@@ -155,7 +155,7 @@ class FileHelperTest extends TestCase
 
         $dirName = $basePath . DIRECTORY_SEPARATOR . 'test_dir_perms';
         $this->assertTrue(FileHelper::createDirectory($dirName, 0700, false));
-        $this->assertFileMode(0700, $dirName);
+        $this->assertFileMode('0700', $dirName);
     }
 
     /**
