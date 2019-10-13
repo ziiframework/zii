@@ -139,7 +139,7 @@ class FileHelperTest extends TestCase
      */
     protected function assertFileMode($expectedMode, $fileName, $message = '')
     {
-        $expectedMode = sprintf('%o', $expectedMode);
+        $expectedMode = str_pad(sprintf('%o', $expectedMode), '4', '0', STR_PAD_LEFT);
         $this->assertEquals($expectedMode, $this->getMode($fileName), $message);
     }
 
@@ -155,7 +155,7 @@ class FileHelperTest extends TestCase
 
         $dirName = $basePath . DIRECTORY_SEPARATOR . 'test_dir_perms';
         $this->assertTrue(FileHelper::createDirectory($dirName, 0700, false));
-        $this->assertFileMode('0700', $dirName);
+        $this->assertFileMode(0700, $dirName);
     }
 
     /**
