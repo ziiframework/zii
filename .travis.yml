@@ -46,8 +46,6 @@ cache:
 # try running against postgres 9.6
 addons:
   postgresql: "9.6"
-  code_climate:
-    repo_token: 2935307212620b0e2228ab67eadd92c9f5501ddb60549d0d86007a354d56915b
 
 matrix:
   fast_finish: true
@@ -65,9 +63,7 @@ matrix:
         - PHPUNIT_EXCLUDE_GROUP=oci,wincache,xcache,zenddata,cubrid
 
     - php: nightly
-      services:
-        - mysql
-        - postgresql
+      env: PHPUNIT_EXCLUDE_GROUP=oci,wincache,xcache,zenddata,cubrid
 
     - language: node_js
       node_js: "6"
