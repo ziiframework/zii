@@ -69,15 +69,15 @@ matrix:
         - mysql
         - postgresql
 
-    # have a separate branch for javascript tests
+
+  allow_failures:
+    - php: nightly
+
     - language: node_js
       node_js: "6"
       env: TASK_TESTS_PHP=0 TASK_TESTS_JS=1
       # overwrite services used for PHP tests
       services:
-
-  allow_failures:
-    - php: nightly
 
 install:
   - |
