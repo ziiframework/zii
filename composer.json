@@ -1,10 +1,7 @@
 {
-    "name": "yiisoft/yii2-dev",
-    "description": "Yii PHP Framework Version 2 - Development Package",
-    "keywords": [
-        "yii2",
-        "framework"
-    ],
+    "name": "ziiframework/zii-dev",
+    "description": "Zii Framework",
+    "keywords": [],
     "homepage": "http://www.yiiframework.com/",
     "type": "yii2-extension",
     "license": "BSD-3-Clause",
@@ -57,15 +54,12 @@
     ],
     "support": {
         "issues": "https://github.com/yiisoft/yii2/issues?state=open",
-        "forum": "http://www.yiiframework.com/forum/",
-        "wiki": "http://www.yiiframework.com/wiki/",
-        "irc": "irc://irc.freenode.net/yii",
         "source": "https://github.com/yiisoft/yii2"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "replace": {
-        "yiisoft/yii2": "self.version"
+        "ziiframework/zii": "self.version"
     },
     "require": {
         "php": ">=7.1.0",
@@ -109,7 +103,7 @@
     ],
     "extra": {
         "branch-alias": {
-            "dev-master": "2.0.x-dev"
+            "dev-master": "3.0.x-dev"
         }
     }
 }
