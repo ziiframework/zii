@@ -436,7 +436,7 @@ class Container extends Component
         $constructor = $reflection->getConstructor();
         if ($constructor !== null) {
             foreach ($constructor->getParameters() as $param) {
-                if (version_compare(PHP_VERSION, '5.6.0', '>=') && $param->isVariadic()) {
+                if ($param->isVariadic()) {
                     break;
                 } elseif ($param->isDefaultValueAvailable()) {
                     $dependencies[] = $param->getDefaultValue();
@@ -539,7 +539,7 @@ class Container extends Component
             $name = $param->getName();
             if (($class = $param->getClass()) !== null) {
                 $className = $class->getName();
-                if (version_compare(PHP_VERSION, '5.6.0', '>=') && $param->isVariadic()) {
+                if ($param->isVariadic()) {
                     $args = array_merge($args, array_values($params));
                     break;
                 } elseif ($associative && isset($params[$name]) && $params[$name] instanceof $className) {
