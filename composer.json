@@ -26,7 +26,7 @@
         "yiisoft/yii2": "self.version"
     },
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=5.6.0",
         "ext-mbstring": "*",
         "ext-ctype": "*",
         "lib-pcre": "*",
@@ -40,7 +40,7 @@
     },
     "require-dev": {
         "cweagans/composer-patches": "^1.6",
-        "phpunit/phpunit": "4.8.34",
+        "phpunit/phpunit": "5.7.27",
         "cebe/indent": "~1.0.2",
         "friendsofphp/php-cs-fixer": "~2.2.3",
         "johnkary/phpunit-speedtrap": "^1.0"
@@ -57,7 +57,7 @@
         }
     },
     "config": {
-        "platform": {"php": "5.4"}
+        "platform": {"php": "5.6"}
     },
     "bin": [
         "framework/yii"
@@ -65,15 +65,6 @@
     "extra": {
         "branch-alias": {
             "dev-master": "2.0.x-dev"
-        },
-        "composer-exit-on-patch-failure": true,
-        "patches": {
-            "phpunit/phpunit-mock-objects": {
-                "Fix PHP 7 compatibility": "./tests/phpunit_mock_objects.patch"
-            },
-            "phpunit/phpunit": {
-                "Fix PHP 7.2 compatibility": "./tests/phpunit_getopt.patch"
-            }
         }
     }
 }
