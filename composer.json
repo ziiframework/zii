@@ -1,66 +1,24 @@
 {
-    "name": "yiisoft/yii2-dev",
-    "description": "Yii PHP Framework Version 2 - Development Package",
+    "name": "ziiframework/zii-dev",
+    "description": "zii framework dev",
     "keywords": [
-        "yii2",
+        "zii",
         "framework"
     ],
-    "homepage": "http://www.yiiframework.com/",
+    "homepage": "https://github.com/ziiframework/zii",
     "type": "yii2-extension",
     "license": "BSD-3-Clause",
     "authors": [
         {
-            "name": "Qiang Xue",
-            "email": "qiang.xue@gmail.com",
-            "homepage": "http://www.yiiframework.com/",
+            "name": "Yii Team",
+            "email": "team@yiiframework.com",
+            "homepage": "http://www.yiiframework.com/team",
             "role": "Founder and project lead"
-        },
-        {
-            "name": "Alexander Makarov",
-            "email": "sam@rmcreative.ru",
-            "homepage": "http://rmcreative.ru/",
-            "role": "Core framework development"
-        },
-        {
-            "name": "Maurizio Domba",
-            "homepage": "http://mdomba.info/",
-            "role": "Core framework development"
-        },
-        {
-            "name": "Carsten Brandt",
-            "email": "mail@cebe.cc",
-            "homepage": "http://cebe.cc/",
-            "role": "Core framework development"
-        },
-        {
-            "name": "Timur Ruziev",
-            "email": "resurtm@gmail.com",
-            "homepage": "http://resurtm.com/",
-            "role": "Core framework development"
-        },
-        {
-            "name": "Paul Klimov",
-            "email": "klimov.paul@gmail.com",
-            "role": "Core framework development"
-        },
-        {
-            "name": "Dmitry Naumenko",
-            "email": "d.naumenko.a@gmail.com",
-            "role": "Core framework development"
-        },
-        {
-            "name": "Boudewijn Vahrmeijer",
-            "email": "info@dynasource.eu",
-            "homepage": "http://dynasource.eu",
-            "role": "Core framework development"
         }
     ],
     "support": {
-        "issues": "https://github.com/yiisoft/yii2/issues?state=open",
-        "forum": "http://www.yiiframework.com/forum/",
-        "wiki": "http://www.yiiframework.com/wiki/",
-        "irc": "irc://irc.freenode.net/yii",
-        "source": "https://github.com/yiisoft/yii2"
+        "issues": "https://github.com/ziiframework/zii/issues?state=open",
+        "source": "https://github.com/ziiframework/zii"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -93,13 +51,9 @@
             "url": "https://asset-packagist.org"
         }
     ],
-    "suggest": {
-        "yiisoft/yii2-coding-standards": "you can use this package to check for code style issues when contributing to yii"
-    },
     "autoload": {
         "psr-4": {
-            "yii\\": "framework/",
-            "yii\\cs\\": "cs/src/"
+            "yii\\": "framework/"
         }
     },
     "config": {
