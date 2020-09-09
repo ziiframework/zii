@@ -23,7 +23,7 @@ use yiiunit\TestCase;
  */
 class RateLimiterTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -39,7 +39,7 @@ class RateLimiterTest extends TestCase
 
         $this->mockWebApplication();
     }
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         Yii::setLogger(null);
@@ -170,7 +170,7 @@ class RateLimiterTest extends TestCase
         };
         $rateLimiter->beforeAction('test');
 
-        // testing the evaluation of user closure, which in this case returns not the expect object and therefore 
+        // testing the evaluation of user closure, which in this case returns not the expect object and therefore
         // the log message "does not implement RateLimitInterface" is expected.
         $this->assertInstanceOf(User::className(), $rateLimiter->user);
         $this->assertContains('Rate limit skipped: "user" does not implement RateLimitInterface.', Yii::getLogger()->messages);
