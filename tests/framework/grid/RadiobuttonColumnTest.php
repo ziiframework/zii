@@ -67,7 +67,7 @@ class RadiobuttonColumnTest extends TestCase
                 return null;
             }
         ]);
-        $this->assertContains('<td></td>', $column->renderDataCell([], 1, 0));
+        $this->assertStringContainsString('<td></td>', $column->renderDataCell([], 1, 0));
 
         $column = new RadioButtonColumn([
             'content' => function ($model, $key, $index, $column) {

@@ -76,7 +76,7 @@ class EachValidatorTest extends TestCase
 
         $validator->allowMessageFromRule = true;
         $validator->validateAttribute($model, 'attr_one');
-        $this->assertContains('integer', $model->getFirstError('attr_one'));
+        $this->assertStringContainsString('integer', $model->getFirstError('attr_one'));
 
         $model->clearErrors();
         $validator->allowMessageFromRule = false;
