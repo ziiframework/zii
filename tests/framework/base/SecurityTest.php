@@ -885,11 +885,11 @@ TEXT;
 
     /**
      * @dataProvider randomKeyInvalidInputs
-     * @expectedException \yii\base\InvalidParamException
      * @param mixed $input
      */
     public function testRandomKeyInvalidInput($input)
     {
+        $this->expectException('\yii\base\InvalidParamException');
         $key1 = $this->security->generateRandomKey($input);
     }
 
@@ -1284,11 +1284,9 @@ TEXT;
         $this->assertEquals('', $this->security->unmaskToken('1'));
     }
 
-    /**
-     * @expectedException \yii\base\InvalidParamException
-     */
     public function testMaskingInvalidStrings()
     {
+        $this->expectException('\yii\base\InvalidParamException');
         $this->security->maskToken('');
     }
 
