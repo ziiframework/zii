@@ -127,7 +127,7 @@ class TraversableArrayAccessibleObject extends ArrayAccessibleObject implements 
  */
 class ArrayHelperTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
