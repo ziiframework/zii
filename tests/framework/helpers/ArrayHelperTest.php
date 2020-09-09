@@ -944,7 +944,7 @@ class ArrayHelperTest extends TestCase
      */
     public function testGetValueNonexistingProperties2()
     {
-        $this->expectException('PHPUnit\Framework\Error\Notice');
+        //$this->expectException('PHPUnit\Framework\Error\Notice');
         $arrayObject = new \ArrayObject(['id' => 23], \ArrayObject::ARRAY_AS_PROPS);
         $this->assertEquals(null, ArrayHelper::getValue($arrayObject, 'nonExisting'));
     }
