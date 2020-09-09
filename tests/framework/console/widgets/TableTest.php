@@ -7,6 +7,7 @@
 
 namespace yiiunit\framework\console;
 
+use PHPUnit\Framework\Assert;
 use yii\console\widgets\Table;
 use yii\helpers\Console;
 use yiiunit\TestCase;
@@ -357,7 +358,7 @@ EXPECTED;
             ->setScreenWidth(200)
             ->run();
 
-        $columnWidths = \PHPUnit_Framework_Assert::readAttribute($table, "columnWidths");
+        $columnWidths = Assert::readAttribute($table, "columnWidths");
 
         $this->assertArrayHasKey(1, $columnWidths);
         $this->assertEquals(4+2, $columnWidths[1]);
