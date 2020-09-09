@@ -946,7 +946,7 @@ class ArrayHelperTest extends TestCase
     {
         $this->expectException('PHPUnit\Framework\Error\Notice');
         $arrayObject = new \ArrayObject(['id' => 23], \ArrayObject::ARRAY_AS_PROPS);
-        $this->assertEquals(23, ArrayHelper::getValue($arrayObject, 'nonExisting'));
+        $this->assertEquals(null, ArrayHelper::getValue($arrayObject, 'nonExisting'));
     }
 
     public function testGetValueFromArrayAccess()
