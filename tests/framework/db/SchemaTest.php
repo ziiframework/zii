@@ -528,7 +528,7 @@ abstract class SchemaTest extends DatabaseTestCase
             $this->assertSame($expected['precision'], $column->precision, "precision of column $name does not match.");
             $this->assertSame($expected['scale'], $column->scale, "scale of column $name does not match.");
             if (\is_object($expected['defaultValue'])) {
-                $this->assertInternalType('object', $column->defaultValue, "defaultValue of column $name is expected to be an object but it is not.");
+                $this->assertIsObject($column->defaultValue, "defaultValue of column $name is expected to be an object but it is not.");
                 $this->assertEquals((string)$expected['defaultValue'], (string)$column->defaultValue, "defaultValue of column $name does not match.");
             } else {
                 $this->assertEquals($expected['defaultValue'], $column->defaultValue, "defaultValue of column $name does not match.");
@@ -782,7 +782,27 @@ abstract class SchemaTest extends DatabaseTestCase
 
     private function assertMetadataEquals($expected, $actual)
     {
-        $this->assertInternalType(strtolower(\gettype($expected)), $actual);
+        $gettype = \gettype($expected);
+        if ($gettype === 'boolean') {
+            $this->assertIsBool($actual);
+        } elseif ($gettype === 'integer') {
+            $this->assertIsInt($actual);
+        } elseif ($gettype === 'double') {
+            $this->assertIsFloat($actual);
+        } elseif ($gettype === 'string') {
+            $this->assertIsString($actual);
+        } elseif ($gettype === 'array') {
+            $this->assertIsArray($actual);
+        } elseif ($gettype === 'object') {
+            $this->assertIsObject($actual);
+        } elseif ($gettype === 'resource' || $gettype === 'resource (closed)') {
+            $this->assertIsResource($actual);
+        } elseif ($gettype === 'NULL' || $gettype === 'null') {
+            $this->assertNull($actual);
+        } elseif ($gettype === 'unknown type') {
+            throw new \Exception('unknown expected type');
+        }
+
         if (\is_array($expected)) {
             $this->normalizeArrayKeys($expected, false);
             $this->normalizeArrayKeys($actual, false);

@@ -10,6 +10,8 @@ jobs:
   phpunit:
     name: PHP ${{ matrix.php }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+
     services:
       mysql:
         image: mysql:5.7
@@ -41,7 +43,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        php: ['7.2', '7.4', '8.0']
+        php: ['7.3', '7.4', '8.0']
 
     steps:
       - name: Generate french locale
@@ -71,7 +73,7 @@ jobs:
             else
                 printf "\033[31;1mpdo_sqlsrv not installed :-(\n"
             fi
-        if: matrix.php == '7.4' || matrix.php == '7.3'
+        if: matrix.php == '7.4'
       - name: Install Memcached
         uses: niden/actions-memcached@v7
       - name: Get composer cache directory
@@ -85,24 +87,25 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
       - name: Install dependencies
         run: composer update $DEFAULT_COMPOSER_FLAGS
-      - name: PHP Unit tests for PHP 7.2
+      - name: PHP Unit tests for PHP 7.3
         run: vendor/bin/phpunit --verbose --coverage-clover=coverage.clover --exclude-group oci,wincache,xcache,zenddata,cubrid
-        if: matrix.php == '7.2'
-      - name: PHP Unit tests for PHP 7.3 - 7.4
+        if: matrix.php == '7.3'
+      - name: PHP Unit tests for PHP 7.4
         run: vendor/bin/phpunit --verbose --exclude-group $PHPUNIT_EXCLUDE_GROUP
         env:
           PHPUNIT_EXCLUDE_GROUP: oci,wincache,xcache,zenddata,cubrid
-        if: matrix.php == '7.4' || matrix.php == '7.3'
+        if: matrix.php == '7.4'
       - name: Code coverage
         run: |
           wget https://scrutinizer-ci.com/ocular.phar
           php ocular.phar code-coverage:upload --format=php-clover coverage.clover
-        if: matrix.php == '7.2'
+        if: matrix.php == '7.3'
         continue-on-error: true # if is fork
 
   npm:
     name: NPM 6 on ubuntu-latest
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
 
     steps:
       - name: Checkout

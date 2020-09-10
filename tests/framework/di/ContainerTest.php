@@ -433,11 +433,9 @@ class ContainerTest extends TestCase
         $this->assertSame(42, $qux->a);
     }
 
-    /**
-     * @expectedException \yii\base\InvalidConfigException
-     */
     public function testThrowingNotFoundException()
     {
+        $this->expectException('\yii\base\InvalidConfigException');
         $container = new Container();
         $container->get('non_existing');
     }

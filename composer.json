@@ -26,10 +26,11 @@
         "yiisoft/yii2": "self.version"
     },
     "require": {
-        "php": ">=7.2.0",
+        "php": ">=7.3.0",
         "ext-mbstring": "*",
         "ext-ctype": "*",
         "lib-pcre": "*",
+        "ext-json": "*",
         "yiisoft/yii2-composer": "~2.0.4",
         "ezyang/htmlpurifier": "~4.6",
         "cebe/markdown": "~1.0.0 | ~1.1.0 | ~1.2.0",
@@ -40,7 +41,7 @@
     },
     "require-dev": {
         "cweagans/composer-patches": "^1.6",
-        "phpunit/phpunit": "8.5.8",
+        "phpunit/phpunit": "^8.5",
         "cebe/indent": "~1.0.2"
     },
     "repositories": [
@@ -55,7 +56,7 @@
         }
     },
     "config": {
-        "platform": {"php": "7.2"}
+        "platform": {"php": "7.3"}
     },
     "bin": [
         "framework/yii"

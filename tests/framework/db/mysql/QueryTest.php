@@ -40,12 +40,19 @@ class QueryTest extends \yiiunit\framework\db\QueryTest
             ->limit(new Expression('2'))
             ->offset(new Expression('1'));
 
-        $result = $query->column($this->getConnection());
+        $columnValues = $query->column($this->getConnection());
 
-        $this->assertCount(2, $result);
+        $this->assertCount(2, $columnValues);
 
-        $this->assertNotContains(1, $result);
-        $this->assertContains(2, $result);
-        $this->assertContains(3, $result);
+        // make sure int => string for strict equals
+        foreach ($columnValues as $i => $columnValue) {
+            if (is_int($columnValue)) {
+                $columnValues[$i] = (string)$columnValue;
+            }
+        }
+
+        $this->assertNotContains('1', $columnValues);
+        $this->assertContains('2', $columnValues);
+        $this->assertContains('3', $columnValues);
     }
 }
