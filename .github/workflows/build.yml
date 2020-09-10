@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 env:
   DEFAULT_COMPOSER_FLAGS: "--prefer-dist --no-interaction --no-progress --optimize-autoloader"
-  PHPUNIT_EXCLUDE_GROUP: mssql,oci,wincache,xcache,zenddata,cubrid
+  PHPUNIT_EXCLUDE_GROUP: mssql,wincache,xcache,zenddata
 
 jobs:
   phpunit:
@@ -88,12 +88,12 @@ jobs:
       - name: Install dependencies
         run: composer update $DEFAULT_COMPOSER_FLAGS
       - name: PHP Unit tests for PHP 7.3
-        run: vendor/bin/phpunit --verbose --coverage-clover=coverage.clover --exclude-group oci,wincache,xcache,zenddata,cubrid
+        run: vendor/bin/phpunit --verbose --coverage-clover=coverage.clover --exclude-group wincache,xcache,zenddata
         if: matrix.php == '7.3'
       - name: PHP Unit tests for PHP 7.4
         run: vendor/bin/phpunit --verbose --exclude-group $PHPUNIT_EXCLUDE_GROUP
         env:
-          PHPUNIT_EXCLUDE_GROUP: oci,wincache,xcache,zenddata,cubrid
+          PHPUNIT_EXCLUDE_GROUP: wincache,xcache,zenddata
         if: matrix.php == '7.4'
       - name: Code coverage
         run: |
