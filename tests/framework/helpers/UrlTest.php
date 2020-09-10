@@ -268,7 +268,7 @@ class UrlTest extends TestCase
                 ['label' => 'Test', 'url' => ['/site/page', 'view' => 'about']],
             ],
         ]);
-        $this->assertRegExp('~<a href="/site/page.html\?view=about">~', $output);
+        $this->assertMatchesRegularExpression('~<a href="/site/page.html\?view=about">~', $output);
     }
 
     public function testBase()
