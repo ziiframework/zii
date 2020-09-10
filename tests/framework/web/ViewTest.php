@@ -202,7 +202,7 @@ class ViewTest extends TestCase
         $view->registerJsFile('/assetSources/js/jquery.js',
             ['appendTimestamp' => false]); // <script src="/assetSources/js/jquery.js"></script>
         $html = $view->render('@yiiunit/data/views/layout.php', ['content' => 'content']);
-        $this->assertDoesNotMatchRegularExpression($pattern, $html);
+        $this->assertNotRegExp($pattern, $html);
 
         // with alias
         $view = new View();
@@ -226,7 +226,7 @@ class ViewTest extends TestCase
         $view->registerJsFile('@web/assetSources/js/jquery.js',
             ['appendTimestamp' => false]); // <script src="/assetSources/js/jquery.js"></script>
         $html = $view->render('@yiiunit/data/views/layout.php', ['content' => 'content']);
-        $this->assertDoesNotMatchRegularExpression($pattern, $html);
+        $this->assertNotRegExp($pattern, $html);
 
         // absolute link
         $view = new View();
@@ -255,12 +255,12 @@ class ViewTest extends TestCase
         $view->registerJsFile('/assetSources/js/jquery.js',
             ['depends' => 'yii\web\AssetBundle']); // <script src="/assetSources/js/jquery.js"></script>
         $html = $view->render('@yiiunit/data/views/layout.php', ['content' => 'content']);
-        $this->assertDoesNotMatchRegularExpression($pattern, $html);
+        $this->assertNotRegExp($pattern, $html);
 
         $view = new View();
         $view->registerJsFile('/assetSources/js/jquery.js'); // <script src="/assetSources/js/jquery.js"></script>
         $html = $view->render('@yiiunit/data/views/layout.php', ['content' => 'content']);
-        $this->assertDoesNotMatchRegularExpression($pattern, $html);
+        $this->assertNotRegExp($pattern, $html);
 
         $view = new View();
         $view->registerJsFile('/assetSources/js/jquery.js',
@@ -276,13 +276,13 @@ class ViewTest extends TestCase
                 'depends' => 'yii\web\AssetBundle',
             ]); // <script src="/assetSources/js/jquery.js"></script>
         $html = $view->render('@yiiunit/data/views/layout.php', ['content' => 'content']);
-        $this->assertDoesNotMatchRegularExpression($pattern, $html);
+        $this->assertNotRegExp($pattern, $html);
 
         $view = new View();
         $view->registerJsFile('/assetSources/js/jquery.js',
             ['appendTimestamp' => false]); // <script src="/assetSources/js/jquery.js"></script>
         $html = $view->render('@yiiunit/data/views/layout.php', ['content' => 'content']);
-        $this->assertDoesNotMatchRegularExpression($pattern, $html);
+        $this->assertNotRegExp($pattern, $html);
 
         // absolute link
         $view = new View();
@@ -348,7 +348,7 @@ class ViewTest extends TestCase
         $view->registerCssFile('/assetSources/css/stub.css',
             ['appendTimestamp' => false]); // <link href="/assetSources/css/stub.css" rel="stylesheet" >
         $html = $view->render('@yiiunit/data/views/layout.php', ['content' => 'content']);
-        $this->assertDoesNotMatchRegularExpression($pattern, $html);
+        $this->assertNotRegExp($pattern, $html);
 
         // with alias
         $view = new View();
@@ -372,7 +372,7 @@ class ViewTest extends TestCase
         $view->registerCssFile('@web/assetSources/css/stub.css',
             ['appendTimestamp' => false]); // <link href="/assetSources/css/stub.css" rel="stylesheet" >
         $html = $view->render('@yiiunit/data/views/layout.php', ['content' => 'content']);
-        $this->assertDoesNotMatchRegularExpression($pattern, $html);
+        $this->assertNotRegExp($pattern, $html);
 
         // absolute link
         $view = new View();
@@ -401,12 +401,12 @@ class ViewTest extends TestCase
         $view->registerCssFile('/assetSources/css/stub.css',
             ['depends' => 'yii\web\AssetBundle']); // <link href="/assetSources/css/stub.css" rel="stylesheet" >
         $html = $view->render('@yiiunit/data/views/layout.php', ['content' => 'content']);
-        $this->assertDoesNotMatchRegularExpression($pattern, $html);
+        $this->assertNotRegExp($pattern, $html);
 
         $view = new View();
         $view->registerCssFile('/assetSources/css/stub.css'); // <link href="/assetSources/css/stub.css" rel="stylesheet" >
         $html = $view->render('@yiiunit/data/views/layout.php', ['content' => 'content']);
-        $this->assertDoesNotMatchRegularExpression($pattern, $html);
+        $this->assertNotRegExp($pattern, $html);
 
         $view = new View();
         $view->registerCssFile('/assetSources/css/stub.css',
@@ -422,13 +422,13 @@ class ViewTest extends TestCase
                 'depends' => 'yii\web\AssetBundle',
             ]); // <link href="/assetSources/css/stub.css" rel="stylesheet" >
         $html = $view->render('@yiiunit/data/views/layout.php', ['content' => 'content']);
-        $this->assertDoesNotMatchRegularExpression($pattern, $html);
+        $this->assertNotRegExp($pattern, $html);
 
         $view = new View();
         $view->registerCssFile('/assetSources/css/stub.css',
             ['appendTimestamp' => false]); // <link href="/assetSources/css/stub.css" rel="stylesheet" >
         $html = $view->render('@yiiunit/data/views/layout.php', ['content' => 'content']);
-        $this->assertDoesNotMatchRegularExpression($pattern, $html);
+        $this->assertNotRegExp($pattern, $html);
 
         // absolute link
         $view = new View();
