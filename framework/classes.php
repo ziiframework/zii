@@ -282,7 +282,6 @@ return [
   'yii\mutex\FileMutex' => YII2_PATH . '/mutex/FileMutex.php',
   'yii\mutex\Mutex' => YII2_PATH . '/mutex/Mutex.php',
   'yii\mutex\MysqlMutex' => YII2_PATH . '/mutex/MysqlMutex.php',
-  'yii\mutex\OracleMutex' => YII2_PATH . '/mutex/OracleMutex.php',
   'yii\mutex\PgsqlMutex' => YII2_PATH . '/mutex/PgsqlMutex.php',
   'yii\mutex\RetryAcquireTrait' => YII2_PATH . '/mutex/RetryAcquireTrait.php',
   'yii\rbac\Assignment' => YII2_PATH . '/rbac/Assignment.php',

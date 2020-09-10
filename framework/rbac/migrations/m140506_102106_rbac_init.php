@@ -38,11 +38,6 @@ class m140506_102106_rbac_init extends \yii\db\Migration
         return $this->db->driverName === 'mssql' || $this->db->driverName === 'sqlsrv' || $this->db->driverName === 'dblib';
     }
 
-    protected function isOracle()
-    {
-        return $this->db->driverName === 'oci';
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -160,10 +155,6 @@ class m140506_102106_rbac_init extends \yii\db\Migration
     {
         if ($this->isMSSQL()) {
             return '';
-        }
-
-        if ($this->isOracle()) {
-            return ' ' . $delete;
         }
 
         return implode(' ', ['', $delete, $update]);

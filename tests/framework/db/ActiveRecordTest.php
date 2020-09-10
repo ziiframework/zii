@@ -107,13 +107,8 @@ abstract class ActiveRecordTest extends DatabaseTestCase
     public function testCustomColumns()
     {
         // find custom column
-        if ($this->driverName === 'oci') {
-            $customer = Customer::find()->select(['{{customer}}.*', '([[status]]*2) AS [[status2]]'])
-                ->where(['name' => 'user3'])->one();
-        } else {
-            $customer = Customer::find()->select(['*', '([[status]]*2) AS [[status2]]'])
-                ->where(['name' => 'user3'])->one();
-        }
+        $customer = Customer::find()->select(['*', '([[status]]*2) AS [[status2]]'])
+            ->where(['name' => 'user3'])->one();
         $this->assertEquals(3, $customer->id);
         $this->assertEquals(4, $customer->status2);
     }
