@@ -141,19 +141,15 @@ class FormatterNumberTest extends TestCase
         $this->assertSame('+123,456', $this->formatter->asInteger(123456.789));
     }
 
-    /**
-     * @expectedException \yii\base\InvalidParamException
-     */
     public function testAsIntegerException()
     {
+        $this->expectException('\yii\base\InvalidParamException');
         $this->formatter->asInteger('a');
     }
 
-    /**
-     * @expectedException \yii\base\InvalidParamException
-     */
     public function testAsIntegerException2()
     {
+        $this->expectException('\yii\base\InvalidParamException');
         $this->formatter->asInteger('-123abc');
     }
 
@@ -422,11 +418,9 @@ class FormatterNumberTest extends TestCase
         $this->assertIsOneOf($this->formatter->asCurrency('123'), ["123.00\xc2\xa0₽", "123.00\xc2\xa0руб."]);
     }
 
-    /**
-     * @expectedException \yii\base\InvalidConfigException
-     */
     public function testAsCurrencyStringFallbackException()
     {
+        $this->expectException('\yii\base\InvalidConfigException');
         $this->formatter->asCurrency('87654321098765436');
     }
 

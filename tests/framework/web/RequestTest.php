@@ -429,22 +429,19 @@ class RequestTest extends TestCase
         $this->assertSame('servername.com', $request->getHostName());
     }
 
-    /**
-     * @expectedException \yii\base\InvalidConfigException
-     */
     public function testGetScriptFileWithEmptyServer()
     {
+        $this->expectException('\yii\base\InvalidConfigException');
         $request = new Request();
         $_SERVER = [];
 
         $request->getScriptFile();
     }
 
-    /**
-     * @expectedException \yii\base\InvalidConfigException
-     */
     public function testGetScriptUrlWithEmptyServer()
     {
+        $this->expectException('\yii\base\InvalidConfigException');
+
         $request = new Request();
         $_SERVER = [];
 
