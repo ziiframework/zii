@@ -545,7 +545,7 @@ EOF;
         $am = $view->assetManager;
         // publising without timestamp
         $result = $am->publish($path . '/data.txt');
-        $this->assertMatchesRegularExpression('/.*data.txt$/i', $result[1]);
+        $this->assertRegExp('/.*data.txt$/i', $result[1]);
         unset($view, $am, $result);
 
         $view = $this->getView();
@@ -553,7 +553,7 @@ EOF;
         // turn on timestamp appending
         $am->appendTimestamp = true;
         $result = $am->publish($path . '/data.txt');
-        $this->assertMatchesRegularExpression('/.*data.txt\?v=\d+$/i', $result[1]);
+        $this->assertRegExp('/.*data.txt\?v=\d+$/i', $result[1]);
     }
 }
 

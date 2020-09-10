@@ -111,7 +111,7 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
 
         $this->assertEmpty($schema->getTableDefaultValues($tableName, true));
         $db->createCommand()->addDefaultValue($name, $tableName, 'int1', 41)->execute();
-        $this->assertMatchesRegularExpression('/^.*41.*$/', $schema->getTableDefaultValues($tableName, true)[0]->value);
+        $this->assertRegExp('/^.*41.*$/', $schema->getTableDefaultValues($tableName, true)[0]->value);
 
         $db->createCommand()->dropDefaultValue($name, $tableName)->execute();
         $this->assertEmpty($schema->getTableDefaultValues($tableName, true));
