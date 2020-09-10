@@ -20,12 +20,6 @@
  */
 $config = [
     'databases' => [
-        'cubrid' => [
-            'dsn' => 'cubrid:dbname=demodb;host=localhost;port=33000',
-            'username' => 'dba',
-            'password' => '',
-            'fixture' => __DIR__ . '/cubrid.sql',
-        ],
         'mysql' => [
             'dsn' => 'mysql:host=127.0.0.1;dbname=yiitest',
             'username' => 'root',
@@ -47,12 +41,6 @@ $config = [
             'username' => 'postgres',
             'password' => 'postgres',
             'fixture' => __DIR__ . '/postgres.sql',
-        ],
-        'oci' => [
-            'dsn' => 'oci:dbname=LOCAL_XE;charset=AL32UTF8;',
-            'username' => '',
-            'password' => '',
-            'fixture' => __DIR__ . '/oci.sql',
         ],
     ],
 ];
