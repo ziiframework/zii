@@ -1887,7 +1887,9 @@ abstract class ActiveRecordTest extends DatabaseTestCase
     {
         /** @var Query $query */
         $query = $this->invokeMethod(\Yii::createObject($modelClassName), 'findByCondition', [$validFilter]);
-        Customer::getDb()->queryBuilder->build($query);
+        $product = Customer::getDb()->queryBuilder->build($query);
+
+        $this->assertIsArray($product);
     }
 
     public function illegalValuesForFindByCondition()
