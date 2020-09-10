@@ -10,6 +10,9 @@ namespace yiiunit;
 
 class Support
 {
+    /**
+     * @see https://github.com/guzzle/guzzle/blob/master/tests/Helpers.php
+     */
     public static function readObjectAttribute(object $object, string $attributeName)
     {
         $reflector = new \ReflectionObject($object);
