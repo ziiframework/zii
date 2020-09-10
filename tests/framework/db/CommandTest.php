@@ -645,7 +645,6 @@ SQL;
             case 'pgsql':
                 $expression = "EXTRACT(YEAR FROM TIMESTAMP 'now')";
                 break;
-            case 'cubrid':
             case 'mysql':
                 $expression = 'YEAR(NOW())';
                 break;
