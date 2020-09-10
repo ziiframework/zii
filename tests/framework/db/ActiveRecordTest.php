@@ -35,7 +35,6 @@ use yiiunit\data\ar\Profile;
 use yiiunit\data\ar\ProfileWithConstructor;
 use yiiunit\data\ar\Type;
 use yiiunit\framework\ar\ActiveRecordTestTrait;
-use yiiunit\framework\db\cubrid\ActiveRecordTest as CubridActiveRecordTest;
 use yiiunit\TestCase;
 
 abstract class ActiveRecordTest extends DatabaseTestCase
@@ -108,13 +107,8 @@ abstract class ActiveRecordTest extends DatabaseTestCase
     public function testCustomColumns()
     {
         // find custom column
-        if ($this->driverName === 'oci') {
-            $customer = Customer::find()->select(['{{customer}}.*', '([[status]]*2) AS [[status2]]'])
-                ->where(['name' => 'user3'])->one();
-        } else {
-            $customer = Customer::find()->select(['*', '([[status]]*2) AS [[status2]]'])
-                ->where(['name' => 'user3'])->one();
-        }
+        $customer = Customer::find()->select(['*', '([[status]]*2) AS [[status2]]'])
+            ->where(['name' => 'user3'])->one();
         $this->assertEquals(3, $customer->id);
         $this->assertEquals(4, $customer->status2);
     }
@@ -1344,12 +1338,7 @@ abstract class ActiveRecordTest extends DatabaseTestCase
         $this->assertEquals(33.22, $model->numeric_col);
         $this->assertEquals(true, $model->bool_col2);
 
-        if ($this instanceof CubridActiveRecordTest) {
-            // cubrid has non-standard timestamp representation
-            $this->assertEquals('12:00:00 AM 01/01/2002', $model->time);
-        } else {
-            $this->assertEquals('2002-01-01 00:00:00', $model->time);
-        }
+        $this->assertEquals('2002-01-01 00:00:00', $model->time);
 
         $model = new Type();
         $model->char_col2 = 'not something';
