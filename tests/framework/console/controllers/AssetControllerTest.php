@@ -320,11 +320,11 @@ EOL;
 
         $compressedCssFileContent = file_get_contents($compressedCssFileName);
         foreach ($cssFiles as $name => $content) {
-            $this->assertContains($content, $compressedCssFileContent, "Source of '{$name}' is missing in combined file!");
+            $this->assertStringContainsString($content, $compressedCssFileContent, "Source of '{$name}' is missing in combined file!");
         }
         $compressedJsFileContent = file_get_contents($compressedJsFileName);
         foreach ($jsFiles as $name => $content) {
-            $this->assertContains($content, $compressedJsFileContent, "Source of '{$name}' is missing in combined file!");
+            $this->assertStringContainsString($content, $compressedJsFileContent, "Source of '{$name}' is missing in combined file!");
         }
     }
 

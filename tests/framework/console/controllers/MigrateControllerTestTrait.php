@@ -217,7 +217,7 @@ CODE;
         $this->runMigrateControllerAction('create', [$migrationName]);
         $files = FileHelper::findFiles($this->migrationPath);
         $this->assertCount(1, $files, 'Unable to create new migration!');
-        $this->assertContains($migrationName, basename($files[0]), 'Wrong migration name!');
+        $this->assertStringContainsString($migrationName, basename($files[0]), 'Wrong migration name!');
     }
 
     public function testUp()
