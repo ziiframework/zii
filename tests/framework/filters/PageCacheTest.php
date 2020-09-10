@@ -137,107 +137,106 @@ class PageCacheTest extends TestCase
     }
 
     /**
-     * @runInSeparateProcess
+     * @dataProvider cacheTestCaseProvider
+     * @param array $testCase
      */
-    public function testCache()
+    public function testCache($testCase)
     {
-        foreach ($this->cacheTestCaseProvider() as $testCase) {
-            $testCase = ArrayHelper::merge([
-                'properties' => [],
-                'cacheable' => true,
-            ], $testCase);
-            if (isset(Yii::$app)) {
-                $this->destroyApplication();
-            }
-            // Prepares the test response
-            $this->mockWebApplication();
-            $controller = new Controller('test', Yii::$app);
-            $action = new Action('test', $controller);
-            $filter = new PageCache(array_merge([
-                'cache' => $cache = new ArrayCache(),
-                'view' => new View(),
-            ], $testCase['properties']));
-            $this->assertTrue($filter->beforeAction($action), $testCase['name']);
-            // Cookies
-            $cookies = [];
-            if (isset($testCase['cookies'])) {
-                foreach (array_keys($testCase['cookies']) as $name) {
-                    $value = Yii::$app->security->generateRandomString();
-                    Yii::$app->response->cookies->add(new Cookie([
-                        'name' => $name,
-                        'value' => $value,
-                        'expire' => strtotime('now +1 year'),
-                    ]));
-                    $cookies[$name] = $value;
-                }
-            }
-            // Headers
-            $headers = [];
-            if (isset($testCase['headers'])) {
-                foreach (array_keys($testCase['headers']) as $name) {
-                    $value = Yii::$app->security->generateRandomString();
-                    Yii::$app->response->headers->add($name, $value);
-                    $headers[$name] = $value;
-                }
-            }
-            // Content
-            $static = Yii::$app->security->generateRandomString();
-            Yii::$app->params['dynamic'] = $dynamic = Yii::$app->security->generateRandomString();
-            $content = $filter->view->render('@yiiunit/data/views/pageCacheLayout.php', ['static' => $static]);
-            Yii::$app->response->content = $content;
-            ob_start();
-            Yii::$app->response->send();
-            ob_end_clean();
-            // Metadata
-            $metadata = [
-                'format' => Yii::$app->response->format,
-                'version' => Yii::$app->response->version,
-                'statusCode' => Yii::$app->response->statusCode,
-                'statusText' => Yii::$app->response->statusText,
-            ];
-            if ($testCase['cacheable']) {
-                $this->assertNotEmpty($this->getInaccessibleProperty($filter->cache, '_cache'), $testCase['name']);
-            } else {
-                $this->assertEmpty($this->getInaccessibleProperty($filter->cache, '_cache'), $testCase['name']);
-                return;
-            }
-
-            // Verifies the cached response
+        $testCase = ArrayHelper::merge([
+            'properties' => [],
+            'cacheable' => true,
+        ], $testCase);
+        if (isset(Yii::$app)) {
             $this->destroyApplication();
-            $this->mockWebApplication();
-            $controller = new Controller('test', Yii::$app);
-            $action = new Action('test', $controller);
-            $filter = new PageCache(array_merge([
-                'cache' => $cache,
-                'view' => new View(),
-            ]), $testCase['properties']);
-            Yii::$app->params['dynamic'] = $dynamic = Yii::$app->security->generateRandomString();
-            $this->assertFalse($filter->beforeAction($action), $testCase['name']);
-            // Content
-            $json = Json::decode(Yii::$app->response->content);
-            $this->assertSame($static, $json['static'], $testCase['name']);
-            $this->assertSame($dynamic, $json['dynamic'], $testCase['name']);
-            // Metadata
-            $this->assertSame($metadata['format'], Yii::$app->response->format, $testCase['name']);
-            $this->assertSame($metadata['version'], Yii::$app->response->version, $testCase['name']);
-            $this->assertSame($metadata['statusCode'], Yii::$app->response->statusCode, $testCase['name']);
-            $this->assertSame($metadata['statusText'], Yii::$app->response->statusText, $testCase['name']);
-            // Cookies
-            if (isset($testCase['cookies'])) {
-                foreach ($testCase['cookies'] as $name => $expected) {
-                    $this->assertSame($expected, Yii::$app->response->cookies->has($name), $testCase['name']);
-                    if ($expected) {
-                        $this->assertSame($cookies[$name], Yii::$app->response->cookies->getValue($name), $testCase['name']);
-                    }
+        }
+        // Prepares the test response
+        $this->mockWebApplication();
+        $controller = new Controller('test', Yii::$app);
+        $action = new Action('test', $controller);
+        $filter = new PageCache(array_merge([
+            'cache' => $cache = new ArrayCache(),
+            'view' => new View(),
+        ], $testCase['properties']));
+        $this->assertTrue($filter->beforeAction($action), $testCase['name']);
+        // Cookies
+        $cookies = [];
+        if (isset($testCase['cookies'])) {
+            foreach (array_keys($testCase['cookies']) as $name) {
+                $value = Yii::$app->security->generateRandomString();
+                Yii::$app->response->cookies->add(new Cookie([
+                    'name' => $name,
+                    'value' => $value,
+                    'expire' => strtotime('now +1 year'),
+                ]));
+                $cookies[$name] = $value;
+            }
+        }
+        // Headers
+        $headers = [];
+        if (isset($testCase['headers'])) {
+            foreach (array_keys($testCase['headers']) as $name) {
+                $value = Yii::$app->security->generateRandomString();
+                Yii::$app->response->headers->add($name, $value);
+                $headers[$name] = $value;
+            }
+        }
+        // Content
+        $static = Yii::$app->security->generateRandomString();
+        Yii::$app->params['dynamic'] = $dynamic = Yii::$app->security->generateRandomString();
+        $content = $filter->view->render('@yiiunit/data/views/pageCacheLayout.php', ['static' => $static]);
+        Yii::$app->response->content = $content;
+        ob_start();
+        Yii::$app->response->send();
+        ob_end_clean();
+        // Metadata
+        $metadata = [
+            'format' => Yii::$app->response->format,
+            'version' => Yii::$app->response->version,
+            'statusCode' => Yii::$app->response->statusCode,
+            'statusText' => Yii::$app->response->statusText,
+        ];
+        if ($testCase['cacheable']) {
+            $this->assertNotEmpty($this->getInaccessibleProperty($filter->cache, '_cache'), $testCase['name']);
+        } else {
+            $this->assertEmpty($this->getInaccessibleProperty($filter->cache, '_cache'), $testCase['name']);
+            return;
+        }
+
+        // Verifies the cached response
+        $this->destroyApplication();
+        $this->mockWebApplication();
+        $controller = new Controller('test', Yii::$app);
+        $action = new Action('test', $controller);
+        $filter = new PageCache(array_merge([
+            'cache' => $cache,
+            'view' => new View(),
+        ]), $testCase['properties']);
+        Yii::$app->params['dynamic'] = $dynamic = Yii::$app->security->generateRandomString();
+        $this->assertFalse($filter->beforeAction($action), $testCase['name']);
+        // Content
+        $json = Json::decode(Yii::$app->response->content);
+        $this->assertSame($static, $json['static'], $testCase['name']);
+        $this->assertSame($dynamic, $json['dynamic'], $testCase['name']);
+        // Metadata
+        $this->assertSame($metadata['format'], Yii::$app->response->format, $testCase['name']);
+        $this->assertSame($metadata['version'], Yii::$app->response->version, $testCase['name']);
+        $this->assertSame($metadata['statusCode'], Yii::$app->response->statusCode, $testCase['name']);
+        $this->assertSame($metadata['statusText'], Yii::$app->response->statusText, $testCase['name']);
+        // Cookies
+        if (isset($testCase['cookies'])) {
+            foreach ($testCase['cookies'] as $name => $expected) {
+                $this->assertSame($expected, Yii::$app->response->cookies->has($name), $testCase['name']);
+                if ($expected) {
+                    $this->assertSame($cookies[$name], Yii::$app->response->cookies->getValue($name), $testCase['name']);
                 }
             }
-            // Headers
-            if (isset($testCase['headers'])) {
-                foreach ($testCase['headers'] as $name => $expected) {
-                    $this->assertSame($expected, Yii::$app->response->headers->has($name), $testCase['name']);
-                    if ($expected) {
-                        $this->assertSame($headers[$name], Yii::$app->response->headers->get($name), $testCase['name']);
-                    }
+        }
+        // Headers
+        if (isset($testCase['headers'])) {
+            foreach ($testCase['headers'] as $name => $expected) {
+                $this->assertSame($expected, Yii::$app->response->headers->has($name), $testCase['name']);
+                if ($expected) {
+                    $this->assertSame($headers[$name], Yii::$app->response->headers->get($name), $testCase['name']);
                 }
             }
         }

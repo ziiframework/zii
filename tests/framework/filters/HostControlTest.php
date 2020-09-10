@@ -83,40 +83,40 @@ class HostControlTest extends TestCase
     }
 
     /**
-     * @runInSeparateProcess
+     * @dataProvider hostInfoValidationDataProvider
+     *
+     * @param mixed $allowedHosts
+     * @param string $host
+     * @param bool $allowed
      */
-    public function testFilter()
+    public function testFilter($allowedHosts, $host, $allowed)
     {
-        foreach ($this->hostInfoValidationDataProvider() as $arr) {
-            [$allowedHosts, $host, $allowed] = $arr;
+        $_SERVER['HTTP_HOST'] = $host;
 
-            $_SERVER['HTTP_HOST'] = $host;
+        $filter = new HostControl();
+        $filter->allowedHosts = $allowedHosts;
 
-            $filter = new HostControl();
-            $filter->allowedHosts = $allowedHosts;
+        $controller = new Controller('id', Yii::$app);
+        $action = new Action('test', $controller);
 
-            $controller = new Controller('id', Yii::$app);
-            $action = new Action('test', $controller);
+        if ($allowed) {
+            $this->assertTrue($filter->beforeAction($action));
+        } else {
+            ob_start();
+            ob_implicit_flush(false);
 
-            if ($allowed) {
-                $this->assertTrue($filter->beforeAction($action));
-            } else {
-                ob_start();
-                ob_implicit_flush(false);
+            $isExit = false;
 
-                $isExit = false;
-
-                try {
-                    $filter->beforeAction($action);
-                } catch (ExitException $e) {
-                    $isExit = true;
-                }
-
-                ob_get_clean();
-
-                $this->assertTrue($isExit);
-                $this->assertEquals(404, Yii::$app->response->getStatusCode());
+            try {
+                $filter->beforeAction($action);
+            } catch (ExitException $e) {
+                $isExit = true;
             }
+
+            ob_get_clean();
+
+            $this->assertTrue($isExit);
+            $this->assertEquals(404, Yii::$app->response->getStatusCode());
         }
     }
 

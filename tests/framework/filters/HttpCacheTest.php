@@ -33,9 +33,6 @@ class HttpCacheTest extends \yiiunit\TestCase
         $this->assertTrue($httpCache->beforeAction(null));
     }
 
-    /**
-     * @runInSeparateProcess
-     */
     public function testEmptyPragma()
     {
         $httpCache = new HttpCache();
@@ -82,7 +79,6 @@ class HttpCacheTest extends \yiiunit\TestCase
     }
 
     /**
-     * @runInSeparateProcess
      * @covers \yii\filters\HttpCache::generateEtag
      */
     public function testGenerateEtag()
