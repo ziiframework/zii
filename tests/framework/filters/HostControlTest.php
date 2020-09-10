@@ -84,6 +84,7 @@ class HostControlTest extends TestCase
 
     /**
      * @dataProvider hostInfoValidationDataProvider
+     * @runInSeparateProcess
      *
      * @param mixed $allowedHosts
      * @param string $host

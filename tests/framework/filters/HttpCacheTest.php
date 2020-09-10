@@ -33,6 +33,9 @@ class HttpCacheTest extends \yiiunit\TestCase
         $this->assertTrue($httpCache->beforeAction(null));
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testEmptyPragma()
     {
         $httpCache = new HttpCache();
