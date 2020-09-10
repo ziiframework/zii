@@ -194,8 +194,8 @@ STRING
             'controllerNamespace' => 'yiiunit\data\console\controllers',
         ]);
         $result = Console::stripAnsiFormat($this->runControllerAction('list'));
-        $this->assertNotContains("fake-empty\n", $result);
-        $this->assertNotContains("fake-no-default\n", $result);
+        $this->assertStringNotContainsString("fake-empty\n", $result);
+        $this->assertStringNotContainsString("fake-no-default\n", $result);
         $this->assertStringContainsString("fake-no-default/index\n", $result);
     }
 
@@ -206,10 +206,10 @@ STRING
             'controllerNamespace' => 'yiiunit\data\console\controllers',
         ]);
         $result = Console::stripAnsiFormat($this->runControllerAction('index'));
-        $this->assertNotContains("- fake-empty", $result);
+        $this->assertStringNotContainsString("- fake-empty", $result);
         $this->assertStringContainsString("- fake-no-default", $result);
         $this->assertStringContainsString("    fake-no-default/index", $result);
-        $this->assertNotContains("    fake-no-default/index (default)", $result);
+        $this->assertStringNotContainsString("    fake-no-default/index (default)", $result);
     }
 }
 

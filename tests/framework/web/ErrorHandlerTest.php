@@ -66,7 +66,7 @@ Exception: yii\web\NotFoundHttpException', $out);
         $this->invokeMethod($handler, 'renderException', [new NotFoundHttpException()]);
         ob_get_clean();
         $out = Yii::$app->response->data;
-        $this->assertNotContains('<script', $out);
+        $this->assertStringNotContainsString('<script', $out);
     }
 
     public function testRenderCallStackItem()
