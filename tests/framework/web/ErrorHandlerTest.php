@@ -37,7 +37,7 @@ class ErrorHandlerTest extends TestCase
         $this->invokeMethod($handler, 'renderException', [new NotFoundHttpException('This message is displayed to end user')]);
         ob_get_clean();
         $out = Yii::$app->response->data;
-        $this->assertEquals('Code: 404
+        $this->assertEqualsWithoutLE('Code: 404
 Message: This message is displayed to end user
 Exception: yii\web\NotFoundHttpException', $out);
     }
@@ -51,7 +51,7 @@ Exception: yii\web\NotFoundHttpException', $out);
         $this->invokeMethod($handler, 'renderException', [new \Exception('Some Exception')]);
         ob_get_clean();
         $out = Yii::$app->response->data;
-        $this->assertEquals('Exception View
+        $this->assertEqualsWithoutLE('Exception View
 ', $out);
     }
 
