@@ -112,8 +112,8 @@ class ContentNegotiatorTest extends TestCase
         $filter->languages = ['en', 'de'];
         $filter->beforeAction($action);
         $varyHeader = $filter->response->getHeaders()->get('Vary', [], false);
-        $this->assertStringContainsString('Accept', $varyHeader);
-        $this->assertStringContainsString('Accept-Language', $varyHeader);
+        $this->assertContains('Accept', $varyHeader);
+        $this->assertContains('Accept-Language', $varyHeader);
     }
 
     public function testNegotiateContentType()

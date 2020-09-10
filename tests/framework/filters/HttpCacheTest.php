@@ -82,6 +82,7 @@ class HttpCacheTest extends \yiiunit\TestCase
     }
 
     /**
+     * @runInSeparateProcess
      * @covers \yii\filters\HttpCache::generateEtag
      */
     public function testGenerateEtag()
