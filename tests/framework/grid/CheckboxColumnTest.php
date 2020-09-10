@@ -100,7 +100,7 @@ class CheckboxColumnTest extends TestCase
             },
             'grid' => $this->getGrid(),
         ]);
-        $this->assertContains(Html::checkBox('checkBoxInput', false), $column->renderDataCell([], 1, 0));
+        $this->assertStringContainsString(Html::checkBox('checkBoxInput', false), $column->renderDataCell([], 1, 0));
     }
 
     /**
