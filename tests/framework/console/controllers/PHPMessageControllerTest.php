@@ -165,7 +165,7 @@ class PHPMessageControllerTest extends BaseMessageControllerTest
         if ($isExpectedToExist) {
             $this->assertFileExists($filePath);
         } else {
-            $this->assertFileDoesNotExist($filePath);
+            $this->assertFileNotExists($filePath);
         }
     }
 }
