@@ -96,7 +96,7 @@ class ContentNegotiatorTest extends TestCase
         ];
         $filter->languages = [];
         $filter->beforeAction($action);
-        $this->assertStringContainsString('Accept', $filter->response->getHeaders()->get('Vary', [], false));
+        $this->assertContains('Accept', $filter->response->getHeaders()->get('Vary', [], false));
 
         list($action, $filter) = $this->mockActionAndFilter();
         $filter->formats = [];

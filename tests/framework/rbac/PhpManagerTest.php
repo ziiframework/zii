@@ -138,7 +138,7 @@ class PhpManagerTest extends ManagerTestCase
 
     public function testOverwriteName()
     {
-        $this->expectException('\yii\base\InvalidConfigException');
+        $this->expectException('\yii\base\InvalidArgumentException');
 
         $this->prepareData();
         $name = 'readPost';
