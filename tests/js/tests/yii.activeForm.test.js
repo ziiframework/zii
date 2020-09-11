@@ -6,8 +6,8 @@ var fs = require('fs');
 var vm = require('vm');
 
 describe('yii.activeForm', function () {
-    var yiiActiveFormPath = 'framework/assets/yii.activeForm.js';
-    var yiiPath = 'framework/assets/yii.js';
+    var yiiActiveFormPath = 'src/assets/yii.activeForm.js';
+    var yiiPath = 'src/assets/yii.js';
     var jQueryPath = 'vendor/bower-asset/jquery/dist/jquery.js';
     var $;
     var $activeForm;
