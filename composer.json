@@ -1,12 +1,12 @@
 {
     "name": "ziiframework/zii",
-    "description": "zii framework dev",
+    "description": "zii framework",
     "keywords": [
         "zii",
         "framework"
     ],
     "homepage": "https://github.com/ziiframework/zii",
-    "type": "yii2-extension",
+    "type": "library",
     "license": "BSD-3-Clause",
     "authors": [
         {
