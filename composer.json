@@ -1,5 +1,5 @@
 {
-    "name": "ziiframework/zii-dev",
+    "name": "ziiframework/zii",
     "description": "zii framework dev",
     "keywords": [
         "zii",
@@ -22,16 +22,13 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "replace": {
-        "yiisoft/yii2": "self.version"
-    },
     "require": {
         "php": ">=7.3.0",
         "ext-mbstring": "*",
         "ext-ctype": "*",
         "lib-pcre": "*",
         "ext-json": "*",
-        "yiisoft/yii2-composer": "~2.0.4",
+        "ziiframework/composer": "3.0.x-dev",
         "ezyang/htmlpurifier": "~4.6",
         "cebe/markdown": "~1.0.0 | ~1.1.0 | ~1.2.0",
         "bower-asset/jquery": "3.5.*@stable | 3.4.*@stable | 3.3.*@stable | 3.2.*@stable | 3.1.*@stable | 2.2.*@stable | 2.1.*@stable | 1.11.*@stable | 1.12.*@stable",
