@@ -561,9 +561,8 @@ abstract class QueryBuilderTest extends DatabaseTestCase
                 $this->tinyInteger()->unsigned(),
                 [
                     'mysql' => 'tinyint(3) UNSIGNED',
-                    'postgres' => 'smallint UNSIGNED',
                     'sqlite' => 'tinyint UNSIGNED',
-                ],
+                ]
             ],
             [
                 Schema::TYPE_TINYINT,
@@ -826,7 +825,6 @@ abstract class QueryBuilderTest extends DatabaseTestCase
                 $this->integer()->comment('test comment'),
                 [
                     'mysql' => "int(11) COMMENT 'test comment'",
-                    'postgres' => 'integer',
                     'sqlsrv' => 'int',
                 ],
                 [
@@ -838,7 +836,6 @@ abstract class QueryBuilderTest extends DatabaseTestCase
                 $this->primaryKey()->comment('test comment'),
                 [
                     'mysql' => "int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'test comment'",
-                    'postgres' => 'serial NOT NULL PRIMARY KEY',
                     'sqlsrv' => 'int IDENTITY PRIMARY KEY',
                 ],
                 [
@@ -850,7 +847,6 @@ abstract class QueryBuilderTest extends DatabaseTestCase
                 $this->primaryKey()->first(),
                 [
                     'mysql' => 'int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST',
-                    'postgres' => 'serial NOT NULL PRIMARY KEY',
                     'sqlsrv' => 'int IDENTITY PRIMARY KEY',
                 ],
                 [
@@ -862,10 +858,10 @@ abstract class QueryBuilderTest extends DatabaseTestCase
                 $this->integer()->first(),
                 [
                     'mysql' => 'int(11) FIRST',
-                    'postgres' => 'integer',
                     'sqlsrv' => 'int',
                 ],
                 [
+                    'pgsql' => 'integer',
                     'sqlsrv' => 'integer',
                 ]
             ],
@@ -874,7 +870,6 @@ abstract class QueryBuilderTest extends DatabaseTestCase
                 $this->string()->first(),
                 [
                     'mysql' => 'varchar(255) FIRST',
-                    'postgres' => 'varchar(255)',
                     'sqlsrv' => 'nvarchar(255)',
                 ],
                 [
@@ -886,7 +881,6 @@ abstract class QueryBuilderTest extends DatabaseTestCase
                 $this->integer()->append('NOT NULL')->first(),
                 [
                     'mysql' => 'int(11) NOT NULL FIRST',
-                    'postgres' => 'integer NOT NULL',
                     'sqlsrv' => 'int NOT NULL',
                 ],
                 [
@@ -898,7 +892,6 @@ abstract class QueryBuilderTest extends DatabaseTestCase
                 $this->string()->append('NOT NULL')->first(),
                 [
                     'mysql' => 'varchar(255) NOT NULL FIRST',
-                    'postgres' => 'varchar(255) NOT NULL',
                     'sqlsrv' => 'nvarchar(255) NOT NULL',
                 ],
                 [
