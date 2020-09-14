@@ -189,10 +189,10 @@ index 3c738d316da..e69ef3cbc3e 100644
 +composer require --dev codeception/specify
 +composer require --dev codeception/verify
  ```
-diff --git a/framework/CHANGELOG.md b/framework/CHANGELOG.md
+diff --git a/src/CHANGELOG.md b/src/CHANGELOG.md
 index a3984eba57f..255deb74e6a 100644
---- a/framework/CHANGELOG.md
-+++ b/framework/CHANGELOG.md
+--- a/src/CHANGELOG.md
++++ b/src/CHANGELOG.md
 @@ -5,16 +5,20 @@ Yii Framework 2 Change Log
  ------------------------
  
@@ -219,10 +219,10 @@ index a3984eba57f..255deb74e6a 100644
  
  2.0.37 August 07, 2020
  ----------------------
-diff --git a/framework/UPGRADE.md b/framework/UPGRADE.md
+diff --git a/src/UPGRADE.md b/src/UPGRADE.md
 index cc80fb4b7fa..b151c334537 100644
---- a/framework/UPGRADE.md
-+++ b/framework/UPGRADE.md
+--- a/src/UPGRADE.md
++++ b/src/UPGRADE.md
 @@ -51,6 +51,12 @@ if you want to upgrade from version A to version C and there is
  version B between A and C, you need to follow the instructions
  for both A and B.
@@ -236,10 +236,10 @@ index cc80fb4b7fa..b151c334537 100644
  Upgrade from Yii 2.0.36
  -----------------------
  
-diff --git a/framework/db/pgsql/Schema.php b/framework/db/pgsql/Schema.php
+diff --git a/src/db/pgsql/Schema.php b/src/db/pgsql/Schema.php
 index 938cff6a341..75793d16d2c 100644
---- a/framework/db/pgsql/Schema.php
-+++ b/framework/db/pgsql/Schema.php
+--- a/src/db/pgsql/Schema.php
++++ b/src/db/pgsql/Schema.php
 @@ -548,14 +548,21 @@ protected function findColumns($table)
                  }
                  $column->defaultValue = null;
@@ -265,10 +265,10 @@ index 938cff6a341..75793d16d2c 100644
                  } elseif (preg_match("/^'(.*?)'::/", $column->defaultValue, $matches)) {
                      $column->defaultValue = $column->phpTypecast($matches[1]);
                  } elseif (preg_match('/^(\()?(.*?)(?(1)\))(?:::.+)?$/', $column->defaultValue, $matches)) {
-diff --git a/framework/di/Container.php b/framework/di/Container.php
+diff --git a/src/di/Container.php b/src/di/Container.php
 index eaa5b0e3adc..2717572b79a 100644
---- a/framework/di/Container.php
-+++ b/framework/di/Container.php
+--- a/src/di/Container.php
++++ b/src/di/Container.php
 @@ -94,6 +94,8 @@
   * @property array $definitions The list of the object definitions or the loaded shared objects (type or ID =>
   * definition or instance). This property is read-only.
@@ -312,10 +312,10 @@ index eaa5b0e3adc..2717572b79a 100644
 +        $this->_resolveArrays = (bool) $value;
 +    }
  }
-diff --git a/framework/messages/hi/yii.php b/framework/messages/hi/yii.php
+diff --git a/src/messages/hi/yii.php b/src/messages/hi/yii.php
 index 58c21544e15..e43b4bff7ee 100644
---- a/framework/messages/hi/yii.php
-+++ b/framework/messages/hi/yii.php
+--- a/src/messages/hi/yii.php
++++ b/src/messages/hi/yii.php
 @@ -26,12 +26,12 @@
      ' and ' => ' और ',
      '(not set)' => '(स्थापित नहीं)',
@@ -344,10 +344,10 @@ index 58c21544e15..e43b4bff7ee 100644
      'The format of {attribute} is invalid.' => '{attribute} का प्रारूप गलत है।',
      'The image "{file}" is too large. The height cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.' => 'यह चित्र "{file}" बहुत बड़ी है। ऊंचाई {limit, number} {limit, plural, one{पिक्सेल} other{पिक्सेल}} से बड़ी नहीं हो सकती।',
      'The image "{file}" is too large. The width cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.' => 'यह चित्र "{file}" बहुत बड़ी है। चौड़ाई {limit, number} {limit, plural, one{पिक्सेल} other{पिक्सेल}} से बड़ी नहीं हो सकती।',
-diff --git a/framework/widgets/ActiveField.php b/framework/widgets/ActiveField.php
+diff --git a/src/widgets/ActiveField.php b/src/widgets/ActiveField.php
 index d5e598bf8a7..4ffe3fc90fe 100644
---- a/framework/widgets/ActiveField.php
-+++ b/framework/widgets/ActiveField.php
+--- a/src/widgets/ActiveField.php
++++ b/src/widgets/ActiveField.php
 @@ -545,6 +545,13 @@ public function textarea($options = [])
       */
      public function radio($options = [], $enclosedByLabel = true)
