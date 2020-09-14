@@ -1,0 +1,1247 @@
+diff --git a/.github/workflows/ci-mysql.yml b/.github/workflows/ci-mysql.yml
+new file mode 100644
+index 00000000000..d7814d5a8b2
+--- /dev/null
++++ b/.github/workflows/ci-mysql.yml
+@@ -0,0 +1,80 @@
++on:
++  - pull_request
++  - push
++
++name: ci-mysql
++
++jobs:
++  tests:
++    name: PHP ${{ matrix.php-version }}-mysql-${{ matrix.mysql-version }}
++    env:
++      extensions: curl, intl, pdo, pdo_mysql
++      key: cache-v1
++
++    runs-on: ${{ matrix.os }}
++
++    strategy:
++      matrix:
++        os:
++          - ubuntu-latest
++
++        php-version:
++          - "7.4"
++
++        mysql-version:
++          - "latest"
++
++    services:
++      mysql:
++        image: mysql:${{ matrix.mysql-version }}
++        env:
++          MYSQL_ROOT_PASSWORD: root
++          MYSQL_DATABASE: yiitest
++        ports:
++          - 3306:3306
++        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
++
++    steps:
++      - name: Checkout
++        uses: actions/checkout@v2
++
++      - name: Setup cache environment
++        id: cache-env
++        uses: shivammathur/cache-extensions@v1
++        with:
++          php-version: ${{ matrix.php-version }}
++          extensions: ${{ env.extensions }}
++          key: ${{ env.key }}
++
++      - name: Cache extensions
++        uses: actions/cache@v1
++        with:
++          path: ${{ steps.cache-env.outputs.dir }}
++          key: ${{ steps.cache-env.outputs.key }}
++          restore-keys: ${{ steps.cache-env.outputs.key }}
++
++      - name: Install PHP with extensions
++        uses: shivammathur/setup-php@v2
++        with:
++          php-version: ${{ matrix.php-version }}
++          extensions: ${{ env.extensions }}
++          ini-values: date.timezone='UTC'
++          coverage: pcov
++
++      - name: Determine composer cache directory
++        if: matrix.os == 'ubuntu-latest'
++        run: echo "::set-env name=COMPOSER_CACHE_DIR::$(composer config cache-dir)"
++
++      - name: Cache dependencies installed with composer
++        uses: actions/cache@v1
++        with:
++          path: ${{ env.COMPOSER_CACHE_DIR }}
++          key: php${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-${{ hashFiles('**/composer.json') }}
++          restore-keys: |
++            php${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-
++
++      - name: Install dependencies with composer
++        run: composer update --prefer-dist --no-interaction --no-progress --optimize-autoloader
++
++      - name: Run mysql tests with phpunit
++        run: vendor/bin/phpunit --group mysql
+diff --git a/.github/workflows/ci-pgsql.yml b/.github/workflows/ci-pgsql.yml
+new file mode 100644
+index 00000000000..2d3818129ba
+--- /dev/null
++++ b/.github/workflows/ci-pgsql.yml
+@@ -0,0 +1,84 @@
++on:
++  - pull_request
++  - push
++
++name: ci-pgsql
++
++jobs:
++  tests:
++    name: PHP ${{ matrix.php-version }}-pgsql-${{ matrix.pgsql-version }}
++    env:
++      extensions: curl, intl, pdo, pdo_pgsql
++      key: cache-v1
++
++    runs-on: ${{ matrix.os }}
++
++    strategy:
++      matrix:
++        os:
++          - ubuntu-latest
++
++        php-version:
++          - "7.4"
++
++        pgsql-version:
++          - "10"
++          - "11"
++          - "12"
++          - "13"
++
++    services:
++      postgres:
++        image: postgres:${{ matrix.pgsql-version }}
++        env:
++          POSTGRES_USER: postgres
++          POSTGRES_PASSWORD: postgres
++          POSTGRES_DB: yiitest
++        ports:
++          - 5432:5432
++        options: --name=postgres --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
++
++    steps:
++      - name: Checkout
++        uses: actions/checkout@v2
++
++      - name: Setup cache environment
++        id: cache-env
++        uses: shivammathur/cache-extensions@v1
++        with:
++          php-version: ${{ matrix.php-version }}
++          extensions: ${{ env.extensions }}
++          key: ${{ env.key }}
++
++      - name: Cache extensions
++        uses: actions/cache@v1
++        with:
++          path: ${{ steps.cache-env.outputs.dir }}
++          key: ${{ steps.cache-env.outputs.key }}
++          restore-keys: ${{ steps.cache-env.outputs.key }}
++
++      - name: Install PHP with extensions
++        uses: shivammathur/setup-php@v2
++        with:
++          php-version: ${{ matrix.php-version }}
++          extensions: ${{ env.extensions }}
++          ini-values: date.timezone='UTC'
++          coverage: pcov
++
++      - name: Determine composer cache directory
++        if: matrix.os == 'ubuntu-latest'
++        run: echo "::set-env name=COMPOSER_CACHE_DIR::$(composer config cache-dir)"
++
++      - name: Cache dependencies installed with composer
++        uses: actions/cache@v1
++        with:
++          path: ${{ env.COMPOSER_CACHE_DIR }}
++          key: php${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-${{ hashFiles('**/composer.json') }}
++          restore-keys: |
++            php${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-
++
++      - name: Install dependencies with composer
++        run: composer update --prefer-dist --no-interaction --no-progress --optimize-autoloader
++
++      - name: Run pgsql tests with phpunit
++        run: vendor/bin/phpunit --group pgsql
+diff --git a/docs/guide/test-environment-setup.md b/docs/guide/test-environment-setup.md
+index 3c738d316da..e69ef3cbc3e 100644
+--- a/docs/guide/test-environment-setup.md
++++ b/docs/guide/test-environment-setup.md
+@@ -17,7 +17,7 @@ In case you are not using one of these templates, Codeception could be installed
+ by issuing the following console commands:
+ 
+ ```
+-composer require codeception/codeception
+-composer require codeception/specify
+-composer require codeception/verify
++composer require --dev codeception/codeception
++composer require --dev codeception/specify
++composer require --dev codeception/verify
+ ```
+diff --git a/framework/CHANGELOG.md b/framework/CHANGELOG.md
+index a3984eba57f..255deb74e6a 100644
+--- a/framework/CHANGELOG.md
++++ b/framework/CHANGELOG.md
+@@ -5,16 +5,20 @@ Yii Framework 2 Change Log
+ ------------------------
+ 
+ - Enh #18213: Do not load fixtures with circular dependencies twice instead of throwing an exception (JesseHines0)
+-- Bug #18066: Fixed `yii\db\Query::create()` wasn't using all info from `withQuery()` (maximkou)
++- Bug #18066: Fix `yii\db\Query::create()` wasn't using all info from `withQuery()` (maximkou)
+ - Bug #18269: Fix integer safe attribute to work properly in `yii\base\Model` (Ladone)
+ - Enh #18236: Allow `yii\filters\RateLimiter` to accept a closure function for the `$user` property in order to assign values on runtime (nadar)
+-- Bug #18248: Render only one stack trace on console for chained exceptions (mikehaertl)
++- Bug #18248: Render only one stack trace on a console for chained exceptions (mikehaertl)
+ - Bug #18233: Add PHP 8 support (samdark)
+ - Enh #18196: `yii\rbac\DbManager::$checkAccessAssignments` is now `protected` (alex-code)
+ - Bug #18239: Fix support of no-extension files for `FileValidator::validateExtension()` (darkdef)
+-- Bug #18229: Add flag for recognize SyBase databases on uses pdo_dblib (darkdef)
+-- Bug #13973: Correct alterColumn for MSSQL & drop constraints before drop column (darkdef)
+-
++- Bug #18229: Add a flag to specify SyBase database when used with pdo_dblib (darkdef)
++- Bug #13973: Correct alterColumn for MSSQL & drop constraints before dropping a column (darkdef)
++- Bug #18040: Display width specification for integer data types was deprecated in MySQL 8.0.19 (terabytesoftw)
++- Bug #15265: PostgreSQL > 10.0 is not pass tests with default value of timestamp CURRENT_TIMESTAMP (terabytesoftw)
++- Bug #18232: Fail tests pgsql v-10.14, v-11.9, v-12-latest (terabytesoftw)
++- Bug #16892: Validation error class was not applied to checkbox and radio when validationStateOn = self::VALIDATION_STATE_ON_INPUT (dan-szabo, samdark)
++- Bug #18245: Make resolving DI references inside of arrays in dependencies optional (SamMousa, samdark, hiqsol)
+ 
+ 2.0.37 August 07, 2020
+ ----------------------
+diff --git a/framework/UPGRADE.md b/framework/UPGRADE.md
+index cc80fb4b7fa..b151c334537 100644
+--- a/framework/UPGRADE.md
++++ b/framework/UPGRADE.md
+@@ -51,6 +51,12 @@ if you want to upgrade from version A to version C and there is
+ version B between A and C, you need to follow the instructions
+ for both A and B.
+ 
++Upgrade from Yii 2.0.37
++-----------------------
++
++* Resolving DI references inside of arrays in dependencies was made optional and turned off by default. In order
++  to turn it on, set `resolveArrays` of container instance to `true`.
++
+ Upgrade from Yii 2.0.36
+ -----------------------
+ 
+diff --git a/framework/db/pgsql/Schema.php b/framework/db/pgsql/Schema.php
+index 938cff6a341..75793d16d2c 100644
+--- a/framework/db/pgsql/Schema.php
++++ b/framework/db/pgsql/Schema.php
+@@ -548,14 +548,21 @@ protected function findColumns($table)
+                 }
+                 $column->defaultValue = null;
+             } elseif ($column->defaultValue) {
+-                if ($column->type === 'timestamp' && $column->defaultValue === 'now()') {
++                if (
++                    in_array($column->type, [self::TYPE_TIMESTAMP, self::TYPE_DATE, self::TYPE_TIME], true) &&
++                    in_array(
++                        strtoupper($column->defaultValue),
++                        ['NOW()', 'CURRENT_TIMESTAMP', 'CURRENT_DATE', 'CURRENT_TIME'],
++                        true
++                    )
++                ) {
+                     $column->defaultValue = new Expression($column->defaultValue);
+                 } elseif ($column->type === 'boolean') {
+                     $column->defaultValue = ($column->defaultValue === 'true');
+                 } elseif (preg_match("/^B'(.*?)'::/", $column->defaultValue, $matches)) {
+                     $column->defaultValue = bindec($matches[1]);
+-                } elseif (strncasecmp($column->dbType, 'bit', 3) === 0 || strncasecmp($column->dbType, 'varbit', 6) === 0) {
+-                    $column->defaultValue = bindec(trim($column->defaultValue, 'B\''));
++                } elseif (preg_match("/^'(\d+)'::\"bit\"$/", $column->defaultValue, $matches)) {
++                    $column->defaultValue = bindec($matches[1]);
+                 } elseif (preg_match("/^'(.*?)'::/", $column->defaultValue, $matches)) {
+                     $column->defaultValue = $column->phpTypecast($matches[1]);
+                 } elseif (preg_match('/^(\()?(.*?)(?(1)\))(?:::.+)?$/', $column->defaultValue, $matches)) {
+diff --git a/framework/di/Container.php b/framework/di/Container.php
+index eaa5b0e3adc..2717572b79a 100644
+--- a/framework/di/Container.php
++++ b/framework/di/Container.php
+@@ -94,6 +94,8 @@
+  * @property array $definitions The list of the object definitions or the loaded shared objects (type or ID =>
+  * definition or instance). This property is read-only.
+  *
++ * @property bool $resolveArrays whether to attempt to resolve elements in array dependencies
++ *
+  * @author Qiang Xue <qiang.xue@gmail.com>
+  * @since 2.0
+  */
+@@ -121,6 +123,10 @@ class Container extends Component
+      */
+     private $_dependencies = [];
+ 
++    /**
++     * @var bool whether to attempt to resolve elements in array dependencies
++     */
++    private $_resolveArrays = false;
+ 
+     /**
+      * Returns an instance of the requested class.
+@@ -491,7 +497,7 @@ protected function resolveDependencies($dependencies, $reflection = null)
+                     $class = $reflection->getName();
+                     throw new InvalidConfigException("Missing required parameter \"$name\" when instantiating \"$class\".");
+                 }
+-            } elseif (is_array($dependency)) {
++            } elseif ($this->_resolveArrays && is_array($dependency)) {
+                 $dependencies[$index] = $this->resolveDependencies($dependency, $reflection);
+             }
+         }
+@@ -682,4 +688,13 @@ public function setSingletons(array $singletons)
+             $this->setSingleton($class, $definition);
+         }
+     }
++
++    /**
++     * @param bool $value whether to attempt to resolve elements in array dependencies
++     * @since 2.0.37
++     */
++    public function setResolveArrays($value)
++    {
++        $this->_resolveArrays = (bool) $value;
++    }
+ }
+diff --git a/framework/messages/hi/yii.php b/framework/messages/hi/yii.php
+index 58c21544e15..e43b4bff7ee 100644
+--- a/framework/messages/hi/yii.php
++++ b/framework/messages/hi/yii.php
+@@ -26,12 +26,12 @@
+     ' and ' => ' और ',
+     '(not set)' => '(स्थापित नहीं)',
+     'An internal server error occurred.' => 'सर्वर में एक आंतरिक दोष उत्पन्न हुआ है।',
+-    'Are you sure you want to delete this item?' => 'क्या आप आश्वस्त हैं कि इसे मिटाना चाहते हैं?',
+-    'Delete' => 'मिटायें',
++    'Are you sure you want to delete this item?' => 'क्या आप सुनिश्चित रूप से इस आइटम को मिटाना चाहते हैं?',
++    'Delete' => 'मिटाएँ',
+     'Error' => 'खामी',
+-    'File upload failed.' => 'फ़ाइल अपलोड असफल हुआ।',
++    'File upload failed.' => 'फ़ाइल अपलोड असफल रहा।',
+     'Home' => 'घर',
+-    'Invalid data received for parameter "{param}".' => 'पैरामीटर "{param}" के लिए अमान्य डेटा मिली हैं।',
++    'Invalid data received for parameter "{param}".' => 'पैरामीटर "{param}" के लिए प्राप्त डेटा अमान्य है।',
+     'Login Required' => 'लॉगिन आवश्यक हैं',
+     'Missing required arguments: {params}' => 'आवश्यक तर्क: {params} अनुपस्थित है',
+     'Missing required parameters: {params}' => 'आवश्यक पैरामीटर: {params} अनुपस्थित है',
+@@ -46,8 +46,8 @@
+     'Showing <b>{begin, number}-{end, number}</b> of <b>{totalCount, number}</b> {totalCount, plural, one{item} other{items}}.' => 'दिखाया गया है {totalCount, number} {totalCount, plural, one{चीज} other{चीज़े}} में से {begin, number}-{end, number} ।',
+     'The combination {values} of {attributes} has already been taken.' => '{attributes} और {values} का संयोजन पहले से ही लिया जा चुका है।',
+     'The file "{file}" is not an image.' => 'यह फ़ाइल "{file}" एक चित्र नहीं है।',
+-    'The file "{file}" is too big. Its size cannot exceed {formattedLimit}.' => 'यह फ़ाइल "{file}" बहुत बड़ी है। इसका आकारण {formattedLimit} से अधिक नहीं हो सकता है।',
+-    'The file "{file}" is too small. Its size cannot be smaller than {formattedLimit}.' => 'यह फ़ाइल "{file}" बहुत छोटी है। इसका आकारण {formattedLimit} से छोटा नहीं हो सकता।',
++    'The file "{file}" is too big. Its size cannot exceed {formattedLimit}.' => 'यह फ़ाइल "{file}" बहुत बड़ी है। इसका आकार {formattedLimit} से अधिक नहीं हो सकता है।',
++    'The file "{file}" is too small. Its size cannot be smaller than {formattedLimit}.' => 'यह फ़ाइल "{file}" बहुत छोटी है। इसका आकार {formattedLimit} से छोटा नहीं हो सकता।',
+     'The format of {attribute} is invalid.' => '{attribute} का प्रारूप गलत है।',
+     'The image "{file}" is too large. The height cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.' => 'यह चित्र "{file}" बहुत बड़ी है। ऊंचाई {limit, number} {limit, plural, one{पिक्सेल} other{पिक्सेल}} से बड़ी नहीं हो सकती।',
+     'The image "{file}" is too large. The width cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.' => 'यह चित्र "{file}" बहुत बड़ी है। चौड़ाई {limit, number} {limit, plural, one{पिक्सेल} other{पिक्सेल}} से बड़ी नहीं हो सकती।',
+diff --git a/framework/widgets/ActiveField.php b/framework/widgets/ActiveField.php
+index d5e598bf8a7..4ffe3fc90fe 100644
+--- a/framework/widgets/ActiveField.php
++++ b/framework/widgets/ActiveField.php
+@@ -545,6 +545,13 @@ public function textarea($options = [])
+      */
+     public function radio($options = [], $enclosedByLabel = true)
+     {
++        if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
++            $this->addErrorClassIfNeeded($options);
++        }
++
++        $this->addAriaAttributes($options);
++        $this->adjustLabelFor($options);
++        
+         if ($enclosedByLabel) {
+             $this->parts['{input}'] = Html::activeRadio($this->model, $this->attribute, $options);
+             $this->parts['{label}'] = '';
+@@ -560,13 +567,6 @@ public function radio($options = [], $enclosedByLabel = true)
+             $this->parts['{input}'] = Html::activeRadio($this->model, $this->attribute, $options);
+         }
+ 
+-        if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
+-            $this->addErrorClassIfNeeded($options);
+-        }
+-
+-        $this->addAriaAttributes($options);
+-        $this->adjustLabelFor($options);
+-
+         return $this;
+     }
+ 
+@@ -597,6 +597,13 @@ public function radio($options = [], $enclosedByLabel = true)
+      */
+     public function checkbox($options = [], $enclosedByLabel = true)
+     {
++        if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
++            $this->addErrorClassIfNeeded($options);
++        }
++
++        $this->addAriaAttributes($options);
++        $this->adjustLabelFor($options);
++        
+         if ($enclosedByLabel) {
+             $this->parts['{input}'] = Html::activeCheckbox($this->model, $this->attribute, $options);
+             $this->parts['{label}'] = '';
+@@ -612,13 +619,6 @@ public function checkbox($options = [], $enclosedByLabel = true)
+             $this->parts['{input}'] = Html::activeCheckbox($this->model, $this->attribute, $options);
+         }
+ 
+-        if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
+-            $this->addErrorClassIfNeeded($options);
+-        }
+-
+-        $this->addAriaAttributes($options);
+-        $this->adjustLabelFor($options);
+-
+         return $this;
+     }
+ 
+diff --git a/tests/framework/db/QueryBuilderTest.php b/tests/framework/db/QueryBuilderTest.php
+index 83bef762484..fedeb9eb97b 100644
+--- a/tests/framework/db/QueryBuilderTest.php
++++ b/tests/framework/db/QueryBuilderTest.php
+@@ -84,7 +84,7 @@ public function columnTypes()
+                 $this->bigInteger(),
+                 [
+                     'mysql' => 'bigint(20)',
+-                    'postgres' => 'bigint',
++                    'pgsql' => 'bigint',
+                     'sqlite' => 'bigint',
+                     'oci' => 'NUMBER(20)',
+                     'sqlsrv' => 'bigint',
+@@ -96,7 +96,7 @@ public function columnTypes()
+                 $this->bigInteger()->notNull(),
+                 [
+                     'mysql' => 'bigint(20) NOT NULL',
+-                    'postgres' => 'bigint NOT NULL',
++                    'pgsql' => 'bigint NOT NULL',
+                     'sqlite' => 'bigint NOT NULL',
+                     'oci' => 'NUMBER(20) NOT NULL',
+                     'sqlsrv' => 'bigint NOT NULL',
+@@ -108,7 +108,7 @@ public function columnTypes()
+                 $this->bigInteger()->check('value > 5'),
+                 [
+                     'mysql' => 'bigint(20) CHECK (value > 5)',
+-                    'postgres' => 'bigint CHECK (value > 5)',
++                    'pgsql' => 'bigint CHECK (value > 5)',
+                     'sqlite' => 'bigint CHECK (value > 5)',
+                     'oci' => 'NUMBER(20) CHECK (value > 5)',
+                     'sqlsrv' => 'bigint CHECK (value > 5)',
+@@ -120,7 +120,7 @@ public function columnTypes()
+                 $this->bigInteger(8),
+                 [
+                     'mysql' => 'bigint(8)',
+-                    'postgres' => 'bigint',
++                    'pgsql' => 'bigint',
+                     'sqlite' => 'bigint',
+                     'oci' => 'NUMBER(8)',
+                     'sqlsrv' => 'bigint',
+@@ -132,7 +132,7 @@ public function columnTypes()
+                 $this->bigInteger(8)->check('value > 5'),
+                 [
+                     'mysql' => 'bigint(8) CHECK (value > 5)',
+-                    'postgres' => 'bigint CHECK (value > 5)',
++                    'pgsql' => 'bigint CHECK (value > 5)',
+                     'sqlite' => 'bigint CHECK (value > 5)',
+                     'oci' => 'NUMBER(8) CHECK (value > 5)',
+                     'sqlsrv' => 'bigint CHECK (value > 5)',
+@@ -144,7 +144,7 @@ public function columnTypes()
+                 $this->bigPrimaryKey(),
+                 [
+                     'mysql' => 'bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY',
+-                    'postgres' => 'bigserial NOT NULL PRIMARY KEY',
++                    'pgsql' => 'bigserial NOT NULL PRIMARY KEY',
+                     'sqlite' => 'integer PRIMARY KEY AUTOINCREMENT NOT NULL',
+                 ],
+             ],
+@@ -153,7 +153,7 @@ public function columnTypes()
+                 $this->binary(),
+                 [
+                     'mysql' => 'blob',
+-                    'postgres' => 'bytea',
++                    'pgsql' => 'bytea',
+                     'sqlite' => 'blob',
+                     'oci' => 'BLOB',
+                     'sqlsrv' => 'varbinary(max)',
+@@ -175,7 +175,7 @@ public function columnTypes()
+                 $this->boolean(),
+                 [
+                     'mysql' => 'tinyint(1)',
+-                    'postgres' => 'boolean',
++                    'pgsql' => 'boolean',
+                     'sqlite' => 'boolean',
+                     'oci' => 'NUMBER(1)',
+                     'sqlsrv' => 'bit',
+@@ -196,7 +196,7 @@ public function columnTypes()
+                 $this->char()->notNull(),
+                 [
+                     'mysql' => 'char(1) NOT NULL',
+-                    'postgres' => 'char(1) NOT NULL',
++                    'pgsql' => 'char(1) NOT NULL',
+                     'sqlite' => 'char(1) NOT NULL',
+                     'oci' => 'CHAR(1) NOT NULL',
+                     'cubrid' => 'char(1) NOT NULL',
+@@ -216,7 +216,7 @@ public function columnTypes()
+                 $this->char(6),
+                 [
+                     'mysql' => 'char(6)',
+-                    'postgres' => 'char(6)',
++                    'pgsql' => 'char(6)',
+                     'sqlite' => 'char(6)',
+                     'oci' => 'CHAR(6)',
+                     'cubrid' => 'char(6)',
+@@ -227,7 +227,7 @@ public function columnTypes()
+                 $this->char(),
+                 [
+                     'mysql' => 'char(1)',
+-                    'postgres' => 'char(1)',
++                    'pgsql' => 'char(1)',
+                     'sqlite' => 'char(1)',
+                     'oci' => 'CHAR(1)',
+                     'cubrid' => 'char(1)',
+@@ -238,7 +238,7 @@ public function columnTypes()
+             //    $this->date()->check("value BETWEEN '2011-01-01' AND '2013-01-01'"),
+             //    [
+             //        'mysql' => ,
+-            //        'postgres' => ,
++            //        'pgsql' => ,
+             //        'sqlite' => ,
+             //        'sqlsrv' => ,
+             //        'cubrid' => ,
+@@ -249,7 +249,7 @@ public function columnTypes()
+                 $this->date()->notNull(),
+                 [
+                     'mysql' => 'date NOT NULL',
+-                    'postgres' => 'date NOT NULL',
++                    'pgsql' => 'date NOT NULL',
+                     'sqlite' => 'date NOT NULL',
+                     'oci' => 'DATE NOT NULL',
+                     'sqlsrv' => 'date NOT NULL',
+@@ -261,7 +261,7 @@ public function columnTypes()
+                 $this->date(),
+                 [
+                     'mysql' => 'date',
+-                    'postgres' => 'date',
++                    'pgsql' => 'date',
+                     'sqlite' => 'date',
+                     'oci' => 'DATE',
+                     'sqlsrv' => 'date',
+@@ -273,7 +273,7 @@ public function columnTypes()
+             //    $this->dateTime()->check("value BETWEEN '2011-01-01' AND '2013-01-01'"),
+             //    [
+             //        'mysql' => ,
+-            //        'postgres' => ,
++            //        'pgsql' => ,
+             //        'sqlite' => ,
+             //        'sqlsrv' => ,
+             //        'cubrid' => ,
+@@ -283,7 +283,7 @@ public function columnTypes()
+                 Schema::TYPE_DATETIME . ' NOT NULL',
+                 $this->dateTime()->notNull(),
+                 [
+-                    'postgres' => 'timestamp(0) NOT NULL',
++                    'pgsql' => 'timestamp(0) NOT NULL',
+                     'sqlite' => 'datetime NOT NULL',
+                     'oci' => 'TIMESTAMP NOT NULL',
+                     'sqlsrv' => 'datetime NOT NULL',
+@@ -294,7 +294,7 @@ public function columnTypes()
+                 Schema::TYPE_DATETIME,
+                 $this->dateTime(),
+                 [
+-                    'postgres' => 'timestamp(0)',
++                    'pgsql' => 'timestamp(0)',
+                     'sqlite' => 'datetime',
+                     'oci' => 'TIMESTAMP',
+                     'sqlsrv' => 'datetime',
+@@ -306,7 +306,7 @@ public function columnTypes()
+                 $this->decimal()->check('value > 5.6'),
+                 [
+                     'mysql' => 'decimal(10,0) CHECK (value > 5.6)',
+-                    'postgres' => 'numeric(10,0) CHECK (value > 5.6)',
++                    'pgsql' => 'numeric(10,0) CHECK (value > 5.6)',
+                     'sqlite' => 'decimal(10,0) CHECK (value > 5.6)',
+                     'oci' => 'NUMBER CHECK (value > 5.6)',
+                     'sqlsrv' => 'decimal(18,0) CHECK (value > 5.6)',
+@@ -318,7 +318,7 @@ public function columnTypes()
+                 $this->decimal()->notNull(),
+                 [
+                     'mysql' => 'decimal(10,0) NOT NULL',
+-                    'postgres' => 'numeric(10,0) NOT NULL',
++                    'pgsql' => 'numeric(10,0) NOT NULL',
+                     'sqlite' => 'decimal(10,0) NOT NULL',
+                     'oci' => 'NUMBER NOT NULL',
+                     'sqlsrv' => 'decimal(18,0) NOT NULL',
+@@ -330,7 +330,7 @@ public function columnTypes()
+                 $this->decimal(12, 4)->check('value > 5.6'),
+                 [
+                     'mysql' => 'decimal(12,4) CHECK (value > 5.6)',
+-                    'postgres' => 'numeric(12,4) CHECK (value > 5.6)',
++                    'pgsql' => 'numeric(12,4) CHECK (value > 5.6)',
+                     'sqlite' => 'decimal(12,4) CHECK (value > 5.6)',
+                     'oci' => 'NUMBER CHECK (value > 5.6)',
+                     'sqlsrv' => 'decimal(12,4) CHECK (value > 5.6)',
+@@ -342,7 +342,7 @@ public function columnTypes()
+                 $this->decimal(12, 4),
+                 [
+                     'mysql' => 'decimal(12,4)',
+-                    'postgres' => 'numeric(12,4)',
++                    'pgsql' => 'numeric(12,4)',
+                     'sqlite' => 'decimal(12,4)',
+                     'oci' => 'NUMBER',
+                     'sqlsrv' => 'decimal(12,4)',
+@@ -354,7 +354,7 @@ public function columnTypes()
+                 $this->decimal(),
+                 [
+                     'mysql' => 'decimal(10,0)',
+-                    'postgres' => 'numeric(10,0)',
++                    'pgsql' => 'numeric(10,0)',
+                     'sqlite' => 'decimal(10,0)',
+                     'oci' => 'NUMBER',
+                     'sqlsrv' => 'decimal(18,0)',
+@@ -366,7 +366,7 @@ public function columnTypes()
+                 $this->double()->check('value > 5.6'),
+                 [
+                     'mysql' => 'double CHECK (value > 5.6)',
+-                    'postgres' => 'double precision CHECK (value > 5.6)',
++                    'pgsql' => 'double precision CHECK (value > 5.6)',
+                     'sqlite' => 'double CHECK (value > 5.6)',
+                     'oci' => 'NUMBER CHECK (value > 5.6)',
+                     'sqlsrv' => 'float CHECK (value > 5.6)',
+@@ -378,7 +378,7 @@ public function columnTypes()
+                 $this->double()->notNull(),
+                 [
+                     'mysql' => 'double NOT NULL',
+-                    'postgres' => 'double precision NOT NULL',
++                    'pgsql' => 'double precision NOT NULL',
+                     'sqlite' => 'double NOT NULL',
+                     'oci' => 'NUMBER NOT NULL',
+                     'sqlsrv' => 'float NOT NULL',
+@@ -390,7 +390,7 @@ public function columnTypes()
+                 $this->double(16)->check('value > 5.6'),
+                 [
+                     'mysql' => 'double CHECK (value > 5.6)',
+-                    'postgres' => 'double precision CHECK (value > 5.6)',
++                    'pgsql' => 'double precision CHECK (value > 5.6)',
+                     'sqlite' => 'double CHECK (value > 5.6)',
+                     'oci' => 'NUMBER CHECK (value > 5.6)',
+                     'sqlsrv' => 'float CHECK (value > 5.6)',
+@@ -413,7 +413,7 @@ public function columnTypes()
+                 $this->double(),
+                 [
+                     'mysql' => 'double',
+-                    'postgres' => 'double precision',
++                    'pgsql' => 'double precision',
+                     'sqlite' => 'double',
+                     'oci' => 'NUMBER',
+                     'sqlsrv' => 'float',
+@@ -425,7 +425,7 @@ public function columnTypes()
+                 $this->float()->check('value > 5.6'),
+                 [
+                     'mysql' => 'float CHECK (value > 5.6)',
+-                    'postgres' => 'double precision CHECK (value > 5.6)',
++                    'pgsql' => 'double precision CHECK (value > 5.6)',
+                     'sqlite' => 'float CHECK (value > 5.6)',
+                     'oci' => 'NUMBER CHECK (value > 5.6)',
+                     'sqlsrv' => 'float CHECK (value > 5.6)',
+@@ -437,7 +437,7 @@ public function columnTypes()
+                 $this->float()->notNull(),
+                 [
+                     'mysql' => 'float NOT NULL',
+-                    'postgres' => 'double precision NOT NULL',
++                    'pgsql' => 'double precision NOT NULL',
+                     'sqlite' => 'float NOT NULL',
+                     'oci' => 'NUMBER NOT NULL',
+                     'sqlsrv' => 'float NOT NULL',
+@@ -449,7 +449,7 @@ public function columnTypes()
+                 $this->float(16)->check('value > 5.6'),
+                 [
+                     'mysql' => 'float CHECK (value > 5.6)',
+-                    'postgres' => 'double precision CHECK (value > 5.6)',
++                    'pgsql' => 'double precision CHECK (value > 5.6)',
+                     'sqlite' => 'float CHECK (value > 5.6)',
+                     'oci' => 'NUMBER CHECK (value > 5.6)',
+                     'sqlsrv' => 'float CHECK (value > 5.6)',
+@@ -472,7 +472,7 @@ public function columnTypes()
+                 $this->float(),
+                 [
+                     'mysql' => 'float',
+-                    'postgres' => 'double precision',
++                    'pgsql' => 'double precision',
+                     'sqlite' => 'float',
+                     'oci' => 'NUMBER',
+                     'sqlsrv' => 'float',
+@@ -484,7 +484,7 @@ public function columnTypes()
+                 $this->integer()->check('value > 5'),
+                 [
+                     'mysql' => 'int(11) CHECK (value > 5)',
+-                    'postgres' => 'integer CHECK (value > 5)',
++                    'pgsql' => 'integer CHECK (value > 5)',
+                     'sqlite' => 'integer CHECK (value > 5)',
+                     'oci' => 'NUMBER(10) CHECK (value > 5)',
+                     'sqlsrv' => 'int CHECK (value > 5)',
+@@ -496,7 +496,7 @@ public function columnTypes()
+                 $this->integer()->notNull(),
+                 [
+                     'mysql' => 'int(11) NOT NULL',
+-                    'postgres' => 'integer NOT NULL',
++                    'pgsql' => 'integer NOT NULL',
+                     'sqlite' => 'integer NOT NULL',
+                     'oci' => 'NUMBER(10) NOT NULL',
+                     'sqlsrv' => 'int NOT NULL',
+@@ -508,7 +508,7 @@ public function columnTypes()
+                 $this->integer(8)->check('value > 5'),
+                 [
+                     'mysql' => 'int(8) CHECK (value > 5)',
+-                    'postgres' => 'integer CHECK (value > 5)',
++                    'pgsql' => 'integer CHECK (value > 5)',
+                     'sqlite' => 'integer CHECK (value > 5)',
+                     'oci' => 'NUMBER(8) CHECK (value > 5)',
+                     'sqlsrv' => 'int CHECK (value > 5)',
+@@ -520,7 +520,7 @@ public function columnTypes()
+                 $this->integer(8),
+                 [
+                     'mysql' => 'int(8)',
+-                    'postgres' => 'integer',
++                    'pgsql' => 'integer',
+                     'sqlite' => 'integer',
+                     'oci' => 'NUMBER(8)',
+                     'sqlsrv' => 'int',
+@@ -532,7 +532,7 @@ public function columnTypes()
+                 $this->integer(),
+                 [
+                     'mysql' => 'int(11)',
+-                    'postgres' => 'integer',
++                    'pgsql' => 'integer',
+                     'sqlite' => 'integer',
+                     'oci' => 'NUMBER(10)',
+                     'sqlsrv' => 'int',
+@@ -544,7 +544,7 @@ public function columnTypes()
+                 $this->money()->check('value > 0.0'),
+                 [
+                     'mysql' => 'decimal(19,4) CHECK (value > 0.0)',
+-                    'postgres' => 'numeric(19,4) CHECK (value > 0.0)',
++                    'pgsql' => 'numeric(19,4) CHECK (value > 0.0)',
+                     'sqlite' => 'decimal(19,4) CHECK (value > 0.0)',
+                     'oci' => 'NUMBER(19,4) CHECK (value > 0.0)',
+                     'sqlsrv' => 'decimal(19,4) CHECK (value > 0.0)',
+@@ -556,7 +556,7 @@ public function columnTypes()
+                 $this->money()->notNull(),
+                 [
+                     'mysql' => 'decimal(19,4) NOT NULL',
+-                    'postgres' => 'numeric(19,4) NOT NULL',
++                    'pgsql' => 'numeric(19,4) NOT NULL',
+                     'sqlite' => 'decimal(19,4) NOT NULL',
+                     'oci' => 'NUMBER(19,4) NOT NULL',
+                     'sqlsrv' => 'decimal(19,4) NOT NULL',
+@@ -568,7 +568,7 @@ public function columnTypes()
+                 $this->money(16, 2)->check('value > 0.0'),
+                 [
+                     'mysql' => 'decimal(16,2) CHECK (value > 0.0)',
+-                    'postgres' => 'numeric(16,2) CHECK (value > 0.0)',
++                    'pgsql' => 'numeric(16,2) CHECK (value > 0.0)',
+                     'sqlite' => 'decimal(16,2) CHECK (value > 0.0)',
+                     'oci' => 'NUMBER(16,2) CHECK (value > 0.0)',
+                     'sqlsrv' => 'decimal(16,2) CHECK (value > 0.0)',
+@@ -580,7 +580,7 @@ public function columnTypes()
+                 $this->money(16, 2),
+                 [
+                     'mysql' => 'decimal(16,2)',
+-                    'postgres' => 'numeric(16,2)',
++                    'pgsql' => 'numeric(16,2)',
+                     'sqlite' => 'decimal(16,2)',
+                     'oci' => 'NUMBER(16,2)',
+                     'sqlsrv' => 'decimal(16,2)',
+@@ -592,7 +592,7 @@ public function columnTypes()
+                 $this->money(),
+                 [
+                     'mysql' => 'decimal(19,4)',
+-                    'postgres' => 'numeric(19,4)',
++                    'pgsql' => 'numeric(19,4)',
+                     'sqlite' => 'decimal(19,4)',
+                     'oci' => 'NUMBER(19,4)',
+                     'sqlsrv' => 'decimal(19,4)',
+@@ -604,7 +604,7 @@ public function columnTypes()
+                 $this->primaryKey()->check('value > 5'),
+                 [
+                     'mysql' => 'int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY CHECK (value > 5)',
+-                    'postgres' => 'serial NOT NULL PRIMARY KEY CHECK (value > 5)',
++                    'pgsql' => 'serial NOT NULL PRIMARY KEY CHECK (value > 5)',
+                     'sqlite' => 'integer PRIMARY KEY AUTOINCREMENT NOT NULL CHECK (value > 5)',
+                     'oci' => 'NUMBER(10) NOT NULL PRIMARY KEY CHECK (value > 5)',
+                     'sqlsrv' => 'int IDENTITY PRIMARY KEY CHECK (value > 5)',
+@@ -632,7 +632,7 @@ public function columnTypes()
+                 $this->primaryKey(),
+                 [
+                     'mysql' => 'int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY',
+-                    'postgres' => 'serial NOT NULL PRIMARY KEY',
++                    'pgsql' => 'serial NOT NULL PRIMARY KEY',
+                     'sqlite' => 'integer PRIMARY KEY AUTOINCREMENT NOT NULL',
+                     'oci' => 'NUMBER(10) NOT NULL PRIMARY KEY',
+                     'sqlsrv' => 'int IDENTITY PRIMARY KEY',
+@@ -644,7 +644,7 @@ public function columnTypes()
+                 $this->tinyInteger(2),
+                 [
+                     'mysql' => 'tinyint(2)',
+-                    'postgres' => 'smallint',
++                    'pgsql' => 'smallint',
+                     'sqlite' => 'tinyint',
+                     'oci' => 'NUMBER(2)',
+                     'sqlsrv' => 'tinyint',
+@@ -656,17 +656,16 @@ public function columnTypes()
+                 $this->tinyInteger()->unsigned(),
+                 [
+                     'mysql' => 'tinyint(3) UNSIGNED',
+-                    'postgres' => 'smallint UNSIGNED',
+                     'sqlite' => 'tinyint UNSIGNED',
+                     'cubrid' => 'smallint UNSIGNED',
+-                ],
++                ]
+             ],
+             [
+                 Schema::TYPE_TINYINT,
+                 $this->tinyInteger(),
+                 [
+                     'mysql' => 'tinyint(3)',
+-                    'postgres' => 'smallint',
++                    'pgsql' => 'smallint',
+                     'sqlite' => 'tinyint',
+                     'oci' => 'NUMBER(3)',
+                     'sqlsrv' => 'tinyint',
+@@ -678,7 +677,7 @@ public function columnTypes()
+                 $this->smallInteger(8),
+                 [
+                     'mysql' => 'smallint(8)',
+-                    'postgres' => 'smallint',
++                    'pgsql' => 'smallint',
+                     'sqlite' => 'smallint',
+                     'oci' => 'NUMBER(8)',
+                     'sqlsrv' => 'smallint',
+@@ -690,7 +689,7 @@ public function columnTypes()
+                 $this->smallInteger(),
+                 [
+                     'mysql' => 'smallint(6)',
+-                    'postgres' => 'smallint',
++                    'pgsql' => 'smallint',
+                     'sqlite' => 'smallint',
+                     'oci' => 'NUMBER(5)',
+                     'sqlsrv' => 'smallint',
+@@ -711,7 +710,7 @@ public function columnTypes()
+                 Schema::TYPE_STRING . ' CHECK (value LIKE \'test%\')',
+                 $this->string()->check('value LIKE \'test%\''),
+                 [
+-                    'postgres' => 'varchar(255) CHECK (value LIKE \'test%\')',
++                    'pgsql' => 'varchar(255) CHECK (value LIKE \'test%\')',
+                     'oci' => 'VARCHAR2(255) CHECK (value LIKE \'test%\')',
+                 ],
+             ],
+@@ -720,7 +719,7 @@ public function columnTypes()
+                 $this->string()->notNull(),
+                 [
+                     'mysql' => 'varchar(255) NOT NULL',
+-                    'postgres' => 'varchar(255) NOT NULL',
++                    'pgsql' => 'varchar(255) NOT NULL',
+                     'sqlite' => 'varchar(255) NOT NULL',
+                     'oci' => 'VARCHAR2(255) NOT NULL',
+                     'sqlsrv' => 'nvarchar(255) NOT NULL',
+@@ -741,7 +740,7 @@ public function columnTypes()
+                 Schema::TYPE_STRING . '(32) CHECK (value LIKE \'test%\')',
+                 $this->string(32)->check('value LIKE \'test%\''),
+                 [
+-                    'postgres' => 'varchar(32) CHECK (value LIKE \'test%\')',
++                    'pgsql' => 'varchar(32) CHECK (value LIKE \'test%\')',
+                     'oci' => 'VARCHAR2(32) CHECK (value LIKE \'test%\')',
+                 ],
+             ],
+@@ -750,7 +749,7 @@ public function columnTypes()
+                 $this->string(32),
+                 [
+                     'mysql' => 'varchar(32)',
+-                    'postgres' => 'varchar(32)',
++                    'pgsql' => 'varchar(32)',
+                     'sqlite' => 'varchar(32)',
+                     'oci' => 'VARCHAR2(32)',
+                     'sqlsrv' => 'nvarchar(32)',
+@@ -762,7 +761,7 @@ public function columnTypes()
+                 $this->string(),
+                 [
+                     'mysql' => 'varchar(255)',
+-                    'postgres' => 'varchar(255)',
++                    'pgsql' => 'varchar(255)',
+                     'sqlite' => 'varchar(255)',
+                     'oci' => 'VARCHAR2(255)',
+                     'sqlsrv' => 'nvarchar(255)',
+@@ -783,7 +782,7 @@ public function columnTypes()
+                 Schema::TYPE_TEXT . ' CHECK (value LIKE \'test%\')',
+                 $this->text()->check('value LIKE \'test%\''),
+                 [
+-                    'postgres' => 'text CHECK (value LIKE \'test%\')',
++                    'pgsql' => 'text CHECK (value LIKE \'test%\')',
+                     'oci' => 'CLOB CHECK (value LIKE \'test%\')',
+                 ],
+             ],
+@@ -792,7 +791,7 @@ public function columnTypes()
+                 $this->text()->notNull(),
+                 [
+                     'mysql' => 'text NOT NULL',
+-                    'postgres' => 'text NOT NULL',
++                    'pgsql' => 'text NOT NULL',
+                     'sqlite' => 'text NOT NULL',
+                     'oci' => 'CLOB NOT NULL',
+                     'sqlsrv' => 'nvarchar(max) NOT NULL',
+@@ -814,7 +813,7 @@ public function columnTypes()
+                 Schema::TYPE_TEXT . ' CHECK (value LIKE \'test%\')',
+                 $this->text()->check('value LIKE \'test%\''),
+                 [
+-                    'postgres' => 'text CHECK (value LIKE \'test%\')',
++                    'pgsql' => 'text CHECK (value LIKE \'test%\')',
+                     'oci' => 'CLOB CHECK (value LIKE \'test%\')',
+                 ],
+                 Schema::TYPE_TEXT . ' CHECK (value LIKE \'test%\')',
+@@ -824,7 +823,7 @@ public function columnTypes()
+                 $this->text()->notNull(),
+                 [
+                     'mysql' => 'text NOT NULL',
+-                    'postgres' => 'text NOT NULL',
++                    'pgsql' => 'text NOT NULL',
+                     'sqlite' => 'text NOT NULL',
+                     'oci' => 'CLOB NOT NULL',
+                     'sqlsrv' => 'nvarchar(max) NOT NULL',
+@@ -837,7 +836,7 @@ public function columnTypes()
+                 $this->text(),
+                 [
+                     'mysql' => 'text',
+-                    'postgres' => 'text',
++                    'pgsql' => 'text',
+                     'sqlite' => 'text',
+                     'oci' => 'CLOB',
+                     'sqlsrv' => 'nvarchar(max)',
+@@ -850,7 +849,7 @@ public function columnTypes()
+                 $this->text(),
+                 [
+                     'mysql' => 'text',
+-                    'postgres' => 'text',
++                    'pgsql' => 'text',
+                     'sqlite' => 'text',
+                     'oci' => 'CLOB',
+                     'sqlsrv' => 'nvarchar(max)',
+@@ -862,7 +861,7 @@ public function columnTypes()
+             //    $this->time()->check("value BETWEEN '12:00:00' AND '13:01:01'"),
+             //    [
+             //        'mysql' => ,
+-            //        'postgres' => ,
++            //        'pgsql' => ,
+             //        'sqlite' => ,
+             //        'sqlsrv' => ,
+             //        'cubrid' => ,
+@@ -872,7 +871,7 @@ public function columnTypes()
+                 Schema::TYPE_TIME . ' NOT NULL',
+                 $this->time()->notNull(),
+                 [
+-                    'postgres' => 'time(0) NOT NULL',
++                    'pgsql' => 'time(0) NOT NULL',
+                     'sqlite' => 'time NOT NULL',
+                     'oci' => 'TIMESTAMP NOT NULL',
+                     'sqlsrv' => 'time NOT NULL',
+@@ -883,7 +882,7 @@ public function columnTypes()
+                 Schema::TYPE_TIME,
+                 $this->time(),
+                 [
+-                    'postgres' => 'time(0)',
++                    'pgsql' => 'time(0)',
+                     'sqlite' => 'time',
+                     'oci' => 'TIMESTAMP',
+                     'sqlsrv' => 'time',
+@@ -895,7 +894,7 @@ public function columnTypes()
+             //    $this->timestamp()->check("value BETWEEN '2011-01-01' AND '2013-01-01'"),
+             //    [
+             //        'mysql' => ,
+-            //        'postgres' => ,
++            //        'pgsql' => ,
+             //        'sqlite' => ,
+             //        'sqlsrv' => ,
+             //        'cubrid' => ,
+@@ -905,7 +904,7 @@ public function columnTypes()
+                 Schema::TYPE_TIMESTAMP . ' NOT NULL',
+                 $this->timestamp()->notNull(),
+                 [
+-                    'postgres' => 'timestamp(0) NOT NULL',
++                    'pgsql' => 'timestamp(0) NOT NULL',
+                     'sqlite' => 'timestamp NOT NULL',
+                     'oci' => 'TIMESTAMP NOT NULL',
+                     'sqlsrv' => 'datetime NOT NULL',
+@@ -921,7 +920,7 @@ public function columnTypes()
+                      * @see \yiiunit\framework\db\mysql\QueryBuilderTest::columnTypes()
+                      */
+ 
+-                    'postgres' => 'timestamp(0)',
++                    'pgsql' => 'timestamp(0)',
+                     'sqlite' => 'timestamp',
+                     'oci' => 'TIMESTAMP',
+                     'sqlsrv' => 'datetime',
+@@ -932,7 +931,7 @@ public function columnTypes()
+                 Schema::TYPE_TIMESTAMP . ' NULL DEFAULT NULL',
+                 $this->timestamp()->defaultValue(null),
+                 [
+-                    'postgres' => 'timestamp(0) NULL DEFAULT NULL',
++                    'pgsql' => 'timestamp(0) NULL DEFAULT NULL',
+                     'sqlite' => 'timestamp NULL DEFAULT NULL',
+                     'sqlsrv' => 'datetime NULL DEFAULT NULL',
+                     'cubrid' => 'timestamp NULL DEFAULT NULL',
+@@ -943,7 +942,7 @@ public function columnTypes()
+                 $this->primaryKey()->unsigned(),
+                 [
+                     'mysql' => 'int(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY',
+-                    'postgres' => 'serial NOT NULL PRIMARY KEY',
++                    'pgsql' => 'serial NOT NULL PRIMARY KEY',
+                     'sqlite' => 'integer PRIMARY KEY AUTOINCREMENT NOT NULL',
+                 ],
+             ],
+@@ -952,7 +951,7 @@ public function columnTypes()
+                 $this->bigPrimaryKey()->unsigned(),
+                 [
+                     'mysql' => 'bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY',
+-                    'postgres' => 'bigserial NOT NULL PRIMARY KEY',
++                    'pgsql' => 'bigserial NOT NULL PRIMARY KEY',
+                     'sqlite' => 'integer PRIMARY KEY AUTOINCREMENT NOT NULL',
+                 ],
+             ],
+@@ -961,7 +960,6 @@ public function columnTypes()
+                 $this->integer()->comment('test comment'),
+                 [
+                     'mysql' => "int(11) COMMENT 'test comment'",
+-                    'postgres' => 'integer',
+                     'sqlsrv' => 'int',
+                     'cubrid' => "int COMMENT 'test comment'",
+                 ],
+@@ -974,7 +972,6 @@ public function columnTypes()
+                 $this->primaryKey()->comment('test comment'),
+                 [
+                     'mysql' => "int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'test comment'",
+-                    'postgres' => 'serial NOT NULL PRIMARY KEY',
+                     'sqlsrv' => 'int IDENTITY PRIMARY KEY',
+                     'cubrid' => "int NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'test comment'",
+                 ],
+@@ -987,7 +984,6 @@ public function columnTypes()
+                 $this->primaryKey()->first(),
+                 [
+                     'mysql' => 'int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST',
+-                    'postgres' => 'serial NOT NULL PRIMARY KEY',
+                     'oci' => 'NUMBER(10) NOT NULL PRIMARY KEY',
+                     'sqlsrv' => 'int IDENTITY PRIMARY KEY',
+                     'cubrid' => 'int NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST',
+@@ -1001,12 +997,12 @@ public function columnTypes()
+                 $this->integer()->first(),
+                 [
+                     'mysql' => 'int(11) FIRST',
+-                    'postgres' => 'integer',
+                     'oci' => 'NUMBER(10)',
+                     'sqlsrv' => 'int',
+                     'cubrid' => 'int FIRST',
+                 ],
+                 [
++                    'pgsql' => 'integer',
+                     'sqlsrv' => 'integer',
+                 ]
+             ],
+@@ -1015,7 +1011,6 @@ public function columnTypes()
+                 $this->string()->first(),
+                 [
+                     'mysql' => 'varchar(255) FIRST',
+-                    'postgres' => 'varchar(255)',
+                     'oci' => 'VARCHAR2(255)',
+                     'sqlsrv' => 'nvarchar(255)',
+                     'cubrid' => 'varchar(255) FIRST',
+@@ -1029,7 +1024,6 @@ public function columnTypes()
+                 $this->integer()->append('NOT NULL')->first(),
+                 [
+                     'mysql' => 'int(11) NOT NULL FIRST',
+-                    'postgres' => 'integer NOT NULL',
+                     'oci' => 'NUMBER(10) NOT NULL',
+                     'sqlsrv' => 'int NOT NULL',
+                     'cubrid' => 'int NOT NULL FIRST',
+@@ -1043,7 +1037,6 @@ public function columnTypes()
+                 $this->string()->append('NOT NULL')->first(),
+                 [
+                     'mysql' => 'varchar(255) NOT NULL FIRST',
+-                    'postgres' => 'varchar(255) NOT NULL',
+                     'oci' => 'VARCHAR2(255) NOT NULL',
+                     'sqlsrv' => 'nvarchar(255) NOT NULL',
+                     'cubrid' => 'varchar(255) NOT NULL FIRST',
+diff --git a/tests/framework/db/mysql/SchemaTest.php b/tests/framework/db/mysql/SchemaTest.php
+index 5b57cd7baaf..6fa6a5d2be6 100644
+--- a/tests/framework/db/mysql/SchemaTest.php
++++ b/tests/framework/db/mysql/SchemaTest.php
+@@ -118,4 +118,63 @@ public function testAlternativeDisplayOfDefaultCurrentTimestampInMariaDB()
+         $this->assertInstanceOf(Expression::className(), $column->defaultValue);
+         $this->assertEquals('CURRENT_TIMESTAMP', $column->defaultValue);
+     }
++
++    public function getExpectedColumns()
++    {
++        $version = $this->getConnection()->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION);
++
++        return array_merge(
++            parent::getExpectedColumns(),
++            [
++                'int_col' => [
++                    'type' => 'integer',
++                    'dbType' => \version_compare($version, '8.0.17', '>') ? 'int' : 'int(11)',
++                    'phpType' => 'integer',
++                    'allowNull' => false,
++                    'autoIncrement' => false,
++                    'enumValues' => null,
++                    'size' => \version_compare($version, '8.0.17', '>') ? null : 11,
++                    'precision' => \version_compare($version, '8.0.17', '>') ? null : 11,
++                    'scale' => null,
++                    'defaultValue' => null,
++                ],
++                'int_col2' => [
++                    'type' => 'integer',
++                    'dbType' => \version_compare($version, '8.0.17', '>') ? 'int' : 'int(11)',
++                    'phpType' => 'integer',
++                    'allowNull' => true,
++                    'autoIncrement' => false,
++                    'enumValues' => null,
++                    'size' => \version_compare($version, '8.0.17', '>') ? null : 11,
++                    'precision' => \version_compare($version, '8.0.17', '>') ? null : 11,
++                    'scale' => null,
++                    'defaultValue' => 1,
++                ],
++                'tinyint_col' => [
++                    'type' => 'tinyint',
++                    'dbType' => \version_compare($version, '8.0.17', '>') ? 'tinyint' : 'tinyint(3)',
++                    'phpType' => 'integer',
++                    'allowNull' => true,
++                    'autoIncrement' => false,
++                    'enumValues' => null,
++                    'size' => \version_compare($version, '8.0.17', '>') ? null : 3,
++                    'precision' => \version_compare($version, '8.0.17', '>') ? null : 3,
++                    'scale' => null,
++                    'defaultValue' => 1,
++                ],
++                'smallint_col' => [
++                    'type' => 'smallint',
++                    'dbType' =>  \version_compare($version, '8.0.17', '>') ? 'smallint' : 'smallint(1)',
++                    'phpType' => 'integer',
++                    'allowNull' => true,
++                    'autoIncrement' => false,
++                    'enumValues' => null,
++                    'size' => \version_compare($version, '8.0.17', '>') ? null : 1,
++                    'precision' => \version_compare($version, '8.0.17', '>') ? null : 1,
++                    'scale' => null,
++                    'defaultValue' => 1,
++                ],
++            ]
++        );
++    }
+ }
+diff --git a/tests/framework/db/pgsql/SchemaTest.php b/tests/framework/db/pgsql/SchemaTest.php
+index ddee4640a7b..d3b0ad3b2a3 100644
+--- a/tests/framework/db/pgsql/SchemaTest.php
++++ b/tests/framework/db/pgsql/SchemaTest.php
+@@ -75,7 +75,9 @@ public function getExpectedColumns()
+         $columns['bool_col2']['precision'] = null;
+         $columns['bool_col2']['scale'] = null;
+         $columns['bool_col2']['defaultValue'] = true;
+-        $columns['ts_default']['defaultValue'] = new Expression('now()');
++        if (version_compare($this->getConnection(false)->getServerVersion(), '10', '<')) {
++            $columns['ts_default']['defaultValue'] = new Expression('now()');
++        }
+         $columns['bit_col']['dbType'] = 'bit';
+         $columns['bit_col']['size'] = 8;
+         $columns['bit_col']['precision'] = null;
+diff --git a/tests/framework/di/ContainerTest.php b/tests/framework/di/ContainerTest.php
+index f0b5c800130..1d6d54b2145 100644
+--- a/tests/framework/di/ContainerTest.php
++++ b/tests/framework/di/ContainerTest.php
+@@ -357,6 +357,7 @@ public function testReferencesInArrayInDependencies()
+     {
+         $quxInterface = 'yiiunit\framework\di\stubs\QuxInterface';
+         $container = new Container();
++        $container->resolveArrays = true;
+         $container->setSingletons([
+             $quxInterface => [
+                 'class' => Qux::className(),
+@@ -494,4 +495,36 @@ public function testVariadicCallable()
+ 
+         require __DIR__ . '/testContainerWithVariadicCallable.php';
+     }
++
++    /**
++     * @see https://github.com/yiisoft/yii2/issues/18245
++     */
++    public function testDelayedInitializationOfSubArray()
++    {
++        $definitions = [
++            'test' => [
++                'class' => Corge::className(),
++                '__construct()' => [
++                    [Instance::of('setLater')],
++                ],
++            ],
++        ];
++
++        $application = Yii::createObject([
++            '__class' => \yii\web\Application::className(),
++            'basePath' => __DIR__,
++            'id' => 'test',
++            'components' => [
++                'request' => [
++                    'baseUrl' => '123'
++                ],
++            ],
++            'container' => [
++                'definitions' => $definitions,
++            ],
++        ]);
++
++        Yii::$container->set('setLater', new Qux());
++        Yii::$container->get('test');
++    }
+ }
+diff --git a/tests/framework/widgets/ActiveFormTest.php b/tests/framework/widgets/ActiveFormTest.php
+index c8accbb270c..79908614778 100644
+--- a/tests/framework/widgets/ActiveFormTest.php
++++ b/tests/framework/widgets/ActiveFormTest.php
+@@ -158,6 +158,7 @@ public function testShouldTriggerInitEvent()
+ 
+     /**
+      * @see https://github.com/yiisoft/yii2/issues/15476
++     * @see https://github.com/yiisoft/yii2/issues/16892
+      */
+     public function testValidationStateOnInput()
+     {
+@@ -182,5 +183,25 @@ public function testValidationStateOnInput()
+ EOF
+         , (string) $form->field($model, 'name'));
+ 
++
++        $this->assertEqualsWithoutLE(<<<'EOF'
++<div class="form-group field-dynamicmodel-name">
++
++<input type="hidden" name="DynamicModel[name]" value="0"><label><input type="checkbox" id="dynamicmodel-name" class="has-error" name="DynamicModel[name]" value="1" aria-invalid="true"> Name</label>
++
++<div class="help-block">I have an error!</div>
++</div>
++EOF
++            , (string) $form->field($model, 'name')->checkbox());
++
++        $this->assertEqualsWithoutLE(<<<'EOF'
++<div class="form-group field-dynamicmodel-name">
++
++<input type="hidden" name="DynamicModel[name]" value="0"><label><input type="radio" id="dynamicmodel-name" class="has-error" name="DynamicModel[name]" value="1" aria-invalid="true"> Name</label>
++
++<div class="help-block">I have an error!</div>
++</div>
++EOF
++            , (string) $form->field($model, 'name')->radio());
+     }
+ }
