@@ -7,6 +7,7 @@ name: ci-mysql
 jobs:
   tests:
     name: PHP ${{ matrix.php-version }}-mysql-${{ matrix.mysql-version }}
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
     env:
       extensions: curl, intl, pdo, pdo_mysql
       key: cache-v1
