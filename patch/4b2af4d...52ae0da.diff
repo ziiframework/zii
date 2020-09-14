@@ -174,21 +174,6 @@ index 00000000000..2d3818129ba
 +
 +      - name: Run pgsql tests with phpunit
 +        run: vendor/bin/phpunit --group pgsql
-diff --git a/docs/guide/test-environment-setup.md b/docs/guide/test-environment-setup.md
-index 3c738d316da..e69ef3cbc3e 100644
---- a/docs/guide/test-environment-setup.md
-+++ b/docs/guide/test-environment-setup.md
-@@ -17,7 +17,7 @@ In case you are not using one of these templates, Codeception could be installed
- by issuing the following console commands:
- 
- ```
--composer require codeception/codeception
--composer require codeception/specify
--composer require codeception/verify
-+composer require --dev codeception/codeception
-+composer require --dev codeception/specify
-+composer require --dev codeception/verify
- ```
 diff --git a/src/CHANGELOG.md b/src/CHANGELOG.md
 index a3984eba57f..255deb74e6a 100644
 --- a/src/CHANGELOG.md
