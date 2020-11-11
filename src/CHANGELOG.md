@@ -1,24 +1,53 @@
 Yii Framework 2 Change Log
 ==========================
 
-2.0.38 under development
+2.0.39.1 November 10, 2020
+--------------------------
+
+- Bug #18373: Fix not taking default value when unable to resolve non-exing class via DI container (vjik)
+- Enh #18370: Add option to provide a string replacement for `null` value in `yii\data\DataFilter` (bizley)
+
+
+2.0.39 November 10, 2020
 ------------------------
 
-- Enh #18213: Do not load fixtures with circular dependencies twice instead of throwing an exception (JesseHines0)
-- Bug #18066: Fix `yii\db\Query::create()` wasn't using all info from `withQuery()` (maximkou)
-- Bug #18269: Fix integer safe attribute to work properly in `yii\base\Model` (Ladone)
-- Enh #18236: Allow `yii\filters\RateLimiter` to accept a closure function for the `$user` property in order to assign values on runtime (nadar)
-- Bug #18248: Render only one stack trace on a console for chained exceptions (mikehaertl)
-- Bug #18233: Add PHP 8 support (samdark)
-- Enh #18196: `yii\rbac\DbManager::$checkAccessAssignments` is now `protected` (alex-code)
-- Bug #18239: Fix support of no-extension files for `FileValidator::validateExtension()` (darkdef)
-- Bug #18229: Add a flag to specify SyBase database when used with pdo_dblib (darkdef)
+- Bug #16418: Fix `yii\data\Pagination::getLinks()` to return links to the first and the last pages regardless of the current page (ptz-nerf, bizley)
+- Bug #16831: Fix console Table widget does not render correctly in combination with ANSI formatting (issidorov, cebe)
+- Bug #18160, #18192: Fix `registerFile` with set argument `depends` does not take `position` and `appendTimestamp` into account (baleeny)
+- Bug #18263: Fix writing `\yii\caching\FileCache` files to the same directory when `keyPrefix` is set (githubjeka)
+- Bug #18287: Fix for `OUTPUT INSERTED` and computed columns. Add flag to mark computed values in table schema (darkdef)
+- Bug #18290: Fix response with non-seekable streams (schmunk42)
+- Bug #18297: Replace usage of deprecated `ReflectionParameter::isArray()` method in PHP8 (baletskyi)
+- Bug #18303: Fix creating migration for column methods used after `defaultValues` (wsaid)
+- Bug #18308: Fix `\yii\base\Model::getErrorSummary()` reverse order (DrDeath72)
+- Bug #18313: Fix multipart form data parsing with double quotes (wsaid)
+- Bug #18317: Additional PHP 8 compatibility fixes (samdark, bizley)
+- Enh #18247: Add support for the 'session.use_strict_mode' ini directive in `yii\web\Session` (rhertogh)
+- Enh #18285: Enhanced DI container to allow passing parameters by name in a constructor (vjik)
+- Enh #18304: Add support of constructor parameters with default values to DI container (vjik)
+- Enh #18351: Add option to change default timezone for parsing formats without time part in `yii\validators\DateValidator` (bizley)
+
+
+2.0.38 September 14, 2020
+-------------------------
+
 - Bug #13973: Correct alterColumn for MSSQL & drop constraints before dropping a column (darkdef)
-- Bug #18040: Display width specification for integer data types was deprecated in MySQL 8.0.19 (terabytesoftw)
 - Bug #15265: PostgreSQL > 10.0 is not pass tests with default value of timestamp CURRENT_TIMESTAMP (terabytesoftw)
-- Bug #18232: Fail tests pgsql v-10.14, v-11.9, v-12-latest (terabytesoftw)
 - Bug #16892: Validation error class was not applied to checkbox and radio when validationStateOn = self::VALIDATION_STATE_ON_INPUT (dan-szabo, samdark)
+- Bug #18040: Display width specification for integer data types was deprecated in MySQL 8.0.19 (terabytesoftw)
+- Bug #18066: Fix `yii\db\Query::create()` wasn't using all info from `withQuery()` (maximkou)
+- Bug #18229: Add a flag to specify SyBase database when used with pdo_dblib (darkdef)
+- Bug #18232: Fail tests pgsql v-10.14, v-11.9, v-12-latest (terabytesoftw)
+- Bug #18233: Add PHP 8 support (samdark)
+- Bug #18239: Fix support of no-extension files for `FileValidator::validateExtension()` (darkdef)
 - Bug #18245: Make resolving DI references inside of arrays in dependencies optional (SamMousa, samdark, hiqsol)
+- Bug #18248: Render only one stack trace on a console for chained exceptions (mikehaertl)
+- Bug #18269: Fix integer safe attribute to work properly in `yii\base\Model` (Ladone)
+- Bug: (CVE-2020-15148): Disable unserialization of `yii\db\BatchQueryResult` to prevent remote code execution in case application calls unserialize() on user input containing specially crafted string (samdark, russtone)
+- Enh #18196: `yii\rbac\DbManager::$checkAccessAssignments` is now `protected` (alex-code)
+- Enh #18213: Do not load fixtures with circular dependencies twice instead of throwing an exception (JesseHines0)
+- Enh #18236: Allow `yii\filters\RateLimiter` to accept a closure function for the `$user` property in order to assign values on runtime (nadar)
+
 
 2.0.37 August 07, 2020
 ----------------------
