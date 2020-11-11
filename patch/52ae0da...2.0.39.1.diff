@@ -1372,21 +1372,6 @@ index e92f9385e06..1ffad32a924 100644
   (
      SELECT CONVERT(VARCHAR, [t2].[value])
  		FROM [sys].[extended_properties] AS [t2]
-diff --git a/src/db/oci/Schema.php b/src/db/oci/Schema.php
-index 23ad65b394c..2e55c09db77 100644
---- a/src/db/oci/Schema.php
-+++ b/src/db/oci/Schema.php
-@@ -24,8 +24,8 @@
- /**
-  * Schema is the class for retrieving metadata from an Oracle database.
-  *
-- * @property string $lastInsertID The row ID of the last row inserted, or the last value retrieved from the
-- * sequence object. This property is read-only.
-+ * @property-read string $lastInsertID The row ID of the last row inserted, or the last value retrieved from
-+ * the sequence object. This property is read-only.
-  *
-  * @author Qiang Xue <qiang.xue@gmail.com>
-  * @since 2.0
 diff --git a/src/db/sqlite/Schema.php b/src/db/sqlite/Schema.php
 index ccd6e2bf6ae..0b5a0cc8ec9 100644
 --- a/src/db/sqlite/Schema.php
