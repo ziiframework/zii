@@ -2595,10 +2595,10 @@ index d731ba9dd88..1b5a7e4a102 100644
  
  ```php
  function foo($model, $attribute) {
-diff --git a/framework/BaseYii.php b/framework/BaseYii.php
+diff --git a/src/BaseYii.php b/src/BaseYii.php
 index e2c4097e42a..6aebd46bbee 100644
---- a/framework/BaseYii.php
-+++ b/framework/BaseYii.php
+--- a/src/BaseYii.php
++++ b/src/BaseYii.php
 @@ -93,7 +93,7 @@ class BaseYii
       */
      public static function getVersion()
@@ -2608,10 +2608,10 @@ index e2c4097e42a..6aebd46bbee 100644
      }
  
      /**
-diff --git a/framework/CHANGELOG.md b/framework/CHANGELOG.md
+diff --git a/src/CHANGELOG.md b/src/CHANGELOG.md
 index 255deb74e6a..3480bcb26d0 100644
---- a/framework/CHANGELOG.md
-+++ b/framework/CHANGELOG.md
+--- a/src/CHANGELOG.md
++++ b/src/CHANGELOG.md
 @@ -1,24 +1,53 @@
  Yii Framework 2 Change Log
  ==========================
@@ -2678,10 +2678,10 @@ index 255deb74e6a..3480bcb26d0 100644
  
  2.0.37 August 07, 2020
  ----------------------
-diff --git a/framework/UPGRADE.md b/framework/UPGRADE.md
+diff --git a/src/UPGRADE.md b/src/UPGRADE.md
 index b151c334537..0796fb183e4 100644
---- a/framework/UPGRADE.md
-+++ b/framework/UPGRADE.md
+--- a/src/UPGRADE.md
++++ b/src/UPGRADE.md
 @@ -51,6 +51,47 @@ if you want to upgrade from version A to version C and there is
  version B between A and C, you need to follow the instructions
  for both A and B.
@@ -2730,10 +2730,10 @@ index b151c334537..0796fb183e4 100644
  Upgrade from Yii 2.0.37
  -----------------------
  
-diff --git a/framework/base/Action.php b/framework/base/Action.php
+diff --git a/src/base/Action.php b/src/base/Action.php
 index bf6464e1c09..5a9413cf296 100644
---- a/framework/base/Action.php
-+++ b/framework/base/Action.php
+--- a/src/base/Action.php
++++ b/src/base/Action.php
 @@ -30,7 +30,7 @@
   *
   * For more details and usage information on Action, see the [guide article on actions](guide:structure-controllers).
@@ -2743,10 +2743,10 @@ index bf6464e1c09..5a9413cf296 100644
   * read-only.
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
-diff --git a/framework/base/Application.php b/framework/base/Application.php
+diff --git a/src/base/Application.php b/src/base/Application.php
 index d7771bf636f..94f4be11787 100644
---- a/framework/base/Application.php
-+++ b/framework/base/Application.php
+--- a/src/base/Application.php
++++ b/src/base/Application.php
 @@ -14,33 +14,39 @@
   *
   * For more details and usage information on Application, see the [guide article on applications](guide:structure-applications).
@@ -2806,10 +2806,10 @@ index d7771bf636f..94f4be11787 100644
   * files. This property is read-only.
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
-diff --git a/framework/base/Component.php b/framework/base/Component.php
+diff --git a/src/base/Component.php b/src/base/Component.php
 index 89bd36a29fc..65516e281fc 100644
---- a/framework/base/Component.php
-+++ b/framework/base/Component.php
+--- a/src/base/Component.php
++++ b/src/base/Component.php
 @@ -93,7 +93,8 @@
   *
   * For more details and usage information on Component, see the [guide article on components](guide:concept-components).
@@ -2820,10 +2820,10 @@ index 89bd36a29fc..65516e281fc 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/framework/base/Controller.php b/framework/base/Controller.php
+diff --git a/src/base/Controller.php b/src/base/Controller.php
 index 79e4dc1efef..e15b091eb0f 100644
---- a/framework/base/Controller.php
-+++ b/framework/base/Controller.php
+--- a/src/base/Controller.php
++++ b/src/base/Controller.php
 @@ -16,12 +16,12 @@
   *
   * For more details and usage information on Controller, see the [guide article on controllers](guide:structure-controllers).
@@ -2842,10 +2842,10 @@ index 79e4dc1efef..e15b091eb0f 100644
   * @property View|\yii\web\View $view The view object that can be used to render views or view files.
   * @property string $viewPath The directory containing the view files for this controller.
   *
-diff --git a/framework/base/ErrorException.php b/framework/base/ErrorException.php
+diff --git a/src/base/ErrorException.php b/src/base/ErrorException.php
 index f3ba4d90bb1..c06111b57dd 100644
---- a/framework/base/ErrorException.php
-+++ b/framework/base/ErrorException.php
+--- a/src/base/ErrorException.php
++++ b/src/base/ErrorException.php
 @@ -33,14 +33,14 @@ class ErrorException extends \ErrorException
      /**
       * Constructs the exception.
@@ -2868,10 +2868,10 @@ index f3ba4d90bb1..c06111b57dd 100644
      {
          parent::__construct($message, $code, $severity, $filename, $lineno, $previous);
  
-diff --git a/framework/base/ErrorHandler.php b/framework/base/ErrorHandler.php
+diff --git a/src/base/ErrorHandler.php b/src/base/ErrorHandler.php
 index 07b3c3cc168..8d98dafe789 100644
---- a/framework/base/ErrorHandler.php
-+++ b/framework/base/ErrorHandler.php
+--- a/src/base/ErrorHandler.php
++++ b/src/base/ErrorHandler.php
 @@ -298,7 +298,7 @@ public function handleFatalError()
  
      /**
@@ -2908,10 +2908,10 @@ index 07b3c3cc168..8d98dafe789 100644
       * @return string the string representation of the exception.
       *
       * @since 2.0.14
-diff --git a/framework/base/ExitException.php b/framework/base/ExitException.php
+diff --git a/src/base/ExitException.php b/src/base/ExitException.php
 index 9197b0f9aac..4fde6a8e800 100644
---- a/framework/base/ExitException.php
-+++ b/framework/base/ExitException.php
+--- a/src/base/ExitException.php
++++ b/src/base/ExitException.php
 @@ -28,9 +28,9 @@ class ExitException extends \Exception
       * @param int $status the exit status code
       * @param string $message error message
@@ -2924,10 +2924,10 @@ index 9197b0f9aac..4fde6a8e800 100644
      {
          $this->statusCode = $status;
          parent::__construct($message, $code, $previous);
-diff --git a/framework/base/Model.php b/framework/base/Model.php
+diff --git a/src/base/Model.php b/src/base/Model.php
 index b525b169447..085ec1a992b 100644
---- a/framework/base/Model.php
-+++ b/framework/base/Model.php
+--- a/src/base/Model.php
++++ b/src/base/Model.php
 @@ -37,19 +37,20 @@
   *
   * For more details and usage information on Model, see the [guide article on models](guide:structure-models).
@@ -2966,10 +2966,10 @@ index b525b169447..085ec1a992b 100644
          }
          return $lines;
      }
-diff --git a/framework/base/Module.php b/framework/base/Module.php
+diff --git a/src/base/Module.php b/src/base/Module.php
 index d5954162cbe..d8577d482ed 100644
---- a/framework/base/Module.php
-+++ b/framework/base/Module.php
+--- a/src/base/Module.php
++++ b/src/base/Module.php
 @@ -23,17 +23,17 @@
   *
   * For more details and usage information on Module, see the [guide article on modules](guide:structure-modules).
@@ -2994,10 +2994,10 @@ index d5954162cbe..d8577d482ed 100644
   * @property string $viewPath The root directory of view files. Defaults to "[[basePath]]/views".
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
-diff --git a/framework/base/View.php b/framework/base/View.php
+diff --git a/src/base/View.php b/src/base/View.php
 index d9584a3f176..d5b64c668c1 100644
---- a/framework/base/View.php
-+++ b/framework/base/View.php
+--- a/src/base/View.php
++++ b/src/base/View.php
 @@ -20,7 +20,7 @@
   *
   * For more details and usage information on View, see the [guide article on views](guide:structure-views).
@@ -3007,10 +3007,10 @@ index d9584a3f176..d5b64c668c1 100644
   * rendered. This property is read-only.
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
-diff --git a/framework/base/Widget.php b/framework/base/Widget.php
+diff --git a/src/base/Widget.php b/src/base/Widget.php
 index d578ae485ae..ab27f028f2f 100644
---- a/framework/base/Widget.php
-+++ b/framework/base/Widget.php
+--- a/src/base/Widget.php
++++ b/src/base/Widget.php
 @@ -15,10 +15,11 @@
   *
   * For more details and usage information on Widget, see the [guide article on widgets](guide:structure-widgets).
@@ -3035,10 +3035,10 @@ index d578ae485ae..ab27f028f2f 100644
       */
      public function getId($autoGenerate = true)
      {
-diff --git a/framework/caching/FileCache.php b/framework/caching/FileCache.php
+diff --git a/src/caching/FileCache.php b/src/caching/FileCache.php
 index 08f292084e9..da71b179300 100644
---- a/framework/caching/FileCache.php
-+++ b/framework/caching/FileCache.php
+--- a/src/caching/FileCache.php
++++ b/src/caching/FileCache.php
 @@ -197,24 +197,31 @@ protected function deleteValue($key)
      }
  
@@ -3080,10 +3080,10 @@ index 08f292084e9..da71b179300 100644
      }
  
      /**
-diff --git a/framework/caching/MemCache.php b/framework/caching/MemCache.php
+diff --git a/src/caching/MemCache.php b/src/caching/MemCache.php
 index 0f2bcdcd04a..2a83e5d3fff 100644
---- a/framework/caching/MemCache.php
-+++ b/framework/caching/MemCache.php
+--- a/src/caching/MemCache.php
++++ b/src/caching/MemCache.php
 @@ -55,10 +55,10 @@
   *
   * For more details and usage information on Cache, see the [guide article on caching](guide:caching-overview).
@@ -3098,10 +3098,10 @@ index 0f2bcdcd04a..2a83e5d3fff 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/framework/captcha/CaptchaAction.php b/framework/captcha/CaptchaAction.php
+diff --git a/src/captcha/CaptchaAction.php b/src/captcha/CaptchaAction.php
 index 3ded638459e..40e1aa03a0a 100644
---- a/framework/captcha/CaptchaAction.php
-+++ b/framework/captcha/CaptchaAction.php
+--- a/src/captcha/CaptchaAction.php
++++ b/src/captcha/CaptchaAction.php
 @@ -31,7 +31,7 @@
   *    to be validated by the 'captcha' validator.
   * 3. In the controller view, insert a [[Captcha]] widget in the form.
@@ -3111,10 +3111,10 @@ index 3ded638459e..40e1aa03a0a 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/framework/console/Application.php b/framework/console/Application.php
+diff --git a/src/console/Application.php b/src/console/Application.php
 index 431198a3614..51d81e43b5c 100644
---- a/framework/console/Application.php
-+++ b/framework/console/Application.php
+--- a/src/console/Application.php
++++ b/src/console/Application.php
 @@ -50,9 +50,10 @@
   * yii help
   * ```
@@ -3129,10 +3129,10 @@ index 431198a3614..51d81e43b5c 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/framework/console/Controller.php b/framework/console/Controller.php
+diff --git a/src/console/Controller.php b/src/console/Controller.php
 index fca945e4a1d..4288f93c822 100644
---- a/framework/console/Controller.php
-+++ b/framework/console/Controller.php
+--- a/src/console/Controller.php
++++ b/src/console/Controller.php
 @@ -28,12 +28,14 @@
   * where `<route>` is a route to a controller action and the params will be populated as properties of a command.
   * See [[options()]] for details.
@@ -3182,10 +3182,10 @@ index fca945e4a1d..4288f93c822 100644
                  continue;
              }
              $name = $reflection->getName();
-diff --git a/framework/console/controllers/AssetController.php b/framework/console/controllers/AssetController.php
+diff --git a/src/console/controllers/AssetController.php b/src/console/controllers/AssetController.php
 index 4f2e492dcea..fe106f79bfd 100644
---- a/framework/console/controllers/AssetController.php
-+++ b/framework/console/controllers/AssetController.php
+--- a/src/console/controllers/AssetController.php
++++ b/src/console/controllers/AssetController.php
 @@ -39,7 +39,7 @@
   * check [[jsCompressor]] and [[cssCompressor]] for more details.
   *
@@ -3195,10 +3195,10 @@ index 4f2e492dcea..fe106f79bfd 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @author Paul Klimov <klimov.paul@gmail.com>
-diff --git a/framework/console/controllers/HelpController.php b/framework/console/controllers/HelpController.php
+diff --git a/src/console/controllers/HelpController.php b/src/console/controllers/HelpController.php
 index b4db783c159..5185f4e011b 100644
---- a/framework/console/controllers/HelpController.php
-+++ b/framework/console/controllers/HelpController.php
+--- a/src/console/controllers/HelpController.php
++++ b/src/console/controllers/HelpController.php
 @@ -30,7 +30,7 @@
   * In the above, if the command name is not provided, all
   * available commands will be displayed.
@@ -3208,10 +3208,10 @@ index b4db783c159..5185f4e011b 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/framework/console/controllers/MigrateController.php b/framework/console/controllers/MigrateController.php
+diff --git a/src/console/controllers/MigrateController.php b/src/console/controllers/MigrateController.php
 index 4d89ebb85e7..aa2625ea06c 100644
---- a/framework/console/controllers/MigrateController.php
-+++ b/framework/console/controllers/MigrateController.php
+--- a/src/console/controllers/MigrateController.php
++++ b/src/console/controllers/MigrateController.php
 @@ -581,7 +581,7 @@ protected function parseFields()
      protected function splitFieldIntoChunks($field)
      {
@@ -3221,10 +3221,10 @@ index 4d89ebb85e7..aa2625ea06c 100644
          if (isset($matches[0][0])) {
              $hasDoubleQuotes = true;
              $originalDefaultValue = $matches[0][0];
-diff --git a/framework/console/widgets/Table.php b/framework/console/widgets/Table.php
+diff --git a/src/console/widgets/Table.php b/src/console/widgets/Table.php
 index f38bb81eb15..99fd5d23234 100644
---- a/framework/console/widgets/Table.php
-+++ b/framework/console/widgets/Table.php
+--- a/src/console/widgets/Table.php
++++ b/src/console/widgets/Table.php
 @@ -40,8 +40,8 @@
   *     ],
   * ]);
@@ -3315,10 +3315,10 @@ index f38bb81eb15..99fd5d23234 100644
              }
          }
      }
-diff --git a/framework/data/ActiveDataFilter.php b/framework/data/ActiveDataFilter.php
+diff --git a/src/data/ActiveDataFilter.php b/src/data/ActiveDataFilter.php
 index 5ca65539ec4..88ad36254c2 100644
---- a/framework/data/ActiveDataFilter.php
-+++ b/framework/data/ActiveDataFilter.php
+--- a/src/data/ActiveDataFilter.php
++++ b/src/data/ActiveDataFilter.php
 @@ -54,7 +54,7 @@ class ActiveDataFilter extends DataFilter
       *
       * Usually the map can be left empty as filter operator names are consistent with the ones
@@ -3328,10 +3328,10 @@ index 5ca65539ec4..88ad36254c2 100644
       *
       * ```php
       * [
-diff --git a/framework/data/BaseDataProvider.php b/framework/data/BaseDataProvider.php
+diff --git a/src/data/BaseDataProvider.php b/src/data/BaseDataProvider.php
 index 82ac0d7fb92..97214cf602c 100644
---- a/framework/data/BaseDataProvider.php
-+++ b/framework/data/BaseDataProvider.php
+--- a/src/data/BaseDataProvider.php
++++ b/src/data/BaseDataProvider.php
 @@ -16,15 +16,15 @@
   *
   * For more details and usage information on BaseDataProvider, see the [guide article on data providers](guide:output-data-providers).
@@ -3351,10 +3351,10 @@ index 82ac0d7fb92..97214cf602c 100644
   * @property int $totalCount Total number of possible data models.
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
-diff --git a/framework/data/DataFilter.php b/framework/data/DataFilter.php
+diff --git a/src/data/DataFilter.php b/src/data/DataFilter.php
 index a10177fbf3a..18f218f3622 100644
---- a/framework/data/DataFilter.php
-+++ b/framework/data/DataFilter.php
+--- a/src/data/DataFilter.php
++++ b/src/data/DataFilter.php
 @@ -113,12 +113,13 @@
   * @see ActiveDataFilter
   *
@@ -3432,10 +3432,10 @@ index a10177fbf3a..18f218f3622 100644
              } else {
                  $result[$key] = $value;
              }
-diff --git a/framework/data/Pagination.php b/framework/data/Pagination.php
+diff --git a/src/data/Pagination.php b/src/data/Pagination.php
 index 5006d9ea0bd..f593d9a9481 100644
---- a/framework/data/Pagination.php
-+++ b/framework/data/Pagination.php
+--- a/src/data/Pagination.php
++++ b/src/data/Pagination.php
 @@ -58,15 +58,15 @@
   *
   * For more details and usage information on Pagination, see the [guide article on pagination](guide:output-pagination).
@@ -3486,10 +3486,10 @@ index 5006d9ea0bd..f593d9a9481 100644
          }
  
          return $links;
-diff --git a/framework/data/Sort.php b/framework/data/Sort.php
+diff --git a/src/data/Sort.php b/src/data/Sort.php
 index 78cc868a82e..d96178e1321 100644
---- a/framework/data/Sort.php
-+++ b/framework/data/Sort.php
+--- a/src/data/Sort.php
++++ b/src/data/Sort.php
 @@ -70,9 +70,9 @@
   *
   * @property array $attributeOrders Sort directions indexed by attribute names. Sort direction can be either
@@ -3503,10 +3503,10 @@ index 78cc868a82e..d96178e1321 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/framework/db/ActiveRecordInterface.php b/framework/db/ActiveRecordInterface.php
+diff --git a/src/db/ActiveRecordInterface.php b/src/db/ActiveRecordInterface.php
 index 5b67f788030..dfa9ed3096e 100644
---- a/framework/db/ActiveRecordInterface.php
-+++ b/framework/db/ActiveRecordInterface.php
+--- a/src/db/ActiveRecordInterface.php
++++ b/src/db/ActiveRecordInterface.php
 @@ -296,7 +296,7 @@ public static function findAll($condition);
       *
       * @param array $attributes attribute values (name-value pairs) to be saved for the record.
@@ -3516,10 +3516,10 @@ index 5b67f788030..dfa9ed3096e 100644
       * Please refer to [[QueryInterface::where()]] on how to specify this parameter.
       * An empty condition will match all records.
       * @return int the number of rows updated
-diff --git a/framework/db/ActiveRelationTrait.php b/framework/db/ActiveRelationTrait.php
+diff --git a/src/db/ActiveRelationTrait.php b/src/db/ActiveRelationTrait.php
 index a5a8cbe0ac2..f2c22e125f3 100644
---- a/framework/db/ActiveRelationTrait.php
-+++ b/framework/db/ActiveRelationTrait.php
+--- a/src/db/ActiveRelationTrait.php
++++ b/src/db/ActiveRelationTrait.php
 @@ -17,8 +17,8 @@
   * @author Carsten Brandt <mail@cebe.cc>
   * @since 2.0
@@ -3531,10 +3531,10 @@ index a5a8cbe0ac2..f2c22e125f3 100644
   * @property ActiveRecord $modelClass
   */
  trait ActiveRelationTrait
-diff --git a/framework/db/BaseActiveRecord.php b/framework/db/BaseActiveRecord.php
+diff --git a/src/db/BaseActiveRecord.php b/src/db/BaseActiveRecord.php
 index c50ce07d742..ead5f5c7d6e 100644
---- a/framework/db/BaseActiveRecord.php
-+++ b/framework/db/BaseActiveRecord.php
+--- a/src/db/BaseActiveRecord.php
++++ b/src/db/BaseActiveRecord.php
 @@ -23,19 +23,19 @@
   *
   * See [[\yii\db\ActiveRecord]] for a concrete implementation.
@@ -3563,10 +3563,10 @@ index c50ce07d742..ead5f5c7d6e 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @author Carsten Brandt <mail@cebe.cc>
-diff --git a/framework/db/BatchQueryResult.php b/framework/db/BatchQueryResult.php
+diff --git a/src/db/BatchQueryResult.php b/src/db/BatchQueryResult.php
 index 68fd03fc926..c08b8745cfa 100644
---- a/framework/db/BatchQueryResult.php
-+++ b/framework/db/BatchQueryResult.php
+--- a/src/db/BatchQueryResult.php
++++ b/src/db/BatchQueryResult.php
 @@ -223,4 +223,15 @@ private function getDbDriverName()
  
          return null;
@@ -3583,10 +3583,10 @@ index 68fd03fc926..c08b8745cfa 100644
 +        throw new \BadMethodCallException('Cannot unserialize ' . __CLASS__);
 +    }
  }
-diff --git a/framework/db/Command.php b/framework/db/Command.php
+diff --git a/src/db/Command.php b/src/db/Command.php
 index 27909fa2cf4..3d61e93a7e9 100644
---- a/framework/db/Command.php
-+++ b/framework/db/Command.php
+--- a/src/db/Command.php
++++ b/src/db/Command.php
 @@ -246,6 +246,9 @@ public function prepare($forRead = null)
          }
  
@@ -3607,10 +3607,10 @@ index 27909fa2cf4..3d61e93a7e9 100644
          }
      }
  
-diff --git a/framework/db/Connection.php b/framework/db/Connection.php
+diff --git a/src/db/Connection.php b/src/db/Connection.php
 index d69cb58edf5..5e2bd45a79c 100644
---- a/framework/db/Connection.php
-+++ b/framework/db/Connection.php
+--- a/src/db/Connection.php
++++ b/src/db/Connection.php
 @@ -111,24 +111,24 @@
   * ```
   *
@@ -3651,10 +3651,10 @@ index d69cb58edf5..5e2bd45a79c 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/framework/db/DataReader.php b/framework/db/DataReader.php
+diff --git a/src/db/DataReader.php b/src/db/DataReader.php
 index f2ef1eb312f..50a2d7dadc3 100644
---- a/framework/db/DataReader.php
-+++ b/framework/db/DataReader.php
+--- a/src/db/DataReader.php
++++ b/src/db/DataReader.php
 @@ -40,10 +40,10 @@
   * [[fetchMode]]. See the [PHP manual](https://secure.php.net/manual/en/function.PDOStatement-setFetchMode.php)
   * for more details about possible fetch mode.
@@ -3670,10 +3670,10 @@ index f2ef1eb312f..50a2d7dadc3 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/framework/db/Exception.php b/framework/db/Exception.php
+diff --git a/src/db/Exception.php b/src/db/Exception.php
 index c0cff469dad..ae16407f85d 100644
---- a/framework/db/Exception.php
-+++ b/framework/db/Exception.php
+--- a/src/db/Exception.php
++++ b/src/db/Exception.php
 @@ -27,9 +27,9 @@ class Exception extends \yii\base\Exception
       * @param string $message PDO error message
       * @param array $errorInfo PDO error info
@@ -3686,10 +3686,10 @@ index c0cff469dad..ae16407f85d 100644
      {
          parent::__construct($message, 0, $previous);
          $this->errorInfo = $errorInfo;
-diff --git a/framework/db/Query.php b/framework/db/Query.php
+diff --git a/src/db/Query.php b/src/db/Query.php
 index 471f22f9f37..59dcb8382aa 100644
---- a/framework/db/Query.php
-+++ b/framework/db/Query.php
+--- a/src/db/Query.php
++++ b/src/db/Query.php
 @@ -42,7 +42,7 @@
   *
   * A more detailed usage guide on how to work with Query can be found in the [guide article on Query Builder](guide:db-query-builder).
@@ -3699,10 +3699,10 @@ index 471f22f9f37..59dcb8382aa 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @author Carsten Brandt <mail@cebe.cc>
-diff --git a/framework/db/QueryBuilder.php b/framework/db/QueryBuilder.php
+diff --git a/src/db/QueryBuilder.php b/src/db/QueryBuilder.php
 index 5015d3ba3fc..c6f74872313 100644
---- a/framework/db/QueryBuilder.php
-+++ b/framework/db/QueryBuilder.php
+--- a/src/db/QueryBuilder.php
++++ b/src/db/QueryBuilder.php
 @@ -22,10 +22,10 @@
   *
   * For more details and usage information on QueryBuilder, see the [guide article on query builders](guide:db-query-builder).
@@ -3718,10 +3718,10 @@ index 5015d3ba3fc..c6f74872313 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/framework/db/Schema.php b/framework/db/Schema.php
+diff --git a/src/db/Schema.php b/src/db/Schema.php
 index c0ed7227c20..c11a22be210 100644
---- a/framework/db/Schema.php
-+++ b/framework/db/Schema.php
+--- a/src/db/Schema.php
++++ b/src/db/Schema.php
 @@ -21,17 +21,18 @@
   *
   * Schema represents the database schema information that is DBMS specific.
@@ -3751,10 +3751,10 @@ index c0ed7227c20..c11a22be210 100644
   * [[Transaction::REPEATABLE_READ]] and [[Transaction::SERIALIZABLE]] but also a string containing DBMS specific
   * syntax to be used after `SET TRANSACTION ISOLATION LEVEL`. This property is write-only.
   *
-diff --git a/framework/db/SqlToken.php b/framework/db/SqlToken.php
+diff --git a/src/db/SqlToken.php b/src/db/SqlToken.php
 index 77497ee22f6..0e947c17458 100644
---- a/framework/db/SqlToken.php
-+++ b/framework/db/SqlToken.php
+--- a/src/db/SqlToken.php
++++ b/src/db/SqlToken.php
 @@ -13,10 +13,10 @@
   * SqlToken represents SQL tokens produced by [[SqlTokenizer]] or its child classes.
   *
@@ -3769,10 +3769,10 @@ index 77497ee22f6..0e947c17458 100644
   *
   * @author Sergey Makinen <sergey@makinen.ru>
   * @since 2.0.13
-diff --git a/framework/db/TableSchema.php b/framework/db/TableSchema.php
+diff --git a/src/db/TableSchema.php b/src/db/TableSchema.php
 index 33e2c128864..899ddb8abb9 100644
---- a/framework/db/TableSchema.php
-+++ b/framework/db/TableSchema.php
+--- a/src/db/TableSchema.php
++++ b/src/db/TableSchema.php
 @@ -13,7 +13,7 @@
  /**
   * TableSchema represents the metadata of a database table.
@@ -3782,10 +3782,10 @@ index 33e2c128864..899ddb8abb9 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/framework/db/Transaction.php b/framework/db/Transaction.php
+diff --git a/src/db/Transaction.php b/src/db/Transaction.php
 index 3935a2380ec..e6c1cbe93a2 100644
---- a/framework/db/Transaction.php
-+++ b/framework/db/Transaction.php
+--- a/src/db/Transaction.php
++++ b/src/db/Transaction.php
 @@ -39,13 +39,13 @@
   * > with PHP 5.x and PHP 7.x. `\Exception` implements the [`\Throwable` interface](https://secure.php.net/manual/en/class.throwable.php)
   * > since PHP 7.0, so you can skip the part with `\Exception` if your app uses only PHP 7.0 and higher.
@@ -3806,10 +3806,10 @@ index 3935a2380ec..e6c1cbe93a2 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/framework/db/mssql/ColumnSchema.php b/framework/db/mssql/ColumnSchema.php
+diff --git a/src/db/mssql/ColumnSchema.php b/src/db/mssql/ColumnSchema.php
 index 8ccd69f13fd..78895d6031f 100644
---- a/framework/db/mssql/ColumnSchema.php
-+++ b/framework/db/mssql/ColumnSchema.php
+--- a/src/db/mssql/ColumnSchema.php
++++ b/src/db/mssql/ColumnSchema.php
 @@ -14,6 +14,13 @@
   */
  class ColumnSchema extends \yii\db\ColumnSchema
@@ -3824,10 +3824,10 @@ index 8ccd69f13fd..78895d6031f 100644
      /**
       * Prepares default value and converts it according to [[phpType]]
       * @param mixed $value default value
-diff --git a/framework/db/mssql/QueryBuilder.php b/framework/db/mssql/QueryBuilder.php
+diff --git a/src/db/mssql/QueryBuilder.php b/src/db/mssql/QueryBuilder.php
 index 9a74810d4ef..cc2a92067a9 100644
---- a/framework/db/mssql/QueryBuilder.php
-+++ b/framework/db/mssql/QueryBuilder.php
+--- a/src/db/mssql/QueryBuilder.php
++++ b/src/db/mssql/QueryBuilder.php
 @@ -475,22 +475,31 @@ public function insert($table, $columns, &$params)
          $version2005orLater = version_compare($this->db->getSchema()->getServerVersion(), '9', '>=');
  
@@ -3867,10 +3867,10 @@ index 9a74810d4ef..cc2a92067a9 100644
          }
  
          return $sql;
-diff --git a/framework/db/mssql/Schema.php b/framework/db/mssql/Schema.php
+diff --git a/src/db/mssql/Schema.php b/src/db/mssql/Schema.php
 index e92f9385e06..1ffad32a924 100644
---- a/framework/db/mssql/Schema.php
-+++ b/framework/db/mssql/Schema.php
+--- a/src/db/mssql/Schema.php
++++ b/src/db/mssql/Schema.php
 @@ -364,6 +364,7 @@ protected function loadColumnSchema($info)
          $column->enumValues = []; // mssql has only vague equivalents to enum
          $column->isPrimaryKey = null; // primary key will be determined in findColumns() method
@@ -3887,10 +3887,10 @@ index e92f9385e06..1ffad32a924 100644
   (
      SELECT CONVERT(VARCHAR, [t2].[value])
  		FROM [sys].[extended_properties] AS [t2]
-diff --git a/framework/db/oci/Schema.php b/framework/db/oci/Schema.php
+diff --git a/src/db/oci/Schema.php b/src/db/oci/Schema.php
 index 23ad65b394c..2e55c09db77 100644
---- a/framework/db/oci/Schema.php
-+++ b/framework/db/oci/Schema.php
+--- a/src/db/oci/Schema.php
++++ b/src/db/oci/Schema.php
 @@ -24,8 +24,8 @@
  /**
   * Schema is the class for retrieving metadata from an Oracle database.
@@ -3902,10 +3902,10 @@ index 23ad65b394c..2e55c09db77 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/framework/db/sqlite/Schema.php b/framework/db/sqlite/Schema.php
+diff --git a/src/db/sqlite/Schema.php b/src/db/sqlite/Schema.php
 index ccd6e2bf6ae..0b5a0cc8ec9 100644
---- a/framework/db/sqlite/Schema.php
-+++ b/framework/db/sqlite/Schema.php
+--- a/src/db/sqlite/Schema.php
++++ b/src/db/sqlite/Schema.php
 @@ -24,9 +24,9 @@
  /**
   * Schema is the class for retrieving metadata from a SQLite (2/3) database.
@@ -3919,10 +3919,10 @@ index ccd6e2bf6ae..0b5a0cc8ec9 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/framework/di/Container.php b/framework/di/Container.php
+diff --git a/src/di/Container.php b/src/di/Container.php
 index 2717572b79a..d6b396b6ed9 100644
---- a/framework/di/Container.php
-+++ b/framework/di/Container.php
+--- a/src/di/Container.php
++++ b/src/di/Container.php
 @@ -8,6 +8,7 @@
  namespace yii\di;
  
@@ -4123,10 +4123,10 @@ index 2717572b79a..d6b396b6ed9 100644
                      $args[] = $params[$name];
                      unset($params[$name]);
                  } elseif (!$associative && isset($params[0]) && $params[0] instanceof $className) {
-diff --git a/framework/filters/AccessRule.php b/framework/filters/AccessRule.php
+diff --git a/src/filters/AccessRule.php b/src/filters/AccessRule.php
 index a4b604ed37b..606c1701026 100644
---- a/framework/filters/AccessRule.php
-+++ b/framework/filters/AccessRule.php
+--- a/src/filters/AccessRule.php
++++ b/src/filters/AccessRule.php
 @@ -114,7 +114,7 @@ class AccessRule extends Component
       * @var array list of user IP addresses that this rule applies to. An IP address
       * can contain the wildcard `*` at the end so that it matches IP addresses with the same prefix.
@@ -4136,10 +4136,10 @@ index a4b604ed37b..606c1701026 100644
       * 20-bit private network block in RFC1918.
       * If not set or empty, it means this rule applies to all IP addresses.
       * @see Request::userIP
-diff --git a/framework/grid/DataColumn.php b/framework/grid/DataColumn.php
+diff --git a/src/grid/DataColumn.php b/src/grid/DataColumn.php
 index be1610190e7..53c18b6b8aa 100644
---- a/framework/grid/DataColumn.php
-+++ b/framework/grid/DataColumn.php
+--- a/src/grid/DataColumn.php
++++ b/src/grid/DataColumn.php
 @@ -142,7 +142,7 @@ protected function renderHeaderCellContent()
      }
  
@@ -4149,10 +4149,10 @@ index be1610190e7..53c18b6b8aa 100644
       * @since 2.0.8
       */
      protected function getHeaderCellLabel()
-diff --git a/framework/helpers/BaseConsole.php b/framework/helpers/BaseConsole.php
+diff --git a/src/helpers/BaseConsole.php b/src/helpers/BaseConsole.php
 index e9e417edca1..285276238cf 100644
---- a/framework/helpers/BaseConsole.php
-+++ b/framework/helpers/BaseConsole.php
+--- a/src/helpers/BaseConsole.php
++++ b/src/helpers/BaseConsole.php
 @@ -331,7 +331,7 @@ public static function xtermBgColor($colorCode)
       */
      public static function stripAnsiFormat($string)
@@ -4230,10 +4230,10 @@ index e9e417edca1..285276238cf 100644
      /**
       * Converts an ANSI formatted string to HTML.
       *
-diff --git a/framework/i18n/I18N.php b/framework/i18n/I18N.php
+diff --git a/src/i18n/I18N.php b/src/i18n/I18N.php
 index 49cf93bd459..3e5bd425d19 100644
---- a/framework/i18n/I18N.php
-+++ b/framework/i18n/I18N.php
+--- a/src/i18n/I18N.php
++++ b/src/i18n/I18N.php
 @@ -19,7 +19,7 @@
   *
   * @property MessageFormatter $messageFormatter The message formatter to be used to format message via ICU
@@ -4243,10 +4243,10 @@ index 49cf93bd459..3e5bd425d19 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/framework/i18n/Locale.php b/framework/i18n/Locale.php
+diff --git a/src/i18n/Locale.php b/src/i18n/Locale.php
 index 6567c083f59..86b78de6a88 100644
---- a/framework/i18n/Locale.php
-+++ b/framework/i18n/Locale.php
+--- a/src/i18n/Locale.php
++++ b/src/i18n/Locale.php
 @@ -16,7 +16,7 @@
   *
   * The class requires [PHP intl extension](https://secure.php.net/manual/en/book.intl.php) to be installed.
@@ -4256,10 +4256,10 @@ index 6567c083f59..86b78de6a88 100644
   *
   * @since 2.0.14
   */
-diff --git a/framework/i18n/MessageFormatter.php b/framework/i18n/MessageFormatter.php
+diff --git a/src/i18n/MessageFormatter.php b/src/i18n/MessageFormatter.php
 index 2b11c034b5d..2fdba093213 100644
---- a/framework/i18n/MessageFormatter.php
-+++ b/framework/i18n/MessageFormatter.php
+--- a/src/i18n/MessageFormatter.php
++++ b/src/i18n/MessageFormatter.php
 @@ -36,8 +36,8 @@
   *   Also messages that are working with the fallback implementation are not necessarily compatible with the
   *   PHP intl MessageFormatter so do not rely on the fallback if you are able to install intl extension somehow.
@@ -4271,10 +4271,10 @@ index 2b11c034b5d..2fdba093213 100644
   *
   * @author Alexander Makarov <sam@rmcreative.ru>
   * @author Carsten Brandt <mail@cebe.cc>
-diff --git a/framework/log/Dispatcher.php b/framework/log/Dispatcher.php
+diff --git a/src/log/Dispatcher.php b/src/log/Dispatcher.php
 index 8109e0b8978..d888d89a8d1 100644
---- a/framework/log/Dispatcher.php
-+++ b/framework/log/Dispatcher.php
+--- a/src/log/Dispatcher.php
++++ b/src/log/Dispatcher.php
 @@ -53,7 +53,7 @@
   * @property int $flushInterval How many messages should be logged before they are sent to targets. This
   * method returns the value of [[Logger::flushInterval]].
@@ -4284,10 +4284,10 @@ index 8109e0b8978..d888d89a8d1 100644
   * @property int $traceLevel How many application call stacks should be logged together with each message.
   * This method returns the value of [[Logger::traceLevel]]. Defaults to 0.
   *
-diff --git a/framework/log/Logger.php b/framework/log/Logger.php
+diff --git a/src/log/Logger.php b/src/log/Logger.php
 index 9bbfa4e89a5..6a6f3b9a85e 100644
---- a/framework/log/Logger.php
-+++ b/framework/log/Logger.php
+--- a/src/log/Logger.php
++++ b/src/log/Logger.php
 @@ -30,13 +30,13 @@
   * to send logged messages to different log targets, such as [[FileTarget|file]], [[EmailTarget|email]],
   * or [[DbTarget|database]], with the help of the [[dispatcher]].
@@ -4308,10 +4308,10 @@ index 9bbfa4e89a5..6a6f3b9a85e 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/framework/log/Target.php b/framework/log/Target.php
+diff --git a/src/log/Target.php b/src/log/Target.php
 index 2a192e80d55..846bc919a9f 100644
---- a/framework/log/Target.php
-+++ b/framework/log/Target.php
+--- a/src/log/Target.php
++++ b/src/log/Target.php
 @@ -27,10 +27,10 @@
   * may specify [[except]] to exclude messages of certain categories.
   *
@@ -4325,10 +4325,10 @@ index 2a192e80d55..846bc919a9f 100644
   *
   * For more details and usage information on Target, see the [guide article on logging & targets](guide:runtime-logging).
   *
-diff --git a/framework/mail/BaseMailer.php b/framework/mail/BaseMailer.php
+diff --git a/src/mail/BaseMailer.php b/src/mail/BaseMailer.php
 index c4546fbd1f4..633974daa2f 100644
---- a/framework/mail/BaseMailer.php
-+++ b/framework/mail/BaseMailer.php
+--- a/src/mail/BaseMailer.php
++++ b/src/mail/BaseMailer.php
 @@ -23,7 +23,7 @@
   * For more details and usage information on BaseMailer, see the [guide article on mailing](guide:tutorial-mailing).
   *
@@ -4338,10 +4338,10 @@ index c4546fbd1f4..633974daa2f 100644
   * @property string $viewPath The directory that contains the view files for composing mail messages Defaults
   * to '@app/mail'.
   *
-diff --git a/framework/messages/bg/yii.php b/framework/messages/bg/yii.php
+diff --git a/src/messages/bg/yii.php b/src/messages/bg/yii.php
 index e10f6fcc6a2..bb738174771 100644
---- a/framework/messages/bg/yii.php
-+++ b/framework/messages/bg/yii.php
+--- a/src/messages/bg/yii.php
++++ b/src/messages/bg/yii.php
 @@ -119,7 +119,7 @@
      '{delta, plural, =1{a month} other{# months}} ago' => 'преди {delta, plural, =1{месец} other{# месеца}}',
      '{delta, plural, =1{a second} other{# seconds}} ago' => 'преди {delta, plural, =1{секунда} other{# секунди}}',
@@ -4351,10 +4351,10 @@ index e10f6fcc6a2..bb738174771 100644
      '{nFormatted} B' => '{nFormatted} B',
      '{nFormatted} GB' => '{nFormatted} GB',
      '{nFormatted} GiB' => '{nFormatted} GiB',
-diff --git a/framework/rbac/BaseManager.php b/framework/rbac/BaseManager.php
+diff --git a/src/rbac/BaseManager.php b/src/rbac/BaseManager.php
 index 4f832e014d6..c8dda76f930 100644
---- a/framework/rbac/BaseManager.php
-+++ b/framework/rbac/BaseManager.php
+--- a/src/rbac/BaseManager.php
++++ b/src/rbac/BaseManager.php
 @@ -17,10 +17,10 @@
   *
   * For more details and usage information on DbManager, see the [guide article on security authorization](guide:security-authorization).
@@ -4369,10 +4369,10 @@ index 4f832e014d6..c8dda76f930 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/framework/rbac/DbManager.php b/framework/rbac/DbManager.php
+diff --git a/src/rbac/DbManager.php b/src/rbac/DbManager.php
 index 51947bdb7b9..9aa29ae9453 100644
---- a/framework/rbac/DbManager.php
-+++ b/framework/rbac/DbManager.php
+--- a/src/rbac/DbManager.php
++++ b/src/rbac/DbManager.php
 @@ -106,6 +106,7 @@ class DbManager extends BaseManager
       */
      protected $checkAccessAssignments = [];
@@ -4381,10 +4381,10 @@ index 51947bdb7b9..9aa29ae9453 100644
      /**
       * Initializes the application component.
       * This method overrides the parent implementation by establishing the database connection.
-diff --git a/framework/test/ActiveFixture.php b/framework/test/ActiveFixture.php
+diff --git a/src/test/ActiveFixture.php b/src/test/ActiveFixture.php
 index 6d93b79c010..ff626a43b5f 100644
---- a/framework/test/ActiveFixture.php
-+++ b/framework/test/ActiveFixture.php
+--- a/src/test/ActiveFixture.php
++++ b/src/test/ActiveFixture.php
 @@ -24,7 +24,7 @@
   *
   * For more details and usage information on ActiveFixture, see the [guide article on fixtures](guide:test-fixtures).
@@ -4394,10 +4394,10 @@ index 6d93b79c010..ff626a43b5f 100644
   * fixture. This property is read-only.
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
-diff --git a/framework/validators/DateValidator.php b/framework/validators/DateValidator.php
+diff --git a/src/validators/DateValidator.php b/src/validators/DateValidator.php
 index 3f2dccf13b9..24604cf6721 100644
---- a/framework/validators/DateValidator.php
-+++ b/framework/validators/DateValidator.php
+--- a/src/validators/DateValidator.php
++++ b/src/validators/DateValidator.php
 @@ -8,6 +8,7 @@
  namespace yii\validators;
  
@@ -4540,10 +4540,10 @@ index 3f2dccf13b9..24604cf6721 100644
          return $date->format($format);
      }
  }
-diff --git a/framework/validators/FileValidator.php b/framework/validators/FileValidator.php
+diff --git a/src/validators/FileValidator.php b/src/validators/FileValidator.php
 index c941ff6f48e..d67934ffd74 100644
---- a/framework/validators/FileValidator.php
-+++ b/framework/validators/FileValidator.php
+--- a/src/validators/FileValidator.php
++++ b/src/validators/FileValidator.php
 @@ -20,7 +20,7 @@
   *
   * Note that you should enable `fileinfo` PHP extension.
@@ -4553,10 +4553,10 @@ index c941ff6f48e..d67934ffd74 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/framework/validators/Validator.php b/framework/validators/Validator.php
+diff --git a/src/validators/Validator.php b/src/validators/Validator.php
 index 19800a1cd56..5b808acd271 100644
---- a/framework/validators/Validator.php
-+++ b/framework/validators/Validator.php
+--- a/src/validators/Validator.php
++++ b/src/validators/Validator.php
 @@ -48,8 +48,8 @@
   *
   * For more details and usage information on Validator, see the [guide article on validators](guide:input-validation).
@@ -4568,10 +4568,10 @@ index 19800a1cd56..5b808acd271 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/framework/web/Application.php b/framework/web/Application.php
+diff --git a/src/web/Application.php b/src/web/Application.php
 index f20c2f85213..6a052f19d3d 100644
---- a/framework/web/Application.php
-+++ b/framework/web/Application.php
+--- a/src/web/Application.php
++++ b/src/web/Application.php
 @@ -16,12 +16,13 @@
   *
   * For more details and usage information on Application, see the [guide article on applications](guide:structure-applications).
@@ -4591,10 +4591,10 @@ index f20c2f85213..6a052f19d3d 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/framework/web/AssetBundle.php b/framework/web/AssetBundle.php
+diff --git a/src/web/AssetBundle.php b/src/web/AssetBundle.php
 index 9890da94964..60ada80ef3b 100644
---- a/framework/web/AssetBundle.php
-+++ b/framework/web/AssetBundle.php
+--- a/src/web/AssetBundle.php
++++ b/src/web/AssetBundle.php
 @@ -153,10 +153,10 @@ public function registerAssetFiles($view)
              if (is_array($js)) {
                  $file = array_shift($js);
@@ -4621,10 +4621,10 @@ index 9890da94964..60ada80ef3b 100644
                  }
              }
          }
-diff --git a/framework/web/AssetManager.php b/framework/web/AssetManager.php
+diff --git a/src/web/AssetManager.php b/src/web/AssetManager.php
 index ee0b61ed4ee..215f5b1ac8d 100644
---- a/framework/web/AssetManager.php
-+++ b/framework/web/AssetManager.php
+--- a/src/web/AssetManager.php
++++ b/src/web/AssetManager.php
 @@ -34,7 +34,7 @@
   * For more details and usage information on AssetManager, see the [guide article on assets](guide:structure-assets).
   *
@@ -4704,10 +4704,10 @@ index ee0b61ed4ee..215f5b1ac8d 100644
 +        return "$baseUrl/$asset";
 +    }
  }
-diff --git a/framework/web/CacheSession.php b/framework/web/CacheSession.php
+diff --git a/src/web/CacheSession.php b/src/web/CacheSession.php
 index 918535973a4..ecb14b782a1 100644
---- a/framework/web/CacheSession.php
-+++ b/framework/web/CacheSession.php
+--- a/src/web/CacheSession.php
++++ b/src/web/CacheSession.php
 @@ -31,7 +31,7 @@
   * ]
   * ```
@@ -4756,10 +4756,10 @@ index 918535973a4..ecb14b782a1 100644
          return $this->cache->set($this->calculateKey($id), $data, $this->getTimeout());
      }
  
-diff --git a/framework/web/CompositeUrlRule.php b/framework/web/CompositeUrlRule.php
+diff --git a/src/web/CompositeUrlRule.php b/src/web/CompositeUrlRule.php
 index d985f078010..d707c64ccc4 100644
---- a/framework/web/CompositeUrlRule.php
-+++ b/framework/web/CompositeUrlRule.php
+--- a/src/web/CompositeUrlRule.php
++++ b/src/web/CompositeUrlRule.php
 @@ -13,8 +13,8 @@
  /**
   * CompositeUrlRule is the base class for URL rule classes that consist of multiple simpler rules.
@@ -4771,10 +4771,10 @@ index d985f078010..d707c64ccc4 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/framework/web/Controller.php b/framework/web/Controller.php
+diff --git a/src/web/Controller.php b/src/web/Controller.php
 index 3b2e8b1ffae..4e205d00eb6 100644
---- a/framework/web/Controller.php
-+++ b/framework/web/Controller.php
+--- a/src/web/Controller.php
++++ b/src/web/Controller.php
 @@ -8,7 +8,6 @@
  namespace yii\web;
  
@@ -4807,10 +4807,10 @@ index 3b2e8b1ffae..4e205d00eb6 100644
                      $params[$name] = (array)$params[$name];
                  } elseif (is_array($params[$name])) {
                      $isValid = false;
-diff --git a/framework/web/CookieCollection.php b/framework/web/CookieCollection.php
+diff --git a/src/web/CookieCollection.php b/src/web/CookieCollection.php
 index e5b2b688f16..c26cfd35445 100644
---- a/framework/web/CookieCollection.php
-+++ b/framework/web/CookieCollection.php
+--- a/src/web/CookieCollection.php
++++ b/src/web/CookieCollection.php
 @@ -17,9 +17,9 @@
   *
   * For more details and usage information on CookieCollection, see the [guide article on handling cookies](guide:runtime-sessions-cookies).
@@ -4824,10 +4824,10 @@ index e5b2b688f16..c26cfd35445 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/framework/web/DbSession.php b/framework/web/DbSession.php
+diff --git a/src/web/DbSession.php b/src/web/DbSession.php
 index 26c392f0d34..bc23f660660 100644
---- a/framework/web/DbSession.php
-+++ b/framework/web/DbSession.php
+--- a/src/web/DbSession.php
++++ b/src/web/DbSession.php
 @@ -93,6 +93,26 @@ public function init()
          $this->db = Instance::ensure($this->db, Connection::className());
      }
@@ -4897,10 +4897,10 @@ index 26c392f0d34..bc23f660660 100644
      /**
       * Method typecasts $fields before passing them to PDO.
       * Default implementation casts field `data` to `\PDO::PARAM_LOB`.
-diff --git a/framework/web/ErrorHandler.php b/framework/web/ErrorHandler.php
+diff --git a/src/web/ErrorHandler.php b/src/web/ErrorHandler.php
 index 44784d61ff3..8c9ee2728f9 100644
---- a/framework/web/ErrorHandler.php
-+++ b/framework/web/ErrorHandler.php
+--- a/src/web/ErrorHandler.php
++++ b/src/web/ErrorHandler.php
 @@ -483,7 +483,7 @@ public function argumentsToString($args)
      /**
       * Returns human-readable exception name.
@@ -4910,10 +4910,10 @@ index 44784d61ff3..8c9ee2728f9 100644
       */
      public function getExceptionName($exception)
      {
-diff --git a/framework/web/HeaderCollection.php b/framework/web/HeaderCollection.php
+diff --git a/src/web/HeaderCollection.php b/src/web/HeaderCollection.php
 index 7c135d26824..1fa6021f7b4 100644
---- a/framework/web/HeaderCollection.php
-+++ b/framework/web/HeaderCollection.php
+--- a/src/web/HeaderCollection.php
++++ b/src/web/HeaderCollection.php
 @@ -13,9 +13,9 @@
  /**
   * HeaderCollection is used by [[Response]] to maintain the currently registered HTTP headers.
@@ -4927,10 +4927,10 @@ index 7c135d26824..1fa6021f7b4 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/framework/web/MultiFieldSession.php b/framework/web/MultiFieldSession.php
+diff --git a/src/web/MultiFieldSession.php b/src/web/MultiFieldSession.php
 index cd26d120aca..1b73e6d583e 100644
---- a/framework/web/MultiFieldSession.php
-+++ b/framework/web/MultiFieldSession.php
+--- a/src/web/MultiFieldSession.php
++++ b/src/web/MultiFieldSession.php
 @@ -22,7 +22,7 @@
   * While extending this class you should use [[composeFields()]] method - while writing the session data into the storage and
   * [[extractData()]] - while reading session data from the storage.
@@ -4940,10 +4940,10 @@ index cd26d120aca..1b73e6d583e 100644
   *
   * @author Paul Klimov <klimov.paul@gmail.com>
   * @since 2.0.6
-diff --git a/framework/web/MultipartFormDataParser.php b/framework/web/MultipartFormDataParser.php
+diff --git a/src/web/MultipartFormDataParser.php b/src/web/MultipartFormDataParser.php
 index 0685160f1bd..c6f8c8ccaa6 100644
---- a/framework/web/MultipartFormDataParser.php
-+++ b/framework/web/MultipartFormDataParser.php
+--- a/src/web/MultipartFormDataParser.php
++++ b/src/web/MultipartFormDataParser.php
 @@ -141,10 +141,11 @@ public function parse($rawBody, $contentType)
              return [];
          }
@@ -4958,10 +4958,10 @@ index 0685160f1bd..c6f8c8ccaa6 100644
  
          $bodyParts = preg_split('/\\R?-+' . preg_quote($boundary, '/') . '/s', $rawBody);
          array_pop($bodyParts); // last block always has no data, contains boundary ending like `--`
-diff --git a/framework/web/Request.php b/framework/web/Request.php
+diff --git a/src/web/Request.php b/src/web/Request.php
 index a99c2b3d379..6ebd807a8bd 100644
---- a/framework/web/Request.php
-+++ b/framework/web/Request.php
+--- a/src/web/Request.php
++++ b/src/web/Request.php
 @@ -23,70 +23,73 @@
   *
   * For more details and usage information on Request, see the [guide article on requests](guide:runtime-requests).
@@ -5074,10 +5074,10 @@ index a99c2b3d379..6ebd807a8bd 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/framework/web/Response.php b/framework/web/Response.php
+diff --git a/src/web/Response.php b/src/web/Response.php
 index 78e719fefe5..cbeac1ba37f 100644
---- a/framework/web/Response.php
-+++ b/framework/web/Response.php
+--- a/src/web/Response.php
++++ b/src/web/Response.php
 @@ -37,23 +37,27 @@
   *
   * For more details and usage information on Response, see the [guide article on responses](guide:runtime-responses).
@@ -5181,10 +5181,10 @@ index 78e719fefe5..cbeac1ba37f 100644
 +        return isset($metaData['seekable']) && $metaData['seekable'] === true;
 +    }
  }
-diff --git a/framework/web/Session.php b/framework/web/Session.php
+diff --git a/src/web/Session.php b/src/web/Session.php
 index fcc8a3a3f7b..03d4ece7c63 100644
---- a/framework/web/Session.php
-+++ b/framework/web/Session.php
+--- a/src/web/Session.php
++++ b/src/web/Session.php
 @@ -45,27 +45,28 @@
   *
   * For more details and usage information on Session, see the [guide article on sessions](guide:runtime-sessions-cookies).
@@ -5343,10 +5343,10 @@ index fcc8a3a3f7b..03d4ece7c63 100644
      /**
       * Session open handler.
       * This method should be overridden if [[useCustomStorage]] returns true.
-diff --git a/framework/web/UploadedFile.php b/framework/web/UploadedFile.php
+diff --git a/src/web/UploadedFile.php b/src/web/UploadedFile.php
 index 7a97b30c7b8..ed8fa111b89 100644
---- a/framework/web/UploadedFile.php
-+++ b/framework/web/UploadedFile.php
+--- a/src/web/UploadedFile.php
++++ b/src/web/UploadedFile.php
 @@ -22,10 +22,10 @@
   *
   * For more details and usage information on UploadedFile, see the [guide article on handling uploads](guide:input-file-upload).
@@ -5362,10 +5362,10 @@ index 7a97b30c7b8..ed8fa111b89 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/framework/web/UrlRule.php b/framework/web/UrlRule.php
+diff --git a/src/web/UrlRule.php b/src/web/UrlRule.php
 index 2f0582350fb..25d3cd81faf 100644
---- a/framework/web/UrlRule.php
-+++ b/framework/web/UrlRule.php
+--- a/src/web/UrlRule.php
++++ b/src/web/UrlRule.php
 @@ -24,8 +24,8 @@
   * ]
   * ```
@@ -5377,10 +5377,10 @@ index 2f0582350fb..25d3cd81faf 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/framework/web/User.php b/framework/web/User.php
+diff --git a/src/web/User.php b/src/web/User.php
 index 3e4db6a9ef1..db1935fe605 100644
---- a/framework/web/User.php
-+++ b/framework/web/User.php
+--- a/src/web/User.php
++++ b/src/web/User.php
 @@ -47,13 +47,13 @@
   * ]
   * ```
@@ -5399,10 +5399,10 @@ index 3e4db6a9ef1..db1935fe605 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/framework/web/View.php b/framework/web/View.php
+diff --git a/src/web/View.php b/src/web/View.php
 index 626d7a86d52..c77f59fba7a 100644
---- a/framework/web/View.php
-+++ b/framework/web/View.php
+--- a/src/web/View.php
++++ b/src/web/View.php
 @@ -479,15 +479,16 @@ private function registerFile($type, $url, $options = [], $key = null)
          $url = Yii::getAlias($url);
          $key = $key ?: $url;
@@ -5432,10 +5432,10 @@ index 626d7a86d52..c77f59fba7a 100644
                  "{$type}Options" => $options,
                  'depends' => (array)$depends,
              ]);
-diff --git a/framework/widgets/FragmentCache.php b/framework/widgets/FragmentCache.php
+diff --git a/src/widgets/FragmentCache.php b/src/widgets/FragmentCache.php
 index d9bed1f1b93..e30e997218c 100644
---- a/framework/widgets/FragmentCache.php
-+++ b/framework/widgets/FragmentCache.php
+--- a/src/widgets/FragmentCache.php
++++ b/src/widgets/FragmentCache.php
 @@ -18,8 +18,8 @@
  /**
   * FragmentCache is used by [[\yii\base\View]] to provide caching of page fragments.
