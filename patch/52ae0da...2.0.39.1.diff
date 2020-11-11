@@ -4534,34 +4534,6 @@ index b9f29d2696e..835ea13b21c 100644
 +        $this->useStrictModeTest(DbSession::className());
 +    }
  }
-diff --git a/tests/framework/web/session/CacheSessionTest.php b/tests/framework/web/session/CacheSessionTest.php
-index 018d1643fbe..e31b0f970f2 100644
---- a/tests/framework/web/session/CacheSessionTest.php
-+++ b/tests/framework/web/session/CacheSessionTest.php
-@@ -16,6 +16,8 @@
-  */
- class CacheSessionTest extends \yiiunit\TestCase
- {
-+    use SessionTestTrait;
-+
-     protected function setUp()
-     {
-         parent::setUp();
-@@ -51,4 +53,14 @@ public function testNotWrittenSessionDestroying()
- 
-         $this->assertTrue($session->destroySession($session->getId()));
-     }
-+
-+    public function testInitUseStrictMode()
-+    {
-+        $this->initStrictModeTest(CacheSession::className());
-+    }
-+
-+    public function testUseStrictMode()
-+    {
-+        $this->useStrictModeTest(CacheSession::className());
-+    }
- }
 diff --git a/tests/framework/web/session/SessionTest.php b/tests/framework/web/session/SessionTest.php
 index 28fc1e10d1e..6ad327f68f7 100644
 --- a/tests/framework/web/session/SessionTest.php
