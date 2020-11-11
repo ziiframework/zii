@@ -1,57 +1,3 @@
-diff --git a/.github/workflows/build.yml b/.github/workflows/build.yml
-index 0498970b496..a912dbfd1b5 100644
---- a/.github/workflows/build.yml
-+++ b/.github/workflows/build.yml
-@@ -3,7 +3,7 @@ name: build
- on: [push, pull_request]
- 
- env:
--  DEFAULT_COMPOSER_FLAGS: "--prefer-dist --no-interaction --no-progress --optimize-autoloader"
-+  DEFAULT_COMPOSER_FLAGS: "--prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi"
-   PHPUNIT_EXCLUDE_GROUP: mssql,oci,wincache,xcache,zenddata,cubrid
- 
- jobs:
-@@ -56,7 +56,7 @@ jobs:
-           php-version: ${{ matrix.php }}
-           tools: pecl
-           extensions: apc, curl, dom, imagick, intl, mbstring, mcrypt, memcached, mysql, pdo, pdo_mysql, pdo_pgsql, pdo_sqlite, pgsql, sqlite
--          ini-values: date.timezone='UTC'
-+          ini-values: date.timezone='UTC', session.save_path="${{ runner.temp }}"
-       - name: Install php-sqlsrv
-         run: |
-             curl -sSL https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add - >/dev/null 2>&1
-@@ -86,16 +86,16 @@ jobs:
-       - name: Install dependencies
-         run: composer update $DEFAULT_COMPOSER_FLAGS
-       - name: PHP Unit tests for PHP 7.1
--        run: vendor/bin/phpunit --verbose --coverage-clover=coverage.clover --exclude-group oci,wincache,xcache,zenddata,cubrid
-+        run: vendor/bin/phpunit --verbose --coverage-clover=coverage.clover --exclude-group oci,wincache,xcache,zenddata,cubrid --colors=always
-         if: matrix.php == '7.1'
--      - name: PHP Unit tests for PHP 7.2 - 7.4
--        run: vendor/bin/phpunit --verbose --exclude-group $PHPUNIT_EXCLUDE_GROUP
-+      - name: PHP Unit tests for PHP >= 7.2
-+        run: vendor/bin/phpunit --verbose --exclude-group $PHPUNIT_EXCLUDE_GROUP --colors=always
-         env:
-           PHPUNIT_EXCLUDE_GROUP: oci,wincache,xcache,zenddata,cubrid
--        if: matrix.php == '7.4' || matrix.php == '7.3' || matrix.php == '7.2'
--      - name: PHP Unit tests for PHP 5.4 - 7.0
--        run: vendor/bin/phpunit --verbose --exclude-group $PHPUNIT_EXCLUDE_GROUP
--        if: matrix.php == '7.0' || matrix.php == '5.6' || matrix.php == '5.5' || matrix.php == '5.4'
-+        if: matrix.php >= '7.2'
-+      - name: PHP Unit tests for PHP <= 7.0
-+        run: vendor/bin/phpunit --verbose --exclude-group $PHPUNIT_EXCLUDE_GROUP --colors=always
-+        if: matrix.php <= '7.0'
-       - name: Code coverage
-         run: |
-           wget https://scrutinizer-ci.com/ocular.phar
-@@ -114,6 +114,7 @@ jobs:
-         uses: shivammathur/setup-php@v2
-         with:
-           php-version: 7.2
-+          ini-values: session.save_path=${{ runner.temp }}
-       - name: Get composer cache directory
-         id: composer-cache
-         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 diff --git a/.github/workflows/ci-mysql.yml b/.github/workflows/ci-mysql.yml
 index d7814d5a8b2..d2049645ef6 100644
 --- a/.github/workflows/ci-mysql.yml
@@ -1372,21 +1318,6 @@ index e92f9385e06..1ffad32a924 100644
   (
      SELECT CONVERT(VARCHAR, [t2].[value])
  		FROM [sys].[extended_properties] AS [t2]
-diff --git a/src/db/oci/Schema.php b/src/db/oci/Schema.php
-index 23ad65b394c..2e55c09db77 100644
---- a/src/db/oci/Schema.php
-+++ b/src/db/oci/Schema.php
-@@ -24,8 +24,8 @@
- /**
-  * Schema is the class for retrieving metadata from an Oracle database.
-  *
-- * @property string $lastInsertID The row ID of the last row inserted, or the last value retrieved from the
-- * sequence object. This property is read-only.
-+ * @property-read string $lastInsertID The row ID of the last row inserted, or the last value retrieved from
-+ * the sequence object. This property is read-only.
-  *
-  * @author Qiang Xue <qiang.xue@gmail.com>
-  * @since 2.0
 diff --git a/src/db/sqlite/Schema.php b/src/db/sqlite/Schema.php
 index ccd6e2bf6ae..0b5a0cc8ec9 100644
 --- a/src/db/sqlite/Schema.php
@@ -4081,51 +4012,6 @@ index 00000000000..dc91d53b937
 +        $this->name = $name;
 +    }
 +}
-diff --git a/tests/framework/filters/RateLimiterTest.php b/tests/framework/filters/RateLimiterTest.php
-index f13c4ec13cf..0b44eb2edb9 100644
---- a/tests/framework/filters/RateLimiterTest.php
-+++ b/tests/framework/filters/RateLimiterTest.php
-@@ -7,13 +7,12 @@
- 
- namespace yiiunit\framework\filters;
- 
--use Prophecy\Argument;
- use Yii;
- use yii\filters\RateLimiter;
--use yii\log\Logger;
- use yii\web\Request;
- use yii\web\Response;
- use yii\web\User;
-+use yiiunit\framework\filters\stubs\ExposedLogger;
- use yiiunit\framework\filters\stubs\RateLimit;
- use yiiunit\framework\filters\stubs\UserIdentity;
- use yiiunit\TestCase;
-@@ -27,15 +26,7 @@ protected function setUp()
-     {
-         parent::setUp();
- 
--        /* @var $logger Logger|\Prophecy\ObjectProphecy */
--        $logger = $this->prophesize(Logger::className());
--        $logger
--            ->log(Argument::any(), Argument::any(), Argument::any())
--            ->will(function ($parameters, $logger) {
--                $logger->messages = $parameters;
--            });
--
--        Yii::setLogger($logger->reveal());
-+        Yii::setLogger(new ExposedLogger());
- 
-         $this->mockWebApplication();
-     }
-@@ -170,7 +161,7 @@ public function testUserWithClosureFunction()
-         };
-         $rateLimiter->beforeAction('test');
- 
--        // testing the evaluation of user closure, which in this case returns not the expect object and therefore 
-+        // testing the evaluation of user closure, which in this case returns not the expect object and therefore
-         // the log message "does not implement RateLimitInterface" is expected.
-         $this->assertInstanceOf(User::className(), $rateLimiter->user);
-         $this->assertContains('Rate limit skipped: "user" does not implement RateLimitInterface.', Yii::getLogger()->messages);
 diff --git a/tests/framework/filters/stubs/ExposedLogger.php b/tests/framework/filters/stubs/ExposedLogger.php
 new file mode 100644
 index 00000000000..951ae55a115
@@ -4592,34 +4478,6 @@ index b9f29d2696e..835ea13b21c 100644
 +    public function testUseStrictMode()
 +    {
 +        $this->useStrictModeTest(DbSession::className());
-+    }
- }
-diff --git a/tests/framework/web/session/CacheSessionTest.php b/tests/framework/web/session/CacheSessionTest.php
-index 018d1643fbe..e31b0f970f2 100644
---- a/tests/framework/web/session/CacheSessionTest.php
-+++ b/tests/framework/web/session/CacheSessionTest.php
-@@ -16,6 +16,8 @@
-  */
- class CacheSessionTest extends \yiiunit\TestCase
- {
-+    use SessionTestTrait;
-+
-     protected function setUp()
-     {
-         parent::setUp();
-@@ -51,4 +53,14 @@ public function testNotWrittenSessionDestroying()
- 
-         $this->assertTrue($session->destroySession($session->getId()));
-     }
-+
-+    public function testInitUseStrictMode()
-+    {
-+        $this->initStrictModeTest(CacheSession::className());
-+    }
-+
-+    public function testUseStrictMode()
-+    {
-+        $this->useStrictModeTest(CacheSession::className());
 +    }
  }
 diff --git a/tests/framework/web/session/SessionTest.php b/tests/framework/web/session/SessionTest.php

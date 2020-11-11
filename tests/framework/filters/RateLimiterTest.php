@@ -7,13 +7,12 @@
 
 namespace yiiunit\framework\filters;
 
-use Prophecy\Argument;
 use Yii;
 use yii\filters\RateLimiter;
-use yii\log\Logger;
 use yii\web\Request;
 use yii\web\Response;
 use yii\web\User;
+use yiiunit\framework\filters\stubs\ExposedLogger;
 use yiiunit\framework\filters\stubs\RateLimit;
 use yiiunit\framework\filters\stubs\UserIdentity;
 use yiiunit\TestCase;
@@ -27,15 +26,7 @@ class RateLimiterTest extends TestCase
     {
         parent::setUp();
 
-        /* @var $logger Logger|\Prophecy\ObjectProphecy */
-        $logger = $this->prophesize(Logger::className());
-        $logger
-            ->log(Argument::any(), Argument::any(), Argument::any())
-            ->will(function ($parameters, $logger) {
-                $logger->messages = $parameters;
-            });
-
-        Yii::setLogger($logger->reveal());
+        Yii::setLogger(new ExposedLogger());
 
         $this->mockWebApplication();
     }
