@@ -1,29 +1,3 @@
-diff --git a/.github/workflows/ci-mysql.yml b/.github/workflows/ci-mysql.yml
-index d2049645ef6..de0a5e1a44f 100644
---- a/.github/workflows/ci-mysql.yml
-+++ b/.github/workflows/ci-mysql.yml
-@@ -63,7 +63,7 @@ jobs:
- 
-       - name: Determine composer cache directory
-         if: matrix.os == 'ubuntu-latest'
--        run: echo "::set-env name=COMPOSER_CACHE_DIR::$(composer config cache-dir)"
-+        run: echo "COMPOSER_CACHE_DIR=$(composer config cache-dir)" >> $GITHUB_ENV
- 
-       - name: Cache dependencies installed with composer
-         uses: actions/cache@v1
-diff --git a/.github/workflows/ci-pgsql.yml b/.github/workflows/ci-pgsql.yml
-index 9325ac2e901..b934f6ab791 100644
---- a/.github/workflows/ci-pgsql.yml
-+++ b/.github/workflows/ci-pgsql.yml
-@@ -67,7 +67,7 @@ jobs:
- 
-       - name: Determine composer cache directory
-         if: matrix.os == 'ubuntu-latest'
--        run: echo "::set-env name=COMPOSER_CACHE_DIR::$(composer config cache-dir)"
-+        run: echo "COMPOSER_CACHE_DIR=$(composer config cache-dir)" >> $GITHUB_ENV
- 
-       - name: Cache dependencies installed with composer
-         uses: actions/cache@v1
 diff --git a/framework/BaseYii.php b/framework/BaseYii.php
 index 6aebd46bbee..cb707b020e2 100644
 --- a/framework/BaseYii.php
