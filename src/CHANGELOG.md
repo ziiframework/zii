@@ -1,10 +1,16 @@
 Yii Framework 2 Change Log
 ==========================
 
+2.0.39.2 November 13, 2020
+--------------------------
+
+- Bug #18378: Fix not taking default value when unable to resolve abstract class via DI container (vjik)
+
+
 2.0.39.1 November 10, 2020
 --------------------------
 
-- Bug #18373: Fix not taking default value when unable to resolve non-exing class via DI container (vjik)
+- Bug #18373: Fix not taking default value when unable to resolve non-existing class via DI container (vjik)
 - Enh #18370: Add option to provide a string replacement for `null` value in `yii\data\DataFilter` (bizley)
 
 
