@@ -1,7 +1,7 @@
-diff --git a/framework/BaseYii.php b/framework/BaseYii.php
+diff --git a/src/BaseYii.php b/src/BaseYii.php
 index 6aebd46bbee..cb707b020e2 100644
---- a/framework/BaseYii.php
-+++ b/framework/BaseYii.php
+--- a/src/BaseYii.php
++++ b/src/BaseYii.php
 @@ -93,7 +93,7 @@ class BaseYii
       */
      public static function getVersion()
@@ -11,10 +11,10 @@ index 6aebd46bbee..cb707b020e2 100644
      }
  
      /**
-diff --git a/framework/CHANGELOG.md b/framework/CHANGELOG.md
+diff --git a/src/CHANGELOG.md b/src/CHANGELOG.md
 index 3480bcb26d0..1e64030d6cc 100644
---- a/framework/CHANGELOG.md
-+++ b/framework/CHANGELOG.md
+--- a/src/CHANGELOG.md
++++ b/src/CHANGELOG.md
 @@ -1,10 +1,16 @@
  Yii Framework 2 Change Log
  ==========================
@@ -33,10 +33,10 @@ index 3480bcb26d0..1e64030d6cc 100644
  - Enh #18370: Add option to provide a string replacement for `null` value in `yii\data\DataFilter` (bizley)
  
  
-diff --git a/framework/di/Container.php b/framework/di/Container.php
+diff --git a/src/di/Container.php b/src/di/Container.php
 index d6b396b6ed9..1c8c9aad68c 100644
---- a/framework/di/Container.php
-+++ b/framework/di/Container.php
+--- a/src/di/Container.php
++++ b/src/di/Container.php
 @@ -528,10 +528,8 @@ protected function getDependencies($class)
                  }
                  $className = $isClass ? $c->getName() : null;
@@ -59,10 +59,10 @@ index d6b396b6ed9..1c8c9aad68c 100644
                  } elseif ($reflection !== null) {
                      $name = $reflection->getConstructor()->getParameters()[$index]->getName();
                      $class = $reflection->getName();
-diff --git a/framework/di/Instance.php b/framework/di/Instance.php
+diff --git a/src/di/Instance.php b/src/di/Instance.php
 index af0044ce4ae..52943860488 100644
---- a/framework/di/Instance.php
-+++ b/framework/di/Instance.php
+--- a/src/di/Instance.php
++++ b/src/di/Instance.php
 @@ -7,6 +7,7 @@
  
  namespace yii\di;
