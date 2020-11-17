@@ -28,8 +28,8 @@
         "ext-ctype": "*",
         "lib-pcre": "*",
         "ext-json": "*",
-        "ziiframework/composer": "3.0.x-dev",
-        "ezyang/htmlpurifier": "~4.6",
+        "ziiframework/composer": "~3.1.1",
+        "ezyang/htmlpurifier": "~4.13.0",
         "cebe/markdown": "~1.0.0 | ~1.1.0 | ~1.2.0",
         "bower-asset/jquery": "3.5.*@stable | 3.4.*@stable | 3.3.*@stable | 3.2.*@stable | 3.1.*@stable | 2.2.*@stable | 2.1.*@stable | 1.11.*@stable | 1.12.*@stable",
         "bower-asset/inputmask": "~3.2.2 | ~3.3.5",
@@ -55,12 +55,20 @@
     "config": {
         "platform": {"php": "7.3"}
     },
+    "scripts": {
+        "redo-install": [
+            "rm -rf vendor/",
+            "rm -f composer.lock",
+            "@composer self-update -vvv",
+            "@composer install -vvv"
+        ]
+    },
     "bin": [
         "src/yii"
     ],
     "extra": {
         "branch-alias": {
-            "dev-master": "3.0.x-dev"
+            "dev-master": "4.0.x-dev"
         }
     }
 }
