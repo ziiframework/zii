@@ -2337,28 +2337,6 @@ index 9ae3d770019..804c63ae7f3 100644
      }
  
      /**
-diff --git a/tests/framework/validators/ExistValidatorTest.php b/tests/framework/validators/ExistValidatorTest.php
-index d55097ed4be..472c74e6b12 100644
---- a/tests/framework/validators/ExistValidatorTest.php
-+++ b/tests/framework/validators/ExistValidatorTest.php
-@@ -198,7 +198,7 @@ public function testExpresionInAttributeColumnName()
-     {
-         $val = new ExistValidator([
-            'targetClass' => OrderItem::className(),
--           'targetAttribute' => ['id' => 'COALESCE(order_id, 0)'],
-+           'targetAttribute' => ['id' => 'COALESCE([[order_id]], 0)'],
-        ]);
- 
-         $m = new Order(['id' => 1]);
-@@ -235,7 +235,7 @@ public function testTargetRelationWithFilter()
-         $val->validateAttribute($m, 'id');
-         $this->assertTrue($m->hasErrors('id'));
-     }
--    
-+
-     public function testForceMaster()
-     {
-         $connection = $this->getConnectionWithInvalidSlave();
 diff --git a/tests/framework/validators/UniqueValidatorTest.php b/tests/framework/validators/UniqueValidatorTest.php
 index ea673e29064..fac59485d53 100644
 --- a/tests/framework/validators/UniqueValidatorTest.php
