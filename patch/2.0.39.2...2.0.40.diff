@@ -1,0 +1,4375 @@
+diff --git a/.github/workflows/build.yml b/.github/workflows/build.yml
+index a912dbfd1b5..1095e78220b 100644
+--- a/.github/workflows/build.yml
++++ b/.github/workflows/build.yml
+@@ -5,6 +5,7 @@ on: [push, pull_request]
+ env:
+   DEFAULT_COMPOSER_FLAGS: "--prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi"
+   PHPUNIT_EXCLUDE_GROUP: mssql,oci,wincache,xcache,zenddata,cubrid
++  XDEBUG_MODE: coverage, develop
+ 
+ jobs:
+   phpunit:
+diff --git a/.github/workflows/ci-oracle.yml b/.github/workflows/ci-oracle.yml
+new file mode 100644
+index 00000000000..4dc62951e11
+--- /dev/null
++++ b/.github/workflows/ci-oracle.yml
+@@ -0,0 +1,81 @@
++on:
++  - pull_request
++  - push
++
++name: ci-oracle
++
++jobs:
++  tests:
++    name: PHP ${{ matrix.php }}-${{ matrix.os }}
++
++    env:
++      extensions: oci8, pdo, pdo_oci
++      key: cache-v1
++
++    runs-on: ${{ matrix.os }}
++
++    strategy:
++      matrix:
++        os:
++          - ubuntu-latest
++
++        php:
++          - "7.4"
++
++    services:
++      oci:
++          image: wnameless/oracle-xe-11g-r2:latest
++          ports:
++              - 1521:1521
++          options: --name=oci
++
++    steps:
++      - name: Checkout
++        uses: actions/checkout@v2
++
++      - name: Setup cache environment
++        id: cache-env
++        uses: shivammathur/cache-extensions@v1
++        with:
++          php-version: ${{ matrix.php }}
++          extensions: ${{ env.extensions }}
++          key: ${{ env.key }}
++
++      - name: Cache extensions
++        uses: actions/cache@v1
++        with:
++          path: ${{ steps.cache-env.outputs.dir }}
++          key: ${{ steps.cache-env.outputs.key }}
++          restore-keys: ${{ steps.cache-env.outputs.key }}
++
++      - name: Install PHP with extensions
++        uses: shivammathur/setup-php@v2
++        with:
++          php-version: ${{ matrix.php }}
++          extensions: ${{ env.extensions }}
++          ini-values: date.timezone='UTC'
++          coverage: pcov
++          tools: composer:v2, pecl
++
++      - name: Determine composer cache directory
++        run: echo "COMPOSER_CACHE_DIR=$(composer config cache-dir)" >> $GITHUB_ENV
++
++      - name: Cache dependencies installed with composer
++        uses: actions/cache@v2
++        with:
++          path: ${{ env.COMPOSER_CACHE_DIR }}
++          key: php${{ matrix.php }}-composer-${{ hashFiles('**/composer.json') }}
++          restore-keys: |
++            php${{ matrix.php }}-composer-
++
++      - name: Install dependencies with composer php 7.4
++        if: matrix.php == '7.4'
++        run: composer update --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
++
++      - name: Install dependencies with composer php 8.0
++        if: matrix.php == '8.0'
++        run: composer update --ignore-platform-reqs --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
++
++      - name: Run tests with phpunit
++        run: vendor/bin/phpunit --group oci --colors=always
++
+diff --git a/build/controllers/DevController.php b/build/controllers/DevController.php
+index 8962cbecfae..5cb1b3263e2 100644
+--- a/build/controllers/DevController.php
++++ b/build/controllers/DevController.php
+@@ -335,7 +335,7 @@ protected function listSubDirs($dir)
+                 continue;
+             }
+             // ignore hidden directories
+-            if ($file[0] === '.') {
++            if (strpos($file, '.') === 0) {
+                 continue;
+             }
+             if (is_dir("$dir/$file")) {
+diff --git a/build/controllers/MimeTypeController.php b/build/controllers/MimeTypeController.php
+index 5645e88554c..5b034912a8d 100644
+--- a/build/controllers/MimeTypeController.php
++++ b/build/controllers/MimeTypeController.php
+@@ -85,7 +85,7 @@ private function generateMimeTypesFile($outFile, $content)
+         $mimeMap = [];
+         foreach (explode("\n", $content) as $line) {
+             $line = trim($line);
+-            if (empty($line) || $line[0] === '#') { // skip comments and empty lines
++            if (empty($line) || strpos($line, '#') === 0) { // skip comments and empty lines
+                 continue;
+             }
+             $parts = preg_split('/\s+/', $line);
+diff --git a/build/controllers/PhpDocController.php b/build/controllers/PhpDocController.php
+index 1c7c660392e..7099fb32d49 100644
+--- a/build/controllers/PhpDocController.php
++++ b/build/controllers/PhpDocController.php
+@@ -329,16 +329,16 @@ protected function fixDocBlockIndentation(&$lines)
+                 $tag = false;
+             } elseif ($docBlock) {
+                 $line = ltrim($line);
+-                if (isset($line[0]) && $line[0] === '*') {
++                if (strpos($line, '*') === 0) {
+                     $line = substr($line, 1);
+                 }
+-                if (isset($line[0]) && $line[0] === ' ') {
++                if (strpos($line, ' ') === 0) {
+                     $line = substr($line, 1);
+                 }
+                 $docLine = str_replace("\t", '    ', rtrim($line));
+                 if (empty($docLine)) {
+                     $listIndent = '';
+-                } elseif ($docLine[0] === '@') {
++                } elseif (strpos($docLine, '@') === 0) {
+                     $listIndent = '';
+                     $codeBlock = false;
+                     $tag = true;
+@@ -453,15 +453,15 @@ protected function fixLineSpacing($lines)
+                 $endofPrivate = $i;
+                 $property = 'Private';
+                 $level = 0;
+-            } elseif (substr($line, 0, 6) === 'const ') {
++            } elseif (strpos($line, 'const ') === 0) {
+                 $endofConst = $i;
+                 $property = false;
+-            } elseif (substr($line, 0, 4) === 'use ') {
++            } elseif (strpos($line, 'use ') === 0) {
+                 $endofUse = $i;
+                 $property = false;
+-            } elseif (!empty($line) && $line[0] === '*') {
++            } elseif (strpos($line, '*') === 0) {
+                 $property = false;
+-            } elseif (!empty($line) && $line[0] !== '*' && strpos($line, 'function ') !== false || $line === '}') {
++            } elseif (strpos($line, '*') !== 0 && strpos($line, 'function ') !== false || $line === '}') {
+                 break;
+             }
+ 
+@@ -797,7 +797,7 @@ protected function fixSentence($str)
+             return '';
+         }
+ 
+-        return strtoupper(substr($str, 0, 1)) . substr($str, 1) . ($str[\strlen($str) - 1] != '.' ? '.' : '');
++        return strtoupper(substr($str, 0, 1)) . substr($str, 1) . ($str[\strlen($str) - 1] !== '.' ? '.' : '');
+     }
+ 
+     protected function getPropParam($prop, $param)
+diff --git a/build/controllers/TranslationController.php b/build/controllers/TranslationController.php
+index 0200ad9f0fa..b4d2164d262 100644
+--- a/build/controllers/TranslationController.php
++++ b/build/controllers/TranslationController.php
+@@ -126,11 +126,11 @@ public function highlightDiff($diff)
+     {
+         $lines = explode("\n", $diff);
+         foreach ($lines as $key => $val) {
+-            if (mb_substr($val, 0, 1, 'utf-8') === '@') {
++            if (strpos($val, '@') === 0) {
+                 $lines[$key] = '<span class="info">' . Html::encode($val) . '</span>';
+-            } elseif (mb_substr($val, 0, 1, 'utf-8') === '+') {
++            } elseif (strpos($val, '+') === 0) {
+                 $lines[$key] = '<ins>' . Html::encode($val) . '</ins>';
+-            } elseif (mb_substr($val, 0, 1, 'utf-8') === '-') {
++            } elseif (strpos($val, '-') === 0) {
+                 $lines[$key] = '<del>' . Html::encode($val) . '</del>';
+             } else {
+                 $lines[$key] = Html::encode($val);
+diff --git a/docs/guide-ru/test-environment-setup.md b/docs/guide-ru/test-environment-setup.md
+index a85c61243be..6c1a35f6c45 100644
+--- a/docs/guide-ru/test-environment-setup.md
++++ b/docs/guide-ru/test-environment-setup.md
+@@ -53,7 +53,7 @@ Changed current directory to <directory>
+ Если вы используете Apache и настроили его как описано в разделе «[Установка Yii](start-installation.md)», то для тестов вам необходимо создать отдельный виртуальный хост который будет работать с той же папкой, но использовать входной скрипт `index-test.php`:
+ ```
+ <VirtualHost *:80>
+-    DocumentRoot "path/to/basic/webb"
++    DocumentRoot "path/to/basic/web"
+     ServerName mysite-test
+     <Directory "path/to/basic/web">
+         Order Allow,Deny
+diff --git a/framework/BaseYii.php b/framework/BaseYii.php
+index cb707b020e2..5e6ce7913e7 100644
+--- a/framework/BaseYii.php
++++ b/framework/BaseYii.php
+@@ -93,7 +93,7 @@ class BaseYii
+      */
+     public static function getVersion()
+     {
+-        return '2.0.39.2';
++        return '2.0.40';
+     }
+ 
+     /**
+@@ -130,7 +130,7 @@ public static function getVersion()
+      */
+     public static function getAlias($alias, $throwException = true)
+     {
+-        if (strncmp($alias, '@', 1)) {
++        if (strpos($alias, '@') !== 0) {
+             // not an alias
+             return $alias;
+         }
+@@ -278,7 +278,7 @@ public static function autoload($className)
+     {
+         if (isset(static::$classMap[$className])) {
+             $classFile = static::$classMap[$className];
+-            if ($classFile[0] === '@') {
++            if (strpos($classFile, '@') === 0) {
+                 $classFile = static::getAlias($classFile);
+             }
+         } elseif (strpos($className, '\\') !== false) {
+diff --git a/framework/CHANGELOG.md b/framework/CHANGELOG.md
+index 1e64030d6cc..64e7d9ef6bd 100644
+--- a/framework/CHANGELOG.md
++++ b/framework/CHANGELOG.md
+@@ -1,6 +1,36 @@
+ Yii Framework 2 Change Log
+ ==========================
+ 
++2.0.40 December 23, 2020
++------------------------
++
++- Bug #16492: Fix eager loading Active Record relations when relation key is a subject to a type-casting behavior (bizley)
++- Bug #18199: Fix content body response on 304 HTTP status code, according to RFC 7232 (rad8329)
++- Bug #18287: Fix the OUTPUT got SQL syntax error if the column name is MSSQL keyword e.g. key (darkdef)
++- Bug #18339: Fix migrate controller actions to return exit codes (haohetao, bizley)
++- Bug #18365: Move quoting of table names to upper level to function `getSchemaMetadata()` in MSSQL driver to get clean names from the schema (darkdef)
++- Bug #18383: RBAC's generated file made PSR-12 compliant (perlexed)
++- Bug #18386: Fix `assets/yii.activeForm.js` incorrect target selector for `validatingCssClass` (brussens)
++- Bug #18393: Fix `ActiveRecord::refresh()` to load data from the database even if cache is enabled (hooman-mirghasemi)
++- Bug #18395: Fix regression in `yii\helpers\BaseArrayHelper::filter()` (allowing filtering arrays with numeric keys) (bizley)
++- Bug #18400: Set parent module of the newly attached child module by `Module::setModule()` and `Module::setModules()` (sup-ham)
++- Bug #18406: Fix PDO exception when committing or rolling back an autocommitted transaction in PHP 8 (brandonkelly)
++- Bug #18414: Fix `AssetManager::appendTimestamp()` not appending timestamp for website root in sub-directory (Isitar)
++- Bug #18426: Fix check for route's leading slash in `yii\widgets\Menu` (stevekr)
++- Bug #18435: Fix ensuring Active Record relation links' keys to be strings (bizley)
++- Bug #18435: Change the check order whether an object is an implementation of `Arrayable` or `JsonSerializable` in `\yii\base\ArrayableTrait::toArray()` and `\yii\rest\Serializer::serialize()` (spell6inder)
++- Bug #18442: Fix calls with array access to string (bizley)
++- Enh #18381: The `yii\web\AssetManager` `$basePath` readable and writeable check has been moved to the `checkBasePathPermission()`. This check will run once before `publishFile()` and `publishDirectory()` (nadar)
++- Enh #18394: Add support for setting `yii\web\Response::$stream` to a callable (brandonkelly)
++
++
++2.0.39.3 November 23, 2020
++--------------------------
++
++- Bug #18396: Fix not throw `InvalidConfigException` when failed to instantiate class via DI container in some cases (vjik)
++- Enh #18200: Add `maxlength` attribute by default to the input text when it is an active field within a `yii\grid\DataColumn` (rad8329)
++
++
+ 2.0.39.2 November 13, 2020
+ --------------------------
+ 
+@@ -1375,7 +1405,7 @@ Yii Framework 2 Change Log
+ - Enh #8329: Added support of options for `message` console command (vchenin)
+ - Enh #8613: `yii\widgets\FragmentCache` will not store empty content anymore which fixes some problems related to `yii\filters\PageCache` (kidol)
+ - Enh #8649: Added total applied migrations to final report (vernik91)
+-- Enh #8687: Added support for non-gregorian calendars, e.g. persian, taiwan, islamic to `yii\i18n\Formatter` (cebe, z-avanes, hooman-pro)
++- Enh #8687: Added support for non-gregorian calendars, e.g. persian, taiwan, islamic to `yii\i18n\Formatter` (cebe, z-avanes, hooman-mirghasemi)
+ - Enh #8824: Allow passing a `yii\db\Expression` to `Query::groupBy()` (cebe)
+ - Enh #8995: `yii\validators\FileValidator::maxFiles` can be set to `0` to allow unlimited count of files (PowerGamer1, silverfire)
+ - Enh #9282: Improved JSON error handling to support PHP 5.5 error codes (freezy-sk)
+diff --git a/framework/assets/yii.activeForm.js b/framework/assets/yii.activeForm.js
+index 0c1ccb0f777..34d334686f2 100644
+--- a/framework/assets/yii.activeForm.js
++++ b/framework/assets/yii.activeForm.js
+@@ -569,7 +569,13 @@
+             $.each(data.attributes, function () {
+                 if (this.status === 2) {
+                     this.status = 3;
+-                    $form.find(this.container).addClass(data.settings.validatingCssClass);
++
++                    var $container = $form.find(this.container),
++                        $input = findInput($form, this);
++
++                    var $errorElement = data.settings.validationStateOn === 'input' ? $input : $container;
++
++                    $errorElement.addClass(data.settings.validatingCssClass);
+                 }
+             });
+             methods.validate.call($form);
+@@ -917,4 +923,4 @@
+             $form.find(attribute.input).attr('aria-invalid', hasError ? 'true' : 'false');
+         }
+     }
+-})(window.jQuery);
+\ No newline at end of file
++})(window.jQuery);
+diff --git a/framework/base/ArrayableTrait.php b/framework/base/ArrayableTrait.php
+index 727d71b4cf8..d2093fd8592 100644
+--- a/framework/base/ArrayableTrait.php
++++ b/framework/base/ArrayableTrait.php
+@@ -103,7 +103,7 @@ public function extraFields()
+      * This method will first identify which fields to be included in the resulting array by calling [[resolveFields()]].
+      * It will then turn the model into an array with these fields. If `$recursive` is true,
+      * any embedded objects will also be converted into arrays.
+-     * When embeded objects are [[Arrayable]], their respective nested fields will be extracted and passed to [[toArray()]].
++     * When embedded objects are [[Arrayable]], their respective nested fields will be extracted and passed to [[toArray()]].
+      *
+      * If the model implements the [[Linkable]] interface, the resulting array will also have a `_link` element
+      * which refers to a list of links as specified by the interface.
+@@ -128,17 +128,17 @@ public function toArray(array $fields = [], array $expand = [], $recursive = tru
+             if ($recursive) {
+                 $nestedFields = $this->extractFieldsFor($fields, $field);
+                 $nestedExpand = $this->extractFieldsFor($expand, $field);
+-                if ($attribute instanceof \JsonSerializable) {
+-                    $attribute = $attribute->jsonSerialize();
+-                } elseif ($attribute instanceof Arrayable) {
++                if ($attribute instanceof Arrayable) {
+                     $attribute = $attribute->toArray($nestedFields, $nestedExpand);
++                } elseif ($attribute instanceof \JsonSerializable) {
++                    $attribute = $attribute->jsonSerialize();
+                 } elseif (is_array($attribute)) {
+                     $attribute = array_map(
+                         function ($item) use ($nestedFields, $nestedExpand) {
+-                            if ($item instanceof \JsonSerializable) {
+-                                return $item->jsonSerialize();
+-                            } elseif ($item instanceof Arrayable) {
++                            if ($item instanceof Arrayable) {
+                                 return $item->toArray($nestedFields, $nestedExpand);
++                            } elseif ($item instanceof \JsonSerializable) {
++                                return $item->jsonSerialize();
+                             }
+                             return $item;
+                         },
+diff --git a/framework/base/Component.php b/framework/base/Component.php
+index 65516e281fc..47e872bd976 100644
+--- a/framework/base/Component.php
++++ b/framework/base/Component.php
+@@ -568,7 +568,7 @@ public function off($name, $handler = null)
+             }
+             if ($removed) {
+                 $this->_events[$name] = array_values($this->_events[$name]);
+-                return $removed;
++                return true;
+             }
+         }
+ 
+diff --git a/framework/base/Controller.php b/framework/base/Controller.php
+index e15b091eb0f..f2d655bac19 100644
+--- a/framework/base/Controller.php
++++ b/framework/base/Controller.php
+@@ -61,7 +61,7 @@ class Controller extends Component implements ViewContextInterface
+      */
+     public $layout;
+     /**
+-     * @var Action the action that is currently being executed. This property will be set
++     * @var Action|null the action that is currently being executed. This property will be set
+      * by [[run()]] when it is called by [[Application]] to run an action.
+      */
+     public $action;
+@@ -77,11 +77,11 @@ class Controller extends Component implements ViewContextInterface
+     public $response = 'response';
+ 
+     /**
+-     * @var View the view object that can be used to render views or view files.
++     * @var View|null the view object that can be used to render views or view files.
+      */
+     private $_view;
+     /**
+-     * @var string the root directory that contains view files for this controller.
++     * @var string|null the root directory that contains view files for this controller.
+      */
+     private $_viewPath;
+ 
+@@ -129,6 +129,7 @@ public function init()
+      *
+      * [[\Yii::createObject()]] will be used later to create the requested action
+      * using the configuration provided here.
++     * @return array
+      */
+     public function actions()
+     {
+diff --git a/framework/base/Event.php b/framework/base/Event.php
+index 5156c20daf3..29bc0a8dacf 100644
+--- a/framework/base/Event.php
++++ b/framework/base/Event.php
+@@ -158,7 +158,7 @@ public static function off($class, $name, $handler = null)
+             }
+             if ($removed) {
+                 self::$_events[$name][$class] = array_values(self::$_events[$name][$class]);
+-                return $removed;
++                return true;
+             }
+         }
+ 
+diff --git a/framework/base/Module.php b/framework/base/Module.php
+index d8577d482ed..ca81190e390 100644
+--- a/framework/base/Module.php
++++ b/framework/base/Module.php
+@@ -425,7 +425,7 @@ public function getModule($id, $load = true)
+                 Yii::debug("Loading module: $id", __METHOD__);
+                 /* @var $module Module */
+                 $module = Yii::createObject($this->_modules[$id], [$id, $this]);
+-                $module->setInstance($module);
++                $module::setInstance($module);
+                 return $this->_modules[$id] = $module;
+             }
+         }
+@@ -450,6 +450,9 @@ public function setModule($id, $module)
+             unset($this->_modules[$id]);
+         } else {
+             $this->_modules[$id] = $module;
++            if ($module instanceof self) {
++                $module->module = $this;
++            }
+         }
+     }
+ 
+@@ -504,6 +507,9 @@ public function setModules($modules)
+     {
+         foreach ($modules as $id => $module) {
+             $this->_modules[$id] = $module;
++            if ($module instanceof self) {
++                $module->module = $this;
++            }
+         }
+     }
+ 
+diff --git a/framework/base/View.php b/framework/base/View.php
+index d5b64c668c1..41b3d9650ca 100644
+--- a/framework/base/View.php
++++ b/framework/base/View.php
+@@ -50,7 +50,7 @@ class View extends Component implements DynamicContentAwareInterface
+      */
+     public $context;
+     /**
+-     * @var mixed custom parameters that are shared among view templates.
++     * @var array custom parameters that are shared among view templates.
+      */
+     public $params = [];
+     /**
+diff --git a/framework/caching/FileCache.php b/framework/caching/FileCache.php
+index da71b179300..b221998db88 100644
+--- a/framework/caching/FileCache.php
++++ b/framework/caching/FileCache.php
+@@ -261,7 +261,7 @@ protected function gcRecursive($path, $expiredOnly)
+     {
+         if (($handle = opendir($path)) !== false) {
+             while (($file = readdir($handle)) !== false) {
+-                if ($file[0] === '.') {
++                if (strpos($file, '.') === 0) {
+                     continue;
+                 }
+                 $fullPath = $path . DIRECTORY_SEPARATOR . $file;
+diff --git a/framework/console/Controller.php b/framework/console/Controller.php
+index 4288f93c822..4beec2478ec 100644
+--- a/framework/console/Controller.php
++++ b/framework/console/Controller.php
+@@ -56,7 +56,7 @@ class Controller extends \yii\base\Controller
+      */
+     public $interactive = true;
+     /**
+-     * @var bool whether to enable ANSI color in the output.
++     * @var bool|null whether to enable ANSI color in the output.
+      * If not set, ANSI color will only be enabled for terminals that support it.
+      */
+     public $color;
+@@ -64,9 +64,9 @@ class Controller extends \yii\base\Controller
+      * @var bool whether to display help information about current command.
+      * @since 2.0.10
+      */
+-    public $help;
++    public $help = false;
+     /**
+-     * @var bool if true - script finish with `ExitCode::OK` in case of exception.
++     * @var bool|null if true - script finish with `ExitCode::OK` in case of exception.
+      * false - `ExitCode::UNSPECIFIED_ERROR`.
+      * Default: `YII_ENV_TEST`
+      * @since 2.0.36
+@@ -79,6 +79,9 @@ class Controller extends \yii\base\Controller
+     private $_passedOptions = [];
+ 
+ 
++    /**
++     * {@inheritdoc}
++     */
+     public function beforeAction($action)
+     {
+         $silentExit = $this->silentExitOnException !== null ? $this->silentExitOnException : YII_ENV_TEST;
+diff --git a/framework/console/controllers/BaseMigrateController.php b/framework/console/controllers/BaseMigrateController.php
+index 561d6bd44b1..dc94497cc70 100644
+--- a/framework/console/controllers/BaseMigrateController.php
++++ b/framework/console/controllers/BaseMigrateController.php
+@@ -211,6 +211,8 @@ public function actionUp($limit = 0)
+             $this->stdout("\n$n " . ($n === 1 ? 'migration was' : 'migrations were') . " applied.\n", Console::FG_GREEN);
+             $this->stdout("\nMigrated up successfully.\n", Console::FG_GREEN);
+         }
++
++        return ExitCode::OK;
+     }
+ 
+     /**
+@@ -272,6 +274,8 @@ public function actionDown($limit = 1)
+             $this->stdout("\n$n " . ($n === 1 ? 'migration was' : 'migrations were') . " reverted.\n", Console::FG_GREEN);
+             $this->stdout("\nMigrated down successfully.\n", Console::FG_GREEN);
+         }
++
++        return ExitCode::OK;
+     }
+ 
+     /**
+@@ -338,6 +342,8 @@ public function actionRedo($limit = 1)
+             $this->stdout("\n$n " . ($n === 1 ? 'migration was' : 'migrations were') . " redone.\n", Console::FG_GREEN);
+             $this->stdout("\nMigration redone successfully.\n", Console::FG_GREEN);
+         }
++
++        return ExitCode::OK;
+     }
+ 
+     /**
+@@ -367,13 +373,13 @@ public function actionRedo($limit = 1)
+     public function actionTo($version)
+     {
+         if (($namespaceVersion = $this->extractNamespaceMigrationVersion($version)) !== false) {
+-            $this->migrateToVersion($namespaceVersion);
++            return $this->migrateToVersion($namespaceVersion);
+         } elseif (($migrationName = $this->extractMigrationVersion($version)) !== false) {
+-            $this->migrateToVersion($migrationName);
++            return $this->migrateToVersion($migrationName);
+         } elseif ((string) (int) $version == $version) {
+-            $this->migrateToTime($version);
++            return $this->migrateToTime($version);
+         } elseif (($time = strtotime($version)) !== false) {
+-            $this->migrateToTime($time);
++            return $this->migrateToTime($time);
+         } else {
+             throw new Exception("The version argument must be either a timestamp (e.g. 101129_185401),\n the full name of a migration (e.g. m101129_185401_create_user_table),\n the full namespaced name of a migration (e.g. app\\migrations\\M101129185401CreateUserTable),\n a UNIX timestamp (e.g. 1392853000), or a datetime string parseable\nby the strtotime() function (e.g. 2014-02-15 13:00:50).");
+         }
+@@ -431,13 +437,11 @@ public function actionMark($version)
+             if (strpos($migration, $version) === 0) {
+                 if ($i === 0) {
+                     $this->stdout("Already at '$originalVersion'. Nothing needs to be done.\n", Console::FG_YELLOW);
+-                } else {
+-                    if ($this->confirm("Set migration history at $originalVersion?")) {
+-                        for ($j = 0; $j < $i; ++$j) {
+-                            $this->removeMigrationHistory($migrations[$j]);
+-                        }
+-                        $this->stdout("The migration history is set at $originalVersion.\nNo actual migration was performed.\n", Console::FG_GREEN);
++                } elseif ($this->confirm("Set migration history at $originalVersion?")) {
++                    for ($j = 0; $j < $i; ++$j) {
++                        $this->removeMigrationHistory($migrations[$j]);
+                     }
++                    $this->stdout("The migration history is set at $originalVersion.\nNo actual migration was performed.\n", Console::FG_GREEN);
+                 }
+ 
+                 return ExitCode::OK;
+@@ -460,16 +464,18 @@ public function actionFresh()
+     {
+         if (YII_ENV_PROD) {
+             $this->stdout("YII_ENV is set to 'prod'.\nRefreshing migrations is not possible on production systems.\n");
++
+             return ExitCode::OK;
+         }
+ 
+-        if ($this->confirm(
+-            "Are you sure you want to drop all tables and related constraints and start the migration from the beginning?\nAll data will be lost irreversibly!")) {
++        if ($this->confirm("Are you sure you want to drop all tables and related constraints and start the migration from the beginning?\nAll data will be lost irreversibly!")) {
+             $this->truncateDatabase();
++
+             return $this->actionUp();
+         }
+ 
+         $this->stdout('Action was cancelled by user. Nothing has been performed.');
++
+         return ExitCode::OK;
+     }
+ 
+@@ -545,6 +551,8 @@ public function actionHistory($limit = 10)
+                 $this->stdout("\t(" . date('Y-m-d H:i:s', $time) . ') ' . $version . "\n");
+             }
+         }
++
++        return ExitCode::OK;
+     }
+ 
+     /**
+@@ -591,6 +599,8 @@ public function actionNew($limit = 10)
+                 $this->stdout("\t" . $migration . "\n");
+             }
+         }
++
++        return ExitCode::OK;
+     }
+ 
+     /**
+@@ -647,9 +657,16 @@ public function actionCreate($name)
+                 'namespace' => $namespace,
+             ]);
+             FileHelper::createDirectory($migrationPath);
+-            file_put_contents($file, $content, LOCK_EX);
++            if (file_put_contents($file, $content, LOCK_EX) === false) {
++                $this->stdout("Failed to create new migration.\n", Console::FG_RED);
++
++                return ExitCode::IOERR;
++            }
++
+             $this->stdout("New migration created successfully.\n", Console::FG_GREEN);
+         }
++
++        return ExitCode::OK;
+     }
+ 
+     /**
+@@ -826,8 +843,10 @@ protected function migrateToTime($time)
+         if ($count === 0) {
+             $this->stdout("Nothing needs to be done.\n", Console::FG_GREEN);
+         } else {
+-            $this->actionDown($count);
++            return $this->actionDown($count);
+         }
++
++        return ExitCode::OK;
+     }
+ 
+     /**
+@@ -844,9 +863,7 @@ protected function migrateToVersion($version)
+         $migrations = $this->getNewMigrations();
+         foreach ($migrations as $i => $migration) {
+             if (strpos($migration, $version) === 0) {
+-                $this->actionUp($i + 1);
+-
+-                return ExitCode::OK;
++                return $this->actionUp($i + 1);
+             }
+         }
+ 
+@@ -857,7 +874,7 @@ protected function migrateToVersion($version)
+                 if ($i === 0) {
+                     $this->stdout("Already at '$originalVersion'. Nothing needs to be done.\n", Console::FG_YELLOW);
+                 } else {
+-                    $this->actionDown($i);
++                    return $this->actionDown($i);
+                 }
+ 
+                 return ExitCode::OK;
+diff --git a/framework/console/controllers/MessageController.php b/framework/console/controllers/MessageController.php
+index 0aa90bee2e3..a8278d9db5c 100644
+--- a/framework/console/controllers/MessageController.php
++++ b/framework/console/controllers/MessageController.php
+@@ -386,7 +386,7 @@ protected function saveMessagesToDb($messages, $db, $sourceMessageTable, $messag
+ 
+         if (!$removeUnused) {
+             foreach ($obsolete as $pk => $msg) {
+-                if (mb_substr($msg, 0, 2) === '@@' && mb_substr($msg, -2) === '@@') {
++                if (strpos($msg, '@@') === 0 && substr($msg, -2) === '@@') {
+                     unset($obsolete[$pk]);
+                 }
+             }
+diff --git a/framework/db/ActiveRecord.php b/framework/db/ActiveRecord.php
+index 54085022869..0ccbcca6305 100644
+--- a/framework/db/ActiveRecord.php
++++ b/framework/db/ActiveRecord.php
+@@ -289,7 +289,7 @@ public function refresh()
+         $query->where($pk);
+ 
+         /* @var $record BaseActiveRecord */
+-        $record = $query->one();
++        $record = $query->noCache()->one();
+         return $this->refreshInternal($record);
+     }
+ 
+diff --git a/framework/db/ActiveRelationTrait.php b/framework/db/ActiveRelationTrait.php
+index f2c22e125f3..6f6e12c7f7e 100644
+--- a/framework/db/ActiveRelationTrait.php
++++ b/framework/db/ActiveRelationTrait.php
+@@ -585,22 +585,23 @@ private function getModelKey($model, $attributes)
+         if (count($key) > 1) {
+             return serialize($key);
+         }
+-        $key = reset($key);
+-        return is_scalar($key) ? $key : serialize($key);
++        return reset($key);
+     }
+ 
+     /**
+-     * @param mixed $value raw key value.
++     * @param mixed $value raw key value. Since 2.0.40 non-string values must be convertable to string (like special
++     * objects for cross-DBMS relations, for example: `|MongoId`).
+      * @return string normalized key value.
+      */
+     private function normalizeModelKey($value)
+     {
+-        if (is_object($value) && method_exists($value, '__toString')) {
+-            // ensure matching to special objects, which are convertable to string, for cross-DBMS relations, for example: `|MongoId`
+-            $value = $value->__toString();
++        try {
++            return (string)$value;
++        } catch (\Exception $e) {
++            throw new InvalidConfigException('Value must be convertable to string.');
++        } catch (\Throwable $e) {
++            throw new InvalidConfigException('Value must be convertable to string.');
+         }
+-
+-        return $value;
+     }
+ 
+     /**
+diff --git a/framework/db/Command.php b/framework/db/Command.php
+index 3d61e93a7e9..1dcfb5b5e92 100644
+--- a/framework/db/Command.php
++++ b/framework/db/Command.php
+@@ -424,7 +424,7 @@ public function queryOne($fetchMode = null)
+     /**
+      * Executes the SQL statement and returns the value of the first column in the first row of data.
+      * This method is best used when only a single value is needed for a query.
+-     * @return string|null|false the value of the first column in the first row of the query result.
++     * @return string|int|null|false the value of the first column in the first row of the query result.
+      * False is returned if there is no value.
+      * @throws Exception execution failed
+      */
+diff --git a/framework/db/Query.php b/framework/db/Query.php
+index 59dcb8382aa..ba0a103b8e9 100644
+--- a/framework/db/Query.php
++++ b/framework/db/Query.php
+@@ -290,7 +290,7 @@ public function one($db = null)
+      * The value returned will be the first column in the first row of the query results.
+      * @param Connection $db the database connection used to generate the SQL statement.
+      * If this parameter is not given, the `db` application component will be used.
+-     * @return string|null|false the value of the first column in the first row of the query result.
++     * @return string|int|null|false the value of the first column in the first row of the query result.
+      * False is returned if the query result is empty.
+      */
+     public function scalar($db = null)
+diff --git a/framework/db/Transaction.php b/framework/db/Transaction.php
+index e6c1cbe93a2..7a119d1171e 100644
+--- a/framework/db/Transaction.php
++++ b/framework/db/Transaction.php
+@@ -140,7 +140,10 @@ public function begin($isolationLevel = null)
+         $schema = $this->db->getSchema();
+         if ($schema->supportsSavepoint()) {
+             Yii::debug('Set savepoint ' . $this->_level, __METHOD__);
+-            $schema->createSavepoint('LEVEL' . $this->_level);
++            // make sure the transaction wasn't autocommitted
++            if ($this->db->pdo->inTransaction()) {
++                $schema->createSavepoint('LEVEL' . $this->_level);
++            }
+         } else {
+             Yii::info('Transaction not started: nested transaction not supported', __METHOD__);
+             throw new NotSupportedException('Transaction not started: nested transaction not supported.');
+@@ -161,7 +164,10 @@ public function commit()
+         $this->_level--;
+         if ($this->_level === 0) {
+             Yii::debug('Commit transaction', __METHOD__);
+-            $this->db->pdo->commit();
++            // make sure the transaction wasn't autocommitted
++            if ($this->db->pdo->inTransaction()) {
++                $this->db->pdo->commit();
++            }
+             $this->db->trigger(Connection::EVENT_COMMIT_TRANSACTION);
+             return;
+         }
+@@ -169,7 +175,10 @@ public function commit()
+         $schema = $this->db->getSchema();
+         if ($schema->supportsSavepoint()) {
+             Yii::debug('Release savepoint ' . $this->_level, __METHOD__);
+-            $schema->releaseSavepoint('LEVEL' . $this->_level);
++            // make sure the transaction wasn't autocommitted
++            if ($this->db->pdo->inTransaction()) {
++                $schema->releaseSavepoint('LEVEL' . $this->_level);
++            }
+         } else {
+             Yii::info('Transaction not committed: nested transaction not supported', __METHOD__);
+         }
+@@ -189,7 +198,10 @@ public function rollBack()
+         $this->_level--;
+         if ($this->_level === 0) {
+             Yii::debug('Roll back transaction', __METHOD__);
+-            $this->db->pdo->rollBack();
++            // make sure the transaction wasn't autocommitted
++            if ($this->db->pdo->inTransaction()) {
++                $this->db->pdo->rollBack();
++            }
+             $this->db->trigger(Connection::EVENT_ROLLBACK_TRANSACTION);
+             return;
+         }
+@@ -197,7 +209,10 @@ public function rollBack()
+         $schema = $this->db->getSchema();
+         if ($schema->supportsSavepoint()) {
+             Yii::debug('Roll back to savepoint ' . $this->_level, __METHOD__);
+-            $schema->rollBackSavepoint('LEVEL' . $this->_level);
++            // make sure the transaction wasn't autocommitted
++            if ($this->db->pdo->inTransaction()) {
++                $schema->rollBackSavepoint('LEVEL' . $this->_level);
++            }
+         } else {
+             Yii::info('Transaction not rolled back: nested transaction not supported', __METHOD__);
+         }
+diff --git a/framework/db/mssql/QueryBuilder.php b/framework/db/mssql/QueryBuilder.php
+index cc2a92067a9..0b068875f9a 100644
+--- a/framework/db/mssql/QueryBuilder.php
++++ b/framework/db/mssql/QueryBuilder.php
+@@ -483,11 +483,12 @@ public function insert($table, $columns, &$params)
+                 if ($column->isComputed) {
+                     continue;
+                 }
+-                $cols[] = $this->db->quoteColumnName($column->name) . ' '
++                $quoteColumnName = $this->db->quoteColumnName($column->name);
++                $cols[] = $quoteColumnName . ' '
+                     . $column->dbType
+                     . (in_array($column->dbType, ['char', 'varchar', 'nchar', 'nvarchar', 'binary', 'varbinary']) ? "(MAX)" : "")
+                     . ' ' . ($column->allowNull ? "NULL" : "");
+-                $columns[] = 'INSERTED.' . $column->name;
++                $columns[] = 'INSERTED.' . $quoteColumnName;
+             }
+         }
+         $countColumns = count($columns);
+diff --git a/framework/db/mssql/Schema.php b/framework/db/mssql/Schema.php
+index 1ffad32a924..34f9976daef 100644
+--- a/framework/db/mssql/Schema.php
++++ b/framework/db/mssql/Schema.php
+@@ -180,12 +180,7 @@ protected function findTableNames($schema = '')
+ WHERE [t].[table_schema] = :schema AND [t].[table_type] IN ('BASE TABLE', 'VIEW')
+ ORDER BY [t].[table_name]
+ SQL;
+-        $tables = $this->db->createCommand($sql, [':schema' => $schema])->queryColumn();
+-        $tables = array_map(static function ($item) {
+-            return '[' . $item . ']';
+-        }, $tables);
+-
+-        return $tables;
++        return $this->db->createCommand($sql, [':schema' => $schema])->queryColumn();
+     }
+ 
+     /**
+@@ -204,6 +199,29 @@ protected function loadTableSchema($name)
+         return null;
+     }
+ 
++    /**
++     * {@inheritdoc}
++     */
++    protected function getSchemaMetadata($schema, $type, $refresh)
++    {
++        $metadata = [];
++        $methodName = 'getTable' . ucfirst($type);
++        $tableNames = array_map(function ($table) {
++            return $this->quoteSimpleTableName($table);
++        }, $this->getTableNames($schema, $refresh));
++        foreach ($tableNames as $name) {
++            if ($schema !== '') {
++                $name = $schema . '.' . $name;
++            }
++            $tableMetadata = $this->$methodName($name, $refresh);
++            if ($tableMetadata !== null) {
++                $metadata[] = $tableMetadata;
++            }
++        }
++
++        return $metadata;
++    }
++
+     /**
+      * {@inheritdoc}
+      */
+@@ -597,12 +615,7 @@ protected function findViewNames($schema = '')
+ ORDER BY [t].[table_name]
+ SQL;
+ 
+-        $views = $this->db->createCommand($sql, [':schema' => $schema])->queryColumn();
+-        $views = array_map(static function ($item) {
+-            return '[' . $item . ']';
+-        }, $views);
+-
+-        return $views;
++        return $this->db->createCommand($sql, [':schema' => $schema])->queryColumn();
+     }
+ 
+     /**
+diff --git a/framework/db/oci/Schema.php b/framework/db/oci/Schema.php
+index 2e55c09db77..7b1cc80997b 100644
+--- a/framework/db/oci/Schema.php
++++ b/framework/db/oci/Schema.php
+@@ -419,10 +419,12 @@ protected function createColumn($column)
+                     $c->defaultValue = new Expression('CURRENT_TIMESTAMP');
+                 } else {
+                     if ($defaultValue !== null) {
+-                        if (($len = strlen($defaultValue)) > 2 && $defaultValue[0] === "'"
+-                            && $defaultValue[$len - 1] === "'"
++                        if (
++                            strlen($defaultValue) > 2
++                            && strpos($defaultValue, "'") === 0
++                            && substr($defaultValue, -1) === "'"
+                         ) {
+-                            $defaultValue = substr($column['DATA_DEFAULT'], 1, -1);
++                            $defaultValue = substr($defaultValue, 1, -1);
+                         } else {
+                             $defaultValue = trim($defaultValue);
+                         }
+diff --git a/framework/db/pgsql/Schema.php b/framework/db/pgsql/Schema.php
+index 75793d16d2c..83429fccb12 100644
+--- a/framework/db/pgsql/Schema.php
++++ b/framework/db/pgsql/Schema.php
+@@ -443,7 +443,7 @@ public function findUniqueIndexes($table)
+                 $row = array_change_key_case($row, CASE_LOWER);
+             }
+             $column = $row['columnname'];
+-            if (!empty($column) && $column[0] === '"') {
++            if (strpos($column, '"') === 0) {
+                 // postgres will quote names that are not lowercase-only
+                 // https://github.com/yiisoft/yii2/issues/10613
+                 $column = substr($column, 1, -1);
+diff --git a/framework/di/Container.php b/framework/di/Container.php
+index 1c8c9aad68c..e527edb7126 100644
+--- a/framework/di/Container.php
++++ b/framework/di/Container.php
+@@ -9,6 +9,8 @@
+ 
+ use ReflectionClass;
+ use ReflectionException;
++use ReflectionNamedType;
++use ReflectionParameter;
+ use Yii;
+ use yii\base\Component;
+ use yii\base\InvalidConfigException;
+@@ -493,7 +495,7 @@ protected function mergeParams($class, $params)
+      * Returns the dependencies of the specified class.
+      * @param string $class class name, interface name or alias name
+      * @return array the dependencies of the specified class.
+-     * @throws InvalidConfigException if a dependency cannot be resolved or if a dependency cannot be fulfilled.
++     * @throws NotInstantiableException if a dependency cannot be resolved or if a dependency cannot be fulfilled.
+      */
+     protected function getDependencies($class)
+     {
+@@ -505,7 +507,12 @@ protected function getDependencies($class)
+         try {
+             $reflection = new ReflectionClass($class);
+         } catch (\ReflectionException $e) {
+-            throw new InvalidConfigException('Failed to instantiate component or class "' . $class . '".', 0, $e);
++            throw new NotInstantiableException(
++                $class,
++                'Failed to instantiate component or class "' . $class . '".',
++                0,
++                $e
++            );
+         }
+ 
+         $constructor = $reflection->getConstructor();
+@@ -522,14 +529,28 @@ protected function getDependencies($class)
+                     try {
+                         $c = $param->getClass();
+                     } catch (ReflectionException $e) {
+-                        $c = null;
++                        if (!$this->isNulledParam($param)) {
++                            $notInstantiableClass = null;
++                            if (PHP_VERSION_ID >= 70000) {
++                                $type = $param->getType();
++                                if ($type instanceof ReflectionNamedType) {
++                                    $notInstantiableClass = $type->getName();
++                                }
++                            }
++                            throw new NotInstantiableException(
++                                $notInstantiableClass,
++                                $notInstantiableClass === null ? 'Can not instantiate unknown class.' : null
++                            );
++                        } else {
++                            $c = null;
++                        }
+                     }
+                     $isClass = $c !== null;
+                 }
+                 $className = $isClass ? $c->getName() : null;
+ 
+                 if ($className !== null) {
+-                    $dependencies[$param->getName()] = Instance::of($className, true);
++                    $dependencies[$param->getName()] = Instance::of($className, $this->isNulledParam($param));
+                 } else {
+                     $dependencies[$param->getName()] = $param->isDefaultValueAvailable()
+                         ? $param->getDefaultValue()
+@@ -544,6 +565,15 @@ protected function getDependencies($class)
+         return [$reflection, $dependencies];
+     }
+ 
++    /**
++     * @param ReflectionParameter $param
++     * @return bool
++     */
++    private function isNulledParam($param)
++    {
++        return $param->isOptional() || (PHP_VERSION_ID >= 70100 && $param->getType()->allowsNull());
++    }
++
+     /**
+      * Resolves dependencies by replacing them with the actual object instances.
+      * @param array $dependencies the dependencies
+diff --git a/framework/grid/DataColumn.php b/framework/grid/DataColumn.php
+index 53c18b6b8aa..b5a61c29685 100644
+--- a/framework/grid/DataColumn.php
++++ b/framework/grid/DataColumn.php
+@@ -206,8 +206,9 @@ protected function renderFilterCellContent()
+                     0 => $this->grid->formatter->booleanFormat[0],
+                 ], $options) . $error;
+             }
++            $options = array_merge(['maxlength' => true], $this->filterInputOptions);
+ 
+-            return Html::activeTextInput($model, $this->attribute, $this->filterInputOptions) . $error;
++            return Html::activeTextInput($model, $this->attribute, $options) . $error;
+         }
+ 
+         return parent::renderFilterCellContent();
+diff --git a/framework/helpers/BaseArrayHelper.php b/framework/helpers/BaseArrayHelper.php
+index e30d0c070e1..0f3d368ac08 100644
+--- a/framework/helpers/BaseArrayHelper.php
++++ b/framework/helpers/BaseArrayHelper.php
+@@ -944,13 +944,17 @@ public static function filter($array, $filters)
+         $excludeFilters = [];
+ 
+         foreach ($filters as $filter) {
+-            if ($filter[0] === '!') {
++            if (!is_string($filter) && !is_int($filter)) {
++                continue;
++            }
++
++            if (is_string($filter) && strpos($filter, '!') === 0) {
+                 $excludeFilters[] = substr($filter, 1);
+                 continue;
+             }
+ 
+             $nodeValue = $array; //set $array as root node
+-            $keys = explode('.', $filter);
++            $keys = explode('.', (string) $filter);
+             foreach ($keys as $key) {
+                 if (!array_key_exists($key, $nodeValue)) {
+                     continue 2; //Jump to next filter
+@@ -971,7 +975,7 @@ public static function filter($array, $filters)
+ 
+         foreach ($excludeFilters as $filter) {
+             $excludeNode = &$result;
+-            $keys = explode('.', $filter);
++            $keys = explode('.', (string) $filter);
+             $numNestedKeys = count($keys) - 1;
+             foreach ($keys as $i => $key) {
+                 if (!array_key_exists($key, $excludeNode)) {
+diff --git a/framework/helpers/BaseFileHelper.php b/framework/helpers/BaseFileHelper.php
+index 828ecbf83e8..71bfe8f1f28 100644
+--- a/framework/helpers/BaseFileHelper.php
++++ b/framework/helpers/BaseFileHelper.php
+@@ -700,7 +700,7 @@ private static function matchBasename($baseName, $pattern, $firstWildcard, $flag
+     private static function matchPathname($path, $basePath, $pattern, $firstWildcard, $flags)
+     {
+         // match with FNM_PATHNAME; the pattern has base implicitly in front of it.
+-        if (isset($pattern[0]) && $pattern[0] === '/') {
++        if (strpos($pattern, '/') === 0) {
+             $pattern = StringHelper::byteSubstr($pattern, 1, StringHelper::byteLength($pattern));
+             if ($firstWildcard !== false && $firstWildcard !== 0) {
+                 $firstWildcard--;
+@@ -806,11 +806,11 @@ private static function parseExcludePattern($pattern, $caseSensitive)
+             $result['flags'] |= self::PATTERN_CASE_INSENSITIVE;
+         }
+ 
+-        if (!isset($pattern[0])) {
++        if (empty($pattern)) {
+             return $result;
+         }
+ 
+-        if ($pattern[0] === '!') {
++        if (strpos($pattern, '!') === 0) {
+             $result['flags'] |= self::PATTERN_NEGATIVE;
+             $pattern = StringHelper::byteSubstr($pattern, 1, StringHelper::byteLength($pattern));
+         }
+@@ -822,7 +822,7 @@ private static function parseExcludePattern($pattern, $caseSensitive)
+             $result['flags'] |= self::PATTERN_NODIR;
+         }
+         $result['firstWildcard'] = self::firstWildcardInPattern($pattern);
+-        if ($pattern[0] === '*' && self::firstWildcardInPattern(StringHelper::byteSubstr($pattern, 1, StringHelper::byteLength($pattern))) === false) {
++        if (strpos($pattern, '*') === 0 && self::firstWildcardInPattern(StringHelper::byteSubstr($pattern, 1, StringHelper::byteLength($pattern))) === false) {
+             $result['flags'] |= self::PATTERN_ENDSWITH;
+         }
+         $result['pattern'] = $pattern;
+diff --git a/framework/helpers/BaseHtml.php b/framework/helpers/BaseHtml.php
+index 902d4643334..9b6eee25818 100644
+--- a/framework/helpers/BaseHtml.php
++++ b/framework/helpers/BaseHtml.php
+@@ -1942,7 +1942,7 @@ public static function renderSelectOptions($selection, $items, &$tagOptions = []
+      * @param array $attributes attributes to be rendered. The attribute values will be HTML-encoded using [[encode()]].
+      * @return string the rendering result. If the attributes are not empty, they will be rendered
+      * into a string with a leading white space (so that it can be directly appended to the tag name
+-     * in a tag. If there is no attribute, an empty string will be returned.
++     * in a tag). If there is no attribute, an empty string will be returned.
+      * @see addCssClass()
+      */
+     public static function renderTagAttributes($attributes)
+diff --git a/framework/helpers/BaseUrl.php b/framework/helpers/BaseUrl.php
+index 4c26696dd0d..4b44551f4f3 100644
+--- a/framework/helpers/BaseUrl.php
++++ b/framework/helpers/BaseUrl.php
+@@ -248,7 +248,7 @@ public static function ensureScheme($url, $scheme)
+             return $url;
+         }
+ 
+-        if (substr($url, 0, 2) === '//') {
++        if (strpos($url, '//') === 0) {
+             // e.g. //example.com/path/to/resource
+             return $scheme === '' ? $url : "$scheme:$url";
+         }
+diff --git a/framework/helpers/mimeTypes.php b/framework/helpers/mimeTypes.php
+index 95713079155..3056874fd6c 100644
+--- a/framework/helpers/mimeTypes.php
++++ b/framework/helpers/mimeTypes.php
+@@ -480,7 +480,6 @@
+     'mpkg' => 'application/vnd.apple.installer+xml',
+     'mpm' => 'application/vnd.blueice.multipass',
+     'mpn' => 'application/vnd.mophun.application',
+-    0 => 'application/vnd.lotus-1-2-3',
+     'mpp' => 'application/vnd.ms-project',
+     'mpt' => 'application/vnd.ms-project',
+     'mpy' => 'application/vnd.ibm.minipay',
+@@ -492,6 +491,7 @@
+     'mseed' => 'application/vnd.fdsn.mseed',
+     'mseq' => 'application/vnd.mseq',
+     'msf' => 'application/vnd.epson.msf',
++    0 => 'application/vnd.lotus-1-2-3',
+     'msh' => 'model/mesh',
+     'msi' => 'application/x-msdownload',
+     'msl' => 'application/vnd.mobius.msl',
+@@ -553,6 +553,7 @@
+     'opf' => 'application/oebps-package+xml',
+     'opml' => 'text/x-opml',
+     'oprc' => 'application/vnd.palm',
++    'opus' => 'audio/ogg',
+     'org' => 'application/vnd.lotus-organizer',
+     'osf' => 'application/vnd.yamaha.openscoreformat',
+     'osfpvg' => 'application/vnd.yamaha.openscoreformat.osfpvg+xml',
+diff --git a/framework/i18n/GettextMessageSource.php b/framework/i18n/GettextMessageSource.php
+index 32a3bf1e6a5..6b4a3c2ef9c 100644
+--- a/framework/i18n/GettextMessageSource.php
++++ b/framework/i18n/GettextMessageSource.php
+@@ -106,7 +106,7 @@ protected function loadFallbackMessages($category, $fallbackLanguage, $messages,
+         if (
+             $messages === null && $fallbackMessages === null
+             && $fallbackLanguage !== $this->sourceLanguage
+-            && $fallbackLanguage !== substr($this->sourceLanguage, 0, 2)
++            && strpos($this->sourceLanguage, $fallbackLanguage) !== 0
+         ) {
+             Yii::error("The message file for category '$category' does not exist: $originalMessageFile "
+                 . "Fallback file does not exist as well: $fallbackMessageFile", __METHOD__);
+diff --git a/framework/i18n/MessageFormatter.php b/framework/i18n/MessageFormatter.php
+index 2fdba093213..7aec4824149 100644
+--- a/framework/i18n/MessageFormatter.php
++++ b/framework/i18n/MessageFormatter.php
+@@ -423,7 +423,7 @@ private function parseToken($token, $args, $locale)
+                         $selector = trim(mb_substr($selector, $pos + 1, mb_strlen($selector, $charset), $charset));
+                     }
+                     if ($message === false && $selector === 'other' ||
+-                        $selector[0] === '=' && (int) mb_substr($selector, 1, mb_strlen($selector, $charset), $charset) === $arg ||
++                        strpos($selector, '=') === 0 && (int) mb_substr($selector, 1, mb_strlen($selector, $charset), $charset) === $arg ||
+                         $selector === 'one' && $arg - $offset == 1
+                     ) {
+                         $message = implode(',', str_replace('#', $arg - $offset, $plural[$i]));
+diff --git a/framework/i18n/PhpMessageSource.php b/framework/i18n/PhpMessageSource.php
+index ec4dcd1ef83..103c9311204 100644
+--- a/framework/i18n/PhpMessageSource.php
++++ b/framework/i18n/PhpMessageSource.php
+@@ -108,7 +108,7 @@ protected function loadFallbackMessages($category, $fallbackLanguage, $messages,
+         if (
+             $messages === null && $fallbackMessages === null
+             && $fallbackLanguage !== $this->sourceLanguage
+-            && $fallbackLanguage !== substr($this->sourceLanguage, 0, 2)
++            && strpos($this->sourceLanguage, $fallbackLanguage) !== 0
+         ) {
+             Yii::error("The message file for category '$category' does not exist: $originalMessageFile "
+                 . "Fallback file does not exist as well: $fallbackMessageFile", __METHOD__);
+diff --git a/framework/messages/hr/yii.php b/framework/messages/hr/yii.php
+index cbe8ba4f49b..58265276442 100644
+--- a/framework/messages/hr/yii.php
++++ b/framework/messages/hr/yii.php
+@@ -87,9 +87,9 @@
+     '{attribute} must be no less than {min}.' => '{attribute} ne smije biti manji od {min}.',
+     '{attribute} must be repeated exactly.' => '{attribute} mora biti točno ponovljeno.',
+     '{attribute} must not be equal to "{compareValue}".' => '{attribute} ne smije biti jednak "{compareValue}".',
+-    '{attribute} should contain at least {min, number} {min, plural, one{character} other{characters}}.' => '{attribute} mora najmanje sadržavati {min, number} {min, plural, =1{znak} one{# znak} few{# znaka} many{# znakova} other{# znakova}}.',
+-    '{attribute} should contain at most {max, number} {max, plural, one{character} other{characters}}.' => '{attribute} moze sadržavati najviše do {max, number} {max, plural, =1{znak} one{# znak} few{# znaka} many{# znakova} other{# znakova}}.',
+-    '{attribute} should contain {length, number} {length, plural, one{character} other{characters}}.' => '{attribute} mora sadržavati {length, number} {length, plural, =1{znak} one{# znak} few{# znaka} many{# znakova} other{# znakova}}.',
++    '{attribute} should contain at least {min, number} {min, plural, one{character} other{characters}}.' => '{attribute} mora najmanje sadržavati {min, number} {min, plural, =1{znak} one{znak} few{znaka} many{znakova} other{znakova}}.',
++    '{attribute} should contain at most {max, number} {max, plural, one{character} other{characters}}.' => '{attribute} moze sadržavati najviše do {max, number} {max, plural, =1{znak} one{znak} few{znaka} many{znakova} other{znakova}}.',
++    '{attribute} should contain {length, number} {length, plural, one{character} other{characters}}.' => '{attribute} mora sadržavati {length, number} {length, plural, =1{znak} one{znak} few{znaka} many{znakova} other{znakova}}.',
+     '{delta, plural, =1{a day} other{# days}} ago' => '{delta, plural, =1{dan} one{# dan} few{# dana} many{# dana} other{# dana}}',
+     '{delta, plural, =1{a minute} other{# minutes}} ago' => '{delta, plural, =1{minuta} one{# minuta} few{# minute} many{# minuta} other{# minuta}}',
+     '{delta, plural, =1{a month} other{# months}} ago' => '{delta, plural, =1{mjesec} one{# mjesec} few{# mjeseca} many{# mjeseci} other{# mjeseci}}',
+diff --git a/framework/rbac/PhpManager.php b/framework/rbac/PhpManager.php
+index 39fdcf17847..9a15990d3ea 100644
+--- a/framework/rbac/PhpManager.php
++++ b/framework/rbac/PhpManager.php
+@@ -796,7 +796,7 @@ protected function loadFromFile($file)
+      */
+     protected function saveToFile($data, $file)
+     {
+-        file_put_contents($file, "<?php\nreturn " . VarDumper::export($data) . ";\n", LOCK_EX);
++        file_put_contents($file, "<?php\n\nreturn " . VarDumper::export($data) . ";\n", LOCK_EX);
+         $this->invalidateScriptCache($file);
+     }
+ 
+diff --git a/framework/rest/Serializer.php b/framework/rest/Serializer.php
+index 6cb3ebc35e4..2a47511e7f0 100644
+--- a/framework/rest/Serializer.php
++++ b/framework/rest/Serializer.php
+@@ -146,10 +146,10 @@ public function serialize($data)
+     {
+         if ($data instanceof Model && $data->hasErrors()) {
+             return $this->serializeModelErrors($data);
+-        } elseif ($data instanceof \JsonSerializable) {
+-            return $data->jsonSerialize();
+         } elseif ($data instanceof Arrayable) {
+             return $this->serializeModel($data);
++        } elseif ($data instanceof \JsonSerializable) {
++            return $data->jsonSerialize();
+         } elseif ($data instanceof DataProviderInterface) {
+             return $this->serializeDataProvider($data);
+         } elseif (is_array($data)) {
+diff --git a/framework/validators/SafeValidator.php b/framework/validators/SafeValidator.php
+index f86f2395a3c..2b0a3c5dd7f 100644
+--- a/framework/validators/SafeValidator.php
++++ b/framework/validators/SafeValidator.php
+@@ -14,7 +14,7 @@
+  * when a user submits form data to be loaded into a model directly from the POST data, is it ok for a property to be copied.
+  * In many cases, this is required but because sometimes properties are internal and you do not want the POST data to be able to
+  * override these internal values (especially things like database row ids), Yii assumes all values are unsafe for massive assignment
+- * unless a validation rule exists for the property, which in most cases it will. Sometimes, however, an item is safe for massive assigment but
++ * unless a validation rule exists for the property, which in most cases it will. Sometimes, however, an item is safe for massive assignment but
+  * does not have a validation rule associated with it - for instance, due to no validation being performed, in which case, you use this class
+  * as a validation rule for that property. Although it has no functionality, it allows Yii to determine that the property is safe to copy.
+  *
+diff --git a/framework/web/AssetManager.php b/framework/web/AssetManager.php
+index 215f5b1ac8d..996e021ace3 100644
+--- a/framework/web/AssetManager.php
++++ b/framework/web/AssetManager.php
+@@ -209,12 +209,34 @@ public function init()
+     {
+         parent::init();
+         $this->basePath = Yii::getAlias($this->basePath);
++
++        $this->basePath = realpath($this->basePath);
++        $this->baseUrl = rtrim(Yii::getAlias($this->baseUrl), '/');
++    }
++
++    private $_isBasePathPermissionChecked;
++
++    /**
++     * Check whether the basePath exists and is writeable.
++     *
++     * @since 2.0.40
++     */
++    public function checkBasePathPermission()
++    {
++        // if the check is been done already, skip further checks
++        if ($this->_isBasePathPermissionChecked) {
++            return;
++        }
++
+         if (!is_dir($this->basePath)) {
+             throw new InvalidConfigException("The directory does not exist: {$this->basePath}");
+         }
++        
++        if (!is_writable($this->basePath)) {
++            throw new InvalidConfigException("The directory is not writable by the Web process: {$this->basePath}");
++        }
+ 
+-        $this->basePath = realpath($this->basePath);
+-        $this->baseUrl = rtrim(Yii::getAlias($this->baseUrl), '/');
++        $this->_isBasePathPermissionChecked = true;
+     }
+ 
+     /**
+@@ -439,10 +461,6 @@ public function publish($path, $options = [])
+             throw new InvalidArgumentException("The file or directory to be published does not exist: $path");
+         }
+ 
+-        if (!is_writable($this->basePath)) {
+-            throw new InvalidConfigException("The directory is not writable by the Web process: {$this->basePath}");
+-        }
+-
+         if (is_file($src)) {
+             return $this->_published[$path] = $this->publishFile($src);
+         }
+@@ -458,6 +476,8 @@ public function publish($path, $options = [])
+      */
+     protected function publishFile($src)
+     {
++        $this->checkBasePathPermission();
++
+         $dir = $this->hash($src);
+         $fileName = basename($src);
+         $dstDir = $this->basePath . DIRECTORY_SEPARATOR . $dir;
+@@ -513,6 +533,8 @@ protected function publishFile($src)
+      */
+     protected function publishDirectory($src, $options)
+     {
++        $this->checkBasePathPermission();
++
+         $dir = $this->hash($src);
+         $dstDir = $this->basePath . DIRECTORY_SEPARATOR . $dir;
+         if ($this->linkAssets) {
+diff --git a/framework/web/Response.php b/framework/web/Response.php
+index cbeac1ba37f..7609fbf3859 100644
+--- a/framework/web/Response.php
++++ b/framework/web/Response.php
+@@ -138,9 +138,12 @@ class Response extends \yii\base\Response
+      */
+     public $content;
+     /**
+-     * @var resource|array the stream to be sent. This can be a stream handle or an array of stream handle,
+-     * the begin position and the end position. Note that when this property is set, the [[data]] and [[content]]
+-     * properties will be ignored by [[send()]].
++     * @var resource|array|callable the stream to be sent. This can be a stream handle or an array of stream handle,
++     * the begin position and the end position. Alternatively it can be set to a callable, which returns
++     * (or [yields](https://www.php.net/manual/en/language.generators.syntax.php)) an array of strings that should
++     * be echoed and flushed out one by one.
++     *
++     * Note that when this property is set, the [[data]] and [[content]] properties will be ignored by [[send()]].
+      */
+     public $stream;
+     /**
+@@ -441,6 +444,15 @@ protected function sendContent()
+             Yii::warning('set_time_limit() is not available', __METHOD__);
+         }
+ 
++        if (is_callable($this->stream)) {
++            $data = call_user_func($this->stream);
++            foreach ($data as $datum) {
++                echo $datum;
++                flush();
++            }
++            return;
++        }
++
+         $chunkSize = 8 * 1024 * 1024; // 8MB per chunk
+ 
+         if (is_array($this->stream)) {
+@@ -1061,10 +1073,14 @@ protected function defaultFormatters()
+      * Prepares for sending the response.
+      * The default implementation will convert [[data]] into [[content]] and set headers accordingly.
+      * @throws InvalidConfigException if the formatter for the specified format is invalid or [[format]] is not supported
++     *
++     * @see https://tools.ietf.org/html/rfc7231#page-53
++     * @see https://tools.ietf.org/html/rfc7232#page-18
+      */
+     protected function prepare()
+     {
+-        if ($this->statusCode === 204) {
++        if (in_array($this->getStatusCode(), [204, 304])) {
++            // A 204/304 response cannot contain a message body according to rfc7231/rfc7232
+             $this->content = '';
+             $this->stream = null;
+             return;
+diff --git a/framework/web/View.php b/framework/web/View.php
+index c77f59fba7a..3d2f1e6dd3a 100644
+--- a/framework/web/View.php
++++ b/framework/web/View.php
+@@ -492,8 +492,14 @@ private function registerFile($type, $url, $options = [], $key = null)
+ 
+         if (empty($depends)) {
+             // register directly without AssetManager
+-            if ($appendTimestamp && Url::isRelative($url) && ($timestamp = @filemtime(Yii::getAlias('@webroot/' . ltrim($url, '/'), false))) > 0) {
+-                $url = $timestamp ? "$url?v=$timestamp" : $url;
++            if ($appendTimestamp && Url::isRelative($url)) {
++                $prefix = Yii::getAlias('@web');
++                $prefixLength = strlen($prefix);
++                $trimmedUrl = ltrim((substr($url, 0, $prefixLength) === $prefix) ? substr($url, $prefixLength) : $url, '/');
++                $timestamp = @filemtime(Yii::getAlias('@webroot/' . $trimmedUrl, false));
++                if ($timestamp > 0) {
++                    $url = $timestamp ? "$url?v=$timestamp" : $url;
++                }
+             }
+             if ($type === 'js') {
+                 $this->jsFiles[$position][$key] = Html::jsFile($url, $options);
+diff --git a/framework/widgets/Menu.php b/framework/widgets/Menu.php
+index 6efaa7e9fd0..d9775d602d4 100644
+--- a/framework/widgets/Menu.php
++++ b/framework/widgets/Menu.php
+@@ -306,7 +306,7 @@ protected function isItemActive($item)
+     {
+         if (isset($item['url']) && is_array($item['url']) && isset($item['url'][0])) {
+             $route = Yii::getAlias($item['url'][0]);
+-            if ($route[0] !== '/' && Yii::$app->controller) {
++            if (strpos($route, '/') !== 0 && Yii::$app->controller) {
+                 $route = Yii::$app->controller->module->getUniqueId() . '/' . $route;
+             }
+             if (ltrim($route, '/') !== $this->route) {
+diff --git a/tests/data/ar/Customer.php b/tests/data/ar/Customer.php
+index c77683fc638..e22cce59edf 100644
+--- a/tests/data/ar/Customer.php
++++ b/tests/data/ar/Customer.php
+@@ -47,7 +47,7 @@ public function getOrdersPlain()
+ 
+     public function getOrders()
+     {
+-        return $this->hasMany(Order::className(), ['customer_id' => 'id'])->orderBy('id');
++        return $this->hasMany(Order::className(), ['customer_id' => 'id'])->orderBy('[[id]]');
+     }
+ 
+     public function getExpensiveOrders()
+diff --git a/tests/data/ar/Order.php b/tests/data/ar/Order.php
+index da1f9967944..475ff1a48dc 100644
+--- a/tests/data/ar/Order.php
++++ b/tests/data/ar/Order.php
+@@ -236,4 +236,9 @@ public function activeAttributes()
+             0 => 'customer_id',
+         ];
+     }
++
++    public function getQuantityOrderItems()
++    {
++        return $this->hasMany(OrderItem::className(), ['order_id' => 'id', 'quantity' => 'id']);
++    }
+ }
+diff --git a/tests/data/ar/OrderItem.php b/tests/data/ar/OrderItem.php
+index 36fab6c369a..58623fc4ce9 100644
+--- a/tests/data/ar/OrderItem.php
++++ b/tests/data/ar/OrderItem.php
+@@ -7,6 +7,8 @@
+ 
+ namespace yiiunit\data\ar;
+ 
++use yii\behaviors\AttributeTypecastBehavior;
++
+ /**
+  * Class OrderItem.
+  *
+@@ -24,6 +26,22 @@ public static function tableName()
+         return static::$tableName ?: 'order_item';
+     }
+ 
++    public function behaviors()
++    {
++        return [
++            'typecast' => [
++                'class' => AttributeTypecastBehavior::className(),
++                'attributeTypes' => [
++                    'order_id' => AttributeTypecastBehavior::TYPE_STRING,
++                ],
++                'typecastAfterValidate' => false,
++                'typecastAfterFind' => true,
++                'typecastAfterSave' => false,
++                'typecastBeforeSave' => false,
++            ],
++        ];
++    }
++
+     public function getOrder()
+     {
+         return $this->hasOne(Order::className(), ['id' => 'order_id']);
+diff --git a/tests/data/base/Singer.php b/tests/data/base/Singer.php
+index 444eb5459bf..1dabe0b1f0c 100644
+--- a/tests/data/base/Singer.php
++++ b/tests/data/base/Singer.php
+@@ -14,15 +14,23 @@
+  */
+ class Singer extends Model
+ {
++    public static $tableName;
++
+     public $firstName;
+     public $lastName;
+     public $test;
+ 
++    public static function tableName()
++    {
++        return static::$tableName ?: 'singer';
++    }
++
+     public function rules()
+     {
+         return [
+             [['lastName'], 'default', 'value' => 'Lennon'],
+             [['lastName'], 'required'],
++            [['lastName'], 'string', 'max' => 25],
+             [['underscore_style'], 'yii\captcha\CaptchaValidator'],
+             [['test'], 'required', 'when' => function ($model) { return $model->firstName === 'cebe'; }],
+         ];
+diff --git a/tests/data/config.php b/tests/data/config.php
+index 5feb3e896b9..33897f2877d 100644
+--- a/tests/data/config.php
++++ b/tests/data/config.php
+@@ -37,7 +37,7 @@
+             'fixture' => __DIR__ . '/sqlite.sql',
+         ],
+         'sqlsrv' => [
+-            'dsn' => 'sqlsrv:Server=localhost,1433;Database=yiitest',
++            'dsn' => 'sqlsrv:Server=127.0.0.1,1433;Database=yiitest',
+             'username' => 'SA',
+             'password' => 'YourStrong!Passw0rd',
+             'fixture' => __DIR__ . '/mssql.sql',
+@@ -49,9 +49,9 @@
+             'fixture' => __DIR__ . '/postgres.sql',
+         ],
+         'oci' => [
+-            'dsn' => 'oci:dbname=LOCAL_XE;charset=AL32UTF8;',
+-            'username' => '',
+-            'password' => '',
++            'dsn' => 'oci:dbname=localhost/XE;charset=AL32UTF8;',
++            'username' => 'system',
++            'password' => 'oracle',
+             'fixture' => __DIR__ . '/oci.sql',
+         ],
+     ],
+diff --git a/tests/framework/ar/ActiveRecordTestTrait.php b/tests/framework/ar/ActiveRecordTestTrait.php
+index cedf96a1e5f..5c189e0b58d 100644
+--- a/tests/framework/ar/ActiveRecordTestTrait.php
++++ b/tests/framework/ar/ActiveRecordTestTrait.php
+@@ -106,14 +106,16 @@ public function testFind()
+         $this->assertEquals(2, $customer->id);
+ 
+         // find by expression
+-        $customer = $customerClass::findOne(new Expression('id = :id', [':id' => 2]));
++        $customer = $customerClass::findOne(new Expression('[[id]] = :id', [':id' => 2]));
+         $this->assertInstanceOf($customerClass, $customer);
+         $this->assertEquals('user2', $customer->name);
+-        $customer = $customerClass::findOne(new Expression('id = :id AND name = :name', [':id' => 2, ':name' => 'user1']));
++        $customer = $customerClass::findOne(
++            new Expression('[[id]] = :id AND [[name]] = :name', [':id' => 2, ':name' => 'user1'])
++        );
+         $this->assertNull($customer);
+-        $customer = $customerClass::findOne(new Expression('id = :id', [':id' => 5]));
++        $customer = $customerClass::findOne(new Expression('[[id]] = :id', [':id' => 5]));
+         $this->assertNull($customer);
+-        $customer = $customerClass::findOne(new Expression('name = :name', [':name' => 'user5']));
++        $customer = $customerClass::findOne(new Expression('[[name]] = :name', [':name' => 'user5']));
+         $this->assertNull($customer);
+ 
+         // scope
+diff --git a/tests/framework/base/ApplicationTest.php b/tests/framework/base/ApplicationTest.php
+index 4ef59bc09b6..e6be5bb64e8 100644
+--- a/tests/framework/base/ApplicationTest.php
++++ b/tests/framework/base/ApplicationTest.php
+@@ -66,6 +66,17 @@ function () {
+         $this->assertSame('Bootstrap with yii\base\Module', Yii::getLogger()->messages[3][0]);
+         $this->assertSame('Bootstrap with Closure', Yii::getLogger()->messages[4][0]);
+     }
++    
++    public function testModuleId()
++    {
++        $this->mockApplication(['id' => 'app-basic']);
++        $child = new Module('child');
++        Yii::$app->setModules(['child' => $child]);
++
++        $this->assertEquals('app-basic', Yii::$app->getModule('child')->module->id);
++        $this->assertEquals('', Yii::$app->getModule('child')->module->getUniqueId());
++        $this->assertEquals('child', Yii::$app->getModule('child')->getUniqueId());
++    }
+ }
+ 
+ class DispatcherMock extends Dispatcher
+diff --git a/tests/framework/base/ModuleTest.php b/tests/framework/base/ModuleTest.php
+index f93768b3476..c4b3ae43dce 100644
+--- a/tests/framework/base/ModuleTest.php
++++ b/tests/framework/base/ModuleTest.php
+@@ -24,6 +24,19 @@ protected function setUp()
+         $this->mockApplication();
+     }
+ 
++    public function testTrueParentModule()
++    {
++        $parent = new Module('parent');
++        $child = new Module('child');
++        $child2 = new Module('child2');
++
++        $parent->setModule('child', $child);
++        $parent->setModules(['child2' => $child2]);
++
++        $this->assertEquals('parent', $child->module->id);
++        $this->assertEquals('parent', $child2->module->id);
++    }
++
+     public function testControllerPath()
+     {
+         $module = new TestModule('test');
+@@ -162,27 +175,27 @@ public function testCreateController()
+ 
+         list($controller, $action) = $module->createController('base');
+         $this->assertSame('', $action);
+-        $this->assertSame('base/default', $controller->uniqueId);
++        $this->assertSame('app/base/default', $controller->uniqueId);
+ 
+         list($controller, $action) = $module->createController('base/default');
+         $this->assertSame('', $action);
+-        $this->assertSame('base/default', $controller->uniqueId);
++        $this->assertSame('app/base/default', $controller->uniqueId);
+ 
+         list($controller, $action) = $module->createController('base/other');
+         $this->assertSame('', $action);
+-        $this->assertSame('base/other', $controller->uniqueId);
++        $this->assertSame('app/base/other', $controller->uniqueId);
+ 
+         list($controller, $action) = $module->createController('base/default/index');
+         $this->assertSame('index', $action);
+-        $this->assertSame('base/default', $controller->uniqueId);
++        $this->assertSame('app/base/default', $controller->uniqueId);
+ 
+         list($controller, $action) = $module->createController('base/other/index');
+         $this->assertSame('index', $action);
+-        $this->assertSame('base/other', $controller->uniqueId);
++        $this->assertSame('app/base/other', $controller->uniqueId);
+ 
+         list($controller, $action) = $module->createController('base/other/someaction');
+         $this->assertSame('someaction', $action);
+-        $this->assertSame('base/other', $controller->uniqueId);
++        $this->assertSame('app/base/other', $controller->uniqueId);
+ 
+         $controller = $module->createController('bases/default/index');
+         $this->assertFalse($controller);
+diff --git a/tests/framework/console/controllers/MigrateControllerTest.php b/tests/framework/console/controllers/MigrateControllerTest.php
+index 76ba005dfe6..e93e2a28061 100644
+--- a/tests/framework/console/controllers/MigrateControllerTest.php
++++ b/tests/framework/console/controllers/MigrateControllerTest.php
+@@ -9,6 +9,7 @@
+ 
+ use Yii;
+ use yii\console\controllers\MigrateController;
++use yii\console\ExitCode;
+ use yii\db\Migration;
+ use yii\db\Query;
+ use yii\helpers\Inflector;
+@@ -96,6 +97,7 @@ protected function assertCommandCreatedJunctionFile($expectedFile, $migrationNam
+         list($config, $namespace, $class) = $this->prepareMigrationNameData($migrationName);
+ 
+         $this->runMigrateControllerAction('create', [$migrationName], $config);
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+         $this->assertFileContentJunction($expectedFile, $class, $junctionTable, $firstTable, $secondTable, $namespace);
+     }
+ 
+@@ -212,7 +214,7 @@ public function generateMigrationDataProvider()
+         return [
+             ['default', 'DefaultTest', 'default', []],
+ 
+-            // underscore + table name = case keeped
++            // underscore + table name = case kept
+             ['create_test', 'create_test_table', 'test', []],
+             ['create_test', 'create_test__table', 'test_', []],
+             ['create_test', 'create_TEST_table', 'TEST', []],
+@@ -370,6 +372,7 @@ public function testUpdatingLongNamedMigration()
+         $this->createMigration(str_repeat('a', 180));
+ 
+         $result = $this->runMigrateControllerAction('up');
++        $this->assertSame(ExitCode::UNSPECIFIED_ERROR, $this->getExitCode());
+ 
+         $this->assertContains('The migration name', $result);
+         $this->assertContains('is too long. Its not possible to apply this migration.', $result);
+@@ -385,6 +388,7 @@ public function testNamedMigrationWithCustomLimit()
+         $this->createMigration(str_repeat('a', 180));
+ 
+         $result = $this->runMigrateControllerAction('up');
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+ 
+         $this->assertContains('1 migration was applied.', $result);
+         $this->assertContains('Migrated up successfully.', $result);
+@@ -418,18 +422,15 @@ public function testRefreshMigration($db)
+             $this->switchDbConnection($db);
+         }
+ 
+-        Yii::$app->db->createCommand('create table hall_of_fame(id int, string varchar(255))')
+-            ->execute();
++        Yii::$app->db->createCommand('create table hall_of_fame(id int, string varchar(255))')->execute();
+ 
+-        Yii::$app->db->createCommand("insert into hall_of_fame values(1, 'Qiang Xue');")
+-            ->execute();
+-        Yii::$app->db->createCommand("insert into hall_of_fame values(2, 'Alexander Makarov');")
+-            ->execute();
++        Yii::$app->db->createCommand("insert into hall_of_fame values(1, 'Qiang Xue');")->execute();
++        Yii::$app->db->createCommand("insert into hall_of_fame values(2, 'Alexander Makarov');")->execute();
+ 
+-        Yii::$app->db->createCommand('create view view_hall_of_fame as select * from hall_of_fame')
+-            ->execute();
++        Yii::$app->db->createCommand('create view view_hall_of_fame as select * from hall_of_fame')->execute();
+ 
+         $result = $this->runMigrateControllerAction('fresh');
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+ 
+         // Drop worked
+         $this->assertContains('Table hall_of_fame dropped.', $result);
+diff --git a/tests/framework/console/controllers/MigrateControllerTestTrait.php b/tests/framework/console/controllers/MigrateControllerTestTrait.php
+index c9e32bd31ee..7b8cd1647f5 100644
+--- a/tests/framework/console/controllers/MigrateControllerTestTrait.php
++++ b/tests/framework/console/controllers/MigrateControllerTestTrait.php
+@@ -9,6 +9,7 @@
+ 
+ use Yii;
+ use yii\console\controllers\BaseMigrateController;
++use yii\console\ExitCode;
+ use yii\helpers\FileHelper;
+ use yii\helpers\StringHelper;
+ use yiiunit\TestCase;
+@@ -37,7 +38,16 @@ trait MigrateControllerTestTrait
+      * @var string test migration namespace
+      */
+     protected $migrationNamespace;
++    /**
++     * @var int|null migration controller exit code
++     */
++    protected $migrationExitCode;
++
+ 
++    public function getExitCode()
++    {
++        return $this->migrationExitCode;
++    }
+ 
+     public function setUpMigrationPath()
+     {
+@@ -91,7 +101,7 @@ protected function runMigrateControllerAction($actionID, array $args = [], array
+         $controller = $this->createMigrateController($config);
+         ob_start();
+         ob_implicit_flush(false);
+-        $controller->run($actionID, $args);
++        $this->migrationExitCode = $controller->run($actionID, $args);
+ 
+         return ob_get_clean();
+     }
+@@ -215,6 +225,7 @@ public function testCreate()
+     {
+         $migrationName = 'test_migration';
+         $this->runMigrateControllerAction('create', [$migrationName]);
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+         $files = FileHelper::findFiles($this->migrationPath);
+         $this->assertCount(1, $files, 'Unable to create new migration!');
+         $this->assertContains($migrationName, basename($files[0]), 'Wrong migration name!');
+@@ -226,6 +237,7 @@ public function testUp()
+         $this->createMigration('test_up2');
+ 
+         $this->runMigrateControllerAction('up');
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+ 
+         $this->assertMigrationHistory(['m*_base', 'm*_test_up1', 'm*_test_up2']);
+     }
+@@ -239,6 +251,7 @@ public function testUpCount()
+         $this->createMigration('test_down2');
+ 
+         $this->runMigrateControllerAction('up', [1]);
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+ 
+         $this->assertMigrationHistory(['m*_base', 'm*_test_down1']);
+     }
+@@ -252,7 +265,9 @@ public function testDownCount()
+         $this->createMigration('test_down_count2');
+ 
+         $this->runMigrateControllerAction('up');
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+         $this->runMigrateControllerAction('down', [1]);
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+ 
+         $this->assertMigrationHistory(['m*_base', 'm*_test_down_count1']);
+     }
+@@ -266,7 +281,9 @@ public function testDownAll()
+         $this->createMigration('test_down_all2');
+ 
+         $this->runMigrateControllerAction('up');
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+         $this->runMigrateControllerAction('down', ['all']);
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+ 
+         $this->assertMigrationHistory(['m*_base']);
+     }
+@@ -282,8 +299,10 @@ public function testHistory()
+         $this->createMigration('test_history1');
+         $this->createMigration('test_history2');
+         $this->runMigrateControllerAction('up');
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+ 
+         $output = $this->runMigrateControllerAction('history');
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+         $this->assertContains('_test_history1', $output);
+         $this->assertContains('_test_history2', $output);
+     }
+@@ -296,11 +315,14 @@ public function testNew()
+         $this->createMigration('test_new1');
+ 
+         $output = $this->runMigrateControllerAction('new');
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+         $this->assertContains('_test_new1', $output);
+ 
+         $this->runMigrateControllerAction('up');
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+ 
+         $output = $this->runMigrateControllerAction('new');
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+         $this->assertNotContains('_test_new1', $output);
+     }
+ 
+@@ -310,6 +332,7 @@ public function testMark()
+         $this->createMigration('test_mark1', $version);
+ 
+         $this->runMigrateControllerAction('mark', [$version]);
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+ 
+         $this->assertMigrationHistory(['m*_base', 'm*_test_mark1']);
+     }
+@@ -320,9 +343,11 @@ public function testMarkBase()
+         $this->createMigration('test_mark1', $version);
+ 
+         $this->runMigrateControllerAction('up');
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+         $this->assertMigrationHistory(['m*_base', 'm*_test_mark1']);
+ 
+         $this->runMigrateControllerAction('mark', [BaseMigrateController::BASE_MIGRATION]);
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+         $this->assertMigrationHistory(['m*_base']);
+     }
+ 
+@@ -332,6 +357,7 @@ public function testTo()
+         $this->createMigration('to1', $version);
+ 
+         $this->runMigrateControllerAction('to', [$version]);
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+ 
+         $this->assertMigrationHistory(['m*_base', 'm*_to1']);
+     }
+@@ -343,8 +369,10 @@ public function testRedo()
+     {
+         $this->createMigration('test_redo1');
+         $this->runMigrateControllerAction('up');
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+ 
+         $this->runMigrateControllerAction('redo');
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+ 
+         $this->assertMigrationHistory(['m*_base', 'm*_test_redo1']);
+     }
+@@ -362,6 +390,7 @@ public function testNamespaceCreate()
+             'migrationPath' => null,
+             'migrationNamespaces' => [$this->migrationNamespace],
+         ]);
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+         $files = FileHelper::findFiles($this->migrationPath);
+         $fileContent = file_get_contents($files[0]);
+         $this->assertContains("namespace {$this->migrationNamespace};", $fileContent);
+@@ -374,6 +403,7 @@ public function testNamespaceCreate()
+             'migrationPath' => $this->migrationPath,
+             'migrationNamespaces' => [$this->migrationNamespace],
+         ]);
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+         $files = FileHelper::findFiles($this->migrationPath);
+         $fileContent = file_get_contents($files[0]);
+         $this->assertContains("namespace {$this->migrationNamespace};", $fileContent);
+@@ -385,6 +415,7 @@ public function testNamespaceCreate()
+             'migrationPath' => $this->migrationPath,
+             'migrationNamespaces' => [$this->migrationNamespace],
+         ]);
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+         $files = FileHelper::findFiles($this->migrationPath);
+         $fileContent = file_get_contents($files[0]);
+         $this->assertNotContains("namespace {$this->migrationNamespace};", $fileContent);
+@@ -402,6 +433,7 @@ public function testNamespaceUp()
+             'migrationPath' => null,
+             'migrationNamespaces' => [$this->migrationNamespace],
+         ]);
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+ 
+         $this->assertMigrationHistory([
+             'm*_*_base',
+@@ -424,7 +456,9 @@ public function testNamespaceDownCount()
+             'migrationNamespaces' => [$this->migrationNamespace],
+         ];
+         $this->runMigrateControllerAction('up', [], $controllerConfig);
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+         $this->runMigrateControllerAction('down', [1], $controllerConfig);
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+ 
+         $this->assertMigrationHistory([
+             'm*_*_base',
+@@ -449,8 +483,10 @@ public function testNamespaceHistory()
+         $this->createNamespaceMigration('history1');
+         $this->createNamespaceMigration('history2');
+         $this->runMigrateControllerAction('up', [], $controllerConfig);
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+ 
+         $output = $this->runMigrateControllerAction('history', [], $controllerConfig);
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+         $this->assertRegExp('/' . preg_quote($this->migrationNamespace) . '.*History1/s', $output);
+         $this->assertRegExp('/' . preg_quote($this->migrationNamespace) . '.*History2/s', $output);
+     }
+@@ -469,6 +505,7 @@ public function testNamespaceMark()
+         $this->createNamespaceMigration('mark1', $version);
+ 
+         $this->runMigrateControllerAction('mark', [$this->migrationNamespace . '\\M' . $version], $controllerConfig);
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+ 
+         $this->assertMigrationHistory(['m*_base', $this->migrationNamespace . '\\M*Mark1']);
+     }
+@@ -487,6 +524,7 @@ public function testNamespaceTo()
+         $this->createNamespaceMigration('to1', $version);
+ 
+         $this->runMigrateControllerAction('to', [$this->migrationNamespace . '\\M' . $version], $controllerConfig);
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+ 
+         $this->assertMigrationHistory(['m*_base', $this->migrationNamespace . '\\M*To1']);
+     }
+@@ -510,10 +548,12 @@ public function testCombinedMigrationProcess()
+ 
+         // yii migrate/up 1
+         $this->runMigrateControllerAction('up', [1], $controllerConfig);
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+         $this->assertMigrationHistory(['m*_base', 'm010101_000001_app_migration1']);
+ 
+         // yii migrate/up
+         $this->runMigrateControllerAction('up', [], $controllerConfig);
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+         $this->assertMigrationHistory([
+             'm*_base',
+             'm010101_000001_app_migration1',
+@@ -524,6 +564,7 @@ public function testCombinedMigrationProcess()
+ 
+         // yii migrate/to m010101_000002_ext_migration1
+         $this->runMigrateControllerAction('to', ['m010101_000002_ext_migration1'], $controllerConfig);
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+         $this->assertMigrationHistory([
+             'm*_base',
+             'm010101_000001_app_migration1',
+@@ -531,6 +572,7 @@ public function testCombinedMigrationProcess()
+ 
+         // yii migrate/mark M010101000004NsMigration
+         $this->runMigrateControllerAction('mark', ['m010101_000003_app_migration2'], $controllerConfig);
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+         $this->assertMigrationHistory([
+             'm*_base',
+             'm010101_000001_app_migration1',
+@@ -540,6 +582,7 @@ public function testCombinedMigrationProcess()
+ 
+         // yii migrate/up
+         $this->runMigrateControllerAction('up', [], $controllerConfig);
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+         $this->assertMigrationHistory([
+             'm*_base',
+             'm010101_000001_app_migration1',
+@@ -550,6 +593,7 @@ public function testCombinedMigrationProcess()
+ 
+         // yii migrate/redo 2
+         $this->runMigrateControllerAction('redo', [2], $controllerConfig);
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+         $this->assertMigrationHistory([
+             'm*_base',
+             'm010101_000001_app_migration1',
+@@ -560,6 +604,7 @@ public function testCombinedMigrationProcess()
+ 
+         // yii migrate/down
+         $this->runMigrateControllerAction('down', [], $controllerConfig);
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+         $this->assertMigrationHistory([
+             'm*_base',
+             'm010101_000001_app_migration1',
+@@ -569,6 +614,7 @@ public function testCombinedMigrationProcess()
+ 
+         // yii migrate/redo
+         $this->runMigrateControllerAction('redo', [], $controllerConfig);
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+         $this->assertMigrationHistory([
+             'm*_base',
+             'm010101_000001_app_migration1',
+@@ -578,6 +624,7 @@ public function testCombinedMigrationProcess()
+ 
+         // yii migrate/down 2
+         $this->runMigrateControllerAction('down', [2], $controllerConfig);
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+         $this->assertMigrationHistory([
+             'm*_base',
+             'm010101_000001_app_migration1',
+@@ -585,6 +632,7 @@ public function testCombinedMigrationProcess()
+ 
+         // yii migrate/create app_migration3
+         $this->runMigrateControllerAction('create', ['app_migration3'], $controllerConfig);
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+         $this->assertMigrationHistory([
+             'm*_base',
+             'm010101_000001_app_migration1',
+@@ -592,6 +640,7 @@ public function testCombinedMigrationProcess()
+ 
+         // yii migrate/up
+         $this->runMigrateControllerAction('up', [], $controllerConfig);
++        $this->assertSame(ExitCode::OK, $this->getExitCode());
+         $this->assertMigrationHistory([
+             'm*_base',
+             'm010101_000001_app_migration1',
+diff --git a/tests/framework/db/ActiveRecordTest.php b/tests/framework/db/ActiveRecordTest.php
+index 1599d987e93..aeb8d9ddca6 100644
+--- a/tests/framework/db/ActiveRecordTest.php
++++ b/tests/framework/db/ActiveRecordTest.php
+@@ -940,7 +940,7 @@ public function testJoinWithAlias($aliasMethod)
+         /** @var $query ActiveQuery */
+         $query = Order::find()->joinWith(['customer c']);
+         if ($aliasMethod === 'explicit') {
+-            $count = $query->count('c.id');
++            $count = $query->count('[[c.id]]');
+         } elseif ($aliasMethod === 'querysyntax') {
+             $count = $query->count('{{@customer}}.id');
+         } elseif ($aliasMethod === 'applyAlias') {
+@@ -1020,12 +1020,12 @@ public function testJoinWithSameTable()
+         $query = Order::find()
+             ->joinWith([
+                 'itemsIndexed books' => function ($q) {
+-                    $q->onCondition('books.category_id = 1');
++                    $q->onCondition('[[books.category_id]] = 1');
+                 },
+             ], false)
+             ->joinWith([
+                 'itemsIndexed movies' => function ($q) {
+-                    $q->onCondition('movies.category_id = 2');
++                    $q->onCondition('[[movies.category_id]] = 2');
+                 },
+             ], false)
+             ->where(['movies.name' => 'Toy Story']);
+@@ -1037,12 +1037,12 @@ public function testJoinWithSameTable()
+         $query = Order::find()
+             ->joinWith([
+                 'itemsIndexed books' => function ($q) {
+-                    $q->onCondition('books.category_id = 1');
++                    $q->onCondition('[[books.category_id]] = 1');
+                 },
+             ], false)
+             ->joinWith([
+                 'itemsIndexed movies' => function ($q) {
+-                    $q->onCondition('movies.category_id = 2');
++                    $q->onCondition('[[movies.category_id]] = 2');
+                 },
+             ], true)
+             ->where(['movies.name' => 'Toy Story']);
+@@ -1055,15 +1055,15 @@ public function testJoinWithSameTable()
+         $query = Order::find()
+             ->joinWith([
+                 'itemsIndexed books' => function ($q) {
+-                    $q->onCondition('books.category_id = 1');
++                    $q->onCondition('[[books.category_id]] = 1');
+                 },
+             ], true)
+             ->joinWith([
+                 'itemsIndexed movies' => function ($q) {
+-                    $q->onCondition('movies.category_id = 2');
++                    $q->onCondition('[[movies.category_id]] = 2');
+                 },
+             ], false)
+-            ->where(['movies.name' => 'Toy Story']);
++            ->where(['[[movies.name]]' => 'Toy Story']);
+         $orders = $query->all();
+         $this->assertCount(1, $orders, $query->createCommand()->rawSql . print_r($orders, true));
+         $this->assertEquals(2, $orders[0]->id);
+@@ -2080,4 +2080,19 @@ public function testEagerLoadingUsingStringIdentifiers()
+ 
+         $this->assertEquals(['1', '01', '001', '001', '2', '2b', '2b', '02'], $alphaIdentifiers);
+     }
++
++    /**
++     * @see https://github.com/yiisoft/yii2/issues/16492
++     */
++    public function testEagerLoadingWithTypeCastedCompositeIdentifier()
++    {
++        $aggregation = Order::find()->joinWith('quantityOrderItems', true)->all();
++        foreach ($aggregation as $item) {
++            if ($item->id == 1) {
++                $this->assertEquals(1, $item->quantityOrderItems[0]->order_id);
++            } elseif ($item->id != 1) {
++                $this->assertCount(0, $item->quantityOrderItems);
++            }
++        }
++    }
+ }
+diff --git a/tests/framework/db/CommandTest.php b/tests/framework/db/CommandTest.php
+index 95732847040..2357a7488b5 100644
+--- a/tests/framework/db/CommandTest.php
++++ b/tests/framework/db/CommandTest.php
+@@ -177,26 +177,30 @@ public function testBindParamValue()
+         $command = $db->createCommand($sql);
+         $intCol = 123;
+         $charCol = str_repeat('abc', 33) . 'x'; // a 100 char string
+-        $boolCol = false;
+         $command->bindParam(':int_col', $intCol, \PDO::PARAM_INT);
+         $command->bindParam(':char_col', $charCol);
+-        $command->bindParam(':bool_col', $boolCol, \PDO::PARAM_BOOL);
+         if ($this->driverName === 'oci') {
+             // can't bind floats without support from a custom PDO driver
+             $floatCol = 2;
+             $numericCol = 3;
+             // can't use blobs without support from a custom PDO driver
+             $blobCol = null;
++            // You can create a table with a column of datatype CHAR(1) and store either “Y” or “N” in that column
++            // to indicate TRUE or FALSE.
++            $boolCol = '0';
+             $command->bindParam(':float_col', $floatCol, \PDO::PARAM_INT);
+             $command->bindParam(':numeric_col', $numericCol, \PDO::PARAM_INT);
+             $command->bindParam(':blob_col', $blobCol);
++            $command->bindParam(':bool_col', $boolCol, \PDO::PARAM_BOOL);
+         } else {
+             $floatCol = 1.23;
+             $numericCol = '1.23';
+             $blobCol = "\x10\x11\x12";
++            $boolCol = false;
+             $command->bindParam(':float_col', $floatCol);
+             $command->bindParam(':numeric_col', $numericCol);
+             $command->bindParam(':blob_col', $blobCol);
++            $command->bindParam(':bool_col', $boolCol, \PDO::PARAM_BOOL);
+         }
+         $this->assertEquals(1, $command->execute());
+ 
+@@ -654,6 +658,9 @@ public function testInsertExpression()
+                 break;
+             case 'sqlsrv':
+                 $expression = 'YEAR(GETDATE())';
++                break;
++            case 'oci':
++                $expression = 'EXTRACT(YEAR FROM sysdate)';
+         }
+ 
+         $command = $db->createCommand();
+diff --git a/tests/framework/db/ConnectionTest.php b/tests/framework/db/ConnectionTest.php
+index a8ab35d4796..be5ed4edc6f 100644
+--- a/tests/framework/db/ConnectionTest.php
++++ b/tests/framework/db/ConnectionTest.php
+@@ -137,7 +137,12 @@ public function testTransaction()
+         $this->assertFalse($transaction->isActive);
+         $this->assertNull($connection->transaction);
+ 
+-        $this->assertEquals(0, $connection->createCommand("SELECT COUNT(*) FROM profile WHERE description = 'test transaction';")->queryScalar());
++        $this->assertEquals(
++            0,
++            $connection->createCommand(
++                "SELECT COUNT(*) FROM {{profile}} WHERE [[description]] = 'test transaction'"
++            )->queryScalar()
++        );
+ 
+         $transaction = $connection->beginTransaction();
+         $connection->createCommand()->insert('profile', ['description' => 'test transaction'])->execute();
+@@ -145,7 +150,12 @@ public function testTransaction()
+         $this->assertFalse($transaction->isActive);
+         $this->assertNull($connection->transaction);
+ 
+-        $this->assertEquals(1, $connection->createCommand("SELECT COUNT(*) FROM profile WHERE description = 'test transaction';")->queryScalar());
++        $this->assertEquals(
++            1,
++            $connection->createCommand(
++                "SELECT COUNT(*) FROM {{profile}} WHERE [[description]] = 'test transaction'"
++            )->queryScalar()
++        );
+     }
+ 
+     public function testTransactionIsolation()
+@@ -193,7 +203,10 @@ public function testTransactionShortcutCorrect()
+ 
+         $this->assertTrue($result, 'transaction shortcut valid value should be returned from callback');
+ 
+-        $profilesCount = $connection->createCommand("SELECT COUNT(*) FROM profile WHERE description = 'test transaction shortcut';")->queryScalar();
++        $profilesCount = $connection->createCommand(
++            "SELECT COUNT(*) FROM {{profile}} WHERE [[description]] = 'test transaction shortcut'"
++        )->queryScalar();
++
+         $this->assertEquals(1, $profilesCount, 'profile should be inserted in transaction shortcut');
+     }
+ 
+@@ -260,7 +273,7 @@ public function testEnableQueryLog()
+         $this->assertNotNull($connection->getTableSchema('qlog1', true));
+ 
+         \Yii::getLogger()->messages = [];
+-        $connection->createCommand('SELECT * FROM qlog1')->queryAll();
++        $connection->createCommand('SELECT * FROM {{qlog1}}')->queryAll();
+         $this->assertCount(3, \Yii::getLogger()->messages);
+ 
+         // profiling only
+@@ -273,7 +286,7 @@ public function testEnableQueryLog()
+         $this->assertNotNull($connection->getTableSchema('qlog2', true));
+ 
+         \Yii::getLogger()->messages = [];
+-        $connection->createCommand('SELECT * FROM qlog2')->queryAll();
++        $connection->createCommand('SELECT * FROM {{qlog2}}')->queryAll();
+         $this->assertCount(2, \Yii::getLogger()->messages);
+ 
+         // logging only
+@@ -286,7 +299,7 @@ public function testEnableQueryLog()
+         $this->assertNotNull($connection->getTableSchema('qlog3', true));
+ 
+         \Yii::getLogger()->messages = [];
+-        $connection->createCommand('SELECT * FROM qlog3')->queryAll();
++        $connection->createCommand('SELECT * FROM {{qlog3}}')->queryAll();
+         $this->assertCount(1, \Yii::getLogger()->messages);
+ 
+         // disabled
+@@ -297,7 +310,7 @@ public function testEnableQueryLog()
+         $connection->createCommand()->createTable('qlog4', ['id' => 'pk'])->execute();
+         $this->assertNotNull($connection->getTableSchema('qlog4', true));
+         $this->assertCount(0, \Yii::getLogger()->messages);
+-        $connection->createCommand('SELECT * FROM qlog4')->queryAll();
++        $connection->createCommand('SELECT * FROM {{qlog4}}')->queryAll();
+         $this->assertCount(0, \Yii::getLogger()->messages);
+     }
+ 
+diff --git a/tests/framework/db/QueryBuilderTest.php b/tests/framework/db/QueryBuilderTest.php
+index fedeb9eb97b..3f0fd800e70 100644
+--- a/tests/framework/db/QueryBuilderTest.php
++++ b/tests/framework/db/QueryBuilderTest.php
+@@ -984,11 +984,11 @@ public function columnTypes()
+                 $this->primaryKey()->first(),
+                 [
+                     'mysql' => 'int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST',
+-                    'oci' => 'NUMBER(10) NOT NULL PRIMARY KEY',
+                     'sqlsrv' => 'int IDENTITY PRIMARY KEY',
+                     'cubrid' => 'int NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST',
+                 ],
+                 [
++                    'oci' => 'NUMBER(10) NOT NULL PRIMARY KEY',
+                     'sqlsrv' => 'pk',
+                 ]
+             ],
+@@ -997,11 +997,11 @@ public function columnTypes()
+                 $this->integer()->first(),
+                 [
+                     'mysql' => 'int(11) FIRST',
+-                    'oci' => 'NUMBER(10)',
+                     'sqlsrv' => 'int',
+                     'cubrid' => 'int FIRST',
+                 ],
+                 [
++                    'oci' => 'NUMBER(10)',
+                     'pgsql' => 'integer',
+                     'sqlsrv' => 'integer',
+                 ]
+@@ -1011,11 +1011,11 @@ public function columnTypes()
+                 $this->string()->first(),
+                 [
+                     'mysql' => 'varchar(255) FIRST',
+-                    'oci' => 'VARCHAR2(255)',
+                     'sqlsrv' => 'nvarchar(255)',
+                     'cubrid' => 'varchar(255) FIRST',
+                 ],
+                 [
++                    'oci' => 'VARCHAR2(255)',
+                     'sqlsrv' => 'string',
+                 ]
+             ],
+@@ -1024,11 +1024,11 @@ public function columnTypes()
+                 $this->integer()->append('NOT NULL')->first(),
+                 [
+                     'mysql' => 'int(11) NOT NULL FIRST',
+-                    'oci' => 'NUMBER(10) NOT NULL',
+                     'sqlsrv' => 'int NOT NULL',
+                     'cubrid' => 'int NOT NULL FIRST',
+                 ],
+                 [
++                    'oci' => 'NUMBER(10) NOT NULL',
+                     'sqlsrv' => 'integer NOT NULL',
+                 ]
+             ],
+@@ -1037,11 +1037,11 @@ public function columnTypes()
+                 $this->string()->append('NOT NULL')->first(),
+                 [
+                     'mysql' => 'varchar(255) NOT NULL FIRST',
+-                    'oci' => 'VARCHAR2(255) NOT NULL',
+                     'sqlsrv' => 'nvarchar(255) NOT NULL',
+                     'cubrid' => 'varchar(255) NOT NULL FIRST',
+                 ],
+                 [
++                    'oci' => 'VARCHAR2(255) NOT NULL',
+                     'sqlsrv' => 'string NOT NULL',
+                 ]
+             ],
+diff --git a/tests/framework/db/QueryTest.php b/tests/framework/db/QueryTest.php
+index a983f26a5e0..18179085e44 100644
+--- a/tests/framework/db/QueryTest.php
++++ b/tests/framework/db/QueryTest.php
+@@ -359,10 +359,10 @@ public function testOne()
+     {
+         $db = $this->getConnection();
+ 
+-        $result = (new Query())->from('customer')->where(['status' => 2])->one($db);
++        $result = (new Query())->from('customer')->where(['[[status]]' => 2])->one($db);
+         $this->assertEquals('user3', $result['name']);
+ 
+-        $result = (new Query())->from('customer')->where(['status' => 3])->one($db);
++        $result = (new Query())->from('customer')->where(['[[status]]' => 3])->one($db);
+         $this->assertFalse($result);
+     }
+ 
+@@ -665,7 +665,11 @@ public function testExpressionInFrom()
+     {
+         $db = $this->getConnection();
+         $query = (new Query())
+-            ->from(new \yii\db\Expression('(SELECT id, name, email, address, status FROM customer) c'))
++            ->from(
++                new \yii\db\Expression(
++                    '(SELECT [[id]], [[name]], [[email]], [[address]], [[status]] FROM {{customer}}) c'
++                )
++            )
+             ->where(['status' => 2]);
+ 
+         $result = $query->one($db);
+diff --git a/tests/framework/db/mssql/QueryBuilderTest.php b/tests/framework/db/mssql/QueryBuilderTest.php
+index 99eb3f29510..624ca723b9c 100644
+--- a/tests/framework/db/mssql/QueryBuilderTest.php
++++ b/tests/framework/db/mssql/QueryBuilderTest.php
+@@ -277,7 +277,7 @@ public function insertProvider()
+                 ],
+                 [],
+                 $this->replaceQuotes('SET NOCOUNT ON;DECLARE @temporary_inserted TABLE ([id] int , [email] varchar(128) , [name] varchar(128) NULL, [address] text NULL, [status] int NULL, [profile_id] int NULL);' .
+-                    'INSERT INTO [customer] ([email], [name], [address], [is_active], [related_id]) OUTPUT INSERTED.id,INSERTED.email,INSERTED.name,INSERTED.address,INSERTED.status,INSERTED.profile_id INTO @temporary_inserted VALUES (:qp0, :qp1, :qp2, :qp3, :qp4);' .
++                    'INSERT INTO [customer] ([email], [name], [address], [is_active], [related_id]) OUTPUT INSERTED.[id],INSERTED.[email],INSERTED.[name],INSERTED.[address],INSERTED.[status],INSERTED.[profile_id] INTO @temporary_inserted VALUES (:qp0, :qp1, :qp2, :qp3, :qp4);' .
+                     'SELECT * FROM @temporary_inserted'),
+                 [
+                     ':qp0' => 'test@example.com',
+@@ -295,7 +295,7 @@ public function insertProvider()
+                 ],
+                 [],
+                 'SET NOCOUNT ON;DECLARE @temporary_inserted TABLE ([int_col] int , [int_col2] int NULL, [tinyint_col] tinyint NULL, [smallint_col] smallint NULL, [char_col] char(100) , [char_col2] varchar(100) NULL, [char_col3] text NULL, [float_col] decimal , [float_col2] float NULL, [blob_col] varbinary(MAX) NULL, [numeric_col] decimal NULL, [time] datetime , [bool_col] tinyint , [bool_col2] tinyint NULL);' .
+-                'INSERT INTO {{%type}} ({{%type}}.[[related_id]], [[time]]) OUTPUT INSERTED.int_col,INSERTED.int_col2,INSERTED.tinyint_col,INSERTED.smallint_col,INSERTED.char_col,INSERTED.char_col2,INSERTED.char_col3,INSERTED.float_col,INSERTED.float_col2,INSERTED.blob_col,INSERTED.numeric_col,INSERTED.time,INSERTED.bool_col,INSERTED.bool_col2 INTO @temporary_inserted VALUES (:qp0, now());' .
++                'INSERT INTO {{%type}} ({{%type}}.[[related_id]], [[time]]) OUTPUT INSERTED.[int_col],INSERTED.[int_col2],INSERTED.[tinyint_col],INSERTED.[smallint_col],INSERTED.[char_col],INSERTED.[char_col2],INSERTED.[char_col3],INSERTED.[float_col],INSERTED.[float_col2],INSERTED.[blob_col],INSERTED.[numeric_col],INSERTED.[time],INSERTED.[bool_col],INSERTED.[bool_col2] INTO @temporary_inserted VALUES (:qp0, now());' .
+                 'SELECT * FROM @temporary_inserted',
+                 [
+                     ':qp0' => null,
+@@ -313,7 +313,7 @@ public function insertProvider()
+                 ],
+                 [':phBar' => 'bar'],
+                 $this->replaceQuotes('SET NOCOUNT ON;DECLARE @temporary_inserted TABLE ([id] int , [email] varchar(128) , [name] varchar(128) NULL, [address] text NULL, [status] int NULL, [profile_id] int NULL);' .
+-                    'INSERT INTO [customer] ([email], [name], [address], [is_active], [related_id], [col]) OUTPUT INSERTED.id,INSERTED.email,INSERTED.name,INSERTED.address,INSERTED.status,INSERTED.profile_id INTO @temporary_inserted VALUES (:qp1, :qp2, :qp3, :qp4, :qp5, CONCAT(:phFoo, :phBar));' .
++                    'INSERT INTO [customer] ([email], [name], [address], [is_active], [related_id], [col]) OUTPUT INSERTED.[id],INSERTED.[email],INSERTED.[name],INSERTED.[address],INSERTED.[status],INSERTED.[profile_id] INTO @temporary_inserted VALUES (:qp1, :qp2, :qp3, :qp4, :qp5, CONCAT(:phFoo, :phBar));' .
+                     'SELECT * FROM @temporary_inserted'),
+                 [
+                     ':phBar' => 'bar',
+@@ -346,7 +346,7 @@ public function insertProvider()
+                     ]),
+                 [':phBar' => 'bar'],
+                 $this->replaceQuotes('SET NOCOUNT ON;DECLARE @temporary_inserted TABLE ([id] int , [email] varchar(128) , [name] varchar(128) NULL, [address] text NULL, [status] int NULL, [profile_id] int NULL);' .
+-                    'INSERT INTO [customer] ([email], [name], [address], [is_active], [related_id]) OUTPUT INSERTED.id,INSERTED.email,INSERTED.name,INSERTED.address,INSERTED.status,INSERTED.profile_id INTO @temporary_inserted SELECT [email], [name], [address], [is_active], [related_id] FROM [customer] WHERE ([email]=:qp1) AND ([name]=:qp2) AND ([address]=:qp3) AND ([is_active]=:qp4) AND ([related_id] IS NULL) AND ([col]=CONCAT(:phFoo, :phBar));' .
++                    'INSERT INTO [customer] ([email], [name], [address], [is_active], [related_id]) OUTPUT INSERTED.[id],INSERTED.[email],INSERTED.[name],INSERTED.[address],INSERTED.[status],INSERTED.[profile_id] INTO @temporary_inserted SELECT [email], [name], [address], [is_active], [related_id] FROM [customer] WHERE ([email]=:qp1) AND ([name]=:qp2) AND ([address]=:qp3) AND ([is_active]=:qp4) AND ([related_id] IS NULL) AND ([col]=CONCAT(:phFoo, :phBar));' .
+                     'SELECT * FROM @temporary_inserted'),
+                 [
+                     ':phBar' => 'bar',
+@@ -396,17 +396,17 @@ public function upsertProvider()
+             ],
+             'values and expressions' => [
+                 3 => 'SET NOCOUNT ON;DECLARE @temporary_inserted TABLE ([id] int , [ts] int NULL, [email] varchar(128) , [recovery_email] varchar(128) NULL, [address] text NULL, [status] tinyint , [orders] int , [profile_id] int NULL);' .
+-                    'INSERT INTO {{%T_upsert}} ({{%T_upsert}}.[[email]], [[ts]]) OUTPUT INSERTED.id,INSERTED.ts,INSERTED.email,INSERTED.recovery_email,INSERTED.address,INSERTED.status,INSERTED.orders,INSERTED.profile_id INTO @temporary_inserted VALUES (:qp0, now());' .
++                    'INSERT INTO {{%T_upsert}} ({{%T_upsert}}.[[email]], [[ts]]) OUTPUT INSERTED.[id],INSERTED.[ts],INSERTED.[email],INSERTED.[recovery_email],INSERTED.[address],INSERTED.[status],INSERTED.[orders],INSERTED.[profile_id] INTO @temporary_inserted VALUES (:qp0, now());' .
+                     'SELECT * FROM @temporary_inserted',
+             ],
+             'values and expressions with update part' => [
+                 3 => 'SET NOCOUNT ON;DECLARE @temporary_inserted TABLE ([id] int , [ts] int NULL, [email] varchar(128) , [recovery_email] varchar(128) NULL, [address] text NULL, [status] tinyint , [orders] int , [profile_id] int NULL);' .
+-                    'INSERT INTO {{%T_upsert}} ({{%T_upsert}}.[[email]], [[ts]]) OUTPUT INSERTED.id,INSERTED.ts,INSERTED.email,INSERTED.recovery_email,INSERTED.address,INSERTED.status,INSERTED.orders,INSERTED.profile_id INTO @temporary_inserted VALUES (:qp0, now());' .
++                    'INSERT INTO {{%T_upsert}} ({{%T_upsert}}.[[email]], [[ts]]) OUTPUT INSERTED.[id],INSERTED.[ts],INSERTED.[email],INSERTED.[recovery_email],INSERTED.[address],INSERTED.[status],INSERTED.[orders],INSERTED.[profile_id] INTO @temporary_inserted VALUES (:qp0, now());' .
+                     'SELECT * FROM @temporary_inserted',
+             ],
+             'values and expressions without update part' => [
+                 3 => 'SET NOCOUNT ON;DECLARE @temporary_inserted TABLE ([id] int , [ts] int NULL, [email] varchar(128) , [recovery_email] varchar(128) NULL, [address] text NULL, [status] tinyint , [orders] int , [profile_id] int NULL);' .
+-                    'INSERT INTO {{%T_upsert}} ({{%T_upsert}}.[[email]], [[ts]]) OUTPUT INSERTED.id,INSERTED.ts,INSERTED.email,INSERTED.recovery_email,INSERTED.address,INSERTED.status,INSERTED.orders,INSERTED.profile_id INTO @temporary_inserted VALUES (:qp0, now());' .
++                    'INSERT INTO {{%T_upsert}} ({{%T_upsert}}.[[email]], [[ts]]) OUTPUT INSERTED.[id],INSERTED.[ts],INSERTED.[email],INSERTED.[recovery_email],INSERTED.[address],INSERTED.[status],INSERTED.[orders],INSERTED.[profile_id] INTO @temporary_inserted VALUES (:qp0, now());' .
+                     'SELECT * FROM @temporary_inserted',
+             ],
+             'query, values and expressions with update part' => [
+diff --git a/tests/framework/db/mysql/ConnectionTest.php b/tests/framework/db/mysql/ConnectionTest.php
+index 7f9b156406d..8a8f36e0db4 100644
+--- a/tests/framework/db/mysql/ConnectionTest.php
++++ b/tests/framework/db/mysql/ConnectionTest.php
+@@ -7,6 +7,8 @@
+ 
+ namespace yiiunit\framework\db\mysql;
+ 
++use yii\db\Connection;
++
+ /**
+  * @group db
+  * @group mysql
+@@ -14,4 +16,21 @@
+ class ConnectionTest extends \yiiunit\framework\db\ConnectionTest
+ {
+     protected $driverName = 'mysql';
++
++    /**
++     * @doesNotPerformAssertions
++     */
++    public function testTransactionAutocommit()
++    {
++        /** @var Connection $connection */
++        $connection = $this->getConnection(true);
++        $connection->transaction(function (Connection $db) {
++            // create table will cause the transaction to be implicitly committed
++            // (see https://dev.mysql.com/doc/refman/8.0/en/implicit-commit.html)
++            $name = 'test_implicit_transaction_table';
++            $db->createCommand()->createTable($name, ['id' => 'pk'])->execute();
++            $db->createCommand()->dropTable($name)->execute();
++        });
++        // If we made it this far without an error, then everything's working
++    }
+ }
+diff --git a/tests/framework/db/oci/ActiveRecordTest.php b/tests/framework/db/oci/ActiveRecordTest.php
+index 5935c899644..91442a5a411 100644
+--- a/tests/framework/db/oci/ActiveRecordTest.php
++++ b/tests/framework/db/oci/ActiveRecordTest.php
+@@ -7,8 +7,12 @@
+ 
+ namespace yiiunit\framework\db\oci;
+ 
++use yii\db\Expression;
++use yiiunit\data\ar\BitValues;
++use yiiunit\data\ar\Customer;
+ use yiiunit\data\ar\DefaultPk;
+ use yiiunit\data\ar\DefaultMultiplePk;
++use yiiunit\data\ar\Order;
+ use yiiunit\data\ar\Type;
+ 
+ /**
+@@ -44,10 +48,10 @@ public function testCastValues()
+         $this->assertSame('1337', trim($model->char_col));
+         $this->assertSame('test', $model->char_col2);
+         $this->assertSame('test123', $model->char_col3);
+-//        $this->assertSame(1337.42, $model->float_col);
+-//        $this->assertSame(42.1337, $model->float_col2);
+-//        $this->assertTrue($model->bool_col);
+-//        $this->assertFalse($model->bool_col2);
++        $this->assertSame(1337.42, $model->float_col);
++        $this->assertSame(42.1337, $model->float_col2);
++        $this->assertEquals('1', $model->bool_col);
++        $this->assertEquals('0', $model->bool_col2);
+     }
+ 
+     public function testDefaultValues()
+@@ -58,7 +62,7 @@ public function testDefaultValues()
+         $this->assertEquals('something', $model->char_col2);
+         $this->assertEquals(1.23, $model->float_col2);
+         $this->assertEquals(33.22, $model->numeric_col);
+-        $this->assertTrue($model->bool_col2);
++        $this->assertEquals('1', $model->bool_col2);
+ 
+         // not testing $model->time, because oci\Schema can't read default value
+ 
+@@ -133,4 +137,189 @@ public function testMultiplePrimaryKeyAfterSave()
+         $this->assertEquals(5, $record->id);
+         $this->assertEquals('secondKey', $record->second_key_column);
+     }
++
++    /**
++     * @see https://github.com/yiisoft/yii2/issues/9006
++     */
++    public function testBit()
++    {
++        $falseBit = BitValues::findOne(1);
++        $this->assertEquals('0', $falseBit->val);
++
++        $trueBit = BitValues::findOne(2);
++        $this->assertEquals('1', $trueBit->val);
++    }
++
++    /**
++     * Some PDO implementations(e.g. cubrid) do not support boolean values.
++     * Make sure this does not affect AR layer.
++     */
++    public function testBooleanAttribute()
++    {
++        /* @var $customerClass \yii\db\ActiveRecordInterface */
++        $customerClass = $this->getCustomerClass();
++        /* @var $this TestCase|ActiveRecordTestTrait */
++        $customer = new $customerClass();
++        $customer->name = 'boolean customer';
++        $customer->email = 'mail@example.com';
++        $customer->status = '1';
++        $customer->save(false);
++
++        $customer->refresh();
++        $this->assertEquals('1', $customer->status);
++
++        $customer->status = '0';
++        $customer->save(false);
++
++        $customer->refresh();
++        $this->assertEquals('0', $customer->status);
++
++        $customers = $customerClass::find()->where(['[[status]]' => '1'])->all();
++        $this->assertCount(2, $customers);
++
++        $customers = $customerClass::find()->where(['[[status]]' => '0'])->all();
++        $this->assertCount(1, $customers);
++    }
++
++    /**
++     * Tests the alias syntax for joinWith: 'alias' => 'relation'.
++     * @dataProvider aliasMethodProvider
++     * @param string $aliasMethod whether alias is specified explicitly or using the query syntax {{@tablename}}
++     */
++    public function testJoinWithAlias($aliasMethod)
++    {
++        // left join and eager loading
++        /** @var ActiveQuery $query */
++        $query = Order::find()->joinWith(['customer c']);
++        if ($aliasMethod === 'explicit') {
++            $orders = $query->orderBy('c.id DESC, order.id')->all();
++        } elseif ($aliasMethod === 'querysyntax') {
++            $orders = $query->orderBy('{{@customer}}.id DESC, {{@order}}.id')->all();
++        } elseif ($aliasMethod === 'applyAlias') {
++            $orders = $query->orderBy($query->applyAlias('customer', 'id') . ' DESC,' . $query->applyAlias('order', 'id'))->all();
++        }
++        $this->assertCount(3, $orders);
++        $this->assertEquals(2, $orders[0]->id);
++        $this->assertEquals(3, $orders[1]->id);
++        $this->assertEquals(1, $orders[2]->id);
++        $this->assertTrue($orders[0]->isRelationPopulated('customer'));
++        $this->assertTrue($orders[1]->isRelationPopulated('customer'));
++        $this->assertTrue($orders[2]->isRelationPopulated('customer'));
++
++        // inner join filtering and eager loading
++        $query = Order::find()->innerJoinWith(['customer c']);
++        if ($aliasMethod === 'explicit') {
++            $orders = $query->where('{{c}}.[[id]]=2')->orderBy('order.id')->all();
++        } elseif ($aliasMethod === 'querysyntax') {
++            $orders = $query->where('{{@customer}}.[[id]]=2')->orderBy('{{@order}}.id')->all();
++        } elseif ($aliasMethod === 'applyAlias') {
++            $orders = $query->where([$query->applyAlias('customer', 'id') => 2])->orderBy($query->applyAlias('order', 'id'))->all();
++        }
++        $this->assertCount(2, $orders);
++        $this->assertEquals(2, $orders[0]->id);
++        $this->assertEquals(3, $orders[1]->id);
++        $this->assertTrue($orders[0]->isRelationPopulated('customer'));
++        $this->assertTrue($orders[1]->isRelationPopulated('customer'));
++
++        // inner join filtering without eager loading
++        $query = Order::find()->innerJoinWith(['customer c'], false);
++        if ($aliasMethod === 'explicit') {
++            $orders = $query->where('{{c}}.[[id]]=2')->orderBy('order.id')->all();
++        } elseif ($aliasMethod === 'querysyntax') {
++            $orders = $query->where('{{@customer}}.[[id]]=2')->orderBy('{{@order}}.id')->all();
++        } elseif ($aliasMethod === 'applyAlias') {
++            $orders = $query->where([$query->applyAlias('customer', 'id') => 2])->orderBy($query->applyAlias('order', 'id'))->all();
++        }
++        $this->assertCount(2, $orders);
++        $this->assertEquals(2, $orders[0]->id);
++        $this->assertEquals(3, $orders[1]->id);
++        $this->assertFalse($orders[0]->isRelationPopulated('customer'));
++        $this->assertFalse($orders[1]->isRelationPopulated('customer'));
++
++        // join with via-relation
++        $query = Order::find()->innerJoinWith(['books b']);
++        if ($aliasMethod === 'explicit') {
++            $orders = $query->where(['b.name' => 'Yii 1.1 Application Development Cookbook'])->orderBy('order.id')->all();
++        } elseif ($aliasMethod === 'querysyntax') {
++            $orders = $query->where(['{{@item}}.name' => 'Yii 1.1 Application Development Cookbook'])->orderBy('{{@order}}.id')->all();
++        } elseif ($aliasMethod === 'applyAlias') {
++            $orders = $query->where([$query->applyAlias('book', 'name') => 'Yii 1.1 Application Development Cookbook'])->orderBy($query->applyAlias('order', 'id'))->all();
++        }
++        $this->assertCount(2, $orders);
++        $this->assertEquals(1, $orders[0]->id);
++        $this->assertEquals(3, $orders[1]->id);
++        $this->assertTrue($orders[0]->isRelationPopulated('books'));
++        $this->assertTrue($orders[1]->isRelationPopulated('books'));
++        $this->assertCount(2, $orders[0]->books);
++        $this->assertCount(1, $orders[1]->books);
++
++        // joining sub relations
++        $query = Order::find()->innerJoinWith([
++            'items i' => function ($q) use ($aliasMethod) {
++                /* @var $q ActiveQuery */
++                if ($aliasMethod === 'explicit') {
++                    $q->orderBy('{{i}}.id');
++                } elseif ($aliasMethod === 'querysyntax') {
++                    $q->orderBy('{{@item}}.id');
++                } elseif ($aliasMethod === 'applyAlias') {
++                    $q->orderBy($q->applyAlias('item', 'id'));
++                }
++            },
++            'items.category c' => function ($q) use ($aliasMethod) {
++                /* @var $q ActiveQuery */
++                if ($aliasMethod === 'explicit') {
++                    $q->where('{{c}}.[[id]] = 2');
++                } elseif ($aliasMethod === 'querysyntax') {
++                    $q->where('{{@category}}.[[id]] = 2');
++                } elseif ($aliasMethod === 'applyAlias') {
++                    $q->where([$q->applyAlias('category', 'id') => 2]);
++                }
++            },
++        ]);
++        if ($aliasMethod === 'explicit') {
++            $orders = $query->orderBy('{{i}}.id')->all();
++        } elseif ($aliasMethod === 'querysyntax') {
++            $orders = $query->orderBy('{{@item}}.id')->all();
++        } elseif ($aliasMethod === 'applyAlias') {
++            $orders = $query->orderBy($query->applyAlias('item', 'id'))->all();
++        }
++        $this->assertCount(1, $orders);
++        $this->assertTrue($orders[0]->isRelationPopulated('items'));
++        $this->assertEquals(2, $orders[0]->id);
++        $this->assertCount(3, $orders[0]->items);
++        $this->assertTrue($orders[0]->items[0]->isRelationPopulated('category'));
++        $this->assertEquals(2, $orders[0]->items[0]->category->id);
++
++        // join with ON condition
++        if ($aliasMethod === 'explicit' || $aliasMethod === 'querysyntax') {
++            $relationName = 'books' . ucfirst($aliasMethod);
++            $orders = Order::find()->joinWith(["$relationName b"])->orderBy('order.id')->all();
++            $this->assertCount(3, $orders);
++            $this->assertEquals(1, $orders[0]->id);
++            $this->assertEquals(2, $orders[1]->id);
++            $this->assertEquals(3, $orders[2]->id);
++            $this->assertTrue($orders[0]->isRelationPopulated($relationName));
++            $this->assertTrue($orders[1]->isRelationPopulated($relationName));
++            $this->assertTrue($orders[2]->isRelationPopulated($relationName));
++            $this->assertCount(2, $orders[0]->$relationName);
++            $this->assertCount(0, $orders[1]->$relationName);
++            $this->assertCount(1, $orders[2]->$relationName);
++        }
++
++        // join with ON condition and alias in relation definition
++        if ($aliasMethod === 'explicit' || $aliasMethod === 'querysyntax') {
++            $relationName = 'books' . ucfirst($aliasMethod) . 'A';
++            $orders = Order::find()->joinWith([(string)$relationName])->orderBy('order.id')->all();
++            $this->assertCount(3, $orders);
++            $this->assertEquals(1, $orders[0]->id);
++            $this->assertEquals(2, $orders[1]->id);
++            $this->assertEquals(3, $orders[2]->id);
++            $this->assertTrue($orders[0]->isRelationPopulated($relationName));
++            $this->assertTrue($orders[1]->isRelationPopulated($relationName));
++            $this->assertTrue($orders[2]->isRelationPopulated($relationName));
++            $this->assertCount(2, $orders[0]->$relationName);
++            $this->assertCount(0, $orders[1]->$relationName);
++            $this->assertCount(1, $orders[2]->$relationName);
++        }
++    }
+ }
+diff --git a/tests/framework/db/oci/CommandTest.php b/tests/framework/db/oci/CommandTest.php
+index 10146496fce..319f3fca943 100644
+--- a/tests/framework/db/oci/CommandTest.php
++++ b/tests/framework/db/oci/CommandTest.php
+@@ -7,7 +7,11 @@
+ 
+ namespace yiiunit\framework\db\oci;
+ 
++use yii\caching\ArrayCache;
++use yii\db\Connection;
++use yii\db\Query;
+ use yii\db\Schema;
++
+ /**
+  * @group db
+  * @group oci
+@@ -38,8 +42,12 @@ public function testLastInsertId()
+     public function batchInsertSqlProvider()
+     {
+         $data = parent::batchInsertSqlProvider();
+-        $data['issue11242']['expected'] = 'INSERT INTO "type" ("int_col", "float_col", "char_col") VALUES (NULL, NULL, \'Kyiv {{city}}, Ukraine\')';
+-        $data['wrongBehavior']['expected'] = 'INSERT INTO "type" ("type"."int_col", "float_col", "char_col") VALUES (\'\', \'\', \'Kyiv {{city}}, Ukraine\')';
++        $data['issue11242']['expected'] = 'INSERT ALL  INTO "type" ("int_col", "float_col", "char_col") ' .
++            "VALUES (NULL, NULL, 'Kyiv {{city}}, Ukraine') SELECT 1 FROM SYS.DUAL";
++        $data['wrongBehavior']['expected'] = 'INSERT ALL  INTO "type" ("type"."int_col", "float_col", "char_col") ' .
++            "VALUES ('', '', 'Kyiv {{city}}, Ukraine') SELECT 1 FROM SYS.DUAL";
++        $data['batchInsert binds params from expression']['expected'] = 'INSERT ALL  INTO "type" ("int_col") ' .
++            'VALUES (:qp1) SELECT 1 FROM SYS.DUAL';
+ 
+         return $data;
+     }
+@@ -68,4 +76,411 @@ public function testCLOBStringInsertion()
+ 
+         $db->createCommand()->dropTable('longstring')->execute();
+     }
++
++    public function testQueryCache()
++    {
++        $db = $this->getConnection(true);
++
++        $db->enableQueryCache = true;
++        $db->queryCache = new ArrayCache();
++
++        $command = $db->createCommand('SELECT [[name]] FROM {{customer}} WHERE [[id]] = :id');
++
++        $this->assertEquals('user1', $command->bindValue(':id', 1)->queryScalar());
++
++        $update = $db->createCommand('UPDATE {{customer}} SET [[name]] = :name WHERE [[id]] = :id');
++        $update->bindValues([':id' => 1, ':name' => 'user11'])->execute();
++
++        $command = $db->createCommand('SELECT [[name]] FROM {{customer}} WHERE [[id]] = :id');
++
++        $this->assertEquals('user11', $command->bindValue(':id', 1)->queryScalar());
++
++        $db->cache(function (Connection $db) use ($update) {
++            $command = $db->createCommand('SELECT [[name]] FROM {{customer}} WHERE [[id]] = :id');
++
++            $this->assertEquals('user2', $command->bindValue(':id', 2)->queryScalar());
++
++            $update->bindValues([':id' => 2, ':name' => 'user22'])->execute();
++
++            $command = $db->createCommand('SELECT [[name]] FROM {{customer}} WHERE [[id]] = :id');
++
++            $this->assertEquals('user2', $command->bindValue(':id', 2)->queryScalar());
++
++            $db->noCache(function () use ($db) {
++                $command = $db->createCommand('SELECT [[name]] FROM {{customer}} WHERE [[id]] = :id');
++
++                $this->assertEquals('user22', $command->bindValue(':id', 2)->queryScalar());
++            });
++
++            $command = $db->createCommand('SELECT [[name]] FROM {{customer}} WHERE [[id]] = :id');
++
++            $this->assertEquals('user2', $command->bindValue(':id', 2)->queryScalar());
++        }, 10);
++
++        $db->enableQueryCache =false;
++
++        $db->cache(function (Connection $db) use ($update) {
++            $command = $db->createCommand('SELECT [[name]] FROM {{customer}} WHERE [[id]] = :id');
++
++            $this->assertEquals('user22', $command->bindValue(':id', 2)->queryScalar());
++
++            $update->bindValues([':id' => 2, ':name' => 'user2'])->execute();
++
++            $command = $db->createCommand('SELECT [[name]] FROM {{customer}} WHERE [[id]] = :id');
++
++            $this->assertEquals('user2', $command->bindValue(':id', 2)->queryScalar());
++        }, 10);
++
++        $db->enableQueryCache = true;
++
++        $command = $db->createCommand('SELECT [[name]] FROM {{customer}} WHERE [[id]] = :id')->cache();
++
++        $this->assertEquals('user11', $command->bindValue(':id', 1)->queryScalar());
++
++        $update->bindValues([':id' => 1, ':name' => 'user1'])->execute();
++
++        $command = $db->createCommand('SELECT [[name]] FROM {{customer}} WHERE [[id]] = :id')->cache();
++
++        $this->assertEquals('user11', $command->bindValue(':id', 1)->queryScalar());
++
++        $command = $db->createCommand('SELECT [[name]] FROM {{customer}} WHERE [[id]] = :id')->noCache();
++
++        $this->assertEquals('user1', $command->bindValue(':id', 1)->queryScalar());
++
++        $db->cache(function (Connection $db) use ($update) {
++            $command = $db->createCommand('SELECT [[name]] FROM {{customer}} WHERE [[id]] = :id');
++
++            $this->assertEquals('user11', $command->bindValue(':id', 1)->queryScalar());
++
++            $command = $db->createCommand('SELECT [[name]] FROM {{customer}} WHERE [[id]] = :id')->noCache();
++
++            $this->assertEquals('user1', $command->bindValue(':id', 1)->queryScalar());
++        }, 10);
++    }
++
++    public function paramsNonWhereProvider()
++    {
++        return [
++            ['SELECT SUBSTR([[name]], :len) FROM {{customer}} WHERE [[email]] = :email GROUP BY SUBSTR([[name]], :len)'],
++            ['SELECT SUBSTR([[name]], :len) FROM {{customer}} WHERE [[email]] = :email ORDER BY SUBSTR([[name]], :len)'],
++            ['SELECT SUBSTR([[name]], :len) FROM {{customer}} WHERE [[email]] = :email'],
++        ];
++    }
++
++    public function testInsert()
++    {
++        $db = $this->getConnection();
++        $db->createCommand('DELETE FROM {{customer}}')->execute();
++
++        $command = $db->createCommand();
++        $command->insert(
++            '{{customer}}',
++            [
++                'email' => 't1@example.com',
++                'name' => 'test',
++                'address' => 'test address',
++            ]
++        )->execute();
++        $this->assertEquals(1, $db->createCommand('SELECT COUNT(*) FROM {{customer}}')->queryScalar());
++        $record = $db->createCommand('SELECT [[email]], [[name]], [[address]] FROM {{customer}}')->queryOne();
++        $this->assertEquals([
++            'email' => 't1@example.com',
++            'name' => 'test',
++            'address' => 'test address',
++        ], $record);
++    }
++
++    /**
++     * Test INSERT INTO ... SELECT SQL statement with alias syntax.
++     */
++    public function testInsertSelectAlias()
++    {
++        $db = $this->getConnection();
++
++        $db->createCommand('DELETE FROM {{customer}}')->execute();
++
++        $command = $db->createCommand();
++
++        $command->insert(
++            '{{customer}}',
++            [
++                'email'   => 't1@example.com',
++                'name'    => 'test',
++                'address' => 'test address',
++            ]
++        )->execute();
++
++        $query = $db->createCommand(
++            "SELECT 't2@example.com' as [[email]], [[address]] as [[name]], [[name]] as [[address]] from {{customer}}"
++        );
++
++        $command->insert(
++            '{{customer}}',
++            $query->queryOne()
++        )->execute();
++
++        $this->assertEquals(2, $db->createCommand('SELECT COUNT(*) FROM {{customer}}')->queryScalar());
++
++        $record = $db->createCommand('SELECT [[email]], [[name]], [[address]] FROM {{customer}}')->queryAll();
++
++        $this->assertEquals([
++            [
++                'email'   => 't1@example.com',
++                'name'    => 'test',
++                'address' => 'test address',
++            ],
++            [
++                'email'   => 't2@example.com',
++                'name'    => 'test address',
++                'address' => 'test',
++            ],
++        ], $record);
++    }
++
++    /**
++     * Test batch insert with different data types.
++     *
++     * Ensure double is inserted with `.` decimal separator.
++     *
++     * https://github.com/yiisoft/yii2/issues/6526
++     */
++    public function testBatchInsertDataTypesLocale()
++    {
++        $locale = setlocale(LC_NUMERIC, 0);
++        if (false === $locale) {
++            $this->markTestSkipped('Your platform does not support locales.');
++        }
++        $db = $this->getConnection();
++
++        try {
++            // This one sets decimal mark to comma sign
++            setlocale(LC_NUMERIC, 'ru_RU.UTF-8');
++
++            $cols = ['int_col', 'char_col', 'float_col', 'bool_col'];
++            $data = [
++                [1, 'A', 9.735, '1'],
++                [2, 'B', -2.123, '0'],
++                [3, 'C', 2.123, '0'],
++            ];
++
++            // clear data in "type" table
++            $db->createCommand()->delete('type')->execute();
++            // batch insert on "type" table
++            $db->createCommand()->batchInsert('type', $cols, $data)->execute();
++
++            // change , for point oracle.
++            $db->createCommand("ALTER SESSION SET NLS_NUMERIC_CHARACTERS='.,'")->execute();
++
++            $data = $db->createCommand(
++                'SELECT [[int_col]], [[char_col]], [[float_col]], [[bool_col]] FROM {{type}} WHERE [[int_col]] ' .
++                'IN (1,2,3) ORDER BY [[int_col]]'
++            )->queryAll();
++
++            $this->assertEquals(3, \count($data));
++            $this->assertEquals(1, $data[0]['int_col']);
++            $this->assertEquals(2, $data[1]['int_col']);
++            $this->assertEquals(3, $data[2]['int_col']);
++            $this->assertEquals('A', rtrim($data[0]['char_col'])); // rtrim because Postgres padds the column with whitespace
++            $this->assertEquals('B', rtrim($data[1]['char_col']));
++            $this->assertEquals('C', rtrim($data[2]['char_col']));
++            $this->assertEquals('9.735', $data[0]['float_col']);
++            $this->assertEquals('-2.123', $data[1]['float_col']);
++            $this->assertEquals('2.123', $data[2]['float_col']);
++            $this->assertEquals('1', $data[0]['bool_col']);
++            $this->assertIsOneOf($data[1]['bool_col'], ['0', false]);
++            $this->assertIsOneOf($data[2]['bool_col'], ['0', false]);
++
++        } catch (\Exception $e) {
++            setlocale(LC_NUMERIC, $locale);
++            throw $e;
++        } catch (\Throwable $e) {
++            setlocale(LC_NUMERIC, $locale);
++            throw $e;
++        }
++        setlocale(LC_NUMERIC, $locale);
++    }
++
++    /**
++     * verify that {{}} are not going to be replaced in parameters.
++     */
++    public function testNoTablenameReplacement()
++    {
++        $db = $this->getConnection();
++
++        $db->createCommand()->insert(
++            '{{customer}}',
++            [
++                'name' => 'Some {{weird}} name',
++                'email' => 'test@example.com',
++                'address' => 'Some {{%weird}} address',
++            ]
++        )->execute();
++
++        $customerId = $db->getLastInsertID('customer_SEQ');
++
++        $customer = $db->createCommand('SELECT * FROM {{customer}} WHERE [[id]]=' . $customerId)->queryOne();
++        $this->assertEquals('Some {{weird}} name', $customer['name']);
++        $this->assertEquals('Some {{%weird}} address', $customer['address']);
++
++        $db->createCommand()->update(
++            '{{customer}}',
++            [
++                'name' => 'Some {{updated}} name',
++                'address' => 'Some {{%updated}} address',
++            ],
++            ['id' => $customerId]
++        )->execute();
++        $customer = $db->createCommand('SELECT * FROM {{customer}} WHERE [[id]]=' . $customerId)->queryOne();
++        $this->assertEquals('Some {{updated}} name', $customer['name']);
++        $this->assertEquals('Some {{%updated}} address', $customer['address']);
++    }
++
++    public function testCreateTable()
++    {
++        $db = $this->getConnection();
++
++        if ($db->getSchema()->getTableSchema("testCreateTable") !== null) {
++            $db->createCommand("DROP SEQUENCE testCreateTable_SEQ")->execute();
++            $db->createCommand()->dropTable("testCreateTable")->execute();
++        }
++
++        $db->createCommand()->createTable(
++            '{{testCreateTable}}',
++            ['id' => Schema::TYPE_PK, 'bar' => Schema::TYPE_INTEGER]
++        )->execute();
++
++        $db->createCommand('CREATE SEQUENCE testCreateTable_SEQ START with 1 INCREMENT BY 1')->execute();
++
++        $db->createCommand(
++            'INSERT INTO {{testCreateTable}} ("id", "bar") VALUES(testCreateTable_SEQ.NEXTVAL, 1)'
++        )->execute();
++
++        $records = $db->createCommand('SELECT [[id]], [[bar]] FROM {{testCreateTable}}')->queryAll();
++
++        $this->assertEquals([
++            ['id' => 1, 'bar' => 1],
++        ], $records);
++    }
++
++    public function testsInsertQueryAsColumnValue()
++    {
++        $time = time();
++
++        $db = $this->getConnection();
++        $db->createCommand('DELETE FROM {{order_with_null_fk}}')->execute();
++
++        $command = $db->createCommand();
++        $command->insert('{{order}}', [
++            'customer_id' => 1,
++            'created_at' => $time,
++            'total' => 42,
++        ])->execute();
++
++        $orderId = $db->getLastInsertID('order_SEQ');
++
++        $columnValueQuery = new \yii\db\Query();
++        $columnValueQuery->select('created_at')->from('{{order}}')->where(['id' => $orderId]);
++
++        $command = $db->createCommand();
++        $command->insert(
++            '{{order_with_null_fk}}',
++            [
++                'customer_id' => $orderId,
++                'created_at' => $columnValueQuery,
++                'total' => 42,
++            ]
++        )->execute();
++
++        $this->assertEquals($time, $db->createCommand(
++            'SELECT [[created_at]] FROM {{order_with_null_fk}} WHERE [[customer_id]] = ' . $orderId
++        )->queryScalar());
++
++        $db->createCommand('DELETE FROM {{order_with_null_fk}}')->execute();
++        $db->createCommand('DELETE FROM {{order}} WHERE [[id]] = ' . $orderId)->execute();
++    }
++
++    public function testAlterTable()
++    {
++        $db = $this->getConnection();
++
++        if ($db->getSchema()->getTableSchema('testAlterTable') !== null) {
++            $db->createCommand("DROP SEQUENCE testAlterTable_SEQ")->execute();
++            $db->createCommand()->dropTable('testAlterTable')->execute();
++        }
++
++        $db->createCommand()->createTable(
++            'testAlterTable',
++            ['id' => Schema::TYPE_PK, 'bar' => Schema::TYPE_INTEGER]
++        )->execute();
++
++        $db->createCommand('CREATE SEQUENCE testAlterTable_SEQ START with 1 INCREMENT BY 1')->execute();
++
++        $db->createCommand(
++            'INSERT INTO {{testAlterTable}} ([[id]], [[bar]]) VALUES(testAlterTable_SEQ.NEXTVAL, 1)'
++        )->execute();
++
++        $db->createCommand('ALTER TABLE {{testAlterTable}} ADD ([[bar_tmp]] VARCHAR(20))')->execute();
++
++        $db->createCommand('UPDATE {{testAlterTable}} SET [[bar_tmp]] = [[bar]]')->execute();
++
++        $db->createCommand('ALTER TABLE {{testAlterTable}} DROP COLUMN [[bar]]')->execute();
++
++        $db->createCommand('ALTER TABLE {{testAlterTable}} RENAME COLUMN [[bar_tmp]] TO [[bar]]')->execute();
++
++        $db->createCommand(
++            "INSERT INTO {{testAlterTable}} ([[id]], [[bar]]) VALUES(testAlterTable_SEQ.NEXTVAL, 'hello')"
++        )->execute();
++
++        $records = $db->createCommand('SELECT [[id]], [[bar]] FROM {{testAlterTable}}')->queryAll();
++
++        $this->assertEquals([
++            ['id' => 1, 'bar' => 1],
++            ['id' => 2, 'bar' => 'hello'],
++        ], $records);
++    }
++
++    public function testCreateView()
++    {
++        $db = $this->getConnection();
++
++        $subquery = (new Query())
++            ->select('bar')
++            ->from('testCreateViewTable')
++            ->where(['>', 'bar', '5']);
++
++        if ($db->getSchema()->getTableSchema('testCreateView') !== null) {
++            $db->createCommand()->dropView('testCreateView')->execute();
++        }
++
++        if ($db->getSchema()->getTableSchema('testCreateViewTable')) {
++            $db->createCommand("DROP SEQUENCE testCreateViewTable_SEQ")->execute();
++            $db->createCommand()->dropTable('testCreateViewTable')->execute();
++        }
++
++        $db->createCommand()->createTable('testCreateViewTable', [
++            'id'  => Schema::TYPE_PK,
++            'bar' => Schema::TYPE_INTEGER,
++        ])->execute();
++
++        $db->createCommand('CREATE SEQUENCE testCreateViewTable_SEQ START with 1 INCREMENT BY 1')->execute();
++
++        $db->createCommand(
++            'INSERT INTO {{testCreateViewTable}} ("id", "bar") VALUES(testCreateTable_SEQ.NEXTVAL, 1)'
++        )->execute();
++
++        $db->createCommand(
++            'INSERT INTO {{testCreateViewTable}} ("id", "bar") VALUES(testCreateTable_SEQ.NEXTVAL, 6)'
++        )->execute();
++
++        $db->createCommand()->createView('testCreateView', $subquery)->execute();
++
++        $records = $db->createCommand('SELECT [[bar]] FROM {{testCreateView}}')->queryAll();
++
++        $this->assertEquals([['bar' => 6]], $records);
++    }
++
++    public function testColumnCase()
++    {
++        $this->markTestSkipped('Should be fixed.');
++    }
+ }
+diff --git a/tests/framework/db/oci/ConnectionTest.php b/tests/framework/db/oci/ConnectionTest.php
+index 95b00feb97f..d4aef99c82c 100644
+--- a/tests/framework/db/oci/ConnectionTest.php
++++ b/tests/framework/db/oci/ConnectionTest.php
+@@ -7,6 +7,7 @@
+ 
+ namespace yiiunit\framework\db\oci;
+ 
++use yii\db\Connection;
+ use yii\db\Transaction;
+ 
+ /**
+@@ -85,4 +86,35 @@ public function testTransactionIsolation()
+         $transaction = $connection->beginTransaction(Transaction::SERIALIZABLE);
+         $transaction->commit();
+     }
++
++    /**
++     * Note: The READ UNCOMMITTED isolation level allows dirty reads. Oracle Database doesn't use dirty reads, nor does
++     * it even allow them.
++     *
++     * Change Transaction::READ_UNCOMMITTED => Transaction::READ_COMMITTED.
++     */
++    public function testTransactionShortcutCustom()
++    {
++        $connection = $this->getConnection(true);
++
++        $result = $connection->transaction(static function (Connection $db) {
++            $db->createCommand()->insert('profile', ['description' => 'test transaction shortcut'])->execute();
++            return true;
++        }, Transaction::READ_COMMITTED);
++
++        $this->assertTrue($result, 'transaction shortcut valid value should be returned from callback');
++
++        $profilesCount = $connection->createCommand(
++            "SELECT COUNT(*) FROM {{profile}} WHERE [[description]] = 'test transaction shortcut'"
++        )->queryScalar();
++        $this->assertEquals(1, $profilesCount, 'profile should be inserted in transaction shortcut');
++    }
++
++    public function testQuoteValue()
++    {
++        $connection = $this->getConnection(false);
++        $this->assertEquals(123, $connection->quoteValue(123));
++        $this->assertEquals("'string'", $connection->quoteValue('string'));
++        $this->assertEquals("'It''s interesting'", $connection->quoteValue("It's interesting"));
++    }
+ }
+diff --git a/tests/framework/db/oci/QueryBuilderTest.php b/tests/framework/db/oci/QueryBuilderTest.php
+index 10e1f16af40..daed2d13c22 100644
+--- a/tests/framework/db/oci/QueryBuilderTest.php
++++ b/tests/framework/db/oci/QueryBuilderTest.php
+@@ -9,6 +9,7 @@
+ 
+ use yii\db\oci\QueryBuilder;
+ use yii\db\oci\Schema;
++use yii\helpers\ArrayHelper;
+ use yiiunit\data\base\TraversableObject;
+ 
+ /**
+@@ -75,6 +76,10 @@ public function indexesProvider()
+         return $result;
+     }
+ 
++    /**
++     * @dataProvider defaultValuesProvider
++     * @param string $sql
++     */
+     public function testAddDropDefaultValue($sql, \Closure $builder)
+     {
+         $this->markTestSkipped('Adding/dropping default constraints is not supported in Oracle.');
+@@ -137,11 +142,14 @@ public function likeConditionProvider()
+         return parent::likeConditionProvider();
+     }
+ 
+-    public function conditionProvider()
++    public function conditionProvidertmp()
+     {
+-        return array_merge(parent::conditionProvider(), [
++        // test bc with commit
++        // {@see https://github.com/yiisoft/yii2/commit/d16586334d7bea226a67aa8db28982848b5c92dd#diff-ae95e8cbf4e036860dd6b41011f9f8035a616a8f45d3c3167b3705d39879c95c}
++        // should be fixed.
++        return array_merge([], [
+             [
+-                ['in', 'id', range(0, 2500)],
++                ['in', '[[id]]', range(0, 2500)],
+ 
+                 ' ('
+                 . '([[id]] IN (' . implode(', ', $this->generateSprintfSeries(':qp%d', 0, 999)) . '))'
+@@ -152,7 +160,7 @@ public function conditionProvider()
+                 array_flip($this->generateSprintfSeries(':qp%d', 0, 2500)),
+             ],
+             [
+-                ['not in', 'id', range(0, 2500)],
++                ['not in', '[[id]]', range(0, 2500)],
+ 
+                 '('
+                 . '([[id]] NOT IN (' . implode(', ', $this->generateSprintfSeries(':qp%d', 0, 999)) . '))'
+@@ -163,7 +171,7 @@ public function conditionProvider()
+                 array_flip($this->generateSprintfSeries(':qp%d', 0, 2500)),
+             ],
+             [
+-                ['not in', 'id', new TraversableObject(range(0, 2500))],
++                ['not in', '[[id]]', new TraversableObject(range(0, 2500))],
+ 
+                 '('
+                 . '([[id]] NOT IN (' . implode(', ', $this->generateSprintfSeries(':qp%d', 0, 999)) . '))'
+@@ -203,21 +211,21 @@ public function upsertProvider()
+     PAGINATION AS (SELECT USER_SQL.*, rownum as rowNumId FROM USER_SQL)
+ SELECT *
+ FROM PAGINATION
+-WHERE rownum <= 1) "EXCLUDED" ON ("T_upsert"."email"="EXCLUDED"."email") WHEN MATCHED THEN UPDATE SET "status"="EXCLUDED"."status" WHEN NOT MATCHED THEN INSERT ("email", "status") VALUES ("EXCLUDED"."email", "EXCLUDED"."status")',
++WHERE rownum <= 1) "EXCLUDED" ON ("T_upsert"."email"="EXCLUDED"."email") WHEN MATCHED THEN UPDATE SET "status"="EXCLUDED"."status" WHEN NOT MATCHED THEN INSERT ("email", "status") VALUES ("EXCLUDED"."email", "EXCLUDED"."status")'
+             ],
+             'query with update part' => [
+                 3 => 'MERGE INTO "T_upsert" USING (WITH USER_SQL AS (SELECT "email", 2 AS "status" FROM "customer" WHERE "name"=:qp0),
+     PAGINATION AS (SELECT USER_SQL.*, rownum as rowNumId FROM USER_SQL)
+ SELECT *
+ FROM PAGINATION
+-WHERE rownum <= 1) "EXCLUDED" ON ("T_upsert"."email"="EXCLUDED"."email") WHEN MATCHED THEN UPDATE SET "address"=:qp1, "status"=:qp2, "orders"=T_upsert.orders + 1 WHEN NOT MATCHED THEN INSERT ("email", "status") VALUES ("EXCLUDED"."email", "EXCLUDED"."status")',
++WHERE rownum <= 1) "EXCLUDED" ON ("T_upsert"."email"="EXCLUDED"."email") WHEN MATCHED THEN UPDATE SET "address"=:qp1, "status"=:qp2, "orders"=T_upsert.orders + 1 WHEN NOT MATCHED THEN INSERT ("email", "status") VALUES ("EXCLUDED"."email", "EXCLUDED"."status")'
+             ],
+             'query without update part' => [
+                 3 => 'MERGE INTO "T_upsert" USING (WITH USER_SQL AS (SELECT "email", 2 AS "status" FROM "customer" WHERE "name"=:qp0),
+     PAGINATION AS (SELECT USER_SQL.*, rownum as rowNumId FROM USER_SQL)
+ SELECT *
+ FROM PAGINATION
+-WHERE rownum <= 1) "EXCLUDED" ON ("T_upsert"."email"="EXCLUDED"."email") WHEN NOT MATCHED THEN INSERT ("email", "status") VALUES ("EXCLUDED"."email", "EXCLUDED"."status")',
++WHERE rownum <= 1) "EXCLUDED" ON ("T_upsert"."email"="EXCLUDED"."email") WHEN NOT MATCHED THEN INSERT ("email", "status") VALUES ("EXCLUDED"."email", "EXCLUDED"."status")'
+             ],
+             'values and expressions' => [
+                 3 => 'INSERT INTO {{%T_upsert}} ({{%T_upsert}}.[[email]], [[ts]]) VALUES (:qp0, now())',
+@@ -245,4 +253,65 @@ public function upsertProvider()
+ 
+         return $newData;
+     }
++
++    public function batchInsertProvider()
++    {
++        $data = parent::batchInsertProvider();
++
++        $data[0][3] = 'INSERT ALL  INTO "customer" ("email", "name", "address") ' .
++            "VALUES ('test@example.com', 'silverfire', 'Kyiv {{city}}, Ukraine') SELECT 1 FROM SYS.DUAL";
++
++        $data['escape-danger-chars']['expected'] = 'INSERT ALL  INTO "customer" ("address") ' .
++            "VALUES ('SQL-danger chars are escaped: ''); --') SELECT 1 FROM SYS.DUAL";
++
++        $data[2][3] = 'INSERT ALL  INTO "customer" () ' .
++            "VALUES ('no columns passed') SELECT 1 FROM SYS.DUAL";
++
++        $data['bool-false, bool2-null']['expected'] = 'INSERT ALL  INTO "type" ("bool_col", "bool_col2") ' .
++            "VALUES ('', NULL) SELECT 1 FROM SYS.DUAL";
++
++        $data[3][3] = 'INSERT ALL  INTO {{%type}} ({{%type}}.[[float_col]], [[time]]) ' .
++            "VALUES (NULL, now()) SELECT 1 FROM SYS.DUAL";
++
++        $data['bool-false, time-now()']['expected'] = 'INSERT ALL  INTO {{%type}} ({{%type}}.[[bool_col]], [[time]]) ' .
++            "VALUES (0, now()) SELECT 1 FROM SYS.DUAL";
++
++        return $data;
++    }
++
++    /**
++     * Dummy test to speed up QB's tests which rely on DB schema
++     */
++    public function testInitFixtures()
++    {
++        $this->assertInstanceOf('yii\db\QueryBuilder', $this->getQueryBuilder(true, true));
++    }
++
++    /**
++     * @depends      testInitFixtures
++     * @dataProvider upsertProvider
++     * @param string $table
++     * @param array $insertColumns
++     * @param array|null $updateColumns
++     * @param string|string[] $expectedSQL
++     * @param array $expectedParams
++     * @throws \yii\base\NotSupportedException
++     * @throws \Exception
++     */
++    public function testUpsert($table, $insertColumns, $updateColumns, $expectedSQL, $expectedParams)
++    {
++        $actualParams = [];
++        $actualSQL = $this->getQueryBuilder(true, $this->driverName === 'sqlite')->upsert($table, $insertColumns, $updateColumns, $actualParams);
++        if (is_string($expectedSQL)) {
++            $this->assertEqualsWithoutLE($expectedSQL, $actualSQL);
++        } else {
++            $this->assertContains($actualSQL, $expectedSQL);
++        }
++        if (ArrayHelper::isAssociative($expectedParams)) {
++            $this->assertSame($expectedParams, $actualParams);
++        } else {
++            $this->assertIsOneOf($actualParams, $expectedParams);
++        }
++    }
++
+ }
+diff --git a/tests/framework/db/oci/QueryTest.php b/tests/framework/db/oci/QueryTest.php
+index e2a2c82c978..d5acd3cc963 100644
+--- a/tests/framework/db/oci/QueryTest.php
++++ b/tests/framework/db/oci/QueryTest.php
+@@ -7,8 +7,6 @@
+ 
+ namespace yiiunit\framework\db\oci;
+ 
+-use yii\db\Query;
+-
+ /**
+  * @group db
+  * @group oci
+@@ -17,14 +15,8 @@ class QueryTest extends \yiiunit\framework\db\QueryTest
+ {
+     protected $driverName = 'oci';
+ 
+-    public function testOne()
++    public function testUnion()
+     {
+-        $db = $this->getConnection();
+-
+-        $result = (new Query())->from('customer')->where(['[[status]]' => 2])->one($db);
+-        $this->assertEquals('user3', $result['name']);
+-
+-        $result = (new Query())->from('customer')->where(['[[status]]' => 3])->one($db);
+-        $this->assertFalse($result);
++        $this->markTestSkipped('Unsupported use of WITH clause in Oracle.');
+     }
+ }
+diff --git a/tests/framework/db/oci/SchemaTest.php b/tests/framework/db/oci/SchemaTest.php
+index 1541d063bb3..b0335b3a84e 100644
+--- a/tests/framework/db/oci/SchemaTest.php
++++ b/tests/framework/db/oci/SchemaTest.php
+@@ -43,6 +43,7 @@ public function getExpectedColumns()
+         $columns['smallint_col']['size'] = 22;
+         $columns['smallint_col']['precision'] = null;
+         $columns['smallint_col']['scale'] = 0;
++        $columns['char_col']['type'] = 'string';
+         $columns['char_col']['dbType'] = 'CHAR';
+         $columns['char_col']['precision'] = null;
+         $columns['char_col']['size'] = 100;
+@@ -174,4 +175,61 @@ public function constraintsProvider()
+         ]);
+         return $result;
+     }
++
++    public function testFindUniqueIndexes()
++    {
++        if ($this->driverName === 'sqlsrv') {
++            $this->markTestSkipped('`\yii\db\mssql\Schema::findUniqueIndexes()` returns only unique constraints not unique indexes.');
++        }
++
++        $db = $this->getConnection();
++
++        try {
++            $db->createCommand()->dropTable('uniqueIndex')->execute();
++        } catch (\Exception $e) {
++        }
++        $db->createCommand()->createTable('uniqueIndex', [
++            'somecol' => 'string',
++            'someCol2' => 'string',
++            'someCol3' => 'string',
++        ])->execute();
++
++        /* @var $schema Schema */
++        $schema = $db->schema;
++
++        $uniqueIndexes = $schema->findUniqueIndexes($schema->getTableSchema('uniqueIndex', true));
++        $this->assertEquals([], $uniqueIndexes);
++
++        $db->createCommand()->createIndex('somecolUnique', 'uniqueIndex', 'somecol', true)->execute();
++
++        $uniqueIndexes = $schema->findUniqueIndexes($schema->getTableSchema('uniqueIndex', true));
++        $this->assertEquals([
++            'somecolUnique' => ['somecol'],
++        ], $uniqueIndexes);
++
++        // create another column with upper case letter that fails postgres
++        // see https://github.com/yiisoft/yii2/issues/10613
++        $db->createCommand()->createIndex('someCol2Unique', 'uniqueIndex', 'someCol2', true)->execute();
++
++        $uniqueIndexes = $schema->findUniqueIndexes($schema->getTableSchema('uniqueIndex', true));
++        $this->assertEquals([
++            'somecolUnique' => ['somecol'],
++            'someCol2Unique' => ['someCol2'],
++        ], $uniqueIndexes);
++
++        // see https://github.com/yiisoft/yii2/issues/13814
++        $db->createCommand()->createIndex('another unique index', 'uniqueIndex', 'someCol3', true)->execute();
++
++        $uniqueIndexes = $schema->findUniqueIndexes($schema->getTableSchema('uniqueIndex', true));
++        $this->assertEquals([
++            'somecolUnique' => ['somecol'],
++            'someCol2Unique' => ['someCol2'],
++            'another unique index' => ['someCol3'],
++        ], $uniqueIndexes);
++    }
++
++    public function testCompositeFk()
++    {
++        $this->markTestSkipped('Should be fixed.');
++    }
+ }
+diff --git a/tests/framework/db/oci/UniqueValidatorTest.php b/tests/framework/db/oci/UniqueValidatorTest.php
+index 6c313ada2f9..2ce07dee46e 100644
+--- a/tests/framework/db/oci/UniqueValidatorTest.php
++++ b/tests/framework/db/oci/UniqueValidatorTest.php
+@@ -7,6 +7,10 @@
+ 
+ namespace yiiunit\framework\db\oci;
+ 
++use yii\validators\UniqueValidator;
++use yiiunit\data\validators\models\ValidatorTestMainModel;
++use yiiunit\data\validators\models\ValidatorTestRefModel;
++
+ /**
+  * @group db
+  * @group oci
+@@ -15,4 +19,21 @@
+ class UniqueValidatorTest extends \yiiunit\framework\validators\UniqueValidatorTest
+ {
+     public $driverName = 'oci';
++
++    public function testValidateEmptyAttributeInStringField()
++    {
++        ValidatorTestMainModel::deleteAll();
++
++        $val = new UniqueValidator();
++
++        $m = new ValidatorTestMainModel(['id' => 5, 'field1' => ' ']);
++
++        $val->validateAttribute($m, 'field1');
++        $this->assertFalse($m->hasErrors('field1'));
++        $m->save(false);
++
++        $m = new ValidatorTestMainModel(['field1' => ' ']);
++        $val->validateAttribute($m, 'field1');
++        $this->assertTrue($m->hasErrors('field1'));
++    }
+ }
+diff --git a/tests/framework/di/ContainerTest.php b/tests/framework/di/ContainerTest.php
+index 1ba991e84e0..7eb0f10f1c4 100644
+--- a/tests/framework/di/ContainerTest.php
++++ b/tests/framework/di/ContainerTest.php
+@@ -22,9 +22,11 @@
+ use yiiunit\framework\di\stubs\Corge;
+ use yiiunit\framework\di\stubs\Foo;
+ use yiiunit\framework\di\stubs\FooProperty;
++use yiiunit\framework\di\stubs\Kappa;
+ use yiiunit\framework\di\stubs\Qux;
+ use yiiunit\framework\di\stubs\QuxInterface;
+ use yiiunit\framework\di\stubs\QuxFactory;
++use yiiunit\framework\di\stubs\Zeta;
+ use yiiunit\TestCase;
+ 
+ /**
+@@ -580,4 +582,43 @@ public function testInvalidConstructorParameters()
+             'Hello',
+         ]);
+     }
++
++    public function dataNotInstantiableException()
++    {
++        return [
++            [Bar::className()],
++            [Kappa::className()],
++        ];
++    }
++
++    /**
++     * @dataProvider dataNotInstantiableException
++     *
++     * @see https://github.com/yiisoft/yii2/pull/18379
++     *
++     * @param string $class
++     */
++    public function testNotInstantiableException($class)
++    {
++        $this->expectException('yii\di\NotInstantiableException');
++        (new Container())->get($class);
++    }
++
++    public function testNullTypeConstructorParameters()
++    {
++        if (PHP_VERSION_ID < 70100) {
++            $this->markTestSkipped('Can not be tested on PHP < 7.1');
++            return;
++        }
++
++        $zeta = (new Container())->get(Zeta::className());
++        $this->assertInstanceOf(Beta::className(), $zeta->beta);
++        $this->assertInstanceOf(Beta::className(), $zeta->betaNull);
++        $this->assertNull($zeta->color);
++        $this->assertNull($zeta->colorNull);
++        $this->assertNull($zeta->qux);
++        $this->assertNull($zeta->quxNull);
++        $this->assertNull($zeta->unknown);
++        $this->assertNull($zeta->unknownNull);
++    }
+ }
+diff --git a/tests/framework/di/stubs/Kappa.php b/tests/framework/di/stubs/Kappa.php
+new file mode 100644
+index 00000000000..21b951b5719
+--- /dev/null
++++ b/tests/framework/di/stubs/Kappa.php
+@@ -0,0 +1,12 @@
++<?php
++
++namespace yiiunit\framework\di\stubs;
++
++use yii\base\BaseObject;
++
++class Kappa extends BaseObject
++{
++    public function __construct(Unknown $unknown)
++    {
++    }
++}
+diff --git a/tests/framework/di/stubs/Zeta.php b/tests/framework/di/stubs/Zeta.php
+new file mode 100644
+index 00000000000..f57211c1bf0
+--- /dev/null
++++ b/tests/framework/di/stubs/Zeta.php
+@@ -0,0 +1,37 @@
++<?php
++
++namespace yiiunit\framework\di\stubs;
++
++use yii\base\BaseObject;
++
++class Zeta extends BaseObject
++{
++    public $beta = false;
++    public $betaNull = false;
++    public $color = false;
++    public $colorNull = false;
++    public $qux = false;
++    public $quxNull = false;
++    public $unknown = false;
++    public $unknownNull = false;
++
++    public function __construct(
++        ?Beta $beta,
++        ?AbstractColor $color,
++        ?QuxInterface $qux,
++        ?Unknown $unknown,
++        ?Beta $betaNull = null,
++        ?AbstractColor $colorNull = null,
++        ?QuxInterface $quxNull = null,
++        ?Unknown $unknownNull = null
++    ) {
++        $this->beta = $beta;
++        $this->betaNull = $betaNull;
++        $this->color = $color;
++        $this->colorNull = $colorNull;
++        $this->qux = $qux;
++        $this->quxNull = $quxNull;
++        $this->unknown = $unknown;
++        $this->unknownNull = $unknownNull;
++    }
++}
+diff --git a/tests/framework/grid/DataColumnTest.php b/tests/framework/grid/DataColumnTest.php
+index d847a905ab6..9d0e001eba5 100644
+--- a/tests/framework/grid/DataColumnTest.php
++++ b/tests/framework/grid/DataColumnTest.php
+@@ -8,11 +8,13 @@
+ namespace yiiunit\framework\grid;
+ 
+ use Yii;
++use yii\data\ActiveDataProvider;
+ use yii\data\ArrayDataProvider;
+ use yii\grid\DataColumn;
+ use yii\grid\GridView;
+ use yiiunit\data\ar\ActiveRecord;
+ use yiiunit\data\ar\Order;
++use yiiunit\data\base\Singer;
+ 
+ /**
+  * @author Dmitry Naumenko <d.naumenko.a@gmail.com>
+@@ -95,6 +97,43 @@ public function testFilterInput_String()
+         $this->assertEquals($result, $filterInput);
+     }
+ 
++    /**
++     * @see DataColumn::$filter
++     * @see DataColumn::renderFilterCellContent()
++     */
++    public function testFilterHasMaxLengthWhenIsAnActiveTextInput()
++    {
++        $this->mockApplication([
++            'components' => [
++                'db' => [
++                    'class' => '\yii\db\Connection',
++                    'dsn' => 'sqlite::memory:',
++                ],
++            ],
++        ]);
++
++        ActiveRecord::$db = Yii::$app->getDb();
++        Yii::$app->getDb()->createCommand()->createTable(Singer::tableName(), [
++            'firstName' => 'string',
++            'lastName' => 'string'
++        ])->execute();
++
++        $filterInput = '<input type="text" class="form-control" name="Singer[lastName]" maxlength="25">';
++        $grid = new GridView([
++            'dataProvider' => new ActiveDataProvider(),
++            'filterModel' => new Singer(),
++            'columns' => [
++                0 => 'lastName'
++            ],
++        ]);
++
++        $dataColumn = $grid->columns[0];
++        $method = new \ReflectionMethod($dataColumn, 'renderFilterCellContent');
++        $method->setAccessible(true);
++        $result = $method->invoke($dataColumn);
++        $this->assertEquals($result, $filterInput);
++    }
++
+ 
+     /**
+      * @see DataColumn::$filter
+diff --git a/tests/framework/helpers/ArrayHelperTest.php b/tests/framework/helpers/ArrayHelperTest.php
+index 8ef84ffd4fc..a5f8aae071c 100644
+--- a/tests/framework/helpers/ArrayHelperTest.php
++++ b/tests/framework/helpers/ArrayHelperTest.php
+@@ -1402,7 +1402,7 @@ public function testFilter()
+         ];
+ 
+         //Include tests
+-        $this->assertEquals(ArrayHelper::filter($array, ['A']), [
++        $this->assertEquals([
+             'A' => [
+                 'B' => 1,
+                 'C' => 2,
+@@ -1411,28 +1411,28 @@ public function testFilter()
+                     'F' => 2,
+                 ],
+             ],
+-        ]);
+-        $this->assertEquals(ArrayHelper::filter($array, ['A.B']), [
++        ], ArrayHelper::filter($array, ['A']));
++        $this->assertEquals([
+             'A' => [
+                 'B' => 1,
+             ],
+-        ]);
+-        $this->assertEquals(ArrayHelper::filter($array, ['A.D']), [
++        ], ArrayHelper::filter($array, ['A.B']));
++        $this->assertEquals([
+             'A' => [
+                 'D' => [
+                     'E' => 1,
+                     'F' => 2,
+                 ],
+             ],
+-        ]);
+-        $this->assertEquals(ArrayHelper::filter($array, ['A.D.E']), [
++        ], ArrayHelper::filter($array, ['A.D']));
++        $this->assertEquals([
+             'A' => [
+                 'D' => [
+                     'E' => 1,
+                 ],
+             ],
+-        ]);
+-        $this->assertEquals(ArrayHelper::filter($array, ['A', 'G']), [
++        ], ArrayHelper::filter($array, ['A.D.E']));
++        $this->assertEquals([
+             'A' => [
+                 'B' => 1,
+                 'C' => 2,
+@@ -1442,18 +1442,18 @@ public function testFilter()
+                 ],
+             ],
+             'G' => 1,
+-        ]);
+-        $this->assertEquals(ArrayHelper::filter($array, ['A.D.E', 'G']), [
++        ], ArrayHelper::filter($array, ['A', 'G']));
++        $this->assertEquals([
+             'A' => [
+                 'D' => [
+                     'E' => 1,
+                 ],
+             ],
+             'G' => 1,
+-        ]);
++        ], ArrayHelper::filter($array, ['A.D.E', 'G']));
+ 
+         //Exclude (combined with include) tests
+-        $this->assertEquals(ArrayHelper::filter($array, ['A', '!A.B']), [
++        $this->assertEquals([
+             'A' => [
+                 'C' => 2,
+                 'D' => [
+@@ -1461,8 +1461,8 @@ public function testFilter()
+                     'F' => 2,
+                 ],
+             ],
+-        ]);
+-        $this->assertEquals(ArrayHelper::filter($array, ['!A.B', 'A']), [
++        ], ArrayHelper::filter($array, ['A', '!A.B']));
++        $this->assertEquals([
+             'A' => [
+                 'C' => 2,
+                 'D' => [
+@@ -1470,8 +1470,8 @@ public function testFilter()
+                     'F' => 2,
+                 ],
+             ],
+-        ]);
+-        $this->assertEquals(ArrayHelper::filter($array, ['A', '!A.D.E']), [
++        ], ArrayHelper::filter($array, ['!A.B', 'A']));
++        $this->assertEquals([
+             'A' => [
+                 'B' => 1,
+                 'C' => 2,
+@@ -1479,19 +1479,19 @@ public function testFilter()
+                     'F' => 2,
+                 ],
+             ],
+-        ]);
+-        $this->assertEquals(ArrayHelper::filter($array, ['A', '!A.D']), [
++        ], ArrayHelper::filter($array, ['A', '!A.D.E']));
++        $this->assertEquals([
+             'A' => [
+                 'B' => 1,
+                 'C' => 2,
+             ],
+-        ]);
++        ], ArrayHelper::filter($array, ['A', '!A.D']));
+ 
+         //Non existing keys tests
+-        $this->assertEquals(ArrayHelper::filter($array, ['X']), []);
+-        $this->assertEquals(ArrayHelper::filter($array, ['X.Y']), []);
+-        $this->assertEquals(ArrayHelper::filter($array, ['X.Y.Z']), []);
+-        $this->assertEquals(ArrayHelper::filter($array, ['A.X']), []);
++        $this->assertEquals([], ArrayHelper::filter($array, ['X']));
++        $this->assertEquals([], ArrayHelper::filter($array, ['X.Y']));
++        $this->assertEquals([], ArrayHelper::filter($array, ['X.Y.Z']));
++        $this->assertEquals([], ArrayHelper::filter($array, ['A.X']));
+ 
+         //Values that evaluate to `true` with `empty()` tests
+         $tmp = [
+@@ -1502,7 +1502,28 @@ public function testFilter()
+             'e' => true,
+         ];
+ 
+-        $this->assertEquals(ArrayHelper::filter($tmp, array_keys($tmp)), $tmp);
++        $this->assertEquals($tmp, ArrayHelper::filter($tmp, array_keys($tmp)));
++    }
++
++    /**
++     * @see https://github.com/yiisoft/yii2/issues/18395
++     */
++    public function testFilterForIntegerKeys()
++    {
++        $array = ['a', 'b', ['c', 'd']];
++
++        // to make sure order is changed test it encoded
++        $this->assertEquals('{"1":"b","0":"a"}', json_encode(ArrayHelper::filter($array, [1, 0])));
++        $this->assertEquals([2 => ['c']], ArrayHelper::filter($array, ['2.0']));
++        $this->assertEquals([2 => [1 => 'd']], ArrayHelper::filter($array, [2, '!2.0']));
++    }
++
++    public function testFilterWithInvalidValues()
++    {
++        $array = ['a' => 'b'];
++
++        $this->assertEquals([], ArrayHelper::filter($array, [new \stdClass()]));
++        $this->assertEquals([], ArrayHelper::filter($array, [['a']]));
+     }
+ 
+     /**
+diff --git a/tests/framework/helpers/FileHelperTest.php b/tests/framework/helpers/FileHelperTest.php
+index 9e46f0d0ab8..7fd94a99dcd 100644
+--- a/tests/framework/helpers/FileHelperTest.php
++++ b/tests/framework/helpers/FileHelperTest.php
+@@ -396,7 +396,7 @@ public function testRemoveDirectory()
+ 
+     public function testRemoveDirectorySymlinks1()
+     {
+-        if (strtolower(substr(PHP_OS, 0, 3)) == 'win') {
++        if (DIRECTORY_SEPARATOR === '\\') {
+             $this->markTestSkipped('Cannot test this on MS Windows since symlinks are uncommon for it.');
+         }
+ 
+@@ -439,7 +439,7 @@ public function testRemoveDirectorySymlinks1()
+ 
+     public function testRemoveDirectorySymlinks2()
+     {
+-        if (strtolower(substr(PHP_OS, 0, 3)) == 'win') {
++        if (DIRECTORY_SEPARATOR === '\\') {
+             $this->markTestSkipped('Cannot test this on MS Windows since symlinks are uncommon for it.');
+         }
+ 
+diff --git a/tests/framework/rest/SerializerTest.php b/tests/framework/rest/SerializerTest.php
+index 6872bb983f9..6fd70974987 100644
+--- a/tests/framework/rest/SerializerTest.php
++++ b/tests/framework/rest/SerializerTest.php
+@@ -421,9 +421,11 @@ public function testSerializeDataProvider($dataProvider, $expectedResult, $saveK
+     public function testSerializeJsonSerializable()
+     {
+         $serializer = new Serializer();
+-        $model = new TestModel3();
++        $model3 = new TestModel3();
++        $model4 = new TestModel4();
+ 
+-        $this->assertEquals(['customField' => 'test3/test4'], $serializer->serialize($model));
++        $this->assertEquals(['customField' => 'test3/test4'], $serializer->serialize($model3));
++        $this->assertEquals(['customField2' => 'test5/test6'], $serializer->serialize($model4));
+     }
+ 
+     /**
+@@ -432,15 +434,18 @@ public function testSerializeJsonSerializable()
+     public function testSerializeArrayableWithJsonSerializableAttribute()
+     {
+         $serializer = new Serializer();
+-        $model = new TestModel4();
++        $model = new TestModel5();
+ 
+-        $this->assertEquals([
+-            'field3' => 'test3',
+-            'field4' => 'test4',
+-            'testModel3' => ['customField' => 'test3/test4'],
+-            'testModelArray' => [['customField' => 'test3/test4']],
+-        ],
+-        $serializer->serialize($model));
++        $this->assertEquals(
++            [
++                'field7' => 'test7',
++                'field8' => 'test8',
++                'testModel3' => ['customField' => 'test3/test4'],
++                'testModel4' => ['customField2' => 'test5/test6'],
++                'testModelArray' => [['customField' => 'test3/test4'], ['customField2' => 'test5/test6']],
++            ],
++            $serializer->serialize($model)
++        );
+     }
+ 
+     /**
+@@ -523,7 +528,11 @@ class TestModel3 extends Model implements \JsonSerializable
+ 
+     public function fields()
+     {
+-        return static::$fields;
++        return [
++            'customField' => function() {
++                return $this->field3.'/'.$this->field4;
++            },
++        ];
+     }
+ 
+     public function extraFields()
+@@ -531,22 +540,32 @@ public function extraFields()
+         return static::$extraFields;
+     }
+ 
++    public function jsonSerialize()
++    {
++        return $this->getAttributes();
++    }
++}
++class TestModel4 implements \JsonSerializable
++{
++    public $field5 = 'test5';
++    public $field6 = 'test6';
++
+     public function jsonSerialize()
+     {
+         return [
+-            'customField' => $this->field3.'/'.$this->field4,
++            'customField2' => $this->field5.'/'.$this->field6,
+         ];
+     }
+ }
+ 
+-class TestModel4 extends Model
++class TestModel5 extends Model
+ {
+-    public static $fields = ['field3', 'field4'];
++    public static $fields = ['field7', 'field8'];
+     public static $extraFields = [];
+ 
+-    public $field3 = 'test3';
+-    public $field4 = 'test4';
+-    public $extraField4 = 'testExtra2';
++    public $field7 = 'test7';
++    public $field8 = 'test8';
++    public $extraField4 = 'testExtra4';
+ 
+     public function fields()
+     {
+@@ -554,8 +573,11 @@ public function fields()
+         $fields['testModel3'] = function() {
+             return $this->getTestModel3();
+         };
++        $fields['testModel4'] = function() {
++            return $this->getTestModel4();
++        };
+         $fields['testModelArray'] = function() {
+-            return [$this->getTestModel3()];
++            return [$this->getTestModel3(), $this->getTestModel4()];
+         };
+         return $fields;
+     }
+@@ -569,4 +591,9 @@ public function getTestModel3()
+     {
+         return new TestModel3();
+     }
++
++    public function getTestModel4()
++    {
++        return new TestModel4();
++    }
+ }
+diff --git a/tests/framework/validators/DateValidatorTest.php b/tests/framework/validators/DateValidatorTest.php
+index 9ae3d770019..804c63ae7f3 100644
+--- a/tests/framework/validators/DateValidatorTest.php
++++ b/tests/framework/validators/DateValidatorTest.php
+@@ -687,6 +687,196 @@ public function testValidationWithoutTime($timezone)
+         $this->assertFalse($model->hasErrors('attr_date'));
+         $this->assertFalse($model->hasErrors('attr_timestamp'));
+         $this->assertSame(1497477600, $model->attr_timestamp);
++
++        // ICU, timeZone => America/Jamaica, timestampAttributeTimeZone => UTC (default)
++        $val = new DateValidator([
++            'format' => 'yyyy-MM-dd',
++            'timestampAttribute' => 'attr_timestamp',
++            'timestampAttributeFormat' => 'yyyy-MM-dd HH:mm:ss',
++            'timeZone' => 'America/Jamaica',
++        ]);
++        $model = new FakedValidationModel();
++        $model->attr_date = '2017-06-15';
++        $model->attr_timestamp = true;
++        $val->validateAttribute($model, 'attr_date');
++        $this->assertFalse($model->hasErrors('attr_date'));
++        $this->assertFalse($model->hasErrors('attr_timestamp'));
++        $this->assertSame('2017-06-15 00:00:00', $model->attr_timestamp);
++
++        // PHP, timeZone => America/Jamaica, timestampAttributeTimeZone => UTC (default)
++        $val = new DateValidator([
++            'format' => 'php:Y-m-d',
++            'timestampAttribute' => 'attr_timestamp',
++            'timestampAttributeFormat' => 'yyyy-MM-dd HH:mm:ss',
++            'timeZone' => 'America/Jamaica',
++        ]);
++        $model = new FakedValidationModel();
++        $model->attr_date = '2017-06-15';
++        $model->attr_timestamp = true;
++        $val->validateAttribute($model, 'attr_date');
++        $this->assertFalse($model->hasErrors('attr_date'));
++        $this->assertFalse($model->hasErrors('attr_timestamp'));
++        $this->assertSame('2017-06-15 00:00:00', $model->attr_timestamp);
++
++        // ICU, timeZone => UTC (default), timestampAttributeTimeZone => America/Jamaica
++        $val = new DateValidator([
++            'format' => 'yyyy-MM-dd',
++            'timestampAttribute' => 'attr_timestamp',
++            'timestampAttributeFormat' => 'yyyy-MM-dd HH:mm:ss',
++            'timeZone' => 'UTC',
++            'timestampAttributeTimeZone' => 'America/Jamaica',
++        ]);
++        $model = new FakedValidationModel();
++        $model->attr_date = '2017-06-15';
++        $model->attr_timestamp = true;
++        $val->validateAttribute($model, 'attr_date');
++        $this->assertFalse($model->hasErrors('attr_date'));
++        $this->assertFalse($model->hasErrors('attr_timestamp'));
++        $this->assertSame('2017-06-14 19:00:00', $model->attr_timestamp);
++
++        // PHP, timeZone => UTC (default), timestampAttributeTimeZone => America/Jamaica
++        $val = new DateValidator([
++            'format' => 'php:Y-m-d',
++            'timestampAttribute' => 'attr_timestamp',
++            'timestampAttributeFormat' => 'yyyy-MM-dd HH:mm:ss',
++            'timeZone' => 'UTC',
++            'timestampAttributeTimeZone' => 'America/Jamaica',
++        ]);
++        $model = new FakedValidationModel();
++        $model->attr_date = '2017-06-15';
++        $model->attr_timestamp = true;
++        $val->validateAttribute($model, 'attr_date');
++        $this->assertFalse($model->hasErrors('attr_date'));
++        $this->assertFalse($model->hasErrors('attr_timestamp'));
++        $this->assertSame('2017-06-14 19:00:00', $model->attr_timestamp);
++
++        // ICU, timeZone => America/Jamaica, timestampAttributeTimeZone => America/Jamaica
++        $val = new DateValidator([
++            'format' => 'yyyy-MM-dd',
++            'timestampAttribute' => 'attr_timestamp',
++            'timestampAttributeFormat' => 'yyyy-MM-dd HH:mm:ss',
++            'timeZone' => 'America/Jamaica',
++            'timestampAttributeTimeZone' => 'America/Jamaica',
++        ]);
++        $model = new FakedValidationModel();
++        $model->attr_date = '2017-06-15';
++        $model->attr_timestamp = true;
++        $val->validateAttribute($model, 'attr_date');
++        $this->assertFalse($model->hasErrors('attr_date'));
++        $this->assertFalse($model->hasErrors('attr_timestamp'));
++        $this->assertSame('2017-06-14 19:00:00', $model->attr_timestamp);
++
++        // PHP, timeZone => America/Jamaica, timestampAttributeTimeZone => America/Jamaica
++        $val = new DateValidator([
++            'format' => 'php:Y-m-d',
++            'timestampAttribute' => 'attr_timestamp',
++            'timestampAttributeFormat' => 'yyyy-MM-dd HH:mm:ss',
++            'timeZone' => 'America/Jamaica',
++            'timestampAttributeTimeZone' => 'America/Jamaica',
++        ]);
++        $model = new FakedValidationModel();
++        $model->attr_date = '2017-06-15';
++        $model->attr_timestamp = true;
++        $val->validateAttribute($model, 'attr_date');
++        $this->assertFalse($model->hasErrors('attr_date'));
++        $this->assertFalse($model->hasErrors('attr_timestamp'));
++        $this->assertSame('2017-06-14 19:00:00', $model->attr_timestamp);
++
++        // ICU, defaultTimeZone => America/Jamaica, timestampAttributeTimeZone => UTC (default)
++        $val = new DateValidator([
++            'format' => 'yyyy-MM-dd',
++            'timestampAttribute' => 'attr_timestamp',
++            'timestampAttributeFormat' => 'yyyy-MM-dd HH:mm:ss',
++            'defaultTimeZone' => 'America/Jamaica',
++            'timestampAttributeTimeZone' => 'UTC',
++        ]);
++        $model = new FakedValidationModel();
++        $model->attr_date = '2020-01-27';
++        $model->attr_timestamp = true;
++        $val->validateAttribute($model, 'attr_date');
++        $this->assertFalse($model->hasErrors('attr_date'));
++        $this->assertFalse($model->hasErrors('attr_timestamp'));
++        $this->assertSame('2020-01-27 05:00:00', $model->attr_timestamp);
++
++        // PHP, defaultTimeZone => America/Jamaica, timestampAttributeTimeZone => UTC (default)
++        $val = new DateValidator([
++            'format' => 'php:Y-m-d',
++            'timestampAttribute' => 'attr_timestamp',
++            'timestampAttributeFormat' => 'yyyy-MM-dd HH:mm:ss',
++            'defaultTimeZone' => 'America/Jamaica',
++            'timestampAttributeTimeZone' => 'UTC',
++        ]);
++        $model = new FakedValidationModel();
++        $model->attr_date = '2020-01-27';
++        $model->attr_timestamp = true;
++        $val->validateAttribute($model, 'attr_date');
++        $this->assertFalse($model->hasErrors('attr_date'));
++        $this->assertFalse($model->hasErrors('attr_timestamp'));
++        $this->assertSame('2020-01-27 05:00:00', $model->attr_timestamp);
++
++        // ICU, defaultTimeZone => UTC (default), timestampAttributeTimeZone => America/Jamaica
++        $val = new DateValidator([
++            'format' => 'yyyy-MM-dd',
++            'timestampAttribute' => 'attr_timestamp',
++            'timestampAttributeFormat' => 'yyyy-MM-dd HH:mm:ss',
++            'defaultTimeZone' => 'UTC',
++            'timestampAttributeTimeZone' => 'America/Jamaica',
++        ]);
++        $model = new FakedValidationModel();
++        $model->attr_date = '2020-01-27';
++        $model->attr_timestamp = true;
++        $val->validateAttribute($model, 'attr_date');
++        $this->assertFalse($model->hasErrors('attr_date'));
++        $this->assertFalse($model->hasErrors('attr_timestamp'));
++        $this->assertSame('2020-01-26 19:00:00', $model->attr_timestamp);
++
++        // PHP, defaultTimeZone => UTC (default), timestampAttributeTimeZone => America/Jamaica
++        $val = new DateValidator([
++            'format' => 'php:Y-m-d',
++            'timestampAttribute' => 'attr_timestamp',
++            'timestampAttributeFormat' => 'yyyy-MM-dd HH:mm:ss',
++            'defaultTimeZone' => 'UTC',
++            'timestampAttributeTimeZone' => 'America/Jamaica',
++        ]);
++        $model = new FakedValidationModel();
++        $model->attr_date = '2020-01-27';
++        $model->attr_timestamp = true;
++        $val->validateAttribute($model, 'attr_date');
++        $this->assertFalse($model->hasErrors('attr_date'));
++        $this->assertFalse($model->hasErrors('attr_timestamp'));
++        $this->assertSame('2020-01-26 19:00:00', $model->attr_timestamp);
++
++        // ICU, defaultTimeZone => America/Jamaica, timestampAttributeTimeZone => America/Jamaica
++        $val = new DateValidator([
++            'format' => 'yyyy-MM-dd',
++            'timestampAttribute' => 'attr_timestamp',
++            'timestampAttributeFormat' => 'yyyy-MM-dd HH:mm:ss',
++            'defaultTimeZone' => 'America/Jamaica',
++            'timestampAttributeTimeZone' => 'America/Jamaica',
++        ]);
++        $model = new FakedValidationModel();
++        $model->attr_date = '2020-01-27';
++        $model->attr_timestamp = true;
++        $val->validateAttribute($model, 'attr_date');
++        $this->assertFalse($model->hasErrors('attr_date'));
++        $this->assertFalse($model->hasErrors('attr_timestamp'));
++        $this->assertSame('2020-01-27 00:00:00', $model->attr_timestamp);
++
++        // PHP, defaultTimeZone => America/Jamaica, timestampAttributeTimeZone => America/Jamaica
++        $val = new DateValidator([
++            'format' => 'php:Y-m-d',
++            'timestampAttribute' => 'attr_timestamp',
++            'timestampAttributeFormat' => 'yyyy-MM-dd HH:mm:ss',
++            'defaultTimeZone' => 'America/Jamaica',
++            'timestampAttributeTimeZone' => 'America/Jamaica',
++        ]);
++        $model = new FakedValidationModel();
++        $model->attr_date = '2020-01-27';
++        $model->attr_timestamp = true;
++        $val->validateAttribute($model, 'attr_date');
++        $this->assertFalse($model->hasErrors('attr_date'));
++        $this->assertFalse($model->hasErrors('attr_timestamp'));
++        $this->assertSame('2020-01-27 00:00:00', $model->attr_timestamp);
+     }
+ 
+     /**
+diff --git a/tests/framework/validators/ExistValidatorTest.php b/tests/framework/validators/ExistValidatorTest.php
+index d55097ed4be..472c74e6b12 100644
+--- a/tests/framework/validators/ExistValidatorTest.php
++++ b/tests/framework/validators/ExistValidatorTest.php
+@@ -198,7 +198,7 @@ public function testExpresionInAttributeColumnName()
+     {
+         $val = new ExistValidator([
+            'targetClass' => OrderItem::className(),
+-           'targetAttribute' => ['id' => 'COALESCE(order_id, 0)'],
++           'targetAttribute' => ['id' => 'COALESCE([[order_id]], 0)'],
+        ]);
+ 
+         $m = new Order(['id' => 1]);
+@@ -235,7 +235,7 @@ public function testTargetRelationWithFilter()
+         $val->validateAttribute($m, 'id');
+         $this->assertTrue($m->hasErrors('id'));
+     }
+-    
++
+     public function testForceMaster()
+     {
+         $connection = $this->getConnectionWithInvalidSlave();
+diff --git a/tests/framework/validators/UniqueValidatorTest.php b/tests/framework/validators/UniqueValidatorTest.php
+index ea673e29064..fac59485d53 100644
+--- a/tests/framework/validators/UniqueValidatorTest.php
++++ b/tests/framework/validators/UniqueValidatorTest.php
+@@ -109,6 +109,10 @@ public function testValidateAttributeDefault()
+         $val->validateAttribute($m, 'ref');
+         $this->assertTrue($m->hasErrors('ref'));
+         $m = new ValidatorTestRefModel();
++        // Add id manual, there is no definition of sequence for the table.
++        if ($this->driverName === 'oci') {
++            $m->id = 7;
++        }
+         $m->ref = 12121;
+         $val->validateAttribute($m, 'ref');
+         $this->assertFalse($m->hasErrors('ref'));
+@@ -282,6 +286,12 @@ public function testValidateEmptyAttributeInStringField()
+         $val = new UniqueValidator();
+ 
+         $m = new ValidatorTestMainModel(['field1' => '']);
++
++        // Add id manual, there is no definition of sequence for the table.
++        if ($this->driverName === 'oci') {
++            $m->id = 5;
++        }
++
+         $val->validateAttribute($m, 'field1');
+         $this->assertFalse($m->hasErrors('field1'));
+         $m->save(false);
+@@ -298,6 +308,12 @@ public function testValidateEmptyAttributeInIntField()
+         $val = new UniqueValidator();
+ 
+         $m = new ValidatorTestRefModel(['ref' => 0]);
++
++        // Add id manual, there is no definition of sequence for the table.
++        if ($this->driverName === 'oci') {
++            $m->id = 6;
++        }
++
+         $val->validateAttribute($m, 'ref');
+         $this->assertFalse($m->hasErrors('ref'));
+         $m->save(false);
+@@ -416,7 +432,7 @@ public function testExpressionInAttributeColumnName()
+     {
+         $validator = new UniqueValidator([
+             'targetAttribute' => [
+-                'title' => 'LOWER(title)',
++                'title' => 'LOWER([[title]])',
+             ],
+         ]);
+         $model = new Document();
+@@ -445,7 +461,7 @@ public function testFindModelWith()
+             $this->fail('Query is crashed because "with" relation cannot be loaded');
+         }
+     }
+-    
++
+     /**
+      * Test join with doesn't attempt to eager load joinWith relations
+      * @see https://github.com/yiisoft/yii2/issues/17389
+@@ -463,7 +479,7 @@ public function testFindModelJoinWith()
+             $this->fail('Query is crashed because "joinWith" relation cannot be loaded');
+         }
+     }
+-    
++
+     public function testForceMaster()
+     {
+         $connection = $this->getConnectionWithInvalidSlave();
+@@ -504,9 +520,9 @@ public static function find() {
+ class JoinWithCustomer extends Customer {
+     public static function find() {
+         $res = parent::find();
+-        
++
+         $res->joinWith('profile');
+-        
++
+         return $res;
+     }
+ }
+diff --git a/tests/framework/web/ResponseTest.php b/tests/framework/web/ResponseTest.php
+index 35ddf94e435..60b71a6825c 100644
+--- a/tests/framework/web/ResponseTest.php
++++ b/tests/framework/web/ResponseTest.php
+@@ -278,42 +278,44 @@ public function testSkipFormatter($format, $content)
+      */
+     public function testEmptyContentOn204()
+     {
+-        $response = new Response();
+-        $response->setStatusCode(204);
+-        $response->content = 'not empty content';
+-
+-        ob_start();
+-        $response->send();
+-        $content = ob_get_clean();
+-        $this->assertSame($content, '');
++        $this->assertEmptyContentOn(204);
+     }
+ 
+     public function testSettingContentToNullOn204()
+     {
+-        $response = new Response();
+-        $response->setStatusCode(204);
+-        $response->content = 'not empty content';
+-
+-        ob_start();
+-        $response->send();
+-        $content = ob_get_clean();
+-        $this->assertSame($content, '');
+-        $this->assertSame($response->content, '');
++        $this->assertEmptyContentOn(204, function ($response) {
++            /** @var $response Response */
++            $this->assertSame($response->content, '');
++        });
+     }
+ 
+     public function testSettingStreamToNullOn204()
+     {
+-        $response = new Response();
+-        $dataFile = \Yii::getAlias('@yiiunit/data/web/data.txt');
++        $this->assertSettingStreamToNullOn(204);
++    }
+ 
+-        $response->sendFile($dataFile);
+-        $response->setStatusCode(204);
++    /**
++     * @see https://github.com/yiisoft/yii2/issues/18199
++     */
++    public function testEmptyContentOn304()
++    {
++        $this->assertEmptyContentOn(304);
++    }
+ 
+-        ob_start();
+-        $response->send();
+-        $content = ob_get_clean();
+-        $this->assertSame($content, '');
+-        $this->assertNull($response->stream);
++    /**
++     * @see https://github.com/yiisoft/yii2/issues/18199
++     */
++    public function testSettingContentToNullOn304()
++    {
++        $this->assertEmptyContentOn(304, function ($response) {
++            /** @var $response Response */
++            $this->assertSame($response->content, '');
++        });
++    }
++
++    public function testSettingStreamToNullOn304()
++    {
++        $this->assertSettingStreamToNullOn(304);
+     }
+ 
+     public function testSendFileWithInvalidCharactersInFileName()
+@@ -342,4 +344,49 @@ public function testSameSiteCookie()
+         // Only way to test is that it doesn't create any errors
+         $this->assertEquals('', $content);
+     }
++
++    /**
++     * Asserts that given a status code, the response will have an empty content body. If the lambda is present, it will
++     * call the lambda what is supposed to handle other assertions.
++     *
++     * @param int $statusCode
++     * @param callable|null $callback lambda in charge to handle other assertions
++     *                                callable(\yii\web\Response $response):void
++     */
++    protected function assertEmptyContentOn($statusCode, $callback = null)
++    {
++        $response = new Response();
++        $response->setStatusCode($statusCode);
++        $response->content = 'not empty content';
++
++        ob_start();
++        $response->send();
++        $content = ob_get_clean();
++        $this->assertSame($content, '');
++
++        if ($callback && is_callable($callback)) {
++            $callback($response);
++        }
++    }
++
++    /**
++     * Asserts that given a status code, the response will have an empty content body, no matter
++     * if the response is a stream as file
++     *
++     * @param int $statusCode
++     */
++    protected function assertSettingStreamToNullOn($statusCode)
++    {
++        $response = new Response();
++        $dataFile = \Yii::getAlias('@yiiunit/data/web/data.txt');
++
++        $response->sendFile($dataFile);
++        $response->setStatusCode($statusCode);
++
++        ob_start();
++        $response->send();
++        $content = ob_get_clean();
++        $this->assertSame($content, '');
++        $this->assertNull($response->stream);
++    }
+ }
+diff --git a/tests/framework/web/ViewTest.php b/tests/framework/web/ViewTest.php
+index 10016a0b37e..e9e6cc0f595 100644
+--- a/tests/framework/web/ViewTest.php
++++ b/tests/framework/web/ViewTest.php
+@@ -185,6 +185,24 @@ public function testAppendTimestampForRegisterJsFile()
+         $html = $view->render('@yiiunit/data/views/layout.php', ['content' => 'content']);
+         $this->assertRegExp($pattern, $html);
+ 
++        // test append timestamp when @web is prefixed in url
++        \Yii::setAlias('@web', '/test-app');
++        $view = new View();
++        $view->registerJsFile(\Yii::getAlias('@web/assetSources/js/jquery.js'),
++            ['depends' => 'yii\web\AssetBundle']); // <script src="/assetSources/js/jquery.js?v=1541056962"></script>
++        $html = $view->render('@yiiunit/data/views/layout.php', ['content' => 'content']);
++        $this->assertRegExp($pattern, $html);
++
++        // test append timestamp when @web has the same name as the asset-source folder
++        \Yii::setAlias('@web', '/assetSources/');
++        $view = new View();
++        $view->registerJsFile(\Yii::getAlias('@web/assetSources/js/jquery.js'),
++            ['depends' => 'yii\web\AssetBundle']); // <script src="/assetSources/js/jquery.js?v=1541056962"></script>
++        $html = $view->render('@yiiunit/data/views/layout.php', ['content' => 'content']);
++        $this->assertRegExp($pattern, $html);
++        // reset aliases
++        $this->setUpAliases();
++
+         // won't be used AssetManager but the timestamp will be
+         $view = new View();
+         $view->registerJsFile('/assetSources/js/jquery.js'); // <script src="/assetSources/js/jquery.js?v=1541056962"></script>
+@@ -331,6 +349,24 @@ public function testAppendTimestampForRegisterCssFile()
+         $html = $view->render('@yiiunit/data/views/layout.php', ['content' => 'content']);
+         $this->assertRegExp($pattern, $html);
+ 
++        // test append timestamp when @web is prefixed in url
++        \Yii::setAlias('@web', '/test-app');
++        $view = new View();
++        $view->registerCssFile(\Yii::getAlias('@web/assetSources/css/stub.css'),
++            ['depends' => 'yii\web\AssetBundle']); // <link href="/assetSources/css/stub.css?v=1541056962" rel="stylesheet" >
++        $html = $view->render('@yiiunit/data/views/layout.php', ['content' => 'content']);
++        $this->assertRegExp($pattern, $html);
++
++        // test append timestamp when @web has the same name as the asset-source folder
++        \Yii::setAlias('@web', '/assetSources/');
++        $view = new View();
++        $view->registerCssFile(\Yii::getAlias('@web/assetSources/css/stub.css'),
++            ['depends' => 'yii\web\AssetBundle']); // <link href="/assetSources/css/stub.css?v=1541056962" rel="stylesheet" >
++        $html = $view->render('@yiiunit/data/views/layout.php', ['content' => 'content']);
++        $this->assertRegExp($pattern, $html);
++        // reset aliases
++        $this->setUpAliases();
++
+         // won't be used AssetManager but the timestamp will be
+         $view = new View();
+         $view->registerCssFile('/assetSources/css/stub.css'); // <link href="/assetSources/css/stub.css?v=1541056962" rel="stylesheet" >
