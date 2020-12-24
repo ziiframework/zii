@@ -97,19 +97,6 @@ index 00000000000..4dc62951e11
 +      - name: Run tests with phpunit
 +        run: vendor/bin/phpunit --group oci --colors=always
 +
-diff --git a/docs/guide-ru/test-environment-setup.md b/docs/guide-ru/test-environment-setup.md
-index a85c61243be..6c1a35f6c45 100644
---- a/docs/guide-ru/test-environment-setup.md
-+++ b/docs/guide-ru/test-environment-setup.md
-@@ -53,7 +53,7 @@ Changed current directory to <directory>
- Если вы используете Apache и настроили его как описано в разделе «[Установка Yii](start-installation.md)», то для тестов вам необходимо создать отдельный виртуальный хост который будет работать с той же папкой, но использовать входной скрипт `index-test.php`:
- ```
- <VirtualHost *:80>
--    DocumentRoot "path/to/basic/webb"
-+    DocumentRoot "path/to/basic/web"
-     ServerName mysite-test
-     <Directory "path/to/basic/web">
-         Order Allow,Deny
 diff --git a/src/BaseYii.php b/src/BaseYii.php
 index cb707b020e2..5e6ce7913e7 100644
 --- a/src/BaseYii.php
