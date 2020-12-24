@@ -416,7 +416,7 @@ abstract class UniqueValidatorTest extends DatabaseTestCase
     {
         $validator = new UniqueValidator([
             'targetAttribute' => [
-                'title' => 'LOWER(title)',
+                'title' => 'LOWER([[title]])',
             ],
         ]);
         $model = new Document();

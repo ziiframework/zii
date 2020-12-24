@@ -177,17 +177,17 @@ SQL;
         $command = $db->createCommand($sql);
         $intCol = 123;
         $charCol = str_repeat('abc', 33) . 'x'; // a 100 char string
-        $boolCol = false;
         $command->bindParam(':int_col', $intCol, \PDO::PARAM_INT);
         $command->bindParam(':char_col', $charCol);
-        $command->bindParam(':bool_col', $boolCol, \PDO::PARAM_BOOL);
 
         $floatCol = 1.23;
         $numericCol = '1.23';
         $blobCol = "\x10\x11\x12";
+        $boolCol = false;
         $command->bindParam(':float_col', $floatCol);
         $command->bindParam(':numeric_col', $numericCol);
         $command->bindParam(':blob_col', $blobCol);
+        $command->bindParam(':bool_col', $boolCol, \PDO::PARAM_BOOL);
 
         $this->assertEquals(1, $command->execute());
 
