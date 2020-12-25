@@ -366,10 +366,10 @@ abstract class QueryTest extends DatabaseTestCase
     {
         $db = $this->getConnection();
 
-        $result = (new Query())->from('customer')->where(['status' => 2])->one($db);
+        $result = (new Query())->from('customer')->where(['[[status]]' => 2])->one($db);
         $this->assertEquals('user3', $result['name']);
 
-        $result = (new Query())->from('customer')->where(['status' => 3])->one($db);
+        $result = (new Query())->from('customer')->where(['[[status]]' => 3])->one($db);
         $this->assertFalse($result);
     }
 
@@ -672,7 +672,11 @@ abstract class QueryTest extends DatabaseTestCase
     {
         $db = $this->getConnection();
         $query = (new Query())
-            ->from(new \yii\db\Expression('(SELECT id, name, email, address, status FROM customer) c'))
+            ->from(
+                new \yii\db\Expression(
+                    '(SELECT [[id]], [[name]], [[email]], [[address]], [[status]] FROM {{customer}}) c'
+                )
+            )
             ->where(['status' => 2]);
 
         $result = $query->one($db);
