@@ -50,7 +50,10 @@
     "autoload": {
         "psr-4": {
             "yii\\": "src/"
-        }
+        },
+        "exclude-from-classmap": [
+            "/tests/"
+        ]
     },
     "config": {
         "platform": {"php": "7.3"}
