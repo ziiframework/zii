@@ -562,10 +562,10 @@ index 1b5a7e4a102..cce419172b9 100644
    on the format of query condition), or an anonymous function with the signature `function ($query)`, where `$query`
    is the [[yii\db\Query|Query]] object that you can modify in the function.
  
-diff --git a/framework/BaseYii.php b/framework/BaseYii.php
+diff --git a/src/BaseYii.php b/src/BaseYii.php
 index 5e6ce7913e7..46808ff7076 100644
---- a/framework/BaseYii.php
-+++ b/framework/BaseYii.php
+--- a/src/BaseYii.php
++++ b/src/BaseYii.php
 @@ -93,7 +93,7 @@ class BaseYii
       */
      public static function getVersion()
@@ -575,10 +575,10 @@ index 5e6ce7913e7..46808ff7076 100644
      }
  
      /**
-diff --git a/framework/CHANGELOG.md b/framework/CHANGELOG.md
+diff --git a/src/CHANGELOG.md b/src/CHANGELOG.md
 index 64e7d9ef6bd..c05c27b270e 100644
---- a/framework/CHANGELOG.md
-+++ b/framework/CHANGELOG.md
+--- a/src/CHANGELOG.md
++++ b/src/CHANGELOG.md
 @@ -1,6 +1,34 @@
  Yii Framework 2 Change Log
  ==========================
@@ -623,10 +623,10 @@ index 64e7d9ef6bd..c05c27b270e 100644
  - Bug #18442: Fix calls with array access to string (bizley)
  - Enh #18381: The `yii\web\AssetManager` `$basePath` readable and writeable check has been moved to the `checkBasePathPermission()`. This check will run once before `publishFile()` and `publishDirectory()` (nadar)
  - Enh #18394: Add support for setting `yii\web\Response::$stream` to a callable (brandonkelly)
-diff --git a/framework/UPGRADE.md b/framework/UPGRADE.md
+diff --git a/src/UPGRADE.md b/src/UPGRADE.md
 index 0796fb183e4..b5352abd99a 100644
---- a/framework/UPGRADE.md
-+++ b/framework/UPGRADE.md
+--- a/src/UPGRADE.md
++++ b/src/UPGRADE.md
 @@ -51,6 +51,24 @@ if you want to upgrade from version A to version C and there is
  version B between A and C, you need to follow the instructions
  for both A and B.
@@ -652,10 +652,10 @@ index 0796fb183e4..b5352abd99a 100644
  Upgrade from Yii 2.0.38
  -----------------------
  
-diff --git a/framework/base/ErrorException.php b/framework/base/ErrorException.php
+diff --git a/src/base/ErrorException.php b/src/base/ErrorException.php
 index c06111b57dd..03b662f3af9 100644
---- a/framework/base/ErrorException.php
-+++ b/framework/base/ErrorException.php
+--- a/src/base/ErrorException.php
++++ b/src/base/ErrorException.php
 @@ -44,24 +44,24 @@ public function __construct($message = '', $code = 0, $severity = 1, $filename =
      {
          parent::__construct($message, $code, $severity, $filename, $lineno, $previous);
@@ -720,10 +720,10 @@ index c06111b57dd..03b662f3af9 100644
      /**
       * Returns if error is one of fatal type.
       *
-diff --git a/framework/base/Module.php b/framework/base/Module.php
+diff --git a/src/base/Module.php b/src/base/Module.php
 index ca81190e390..fa84e553c74 100644
---- a/framework/base/Module.php
-+++ b/framework/base/Module.php
+--- a/src/base/Module.php
++++ b/src/base/Module.php
 @@ -33,7 +33,7 @@
   * @property array $modules The modules (indexed by their IDs).
   * @property-read string $uniqueId The unique ID of the module. This property is read-only.
@@ -756,10 +756,10 @@ index ca81190e390..fa84e553c74 100644
       * This namespace will be used to load controller classes by prepending it to the controller
       * class name.
       *
-diff --git a/framework/base/Widget.php b/framework/base/Widget.php
+diff --git a/src/base/Widget.php b/src/base/Widget.php
 index ab27f028f2f..a43a5652bb6 100644
---- a/framework/base/Widget.php
-+++ b/framework/base/Widget.php
+--- a/src/base/Widget.php
++++ b/src/base/Widget.php
 @@ -16,9 +16,9 @@
   * For more details and usage information on Widget, see the [guide article on widgets](guide:structure-widgets).
   *
@@ -772,10 +772,10 @@ index ab27f028f2f..a43a5652bb6 100644
   * @property-read string $viewPath The directory containing the view files for this widget. This property is
   * read-only.
   *
-diff --git a/framework/caching/MemCache.php b/framework/caching/MemCache.php
+diff --git a/src/caching/MemCache.php b/src/caching/MemCache.php
 index 2a83e5d3fff..8fe5378b5d8 100644
---- a/framework/caching/MemCache.php
-+++ b/framework/caching/MemCache.php
+--- a/src/caching/MemCache.php
++++ b/src/caching/MemCache.php
 @@ -58,7 +58,7 @@
   * @property-read \Memcache|\Memcached $memcache The memcache (or memcached) object used by this cache
   * component. This property is read-only.
@@ -785,10 +785,10 @@ index 2a83e5d3fff..8fe5378b5d8 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/framework/classes.php b/framework/classes.php
+diff --git a/src/classes.php b/src/classes.php
 index 622a1b74b30..ac9767168b0 100644
---- a/framework/classes.php
-+++ b/framework/classes.php
+--- a/src/classes.php
++++ b/src/classes.php
 @@ -174,6 +174,7 @@
    'yii\db\cubrid\Schema' => YII2_PATH . '/db/cubrid/Schema.php',
    'yii\db\cubrid\conditions\LikeConditionBuilder' => YII2_PATH . '/db/cubrid/conditions/LikeConditionBuilder.php',
@@ -797,10 +797,10 @@ index 622a1b74b30..ac9767168b0 100644
    'yii\db\mssql\PDO' => YII2_PATH . '/db/mssql/PDO.php',
    'yii\db\mssql\QueryBuilder' => YII2_PATH . '/db/mssql/QueryBuilder.php',
    'yii\db\mssql\Schema' => YII2_PATH . '/db/mssql/Schema.php',
-diff --git a/framework/console/Controller.php b/framework/console/Controller.php
+diff --git a/src/console/Controller.php b/src/console/Controller.php
 index 4beec2478ec..fa0555386cc 100644
---- a/framework/console/Controller.php
-+++ b/framework/console/Controller.php
+--- a/src/console/Controller.php
++++ b/src/console/Controller.php
 @@ -153,7 +153,7 @@ public function runAction($id, $params = [])
  
                  if (in_array($name, $options, true)) {
@@ -810,10 +810,10 @@ index 4beec2478ec..fa0555386cc 100644
                          $this->$name = preg_split('/\s*,\s*(?![^()]*\))/', $value);
                      } elseif ($default !== null) {
                          settype($value, gettype($default));
-diff --git a/framework/console/controllers/AssetController.php b/framework/console/controllers/AssetController.php
+diff --git a/src/console/controllers/AssetController.php b/src/console/controllers/AssetController.php
 index fe106f79bfd..4f2e492dcea 100644
---- a/framework/console/controllers/AssetController.php
-+++ b/framework/console/controllers/AssetController.php
+--- a/src/console/controllers/AssetController.php
++++ b/src/console/controllers/AssetController.php
 @@ -39,7 +39,7 @@
   * check [[jsCompressor]] and [[cssCompressor]] for more details.
   *
@@ -823,10 +823,10 @@ index fe106f79bfd..4f2e492dcea 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @author Paul Klimov <klimov.paul@gmail.com>
-diff --git a/framework/data/ActiveDataProvider.php b/framework/data/ActiveDataProvider.php
+diff --git a/src/data/ActiveDataProvider.php b/src/data/ActiveDataProvider.php
 index 5a4fbb88aea..993bb9a1a31 100644
---- a/framework/data/ActiveDataProvider.php
-+++ b/framework/data/ActiveDataProvider.php
+--- a/src/data/ActiveDataProvider.php
++++ b/src/data/ActiveDataProvider.php
 @@ -56,12 +56,11 @@
  class ActiveDataProvider extends BaseDataProvider
  {
@@ -878,10 +878,10 @@ index 5a4fbb88aea..993bb9a1a31 100644
              /* @var $modelClass Model */
              $modelClass = $this->query->modelClass;
              $model = $modelClass::instance();
-diff --git a/framework/data/BaseDataProvider.php b/framework/data/BaseDataProvider.php
+diff --git a/src/data/BaseDataProvider.php b/src/data/BaseDataProvider.php
 index 97214cf602c..5be48a17712 100644
---- a/framework/data/BaseDataProvider.php
-+++ b/framework/data/BaseDataProvider.php
+--- a/src/data/BaseDataProvider.php
++++ b/src/data/BaseDataProvider.php
 @@ -21,10 +21,10 @@
   * uniquely identified by the corresponding key value in this array.
   * @property array $models The list of data models in the current page.
@@ -895,10 +895,10 @@ index 97214cf602c..5be48a17712 100644
   * @property int $totalCount Total number of possible data models.
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
-diff --git a/framework/data/DataFilter.php b/framework/data/DataFilter.php
+diff --git a/src/data/DataFilter.php b/src/data/DataFilter.php
 index 18f218f3622..6af8447caec 100644
---- a/framework/data/DataFilter.php
-+++ b/framework/data/DataFilter.php
+--- a/src/data/DataFilter.php
++++ b/src/data/DataFilter.php
 @@ -113,13 +113,12 @@
   * @see ActiveDataFilter
   *
@@ -916,10 +916,10 @@ index 18f218f3622..6af8447caec 100644
   *
   * @author Paul Klimov <klimov.paul@gmail.com>
   * @since 2.0.13
-diff --git a/framework/data/Sort.php b/framework/data/Sort.php
+diff --git a/src/data/Sort.php b/src/data/Sort.php
 index d96178e1321..0e620644272 100644
---- a/framework/data/Sort.php
-+++ b/framework/data/Sort.php
+--- a/src/data/Sort.php
++++ b/src/data/Sort.php
 @@ -70,7 +70,7 @@
   *
   * @property array $attributeOrders Sort directions indexed by attribute names. Sort direction can be either
@@ -929,10 +929,10 @@ index d96178e1321..0e620644272 100644
   * @property-read array $orders The columns (keys) and their corresponding sort directions (values). This can
   * be passed to [[\yii\db\Query::orderBy()]] to construct a DB query. This property is read-only.
   *
-diff --git a/framework/db/ActiveQueryInterface.php b/framework/db/ActiveQueryInterface.php
+diff --git a/src/db/ActiveQueryInterface.php b/src/db/ActiveQueryInterface.php
 index 9150e8bc2ec..8c708072c55 100644
---- a/framework/db/ActiveQueryInterface.php
-+++ b/framework/db/ActiveQueryInterface.php
+--- a/src/db/ActiveQueryInterface.php
++++ b/src/db/ActiveQueryInterface.php
 @@ -53,6 +53,8 @@ public function one($db = null);
       *     // return the index value corresponding to $model
       * }
@@ -942,10 +942,10 @@ index 9150e8bc2ec..8c708072c55 100644
       *
       * @return $this the query object itself
       */
-diff --git a/framework/db/BaseActiveRecord.php b/framework/db/BaseActiveRecord.php
+diff --git a/src/db/BaseActiveRecord.php b/src/db/BaseActiveRecord.php
 index ead5f5c7d6e..aa5f3b04590 100644
---- a/framework/db/BaseActiveRecord.php
-+++ b/framework/db/BaseActiveRecord.php
+--- a/src/db/BaseActiveRecord.php
++++ b/src/db/BaseActiveRecord.php
 @@ -27,7 +27,7 @@
   * read-only.
   * @property bool $isNewRecord Whether the record is new and should be inserted when calling [[save()]].
@@ -955,10 +955,10 @@ index ead5f5c7d6e..aa5f3b04590 100644
   * @property-read mixed $oldPrimaryKey The old primary key value. An array (column name => column value) is
   * returned if the primary key is composite. A string is returned otherwise (null will be returned if the key
   * value is null). This property is read-only.
-diff --git a/framework/db/BatchQueryResult.php b/framework/db/BatchQueryResult.php
+diff --git a/src/db/BatchQueryResult.php b/src/db/BatchQueryResult.php
 index c08b8745cfa..5158e4b281d 100644
---- a/framework/db/BatchQueryResult.php
-+++ b/framework/db/BatchQueryResult.php
+--- a/src/db/BatchQueryResult.php
++++ b/src/db/BatchQueryResult.php
 @@ -7,7 +7,7 @@
  
  namespace yii\db;
@@ -1015,10 +1015,10 @@ index c08b8745cfa..5158e4b281d 100644
              }
          } catch (\PDOException $e) {
              $errorCode = isset($e->errorInfo[1]) ? $e->errorInfo[1] : null;
-diff --git a/framework/db/Connection.php b/framework/db/Connection.php
+diff --git a/src/db/Connection.php b/src/db/Connection.php
 index 5e2bd45a79c..25ad2ecef1e 100644
---- a/framework/db/Connection.php
-+++ b/framework/db/Connection.php
+--- a/src/db/Connection.php
++++ b/src/db/Connection.php
 @@ -119,7 +119,7 @@
   * @property-read PDO $masterPdo The PDO instance for the currently active master connection. This property is
   * read-only.
@@ -1049,10 +1049,10 @@ index 5e2bd45a79c..25ad2ecef1e 100644
       *
       * @param array $pool the list of connection configurations in the server pool
       * @param array $sharedConfig the configuration common to those given in `$pool`.
-diff --git a/framework/db/Query.php b/framework/db/Query.php
+diff --git a/src/db/Query.php b/src/db/Query.php
 index ba0a103b8e9..e8c6438997f 100644
---- a/framework/db/Query.php
-+++ b/framework/db/Query.php
+--- a/src/db/Query.php
++++ b/src/db/Query.php
 @@ -245,7 +245,29 @@ public function all($db = null)
          if ($this->emulateExecution) {
              return [];
@@ -1083,10 +1083,10 @@ index ba0a103b8e9..e8c6438997f 100644
          return $this->populate($rows);
      }
  
-diff --git a/framework/db/QueryInterface.php b/framework/db/QueryInterface.php
+diff --git a/src/db/QueryInterface.php b/src/db/QueryInterface.php
 index df57ad38385..30df4e52ae5 100644
---- a/framework/db/QueryInterface.php
-+++ b/framework/db/QueryInterface.php
+--- a/src/db/QueryInterface.php
++++ b/src/db/QueryInterface.php
 @@ -68,6 +68,8 @@ public function exists($db = null);
       *     // return the index value corresponding to $row
       * }
@@ -1096,10 +1096,10 @@ index df57ad38385..30df4e52ae5 100644
       *
       * @return $this the query object itself
       */
-diff --git a/framework/db/QueryTrait.php b/framework/db/QueryTrait.php
+diff --git a/src/db/QueryTrait.php b/src/db/QueryTrait.php
 index 803d6baf0be..277fd05c279 100644
---- a/framework/db/QueryTrait.php
-+++ b/framework/db/QueryTrait.php
+--- a/src/db/QueryTrait.php
++++ b/src/db/QueryTrait.php
 @@ -21,23 +21,23 @@
  trait QueryTrait
  {
@@ -1146,10 +1146,10 @@ index 803d6baf0be..277fd05c279 100644
       *
       * @return $this the query object itself
       */
-diff --git a/framework/db/Schema.php b/framework/db/Schema.php
+diff --git a/src/db/Schema.php b/src/db/Schema.php
 index c11a22be210..120141d1120 100644
---- a/framework/db/Schema.php
-+++ b/framework/db/Schema.php
+--- a/src/db/Schema.php
++++ b/src/db/Schema.php
 @@ -460,7 +460,7 @@ public function quoteValue($str)
              return $str;
          }
@@ -1159,11 +1159,11 @@ index c11a22be210..120141d1120 100644
              return $value;
          }
  
-diff --git a/framework/db/mssql/DBLibPDO.php b/framework/db/mssql/DBLibPDO.php
+diff --git a/src/db/mssql/DBLibPDO.php b/src/db/mssql/DBLibPDO.php
 new file mode 100644
 index 00000000000..1500131f633
 --- /dev/null
-+++ b/framework/db/mssql/DBLibPDO.php
++++ b/src/db/mssql/DBLibPDO.php
 @@ -0,0 +1,51 @@
 +<?php
 +/**
@@ -1216,10 +1216,10 @@ index 00000000000..1500131f633
 +        }
 +    }
 +}
-diff --git a/framework/db/mssql/QueryBuilder.php b/framework/db/mssql/QueryBuilder.php
+diff --git a/src/db/mssql/QueryBuilder.php b/src/db/mssql/QueryBuilder.php
 index 0b068875f9a..da04e1d64f4 100644
---- a/framework/db/mssql/QueryBuilder.php
-+++ b/framework/db/mssql/QueryBuilder.php
+--- a/src/db/mssql/QueryBuilder.php
++++ b/src/db/mssql/QueryBuilder.php
 @@ -122,6 +122,9 @@ protected function oldBuildOrderByAndLimit($sql, $orderBy, $limit, $offset)
          $sql = preg_replace('/^([\s(])*SELECT(\s+DISTINCT)?(?!\s*TOP\s*\()/i', "\\1SELECT\\2 rowNum = ROW_NUMBER() over ($orderBy),", $sql);
  
@@ -1250,10 +1250,10 @@ index 0b068875f9a..da04e1d64f4 100644
              . "ON ($on)";
          $insertValues = [];
          foreach ($insertNames as $name) {
-diff --git a/framework/db/mssql/Schema.php b/framework/db/mssql/Schema.php
+diff --git a/src/db/mssql/Schema.php b/src/db/mssql/Schema.php
 index 34f9976daef..365d96e5b17 100644
---- a/framework/db/mssql/Schema.php
-+++ b/framework/db/mssql/Schema.php
+--- a/src/db/mssql/Schema.php
++++ b/src/db/mssql/Schema.php
 @@ -789,13 +789,12 @@ public function insert($table, $columns)
          $tableSchema = $this->getTableSchema($table);
          $result = [];
@@ -1271,10 +1271,10 @@ index 34f9976daef..365d96e5b17 100644
              } elseif (isset($columns[$name])) {
                  $result[$name] = $columns[$name];
              } else {
-diff --git a/framework/db/mysql/QueryBuilder.php b/framework/db/mysql/QueryBuilder.php
+diff --git a/src/db/mysql/QueryBuilder.php b/src/db/mysql/QueryBuilder.php
 index c8b93cf186d..6ef2f30dbfe 100644
---- a/framework/db/mysql/QueryBuilder.php
-+++ b/framework/db/mysql/QueryBuilder.php
+--- a/src/db/mysql/QueryBuilder.php
++++ b/src/db/mysql/QueryBuilder.php
 @@ -90,7 +90,7 @@ public function renameColumn($table, $oldName, $newName)
              $row = array_values($row);
              $sql = $row[1];
@@ -1293,10 +1293,10 @@ index c8b93cf186d..6ef2f30dbfe 100644
              foreach ($matches[1] as $i => $c) {
                  if ($c === $column) {
                      return $matches[2][$i];
-diff --git a/framework/db/mysql/Schema.php b/framework/db/mysql/Schema.php
+diff --git a/src/db/mysql/Schema.php b/src/db/mysql/Schema.php
 index ae9d0de4eee..90ecd314290 100644
---- a/framework/db/mysql/Schema.php
-+++ b/framework/db/mysql/Schema.php
+--- a/src/db/mysql/Schema.php
++++ b/src/db/mysql/Schema.php
 @@ -413,9 +413,9 @@ protected function findConstraints($table)
              $regexp = '/FOREIGN KEY\s+\(([^\)]+)\)\s+REFERENCES\s+([^\(^\s]+)\s*\(([^\)]+)\)/mi';
              if (preg_match_all($regexp, $sql, $matches, PREG_SET_ORDER)) {
@@ -1324,10 +1324,10 @@ index ae9d0de4eee..90ecd314290 100644
                  $uniqueIndexes[$indexName] = $indexColumns;
              }
          }
-diff --git a/framework/db/pgsql/Schema.php b/framework/db/pgsql/Schema.php
+diff --git a/src/db/pgsql/Schema.php b/src/db/pgsql/Schema.php
 index 83429fccb12..3b703839925 100644
---- a/framework/db/pgsql/Schema.php
-+++ b/framework/db/pgsql/Schema.php
+--- a/src/db/pgsql/Schema.php
++++ b/src/db/pgsql/Schema.php
 @@ -232,7 +232,7 @@ protected function loadTableIndexes($tableName)
  INNER JOIN "pg_class" AS "ic"
      ON "ic"."oid" = "i"."indexrelid"
@@ -1337,10 +1337,10 @@ index 83429fccb12..3b703839925 100644
  WHERE "tcns"."nspname" = :schemaName AND "tc"."relname" = :tableName
  ORDER BY "ia"."attnum" ASC
  SQL;
-diff --git a/framework/grid/DataColumn.php b/framework/grid/DataColumn.php
+diff --git a/src/grid/DataColumn.php b/src/grid/DataColumn.php
 index b5a61c29685..8760104aba6 100644
---- a/framework/grid/DataColumn.php
-+++ b/framework/grid/DataColumn.php
+--- a/src/grid/DataColumn.php
++++ b/src/grid/DataColumn.php
 @@ -117,7 +117,24 @@ class DataColumn extends Column
       * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
       */
@@ -1408,10 +1408,10 @@ index b5a61c29685..8760104aba6 100644
          }
  
          return parent::renderFilterCellContent();
-diff --git a/framework/helpers/BaseArrayHelper.php b/framework/helpers/BaseArrayHelper.php
+diff --git a/src/helpers/BaseArrayHelper.php b/src/helpers/BaseArrayHelper.php
 index 0f3d368ac08..8bc7ef2bc0b 100644
---- a/framework/helpers/BaseArrayHelper.php
-+++ b/framework/helpers/BaseArrayHelper.php
+--- a/src/helpers/BaseArrayHelper.php
++++ b/src/helpers/BaseArrayHelper.php
 @@ -196,6 +196,10 @@ public static function getValue($array, $key, $default = null)
              $key = $lastKey;
          }
@@ -1432,10 +1432,10 @@ index 0f3d368ac08..8bc7ef2bc0b 100644
       * @param bool $keepKeys whether to maintain the array keys. If false, the resulting array
       * will be re-indexed with integers.
       * @return array the list of column values
-diff --git a/framework/i18n/GettextMessageSource.php b/framework/i18n/GettextMessageSource.php
+diff --git a/src/i18n/GettextMessageSource.php b/src/i18n/GettextMessageSource.php
 index 6b4a3c2ef9c..251bd7fb5ad 100644
---- a/framework/i18n/GettextMessageSource.php
-+++ b/framework/i18n/GettextMessageSource.php
+--- a/src/i18n/GettextMessageSource.php
++++ b/src/i18n/GettextMessageSource.php
 @@ -72,14 +72,12 @@ protected function loadMessages($category, $language)
          $fallbackLanguage = substr($language, 0, 2);
          $fallbackSourceLanguage = substr($this->sourceLanguage, 0, 2);
@@ -1455,10 +1455,10 @@ index 6b4a3c2ef9c..251bd7fb5ad 100644
          }
  
          return (array) $messages;
-diff --git a/framework/i18n/I18N.php b/framework/i18n/I18N.php
+diff --git a/src/i18n/I18N.php b/src/i18n/I18N.php
 index 3e5bd425d19..49cf93bd459 100644
---- a/framework/i18n/I18N.php
-+++ b/framework/i18n/I18N.php
+--- a/src/i18n/I18N.php
++++ b/src/i18n/I18N.php
 @@ -19,7 +19,7 @@
   *
   * @property MessageFormatter $messageFormatter The message formatter to be used to format message via ICU
@@ -1468,10 +1468,10 @@ index 3e5bd425d19..49cf93bd459 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/framework/i18n/PhpMessageSource.php b/framework/i18n/PhpMessageSource.php
+diff --git a/src/i18n/PhpMessageSource.php b/src/i18n/PhpMessageSource.php
 index 103c9311204..975846874ab 100644
---- a/framework/i18n/PhpMessageSource.php
-+++ b/framework/i18n/PhpMessageSource.php
+--- a/src/i18n/PhpMessageSource.php
++++ b/src/i18n/PhpMessageSource.php
 @@ -74,14 +74,12 @@ protected function loadMessages($category, $language)
          $fallbackLanguage = substr($language, 0, 2);
          $fallbackSourceLanguage = substr($this->sourceLanguage, 0, 2);
@@ -1491,10 +1491,10 @@ index 103c9311204..975846874ab 100644
          }
  
          return (array) $messages;
-diff --git a/framework/log/Dispatcher.php b/framework/log/Dispatcher.php
+diff --git a/src/log/Dispatcher.php b/src/log/Dispatcher.php
 index d888d89a8d1..8109e0b8978 100644
---- a/framework/log/Dispatcher.php
-+++ b/framework/log/Dispatcher.php
+--- a/src/log/Dispatcher.php
++++ b/src/log/Dispatcher.php
 @@ -53,7 +53,7 @@
   * @property int $flushInterval How many messages should be logged before they are sent to targets. This
   * method returns the value of [[Logger::flushInterval]].
@@ -1504,10 +1504,10 @@ index d888d89a8d1..8109e0b8978 100644
   * @property int $traceLevel How many application call stacks should be logged together with each message.
   * This method returns the value of [[Logger::traceLevel]]. Defaults to 0.
   *
-diff --git a/framework/log/Logger.php b/framework/log/Logger.php
+diff --git a/src/log/Logger.php b/src/log/Logger.php
 index 6a6f3b9a85e..76e993d3061 100644
---- a/framework/log/Logger.php
-+++ b/framework/log/Logger.php
+--- a/src/log/Logger.php
++++ b/src/log/Logger.php
 @@ -111,6 +111,11 @@ class Logger extends Component
       * @var Dispatcher the message dispatcher
       */
@@ -1529,10 +1529,10 @@ index 6a6f3b9a85e..76e993d3061 100644
          $count = count($timings);
          $time = 0;
          foreach ($timings as $timing) {
-diff --git a/framework/log/Target.php b/framework/log/Target.php
+diff --git a/src/log/Target.php b/src/log/Target.php
 index 846bc919a9f..2a192e80d55 100644
---- a/framework/log/Target.php
-+++ b/framework/log/Target.php
+--- a/src/log/Target.php
++++ b/src/log/Target.php
 @@ -27,10 +27,10 @@
   * may specify [[except]] to exclude messages of certain categories.
   *
@@ -1546,10 +1546,10 @@ index 846bc919a9f..2a192e80d55 100644
   *
   * For more details and usage information on Target, see the [guide article on logging & targets](guide:runtime-logging).
   *
-diff --git a/framework/mail/BaseMailer.php b/framework/mail/BaseMailer.php
+diff --git a/src/mail/BaseMailer.php b/src/mail/BaseMailer.php
 index 633974daa2f..c4546fbd1f4 100644
---- a/framework/mail/BaseMailer.php
-+++ b/framework/mail/BaseMailer.php
+--- a/src/mail/BaseMailer.php
++++ b/src/mail/BaseMailer.php
 @@ -23,7 +23,7 @@
   * For more details and usage information on BaseMailer, see the [guide article on mailing](guide:tutorial-mailing).
   *
@@ -1559,10 +1559,10 @@ index 633974daa2f..c4546fbd1f4 100644
   * @property string $viewPath The directory that contains the view files for composing mail messages Defaults
   * to '@app/mail'.
   *
-diff --git a/framework/rbac/BaseManager.php b/framework/rbac/BaseManager.php
+diff --git a/src/rbac/BaseManager.php b/src/rbac/BaseManager.php
 index c8dda76f930..60cbc01aeb9 100644
---- a/framework/rbac/BaseManager.php
-+++ b/framework/rbac/BaseManager.php
+--- a/src/rbac/BaseManager.php
++++ b/src/rbac/BaseManager.php
 @@ -20,7 +20,7 @@
   * @property-read Role[] $defaultRoleInstances Default roles. The array is indexed by the role names. This
   * property is read-only.
@@ -1572,10 +1572,10 @@ index c8dda76f930..60cbc01aeb9 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/framework/rest/UrlRule.php b/framework/rest/UrlRule.php
+diff --git a/src/rest/UrlRule.php b/src/rest/UrlRule.php
 index 73c5dc4f44b..413ecf3db0b 100644
---- a/framework/rest/UrlRule.php
-+++ b/framework/rest/UrlRule.php
+--- a/src/rest/UrlRule.php
++++ b/src/rest/UrlRule.php
 @@ -205,9 +205,6 @@ protected function createRule($pattern, $prefix, $action)
          $config['verb'] = $verbs;
          $config['pattern'] = rtrim($prefix . '/' . strtr($pattern, $this->tokens), '/');
@@ -1597,10 +1597,10 @@ index 73c5dc4f44b..413ecf3db0b 100644
          foreach ($this->rules as $urlName => $rules) {
              if (strpos($pathInfo, $urlName) !== false) {
                  foreach ($rules as $rule) {
-diff --git a/framework/validators/CompareValidator.php b/framework/validators/CompareValidator.php
+diff --git a/src/validators/CompareValidator.php b/src/validators/CompareValidator.php
 index 8df351b72da..a57886d7c1d 100644
---- a/framework/validators/CompareValidator.php
-+++ b/framework/validators/CompareValidator.php
+--- a/src/validators/CompareValidator.php
++++ b/src/validators/CompareValidator.php
 @@ -146,6 +146,9 @@ public function validateAttribute($model, $attribute)
              return;
          }
@@ -1632,10 +1632,10 @@ index 8df351b72da..a57886d7c1d 100644
          ValidationAsset::register($view);
          $options = $this->getClientOptions($model, $attribute);
  
-diff --git a/framework/web/AssetBundle.php b/framework/web/AssetBundle.php
+diff --git a/src/web/AssetBundle.php b/src/web/AssetBundle.php
 index 60ada80ef3b..d04ad40eba6 100644
---- a/framework/web/AssetBundle.php
-+++ b/framework/web/AssetBundle.php
+--- a/src/web/AssetBundle.php
++++ b/src/web/AssetBundle.php
 @@ -153,22 +153,18 @@ public function registerAssetFiles($view)
              if (is_array($js)) {
                  $file = array_shift($js);
@@ -1665,10 +1665,10 @@ index 60ada80ef3b..d04ad40eba6 100644
              }
          }
      }
-diff --git a/framework/web/AssetManager.php b/framework/web/AssetManager.php
+diff --git a/src/web/AssetManager.php b/src/web/AssetManager.php
 index 996e021ace3..2d28d9246ed 100644
---- a/framework/web/AssetManager.php
-+++ b/framework/web/AssetManager.php
+--- a/src/web/AssetManager.php
++++ b/src/web/AssetManager.php
 @@ -34,7 +34,7 @@
   * For more details and usage information on AssetManager, see the [guide article on assets](guide:structure-assets).
   *
@@ -1710,10 +1710,10 @@ index 996e021ace3..2d28d9246ed 100644
              return "$assetUrl?v=$timestamp";
          }
  
-diff --git a/framework/web/Controller.php b/framework/web/Controller.php
+diff --git a/src/web/Controller.php b/src/web/Controller.php
 index 4e205d00eb6..08a15e8ed74 100644
---- a/framework/web/Controller.php
-+++ b/framework/web/Controller.php
+--- a/src/web/Controller.php
++++ b/src/web/Controller.php
 @@ -142,31 +142,38 @@ public function bindActionParams($action, $params)
                  } elseif (is_array($params[$name])) {
                      $isValid = false;
@@ -1795,10 +1795,10 @@ index 4e205d00eb6..08a15e8ed74 100644
          }
  
          return $args;
-diff --git a/framework/web/Cookie.php b/framework/web/Cookie.php
+diff --git a/src/web/Cookie.php b/src/web/Cookie.php
 index f517ca3e09f..7ba7d0268fb 100644
---- a/framework/web/Cookie.php
-+++ b/framework/web/Cookie.php
+--- a/src/web/Cookie.php
++++ b/src/web/Cookie.php
 @@ -67,17 +67,12 @@ class Cookie extends \yii\base\BaseObject
      public $httpOnly = true;
      /**
@@ -1819,10 +1819,10 @@ index f517ca3e09f..7ba7d0268fb 100644
  
  
      /**
-diff --git a/framework/web/IdentityInterface.php b/framework/web/IdentityInterface.php
+diff --git a/src/web/IdentityInterface.php b/src/web/IdentityInterface.php
 index 849131ba517..f5ba6227e3b 100644
---- a/framework/web/IdentityInterface.php
-+++ b/framework/web/IdentityInterface.php
+--- a/src/web/IdentityInterface.php
++++ b/src/web/IdentityInterface.php
 @@ -82,8 +82,7 @@ public function getId();
       *
       * The space of such keys should be big enough to defeat potential identity attacks.
@@ -1841,10 +1841,10 @@ index 849131ba517..f5ba6227e3b 100644
       * @param string $authKey the given auth key
       * @return bool whether the given auth key is valid.
       * @see getAuthKey()
-diff --git a/framework/web/Request.php b/framework/web/Request.php
+diff --git a/src/web/Request.php b/src/web/Request.php
 index 6ebd807a8bd..70fa32dffda 100644
---- a/framework/web/Request.php
-+++ b/framework/web/Request.php
+--- a/src/web/Request.php
++++ b/src/web/Request.php
 @@ -231,6 +231,9 @@ class Request extends \yii\base\Request
          // Microsoft:
          'Front-End-Https',
@@ -1864,10 +1864,10 @@ index 6ebd807a8bd..70fa32dffda 100644
              } elseif ($this->headers->has('Host')) {
                  $this->_hostInfo = $http . '://' . $this->headers->get('Host');
              } elseif (isset($_SERVER['SERVER_NAME'])) {
-diff --git a/framework/web/UrlManager.php b/framework/web/UrlManager.php
+diff --git a/src/web/UrlManager.php b/src/web/UrlManager.php
 index ce6ddb3f66f..13e15e4d20c 100644
---- a/framework/web/UrlManager.php
-+++ b/framework/web/UrlManager.php
+--- a/src/web/UrlManager.php
++++ b/src/web/UrlManager.php
 @@ -245,10 +245,6 @@ protected function buildRules($ruleDeclarations)
                  $rule = ['route' => $rule];
                  if (preg_match("/^((?:($verbs),)*($verbs))\\s+(.*)$/", $key, $matches)) {
@@ -1879,10 +1879,10 @@ index ce6ddb3f66f..13e15e4d20c 100644
                      $key = $matches[4];
                  }
                  $rule['pattern'] = $key;
-diff --git a/framework/web/User.php b/framework/web/User.php
+diff --git a/src/web/User.php b/src/web/User.php
 index db1935fe605..5550fcd576e 100644
---- a/framework/web/User.php
-+++ b/framework/web/User.php
+--- a/src/web/User.php
++++ b/src/web/User.php
 @@ -53,7 +53,7 @@
   * user. `null` is returned if the user is not logged in (not authenticated).
   * @property-read bool $isGuest Whether the current user is a guest. This property is read-only.
