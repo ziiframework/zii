@@ -330,18 +330,6 @@ index 2a83e5d3fff..8fe5378b5d8 100644
   *
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
-diff --git a/src/classes.php b/src/classes.php
-index 622a1b74b30..ac9767168b0 100644
---- a/src/classes.php
-+++ b/src/classes.php
-@@ -174,6 +174,7 @@
-   'yii\db\cubrid\Schema' => YII2_PATH . '/db/cubrid/Schema.php',
-   'yii\db\cubrid\conditions\LikeConditionBuilder' => YII2_PATH . '/db/cubrid/conditions/LikeConditionBuilder.php',
-   'yii\db\mssql\ColumnSchema' => YII2_PATH . '/db/mssql/ColumnSchema.php',
-+  'yii\db\mssql\DBLibPDO' => YII2_PATH . '/db/mssql/DBLibPDO.php',
-   'yii\db\mssql\PDO' => YII2_PATH . '/db/mssql/PDO.php',
-   'yii\db\mssql\QueryBuilder' => YII2_PATH . '/db/mssql/QueryBuilder.php',
-   'yii\db\mssql\Schema' => YII2_PATH . '/db/mssql/Schema.php',
 diff --git a/src/console/Controller.php b/src/console/Controller.php
 index 4beec2478ec..fa0555386cc 100644
 --- a/src/console/Controller.php
