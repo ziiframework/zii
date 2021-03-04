@@ -199,22 +199,6 @@ index 44ad97a6eb6..5279ff4ac59 100644
      external_code_coverage:
 +        runs: 3
          timeout: 2100 # Timeout in seconds.
-diff --git a/composer.json b/composer.json
-index ced9703ef4d..ed87b7dd5d0 100644
---- a/composer.json
-+++ b/composer.json
-@@ -102,6 +102,11 @@
-             "yii\\cs\\": "cs/src/"
-         }
-     },
-+    "autoload-dev": {
-+        "files": [
-+            "tests/bootstrap.php"
-+        ]
-+    },
-     "config": {
-         "platform": {"php": "5.4"}
-     },
 diff --git a/src/BaseYii.php b/src/BaseYii.php
 index 5e6ce7913e7..46808ff7076 100644
 --- a/src/BaseYii.php
