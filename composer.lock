@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b9f819e1cff5d3de0144922e674e41f3",
+    "content-hash": "473ff72077e46cf66abe96e4996116d0",
     "packages": [
         {
             "name": "bower-asset/inputmask",
@@ -260,16 +260,16 @@
     "packages-dev": [
         {
             "name": "cebe/indent",
-            "version": "1.0.2",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cebe/indent.git",
-                "reference": "c500ed74d30ed2d7e085f9cf07f8092d32d70776"
+                "reference": "268cf80af0ff1668f28b97a42ed1547e2c270415"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cebe/indent/zipball/c500ed74d30ed2d7e085f9cf07f8092d32d70776",
-                "reference": "c500ed74d30ed2d7e085f9cf07f8092d32d70776",
+                "url": "https://api.github.com/repos/cebe/indent/zipball/268cf80af0ff1668f28b97a42ed1547e2c270415",
+                "reference": "268cf80af0ff1668f28b97a42ed1547e2c270415",
                 "shasum": ""
             },
             "bin": [
@@ -283,17 +283,15 @@
             "authors": [
                 {
                     "name": "Carsten Brandt",
-                    "email": "mail@cebe.cc",
-                    "homepage": "http://cebe.cc/",
-                    "role": "Core framework development"
+                    "email": "mail@cebe.cc"
                 }
             ],
-            "description": "a small tool to convert text file indentation",
+            "description": "A small tool to convert text file indentation.",
             "support": {
                 "issues": "https://github.com/cebe/indent/issues",
                 "source": "https://github.com/cebe/indent/tree/master"
             },
-            "time": "2014-05-23T14:40:08+00:00"
+            "time": "2019-12-05T09:02:49+00:00"
         },
         {
             "name": "cweagans/composer-patches",
