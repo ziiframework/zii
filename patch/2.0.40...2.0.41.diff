@@ -1599,19 +1599,6 @@ index da6c79d6445..d5ce60c0762 100644
      public function testBindActionParams()
      {
          $controller = new FakeController('fake', Yii::$app);
-diff --git a/tests/framework/console/widgets/TableTest.php b/tests/framework/console/widgets/TableTest.php
-index 59cf4bab17b..e90598d088e 100644
---- a/tests/framework/console/widgets/TableTest.php
-+++ b/tests/framework/console/widgets/TableTest.php
-@@ -5,7 +5,7 @@
-  * @license http://www.yiiframework.com/license/
-  */
- 
--namespace yiiunit\framework\console;
-+namespace yiiunit\framework\console\widgets;
- 
- use yii\console\widgets\Table;
- use yii\helpers\Console;
 diff --git a/tests/framework/data/ActiveDataProviderCloningTest.php b/tests/framework/data/ActiveDataProviderCloningTest.php
 index e4c7adc9122..1027baf47cd 100644
 --- a/tests/framework/data/ActiveDataProviderCloningTest.php
