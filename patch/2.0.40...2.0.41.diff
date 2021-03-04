@@ -107,38 +107,6 @@ index 00000000000..232eb290791
 +          php ocular.phar code-coverage:upload --format=php-clover coverage.clover
 +        if: matrix.php == '7.1'
 +        continue-on-error: true # if is fork
-diff --git a/.github/workflows/ci-oracle.yml b/.github/workflows/ci-oracle.yml
-index 4dc62951e11..df7bb3fe078 100644
---- a/.github/workflows/ci-oracle.yml
-+++ b/.github/workflows/ci-oracle.yml
-@@ -76,6 +76,16 @@ jobs:
-         if: matrix.php == '8.0'
-         run: composer update --ignore-platform-reqs --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
- 
--      - name: Run tests with phpunit
-+      - name: PHP Unit tests for PHP 7.4
-+        run: vendor/bin/phpunit --coverage-clover=coverage.clover --group oci --colors=always
-+        if: matrix.php == '7.4'
-+
-+      - name: Run tests with phpunit without coverage
-         run: vendor/bin/phpunit --group oci --colors=always
- 
-+      - name: Code coverage
-+        run: |
-+          wget https://scrutinizer-ci.com/ocular.phar
-+          php ocular.phar code-coverage:upload --format=php-clover coverage.clover
-+        if: matrix.php == '7.4'
-+        continue-on-error: true # if is fork
-diff --git a/.scrutinizer.yml b/.scrutinizer.yml
-index 44ad97a6eb6..5279ff4ac59 100644
---- a/.scrutinizer.yml
-+++ b/.scrutinizer.yml
-@@ -16,4 +16,5 @@ filter:
- 
- tools:
-     external_code_coverage:
-+        runs: 3
-         timeout: 2100 # Timeout in seconds.
 diff --git a/src/BaseYii.php b/src/BaseYii.php
 index 5e6ce7913e7..46808ff7076 100644
 --- a/src/BaseYii.php
