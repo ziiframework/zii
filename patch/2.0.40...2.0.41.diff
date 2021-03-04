@@ -1,0 +1,3193 @@
+diff --git a/.github/workflows/build.yml b/.github/workflows/build.yml
+index 1095e78220b..ed61ec1b512 100644
+--- a/.github/workflows/build.yml
++++ b/.github/workflows/build.yml
+@@ -29,15 +29,6 @@ jobs:
+         ports:
+           - 5432:5432
+         options: --name=postgres --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
+-      mssql:
+-          image: mcr.microsoft.com/mssql/server:2017-latest
+-          env:
+-              SA_PASSWORD: YourStrong!Passw0rd
+-              ACCEPT_EULA: Y
+-              MSSQL_PID: Developer
+-          ports:
+-              - 1433:1433
+-          options: --name=mssql --health-cmd="/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'YourStrong!Passw0rd' -Q 'SELECT 1'" --health-interval=10s --health-timeout=5s --health-retries=3
+     strategy:
+       fail-fast: false
+       matrix:
+@@ -47,8 +38,6 @@ jobs:
+     steps:
+       - name: Generate french locale
+         run: sudo locale-gen fr_FR.UTF-8
+-      - name: Create MS SQL Database
+-        run: docker exec -i mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'YourStrong!Passw0rd' -Q 'CREATE DATABASE yiitest'
+       - name: Checkout
+         uses: actions/checkout@v2
+       - name: Install PHP
+@@ -58,21 +47,6 @@ jobs:
+           tools: pecl
+           extensions: apc, curl, dom, imagick, intl, mbstring, mcrypt, memcached, mysql, pdo, pdo_mysql, pdo_pgsql, pdo_sqlite, pgsql, sqlite
+           ini-values: date.timezone='UTC', session.save_path="${{ runner.temp }}"
+-      - name: Install php-sqlsrv
+-        run: |
+-            curl -sSL https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add - >/dev/null 2>&1
+-            curl -sSL https://packages.microsoft.com/config/ubuntu/16.04/mssql-server-2017.list | sudo tee /etc/apt/sources.list.d/mssql-server-2017.list >/dev/null 2>&1
+-            printf "\033[32;1m✓ \033[0m\033[90;1madd microsoft keys & repository\n"
+-            sudo apt-get -q update >/dev/null 2>&1
+-            printf "\033[32;1m✓ \033[0m\033[90;1mapt-get update\n"
+-            sudo pecl -q install pdo_sqlsrv > /dev/null 2>&1
+-            printf "\033[32;1m✓ \033[0m\033[90;1mpecl install pdo_sqlsrv\n"
+-            if (php -m | grep -i -q -w "pdo_sqlsrv"); then
+-                printf "\033[32;1mpdo_sqlsrv installed correct\n"
+-            else
+-                printf "\033[31;1mpdo_sqlsrv not installed :-(\n"
+-            fi
+-        if: matrix.php == '7.4' || matrix.php == '7.3' || matrix.php == '7.2'
+       - name: Install Memcached
+         uses: niden/actions-memcached@v7
+       - name: Get composer cache directory
+@@ -87,7 +61,7 @@ jobs:
+       - name: Install dependencies
+         run: composer update $DEFAULT_COMPOSER_FLAGS
+       - name: PHP Unit tests for PHP 7.1
+-        run: vendor/bin/phpunit --verbose --coverage-clover=coverage.clover --exclude-group oci,wincache,xcache,zenddata,cubrid --colors=always
++        run: vendor/bin/phpunit --verbose --coverage-clover=coverage.clover --exclude-group $PHPUNIT_EXCLUDE_GROUP --colors=always
+         if: matrix.php == '7.1'
+       - name: PHP Unit tests for PHP >= 7.2
+         run: vendor/bin/phpunit --verbose --exclude-group $PHPUNIT_EXCLUDE_GROUP --colors=always
+diff --git a/.github/workflows/ci-mssql.yml b/.github/workflows/ci-mssql.yml
+new file mode 100644
+index 00000000000..232eb290791
+--- /dev/null
++++ b/.github/workflows/ci-mssql.yml
+@@ -0,0 +1,103 @@
++on:
++  - pull_request
++  - push
++
++name: ci-mssql
++
++jobs:
++  tests:
++    name: PHP ${{ matrix.php }}-mssql-${{ matrix.mssql }}
++
++    env:
++      key: cache
++
++    runs-on: ubuntu-latest
++
++    strategy:
++      matrix:
++        include:
++          - php: '7.0'
++            extensions: pdo, pdo_sqlsrv-5.8.1
++            mssql: 'server:2017-latest'
++          - php: '7.1'
++            extensions: pdo, pdo_sqlsrv-5.8.1
++            mssql: 'server:2017-latest'
++          - php: '7.2'
++            extensions: pdo, pdo_sqlsrv-5.8.1
++            mssql: 'server:2017-latest'
++          - php: '7.3'
++            extensions: pdo, pdo_sqlsrv-5.8.1
++            mssql: 'server:2017-latest'
++          - php: '7.4'
++            extensions: pdo, pdo_sqlsrv
++            mssql: 'server:2017-latest'
++          - php: '7.4'
++            extensions: pdo, pdo_sqlsrv
++            mssql: 'server:2019-latest'
++          - php: '8.0'
++            extensions: pdo, pdo_sqlsrv
++            mssql: 'server:2017-latest'
++          - php: '8.0'
++            extensions: pdo, pdo_sqlsrv
++            mssql: 'server:2019-latest'
++
++    services:
++      mssql:
++          image: mcr.microsoft.com/mssql/${{ matrix.mssql }}
++          env:
++              SA_PASSWORD: YourStrong!Passw0rd
++              ACCEPT_EULA: Y
++              MSSQL_PID: Developer
++          ports:
++              - 1433:1433
++          options: --name=mssql --health-cmd="/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'YourStrong!Passw0rd' -Q 'SELECT 1'" --health-interval=10s --health-timeout=5s --health-retries=3
++
++    steps:
++      - name: Checkout
++        uses: actions/checkout@v2.3.4
++
++      - name: Create MS SQL Database
++        run: docker exec -i mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'YourStrong!Passw0rd' -Q 'CREATE DATABASE yiitest'
++
++      - name: Install PHP with extensions
++        uses: shivammathur/setup-php@v2
++        with:
++          php-version: ${{ matrix.php }}
++          extensions: ${{ matrix.extensions }}
++          ini-values: date.timezone='UTC'
++          tools: composer:v2, pecl
++
++      - name: Determine composer cache directory on Linux
++        run: echo "COMPOSER_CACHE_DIR=$(composer config cache-dir)" >> $GITHUB_ENV
++
++      - name: Cache dependencies installed with composer
++        uses: actions/cache@v2
++        with:
++          path: ${{ env.COMPOSER_CACHE_DIR }}
++          key: php${{ matrix.php }}-composer-${{ hashFiles('**/composer.json') }}
++          restore-keys: |
++            php${{ matrix.php }}-composer-
++
++      - name: Update composer
++        run: composer self-update
++
++      - name: Install dependencies with composer
++        run: composer update --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
++
++      - name: Install dependencies with composer php 8.0
++        if: matrix.php == '8.0'
++        run: composer update --ignore-platform-reqs --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
++
++      - name: PHP Unit tests for PHP 7.1
++        run: vendor/bin/phpunit --coverage-clover=coverage.clover --group mssql --colors=always
++        if: matrix.php == '7.1'
++
++      - name: Run tests with phpunit without coverage
++        run: vendor/bin/phpunit --group mssql --colors=always
++
++      - name: Code coverage
++        run: |
++          wget https://scrutinizer-ci.com/ocular.phar
++          php ocular.phar code-coverage:upload --format=php-clover coverage.clover
++        if: matrix.php == '7.1'
++        continue-on-error: true # if is fork
+diff --git a/.github/workflows/ci-oracle.yml b/.github/workflows/ci-oracle.yml
+index 4dc62951e11..df7bb3fe078 100644
+--- a/.github/workflows/ci-oracle.yml
++++ b/.github/workflows/ci-oracle.yml
+@@ -76,6 +76,16 @@ jobs:
+         if: matrix.php == '8.0'
+         run: composer update --ignore-platform-reqs --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
+ 
+-      - name: Run tests with phpunit
++      - name: PHP Unit tests for PHP 7.4
++        run: vendor/bin/phpunit --coverage-clover=coverage.clover --group oci --colors=always
++        if: matrix.php == '7.4'
++
++      - name: Run tests with phpunit without coverage
+         run: vendor/bin/phpunit --group oci --colors=always
+ 
++      - name: Code coverage
++        run: |
++          wget https://scrutinizer-ci.com/ocular.phar
++          php ocular.phar code-coverage:upload --format=php-clover coverage.clover
++        if: matrix.php == '7.4'
++        continue-on-error: true # if is fork
+diff --git a/.scrutinizer.yml b/.scrutinizer.yml
+index 44ad97a6eb6..5279ff4ac59 100644
+--- a/.scrutinizer.yml
++++ b/.scrutinizer.yml
+@@ -16,4 +16,5 @@ filter:
+ 
+ tools:
+     external_code_coverage:
++        runs: 3
+         timeout: 2100 # Timeout in seconds.
+diff --git a/build/controllers/PhpDocController.php b/build/controllers/PhpDocController.php
+index 7099fb32d49..144413f8228 100644
+--- a/build/controllers/PhpDocController.php
++++ b/build/controllers/PhpDocController.php
+@@ -735,7 +735,7 @@ protected function generateClassPropertyDocs($fileName)
+                 if (isset($prop['get'], $prop['set'])) {
+                     if ($prop['get']['type'] != $prop['set']['type']) {
+                         $note = ' Note that the type of this property differs in getter and setter.'
+-                                . ' See [[get' . ucfirst($propName) . '()]] '
++                                . ' See [[get' . ucfirst($propName) . '()]]'
+                                 . ' and [[set' . ucfirst($propName) . '()]] for details.';
+                     }
+                 } elseif (isset($prop['get'])) {
+@@ -826,11 +826,17 @@ private function hash($string)
+     protected function hasGetterInParents($className, $propName)
+     {
+         $class = $className;
+-        while ($parent = get_parent_class($class)) {
+-            if (method_exists($parent, 'get' . ucfirst($propName))) {
+-                return true;
++
++        try {
++            while ($parent = get_parent_class($class)) {
++                if (method_exists($parent, 'get' . ucfirst($propName))) {
++                    return true;
++                }
++                $class = $parent;
+             }
+-            $class = $parent;
++        } catch (\Throwable $t) {
++            $this->stderr("[ERR] Error when getting parents for $className\n", Console::FG_RED);
++            return false;
+         }
+         return false;
+     }
+@@ -843,11 +849,17 @@ protected function hasGetterInParents($className, $propName)
+     protected function hasSetterInParents($className, $propName)
+     {
+         $class = $className;
+-        while ($parent = get_parent_class($class)) {
+-            if (method_exists($parent, 'set' . ucfirst($propName))) {
+-                return true;
++
++        try {
++            while ($parent = get_parent_class($class)) {
++                if (method_exists($parent, 'set' . ucfirst($propName))) {
++                    return true;
++                }
++                $class = $parent;
+             }
+-            $class = $parent;
++        } catch (\Throwable $t) {
++            $this->stderr("[ERR] Error when getting parents for $className\n", Console::FG_RED);
++            return false;
+         }
+         return false;
+     }
+diff --git a/composer.json b/composer.json
+index ced9703ef4d..ed87b7dd5d0 100644
+--- a/composer.json
++++ b/composer.json
+@@ -102,6 +102,11 @@
+             "yii\\cs\\": "cs/src/"
+         }
+     },
++    "autoload-dev": {
++        "files": [
++            "tests/bootstrap.php"
++        ]
++    },
+     "config": {
+         "platform": {"php": "5.4"}
+     },
+diff --git a/docs/guide-fr/concept-di-container.md b/docs/guide-fr/concept-di-container.md
+index 883699d2640..6cba3d2d19a 100644
+--- a/docs/guide-fr/concept-di-container.md
++++ b/docs/guide-fr/concept-di-container.md
+@@ -410,7 +410,7 @@ $container->setDefinitions([
+     ]
+ ]);
+ 
+-$reader = $container->get('app\storage\DocumentsReader); 
++$reader = $container->get('app\storage\DocumentsReader'); 
+ // Se comporte exactement comme l'exemple précédent
+ ```
+ 
+diff --git a/docs/guide-ja/concept-di-container.md b/docs/guide-ja/concept-di-container.md
+index 7e8c7eae5d1..8daac4fb214 100644
+--- a/docs/guide-ja/concept-di-container.md
++++ b/docs/guide-ja/concept-di-container.md
+@@ -448,7 +448,7 @@ $container->setDefinitions([
+     }
+ ]);
+ 
+-$reader = $container->get('app\storage\DocumentsReader); 
++$reader = $container->get('app\storage\DocumentsReader'); 
+ // 構成情報に書かれている依存とともに DocumentReader オブジェクトが生成されます
+ ```
+ 
+@@ -481,7 +481,7 @@ $container->setDefinitions([
+     ]
+ ]);
+ 
+-$reader = $container->get('app\storage\DocumentsReader); 
++$reader = $container->get('app\storage\DocumentsReader'); 
+ // 前の例と全く同じオブジェクトが生成されます
+ ```
+ 
+diff --git a/docs/guide-zh-CN/concept-di-container.md b/docs/guide-zh-CN/concept-di-container.md
+index 511cb80f38b..81ebff6bbb5 100644
+--- a/docs/guide-zh-CN/concept-di-container.md
++++ b/docs/guide-zh-CN/concept-di-container.md
+@@ -427,7 +427,7 @@ $container->setDefinitions([
+     }
+ ]);
+ 
+-$reader = $container->get('app\storage\DocumentsReader); 
++$reader = $container->get('app\storage\DocumentsReader'); 
+ // 将按照配置中的描述创建 DocumentReader 对象及其依赖关系
+ ```
+ 
+@@ -465,7 +465,7 @@ $container->setDefinitions([
+     ]
+ ]);
+ 
+-$reader = $container->get('app\storage\DocumentsReader); 
++$reader = $container->get('app\storage\DocumentsReader'); 
+ // 将与前面示例中的行为完全相同。
+ ```
+ 
+diff --git a/docs/guide/concept-di-container.md b/docs/guide/concept-di-container.md
+index b771a3d1750..0493bae853e 100644
+--- a/docs/guide/concept-di-container.md
++++ b/docs/guide/concept-di-container.md
+@@ -484,7 +484,7 @@ $container->setDefinitions([
+     ]
+ ]);
+ 
+-$reader = $container->get('app\storage\DocumentsReader); 
++$reader = $container->get('app\storage\DocumentsReader'); 
+ // Will behave exactly the same as in the previous example.
+ ```
+ 
+diff --git a/docs/guide/db-query-builder.md b/docs/guide/db-query-builder.md
+index 696ae05a27d..7a9db3087ff 100644
+--- a/docs/guide/db-query-builder.md
++++ b/docs/guide/db-query-builder.md
+@@ -716,6 +716,8 @@ $query = (new \yii\db\Query())
+     ->all();
+ ```
+ 
++The column name passed into [[yii\db\Query::indexBy()|indexBy()]] method has to be a part of the `SELECT` fragment of a SQL statement. If [[yii\db\Query::select()|select()]] is not used, all columns are selected and therefore the condition is met. If [[yii\db\Query::select()|select()]] is used with an array in its parameter, Yii handles adding that required SQL fragment for you. This applies when using [[yii\db\Query::indexBy()|indexBy()]] with [[yii\db\Query::all()|all()]] or [[yii\db\Query::column()|column()]]. In other cases, like the following example with an anonymous function, is up to users themselves to take care of it.
++
+ To index by expression values, pass an anonymous function to the [[yii\db\Query::indexBy()|indexBy()]] method:
+ 
+ ```php
+diff --git a/docs/guide/security-authentication.md b/docs/guide/security-authentication.md
+index 4c7790b919b..a6890f89267 100644
+--- a/docs/guide/security-authentication.md
++++ b/docs/guide/security-authentication.md
+@@ -42,11 +42,10 @@ the following methods:
+   an instance of the identity class using the specified access token. This method is used when you need
+   to authenticate a user by a single secret token (e.g. in a stateless RESTful application).
+ * [[yii\web\IdentityInterface::getId()|getId()]]: it returns the ID of the user represented by this identity instance.
+-* [[yii\web\IdentityInterface::getAuthKey()|getAuthKey()]]: it returns a key used to verify cookie-based login.
+-  The key is stored in the login cookie and will be later compared with the server-side version to make
+-  sure the login cookie is valid.
++* [[yii\web\IdentityInterface::getAuthKey()|getAuthKey()]]: it returns a key used to validate session and auto-login in
++  case it is enabled.
+ * [[yii\web\IdentityInterface::validateAuthKey()|validateAuthKey()]]: it implements the logic for verifying
+-  the cookie-based login key.
++  authentication key.
+ 
+ If a particular method is not needed, you may implement it with an empty body. For example, if your application
+ is a pure stateless RESTful application, you would only need to implement [[yii\web\IdentityInterface::findIdentityByAccessToken()|findIdentityByAccessToken()]]
+@@ -117,8 +116,7 @@ class User extends ActiveRecord implements IdentityInterface
+ }
+ ```
+ 
+-As explained previously, you only need to implement `getAuthKey()` and `validateAuthKey()` if your application
+-uses cookie-based login feature. In this case, you may use the following code to generate an auth key for each
++You may use the following code to generate an auth key for each
+ user and store it in the `user` table:
+ 
+ ```php
+diff --git a/docs/guide/security-best-practices.md b/docs/guide/security-best-practices.md
+index 03549d49d59..258fcf224ca 100644
+--- a/docs/guide/security-best-practices.md
++++ b/docs/guide/security-best-practices.md
+@@ -353,3 +353,29 @@ return [
+ 
+ > Note: you should always prefer web server configuration for 'host header attack' protection instead of the filter usage.
+   [[yii\filters\HostControl]] should be used only if server configuration setup is unavailable.
++
++### Configuring SSL peer validation
++
++There is a typical misconception about how to solve SSL certificate validation issues such as:
++
++```
++cURL error 60: SSL certificate problem: unable to get local issuer certificate
++```
++
++or
++
++```
++stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages: error:1416F086:SSL routines:tls_process_server_certificate:certificate verify failed
++```
++
++Many sources wrongly suggest disabling SSL peer verification. That should not be ever done since it enables
++man-in-the middle type of attacks. Instead, PHP should be configured properly:
++
++1. Download [https://curl.haxx.se/ca/cacert.pem](https://curl.haxx.se/ca/cacert.pem).
++2. Add the following to your php.ini:
++  ```
++  openssl.cafile="/path/to/cacert.pem"
++  curl.cainfo="/path/to/cacert.pem".
++  ```
++
++Note that the `cacert.pem` file should be kept up to date.
+diff --git a/docs/guide/tutorial-core-validators.md b/docs/guide/tutorial-core-validators.md
+index 1b5a7e4a102..cce419172b9 100644
+--- a/docs/guide/tutorial-core-validators.md
++++ b/docs/guide/tutorial-core-validators.md
+@@ -82,7 +82,7 @@ is as specified by the `operator` property.
+   is being used to validate an attribute, the default value of this property would be the name of
+   the attribute suffixed with `_repeat`. For example, if the attribute being validated is `password`,
+   then this property will default to `password_repeat`.
+-- `compareValue`: a constant value that the input value should be compared with. When both
++- `compareValue`: a constant value (or a closure returning a value) that the input value should be compared with. When both
+   of this property and `compareAttribute` are specified, this property will take precedence.
+ - `operator`: the comparison operator. Defaults to `==`, meaning checking if the input value is equal
+   to that of `compareAttribute` or `compareValue`. The following operators are supported:
+@@ -271,24 +271,49 @@ This validator checks if the input value is a valid email address.
+ ```php
+ [
+     // a1 needs to exist in the column represented by the "a1" attribute
++    // i.e. a1 = 1, valid if there is value 1 in column "a1"
+     ['a1', 'exist'],
++    // equivalent of
++    ['a1', 'exist', 'targetAttribute' => 'a1'],
++    ['a1', 'exist', 'targetAttribute' => ['a1' => 'a1']],
+ 
+     // a1 needs to exist, but its value will use a2 to check for the existence
++    // i.e. a1 = 2, valid if there is value 2 in column "a2"
+     ['a1', 'exist', 'targetAttribute' => 'a2'],
++    // equivalent of
++    ['a1', 'exist', 'targetAttribute' => ['a1' => 'a2']],
++    
++    // a2 needs to exist, its value will use a2 to check for the existence, a1 will receive error message
++    // i.e. a2 = 2, valid if there is value 2 in column "a2"
++    ['a1', 'exist', 'targetAttribute' => ['a2']],
++    // equivalent of
++    ['a1', 'exist', 'targetAttribute' => ['a2' => 'a2']],
+ 
+     // a1 and a2 need to exist together, and they both will receive error message
++    // i.e. a1 = 3, a2 = 4, valid if there is value 3 in column "a1" and value 4 in column "a2"
+     [['a1', 'a2'], 'exist', 'targetAttribute' => ['a1', 'a2']],
++    // equivalent of
++    [['a1', 'a2'], 'exist', 'targetAttribute' => ['a1' => 'a1', 'a2' => 'a2']],
+ 
+     // a1 and a2 need to exist together, only a1 will receive error message
++    // i.e. a1 = 5, a2 = 6, valid if there is value 5 in column "a1" and value 6 in column "a2"
+     ['a1', 'exist', 'targetAttribute' => ['a1', 'a2']],
++    // equivalent of
++    ['a1', 'exist', 'targetAttribute' => ['a1' => 'a1', 'a2' => 'a2']],
+ 
+     // a1 needs to exist by checking the existence of both a2 and a3 (using a1 value)
++    // i.e. a1 = 7, a2 = 8, valid if there is value 7 in column "a3" and value 8 in column "a2"
+     ['a1', 'exist', 'targetAttribute' => ['a2', 'a1' => 'a3']],
++    // equivalent of
++    ['a1', 'exist', 'targetAttribute' => ['a2' => 'a2', 'a1' => 'a3']],
+ 
+     // a1 needs to exist. If a1 is an array, then every element of it must exist.
++    // i.e. a1 = 9, valid if there is value 9 in column "a1"
++    //      a1 = [9, 10], valid if there are values 9 and 10 in column "a1"
+     ['a1', 'exist', 'allowArray' => true],
+     
+-    // type_id needs to exist in the column "id" in the table defined in ProductType class 
++    // type_id needs to exist in the column "id" in the table defined in ProductType class
++    // i.e. type_id = 1, valid if there is value 1 in column "id" of ProductType's table
+     ['type_id', 'exist', 'targetClass' => ProductType::class, 'targetAttribute' => ['type_id' => 'id']],    
+     
+     // the same as the previous, but using already defined relation "type"
+@@ -310,10 +335,19 @@ multiple attribute values should exist).
+   of the input value. If not set, it will use the name of the attribute currently being validated.
+   You may use an array to validate the existence of multiple columns at the same time. The array values
+   are the attributes that will be used to validate the existence, while the array keys are the attributes
+-  whose values are to be validated. If the key and the value are the same, you can just specify the value.
++  whose values are to be validated. If the key, and the value are the same, you can just specify the value.  
++  Assuming we have ModelA to be validated and ModelB set as the target class the following `targetAttribute`'s 
++  configurations are taken as:
++    - `null` => value of a currently validated attribute of ModelA will be checked against stored values of ModelB's attribute with the same name
++    - `'a'` => value of a currently validated attribute of ModelA will be checked against stored values of attribute "a" of ModelB
++    - `['a']` => value of attribute "a" of ModelA will be checked against stored values of attribute "a" of ModelB
++    - `['a' => 'a']` => the same as above
++    - `['a', 'b']` => value of attribute "a" of ModelA will be checked against stored values of attribute "a" of ModelB and 
++      at the same time value of attribute "b" of ModelA will be checked against stored values of attribute "b" of ModelB
++    - `['a' => 'b']` => value of attribute "a" of ModelA will be checked against stored values of attribute "b" of ModelB
+ - `targetRelation`: since version 2.0.14 you can use convenient attribute `targetRelation`, which overrides the `targetClass` and `targetAttribute` attributes using specs from the requested relation.  
+-- `filter`: additional filter to be applied to the DB query used to check the existence of the input value.
+-  This can be a string or an array representing the additional query condition (refer to [[yii\db\Query::where()]]
++- `filter`: an additional filter to be applied to the DB query used to check the existence of the input value.
++  This can be a string, or an array representing the additional query condition (refer to [[yii\db\Query::where()]]
+   on the format of query condition), or an anonymous function with the signature `function ($query)`, where `$query`
+   is the [[yii\db\Query|Query]] object that you can modify in the function.
+ - `allowArray`: whether to allow the input value to be an array. Defaults to `false`. If this property is `true`
+@@ -639,19 +673,34 @@ the input value. Note that if the input value is an array, it will be ignored by
+ ```php
+ [
+     // a1 needs to be unique in the column represented by the "a1" attribute
++    // i.e. a1 = 1, valid if there is no value 1 in column "a1"
+     ['a1', 'unique'],
++    // equivalent of
++    ['a1', 'unique', 'targetAttribute' => 'a1'],
++    ['a1', 'unique', 'targetAttribute' => ['a1' => 'a1']],
+ 
+     // a1 needs to be unique, but column a2 will be used to check the uniqueness of the a1 value
++    // i.e. a1 = 2, valid if there is no value 2 in column "a2"
+     ['a1', 'unique', 'targetAttribute' => 'a2'],
++    // equivalent of
++    ['a1', 'unique', 'targetAttribute' => ['a1' => 'a2']],
+ 
+     // a1 and a2 need to be unique together, and they both will receive error message
++    // i.e. a1 = 3, a2 = 4, valid if there is no value 3 in column "a1" and at the same time no value 4 in column "a2"
+     [['a1', 'a2'], 'unique', 'targetAttribute' => ['a1', 'a2']],
++    // equivalent of
++    [['a1', 'a2'], 'unique', 'targetAttribute' => ['a1' => 'a1', 'a2' => 'a2']],
+ 
+     // a1 and a2 need to be unique together, only a1 will receive error message
+     ['a1', 'unique', 'targetAttribute' => ['a1', 'a2']],
+ 
+     // a1 needs to be unique by checking the uniqueness of both a2 and a3 (using a1 value)
++    // i.e. a1 = 5, a2 = 6, valid if there is no value 5 in column "a3" and at the same time no value 6 in column "a2"
+     ['a1', 'unique', 'targetAttribute' => ['a2', 'a1' => 'a3']],
++    
++    // type_id needs to be unique in the column "id" in the table defined in ProductType class
++    // i.e. type_id = 1, valid if there is no value 1 in column "id" of ProductType's table
++    ['type_id', 'unique', 'targetClass' => ProductType::class, 'targetAttribute' => 'id'],    
+ ]
+ ```
+ 
+@@ -665,9 +714,18 @@ either a single column or multiple columns.
+   of the input value. If not set, it will use the name of the attribute currently being validated.
+   You may use an array to validate the uniqueness of multiple columns at the same time. The array values
+   are the attributes that will be used to validate the uniqueness, while the array keys are the attributes
+-  whose values are to be validated. If the key and the value are the same, you can just specify the value.
+-- `filter`: additional filter to be applied to the DB query used to check the uniqueness of the input value.
+-  This can be a string or an array representing the additional query condition (refer to [[yii\db\Query::where()]]
++  whose values are to be validated. If the key, and the value are the same, you can just specify the value.  
++  Assuming we have ModelA to be validated and ModelB set as the target class the following `targetAttribute`'s
++  configurations are taken as:
++    - `null` => value of a currently validated attribute of ModelA will be checked against stored values of ModelB's attribute with the same name
++    - `'a'` => value of a currently validated attribute of ModelA will be checked against stored values of attribute "a" of ModelB
++    - `['a']` => value of attribute "a" of ModelA will be checked against stored values of attribute "a" of ModelB
++    - `['a' => 'a']` => the same as above
++    - `['a', 'b']` => value of attribute "a" of ModelA will be checked against stored values of attribute "a" of ModelB and
++      at the same time value of attribute "b" of ModelA will be checked against stored values of attribute "b" of ModelB
++    - `['a' => 'b']` => value of attribute "a" of ModelA will be checked against stored values of attribute "b" of ModelB
++- `filter`: an additional filter to be applied to the DB query used to check the uniqueness of the input value.
++  This can be a string, or an array representing the additional query condition (refer to [[yii\db\Query::where()]]
+   on the format of query condition), or an anonymous function with the signature `function ($query)`, where `$query`
+   is the [[yii\db\Query|Query]] object that you can modify in the function.
+ 
+diff --git a/framework/BaseYii.php b/framework/BaseYii.php
+index 5e6ce7913e7..46808ff7076 100644
+--- a/framework/BaseYii.php
++++ b/framework/BaseYii.php
+@@ -93,7 +93,7 @@ class BaseYii
+      */
+     public static function getVersion()
+     {
+-        return '2.0.40';
++        return '2.0.41';
+     }
+ 
+     /**
+diff --git a/framework/CHANGELOG.md b/framework/CHANGELOG.md
+index 64e7d9ef6bd..c05c27b270e 100644
+--- a/framework/CHANGELOG.md
++++ b/framework/CHANGELOG.md
+@@ -1,6 +1,34 @@
+ Yii Framework 2 Change Log
+ ==========================
+ 
++2.0.41 March 03, 2021
++---------------------
++
++- Bug #8750: Fix MySQL support when running in `ANSI`/`ANSI_QUOTES` modes (brandonkelly)
++- Bug #9718: Fix user staying authorized despite authKey change (kidol, Charlie Jack, Kunal Mhaske, samdark)
++- Bug #18448: Fix issues in queries and tests for older MSSQL versions (darkdef)
++- Bug #18450: Allow empty string to be passed as a nullable typed argument to a controller's action (dicrtarasov, bizley)
++- Bug #18464: Fix bug with processing fallback messages when translation language is set to `null` (bizley)
++- Bug #18472: Fix initializing `db` component configuration in `yii\data\ActiveDataProvider` (bizley)
++- Bug #18477: Fix detecting availability of Xdebug's stack trace in `yii\base\ErrorException` (bizley)
++- Bug #18479: Fix invalid argument type for `preg_split()` in `\yii\console\Controller` (gazooz)
++- Bug #18480: Transactions are not committed using the dblib driver (bbrunekreeft)
++- Bug #18505: Fix `yii\helpers\ArrayHelper::getValue()` for ArrayAccess objects with explicitly defined properties (samdark)
++- Bug #18508: Fix Postgres SQL query for load table indexes with correct column order (insolita)
++- Bug #18529: Fix asset files path with `appendTimestamp` option for non-root-relative base URLs (bizley)
++- Bug #18535: Set Cookie SameSite to Lax by default (samdark)
++- Bug #18539: Fix "driver does not support quoting" when using the driver pdo_odbc (xpohoc69)
++- Enh #18447: Do not use `getLastInsertID()` to get PK from insert query to lower collision probability for concurrent inserts (darkdef)
++- Enh #18455: Add ability to use separate attributes for data model and filter model of `yii\grid\GridView` in `yii\grid\DataColumn` (PowerGamer1)
++- Enh #18457: Add `EVENT_RESET` and `EVENT_FINISH` events to `yii\db\BatchQueryResult` (brandonkelly)
++- Enh #18460: `compareValue` in `CompareValidator` can now take a closure returning a value (mmonem)
++- Enh #18483: Add `yii\log\Logger::$dbEventNames` that allows specifying event names used to get statistical results (profiling) of DB queries (atiline)
++- Enh #18487: Allow creating URLs for non-GET-verb rules (bizley)
++- Enh #18493: Faster request parsing for REST UrlRule with prefix handling (bizley)
++- Enh #18499: When using `yii\db\Query::all()` and `yii\db\Query::$indexBy`, the `yii\db\Query::$indexBy` is auto inserted into `yii\db\Query::$select` - the same as in `yii\db\Query::column()` (OndrejVasicek, samdark, bizley)
++- Enh #18518: Add support for ngrok’s `X-Original-Host` header (brandonkelly)
++
++
+ 2.0.40 December 23, 2020
+ ------------------------
+ 
+@@ -18,7 +46,7 @@ Yii Framework 2 Change Log
+ - Bug #18414: Fix `AssetManager::appendTimestamp()` not appending timestamp for website root in sub-directory (Isitar)
+ - Bug #18426: Fix check for route's leading slash in `yii\widgets\Menu` (stevekr)
+ - Bug #18435: Fix ensuring Active Record relation links' keys to be strings (bizley)
+-- Bug #18435: Change the check order whether an object is an implementation of `Arrayable` or `JsonSerializable` in `\yii\base\ArrayableTrait::toArray()` and `\yii\rest\Serializer::serialize()` (spell6inder)
++- Bug #18437: Change the check order whether an object is an implementation of `Arrayable` or `JsonSerializable` in `\yii\base\ArrayableTrait::toArray()` and `\yii\rest\Serializer::serialize()` (spell6inder)
+ - Bug #18442: Fix calls with array access to string (bizley)
+ - Enh #18381: The `yii\web\AssetManager` `$basePath` readable and writeable check has been moved to the `checkBasePathPermission()`. This check will run once before `publishFile()` and `publishDirectory()` (nadar)
+ - Enh #18394: Add support for setting `yii\web\Response::$stream` to a callable (brandonkelly)
+diff --git a/framework/UPGRADE.md b/framework/UPGRADE.md
+index 0796fb183e4..b5352abd99a 100644
+--- a/framework/UPGRADE.md
++++ b/framework/UPGRADE.md
+@@ -51,6 +51,24 @@ if you want to upgrade from version A to version C and there is
+ version B between A and C, you need to follow the instructions
+ for both A and B.
+ 
++Upgrade from Yii 2.0.40
++-----------------------
++
++* The methods `getAuthKey()` and `validateAuthKey()` of `yii\web\IdentityInterface` are now also used to validate active
++  sessions (previously these methods were only used for cookie-based login). If your identity class does not properly
++  implement these methods yet, you should update it accordingly (an example can be found in the guide under
++  `Security` -> `Authentication`). Alternatively, you can simply return `null` in the `getAuthKey()` method to keep
++  the old behavior (that is, no validation of active sessions). Applications that change the underlying `authKey` of
++  an authenticated identity, should now call `yii\web\User::switchIdentity()`, `yii\web\User::login()`
++  or `yii\web\User::logout()` to recreate the active session with the new `authKey`.
++
++Upgrade from Yii 2.0.39.3
++-------------------------
++
++* Priority of processing `yii\base\Arrayable`, and `JsonSerializable` data has been reversed (`Arrayable` data is checked
++  first now) in `yii\base\Model`, and `yii\rest\Serializer`. If your application relies on the previous priority you need 
++  to fix it manually based on the complexity of desired (de)serialization result.
++
+ Upgrade from Yii 2.0.38
+ -----------------------
+ 
+diff --git a/framework/base/ErrorException.php b/framework/base/ErrorException.php
+index c06111b57dd..03b662f3af9 100644
+--- a/framework/base/ErrorException.php
++++ b/framework/base/ErrorException.php
+@@ -44,24 +44,24 @@ public function __construct($message = '', $code = 0, $severity = 1, $filename =
+     {
+         parent::__construct($message, $code, $severity, $filename, $lineno, $previous);
+ 
+-        if (function_exists('xdebug_get_function_stack')) {
+-            // XDebug trace can't be modified and used directly with PHP 7
++        if ($this->isXdebugStackAvailable()) {
++            // Xdebug trace can't be modified and used directly with PHP 7
+             // @see https://github.com/yiisoft/yii2/pull/11723
+-            $xDebugTrace = array_slice(array_reverse(xdebug_get_function_stack()), 1, -1);
++            $xdebugTrace = array_slice(array_reverse(xdebug_get_function_stack()), 1, -1);
+             $trace = [];
+-            foreach ($xDebugTrace as $frame) {
++            foreach ($xdebugTrace as $frame) {
+                 if (!isset($frame['function'])) {
+                     $frame['function'] = 'unknown';
+                 }
+ 
+-                // XDebug < 2.1.1: http://bugs.xdebug.org/view.php?id=695
++                // Xdebug < 2.1.1: http://bugs.xdebug.org/view.php?id=695
+                 if (!isset($frame['type']) || $frame['type'] === 'static') {
+                     $frame['type'] = '::';
+                 } elseif ($frame['type'] === 'dynamic') {
+                     $frame['type'] = '->';
+                 }
+ 
+-                // XDebug has a different key name
++                // Xdebug has a different key name
+                 if (isset($frame['params']) && !isset($frame['args'])) {
+                     $frame['args'] = $frame['params'];
+                 }
+@@ -74,6 +74,32 @@ public function __construct($message = '', $code = 0, $severity = 1, $filename =
+         }
+     }
+ 
++    /**
++     * Ensures that Xdebug stack trace is available based on Xdebug version.
++     * Idea taken from developer bishopb at https://github.com/rollbar/rollbar-php
++     * @return bool
++     */
++    private function isXdebugStackAvailable()
++    {
++        if (!function_exists('xdebug_get_function_stack')) {
++            return false;
++        }
++
++        // check for Xdebug being installed to ensure origin of xdebug_get_function_stack()
++        $version = phpversion('xdebug');
++        if ($version === false) {
++            return false;
++        }
++
++        // Xdebug 2 and prior
++        if (version_compare($version, '3.0.0', '<')) {
++            return true;
++        }
++
++        // Xdebug 3 and later, proper mode is required
++        return false !== strpos(ini_get('xdebug.mode'), 'develop');
++    }
++
+     /**
+      * Returns if error is one of fatal type.
+      *
+diff --git a/framework/base/Module.php b/framework/base/Module.php
+index ca81190e390..fa84e553c74 100644
+--- a/framework/base/Module.php
++++ b/framework/base/Module.php
+@@ -33,7 +33,7 @@
+  * @property array $modules The modules (indexed by their IDs).
+  * @property-read string $uniqueId The unique ID of the module. This property is read-only.
+  * @property string $version The version of this module. Note that the type of this property differs in getter
+- * and setter. See [[getVersion()]]  and [[setVersion()]] for details.
++ * and setter. See [[getVersion()]] and [[setVersion()]] for details.
+  * @property string $viewPath The root directory of view files. Defaults to "[[basePath]]/views".
+  *
+  * @author Qiang Xue <qiang.xue@gmail.com>
+@@ -60,11 +60,11 @@ class Module extends ServiceLocator
+      */
+     public $id;
+     /**
+-     * @var Module the parent module of this module. `null` if this module does not have a parent.
++     * @var Module|null the parent module of this module. `null` if this module does not have a parent.
+      */
+     public $module;
+     /**
+-     * @var string|bool the layout that should be applied for views within this module. This refers to a view name
++     * @var string|bool|null the layout that should be applied for views within this module. This refers to a view name
+      * relative to [[layoutPath]]. If this is not set, it means the layout value of the [[module|parent module]]
+      * will be taken. If this is `false`, layout will be disabled within this module.
+      */
+@@ -90,7 +90,7 @@ class Module extends ServiceLocator
+      */
+     public $controllerMap = [];
+     /**
+-     * @var string the namespace that controller classes are in.
++     * @var string|null the namespace that controller classes are in.
+      * This namespace will be used to load controller classes by prepending it to the controller
+      * class name.
+      *
+diff --git a/framework/base/Widget.php b/framework/base/Widget.php
+index ab27f028f2f..a43a5652bb6 100644
+--- a/framework/base/Widget.php
++++ b/framework/base/Widget.php
+@@ -16,9 +16,9 @@
+  * For more details and usage information on Widget, see the [guide article on widgets](guide:structure-widgets).
+  *
+  * @property string|null $id ID of the widget. Note that the type of this property differs in getter and
+- * setter. See [[getId()]]  and [[setId()]] for details.
++ * setter. See [[getId()]] and [[setId()]] for details.
+  * @property \yii\web\View $view The view object that can be used to render views or view files. Note that the
+- * type of this property differs in getter and setter. See [[getView()]]  and [[setView()]] for details.
++ * type of this property differs in getter and setter. See [[getView()]] and [[setView()]] for details.
+  * @property-read string $viewPath The directory containing the view files for this widget. This property is
+  * read-only.
+  *
+diff --git a/framework/caching/MemCache.php b/framework/caching/MemCache.php
+index 2a83e5d3fff..8fe5378b5d8 100644
+--- a/framework/caching/MemCache.php
++++ b/framework/caching/MemCache.php
+@@ -58,7 +58,7 @@
+  * @property-read \Memcache|\Memcached $memcache The memcache (or memcached) object used by this cache
+  * component. This property is read-only.
+  * @property MemCacheServer[] $servers List of memcache server configurations. Note that the type of this
+- * property differs in getter and setter. See [[getServers()]]  and [[setServers()]] for details.
++ * property differs in getter and setter. See [[getServers()]] and [[setServers()]] for details.
+  *
+  * @author Qiang Xue <qiang.xue@gmail.com>
+  * @since 2.0
+diff --git a/framework/classes.php b/framework/classes.php
+index 622a1b74b30..ac9767168b0 100644
+--- a/framework/classes.php
++++ b/framework/classes.php
+@@ -174,6 +174,7 @@
+   'yii\db\cubrid\Schema' => YII2_PATH . '/db/cubrid/Schema.php',
+   'yii\db\cubrid\conditions\LikeConditionBuilder' => YII2_PATH . '/db/cubrid/conditions/LikeConditionBuilder.php',
+   'yii\db\mssql\ColumnSchema' => YII2_PATH . '/db/mssql/ColumnSchema.php',
++  'yii\db\mssql\DBLibPDO' => YII2_PATH . '/db/mssql/DBLibPDO.php',
+   'yii\db\mssql\PDO' => YII2_PATH . '/db/mssql/PDO.php',
+   'yii\db\mssql\QueryBuilder' => YII2_PATH . '/db/mssql/QueryBuilder.php',
+   'yii\db\mssql\Schema' => YII2_PATH . '/db/mssql/Schema.php',
+diff --git a/framework/console/Controller.php b/framework/console/Controller.php
+index 4beec2478ec..fa0555386cc 100644
+--- a/framework/console/Controller.php
++++ b/framework/console/Controller.php
+@@ -153,7 +153,7 @@ public function runAction($id, $params = [])
+ 
+                 if (in_array($name, $options, true)) {
+                     $default = $this->$name;
+-                    if (is_array($default)) {
++                    if (is_array($default) && is_string($value)) {
+                         $this->$name = preg_split('/\s*,\s*(?![^()]*\))/', $value);
+                     } elseif ($default !== null) {
+                         settype($value, gettype($default));
+diff --git a/framework/console/controllers/AssetController.php b/framework/console/controllers/AssetController.php
+index fe106f79bfd..4f2e492dcea 100644
+--- a/framework/console/controllers/AssetController.php
++++ b/framework/console/controllers/AssetController.php
+@@ -39,7 +39,7 @@
+  * check [[jsCompressor]] and [[cssCompressor]] for more details.
+  *
+  * @property \yii\web\AssetManager $assetManager Asset manager instance. Note that the type of this property
+- * differs in getter and setter. See [[getAssetManager()]]  and [[setAssetManager()]] for details.
++ * differs in getter and setter. See [[getAssetManager()]] and [[setAssetManager()]] for details.
+  *
+  * @author Qiang Xue <qiang.xue@gmail.com>
+  * @author Paul Klimov <klimov.paul@gmail.com>
+diff --git a/framework/data/ActiveDataProvider.php b/framework/data/ActiveDataProvider.php
+index 5a4fbb88aea..993bb9a1a31 100644
+--- a/framework/data/ActiveDataProvider.php
++++ b/framework/data/ActiveDataProvider.php
+@@ -56,12 +56,11 @@
+ class ActiveDataProvider extends BaseDataProvider
+ {
+     /**
+-     * @var QueryInterface the query that is used to fetch data models and [[totalCount]]
+-     * if it is not explicitly set.
++     * @var QueryInterface|null the query that is used to fetch data models and [[totalCount]] if it is not explicitly set.
+      */
+     public $query;
+     /**
+-     * @var string|callable the column that is used as the key of the data models.
++     * @var string|callable|null the column that is used as the key of the data models.
+      * This can be either a column name, or a callable that returns the key value of a given data model.
+      *
+      * If this is not set, the following rules will be used to determine the keys of the data models:
+@@ -73,8 +72,8 @@ class ActiveDataProvider extends BaseDataProvider
+      */
+     public $key;
+     /**
+-     * @var Connection|array|string the DB connection object or the application component ID of the DB connection.
+-     * If not set, the default DB connection will be used.
++     * @var Connection|array|string|null the DB connection object or the application component ID of the DB connection.
++     * If set it overrides [[query]] default DB connection.
+      * Starting from version 2.0.2, this can also be a configuration array for creating the object.
+      */
+     public $db;
+@@ -82,13 +81,13 @@ class ActiveDataProvider extends BaseDataProvider
+ 
+     /**
+      * Initializes the DB connection component.
+-     * This method will initialize the [[db]] property to make sure it refers to a valid DB connection.
++     * This method will initialize the [[db]] property (when set) to make sure it refers to a valid DB connection.
+      * @throws InvalidConfigException if [[db]] is invalid.
+      */
+     public function init()
+     {
+         parent::init();
+-        if (is_string($this->db)) {
++        if ($this->db !== null) {
+             $this->db = Instance::ensure($this->db, Connection::className());
+         }
+     }
+@@ -175,7 +174,7 @@ protected function prepareTotalCount()
+     public function setSort($value)
+     {
+         parent::setSort($value);
+-        if (($sort = $this->getSort()) !== false && $this->query instanceof ActiveQueryInterface) {
++        if ($this->query instanceof ActiveQueryInterface && ($sort = $this->getSort()) !== false) {
+             /* @var $modelClass Model */
+             $modelClass = $this->query->modelClass;
+             $model = $modelClass::instance();
+diff --git a/framework/data/BaseDataProvider.php b/framework/data/BaseDataProvider.php
+index 97214cf602c..5be48a17712 100644
+--- a/framework/data/BaseDataProvider.php
++++ b/framework/data/BaseDataProvider.php
+@@ -21,10 +21,10 @@
+  * uniquely identified by the corresponding key value in this array.
+  * @property array $models The list of data models in the current page.
+  * @property Pagination|false $pagination The pagination object. If this is false, it means the pagination is
+- * disabled. Note that the type of this property differs in getter and setter. See [[getPagination()]]  and
++ * disabled. Note that the type of this property differs in getter and setter. See [[getPagination()]] and
+  * [[setPagination()]] for details.
+  * @property Sort|bool $sort The sorting object. If this is false, it means the sorting is disabled. Note that
+- * the type of this property differs in getter and setter. See [[getSort()]]  and [[setSort()]] for details.
++ * the type of this property differs in getter and setter. See [[getSort()]] and [[setSort()]] for details.
+  * @property int $totalCount Total number of possible data models.
+  *
+  * @author Qiang Xue <qiang.xue@gmail.com>
+diff --git a/framework/data/DataFilter.php b/framework/data/DataFilter.php
+index 18f218f3622..6af8447caec 100644
+--- a/framework/data/DataFilter.php
++++ b/framework/data/DataFilter.php
+@@ -113,13 +113,12 @@
+  * @see ActiveDataFilter
+  *
+  * @property array $errorMessages Error messages in format `[errorKey => message]`. Note that the type of this
+- * property differs in getter and setter. See [[getErrorMessages()]]  and [[setErrorMessages()]] for details.
++ * property differs in getter and setter. See [[getErrorMessages()]] and [[setErrorMessages()]] for details.
+  * @property mixed $filter Raw filter value.
+  * @property array $searchAttributeTypes Search attribute type map. Note that the type of this property
+- * differs in getter and setter. See [[getSearchAttributeTypes()]]  and [[setSearchAttributeTypes()]] for
+- * details.
++ * differs in getter and setter. See [[getSearchAttributeTypes()]] and [[setSearchAttributeTypes()]] for details.
+  * @property Model $searchModel Model instance. Note that the type of this property differs in getter and
+- * setter. See [[getSearchModel()]]  and [[setSearchModel()]] for details.
++ * setter. See [[getSearchModel()]] and [[setSearchModel()]] for details.
+  *
+  * @author Paul Klimov <klimov.paul@gmail.com>
+  * @since 2.0.13
+diff --git a/framework/data/Sort.php b/framework/data/Sort.php
+index d96178e1321..0e620644272 100644
+--- a/framework/data/Sort.php
++++ b/framework/data/Sort.php
+@@ -70,7 +70,7 @@
+  *
+  * @property array $attributeOrders Sort directions indexed by attribute names. Sort direction can be either
+  * `SORT_ASC` for ascending order or `SORT_DESC` for descending order. Note that the type of this property
+- * differs in getter and setter. See [[getAttributeOrders()]]  and [[setAttributeOrders()]] for details.
++ * differs in getter and setter. See [[getAttributeOrders()]] and [[setAttributeOrders()]] for details.
+  * @property-read array $orders The columns (keys) and their corresponding sort directions (values). This can
+  * be passed to [[\yii\db\Query::orderBy()]] to construct a DB query. This property is read-only.
+  *
+diff --git a/framework/db/ActiveQueryInterface.php b/framework/db/ActiveQueryInterface.php
+index 9150e8bc2ec..8c708072c55 100644
+--- a/framework/db/ActiveQueryInterface.php
++++ b/framework/db/ActiveQueryInterface.php
+@@ -53,6 +53,8 @@ public function one($db = null);
+      *     // return the index value corresponding to $model
+      * }
+      * ```
++     * The column has to be a part of the `SELECT` fragment of a SQL statement.
++     * If [[yii\db\Query::select()|select()]] is used with an array in its parameter, Yii handles adding that required SQL fragment for you.
+      *
+      * @return $this the query object itself
+      */
+diff --git a/framework/db/BaseActiveRecord.php b/framework/db/BaseActiveRecord.php
+index ead5f5c7d6e..aa5f3b04590 100644
+--- a/framework/db/BaseActiveRecord.php
++++ b/framework/db/BaseActiveRecord.php
+@@ -27,7 +27,7 @@
+  * read-only.
+  * @property bool $isNewRecord Whether the record is new and should be inserted when calling [[save()]].
+  * @property array $oldAttributes The old attribute values (name-value pairs). Note that the type of this
+- * property differs in getter and setter. See [[getOldAttributes()]]  and [[setOldAttributes()]] for details.
++ * property differs in getter and setter. See [[getOldAttributes()]] and [[setOldAttributes()]] for details.
+  * @property-read mixed $oldPrimaryKey The old primary key value. An array (column name => column value) is
+  * returned if the primary key is composite. A string is returned otherwise (null will be returned if the key
+  * value is null). This property is read-only.
+diff --git a/framework/db/BatchQueryResult.php b/framework/db/BatchQueryResult.php
+index c08b8745cfa..5158e4b281d 100644
+--- a/framework/db/BatchQueryResult.php
++++ b/framework/db/BatchQueryResult.php
+@@ -7,7 +7,7 @@
+ 
+ namespace yii\db;
+ 
+-use yii\base\BaseObject;
++use yii\base\Component;
+ 
+ /**
+  * BatchQueryResult represents a batch query from which you can retrieve data in batches.
+@@ -28,8 +28,20 @@
+  * @author Qiang Xue <qiang.xue@gmail.com>
+  * @since 2.0
+  */
+-class BatchQueryResult extends BaseObject implements \Iterator
++class BatchQueryResult extends Component implements \Iterator
+ {
++    /**
++     * @event Event an event that is triggered when the batch query is reset.
++     * @see reset()
++     * @since 2.0.41
++     */
++    const EVENT_RESET = 'reset';
++    /**
++     * @event Event an event that is triggered when the last batch has been fetched.
++     * @since 2.0.41
++     */
++    const EVENT_FINISH = 'finish';
++
+     /**
+      * @var Connection the DB connection to be used when performing batch query.
+      * If null, the "db" application component will be used.
+@@ -95,6 +107,7 @@ public function reset()
+         $this->_batch = null;
+         $this->_value = null;
+         $this->_key = null;
++        $this->trigger(self::EVENT_RESET);
+     }
+ 
+     /**
+@@ -160,8 +173,14 @@ protected function getRows()
+         $count = 0;
+ 
+         try {
+-            while ($count++ < $this->batchSize && ($row = $this->_dataReader->read())) {
+-                $rows[] = $row;
++            while ($count++ < $this->batchSize) {
++                if ($row = $this->_dataReader->read()) {
++                    $rows[] = $row;
++                } else {
++                    // we've reached the end
++                    $this->trigger(self::EVENT_FINISH);
++                    break;
++                }
+             }
+         } catch (\PDOException $e) {
+             $errorCode = isset($e->errorInfo[1]) ? $e->errorInfo[1] : null;
+diff --git a/framework/db/Connection.php b/framework/db/Connection.php
+index 5e2bd45a79c..25ad2ecef1e 100644
+--- a/framework/db/Connection.php
++++ b/framework/db/Connection.php
+@@ -119,7 +119,7 @@
+  * @property-read PDO $masterPdo The PDO instance for the currently active master connection. This property is
+  * read-only.
+  * @property QueryBuilder $queryBuilder The query builder for the current DB connection. Note that the type of
+- * this property differs in getter and setter. See [[getQueryBuilder()]]  and [[setQueryBuilder()]] for details.
++ * this property differs in getter and setter. See [[getQueryBuilder()]] and [[setQueryBuilder()]] for details.
+  * @property-read Schema $schema The schema information for the database opened by this connection. This
+  * property is read-only.
+  * @property-read string $serverVersion Server version as a string. This property is read-only.
+@@ -694,8 +694,10 @@ protected function createPdoInstance()
+                 $driver = strtolower(substr($this->dsn, 0, $pos));
+             }
+             if (isset($driver)) {
+-                if ($driver === 'mssql' || $driver === 'dblib') {
++                if ($driver === 'mssql') {
+                     $pdoClass = 'yii\db\mssql\PDO';
++                } elseif ($driver === 'dblib') {
++                    $pdoClass = 'yii\db\mssql\DBLibPDO';
+                 } elseif ($driver === 'sqlsrv') {
+                     $pdoClass = 'yii\db\mssql\SqlsrvPDO';
+                 }
+@@ -1139,7 +1141,7 @@ protected function openFromPool(array $pool, array $sharedConfig)
+      *
+      * If none of the servers are available the status cache is ignored and connection attempts are made to all
+      * servers (Since version 2.0.35). This is to avoid downtime when all servers are unavailable for a short time.
+-     * After a successful connection attempt the server is marked as avaiable again.
++     * After a successful connection attempt the server is marked as available again.
+      *
+      * @param array $pool the list of connection configurations in the server pool
+      * @param array $sharedConfig the configuration common to those given in `$pool`.
+diff --git a/framework/db/Query.php b/framework/db/Query.php
+index ba0a103b8e9..e8c6438997f 100644
+--- a/framework/db/Query.php
++++ b/framework/db/Query.php
+@@ -245,7 +245,29 @@ public function all($db = null)
+         if ($this->emulateExecution) {
+             return [];
+         }
++
++        if (is_string($this->indexBy) && $this->indexBy && is_array($this->select)) {
++            $isIndexByAnArray = false;
++            if (strpos($this->indexBy, '.')) {
++                $indexByParts = explode('.', $this->indexBy);
++                foreach ($indexByParts as $indexByPart) {
++                    if (is_numeric($indexByPart)) {
++                        $isIndexByAnArray = true;
++                        break;
++                    }
++                }
++            }
++            if (!$isIndexByAnArray && !in_array($this->indexBy, $this->select, true)) {
++                if (strpos($this->indexBy, '.') === false && count($tables = $this->getTablesUsedInFrom()) > 0) {
++                    $this->select[] = key($tables) . '.' . $this->indexBy;
++                } else {
++                    $this->select[] = $this->indexBy;
++                }
++            }
++        }
++
+         $rows = $this->createCommand($db)->queryAll();
++
+         return $this->populate($rows);
+     }
+ 
+diff --git a/framework/db/QueryInterface.php b/framework/db/QueryInterface.php
+index df57ad38385..30df4e52ae5 100644
+--- a/framework/db/QueryInterface.php
++++ b/framework/db/QueryInterface.php
+@@ -68,6 +68,8 @@ public function exists($db = null);
+      *     // return the index value corresponding to $row
+      * }
+      * ```
++     * The column has to be a part of the `SELECT` fragment of a SQL statement.
++     * If [[yii\db\Query::select()|select()]] is used with an array in its parameter, Yii handles adding that required SQL fragment for you.
+      *
+      * @return $this the query object itself
+      */
+diff --git a/framework/db/QueryTrait.php b/framework/db/QueryTrait.php
+index 803d6baf0be..277fd05c279 100644
+--- a/framework/db/QueryTrait.php
++++ b/framework/db/QueryTrait.php
+@@ -21,23 +21,23 @@
+ trait QueryTrait
+ {
+     /**
+-     * @var string|array|ExpressionInterface query condition. This refers to the WHERE clause in a SQL statement.
++     * @var string|array|ExpressionInterface|null query condition. This refers to the WHERE clause in a SQL statement.
+      * For example, `['age' => 31, 'team' => 1]`.
+      * @see where() for valid syntax on specifying this value.
+      */
+     public $where;
+     /**
+-     * @var int|ExpressionInterface maximum number of records to be returned. May be an instance of [[ExpressionInterface]].
++     * @var int|ExpressionInterface|null maximum number of records to be returned. May be an instance of [[ExpressionInterface]].
+      * If not set or less than 0, it means no limit.
+      */
+     public $limit;
+     /**
+-     * @var int|ExpressionInterface zero-based offset from where the records are to be returned.
++     * @var int|ExpressionInterface|null zero-based offset from where the records are to be returned.
+      * May be an instance of [[ExpressionInterface]]. If not set or less than 0, it means starting from the beginning.
+      */
+     public $offset;
+     /**
+-     * @var array how to sort the query results. This is used to construct the ORDER BY clause in a SQL statement.
++     * @var array|null how to sort the query results. This is used to construct the ORDER BY clause in a SQL statement.
+      * The array keys are the columns to be sorted by, and the array values are the corresponding sort directions which
+      * can be either [SORT_ASC](https://secure.php.net/manual/en/array.constants.php#constant.sort-asc)
+      * or [SORT_DESC](https://secure.php.net/manual/en/array.constants.php#constant.sort-desc).
+@@ -46,7 +46,7 @@ trait QueryTrait
+      */
+     public $orderBy;
+     /**
+-     * @var string|callable the name of the column by which the query results should be indexed by.
++     * @var string|callable|null the name of the column by which the query results should be indexed by.
+      * This can also be a callable (e.g. anonymous function) that returns the index value based on the given
+      * row data. For more details, see [[indexBy()]]. This property is only used by [[QueryInterface::all()|all()]].
+      */
+@@ -71,6 +71,8 @@ trait QueryTrait
+      *     // return the index value corresponding to $row
+      * }
+      * ```
++     * The column has to be a part of the `SELECT` fragment of a SQL statement.
++     * If [[yii\db\Query::select()|select()]] is used with an array in its parameter, Yii handles adding that required SQL fragment for you.
+      *
+      * @return $this the query object itself
+      */
+diff --git a/framework/db/Schema.php b/framework/db/Schema.php
+index c11a22be210..120141d1120 100644
+--- a/framework/db/Schema.php
++++ b/framework/db/Schema.php
+@@ -460,7 +460,7 @@ public function quoteValue($str)
+             return $str;
+         }
+ 
+-        if (($value = $this->db->getSlavePdo()->quote($str)) !== false) {
++        if (mb_stripos($this->db->dsn, 'odbc:') === false && ($value = $this->db->getSlavePdo()->quote($str)) !== false) {
+             return $value;
+         }
+ 
+diff --git a/framework/db/mssql/DBLibPDO.php b/framework/db/mssql/DBLibPDO.php
+new file mode 100644
+index 00000000000..1500131f633
+--- /dev/null
++++ b/framework/db/mssql/DBLibPDO.php
+@@ -0,0 +1,51 @@
++<?php
++/**
++ * @link http://www.yiiframework.com/
++ * @copyright Copyright (c) 2008 Yii Software LLC
++ * @license http://www.yiiframework.com/license/
++ */
++
++namespace yii\db\mssql;
++
++/**
++ * This is an extension of the default PDO class of DBLIB drivers.
++ * It provides workarounds for improperly implemented functionalities of the DBLIB drivers.
++ *
++ * @author Bert Brunekreeft <bbrunekreeft@gmail.com>
++ * @since 2.0.41
++ */
++class DBLibPDO extends \PDO
++{
++    /**
++     * Returns value of the last inserted ID.
++     * @param string|null $name the sequence name. Defaults to null.
++     * @return int last inserted ID value.
++     */
++    public function lastInsertId($name = null)
++    {
++        return $this->query('SELECT CAST(COALESCE(SCOPE_IDENTITY(), @@IDENTITY) AS bigint)')->fetchColumn();
++    }
++
++    /**
++     * Retrieve a database connection attribute.
++     *
++     * It is necessary to override PDO's method as some MSSQL PDO driver (e.g. dblib) does not
++     * support getting attributes.
++     * @param int $attribute One of the PDO::ATTR_* constants.
++     * @return mixed A successful call returns the value of the requested PDO attribute.
++     * An unsuccessful call returns null.
++     */
++    public function getAttribute($attribute)
++    {
++        try {
++            return parent::getAttribute($attribute);
++        } catch (\PDOException $e) {
++            switch ($attribute) {
++                case self::ATTR_SERVER_VERSION:
++                    return $this->query("SELECT CAST(SERVERPROPERTY('productversion') AS VARCHAR)")->fetchColumn();
++                default:
++                    throw $e;
++            }
++        }
++    }
++}
+diff --git a/framework/db/mssql/QueryBuilder.php b/framework/db/mssql/QueryBuilder.php
+index 0b068875f9a..da04e1d64f4 100644
+--- a/framework/db/mssql/QueryBuilder.php
++++ b/framework/db/mssql/QueryBuilder.php
+@@ -122,6 +122,9 @@ protected function oldBuildOrderByAndLimit($sql, $orderBy, $limit, $offset)
+         $sql = preg_replace('/^([\s(])*SELECT(\s+DISTINCT)?(?!\s*TOP\s*\()/i', "\\1SELECT\\2 rowNum = ROW_NUMBER() over ($orderBy),", $sql);
+ 
+         if ($this->hasLimit($limit)) {
++            if ($limit instanceof Expression) {
++                $limit = '('. (string)$limit . ')';
++            }
+             $sql = "SELECT TOP $limit * FROM ($sql) sub";
+         } else {
+             $sql = "SELECT * FROM ($sql) sub";
+@@ -535,8 +538,18 @@ public function upsert($table, $insertColumns, $updateColumns, &$params)
+         }
+         $on = $this->buildCondition($onCondition, $params);
+         list(, $placeholders, $values, $params) = $this->prepareInsertValues($table, $insertColumns, $params);
++
++        /**
++         * Fix number of select query params for old MSSQL version that does not support offset correctly.
++         * @see QueryBuilder::oldBuildOrderByAndLimit
++         */
++        $insertNamesUsing = $insertNames;
++        if (strstr($values, 'rowNum = ROW_NUMBER()') !== false) {
++            $insertNamesUsing = array_merge(['[rowNum]'], $insertNames);
++        }
++
+         $mergeSql = 'MERGE ' . $this->db->quoteTableName($table) . ' WITH (HOLDLOCK) '
+-            . 'USING (' . (!empty($placeholders) ? 'VALUES (' . implode(', ', $placeholders) . ')' : ltrim($values, ' ')) . ') AS [EXCLUDED] (' . implode(', ', $insertNames) . ') '
++            . 'USING (' . (!empty($placeholders) ? 'VALUES (' . implode(', ', $placeholders) . ')' : ltrim($values, ' ')) . ') AS [EXCLUDED] (' . implode(', ', $insertNamesUsing) . ') '
+             . "ON ($on)";
+         $insertValues = [];
+         foreach ($insertNames as $name) {
+diff --git a/framework/db/mssql/Schema.php b/framework/db/mssql/Schema.php
+index 34f9976daef..365d96e5b17 100644
+--- a/framework/db/mssql/Schema.php
++++ b/framework/db/mssql/Schema.php
+@@ -789,13 +789,12 @@ public function insert($table, $columns)
+         $tableSchema = $this->getTableSchema($table);
+         $result = [];
+         foreach ($tableSchema->primaryKey as $name) {
+-            if ($tableSchema->columns[$name]->autoIncrement) {
+-                $result[$name] = $this->getLastInsertID($tableSchema->sequenceName);
+-                break;
+-            }
+             // @see https://github.com/yiisoft/yii2/issues/13828 & https://github.com/yiisoft/yii2/issues/17474
+             if (isset($inserted[$name])) {
+                 $result[$name] = $inserted[$name];
++            } elseif ($tableSchema->columns[$name]->autoIncrement) {
++                // for a version earlier than 2005
++                $result[$name] = $this->getLastInsertID($tableSchema->sequenceName);
+             } elseif (isset($columns[$name])) {
+                 $result[$name] = $columns[$name];
+             } else {
+diff --git a/framework/db/mysql/QueryBuilder.php b/framework/db/mysql/QueryBuilder.php
+index c8b93cf186d..6ef2f30dbfe 100644
+--- a/framework/db/mysql/QueryBuilder.php
++++ b/framework/db/mysql/QueryBuilder.php
+@@ -90,7 +90,7 @@ public function renameColumn($table, $oldName, $newName)
+             $row = array_values($row);
+             $sql = $row[1];
+         }
+-        if (preg_match_all('/^\s*`(.*?)`\s+(.*?),?$/m', $sql, $matches)) {
++        if (preg_match_all('/^\s*[`"](.*?)[`"]\s+(.*?),?$/m', $sql, $matches)) {
+             foreach ($matches[1] as $i => $c) {
+                 if ($c === $oldName) {
+                     return "ALTER TABLE $quotedTable CHANGE "
+@@ -373,7 +373,7 @@ private function getColumnDefinition($table, $column)
+             $row = array_values($row);
+             $sql = $row[1];
+         }
+-        if (preg_match_all('/^\s*`(.*?)`\s+(.*?),?$/m', $sql, $matches)) {
++        if (preg_match_all('/^\s*[`"](.*?)[`"]\s+(.*?),?$/m', $sql, $matches)) {
+             foreach ($matches[1] as $i => $c) {
+                 if ($c === $column) {
+                     return $matches[2][$i];
+diff --git a/framework/db/mysql/Schema.php b/framework/db/mysql/Schema.php
+index ae9d0de4eee..90ecd314290 100644
+--- a/framework/db/mysql/Schema.php
++++ b/framework/db/mysql/Schema.php
+@@ -413,9 +413,9 @@ protected function findConstraints($table)
+             $regexp = '/FOREIGN KEY\s+\(([^\)]+)\)\s+REFERENCES\s+([^\(^\s]+)\s*\(([^\)]+)\)/mi';
+             if (preg_match_all($regexp, $sql, $matches, PREG_SET_ORDER)) {
+                 foreach ($matches as $match) {
+-                    $fks = array_map('trim', explode(',', str_replace('`', '', $match[1])));
+-                    $pks = array_map('trim', explode(',', str_replace('`', '', $match[3])));
+-                    $constraint = [str_replace('`', '', $match[2])];
++                    $fks = array_map('trim', explode(',', str_replace(['`', '"'], '', $match[1])));
++                    $pks = array_map('trim', explode(',', str_replace(['`', '"'], '', $match[3])));
++                    $constraint = [str_replace(['`', '"'], '', $match[2])];
+                     foreach ($fks as $k => $name) {
+                         $constraint[$name] = $pks[$k];
+                     }
+@@ -446,11 +446,11 @@ public function findUniqueIndexes($table)
+         $sql = $this->getCreateTableSql($table);
+         $uniqueIndexes = [];
+ 
+-        $regexp = '/UNIQUE KEY\s+\`(.+)\`\s*\((\`.+\`)+\)/mi';
++        $regexp = '/UNIQUE KEY\s+[`"](.+)[`"]\s*\(([`"].+[`"])+\)/mi';
+         if (preg_match_all($regexp, $sql, $matches, PREG_SET_ORDER)) {
+             foreach ($matches as $match) {
+                 $indexName = $match[1];
+-                $indexColumns = array_map('trim', explode('`,`', trim($match[2], '`')));
++                $indexColumns = array_map('trim', preg_split('/[`"],[`"]/', trim($match[2], '`"')));
+                 $uniqueIndexes[$indexName] = $indexColumns;
+             }
+         }
+diff --git a/framework/db/pgsql/Schema.php b/framework/db/pgsql/Schema.php
+index 83429fccb12..3b703839925 100644
+--- a/framework/db/pgsql/Schema.php
++++ b/framework/db/pgsql/Schema.php
+@@ -232,7 +232,7 @@ protected function loadTableIndexes($tableName)
+ INNER JOIN "pg_class" AS "ic"
+     ON "ic"."oid" = "i"."indexrelid"
+ INNER JOIN "pg_attribute" AS "ia"
+-    ON "ia"."attrelid" = "i"."indrelid" AND "ia"."attnum" = ANY ("i"."indkey")
++    ON "ia"."attrelid" = "i"."indexrelid"
+ WHERE "tcns"."nspname" = :schemaName AND "tc"."relname" = :tableName
+ ORDER BY "ia"."attnum" ASC
+ SQL;
+diff --git a/framework/grid/DataColumn.php b/framework/grid/DataColumn.php
+index b5a61c29685..8760104aba6 100644
+--- a/framework/grid/DataColumn.php
++++ b/framework/grid/DataColumn.php
+@@ -117,7 +117,24 @@ class DataColumn extends Column
+      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
+      */
+     public $filterInputOptions = ['class' => 'form-control', 'id' => null];
++    /**
++     * @var string the attribute name of the [[GridView::filterModel]] associated with this column. If not set,
++     * will have the same value as [[attribute]].
++     * @since 2.0.41
++     */
++    public $filterAttribute;
++
+ 
++    /**
++     * {@inheritdoc}
++     */
++    public function init()
++    {
++        parent::init();
++        if($this->filterAttribute === null) {
++            $this->filterAttribute = $this->attribute;
++        }
++    }
+ 
+     /**
+      * {@inheritdoc}
+@@ -161,7 +178,7 @@ protected function getHeaderCellLabel()
+                 $model = $modelClass::instance();
+                 $label = $model->getAttributeLabel($this->attribute);
+             } elseif ($this->grid->filterModel !== null && $this->grid->filterModel instanceof Model) {
+-                $label = $this->grid->filterModel->getAttributeLabel($this->attribute);
++                $label = $this->grid->filterModel->getAttributeLabel($this->filterAttribute);
+             } else {
+                 $models = $provider->getModels();
+                 if (($model = reset($models)) instanceof Model) {
+@@ -189,26 +206,26 @@ protected function renderFilterCellContent()
+ 
+         $model = $this->grid->filterModel;
+ 
+-        if ($this->filter !== false && $model instanceof Model && $this->attribute !== null && $model->isAttributeActive($this->attribute)) {
+-            if ($model->hasErrors($this->attribute)) {
++        if ($this->filter !== false && $model instanceof Model && $this->filterAttribute !== null && $model->isAttributeActive($this->filterAttribute)) {
++            if ($model->hasErrors($this->filterAttribute)) {
+                 Html::addCssClass($this->filterOptions, 'has-error');
+-                $error = ' ' . Html::error($model, $this->attribute, $this->grid->filterErrorOptions);
++                $error = ' ' . Html::error($model, $this->filterAttribute, $this->grid->filterErrorOptions);
+             } else {
+                 $error = '';
+             }
+             if (is_array($this->filter)) {
+                 $options = array_merge(['prompt' => ''], $this->filterInputOptions);
+-                return Html::activeDropDownList($model, $this->attribute, $this->filter, $options) . $error;
++                return Html::activeDropDownList($model, $this->filterAttribute, $this->filter, $options) . $error;
+             } elseif ($this->format === 'boolean') {
+                 $options = array_merge(['prompt' => ''], $this->filterInputOptions);
+-                return Html::activeDropDownList($model, $this->attribute, [
++                return Html::activeDropDownList($model, $this->filterAttribute, [
+                     1 => $this->grid->formatter->booleanFormat[1],
+                     0 => $this->grid->formatter->booleanFormat[0],
+                 ], $options) . $error;
+             }
+             $options = array_merge(['maxlength' => true], $this->filterInputOptions);
+ 
+-            return Html::activeTextInput($model, $this->attribute, $options) . $error;
++            return Html::activeTextInput($model, $this->filterAttribute, $options) . $error;
+         }
+ 
+         return parent::renderFilterCellContent();
+diff --git a/framework/helpers/BaseArrayHelper.php b/framework/helpers/BaseArrayHelper.php
+index 0f3d368ac08..8bc7ef2bc0b 100644
+--- a/framework/helpers/BaseArrayHelper.php
++++ b/framework/helpers/BaseArrayHelper.php
+@@ -196,6 +196,10 @@ public static function getValue($array, $key, $default = null)
+             $key = $lastKey;
+         }
+ 
++        if (is_object($array) && property_exists($array, $key)) {
++            return $array->$key;
++        }
++
+         if (static::keyExists($key, $array)) {
+             return $array[$key];
+         }
+@@ -520,7 +524,7 @@ public static function index($array, $key, $groups = [])
+      * ```
+      *
+      * @param array $array
+-     * @param int|string|\Closure $name
++     * @param int|string|array|\Closure $name
+      * @param bool $keepKeys whether to maintain the array keys. If false, the resulting array
+      * will be re-indexed with integers.
+      * @return array the list of column values
+diff --git a/framework/i18n/GettextMessageSource.php b/framework/i18n/GettextMessageSource.php
+index 6b4a3c2ef9c..251bd7fb5ad 100644
+--- a/framework/i18n/GettextMessageSource.php
++++ b/framework/i18n/GettextMessageSource.php
+@@ -72,14 +72,12 @@ protected function loadMessages($category, $language)
+         $fallbackLanguage = substr($language, 0, 2);
+         $fallbackSourceLanguage = substr($this->sourceLanguage, 0, 2);
+ 
+-        if ($fallbackLanguage !== $language) {
++        if ($fallbackLanguage !== '' && $fallbackLanguage !== $language) {
+             $messages = $this->loadFallbackMessages($category, $fallbackLanguage, $messages, $messageFile);
+-        } elseif ($language === $fallbackSourceLanguage) {
++        } elseif ($fallbackSourceLanguage !== '' && $language === $fallbackSourceLanguage) {
+             $messages = $this->loadFallbackMessages($category, $this->sourceLanguage, $messages, $messageFile);
+-        } else {
+-            if ($messages === null) {
+-                Yii::error("The message file for category '$category' does not exist: $messageFile", __METHOD__);
+-            }
++        } elseif ($messages === null) {
++            Yii::error("The message file for category '$category' does not exist: $messageFile", __METHOD__);
+         }
+ 
+         return (array) $messages;
+diff --git a/framework/i18n/I18N.php b/framework/i18n/I18N.php
+index 3e5bd425d19..49cf93bd459 100644
+--- a/framework/i18n/I18N.php
++++ b/framework/i18n/I18N.php
+@@ -19,7 +19,7 @@
+  *
+  * @property MessageFormatter $messageFormatter The message formatter to be used to format message via ICU
+  * message format. Note that the type of this property differs in getter and setter. See
+- * [[getMessageFormatter()]]  and [[setMessageFormatter()]] for details.
++ * [[getMessageFormatter()]] and [[setMessageFormatter()]] for details.
+  *
+  * @author Qiang Xue <qiang.xue@gmail.com>
+  * @since 2.0
+diff --git a/framework/i18n/PhpMessageSource.php b/framework/i18n/PhpMessageSource.php
+index 103c9311204..975846874ab 100644
+--- a/framework/i18n/PhpMessageSource.php
++++ b/framework/i18n/PhpMessageSource.php
+@@ -74,14 +74,12 @@ protected function loadMessages($category, $language)
+         $fallbackLanguage = substr($language, 0, 2);
+         $fallbackSourceLanguage = substr($this->sourceLanguage, 0, 2);
+ 
+-        if ($language !== $fallbackLanguage) {
++        if ($fallbackLanguage !== '' && $language !== $fallbackLanguage) {
+             $messages = $this->loadFallbackMessages($category, $fallbackLanguage, $messages, $messageFile);
+-        } elseif ($language === $fallbackSourceLanguage) {
++        } elseif ($fallbackSourceLanguage !== '' && $language === $fallbackSourceLanguage) {
+             $messages = $this->loadFallbackMessages($category, $this->sourceLanguage, $messages, $messageFile);
+-        } else {
+-            if ($messages === null) {
+-                Yii::warning("The message file for category '$category' does not exist: $messageFile", __METHOD__);
+-            }
++        } elseif ($messages === null) {
++            Yii::warning("The message file for category '$category' does not exist: $messageFile", __METHOD__);
+         }
+ 
+         return (array) $messages;
+diff --git a/framework/log/Dispatcher.php b/framework/log/Dispatcher.php
+index d888d89a8d1..8109e0b8978 100644
+--- a/framework/log/Dispatcher.php
++++ b/framework/log/Dispatcher.php
+@@ -53,7 +53,7 @@
+  * @property int $flushInterval How many messages should be logged before they are sent to targets. This
+  * method returns the value of [[Logger::flushInterval]].
+  * @property Logger $logger The logger. If not set, [[\Yii::getLogger()]] will be used. Note that the type of
+- * this property differs in getter and setter. See [[getLogger()]]  and [[setLogger()]] for details.
++ * this property differs in getter and setter. See [[getLogger()]] and [[setLogger()]] for details.
+  * @property int $traceLevel How many application call stacks should be logged together with each message.
+  * This method returns the value of [[Logger::traceLevel]]. Defaults to 0.
+  *
+diff --git a/framework/log/Logger.php b/framework/log/Logger.php
+index 6a6f3b9a85e..76e993d3061 100644
+--- a/framework/log/Logger.php
++++ b/framework/log/Logger.php
+@@ -111,6 +111,11 @@ class Logger extends Component
+      * @var Dispatcher the message dispatcher
+      */
+     public $dispatcher;
++    /**
++     * @var array of event names used to get statistical results of DB queries.
++     * @since 2.0.41
++     */
++    public $dbEventNames = ['yii\db\Command::query', 'yii\db\Command::execute'];
+ 
+ 
+     /**
+@@ -252,7 +257,7 @@ public function getProfiling($categories = [], $excludeCategories = [])
+      */
+     public function getDbProfiling()
+     {
+-        $timings = $this->getProfiling(['yii\db\Command::query', 'yii\db\Command::execute']);
++        $timings = $this->getProfiling($this->dbEventNames);
+         $count = count($timings);
+         $time = 0;
+         foreach ($timings as $timing) {
+diff --git a/framework/log/Target.php b/framework/log/Target.php
+index 846bc919a9f..2a192e80d55 100644
+--- a/framework/log/Target.php
++++ b/framework/log/Target.php
+@@ -27,10 +27,10 @@
+  * may specify [[except]] to exclude messages of certain categories.
+  *
+  * @property bool $enabled Indicates whether this log target is enabled. Defaults to true. Note that the type
+- * of this property differs in getter and setter. See [[getEnabled()]]  and [[setEnabled()]] for details.
++ * of this property differs in getter and setter. See [[getEnabled()]] and [[setEnabled()]] for details.
+  * @property int $levels The message levels that this target is interested in. This is a bitmap of level
+  * values. Defaults to 0, meaning all available levels. Note that the type of this property differs in getter and
+- * setter. See [[getLevels()]]  and [[setLevels()]] for details.
++ * setter. See [[getLevels()]] and [[setLevels()]] for details.
+  *
+  * For more details and usage information on Target, see the [guide article on logging & targets](guide:runtime-logging).
+  *
+diff --git a/framework/mail/BaseMailer.php b/framework/mail/BaseMailer.php
+index 633974daa2f..c4546fbd1f4 100644
+--- a/framework/mail/BaseMailer.php
++++ b/framework/mail/BaseMailer.php
+@@ -23,7 +23,7 @@
+  * For more details and usage information on BaseMailer, see the [guide article on mailing](guide:tutorial-mailing).
+  *
+  * @property View $view View instance. Note that the type of this property differs in getter and setter. See
+- * [[getView()]]  and [[setView()]] for details.
++ * [[getView()]] and [[setView()]] for details.
+  * @property string $viewPath The directory that contains the view files for composing mail messages Defaults
+  * to '@app/mail'.
+  *
+diff --git a/framework/rbac/BaseManager.php b/framework/rbac/BaseManager.php
+index c8dda76f930..60cbc01aeb9 100644
+--- a/framework/rbac/BaseManager.php
++++ b/framework/rbac/BaseManager.php
+@@ -20,7 +20,7 @@
+  * @property-read Role[] $defaultRoleInstances Default roles. The array is indexed by the role names. This
+  * property is read-only.
+  * @property string[] $defaultRoles Default roles. Note that the type of this property differs in getter and
+- * setter. See [[getDefaultRoles()]]  and [[setDefaultRoles()]] for details.
++ * setter. See [[getDefaultRoles()]] and [[setDefaultRoles()]] for details.
+  *
+  * @author Qiang Xue <qiang.xue@gmail.com>
+  * @since 2.0
+diff --git a/framework/rest/UrlRule.php b/framework/rest/UrlRule.php
+index 73c5dc4f44b..413ecf3db0b 100644
+--- a/framework/rest/UrlRule.php
++++ b/framework/rest/UrlRule.php
+@@ -205,9 +205,6 @@ protected function createRule($pattern, $prefix, $action)
+         $config['verb'] = $verbs;
+         $config['pattern'] = rtrim($prefix . '/' . strtr($pattern, $this->tokens), '/');
+         $config['route'] = $action;
+-        if (!empty($verbs) && !in_array('GET', $verbs)) {
+-            $config['mode'] = WebUrlRule::PARSING_ONLY;
+-        }
+         $config['suffix'] = $this->suffix;
+ 
+         return Yii::createObject($config);
+@@ -219,6 +216,10 @@ protected function createRule($pattern, $prefix, $action)
+     public function parseRequest($manager, $request)
+     {
+         $pathInfo = $request->getPathInfo();
++        if ($this->prefix !== '' && strpos($pathInfo . '/', $this->prefix . '/') !== 0) {
++            return false;
++        }
++
+         foreach ($this->rules as $urlName => $rules) {
+             if (strpos($pathInfo, $urlName) !== false) {
+                 foreach ($rules as $rule) {
+diff --git a/framework/validators/CompareValidator.php b/framework/validators/CompareValidator.php
+index 8df351b72da..a57886d7c1d 100644
+--- a/framework/validators/CompareValidator.php
++++ b/framework/validators/CompareValidator.php
+@@ -146,6 +146,9 @@ public function validateAttribute($model, $attribute)
+             return;
+         }
+         if ($this->compareValue !== null) {
++            if ($this->compareValue instanceof \Closure) {
++                $this->compareValue = call_user_func($this->compareValue);
++            }
+             $compareLabel = $compareValue = $compareValueOrAttribute = $this->compareValue;
+         } else {
+             $compareAttribute = $this->compareAttribute === null ? $attribute . '_repeat' : $this->compareAttribute;
+@@ -170,6 +173,9 @@ protected function validateValue($value)
+         if ($this->compareValue === null) {
+             throw new InvalidConfigException('CompareValidator::compareValue must be set.');
+         }
++        if ($this->compareValue instanceof \Closure) {
++            $this->compareValue = call_user_func($this->compareValue);
++        }
+         if (!$this->compareValues($this->operator, $this->type, $value, $this->compareValue)) {
+             return [$this->message, [
+                 'compareAttribute' => $this->compareValue,
+@@ -225,6 +231,10 @@ protected function compareValues($operator, $type, $value, $compareValue)
+      */
+     public function clientValidateAttribute($model, $attribute, $view)
+     {
++        if ($this->compareValue != null && $this->compareValue instanceof \Closure) {
++            $this->compareValue = call_user_func($this->compareValue);
++        }
++
+         ValidationAsset::register($view);
+         $options = $this->getClientOptions($model, $attribute);
+ 
+diff --git a/framework/web/AssetBundle.php b/framework/web/AssetBundle.php
+index 60ada80ef3b..d04ad40eba6 100644
+--- a/framework/web/AssetBundle.php
++++ b/framework/web/AssetBundle.php
+@@ -153,22 +153,18 @@ public function registerAssetFiles($view)
+             if (is_array($js)) {
+                 $file = array_shift($js);
+                 $options = ArrayHelper::merge($this->jsOptions, $js);
+-                $view->registerJsFile($manager->getActualAssetUrl($this, $file), $options);
+-            } else {
+-                if ($js !== null) {
+-                    $view->registerJsFile($manager->getActualAssetUrl($this, $js), $this->jsOptions);
+-                }
++                $view->registerJsFile($manager->getAssetUrl($this, $file, ArrayHelper::getValue($options, 'appendTimestamp')), $options);
++            } elseif ($js !== null) {
++                $view->registerJsFile($manager->getAssetUrl($this, $js), $this->jsOptions);
+             }
+         }
+         foreach ($this->css as $css) {
+             if (is_array($css)) {
+                 $file = array_shift($css);
+                 $options = ArrayHelper::merge($this->cssOptions, $css);
+-                $view->registerCssFile($manager->getActualAssetUrl($this, $file), $options);
+-            } else {
+-                if ($css !== null) {
+-                    $view->registerCssFile($manager->getActualAssetUrl($this, $css), $this->cssOptions);
+-                }
++                $view->registerCssFile($manager->getAssetUrl($this, $file, ArrayHelper::getValue($options, 'appendTimestamp')), $options);
++            } elseif ($css !== null) {
++                $view->registerCssFile($manager->getAssetUrl($this, $css), $this->cssOptions);
+             }
+         }
+     }
+diff --git a/framework/web/AssetManager.php b/framework/web/AssetManager.php
+index 996e021ace3..2d28d9246ed 100644
+--- a/framework/web/AssetManager.php
++++ b/framework/web/AssetManager.php
+@@ -34,7 +34,7 @@
+  * For more details and usage information on AssetManager, see the [guide article on assets](guide:structure-assets).
+  *
+  * @property AssetConverterInterface $converter The asset converter. Note that the type of this property
+- * differs in getter and setter. See [[getConverter()]]  and [[setConverter()]] for details.
++ * differs in getter and setter. See [[getConverter()]] and [[setConverter()]] for details.
+  *
+  * @author Qiang Xue <qiang.xue@gmail.com>
+  * @since 2.0
+@@ -231,7 +231,7 @@ public function checkBasePathPermission()
+         if (!is_dir($this->basePath)) {
+             throw new InvalidConfigException("The directory does not exist: {$this->basePath}");
+         }
+-        
++
+         if (!is_writable($this->basePath)) {
+             throw new InvalidConfigException("The directory is not writable by the Web process: {$this->basePath}");
+         }
+@@ -316,14 +316,20 @@ protected function loadDummyBundle($name)
+      * The actual URL is obtained by prepending either [[AssetBundle::$baseUrl]] or [[AssetManager::$baseUrl]] to the given asset path.
+      * @param AssetBundle $bundle the asset bundle which the asset file belongs to
+      * @param string $asset the asset path. This should be one of the assets listed in [[AssetBundle::$js]] or [[AssetBundle::$css]].
++     * @param bool|null $appendTimestamp Whether to append timestamp to the URL.
+      * @return string the actual URL for the specified asset.
+      */
+-    public function getAssetUrl($bundle, $asset)
++    public function getAssetUrl($bundle, $asset, $appendTimestamp = null)
+     {
+         $assetUrl = $this->getActualAssetUrl($bundle, $asset);
+         $assetPath = $this->getAssetPath($bundle, $asset);
+ 
+-        if ($this->appendTimestamp && $assetPath && ($timestamp = @filemtime($assetPath)) > 0) {
++        $withTimestamp = $this->appendTimestamp;
++        if ($appendTimestamp !== null) {
++            $withTimestamp = $appendTimestamp;
++        }
++
++        if ($withTimestamp && $assetPath && ($timestamp = @filemtime($assetPath)) > 0) {
+             return "$assetUrl?v=$timestamp";
+         }
+ 
+diff --git a/framework/web/Controller.php b/framework/web/Controller.php
+index 4e205d00eb6..08a15e8ed74 100644
+--- a/framework/web/Controller.php
++++ b/framework/web/Controller.php
+@@ -142,31 +142,38 @@ public function bindActionParams($action, $params)
+                 } elseif (is_array($params[$name])) {
+                     $isValid = false;
+                 } elseif (
+-                    PHP_VERSION_ID >= 70000 &&
+-                    ($type = $param->getType()) !== null &&
+-                    $type->isBuiltin() &&
+-                    ($params[$name] !== null || !$type->allowsNull())
++                    PHP_VERSION_ID >= 70000
++                    && ($type = $param->getType()) !== null
++                    && $type->isBuiltin()
++                    && ($params[$name] !== null || !$type->allowsNull())
+                 ) {
+                     $typeName = PHP_VERSION_ID >= 70100 ? $type->getName() : (string)$type;
+-                    switch ($typeName) {
+-                        case 'int':
+-                            $params[$name] = filter_var($params[$name], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
+-                            break;
+-                        case 'float':
+-                            $params[$name] = filter_var($params[$name], FILTER_VALIDATE_FLOAT, FILTER_NULL_ON_FAILURE);
+-                            break;
+-                        case 'bool':
+-                            $params[$name] = filter_var($params[$name], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+-                            break;
+-                    }
+-                    if ($params[$name] === null) {
+-                        $isValid = false;
++
++                    if ($params[$name] === '' && $type->allowsNull()) {
++                        if ($typeName !== 'string') { // for old string behavior compatibility
++                            $params[$name] = null;
++                        }
++                    } else {
++                        switch ($typeName) {
++                            case 'int':
++                                $params[$name] = filter_var($params[$name], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
++                                break;
++                            case 'float':
++                                $params[$name] = filter_var($params[$name], FILTER_VALIDATE_FLOAT, FILTER_NULL_ON_FAILURE);
++                                break;
++                            case 'bool':
++                                $params[$name] = filter_var($params[$name], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
++                                break;
++                        }
++                        if ($params[$name] === null) {
++                            $isValid = false;
++                        }
+                     }
+                 }
+                 if (!$isValid) {
+-                    throw new BadRequestHttpException(Yii::t('yii', 'Invalid data received for parameter "{param}".', [
+-                        'param' => $name,
+-                    ]));
++                    throw new BadRequestHttpException(
++                        Yii::t('yii', 'Invalid data received for parameter "{param}".', ['param' => $name])
++                    );
+                 }
+                 $args[] = $actionParams[$name] = $params[$name];
+                 unset($params[$name]);
+@@ -184,16 +191,16 @@ public function bindActionParams($action, $params)
+         }
+ 
+         if (!empty($missing)) {
+-            throw new BadRequestHttpException(Yii::t('yii', 'Missing required parameters: {params}', [
+-                'params' => implode(', ', $missing),
+-            ]));
++            throw new BadRequestHttpException(
++                Yii::t('yii', 'Missing required parameters: {params}', ['params' => implode(', ', $missing)])
++            );
+         }
+ 
+         $this->actionParams = $actionParams;
+ 
+         // We use a different array here, specifically one that doesn't contain service instances but descriptions instead.
+-        if (\Yii::$app->requestedParams === null) {
+-            \Yii::$app->requestedParams = array_merge($actionParams, $requestedParams);
++        if (Yii::$app->requestedParams === null) {
++            Yii::$app->requestedParams = array_merge($actionParams, $requestedParams);
+         }
+ 
+         return $args;
+diff --git a/framework/web/Cookie.php b/framework/web/Cookie.php
+index f517ca3e09f..7ba7d0268fb 100644
+--- a/framework/web/Cookie.php
++++ b/framework/web/Cookie.php
+@@ -67,17 +67,12 @@ class Cookie extends \yii\base\BaseObject
+     public $httpOnly = true;
+     /**
+      * @var string SameSite prevents the browser from sending this cookie along with cross-site requests.
+-     * Please note that this feature is only supported since PHP 7.3.0
+-     * For better security, an exception will be thrown if `sameSite` is set while using an unsupported version of PHP.
+-     * To use this feature across different PHP versions check the version first. E.g.
+-     * ```php
+-     * $cookie->sameSite = PHP_VERSION_ID >= 70300 ? yii\web\Cookie::SAME_SITE_LAX : null,
+-     * ```
++     *
+      * See https://www.owasp.org/index.php/SameSite for more information about sameSite.
+      *
+      * @since 2.0.21
+      */
+-    public $sameSite;
++    public $sameSite = self::SAME_SITE_LAX;
+ 
+ 
+     /**
+diff --git a/framework/web/IdentityInterface.php b/framework/web/IdentityInterface.php
+index 849131ba517..f5ba6227e3b 100644
+--- a/framework/web/IdentityInterface.php
++++ b/framework/web/IdentityInterface.php
+@@ -82,8 +82,7 @@ public function getId();
+      *
+      * The space of such keys should be big enough to defeat potential identity attacks.
+      *
+-     * This is required if [[User::enableAutoLogin]] is enabled. The returned key will be stored on the
+-     * client side as a cookie and will be used to authenticate user even if PHP session has been expired.
++     * The returned key is used to validate session and auto-login (if [[User::enableAutoLogin]] is enabled).
+      *
+      * Make sure to invalidate earlier issued authKeys when you implement force user logout, password change and
+      * other scenarios, that require forceful access revocation for old sessions.
+@@ -96,7 +95,6 @@ public function getAuthKey();
+     /**
+      * Validates the given auth key.
+      *
+-     * This is required if [[User::enableAutoLogin]] is enabled.
+      * @param string $authKey the given auth key
+      * @return bool whether the given auth key is valid.
+      * @see getAuthKey()
+diff --git a/framework/web/Request.php b/framework/web/Request.php
+index 6ebd807a8bd..70fa32dffda 100644
+--- a/framework/web/Request.php
++++ b/framework/web/Request.php
+@@ -231,6 +231,9 @@ class Request extends \yii\base\Request
+         // Microsoft:
+         'Front-End-Https',
+         'X-Rewrite-Url',
++
++        // ngrok:
++        'X-Original-Host',
+     ];
+     /**
+      * @var string[] List of headers where proxies store the real client IP.
+@@ -744,6 +747,8 @@ public function getHostInfo()
+                 $this->_hostInfo = $http . '://' . $this->getSecureForwardedHeaderTrustedPart('host');
+             } elseif ($this->headers->has('X-Forwarded-Host')) {
+                 $this->_hostInfo = $http . '://' . trim(explode(',', $this->headers->get('X-Forwarded-Host'))[0]);
++            } elseif ($this->headers->has('X-Original-Host')) {
++                $this->_hostInfo = $http . '://' . trim(explode(',', $this->headers->get('X-Original-Host'))[0]);
+             } elseif ($this->headers->has('Host')) {
+                 $this->_hostInfo = $http . '://' . $this->headers->get('Host');
+             } elseif (isset($_SERVER['SERVER_NAME'])) {
+diff --git a/framework/web/UrlManager.php b/framework/web/UrlManager.php
+index ce6ddb3f66f..13e15e4d20c 100644
+--- a/framework/web/UrlManager.php
++++ b/framework/web/UrlManager.php
+@@ -245,10 +245,6 @@ protected function buildRules($ruleDeclarations)
+                 $rule = ['route' => $rule];
+                 if (preg_match("/^((?:($verbs),)*($verbs))\\s+(.*)$/", $key, $matches)) {
+                     $rule['verb'] = explode(',', $matches[1]);
+-                    // rules that are not applicable for GET requests should not be used to create URLs
+-                    if (!in_array('GET', $rule['verb'], true)) {
+-                        $rule['mode'] = UrlRule::PARSING_ONLY;
+-                    }
+                     $key = $matches[4];
+                 }
+                 $rule['pattern'] = $key;
+diff --git a/framework/web/User.php b/framework/web/User.php
+index db1935fe605..5550fcd576e 100644
+--- a/framework/web/User.php
++++ b/framework/web/User.php
+@@ -53,7 +53,7 @@
+  * user. `null` is returned if the user is not logged in (not authenticated).
+  * @property-read bool $isGuest Whether the current user is a guest. This property is read-only.
+  * @property string $returnUrl The URL that the user should be redirected to after login. Note that the type
+- * of this property differs in getter and setter. See [[getReturnUrl()]]  and [[setReturnUrl()]] for details.
++ * of this property differs in getter and setter. See [[getReturnUrl()]] and [[setReturnUrl()]] for details.
+  *
+  * @author Qiang Xue <qiang.xue@gmail.com>
+  * @since 2.0
+@@ -131,6 +131,11 @@ class User extends Component
+      * @var string the session variable name used to store the value of [[id]].
+      */
+     public $idParam = '__id';
++    /**
++     * @var string the session variable name used to store authentication key.
++     * @since 2.0.41
++     */
++    public $authKeyParam = '__authKey';
+     /**
+      * @var string the session variable name used to store the value of expiration timestamp of the authenticated state.
+      * This is used when [[authTimeout]] is set.
+@@ -599,7 +604,8 @@ protected function getIdentityAndDurationFromCookie()
+                 if (!$identity instanceof IdentityInterface) {
+                     throw new InvalidValueException("$class::findIdentity() must return an object implementing IdentityInterface.");
+                 } elseif (!$identity->validateAuthKey($authKey)) {
+-                    Yii::warning("Invalid auth key attempted for user '$id': $authKey", __METHOD__);
++                    $ip = Yii::$app->getRequest()->getUserIP();
++                    Yii::warning("Invalid cookie auth key attempted for user '$id' from $ip: $authKey", __METHOD__);
+                 } else {
+                     return ['identity' => $identity, 'duration' => $duration];
+                 }
+@@ -654,9 +660,11 @@ public function switchIdentity($identity, $duration = 0)
+         }
+         $session->remove($this->idParam);
+         $session->remove($this->authTimeoutParam);
++        $session->remove($this->authKeyParam);
+ 
+         if ($identity) {
+             $session->set($this->idParam, $identity->getId());
++            $session->set($this->authKeyParam, $identity->getAuthKey());
+             if ($this->authTimeout !== null) {
+                 $session->set($this->authTimeoutParam, time() + $this->authTimeout);
+             }
+@@ -692,6 +700,15 @@ protected function renewAuthStatus()
+             $identity = $class::findIdentity($id);
+         }
+ 
++        if ($identity !== null) {
++            $authKey = $session->get($this->authKeyParam);
++            if ($authKey !== null && !$identity->validateAuthKey($authKey)) {
++                $identity = null;
++                $ip = Yii::$app->getRequest()->getUserIP();
++                Yii::warning("Invalid session auth key attempted for user '$id' from $ip: $authKey", __METHOD__);
++            }
++        }
++
+         $this->setIdentity($identity);
+ 
+         if ($identity !== null && ($this->authTimeout !== null || $this->absoluteAuthTimeout !== null)) {
+@@ -757,7 +774,7 @@ public function can($permissionName, $params = [], $allowCaching = true)
+     protected function checkRedirectAcceptable()
+     {
+         $acceptableTypes = Yii::$app->getRequest()->getAcceptableContentTypes();
+-        if (empty($acceptableTypes) || count($acceptableTypes) === 1 && array_keys($acceptableTypes)[0] === '*/*') {
++        if (empty($acceptableTypes) || (count($acceptableTypes) === 1 && array_keys($acceptableTypes)[0] === '*/*')) {
+             return true;
+         }
+ 
+diff --git a/tests/data/travis/README.md b/tests/data/travis/README.md
+deleted file mode 100644
+index 48eb2148b90..00000000000
+--- a/tests/data/travis/README.md
++++ /dev/null
+@@ -1,12 +0,0 @@
+-This directory contains scripts for automated test runs via the [Travis CI](http://travis-ci.com) build service. They are used for the preparation of worker instances by setting up needed extensions and configuring database access.
+-
+-These scripts might be used to configure your own system for test runs. But since their primary purpose remains to support Travis in running the test cases, you would be best advised to stick to the setup notes in the tests themselves.
+-
+-The scripts are:
+-
+- - [`apc-setup.sh`](apc-setup.sh)
+-   Installs and configures the [apc pecl extension](http://pecl.php.net/package/apc)
+- - [`cubrid-setup.sh`](cubrid-setup.sh)
+-   Prepares the [CUBRID](http://www.cubrid.org/) server instance by installing the server and PHP PDO driver
+- - [`memcache-setup.sh`](memcache-setup.sh)
+-   Compiles and installs the [memcache pecl extension](http://pecl.php.net/package/memcache)
+diff --git a/tests/data/travis/apc-setup.sh b/tests/data/travis/apc-setup.sh
+deleted file mode 100755
+index d9b93a0cfb2..00000000000
+--- a/tests/data/travis/apc-setup.sh
++++ /dev/null
+@@ -1,9 +0,0 @@
+-#!/bin/sh -e
+-
+-if [ "$(expr "$TRAVIS_PHP_VERSION" "<" "5.5")" -eq 1 ]; then
+-	yes '' | pecl install apc
+-	#echo "extension = apc.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+-	echo "apc.enable_cli = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+-else
+-	echo "Not installing APC as it is not available in PHP 5.5 anymore."
+-fi
+diff --git a/tests/data/travis/cubrid-setup.sh b/tests/data/travis/cubrid-setup.sh
+deleted file mode 100755
+index 81f4087de7d..00000000000
+--- a/tests/data/travis/cubrid-setup.sh
++++ /dev/null
+@@ -1,79 +0,0 @@
+-#!/bin/sh -e
+-#
+-# install CUBRID DBMS
+-
+-if (php --version | grep -i HipHop > /dev/null); then
+-    echo "Skipping CUBRID on HHVM"
+-    exit 0
+-fi
+-
+-CWD=$(pwd)
+-
+-# cubrid dbms
+-mkdir -p cubrid/$CUBRID_VERSION
+-cd cubrid
+-if (test -f $CUBRID_VERSION-linux.x86_64.tar.gz); then
+-    echo "CUBRID is already downloaded"
+-else
+-    wget http://ftp.cubrid.org/CUBRID_Engine/$CUBRID_VERSION-linux.x86_64.tar.gz -O $CUBRID_VERSION-linux.x86_64.tar.gz
+-    cd $CUBRID_VERSION
+-    tar xzf ../../$CUBRID_VERSION-linux.x86_64.tar.gz
+-    cd ../..
+-fi
+-
+-echo "setting cubrid env"
+-CUBRID=$CWD/cubrid/$CUBRID_VERSION/CUBRID
+-CUBRID_DATABASES=$CUBRID/databases
+-CUBRID_LANG=en_US
+-
+-ld_lib_path=`printenv LD_LIBRARY_PATH` || echo "LD_LIBRARY_PATH is empty"
+-if [ "$ld_lib_path" = "" ]
+-then
+-    LD_LIBRARY_PATH=$CUBRID/lib
+-else
+-    LD_LIBRARY_PATH=$CUBRID/lib:$LD_LIBRARY_PATH
+-fi
+-
+-SHLIB_PATH=$LD_LIBRARY_PATH
+-LIBPATH=$LD_LIBRARY_PATH
+-PATH=$CUBRID/bin:$CUBRID/cubridmanager:$PATH
+-
+-export CUBRID
+-export CUBRID_DATABASES
+-export CUBRID_LANG
+-export LD_LIBRARY_PATH
+-export SHLIB_PATH
+-export LIBPATH
+-export PATH
+-
+-# start cubrid
+-echo "starting cubrid..."
+-cubrid service start || echo "starting CUBRID services failed with exit code $?"
+-# create and start the demo db
+-$CUBRID/demo/make_cubrid_demo.sh || echo "setting up CUBRID demodb failed with exit code $?"
+-cubrid server start demodb || (echo "starting CUBRID demodb failed with exit code $?" && cat demodb_loaddb.log)
+-
+-echo ""
+-echo "Installed CUBRID $CUBRID_VERSION"
+-echo ""
+-
+-# cubrid pdo
+-install_pdo_cubrid() {
+-    if (test "! (-f PDO_CUBRID-$CUBRID_PDO_VERSION.tgz)"); then
+-        wget "http://pecl.php.net/get/PDO_CUBRID-$CUBRID_PDO_VERSION.tgz" -O PDO_CUBRID-$CUBRID_PDO_VERSION.tgz
+-    fi
+-    tar -zxf "PDO_CUBRID-$CUBRID_PDO_VERSION.tgz"
+-    sh -c "cd PDO_CUBRID-$CUBRID_PDO_VERSION && phpize && ./configure --prefix=$CWD/cubrid/PDO_CUBRID-$CUBRID_PDO_VERSION && make"
+-
+-    echo "extension=$CWD/cubrid/PDO_CUBRID-$CUBRID_PDO_VERSION/modules/pdo_cubrid.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+-
+-    return $?
+-}
+-
+-install_pdo_cubrid > ~/pdo_cubrid.log || ( echo "=== PDO CUBRID BUILD FAILED ==="; cat ~/pdo_cubrid.log; exit 1 )
+-
+-echo ""
+-echo "Installed CUBRID PDO $CUBRID_PDO_VERSION"
+-echo ""
+-
+-cd ..
+diff --git a/tests/data/travis/cubrid-solo.rb b/tests/data/travis/cubrid-solo.rb
+deleted file mode 100755
+index f5f00044308..00000000000
+--- a/tests/data/travis/cubrid-solo.rb
++++ /dev/null
+@@ -1,5 +0,0 @@
+-file_cache_path "/tmp/chef-solo"
+-data_bag_path "/tmp/chef-solo/data_bags"
+-encrypted_data_bag_secret "/tmp/chef-solo/data_bag_key"
+-cookbook_path [ "/tmp/chef-solo/cookbooks" ]
+-role_path "/tmp/chef-solo/roles"
+\ No newline at end of file
+diff --git a/tests/data/travis/imagick-setup.sh b/tests/data/travis/imagick-setup.sh
+deleted file mode 100755
+index df5266c677b..00000000000
+--- a/tests/data/travis/imagick-setup.sh
++++ /dev/null
+@@ -1,5 +0,0 @@
+-#!/bin/sh -e
+-
+-if [ $(phpenv version-name) = '5.4' ] || [ $(phpenv version-name) = '5.5' ] || [ $(phpenv version-name) = '5.6' ]; then
+-	yes '' | pecl install imagick
+-fi
+diff --git a/tests/data/travis/memcache-setup.sh b/tests/data/travis/memcache-setup.sh
+deleted file mode 100755
+index c266e947d06..00000000000
+--- a/tests/data/travis/memcache-setup.sh
++++ /dev/null
+@@ -1,20 +0,0 @@
+-#!/bin/sh -e
+-
+-if (php --version | grep -i HipHop > /dev/null); then
+-  echo "skipping memcache on HHVM"
+-else
+-  mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc
+-
+-  # memcache is not available on PHP 7, memcacheD is.
+-  if [ $(phpenv version-name) = '5.4' ] || [ $(phpenv version-name) = '5.5' ] ]; then
+-    echo "extension=memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+-  else
+-    echo "skipping memcache on php 7"
+-  fi
+-
+-  if [ $(phpenv version-name) = '5.6' ]; then
+-    echo "skipping memcache on php 5.6 since it is broken for xenial"
+-  else
+-    echo "extension=memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+-  fi
+-fi
+diff --git a/tests/data/travis/mssql-setup.sh b/tests/data/travis/mssql-setup.sh
+deleted file mode 100644
+index 70e3cffcd6b..00000000000
+--- a/tests/data/travis/mssql-setup.sh
++++ /dev/null
+@@ -1,23 +0,0 @@
+-#!/bin/sh -e
+-
+-if [[ $(phpenv version-name) = '7.3' ]] || [[ $(phpenv version-name) = '7.2' ]] || [[ $(phpenv version-name) = '7.1' ]]; then
+-	sudo docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=YourStrong!Passw0rd' -p 1433:1433 -d microsoft/mssql-server-linux:2017-latest
+-
+-    curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+-    curl https://packages.microsoft.com/config/ubuntu/`lsb_release -r -s`/prod.list | sudo tee -a /etc/apt/sources.list
+-
+-    sudo apt-get update -qq
+-    sudo ACCEPT_EULA=Y apt-get -y install msodbcsql17
+-    # optional: for bcp and sqlcmd
+-    sudo ACCEPT_EULA=Y apt-get -y install mssql-tools
+-    echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile
+-    echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
+-    source ~/.bashrc
+-    # optional: for unixODBC development headers
+-    sudo apt-get -y install unixodbc-dev
+-    
+-    sqlcmd -U sa -P YourStrong!Passw0rd -S localhost -Q "CREATE DATABASE yiitest"
+-
+-    pecl install sqlsrv
+-    pecl install pdo_sqlsrv
+-fi
+diff --git a/tests/data/travis/mysql-setup.sh b/tests/data/travis/mysql-setup.sh
+deleted file mode 100644
+index b563aea7e3e..00000000000
+--- a/tests/data/travis/mysql-setup.sh
++++ /dev/null
+@@ -1,9 +0,0 @@
+-#!/bin/sh -e
+-
+-sudo service mysql stop
+-
+-docker run --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -d mysql:5.7
+-
+-while ! mysqladmin ping -h 127.0.0.1 --silent; do
+-    sleep 1
+-done
+diff --git a/tests/framework/base/ErrorExceptionTest.php b/tests/framework/base/ErrorExceptionTest.php
+index b5329fd6369..fdf58888b1a 100644
+--- a/tests/framework/base/ErrorExceptionTest.php
++++ b/tests/framework/base/ErrorExceptionTest.php
+@@ -15,10 +15,25 @@
+  */
+ class ErrorExceptionTest extends TestCase
+ {
+-    public function testXdebugTrace()
++    private function isXdebugStackAvailable()
+     {
+         if (!function_exists('xdebug_get_function_stack')) {
+-            $this->markTestSkipped('Xdebug are required.');
++            return false;
++        }
++        $version = phpversion('xdebug');
++        if ($version === false) {
++            return false;
++        }
++        if (version_compare($version, '3.0.0', '<')) {
++            return true;
++        }
++        return false !== strpos(ini_get('xdebug.mode'), 'develop');
++    }
++
++    public function testXdebugTrace()
++    {
++        if (!$this->isXdebugStackAvailable()) {
++            $this->markTestSkipped('Xdebug is required.');
+         }
+         try {
+             throw new ErrorException();
+diff --git a/tests/framework/base/SecurityTest.php b/tests/framework/base/SecurityTest.php
+index b96cb2265d2..e84714000e0 100644
+--- a/tests/framework/base/SecurityTest.php
++++ b/tests/framework/base/SecurityTest.php
+@@ -1081,7 +1081,7 @@ public function dataProviderPbkdf2()
+                 20,
+                 '4b007901b765489abead49d926f721d065a429c1',
+             ],
+-            getenv('TRAVIS') == true ? [
++            getenv('GITHUB_ACTIONS') == true ? [
+                 'sha1',
+                 'password',
+                 'salt',
+diff --git a/tests/framework/caching/MemCacheTest.php b/tests/framework/caching/MemCacheTest.php
+index 7796b80a5d7..0487a1695f8 100644
+--- a/tests/framework/caching/MemCacheTest.php
++++ b/tests/framework/caching/MemCacheTest.php
+@@ -41,16 +41,16 @@ protected function getCacheInstance()
+ 
+     public function testExpire()
+     {
+-        if (getenv('TRAVIS') == 'true') {
+-            $this->markTestSkipped('Can not reliably test memcache expiry on travis-ci.');
++        if (getenv('GITHUB_ACTIONS') == 'true') {
++            $this->markTestSkipped('Can not reliably test memcache expiry on GitHub actions.');
+         }
+         parent::testExpire();
+     }
+ 
+     public function testExpireAdd()
+     {
+-        if (getenv('TRAVIS') == 'true') {
+-            $this->markTestSkipped('Can not reliably test memcache expiry on travis-ci.');
++        if (getenv('GITHUB_ACTIONS') == 'true') {
++            $this->markTestSkipped('Can not reliably test memcache expiry on GitHub actions.');
+         }
+         parent::testExpireAdd();
+     }
+diff --git a/tests/framework/caching/MemCachedTest.php b/tests/framework/caching/MemCachedTest.php
+index 1bbd0eae9ed..78f66789956 100644
+--- a/tests/framework/caching/MemCachedTest.php
++++ b/tests/framework/caching/MemCachedTest.php
+@@ -41,16 +41,16 @@ protected function getCacheInstance()
+ 
+     public function testExpire()
+     {
+-        if (getenv('TRAVIS') == 'true') {
+-            $this->markTestSkipped('Can not reliably test memcached expiry on travis-ci.');
++        if (getenv('GITHUB_ACTIONS') == 'true') {
++            $this->markTestSkipped('Can not reliably test memcached expiry on GitHub actions.');
+         }
+         parent::testExpire();
+     }
+ 
+     public function testExpireAdd()
+     {
+-        if (getenv('TRAVIS') == 'true') {
+-            $this->markTestSkipped('Can not reliably test memcached expiry on travis-ci.');
++        if (getenv('GITHUB_ACTIONS') == 'true') {
++            $this->markTestSkipped('Can not reliably test memcached expiry on GitHub actions.');
+         }
+         parent::testExpireAdd();
+     }
+diff --git a/tests/framework/console/ControllerTest.php b/tests/framework/console/ControllerTest.php
+index da6c79d6445..d5ce60c0762 100644
+--- a/tests/framework/console/ControllerTest.php
++++ b/tests/framework/console/ControllerTest.php
+@@ -37,6 +37,15 @@ protected function setUp()
+         ];
+     }
+ 
++    public function testBindArrayToActionParams()
++    {
++        $controller = new FakeController('fake', Yii::$app);
++
++        $params = ['test' => []];
++        $this->assertEquals([], $controller->runAction('aksi4', $params));
++        $this->assertEquals([], $controller->runAction('aksi4', $params));
++    }
++
+     public function testBindActionParams()
+     {
+         $controller = new FakeController('fake', Yii::$app);
+diff --git a/tests/framework/console/widgets/TableTest.php b/tests/framework/console/widgets/TableTest.php
+index 59cf4bab17b..e90598d088e 100644
+--- a/tests/framework/console/widgets/TableTest.php
++++ b/tests/framework/console/widgets/TableTest.php
+@@ -5,7 +5,7 @@
+  * @license http://www.yiiframework.com/license/
+  */
+ 
+-namespace yiiunit\framework\console;
++namespace yiiunit\framework\console\widgets;
+ 
+ use yii\console\widgets\Table;
+ use yii\helpers\Console;
+diff --git a/tests/framework/data/ActiveDataProviderCloningTest.php b/tests/framework/data/ActiveDataProviderCloningTest.php
+index e4c7adc9122..1027baf47cd 100644
+--- a/tests/framework/data/ActiveDataProviderCloningTest.php
++++ b/tests/framework/data/ActiveDataProviderCloningTest.php
+@@ -13,22 +13,18 @@
+ 
+ class ActiveDataProviderCloningTest extends TestCase
+ {
+-
+-    // Tests :
+-
+     public function testClone()
+     {
+         $queryFirst = new Query();
+-        
++
+         $dataProviderFirst = new ActiveDataProvider([
+             'query' => $queryFirst
+         ]);
+-        
++
+         $dataProviderSecond = clone $dataProviderFirst;
+-        
++
+         $querySecond = $dataProviderSecond->query;
+-        
++
+         $this->assertNotSame($querySecond, $queryFirst);
+     }
+ }
+-
+diff --git a/tests/framework/db/ActiveRecordTest.php b/tests/framework/db/ActiveRecordTest.php
+index aeb8d9ddca6..56f936a0f3d 100644
+--- a/tests/framework/db/ActiveRecordTest.php
++++ b/tests/framework/db/ActiveRecordTest.php
+@@ -2095,4 +2095,25 @@ public function testEagerLoadingWithTypeCastedCompositeIdentifier()
+             }
+         }
+     }
++
++    /**
++     * @see https://github.com/yiisoft/yii2/issues/18525
++     */
++    public function testHasManyWithIndexBy()
++    {
++        $category = Category::find()->joinWith('items')->indexBy('items.0.name');
++        $this->assertEquals(['Agile Web Application Development with Yii1.1 and PHP5', 'Ice Age'], array_keys($category->all()));
++
++        $category = Category::find()->select([Category::tableName() . '.*'])->joinWith('items')->indexBy('items.0.name');
++        $this->assertEquals(['Agile Web Application Development with Yii1.1 and PHP5', 'Ice Age'], array_keys($category->all()));
++
++        $category = Category::find()->select([Category::tableName() . '.*'])->joinWith('items')->indexBy('name');
++        $this->assertEquals(['Books', 'Movies'], array_keys($category->all()));
++
++        $category = Category::find()->joinWith('items')->indexBy('item.name');
++        $this->assertEquals([''], array_keys($category->all()));
++
++        $category = Category::find()->select([Category::tableName() . '.name'])->joinWith('items')->indexBy('id');
++        $this->assertEquals([1, 2], array_keys($category->all()));
++    }
+ }
+diff --git a/tests/framework/db/QueryTest.php b/tests/framework/db/QueryTest.php
+index 18179085e44..81eb2af40d5 100644
+--- a/tests/framework/db/QueryTest.php
++++ b/tests/framework/db/QueryTest.php
+@@ -795,4 +795,23 @@ public function testQueryCreation()
+             $newQuery->withQueries
+         );
+     }
++
++    /**
++     * @see https://github.com/yiisoft/yii2/issues/18499
++     */
++    public function testAllWithAutomaticallyAddedIndexedByColumn()
++    {
++        $db = $this->getConnection();
++
++        $result = (new Query())->from('customer')
++            ->select('name')
++            ->orderBy(['id' => SORT_DESC])
++            ->indexBy('id')
++            ->all($db);
++        $this->assertEquals([
++            3 => ['name' => 'user3', 'id' => 3],
++            2 => ['name' => 'user2', 'id' => 2],
++            1 => ['name' => 'user1', 'id' => 1]
++        ], $result);
++    }
+ }
+diff --git a/tests/framework/db/mssql/ActiveRecordTest.php b/tests/framework/db/mssql/ActiveRecordTest.php
+index f29cab5964f..7ac16865d3a 100644
+--- a/tests/framework/db/mssql/ActiveRecordTest.php
++++ b/tests/framework/db/mssql/ActiveRecordTest.php
+@@ -64,11 +64,14 @@ public function testSaveWithComputedColumn()
+     {
+         $db = $this->getConnection();
+ 
+-        $sql = 'CREATE OR ALTER FUNCTION TESTFUNC(@Number INT)
++        $sql = 'IF OBJECT_ID(\'TESTFUNC\') IS NOT NULL EXEC(\'DROP FUNCTION TESTFUNC\')';
++        $db->createCommand($sql)->execute();
++
++        $sql = 'CREATE FUNCTION TESTFUNC(@Number INT)
+ RETURNS VARCHAR(15)
+ AS
+ BEGIN
+-      RETURN (SELECT TRY_CONVERT(VARCHAR(15),@Number))
++      RETURN (SELECT CONVERT(VARCHAR(15),@Number))
+ END';
+         $db->createCommand($sql)->execute();
+ 
+diff --git a/tests/framework/db/mssql/SchemaTest.php b/tests/framework/db/mssql/SchemaTest.php
+index a1d859a9628..28f456b7561 100644
+--- a/tests/framework/db/mssql/SchemaTest.php
++++ b/tests/framework/db/mssql/SchemaTest.php
+@@ -8,6 +8,7 @@
+ namespace yiiunit\framework\db\mssql;
+ 
+ use yii\db\DefaultValueConstraint;
++use yii\db\mssql\Schema;
+ use yiiunit\framework\db\AnyValue;
+ 
+ /**
+@@ -180,4 +181,23 @@ public function getExpectedColumns()
+ 
+         return $columns;
+     }
++
++    public function testGetPrimaryKey()
++    {
++        $db = $this->getConnection();
++
++        if ($db->getSchema()->getTableSchema('testPKTable') !== null) {
++            $db->createCommand()->dropTable('testPKTable')->execute();
++        }
++
++        $db->createCommand()->createTable(
++            'testPKTable',
++            ['id' => Schema::TYPE_PK, 'bar' => Schema::TYPE_INTEGER]
++        )->execute();
++
++        $insertResult = $db->getSchema()->insert('testPKTable', ['bar' => 1]);
++        $selectResult = $db->createCommand('select [id] from [testPKTable] where [bar]=1')->queryOne();
++
++        $this->assertEquals($selectResult['id'], $insertResult['id']);
++    }
+ }
+diff --git a/tests/framework/db/mysql/QueryBuilderTest.php b/tests/framework/db/mysql/QueryBuilderTest.php
+index ebb89d71427..2865dc395ad 100644
+--- a/tests/framework/db/mysql/QueryBuilderTest.php
++++ b/tests/framework/db/mysql/QueryBuilderTest.php
+@@ -367,4 +367,30 @@ public function testIssue17449()
+         $this->assertNotFalse($commentPos);
+         $this->assertLessThan($checkPos, $commentPos);
+     }
++
++    /**
++     * Test for issue https://github.com/yiisoft/yii2/issues/14663
++     */
++    public function testInsertInteger()
++    {
++        $db = $this->getConnection();
++
++        $command = $db->createCommand();
++
++        $sql = $command->insert(
++            '{{customer}}',
++            [
++                'profile_id' => 22,
++            ]
++        )->getRawSql();
++        $this->assertEquals('INSERT INTO `customer` (`profile_id`) VALUES (22)', $sql);
++
++        $sql = $command->insert(
++            '{{customer}}',
++            [
++                'profile_id' => '1000000000000',
++            ]
++        )->getRawSql();
++        $this->assertEquals('INSERT INTO `customer` (`profile_id`) VALUES (1000000000000)', $sql);
++    }
+ }
+diff --git a/tests/framework/db/mysql/connection/DeadLockTest.php b/tests/framework/db/mysql/connection/DeadLockTest.php
+index 316b1fbe747..4e6dd8482a6 100644
+--- a/tests/framework/db/mysql/connection/DeadLockTest.php
++++ b/tests/framework/db/mysql/connection/DeadLockTest.php
+@@ -31,10 +31,6 @@ class DeadLockTest extends \yiiunit\framework\db\mysql\ConnectionTest
+      */
+     public function testDeadlockException()
+     {
+-        if (getenv('TRAVIS') && PHP_VERSION_ID < 70000) {
+-            $this->markTestSkipped('Skipping PHP 5 on Travis since it segfaults with pcntl');
+-        }
+-
+         if (!\function_exists('pcntl_fork')) {
+             $this->markTestSkipped('pcntl_fork() is not available');
+         }
+diff --git a/tests/framework/filters/auth/AuthTest.php b/tests/framework/filters/auth/AuthTest.php
+index 6ef5634f4f1..b0dbe20dcbf 100644
+--- a/tests/framework/filters/auth/AuthTest.php
++++ b/tests/framework/filters/auth/AuthTest.php
+@@ -29,10 +29,6 @@ protected function setUp()
+     {
+         parent::setUp();
+ 
+-        if (defined('HHVM_VERSION') && getenv('TRAVIS') == 'true') {
+-            $this->markTestSkipped('Can not test reliably with HHVM on travis-ci.');
+-        }
+-
+         $_SERVER['SCRIPT_FILENAME'] = '/index.php';
+         $_SERVER['SCRIPT_NAME'] = '/index.php';
+ 
+diff --git a/tests/framework/filters/stubs/UserIdentity.php b/tests/framework/filters/stubs/UserIdentity.php
+index c97eb21a6dd..f0556a5451e 100644
+--- a/tests/framework/filters/stubs/UserIdentity.php
++++ b/tests/framework/filters/stubs/UserIdentity.php
+@@ -8,7 +8,6 @@
+ namespace yiiunit\framework\filters\stubs;
+ 
+ use yii\base\Component;
+-use yii\base\NotSupportedException;
+ use yii\web\IdentityInterface;
+ 
+ /**
+@@ -61,11 +60,11 @@ public function getId()
+ 
+     public function getAuthKey()
+     {
+-        throw new NotSupportedException();
++        return null;
+     }
+ 
+     public function validateAuthKey($authKey)
+     {
+-        throw new NotSupportedException();
++        return true;
+     }
+ }
+diff --git a/tests/framework/grid/DataColumnTest.php b/tests/framework/grid/DataColumnTest.php
+index 9d0e001eba5..487d15deb80 100644
+--- a/tests/framework/grid/DataColumnTest.php
++++ b/tests/framework/grid/DataColumnTest.php
+@@ -235,4 +235,33 @@ public function testFilterInput_FormatBoolean()
+ HTML
+             , $result);
+     }
++
++    /**
++     * @see DataColumn::$filterAttribute
++     * @see DataColumn::renderFilterCellContent()
++     */
++    public function testFilterInputWithFilterAttribute()
++    {
++        $this->mockApplication();
++
++        $grid = new GridView([
++            'dataProvider' => new ArrayDataProvider([
++                'allModels' => [],
++            ]),
++            'columns' => [
++                0 => [
++                    'attribute' => 'username',
++                    'filterAttribute' => 'user_id',
++                ],
++            ],
++            'filterModel' => new \yiiunit\data\base\RulesModel(['rules' => [['user_id', 'safe']]]),
++        ]);
++
++        $dataColumn = $grid->columns[0];
++        $method = new \ReflectionMethod($dataColumn, 'renderFilterCellContent');
++        $method->setAccessible(true);
++        $result = $method->invoke($dataColumn);
++
++        $this->assertEquals('<input type="text" class="form-control" name="RulesModel[user_id]">', $result);
++    }
+ }
+diff --git a/tests/framework/helpers/ArrayHelperTest.php b/tests/framework/helpers/ArrayHelperTest.php
+index a5f8aae071c..fae9d0237c4 100644
+--- a/tests/framework/helpers/ArrayHelperTest.php
++++ b/tests/framework/helpers/ArrayHelperTest.php
+@@ -10,6 +10,7 @@
+ use ArrayAccess;
+ use Iterator;
+ use yii\base\BaseObject;
++use yii\base\Model;
+ use yii\data\Sort;
+ use yii\helpers\ArrayHelper;
+ use yiiunit\TestCase;
+@@ -122,6 +123,23 @@ public function valid()
+     }
+ }
+ 
++class MagicModel extends Model
++{
++    protected $magic;
++
++    public function getMagic()
++    {
++        return 42;
++    }
++
++    private $moreMagic;
++
++    public function getMoreMagic()
++    {
++        return 'ta-da';
++    }
++}
++
+ /**
+  * @group helpers
+  */
+@@ -1536,4 +1554,15 @@ public function testArrayAccessWithPublicProperty()
+         $this->assertEquals(123, ArrayHelper::getValue($data, 'value'));
+         $this->assertEquals('bar1', ArrayHelper::getValue($data, 'name'));
+     }
++
++    /**
++     * https://github.com/yiisoft/yii2/commit/35fb9c624893855317e5fe52e6a21f6518a9a31c changed the way
++     * ArrayHelper works with existing object properties in case of ArrayAccess.
++     */
++    public function testArrayAccessWithMagicProperty()
++    {
++        $model = new MagicModel();
++        $this->assertEquals(42, ArrayHelper::getValue($model, 'magic'));
++        $this->assertEquals('ta-da', ArrayHelper::getValue($model, 'moreMagic'));
++    }
+ }
+diff --git a/tests/framework/helpers/HtmlTest.php b/tests/framework/helpers/HtmlTest.php
+index 15c41b0281a..28998e6fc07 100644
+--- a/tests/framework/helpers/HtmlTest.php
++++ b/tests/framework/helpers/HtmlTest.php
+@@ -768,7 +768,7 @@ public function testCheckboxList()
+                 'label' => 'Test Label'
+             ]
+         ]));
+-        
++
+         $expected = <<<'EOD'
+ <div><label><input type="checkbox" name="test[]" value="1"> 1</label>
+ <label><input type="checkbox" name="test[]" value="1.1" checked> 1.1</label>
+@@ -916,7 +916,7 @@ public function testRadioList()
+                 'label' => 'Test Label'
+             ]
+         ]));
+-        
++
+         $expected = <<<'EOD'
+ <div><label><input type="radio" name="test" value="1"> 1</label>
+ <label><input type="radio" name="test" value="1.1" checked> 1.1</label>
+@@ -1060,7 +1060,7 @@ public function testRenderOptions()
+             ],
+         ];
+         $this->assertEqualsWithoutLE($expected, Html::renderSelectOptions(['value1'], $data, $attributes));
+-        
++
+         $expected = <<<'EOD'
+ <option value="1">1</option>
+ <option value="1.1" selected>1.1</option>
+@@ -1069,7 +1069,7 @@ public function testRenderOptions()
+         $data = ['1' => '1', '1.1' => '1.1', '1.10' => '1.10'];
+         $attributes = ['strict' => true];
+         $this->assertEqualsWithoutLE($expected, Html::renderSelectOptions(['1.1'], $data, $attributes));
+-        
++
+         $expected = <<<'EOD'
+ <option value="1">1</option>
+ <option value="1.1">1.1</option>
+@@ -1734,23 +1734,16 @@ public function validAttributeNamesProvider()
+             ['a[0]', 'a'],
+             ['[0]a[0]', 'a'],
+             ['[0]a.[0]', 'a.'],
++            ['ä', 'ä'],
++            ['ä', 'ä'],
++            ['asdf]öáöio..[asdfasdf', 'öáöio..'],
++            ['öáöio', 'öáöio'],
++            ['[0]test.ööößß.d', 'test.ööößß.d'],
++            ['ИІК', 'ИІК'],
++            [']ИІК[', 'ИІК'],
++            ['[0]ИІК[0]', 'ИІК'],
+         ];
+ 
+-        if (getenv('TRAVIS_PHP_VERSION') !== 'nightly') {
+-            $data = array_merge($data, [
+-                ['ä', 'ä'],
+-                ['ä', 'ä'],
+-                ['asdf]öáöio..[asdfasdf', 'öáöio..'],
+-                ['öáöio', 'öáöio'],
+-                ['[0]test.ööößß.d', 'test.ööößß.d'],
+-                ['ИІК', 'ИІК'],
+-                [']ИІК[', 'ИІК'],
+-                ['[0]ИІК[0]', 'ИІК'],
+-            ]);
+-        } else {
+-            $this->markTestIncomplete("Unicode characters check skipped for 'nightly' PHP version because \w does not work with these as expected. Check later with stable version.");
+-        }
+-
+         return $data;
+     }
+ 
+diff --git a/tests/framework/i18n/I18NTest.php b/tests/framework/i18n/I18NTest.php
+index 2b281433361..727dcbb3184 100644
+--- a/tests/framework/i18n/I18NTest.php
++++ b/tests/framework/i18n/I18NTest.php
+@@ -129,6 +129,9 @@ public function testSourceLanguageFallback()
+         // target is a different language than source
+         $this->assertEquals('Собака бегает быстро.', $i18n->translate('test', $msg, [], 'ru-RU'));
+         $this->assertEquals('Собака бегает быстро.', $i18n->translate('test', $msg, [], 'ru'));
++
++        // language is set to null
++        $this->assertEquals($msg, $i18n->translate('test', $msg, [], null));
+     }
+ 
+     public function testTranslateParams()
+diff --git a/tests/framework/rest/UrlRuleTest.php b/tests/framework/rest/UrlRuleTest.php
+index da738c29494..e52eb798e90 100644
+--- a/tests/framework/rest/UrlRuleTest.php
++++ b/tests/framework/rest/UrlRuleTest.php
+@@ -86,6 +86,8 @@ protected function getTestsForParseRequest()
+                 ['controller' => 'post', 'prefix' => 'admin'],
+                 [
+                     ['admin/posts', 'post/index'],
++                    ['different/posts', false],
++                    ['posts', false],
+                 ],
+             ],
+             [
+@@ -323,7 +325,7 @@ public function createUrlDataProvider()
+                     'extraPatterns' => [
+                         '{id}/my' => 'my',
+                         'my' => 'my',
+-                        // this should not create a URL, no GET definition
++                        // since 2.0.41 this should create a URL (previously it was false)
+                         'POST {id}/my2' => 'my2',
+                     ],
+                 ],
+@@ -339,7 +341,7 @@ public function createUrlDataProvider()
+                     [['v1/channel/my'], 'v1/channels/my'],
+                     [['v1/channel/my', 'id' => 42], 'v1/channels/42/my'],
+                     [['v1/channel/my2'], false],
+-                    [['v1/channel/my2', 'id' => 42], false],
++                    [['v1/channel/my2', 'id' => 42], 'v1/channels/42/my2'],
+                 ],
+             ],
+         ];
+@@ -419,11 +421,16 @@ public function testGetCreateUrlStatusProvider()
+                     [['v1/channel/index'], 'v1/channels', WebUrlRule::CREATE_STATUS_SUCCESS],
+                     [['v1/channel/index', 'offset' => 1], 'v1/channels?offset=1', WebUrlRule::CREATE_STATUS_SUCCESS],
+                     [['v1/channel/view', 'id' => 42], 'v1/channels/42', WebUrlRule::CREATE_STATUS_SUCCESS],
++                    [['v1/channel/view'], false, WebUrlRule::CREATE_STATUS_PARAMS_MISMATCH],
+                     [['v1/channel/options'], 'v1/channels', WebUrlRule::CREATE_STATUS_SUCCESS],
+                     [['v1/channel/options', 'id' => 42], 'v1/channels/42', WebUrlRule::CREATE_STATUS_SUCCESS],
+-                    [['v1/channel/delete'], false, WebUrlRule::CREATE_STATUS_PARSING_ONLY],
++                    [['v1/channel/delete'], false, WebUrlRule::CREATE_STATUS_PARAMS_MISMATCH],
++                    [['v1/channel/delete', 'id' => 43], 'v1/channels/43', WebUrlRule::CREATE_STATUS_SUCCESS],
++                    [['v1/channel/create'], 'v1/channels', WebUrlRule::CREATE_STATUS_SUCCESS],
++                    [['v1/channel/update', 'id' => 44], 'v1/channels/44', WebUrlRule::CREATE_STATUS_SUCCESS],
++                    [['v1/channel/update'], false, WebUrlRule::CREATE_STATUS_PARAMS_MISMATCH],
++
+                     [['v1/missing/view'], false, WebUrlRule::CREATE_STATUS_ROUTE_MISMATCH],
+-                    [['v1/channel/view'], false, WebUrlRule::CREATE_STATUS_PARAMS_MISMATCH],
+                 ],
+             ],
+             'multiple controllers' => [
+@@ -438,13 +445,23 @@ public function testGetCreateUrlStatusProvider()
+                     [['v1/channel/view', 'id' => 42], 'v1/channel/42', WebUrlRule::CREATE_STATUS_SUCCESS],
+                     [['v1/channel/options'], 'v1/channel', WebUrlRule::CREATE_STATUS_SUCCESS],
+                     [['v1/channel/options', 'id' => 42], 'v1/channel/42', WebUrlRule::CREATE_STATUS_SUCCESS],
+-                    [['v1/channel/delete'], false, WebUrlRule::CREATE_STATUS_PARSING_ONLY],
++                    [['v1/channel/delete'], false, WebUrlRule::CREATE_STATUS_PARAMS_MISMATCH],
++                    [['v1/channel/delete', 'id' => 43], 'v1/channel/43', WebUrlRule::CREATE_STATUS_SUCCESS],
++                    [['v1/channel/create'], 'v1/channel', WebUrlRule::CREATE_STATUS_SUCCESS],
++                    [['v1/channel/update'], false, WebUrlRule::CREATE_STATUS_PARAMS_MISMATCH],
++                    [['v1/channel/update', 'id' => 45], 'v1/channel/45', WebUrlRule::CREATE_STATUS_SUCCESS],
++
+                     [['v1/user/index'], 'v1/u', WebUrlRule::CREATE_STATUS_SUCCESS],
+                     [['v1/user/view', 'id' => 1], 'v1/u/1', WebUrlRule::CREATE_STATUS_SUCCESS],
++                    [['v1/user/view'], false, WebUrlRule::CREATE_STATUS_PARAMS_MISMATCH],
+                     [['v1/user/options'], 'v1/u', WebUrlRule::CREATE_STATUS_SUCCESS],
+                     [['v1/user/options', 'id' => 42], 'v1/u/42', WebUrlRule::CREATE_STATUS_SUCCESS],
+-                    [['v1/user/delete'], false, WebUrlRule::CREATE_STATUS_PARSING_ONLY],
+-                    [['v1/user/view'], false, WebUrlRule::CREATE_STATUS_PARAMS_MISMATCH],
++                    [['v1/user/delete', 'id' => 44], 'v1/u/44', WebUrlRule::CREATE_STATUS_SUCCESS],
++                    [['v1/user/delete'], false, WebUrlRule::CREATE_STATUS_PARAMS_MISMATCH],
++                    [['v1/user/create'], 'v1/u', WebUrlRule::CREATE_STATUS_SUCCESS],
++                    [['v1/user/update', 'id' => 46], 'v1/u/46', WebUrlRule::CREATE_STATUS_SUCCESS],
++                    [['v1/user/update'], false, WebUrlRule::CREATE_STATUS_PARAMS_MISMATCH],
++
+                     [['v1/missing/view'], false, WebUrlRule::CREATE_STATUS_ROUTE_MISMATCH],
+                 ],
+             ],
+diff --git a/tests/framework/validators/CompareValidatorTest.php b/tests/framework/validators/CompareValidatorTest.php
+index c65cc0a9fcf..a0740def208 100644
+--- a/tests/framework/validators/CompareValidatorTest.php
++++ b/tests/framework/validators/CompareValidatorTest.php
+@@ -40,6 +40,15 @@ public function testValidateValue()
+         $this->assertTrue($val->validate($value));
+         $this->assertTrue($val->validate((string) $value));
+         $this->assertFalse($val->validate($value + 1));
++
++        // Using a closure for compareValue
++        $val = new CompareValidator(['compareValue' => function() use ($value) {
++            return $value;
++        }]);
++        $this->assertTrue($val->validate($value));
++        $this->assertTrue($val->validate((string) $value));
++        $this->assertFalse($val->validate($value + 1));
++
+         foreach ($this->getOperationTestData($value) as $op => $tests) {
+             $val = new CompareValidator(['compareValue' => $value]);
+             $val->operator = $op;
+diff --git a/tests/framework/web/AssetBundleTest.php b/tests/framework/web/AssetBundleTest.php
+index 935761b0fbe..e1a0234293a 100644
+--- a/tests/framework/web/AssetBundleTest.php
++++ b/tests/framework/web/AssetBundleTest.php
+@@ -527,7 +527,6 @@ public function testRegisterFileAppendTimestamp($type, $path, $appendTimestamp,
+         }
+         Yii::setAlias('@web', $webAlias);
+ 
+-
+         $view = $this->getView(['appendTimestamp' => $appendTimestamp]);
+         $method = 'register' . ucfirst($type) . 'File';
+         $view->$method($path);
+@@ -542,7 +541,7 @@ public function testCustomFilePublishWithTimestamp()
+ 
+         $view = $this->getView();
+         $am = $view->assetManager;
+-        // publising without timestamp
++        // publishing without timestamp
+         $result = $am->publish($path . '/data.txt');
+         $this->assertRegExp('/.*data.txt$/i', $result[1]);
+         unset($view, $am, $result);
+@@ -554,6 +553,21 @@ public function testCustomFilePublishWithTimestamp()
+         $result = $am->publish($path . '/data.txt');
+         $this->assertRegExp('/.*data.txt\?v=\d+$/i', $result[1]);
+     }
++
++    /**
++     * @see https://github.com/yiisoft/yii2/issues/18529
++     */
++    public function testNonRelativeAssetWebPathWithTimestamp()
++    {
++        Yii::setAlias('@webroot', '@yiiunit/data/web/assetSources/');
++
++        $view = $this->getView(['appendTimestamp' => true]);
++        TestNonRelativeAsset::register($view);
++        $this->assertRegExp(
++            '~123<script src="http:\/\/example\.com\/js\/jquery\.js\?v=\d+"><\/script>4~',
++            $view->renderFile('@yiiunit/data/views/rawlayout.php')
++        );
++    }
+ }
+ 
+ class TestSimpleAsset extends AssetBundle
+@@ -649,3 +663,12 @@ class TestAssetPerFileOptions extends AssetBundle
+     public $cssOptions = ['media' => 'screen', 'hreflang' => 'en'];
+     public $jsOptions = ['charset' => 'utf-8'];
+ }
++
++class TestNonRelativeAsset extends AssetBundle
++{
++    public $basePath = '@webroot/js';
++    public $baseUrl = 'http://example.com/js/';
++    public $js = [
++        'jquery.js',
++    ];
++}
+diff --git a/tests/framework/web/ControllerTest.php b/tests/framework/web/ControllerTest.php
+index 1ddc9037faf..f1f85e9f5ff 100644
+--- a/tests/framework/web/ControllerTest.php
++++ b/tests/framework/web/ControllerTest.php
+@@ -22,19 +22,40 @@ class ControllerTest extends TestCase
+ {
+     /** @var FakeController */
+     private $controller;
++
++    protected function setUp()
++    {
++        parent::setUp();
++
++        $this->mockWebApplication();
++        $this->controller = new FakeController('fake', new \yii\web\Application([
++            'id' => 'app',
++            'basePath' => __DIR__,
++            'components' => [
++                'request' => [
++                    'cookieValidationKey' => 'wefJDF8sfdsfSDefwqdxj9oq',
++                    'scriptFile' => __DIR__ . '/index.php',
++                    'scriptUrl' => '/index.php',
++                ],
++            ],
++        ]));
++
++        Yii::$app->controller = $this->controller;
++    }
++
+     public function testBindActionParams()
+     {
+         $aksi1 = new InlineAction('aksi1', $this->controller, 'actionAksi1');
+ 
+-        $params = ['fromGet' => 'from query params', 'q' => 'd426', 'validator' => 'avaliable'];
++        $params = ['fromGet' => 'from query params', 'q' => 'd426', 'validator' => 'available'];
+         list($fromGet, $other) = $this->controller->bindActionParams($aksi1, $params);
+         $this->assertEquals('from query params', $fromGet);
+         $this->assertEquals('default', $other);
+ 
+-        $params = ['fromGet' => 'from query params', 'q' => 'd426', 'other' => 'avaliable'];
++        $params = ['fromGet' => 'from query params', 'q' => 'd426', 'other' => 'available'];
+         list($fromGet, $other) = $this->controller->bindActionParams($aksi1, $params);
+         $this->assertEquals('from query params', $fromGet);
+-        $this->assertEquals('avaliable', $other);
++        $this->assertEquals('available', $other);
+     }
+ 
+     public function testNullableInjectedActionParams()
+@@ -62,7 +83,7 @@ public function testNullableInjectedActionParams()
+         $injectionAction = new InlineAction('injection', $this->controller, 'actionNullableInjection');
+         $params = [];
+         $args = $this->controller->bindActionParams($injectionAction, $params);
+-        $this->assertEquals(\Yii::$app->request, $args[0]);
++        $this->assertEquals(Yii::$app->request, $args[0]);
+         $this->assertNull($args[1]);
+     }
+ 
+@@ -89,7 +110,7 @@ public function testInjectionContainerException()
+ 
+         $injectionAction = new InlineAction('injection', $this->controller, 'actionInjection');
+         $params = ['between' => 'test', 'after' => 'another', 'before' => 'test'];
+-        \Yii::$container->set(VendorImage::className(), function() { throw new \RuntimeException('uh oh'); });
++        Yii::$container->set(VendorImage::className(), function() { throw new \RuntimeException('uh oh'); });
+ 
+         $this->expectException(get_class(new RuntimeException()));
+         $this->expectExceptionMessage('uh oh');
+@@ -106,7 +127,6 @@ public function testUnknownInjection()
+         $this->controller = new FakePhp71Controller('fake', new \yii\web\Application([
+             'id' => 'app',
+             'basePath' => __DIR__,
+-
+             'components' => [
+                 'request' => [
+                     'cookieValidationKey' => 'wefJDF8sfdsfSDefwqdxj9oq',
+@@ -119,7 +139,7 @@ public function testUnknownInjection()
+ 
+         $injectionAction = new InlineAction('injection', $this->controller, 'actionInjection');
+         $params = ['between' => 'test', 'after' => 'another', 'before' => 'test'];
+-        \Yii::$container->clear(VendorImage::className());
++        Yii::$container->clear(VendorImage::className());
+         $this->expectException(get_class(new ServerErrorHttpException()));
+         $this->expectExceptionMessage('Could not load required service: vendorImage');
+         $this->controller->bindActionParams($injectionAction, $params);
+@@ -135,7 +155,6 @@ public function testInjectedActionParams()
+         $this->controller = new FakePhp71Controller('fake', new \yii\web\Application([
+             'id' => 'app',
+             'basePath' => __DIR__,
+-
+             'components' => [
+                 'request' => [
+                     'cookieValidationKey' => 'wefJDF8sfdsfSDefwqdxj9oq',
+@@ -148,16 +167,16 @@ public function testInjectedActionParams()
+ 
+         $injectionAction = new InlineAction('injection', $this->controller, 'actionInjection');
+         $params = ['between' => 'test', 'after' => 'another', 'before' => 'test'];
+-        \Yii::$container->set(VendorImage::className(), VendorImage::className());
++        Yii::$container->set(VendorImage::className(), VendorImage::className());
+         $args = $this->controller->bindActionParams($injectionAction, $params);
+         $this->assertEquals($params['before'], $args[0]);
+-        $this->assertEquals(\Yii::$app->request, $args[1]);
+-        $this->assertEquals('Component: yii\web\Request $request', \Yii::$app->requestedParams['request']);
++        $this->assertEquals(Yii::$app->request, $args[1]);
++        $this->assertEquals('Component: yii\web\Request $request', Yii::$app->requestedParams['request']);
+         $this->assertEquals($params['between'], $args[2]);
+         $this->assertInstanceOf(VendorImage::className(), $args[3]);
+-        $this->assertEquals('Container DI: yiiunit\framework\web\stubs\VendorImage $vendorImage', \Yii::$app->requestedParams['vendorImage']);
++        $this->assertEquals('Container DI: yiiunit\framework\web\stubs\VendorImage $vendorImage', Yii::$app->requestedParams['vendorImage']);
+         $this->assertNull($args[4]);
+-        $this->assertEquals('Unavailable service: post', \Yii::$app->requestedParams['post']);
++        $this->assertEquals('Unavailable service: post', Yii::$app->requestedParams['post']);
+         $this->assertEquals($params['after'], $args[5]);
+     }
+ 
+@@ -170,7 +189,6 @@ public function testInjectedActionParamsFromModule()
+         $module = new \yii\base\Module('fake', new \yii\web\Application([
+             'id' => 'app',
+             'basePath' => __DIR__,
+-
+             'components' => [
+                 'request' => [
+                     'cookieValidationKey' => 'wefJDF8sfdsfSDefwqdxj9oq',
+@@ -189,7 +207,7 @@ public function testInjectedActionParamsFromModule()
+         $injectionAction = new InlineAction('injection', $this->controller, 'actionModuleServiceInjection');
+         $args = $this->controller->bindActionParams($injectionAction, []);
+         $this->assertInstanceOf(\yii\data\ArrayDataProvider::className(), $args[0]);
+-        $this->assertEquals('Module yii\base\Module DI: yii\data\DataProviderInterface $dataProvider', \Yii::$app->requestedParams['dataProvider']);
++        $this->assertEquals('Module yii\base\Module DI: yii\data\DataProviderInterface $dataProvider', Yii::$app->requestedParams['dataProvider']);
+     }
+ 
+     /**
+@@ -206,7 +224,6 @@ public function testBindTypedActionParams()
+         $this->controller = new FakePhp7Controller('fake', new \yii\web\Application([
+             'id' => 'app',
+             'basePath' => __DIR__,
+-
+             'components' => [
+                 'request' => [
+                     'cookieValidationKey' => 'wefJDF8sfdsfSDefwqdxj9oq',
+@@ -226,6 +243,17 @@ public function testBindTypedActionParams()
+         $this->assertSame(true, $true);
+         $this->assertSame(false, $false);
+ 
++        // allow nullable argument to be set to empty string (as null)
++        // https://github.com/yiisoft/yii2/issues/18450
++        $params = ['foo' => 100, 'bar' => '', 'true' => true, 'false' => true];
++        list(, $bar) = $this->controller->bindActionParams($aksi1, $params);
++        $this->assertSame(null, $bar);
++
++        // make sure nullable string argument is not set to null when empty string is passed
++        $stringy = new InlineAction('stringy', $this->controller, 'actionStringy');
++        list($foo) = $this->controller->bindActionParams($stringy, ['foo' => '']);
++        $this->assertSame('', $foo);
++
+         $params = ['foo' => 'oops', 'bar' => null];
+         $this->expectException('yii\web\BadRequestHttpException');
+         $this->expectExceptionMessage('Invalid data received for parameter "foo".');
+@@ -274,23 +302,4 @@ public function testRedirect()
+         $this->assertEquals($this->controller->redirect(['//controller/index', 'id_1' => 3, 'id_2' => 4])->headers->get('location'), '/index.php?r=controller%2Findex&id_1=3&id_2=4');
+         $this->assertEquals($this->controller->redirect(['//controller/index', 'slug' => 'äöüß!"§$%&/()'])->headers->get('location'), '/index.php?r=controller%2Findex&slug=%C3%A4%C3%B6%C3%BC%C3%9F%21%22%C2%A7%24%25%26%2F%28%29');
+     }
+-
+-    protected function setUp()
+-    {
+-        parent::setUp();
+-        $this->mockWebApplication();
+-        $this->controller = new FakeController('fake', new \yii\web\Application([
+-            'id' => 'app',
+-            'basePath' => __DIR__,
+-
+-            'components' => [
+-                'request' => [
+-                    'cookieValidationKey' => 'wefJDF8sfdsfSDefwqdxj9oq',
+-                    'scriptFile' => __DIR__ . '/index.php',
+-                    'scriptUrl' => '/index.php',
+-                ],
+-            ],
+-        ]));
+-        Yii::$app->controller = $this->controller;
+-    }
+ }
+diff --git a/tests/framework/web/FakePhp7Controller.php b/tests/framework/web/FakePhp7Controller.php
+index 68a35170788..5b3ae0b8269 100644
+--- a/tests/framework/web/FakePhp7Controller.php
++++ b/tests/framework/web/FakePhp7Controller.php
+@@ -20,4 +20,8 @@ class FakePhp7Controller extends Controller
+     public function actionAksi1(int $foo, float $bar = null, bool $true, bool $false)
+     {
+     }
++
++    public function actionStringy(string $foo = null)
++    {
++    }
+ }
+diff --git a/tests/framework/web/UrlManagerCreateUrlTest.php b/tests/framework/web/UrlManagerCreateUrlTest.php
+index e1ca2b259ca..ae95c2a855e 100644
+--- a/tests/framework/web/UrlManagerCreateUrlTest.php
++++ b/tests/framework/web/UrlManagerCreateUrlTest.php
+@@ -202,6 +202,7 @@ public function testSimpleRules($method, $showScriptName, $prefix, $config)
+             'post/<id:\d+>' => 'post/view',
+             'posts' => 'post/index',
+             'book/<id:\d+>/<title>' => 'book/view',
++            'POST posts' => 'post/create',
+         ];
+         $manager = $this->getUrlManager($config, $showScriptName);
+ 
+@@ -235,6 +236,10 @@ public function testSimpleRules($method, $showScriptName, $prefix, $config)
+         // match third rule, ensure encoding of params
+         $url = $manager->$method(['book/view', 'id' => 1, 'title' => 'sample post']);
+         $this->assertEquals("$prefix/book/1/sample+post", $url);
++
++        // match fourth rule, since 2.0.41 non-GET verbs are allowed
++        $url = $manager->$method(['post/create']);
++        $this->assertEquals("$prefix/posts", $url);
+     }
+ 
+     /**
+diff --git a/tests/framework/web/UrlManagerParseUrlTest.php b/tests/framework/web/UrlManagerParseUrlTest.php
+index d2ab77b972e..57848ce0440 100644
+--- a/tests/framework/web/UrlManagerParseUrlTest.php
++++ b/tests/framework/web/UrlManagerParseUrlTest.php
+@@ -342,7 +342,7 @@ public function testParseRESTRequest()
+                 ],
+             ],
+         ], \yii\web\Application::className());
+-        $this->assertEquals('/app/post/delete?id=123', $manager->createUrl(['post/delete', 'id' => 123]));
++        $this->assertEquals('/app/post/123', $manager->createUrl(['post/delete', 'id' => 123]));
+         $this->destroyApplication();
+ 
+         unset($_SERVER['REQUEST_METHOD']);
+diff --git a/tests/framework/web/UserTest.php b/tests/framework/web/UserTest.php
+index b6d97824ced..b37eeed313e 100644
+--- a/tests/framework/web/UserTest.php
++++ b/tests/framework/web/UserTest.php
+@@ -47,10 +47,6 @@ protected function tearDown()
+ 
+     public function testLoginExpires()
+     {
+-        if (getenv('TRAVIS') == 'true') {
+-            $this->markTestSkipped('Can not reliably test this on travis-ci.');
+-        }
+-
+         $appConfig = [
+             'components' => [
+                 'user' => [
+@@ -455,6 +451,77 @@ public function testSetIdentity()
+         $this->expectException('\yii\base\InvalidValueException');
+         Yii::$app->user->setIdentity(new \stdClass());
+     }
++
++    public function testSessionAuthWithNonExistingId()
++    {
++        $appConfig = [
++            'components' => [
++                'user' => [
++                    'identityClass' => UserIdentity::className(),
++                ],
++            ],
++        ];
++
++        $this->mockWebApplication($appConfig);
++
++        Yii::$app->session->set('__id', '1');
++
++        $this->assertNull(Yii::$app->user->getIdentity());
++    }
++
++    public function testSessionAuthWithMissingKey()
++    {
++        $appConfig = [
++            'components' => [
++                'user' => [
++                    'identityClass' => UserIdentity::className(),
++                ],
++            ],
++        ];
++
++        $this->mockWebApplication($appConfig);
++
++        Yii::$app->session->set('__id', 'user1');
++
++        $this->assertNotNull(Yii::$app->user->getIdentity());
++    }
++
++    public function testSessionAuthWithInvalidKey()
++    {
++        $appConfig = [
++            'components' => [
++                'user' => [
++                    'identityClass' => UserIdentity::className(),
++                ],
++            ],
++        ];
++
++        $this->mockWebApplication($appConfig);
++
++        Yii::$app->session->set('__id', 'user1');
++        Yii::$app->session->set('__authKey', 'invalid');
++
++
++        $this->assertNull(Yii::$app->user->getIdentity());
++    }
++
++    public function testSessionAuthWithValidKey()
++    {
++        $appConfig = [
++            'components' => [
++                'user' => [
++                    'identityClass' => UserIdentity::className(),
++                ],
++            ],
++        ];
++
++        $this->mockWebApplication($appConfig);
++
++        Yii::$app->session->set('__id', 'user1');
++        Yii::$app->session->set('__authKey', 'ABCD1234');
++
++        $this->assertNotNull(Yii::$app->user->getIdentity());
++    }
+ }
+ 
+ static $cookiesMock;
+diff --git a/tests/framework/widgets/LinkSorterTest.php b/tests/framework/widgets/LinkSorterTest.php
+index ae1a75e4dd4..8d607221e4f 100644
+--- a/tests/framework/widgets/LinkSorterTest.php
++++ b/tests/framework/widgets/LinkSorterTest.php
+@@ -86,7 +86,7 @@ public function testLabelsExplicit()
+     public function testShouldTriggerInitEvent()
+     {
+         $initTriggered = false;
+-        $linkSorter = new LinkSorter(
++        new LinkSorter(
+             [
+                 'sort' => [
+                     'attributes' => ['total'],
