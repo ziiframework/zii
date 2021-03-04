@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "473ff72077e46cf66abe96e4996116d0",
+    "content-hash": "65c657d8f1c4e19faacbd2ce5e359ecd",
     "packages": [
         {
             "name": "bower-asset/inputmask",
@@ -47,16 +47,16 @@
         },
         {
             "name": "bower-asset/punycode",
-            "version": "v1.3.2",
+            "version": "v2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bestiejs/punycode.js.git",
-                "reference": "38c8d3131a82567bfef18da09f7f4db68c84f8a3"
+                "reference": "68df855dc42d1086ada161331b3074468e8d848d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bestiejs/punycode.js/zipball/38c8d3131a82567bfef18da09f7f4db68c84f8a3",
-                "reference": "38c8d3131a82567bfef18da09f7f4db68c84f8a3"
+                "url": "https://api.github.com/repos/bestiejs/punycode.js/zipball/68df855dc42d1086ada161331b3074468e8d848d",
+                "reference": "68df855dc42d1086ada161331b3074468e8d848d"
             },
             "type": "bower-asset"
         },
