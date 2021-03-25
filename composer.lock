@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8ad20738acf934509550e16d4b20521b",
+    "content-hash": "160d0528c1cf49ba2a831aa9321b8a05",
     "packages": [
         {
             "name": "cebe/markdown",
@@ -126,16 +126,16 @@
         },
         {
             "name": "ziiframework/composer",
-            "version": "3.1.1",
+            "version": "3.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ziiframework/composer.git",
-                "reference": "ac73d872fe9bcd03a0843676b908ded44370e8d2"
+                "reference": "2cd58f77ce9b7c8a5c71ff43f0b9d9a759d018c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ziiframework/composer/zipball/ac73d872fe9bcd03a0843676b908ded44370e8d2",
-                "reference": "ac73d872fe9bcd03a0843676b908ded44370e8d2",
+                "url": "https://api.github.com/repos/ziiframework/composer/zipball/2cd58f77ce9b7c8a5c71ff43f0b9d9a759d018c4",
+                "reference": "2cd58f77ce9b7c8a5c71ff43f0b9d9a759d018c4",
                 "shasum": ""
             },
             "require": {
@@ -143,7 +143,7 @@
                 "ext-openssl": "*"
             },
             "require-dev": {
-                "composer/composer": "^1.0 | ^2.0@dev",
+                "composer/composer": "^1.0 | ^2.0",
                 "phpunit/phpunit": "^8.5"
             },
             "type": "composer-plugin",
@@ -179,7 +179,7 @@
                 "issues": "https://github.com/ziiframework/composer/issues",
                 "source": "https://github.com/ziiframework/composer"
             },
-            "time": "2020-11-17T15:11:02+00:00"
+            "time": "2021-03-25T10:01:36+00:00"
         }
     ],
     "packages-dev": [
