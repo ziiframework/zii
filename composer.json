@@ -37,12 +37,6 @@
         "phpunit/phpunit": "^8.5",
         "cebe/indent": "^1.0"
     },
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://asset-packagist.cn"
-        }
-    ],
     "autoload": {
         "psr-4": {
             "yii\\": "src/"
