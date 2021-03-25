@@ -29,8 +29,8 @@
         "lib-pcre": "*",
         "ext-json": "*",
         "ziiframework/composer": "~3.2.1",
-        "ezyang/htmlpurifier": "~4.13.0",
-        "cebe/markdown": "~1.0.0 | ~1.1.0 | ~1.2.0"
+        "ezyang/htmlpurifier": "^4.13",
+        "cebe/markdown": "^1.0"
     },
     "require-dev": {
         "cweagans/composer-patches": "^1.6",
