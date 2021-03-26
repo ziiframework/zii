@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "473ff72077e46cf66abe96e4996116d0",
+    "content-hash": "f2e9751254b5e9f6daf7f33facc305a9",
     "packages": [
         {
             "name": "bower-asset/inputmask",
@@ -201,24 +201,24 @@
         },
         {
             "name": "ziiframework/composer",
-            "version": "3.1.1",
+            "version": "3.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ziiframework/composer.git",
-                "reference": "ac73d872fe9bcd03a0843676b908ded44370e8d2"
+                "reference": "f6d1118e76092b55d72958bfb755806984fc94eb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ziiframework/composer/zipball/ac73d872fe9bcd03a0843676b908ded44370e8d2",
-                "reference": "ac73d872fe9bcd03a0843676b908ded44370e8d2",
+                "url": "https://api.github.com/repos/ziiframework/composer/zipball/f6d1118e76092b55d72958bfb755806984fc94eb",
+                "reference": "f6d1118e76092b55d72958bfb755806984fc94eb",
                 "shasum": ""
             },
             "require": {
-                "composer-plugin-api": "^1.0 | ^2.0",
+                "composer-plugin-api": "^1.0|^2.0",
                 "ext-openssl": "*"
             },
             "require-dev": {
-                "composer/composer": "^1.0 | ^2.0@dev",
+                "composer/composer": "^1.0|^2.0",
                 "phpunit/phpunit": "^8.5"
             },
             "type": "composer-plugin",
@@ -254,7 +254,7 @@
                 "issues": "https://github.com/ziiframework/composer/issues",
                 "source": "https://github.com/ziiframework/composer"
             },
-            "time": "2020-11-17T15:11:02+00:00"
+            "time": "2021-03-25T13:47:31+00:00"
         }
     ],
     "packages-dev": [
