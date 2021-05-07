@@ -1121,7 +1121,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      */
     public function getPrimaryKey($asArray = false)
     {
-        $keys = $this->primaryKey();
+        $keys = static::primaryKey();
         if (!$asArray && count($keys) === 1) {
             return isset($this->_attributes[$keys[0]]) ? $this->_attributes[$keys[0]] : null;
         }
@@ -1152,7 +1152,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      */
     public function getOldPrimaryKey($asArray = false)
     {
-        $keys = $this->primaryKey();
+        $keys = static::primaryKey();
         if (empty($keys)) {
             throw new Exception(get_class($this) . ' does not have a primary key. You should either define a primary key for the corresponding table or override the primaryKey() method.');
         }
@@ -1384,9 +1384,12 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      * If `false`, the model's foreign key will be set `null` and saved.
      * If `true`, the model containing the foreign key will be deleted.
      * @throws InvalidCallException if the models cannot be unlinked
+     * @throws Exception
+     * @throws StaleObjectException
      */
     public function unlink($name, $model, $delete = false)
     {
+        /* @var $relation ActiveQueryInterface|ActiveQuery */
         $relation = $this->getRelation($name);
 
         if ($relation->via !== null) {
@@ -1409,6 +1412,9 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
             $nulls = [];
             foreach (array_keys($columns) as $a) {
                 $nulls[$a] = null;
+            }
+            if (property_exists($viaRelation, 'on') && $viaRelation->on !== null) {
+                $columns = ['and', $columns, $viaRelation->on];
             }
             if (is_array($relation->via)) {
                 /* @var $viaClass ActiveRecordInterface */
@@ -1507,7 +1513,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
             if (!empty($viaRelation->where)) {
                 $condition = ['and', $condition, $viaRelation->where];
             }
-            if (!empty($viaRelation->on)) {
+            if (property_exists($viaRelation, 'on') && !empty($viaRelation->on)) {
                 $condition = ['and', $condition, $viaRelation->on];
             }
             if (is_array($relation->via)) {
@@ -1544,7 +1550,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
                 if (!empty($relation->where)) {
                     $condition = ['and', $condition, $relation->where];
                 }
-                if (!empty($relation->on)) {
+                if (property_exists($relation, 'on') && !empty($relation->on)) {
                     $condition = ['and', $condition, $relation->on];
                 }
                 if ($delete) {

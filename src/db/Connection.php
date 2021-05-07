@@ -136,19 +136,19 @@ use yii\caching\CacheInterface;
 class Connection extends Component
 {
     /**
-     * @event yii\base\Event an event that is triggered after a DB connection is established
+     * @event \yii\base\Event an event that is triggered after a DB connection is established
      */
     const EVENT_AFTER_OPEN = 'afterOpen';
     /**
-     * @event yii\base\Event an event that is triggered right before a top-level transaction is started
+     * @event \yii\base\Event an event that is triggered right before a top-level transaction is started
      */
     const EVENT_BEGIN_TRANSACTION = 'beginTransaction';
     /**
-     * @event yii\base\Event an event that is triggered right after a top-level transaction is committed
+     * @event \yii\base\Event an event that is triggered right after a top-level transaction is committed
      */
     const EVENT_COMMIT_TRANSACTION = 'commitTransaction';
     /**
-     * @event yii\base\Event an event that is triggered right after a top-level transaction is rolled back
+     * @event \yii\base\Event an event that is triggered right after a top-level transaction is rolled back
      */
     const EVENT_ROLLBACK_TRANSACTION = 'rollbackTransaction';
 
@@ -420,6 +420,13 @@ class Connection extends Component
      */
     public $isSybase = false;
 
+    /**
+     * @var array An array of [[setQueryBuilder()]] calls, holding the passed arguments.
+     * Is used to restore a QueryBuilder configuration after the connection close/open cycle.
+     *
+     * @see restoreQueryBuilderConfiguration()
+     */
+    private $_queryBuilderConfigurations = [];
     /**
      * @var Transaction the currently active transaction
      */
@@ -847,7 +854,10 @@ class Connection extends Component
             $config = !is_array($this->schemaMap[$driver]) ? ['class' => $this->schemaMap[$driver]] : $this->schemaMap[$driver];
             $config['db'] = $this;
 
-            return $this->_schema = Yii::createObject($config);
+            $this->_schema = Yii::createObject($config);
+            $this->restoreQueryBuilderConfiguration();
+
+            return $this->_schema;
         }
 
         throw new NotSupportedException("Connection does not support reading schema information for '$driver' DBMS.");
@@ -871,13 +881,30 @@ class Connection extends Component
     public function setQueryBuilder($value)
     {
         Yii::configure($this->getQueryBuilder(), $value);
+        $this->_queryBuilderConfigurations[] = $value;
+    }
+
+    /**
+     * Restores custom QueryBuilder configuration after the connection close/open cycle
+     */
+    private function restoreQueryBuilderConfiguration()
+    {
+        if ($this->_queryBuilderConfigurations === []) {
+            return;
+        }
+
+        $queryBuilderConfigurations = $this->_queryBuilderConfigurations;
+        $this->_queryBuilderConfigurations = [];
+        foreach ($queryBuilderConfigurations as $queryBuilderConfiguration) {
+            $this->setQueryBuilder($queryBuilderConfiguration);
+        }
     }
 
     /**
      * Obtains the schema information for the named table.
      * @param string $name table name.
      * @param bool $refresh whether to reload the table schema even if it is found in the cache.
-     * @return TableSchema table schema information. Null if the named table does not exist.
+     * @return TableSchema|null table schema information. Null if the named table does not exist.
      */
     public function getTableSchema($name, $refresh = false)
     {
