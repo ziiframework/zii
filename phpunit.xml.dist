@@ -14,21 +14,21 @@
   </testsuites>
   <filter>
     <whitelist>
-      <directory suffix=".php">framework/</directory>
+      <directory suffix=".php">src/</directory>
       <exclude>
-        <file>framework/helpers/Json.php</file>
-        <file>framework/helpers/StringHelper.php</file>
-        <file>framework/helpers/VarDumper.php</file>
-        <file>framework/helpers/Html.php</file>
-        <file>framework/helpers/Inflector.php</file>
-        <file>framework/helpers/FileHelper.php</file>
-        <file>framework/helpers/ArrayHelper.php</file>
-        <file>framework/helpers/Console.php</file>
-        <file>framework/i18n/GettextFile.php</file>
-        <file>framework/web/ResponseFormatterInterface.php</file>
-        <directory suffix="Exception.php">framework/base</directory>
-        <directory suffix=".php">framework/db/mssql</directory>
-        <directory suffix=".php">framework/bootstrap</directory>
+        <file>src/helpers/Json.php</file>
+        <file>src/helpers/StringHelper.php</file>
+        <file>src/helpers/VarDumper.php</file>
+        <file>src/helpers/Html.php</file>
+        <file>src/helpers/Inflector.php</file>
+        <file>src/helpers/FileHelper.php</file>
+        <file>src/helpers/ArrayHelper.php</file>
+        <file>src/helpers/Console.php</file>
+        <file>src/i18n/GettextFile.php</file>
+        <file>src/web/ResponseFormatterInterface.php</file>
+        <directory suffix="Exception.php">src/base</directory>
+        <directory suffix=".php">src/db/mssql</directory>
+        <directory suffix=".php">src/bootstrap</directory>
       </exclude>
     </whitelist>
   </filter>
