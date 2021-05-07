@@ -1420,19 +1420,6 @@ index 475ff1a48dc..6fbc5b0fde5 100644
 +        return $this->hasMany(Item::className(), ['id' => 'item_id'])->via('orderItemsFor8');
 +    }
  }
-diff --git a/tests/data/cubrid.sql b/tests/data/cubrid.sql
-index f0c5897b826..19cdee5afa1 100644
---- a/tests/data/cubrid.sql
-+++ b/tests/data/cubrid.sql
-@@ -229,7 +229,7 @@ INSERT INTO "order_item_with_null_fk" (order_id, item_id, quantity, subtotal) VA
- INSERT INTO "order_item_with_null_fk" (order_id, item_id, quantity, subtotal) VALUES (1, 2, 2, 40.0);
- INSERT INTO "order_item_with_null_fk" (order_id, item_id, quantity, subtotal) VALUES (2, 4, 1, 10.0);
- INSERT INTO "order_item_with_null_fk" (order_id, item_id, quantity, subtotal) VALUES (2, 5, 1, 15.0);
--INSERT INTO "order_item_with_null_fk" (order_id, item_id, quantity, subtotal) VALUES (2, 3, 1, 8.0);
-+INSERT INTO "order_item_with_null_fk" (order_id, item_id, quantity, subtotal) VALUES (2, 5, 1, 8.0);
- INSERT INTO "order_item_with_null_fk" (order_id, item_id, quantity, subtotal) VALUES (3, 2, 1, 40.0);
- 
- INSERT INTO "document" (title, content, version) VALUES ('Yii 2.0 guide', 'This is Yii 2.0 guide', 0);
 diff --git a/tests/data/mssql.sql b/tests/data/mssql.sql
 index 57f4e597e71..44e545e1ed2 100644
 --- a/tests/data/mssql.sql
