@@ -33,7 +33,6 @@
         "cebe/markdown": "^1.0"
     },
     "require-dev": {
-        "cweagans/composer-patches": "^1.6",
         "phpunit/phpunit": "^8.5",
         "cebe/indent": "^1.0"
     },
