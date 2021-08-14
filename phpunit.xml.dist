@@ -16,14 +16,6 @@
     <whitelist>
       <directory suffix=".php">src/</directory>
       <exclude>
-        <file>src/helpers/Json.php</file>
-        <file>src/helpers/StringHelper.php</file>
-        <file>src/helpers/VarDumper.php</file>
-        <file>src/helpers/Html.php</file>
-        <file>src/helpers/Inflector.php</file>
-        <file>src/helpers/FileHelper.php</file>
-        <file>src/helpers/ArrayHelper.php</file>
-        <file>src/helpers/Console.php</file>
         <file>src/i18n/GettextFile.php</file>
         <file>src/web/ResponseFormatterInterface.php</file>
         <directory suffix="Exception.php">src/base</directory>
