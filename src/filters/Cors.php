@@ -143,7 +143,7 @@ class Cors extends ActionFilter
         $headers = [];
         foreach (array_keys($this->cors) as $headerField) {
             $serverField = $this->headerizeToPhp($headerField);
-            $headerData = isset($_SERVER[$serverField]) ? $_SERVER[$serverField] : null;
+            $headerData = $_SERVER[$serverField] ?? null;
             if ($headerData !== null) {
                 $headers[$headerField] = $headerData;
             }

@@ -70,7 +70,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
     public function upsert($table, $insertColumns, $updateColumns, &$params)
     {
         /** @var Constraint[] $constraints */
-        list($uniqueNames, $insertNames, $updateNames) = $this->prepareUpsertColumns($table, $insertColumns, $updateColumns, $constraints);
+        [$uniqueNames, $insertNames, $updateNames] = $this->prepareUpsertColumns($table, $insertColumns, $updateColumns, $constraints);
         if (empty($uniqueNames)) {
             return $this->insert($table, $insertColumns, $params);
         }
@@ -79,7 +79,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
             $updateColumns = false;
         }
 
-        list(, $placeholders, $values, $params) = $this->prepareInsertValues($table, $insertColumns, $params);
+        [, $placeholders, $values, $params] = $this->prepareInsertValues($table, $insertColumns, $params);
         $insertSql = 'INSERT OR IGNORE INTO ' . $this->db->quoteTableName($table)
             . (!empty($insertNames) ? ' (' . implode(', ', $insertNames) . ')' : '')
             . (!empty($placeholders) ? ' VALUES (' . implode(', ', $placeholders) . ')' : $values);
@@ -542,7 +542,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
         foreach ($unions as $i => $union) {
             $query = $union['query'];
             if ($query instanceof Query) {
-                list($unions[$i]['query'], $params) = $this->build($query, $params);
+                [$unions[$i]['query'], $params] = $this->build($query, $params);
             }
 
             $result .= ' UNION ' . ($union['all'] ? 'ALL ' : '') . ' ' . $unions[$i]['query'];
@@ -560,7 +560,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
 
         $schema = null;
         if (count($tableParts) === 2) {
-            list ($schema, $table) = $tableParts;
+            [$schema, $table] = $tableParts;
         }
 
         return ($unique ? 'CREATE UNIQUE INDEX ' : 'CREATE INDEX ')

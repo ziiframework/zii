@@ -155,12 +155,12 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
     protected function findSchemaNames()
     {
         static $sql = <<<'SQL'
-SELECT [s].[name]
-FROM [sys].[schemas] AS [s]
-INNER JOIN [sys].[database_principals] AS [p] ON [p].[principal_id] = [s].[principal_id]
-WHERE [p].[is_fixed_role] = 0 AND [p].[sid] IS NOT NULL
-ORDER BY [s].[name] ASC
-SQL;
+            SELECT [s].[name]
+            FROM [sys].[schemas] AS [s]
+            INNER JOIN [sys].[database_principals] AS [p] ON [p].[principal_id] = [s].[principal_id]
+            WHERE [p].[is_fixed_role] = 0 AND [p].[sid] IS NOT NULL
+            ORDER BY [s].[name] ASC
+            SQL;
 
         return $this->db->createCommand($sql)->queryColumn();
     }
@@ -175,11 +175,11 @@ SQL;
         }
 
         $sql = <<<'SQL'
-SELECT [t].[table_name]
-FROM [INFORMATION_SCHEMA].[TABLES] AS [t]
-WHERE [t].[table_schema] = :schema AND [t].[table_type] IN ('BASE TABLE', 'VIEW')
-ORDER BY [t].[table_name]
-SQL;
+            SELECT [t].[table_name]
+            FROM [INFORMATION_SCHEMA].[TABLES] AS [t]
+            WHERE [t].[table_schema] = :schema AND [t].[table_type] IN ('BASE TABLE', 'VIEW')
+            ORDER BY [t].[table_name]
+            SQL;
         return $this->db->createCommand($sql, [':schema' => $schema])->queryColumn();
     }
 
@@ -244,19 +244,19 @@ SQL;
     protected function loadTableIndexes($tableName)
     {
         static $sql = <<<'SQL'
-SELECT
-    [i].[name] AS [name],
-    [iccol].[name] AS [column_name],
-    [i].[is_unique] AS [index_is_unique],
-    [i].[is_primary_key] AS [index_is_primary]
-FROM [sys].[indexes] AS [i]
-INNER JOIN [sys].[index_columns] AS [ic]
-    ON [ic].[object_id] = [i].[object_id] AND [ic].[index_id] = [i].[index_id]
-INNER JOIN [sys].[columns] AS [iccol]
-    ON [iccol].[object_id] = [ic].[object_id] AND [iccol].[column_id] = [ic].[column_id]
-WHERE [i].[object_id] = OBJECT_ID(:fullName)
-ORDER BY [ic].[key_ordinal] ASC
-SQL;
+            SELECT
+                [i].[name] AS [name],
+                [iccol].[name] AS [column_name],
+                [i].[is_unique] AS [index_is_unique],
+                [i].[is_primary_key] AS [index_is_primary]
+            FROM [sys].[indexes] AS [i]
+            INNER JOIN [sys].[index_columns] AS [ic]
+                ON [ic].[object_id] = [i].[object_id] AND [ic].[index_id] = [i].[index_id]
+            INNER JOIN [sys].[columns] AS [iccol]
+                ON [iccol].[object_id] = [ic].[object_id] AND [iccol].[column_id] = [ic].[column_id]
+            WHERE [i].[object_id] = OBJECT_ID(:fullName)
+            ORDER BY [ic].[key_ordinal] ASC
+            SQL;
 
         $resolvedName = $this->resolveTableName($tableName);
         $indexes = $this->db->createCommand($sql, [
@@ -441,34 +441,34 @@ SQL;
         $columnsTableName = $this->quoteTableName($columnsTableName);
 
         $sql = <<<SQL
-SELECT
- [t1].[column_name],
- [t1].[is_nullable],
- CASE WHEN [t1].[data_type] IN ('char','varchar','nchar','nvarchar','binary','varbinary') THEN
-    CASE WHEN [t1].[character_maximum_length] = NULL OR [t1].[character_maximum_length] = -1 THEN
-        [t1].[data_type]
-    ELSE
-        [t1].[data_type] + '(' + LTRIM(RTRIM(CONVERT(CHAR,[t1].[character_maximum_length]))) + ')'
-    END
- ELSE
-    [t1].[data_type]
- END AS 'data_type',
- [t1].[column_default],
- COLUMNPROPERTY(OBJECT_ID([t1].[table_schema] + '.' + [t1].[table_name]), [t1].[column_name], 'IsIdentity') AS is_identity,
- COLUMNPROPERTY(OBJECT_ID([t1].[table_schema] + '.' + [t1].[table_name]), [t1].[column_name], 'IsComputed') AS is_computed,
- (
-    SELECT CONVERT(VARCHAR, [t2].[value])
-		FROM [sys].[extended_properties] AS [t2]
-		WHERE
-			[t2].[class] = 1 AND
-			[t2].[class_desc] = 'OBJECT_OR_COLUMN' AND
-			[t2].[name] = 'MS_Description' AND
-			[t2].[major_id] = OBJECT_ID([t1].[TABLE_SCHEMA] + '.' + [t1].[table_name]) AND
-			[t2].[minor_id] = COLUMNPROPERTY(OBJECT_ID([t1].[TABLE_SCHEMA] + '.' + [t1].[TABLE_NAME]), [t1].[COLUMN_NAME], 'ColumnID')
- ) as comment
-FROM {$columnsTableName} AS [t1]
-WHERE {$whereSql}
-SQL;
+            SELECT
+             [t1].[column_name],
+             [t1].[is_nullable],
+             CASE WHEN [t1].[data_type] IN ('char','varchar','nchar','nvarchar','binary','varbinary') THEN
+                CASE WHEN [t1].[character_maximum_length] = NULL OR [t1].[character_maximum_length] = -1 THEN
+                    [t1].[data_type]
+                ELSE
+                    [t1].[data_type] + '(' + LTRIM(RTRIM(CONVERT(CHAR,[t1].[character_maximum_length]))) + ')'
+                END
+             ELSE
+                [t1].[data_type]
+             END AS 'data_type',
+             [t1].[column_default],
+             COLUMNPROPERTY(OBJECT_ID([t1].[table_schema] + '.' + [t1].[table_name]), [t1].[column_name], 'IsIdentity') AS is_identity,
+             COLUMNPROPERTY(OBJECT_ID([t1].[table_schema] + '.' + [t1].[table_name]), [t1].[column_name], 'IsComputed') AS is_computed,
+             (
+                SELECT CONVERT(VARCHAR, [t2].[value])
+            		FROM [sys].[extended_properties] AS [t2]
+            		WHERE
+            			[t2].[class] = 1 AND
+            			[t2].[class_desc] = 'OBJECT_OR_COLUMN' AND
+            			[t2].[name] = 'MS_Description' AND
+            			[t2].[major_id] = OBJECT_ID([t1].[TABLE_SCHEMA] + '.' + [t1].[table_name]) AND
+            			[t2].[minor_id] = COLUMNPROPERTY(OBJECT_ID([t1].[TABLE_SCHEMA] + '.' + [t1].[TABLE_NAME]), [t1].[COLUMN_NAME], 'ColumnID')
+             ) as comment
+            FROM {$columnsTableName} AS [t1]
+            WHERE {$whereSql}
+            SQL;
 
         try {
             $columns = $this->db->createCommand($sql)->queryAll();
@@ -514,19 +514,19 @@ SQL;
         $tableConstraintsTableName = $this->quoteTableName($tableConstraintsTableName);
 
         $sql = <<<SQL
-SELECT
-    [kcu].[constraint_name] AS [index_name],
-    [kcu].[column_name] AS [field_name]
-FROM {$keyColumnUsageTableName} AS [kcu]
-LEFT JOIN {$tableConstraintsTableName} AS [tc] ON
-    [kcu].[table_schema] = [tc].[table_schema] AND
-    [kcu].[table_name] = [tc].[table_name] AND
-    [kcu].[constraint_name] = [tc].[constraint_name]
-WHERE
-    [tc].[constraint_type] = :type AND
-    [kcu].[table_name] = :tableName AND
-    [kcu].[table_schema] = :schemaName
-SQL;
+            SELECT
+                [kcu].[constraint_name] AS [index_name],
+                [kcu].[column_name] AS [field_name]
+            FROM {$keyColumnUsageTableName} AS [kcu]
+            LEFT JOIN {$tableConstraintsTableName} AS [tc] ON
+                [kcu].[table_schema] = [tc].[table_schema] AND
+                [kcu].[table_name] = [tc].[table_name] AND
+                [kcu].[constraint_name] = [tc].[constraint_name]
+            WHERE
+                [tc].[constraint_type] = :type AND
+                [kcu].[table_name] = :tableName AND
+                [kcu].[table_schema] = :schemaName
+            SQL;
 
         return $this->db
             ->createCommand($sql, [
@@ -567,24 +567,24 @@ SQL;
         // please refer to the following page for more details:
         // http://msdn2.microsoft.com/en-us/library/aa175805(SQL.80).aspx
         $sql = <<<'SQL'
-SELECT
-	[fk].[name] AS [fk_name],
-	[cp].[name] AS [fk_column_name],
-	OBJECT_NAME([fk].[referenced_object_id]) AS [uq_table_name],
-	[cr].[name] AS [uq_column_name]
-FROM
-	[sys].[foreign_keys] AS [fk]
-	INNER JOIN [sys].[foreign_key_columns] AS [fkc] ON
-		[fk].[object_id] = [fkc].[constraint_object_id]
-	INNER JOIN [sys].[columns] AS [cp] ON
-		[fk].[parent_object_id] = [cp].[object_id] AND
-		[fkc].[parent_column_id] = [cp].[column_id]
-	INNER JOIN [sys].[columns] AS [cr] ON
-		[fk].[referenced_object_id] = [cr].[object_id] AND
-		[fkc].[referenced_column_id] = [cr].[column_id]
-WHERE
-	[fk].[parent_object_id] = OBJECT_ID(:object)
-SQL;
+            SELECT
+            	[fk].[name] AS [fk_name],
+            	[cp].[name] AS [fk_column_name],
+            	OBJECT_NAME([fk].[referenced_object_id]) AS [uq_table_name],
+            	[cr].[name] AS [uq_column_name]
+            FROM
+            	[sys].[foreign_keys] AS [fk]
+            	INNER JOIN [sys].[foreign_key_columns] AS [fkc] ON
+            		[fk].[object_id] = [fkc].[constraint_object_id]
+            	INNER JOIN [sys].[columns] AS [cp] ON
+            		[fk].[parent_object_id] = [cp].[object_id] AND
+            		[fkc].[parent_column_id] = [cp].[column_id]
+            	INNER JOIN [sys].[columns] AS [cr] ON
+            		[fk].[referenced_object_id] = [cr].[object_id] AND
+            		[fkc].[referenced_column_id] = [cr].[column_id]
+            WHERE
+            	[fk].[parent_object_id] = OBJECT_ID(:object)
+            SQL;
 
         $rows = $this->db->createCommand($sql, [
             ':object' => $object,
@@ -609,11 +609,11 @@ SQL;
         }
 
         $sql = <<<'SQL'
-SELECT [t].[table_name]
-FROM [INFORMATION_SCHEMA].[TABLES] AS [t]
-WHERE [t].[table_schema] = :schema AND [t].[table_type] = 'VIEW'
-ORDER BY [t].[table_name]
-SQL;
+            SELECT [t].[table_name]
+            FROM [INFORMATION_SCHEMA].[TABLES] AS [t]
+            WHERE [t].[table_schema] = :schema AND [t].[table_type] = 'VIEW'
+            ORDER BY [t].[table_name]
+            SQL;
 
         return $this->db->createCommand($sql, [':schema' => $schema])->queryColumn();
     }
@@ -658,44 +658,44 @@ SQL;
     private function loadTableConstraints($tableName, $returnType)
     {
         static $sql = <<<'SQL'
-SELECT
-    [o].[name] AS [name],
-    COALESCE([ccol].[name], [dcol].[name], [fccol].[name], [kiccol].[name]) AS [column_name],
-    RTRIM([o].[type]) AS [type],
-    OBJECT_SCHEMA_NAME([f].[referenced_object_id]) AS [foreign_table_schema],
-    OBJECT_NAME([f].[referenced_object_id]) AS [foreign_table_name],
-    [ffccol].[name] AS [foreign_column_name],
-    [f].[update_referential_action_desc] AS [on_update],
-    [f].[delete_referential_action_desc] AS [on_delete],
-    [c].[definition] AS [check_expr],
-    [d].[definition] AS [default_expr]
-FROM (SELECT OBJECT_ID(:fullName) AS [object_id]) AS [t]
-INNER JOIN [sys].[objects] AS [o]
-    ON [o].[parent_object_id] = [t].[object_id] AND [o].[type] IN ('PK', 'UQ', 'C', 'D', 'F')
-LEFT JOIN [sys].[check_constraints] AS [c]
-    ON [c].[object_id] = [o].[object_id]
-LEFT JOIN [sys].[columns] AS [ccol]
-    ON [ccol].[object_id] = [c].[parent_object_id] AND [ccol].[column_id] = [c].[parent_column_id]
-LEFT JOIN [sys].[default_constraints] AS [d]
-    ON [d].[object_id] = [o].[object_id]
-LEFT JOIN [sys].[columns] AS [dcol]
-    ON [dcol].[object_id] = [d].[parent_object_id] AND [dcol].[column_id] = [d].[parent_column_id]
-LEFT JOIN [sys].[key_constraints] AS [k]
-    ON [k].[object_id] = [o].[object_id]
-LEFT JOIN [sys].[index_columns] AS [kic]
-    ON [kic].[object_id] = [k].[parent_object_id] AND [kic].[index_id] = [k].[unique_index_id]
-LEFT JOIN [sys].[columns] AS [kiccol]
-    ON [kiccol].[object_id] = [kic].[object_id] AND [kiccol].[column_id] = [kic].[column_id]
-LEFT JOIN [sys].[foreign_keys] AS [f]
-    ON [f].[object_id] = [o].[object_id]
-LEFT JOIN [sys].[foreign_key_columns] AS [fc]
-    ON [fc].[constraint_object_id] = [o].[object_id]
-LEFT JOIN [sys].[columns] AS [fccol]
-    ON [fccol].[object_id] = [fc].[parent_object_id] AND [fccol].[column_id] = [fc].[parent_column_id]
-LEFT JOIN [sys].[columns] AS [ffccol]
-    ON [ffccol].[object_id] = [fc].[referenced_object_id] AND [ffccol].[column_id] = [fc].[referenced_column_id]
-ORDER BY [kic].[key_ordinal] ASC, [fc].[constraint_column_id] ASC
-SQL;
+            SELECT
+                [o].[name] AS [name],
+                COALESCE([ccol].[name], [dcol].[name], [fccol].[name], [kiccol].[name]) AS [column_name],
+                RTRIM([o].[type]) AS [type],
+                OBJECT_SCHEMA_NAME([f].[referenced_object_id]) AS [foreign_table_schema],
+                OBJECT_NAME([f].[referenced_object_id]) AS [foreign_table_name],
+                [ffccol].[name] AS [foreign_column_name],
+                [f].[update_referential_action_desc] AS [on_update],
+                [f].[delete_referential_action_desc] AS [on_delete],
+                [c].[definition] AS [check_expr],
+                [d].[definition] AS [default_expr]
+            FROM (SELECT OBJECT_ID(:fullName) AS [object_id]) AS [t]
+            INNER JOIN [sys].[objects] AS [o]
+                ON [o].[parent_object_id] = [t].[object_id] AND [o].[type] IN ('PK', 'UQ', 'C', 'D', 'F')
+            LEFT JOIN [sys].[check_constraints] AS [c]
+                ON [c].[object_id] = [o].[object_id]
+            LEFT JOIN [sys].[columns] AS [ccol]
+                ON [ccol].[object_id] = [c].[parent_object_id] AND [ccol].[column_id] = [c].[parent_column_id]
+            LEFT JOIN [sys].[default_constraints] AS [d]
+                ON [d].[object_id] = [o].[object_id]
+            LEFT JOIN [sys].[columns] AS [dcol]
+                ON [dcol].[object_id] = [d].[parent_object_id] AND [dcol].[column_id] = [d].[parent_column_id]
+            LEFT JOIN [sys].[key_constraints] AS [k]
+                ON [k].[object_id] = [o].[object_id]
+            LEFT JOIN [sys].[index_columns] AS [kic]
+                ON [kic].[object_id] = [k].[parent_object_id] AND [kic].[index_id] = [k].[unique_index_id]
+            LEFT JOIN [sys].[columns] AS [kiccol]
+                ON [kiccol].[object_id] = [kic].[object_id] AND [kiccol].[column_id] = [kic].[column_id]
+            LEFT JOIN [sys].[foreign_keys] AS [f]
+                ON [f].[object_id] = [o].[object_id]
+            LEFT JOIN [sys].[foreign_key_columns] AS [fc]
+                ON [fc].[constraint_object_id] = [o].[object_id]
+            LEFT JOIN [sys].[columns] AS [fccol]
+                ON [fccol].[object_id] = [fc].[parent_object_id] AND [fccol].[column_id] = [fc].[parent_column_id]
+            LEFT JOIN [sys].[columns] AS [ffccol]
+                ON [ffccol].[object_id] = [fc].[referenced_object_id] AND [ffccol].[column_id] = [fc].[referenced_column_id]
+            ORDER BY [kic].[key_ordinal] ASC, [fc].[constraint_column_id] ASC
+            SQL;
 
         $resolvedName = $this->resolveTableName($tableName);
         $constraints = $this->db->createCommand($sql, [

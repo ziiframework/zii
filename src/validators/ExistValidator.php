@@ -320,7 +320,8 @@ class ExistValidator extends Validator
                 $prefixedColumn = "{$alias}.[[" . preg_replace(
                     '/^' . preg_quote($alias) . '\.(.*)$/',
                     '$1',
-                    $columnName) . ']]';
+                    $columnName
+                ) . ']]';
             } else {
                 // there is an expression, can't prefix it reliably
                 $prefixedColumn = $columnName;

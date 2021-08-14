@@ -63,16 +63,16 @@ class Model extends Component implements StaticInstanceInterface, IteratorAggreg
     /**
      * The name of the default scenario.
      */
-    const SCENARIO_DEFAULT = 'default';
+    public const SCENARIO_DEFAULT = 'default';
     /**
      * @event ModelEvent an event raised at the beginning of [[validate()]]. You may set
      * [[ModelEvent::isValid]] to be false to stop the validation.
      */
-    const EVENT_BEFORE_VALIDATE = 'beforeValidate';
+    public const EVENT_BEFORE_VALIDATE = 'beforeValidate';
     /**
      * @event Event an event raised at the end of [[validate()]]
      */
-    const EVENT_AFTER_VALIDATE = 'afterValidate';
+    public const EVENT_AFTER_VALIDATE = 'afterValidate';
 
     /**
      * @var array validation errors (attribute name => array of errors)
@@ -533,7 +533,7 @@ class Model extends Component implements StaticInstanceInterface, IteratorAggreg
     public function getAttributeLabel($attribute)
     {
         $labels = $this->attributeLabels();
-        return isset($labels[$attribute]) ? $labels[$attribute] : $this->generateAttributeLabel($attribute);
+        return $labels[$attribute] ?? $this->generateAttributeLabel($attribute);
     }
 
     /**
@@ -546,7 +546,7 @@ class Model extends Component implements StaticInstanceInterface, IteratorAggreg
     public function getAttributeHint($attribute)
     {
         $hints = $this->attributeHints();
-        return isset($hints[$attribute]) ? $hints[$attribute] : '';
+        return $hints[$attribute] ?? '';
     }
 
     /**
@@ -588,7 +588,7 @@ class Model extends Component implements StaticInstanceInterface, IteratorAggreg
             return $this->_errors === null ? [] : $this->_errors;
         }
 
-        return isset($this->_errors[$attribute]) ? $this->_errors[$attribute] : [];
+        return $this->_errors[$attribute] ?? [];
     }
 
     /**

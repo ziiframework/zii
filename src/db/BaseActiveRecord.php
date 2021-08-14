@@ -46,43 +46,43 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
     /**
      * @event Event an event that is triggered when the record is initialized via [[init()]].
      */
-    const EVENT_INIT = 'init';
+    public const EVENT_INIT = 'init';
     /**
      * @event Event an event that is triggered after the record is created and populated with query result.
      */
-    const EVENT_AFTER_FIND = 'afterFind';
+    public const EVENT_AFTER_FIND = 'afterFind';
     /**
      * @event ModelEvent an event that is triggered before inserting a record.
      * You may set [[ModelEvent::isValid]] to be `false` to stop the insertion.
      */
-    const EVENT_BEFORE_INSERT = 'beforeInsert';
+    public const EVENT_BEFORE_INSERT = 'beforeInsert';
     /**
      * @event AfterSaveEvent an event that is triggered after a record is inserted.
      */
-    const EVENT_AFTER_INSERT = 'afterInsert';
+    public const EVENT_AFTER_INSERT = 'afterInsert';
     /**
      * @event ModelEvent an event that is triggered before updating a record.
      * You may set [[ModelEvent::isValid]] to be `false` to stop the update.
      */
-    const EVENT_BEFORE_UPDATE = 'beforeUpdate';
+    public const EVENT_BEFORE_UPDATE = 'beforeUpdate';
     /**
      * @event AfterSaveEvent an event that is triggered after a record is updated.
      */
-    const EVENT_AFTER_UPDATE = 'afterUpdate';
+    public const EVENT_AFTER_UPDATE = 'afterUpdate';
     /**
      * @event ModelEvent an event that is triggered before deleting a record.
      * You may set [[ModelEvent::isValid]] to be `false` to stop the deletion.
      */
-    const EVENT_BEFORE_DELETE = 'beforeDelete';
+    public const EVENT_BEFORE_DELETE = 'beforeDelete';
     /**
      * @event Event an event that is triggered after a record is deleted.
      */
-    const EVENT_AFTER_DELETE = 'afterDelete';
+    public const EVENT_AFTER_DELETE = 'afterDelete';
     /**
      * @event Event an event that is triggered after a record is refreshed.
      * @since 2.0.8
      */
-    const EVENT_AFTER_REFRESH = 'afterRefresh';
+    public const EVENT_AFTER_REFRESH = 'afterRefresh';
 
     /**
      * @var array attribute values indexed by attribute names
@@ -510,7 +510,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      */
     public function getAttribute($name)
     {
-        return isset($this->_attributes[$name]) ? $this->_attributes[$name] : null;
+        return $this->_attributes[$name] ?? null;
     }
 
     /**
@@ -566,7 +566,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      */
     public function getOldAttribute($name)
     {
-        return isset($this->_oldAttributes[$name]) ? $this->_oldAttributes[$name] : null;
+        return $this->_oldAttributes[$name] ?? null;
     }
 
     /**
@@ -819,7 +819,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
 
         $changedAttributes = [];
         foreach ($values as $name => $value) {
-            $changedAttributes[$name] = isset($this->_oldAttributes[$name]) ? $this->_oldAttributes[$name] : null;
+            $changedAttributes[$name] = $this->_oldAttributes[$name] ?? null;
             $this->_oldAttributes[$name] = $value;
         }
         $this->afterSave(false, $changedAttributes);
@@ -1069,7 +1069,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
             return false;
         }
         foreach ($this->attributes() as $name) {
-            $this->_attributes[$name] = isset($record->_attributes[$name]) ? $record->_attributes[$name] : null;
+            $this->_attributes[$name] = $record->_attributes[$name] ?? null;
         }
         $this->_oldAttributes = $record->_oldAttributes;
         $this->_related = [];
@@ -1123,12 +1123,12 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
     {
         $keys = static::primaryKey();
         if (!$asArray && count($keys) === 1) {
-            return isset($this->_attributes[$keys[0]]) ? $this->_attributes[$keys[0]] : null;
+            return $this->_attributes[$keys[0]] ?? null;
         }
 
         $values = [];
         foreach ($keys as $name) {
-            $values[$name] = isset($this->_attributes[$name]) ? $this->_attributes[$name] : null;
+            $values[$name] = $this->_attributes[$name] ?? null;
         }
 
         return $values;
@@ -1157,12 +1157,12 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
             throw new Exception(get_class($this) . ' does not have a primary key. You should either define a primary key for the corresponding table or override the primaryKey() method.');
         }
         if (!$asArray && count($keys) === 1) {
-            return isset($this->_oldAttributes[$keys[0]]) ? $this->_oldAttributes[$keys[0]] : null;
+            return $this->_oldAttributes[$keys[0]] ?? null;
         }
 
         $values = [];
         foreach ($keys as $name) {
-            $values[$name] = isset($this->_oldAttributes[$name]) ? $this->_oldAttributes[$name] : null;
+            $values[$name] = $this->_oldAttributes[$name] ?? null;
         }
 
         return $values;
@@ -1304,7 +1304,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
             }
             if (is_array($relation->via)) {
                 /* @var $viaRelation ActiveQuery */
-                list($viaName, $viaRelation) = $relation->via;
+                [$viaName, $viaRelation] = $relation->via;
                 $viaClass = $viaRelation->modelClass;
                 // unset $viaName so that it can be reloaded to reflect the change
                 unset($this->_related[$viaName]);
@@ -1397,7 +1397,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
         if ($relation->via !== null) {
             if (is_array($relation->via)) {
                 /* @var $viaRelation ActiveQuery */
-                list($viaName, $viaRelation) = $relation->via;
+                [$viaName, $viaRelation] = $relation->via;
                 $viaClass = $viaRelation->modelClass;
                 unset($this->_related[$viaName]);
             } else {
@@ -1500,7 +1500,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
         if ($relation->via !== null) {
             if (is_array($relation->via)) {
                 /* @var $viaRelation ActiveQuery */
-                list($viaName, $viaRelation) = $relation->via;
+                [$viaName, $viaRelation] = $relation->via;
                 $viaClass = $viaRelation->modelClass;
                 unset($this->_related[$viaName]);
             } else {
@@ -1757,7 +1757,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
         } elseif ($relation->via instanceof ActiveQueryInterface) {
             $this->setRelationDependencies($name, $relation->via);
         } elseif (is_array($relation->via)) {
-            list($viaRelationName, $viaQuery) = $relation->via;
+            [$viaRelationName, $viaQuery] = $relation->via;
             $this->setRelationDependencies($name, $viaQuery, $viaRelationName);
         }
     }

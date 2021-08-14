@@ -24,11 +24,11 @@ use yii\base\InvalidConfigException;
  */
 class BaseFileHelper
 {
-    const PATTERN_NODIR = 1;
-    const PATTERN_ENDSWITH = 4;
-    const PATTERN_MUSTBEDIR = 8;
-    const PATTERN_NEGATIVE = 16;
-    const PATTERN_CASE_INSENSITIVE = 32;
+    public const PATTERN_NODIR = 1;
+    public const PATTERN_ENDSWITH = 4;
+    public const PATTERN_MUSTBEDIR = 8;
+    public const PATTERN_NEGATIVE = 16;
+    public const PATTERN_CASE_INSENSITIVE = 32;
 
     /**
      * @var string the path (or alias) of a PHP file containing MIME type information.
@@ -313,7 +313,7 @@ class BaseFileHelper
         }
         $dstExists = is_dir($dst);
         if (!$dstExists && (!isset($options['copyEmptyDirectories']) || $options['copyEmptyDirectories'])) {
-            static::createDirectory($dst, isset($options['dirMode']) ? $options['dirMode'] : 0775, true);
+            static::createDirectory($dst, $options['dirMode'] ?? 0775, true);
             $dstExists = true;
         }
 
@@ -339,7 +339,7 @@ class BaseFileHelper
                 if (is_file($from)) {
                     if (!$dstExists) {
                         // delay creation of destination directory until the first file is copied to avoid creating empty directories
-                        static::createDirectory($dst, isset($options['dirMode']) ? $options['dirMode'] : 0775, true);
+                        static::createDirectory($dst, $options['dirMode'] ?? 0775, true);
                         $dstExists = true;
                     }
                     copy($from, $to);
@@ -729,7 +729,7 @@ class BaseFileHelper
         }
 
         $matchOptions = [
-            'filePath' => true
+            'filePath' => true,
         ];
         if ($flags & self::PATTERN_CASE_INSENSITIVE) {
             $matchOptions['caseSensitive'] = false;

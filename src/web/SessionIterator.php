@@ -59,7 +59,7 @@ class SessionIterator implements \Iterator
      */
     public function current()
     {
-        return isset($_SESSION[$this->_key]) ? $_SESSION[$this->_key] : null;
+        return $_SESSION[$this->_key] ?? null;
     }
 
     /**

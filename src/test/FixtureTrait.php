@@ -160,7 +160,7 @@ trait FixtureTrait
         }
         $name = ltrim($name, '\\');
 
-        return isset($this->_fixtures[$name]) ? $this->_fixtures[$name] : null;
+        return $this->_fixtures[$name] ?? null;
     }
 
     /**
@@ -196,18 +196,18 @@ trait FixtureTrait
         while (($fixture = array_pop($stack)) !== null) {
             if ($fixture instanceof Fixture) {
                 $class = get_class($fixture);
-                $name = isset($aliases[$class]) ? $aliases[$class] : $class;
+                $name = $aliases[$class] ?? $class;
                 unset($instances[$name]);  // unset so that the fixture is added to the last in the next line
                 $instances[$name] = $fixture;
             } else {
                 $class = ltrim($fixture['class'], '\\');
-                $name = isset($aliases[$class]) ? $aliases[$class] : $class;
+                $name = $aliases[$class] ?? $class;
                 if (!isset($instances[$name])) {
                     $instances[$name] = false;
                     $stack[] = $fixture = Yii::createObject($fixture);
                     foreach ($fixture->depends as $dep) {
                         // need to use the configuration provided in test case
-                        $stack[] = isset($config[$dep]) ? $config[$dep] : ['class' => $dep];
+                        $stack[] = $config[$dep] ?? ['class' => $dep];
                     }
                 }
                 // if the fixture is already loaded (ie. a circular dependency or if two fixtures depend on the same fixture) just skip it.

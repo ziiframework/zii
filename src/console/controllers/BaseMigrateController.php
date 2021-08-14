@@ -30,7 +30,7 @@ abstract class BaseMigrateController extends Controller
     /**
      * The name of the dummy migration that marks the beginning of the whole migration history.
      */
-    const BASE_MIGRATION = 'm000000_000000_base';
+    public const BASE_MIGRATION = 'm000000_000000_base';
 
     /**
      * @var string the default command action.
@@ -652,7 +652,7 @@ abstract class BaseMigrateController extends Controller
             throw new Exception('The migration name should contain letters, digits, underscore and/or backslash characters only.');
         }
 
-        list($namespace, $className) = $this->generateClassName($name);
+        [$namespace, $className] = $this->generateClassName($name);
         // Abort if name is too long
         $nameLimit = $this->getMigrationNameLimit();
         if ($nameLimit !== null && strlen($className) > $nameLimit) {
@@ -923,7 +923,7 @@ abstract class BaseMigrateController extends Controller
 
         $migrations = [];
         foreach ($migrationPaths as $item) {
-            list($migrationPath, $namespace) = $item;
+            [$migrationPath, $namespace] = $item;
             if (!file_exists($migrationPath)) {
                 continue;
             }

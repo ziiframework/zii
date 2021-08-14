@@ -48,23 +48,23 @@ use yii\helpers\Console;
  */
 class Table extends Widget
 {
-    const DEFAULT_CONSOLE_SCREEN_WIDTH = 120;
-    const CONSOLE_SCROLLBAR_OFFSET = 3;
-    const CHAR_TOP = 'top';
-    const CHAR_TOP_MID = 'top-mid';
-    const CHAR_TOP_LEFT = 'top-left';
-    const CHAR_TOP_RIGHT = 'top-right';
-    const CHAR_BOTTOM = 'bottom';
-    const CHAR_BOTTOM_MID = 'bottom-mid';
-    const CHAR_BOTTOM_LEFT = 'bottom-left';
-    const CHAR_BOTTOM_RIGHT = 'bottom-right';
-    const CHAR_LEFT = 'left';
-    const CHAR_LEFT_MID = 'left-mid';
-    const CHAR_MID = 'mid';
-    const CHAR_MID_MID = 'mid-mid';
-    const CHAR_RIGHT = 'right';
-    const CHAR_RIGHT_MID = 'right-mid';
-    const CHAR_MIDDLE = 'middle';
+    public const DEFAULT_CONSOLE_SCREEN_WIDTH = 120;
+    public const CONSOLE_SCROLLBAR_OFFSET = 3;
+    public const CHAR_TOP = 'top';
+    public const CHAR_TOP_MID = 'top-mid';
+    public const CHAR_TOP_LEFT = 'top-left';
+    public const CHAR_TOP_RIGHT = 'top-right';
+    public const CHAR_BOTTOM = 'bottom';
+    public const CHAR_BOTTOM_MID = 'bottom-mid';
+    public const CHAR_BOTTOM_LEFT = 'bottom-left';
+    public const CHAR_BOTTOM_RIGHT = 'bottom-right';
+    public const CHAR_LEFT = 'left';
+    public const CHAR_LEFT_MID = 'left-mid';
+    public const CHAR_MID = 'mid';
+    public const CHAR_MID_MID = 'mid-mid';
+    public const CHAR_RIGHT = 'right';
+    public const CHAR_RIGHT_MID = 'right-mid';
+    public const CHAR_MIDDLE = 'middle';
 
     /**
      * @var array table headers
@@ -134,8 +134,8 @@ class Table extends Widget
      */
     public function setRows(array $rows)
     {
-        $this->rows = array_map(function($row) {
-            return array_map(function($value) {
+        $this->rows = array_map(function ($row) {
+            return array_map(function ($value) {
                 return empty($value) && !is_numeric($value) ? ' ' : $value;
             }, array_values($row));
         }, $rows);
@@ -194,7 +194,8 @@ class Table extends Widget
         );
         // Header
         if ($headerCount > 0) {
-            $buffer .= $this->renderRow($this->headers,
+            $buffer .= $this->renderRow(
+                $this->headers,
                 $this->chars[self::CHAR_LEFT],
                 $this->chars[self::CHAR_MIDDLE],
                 $this->chars[self::CHAR_RIGHT]
@@ -211,10 +212,12 @@ class Table extends Widget
                     $this->chars[self::CHAR_RIGHT_MID]
                 );
             }
-            $buffer .= $this->renderRow($row,
+            $buffer .= $this->renderRow(
+                $row,
                 $this->chars[self::CHAR_LEFT],
                 $this->chars[self::CHAR_MIDDLE],
-                $this->chars[self::CHAR_RIGHT]);
+                $this->chars[self::CHAR_RIGHT]
+            );
         }
 
         $buffer .= $this->renderSeparator(
@@ -247,7 +250,7 @@ class Table extends Widget
         for ($i = 0, ($max = $this->calculateRowHeight($row)) ?: $max = 1; $i < $max; $i++) {
             $buffer .= $spanLeft . ' ';
             foreach ($size as $index => $cellSize) {
-                $cell = isset($row[$index]) ? $row[$index] : null;
+                $cell = $row[$index] ?? null;
                 $prefix = '';
                 if ($index !== 0) {
                     $buffer .= $spanMiddle . ' ';
@@ -403,9 +406,8 @@ class Table extends Widget
     {
         if (!$this->screenWidth) {
             $size = Console::getScreenSize();
-            $this->screenWidth = isset($size[0])
-                ? $size[0]
-                : self::DEFAULT_CONSOLE_SCREEN_WIDTH + self::CONSOLE_SCROLLBAR_OFFSET;
+            $this->screenWidth = $size[0]
+                ?? self::DEFAULT_CONSOLE_SCREEN_WIDTH + self::CONSOLE_SCROLLBAR_OFFSET;
         }
         return $this->screenWidth;
     }

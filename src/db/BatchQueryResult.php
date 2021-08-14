@@ -35,12 +35,12 @@ class BatchQueryResult extends Component implements \Iterator
      * @see reset()
      * @since 2.0.41
      */
-    const EVENT_RESET = 'reset';
+    public const EVENT_RESET = 'reset';
     /**
      * @event Event an event that is triggered when the last batch has been fetched.
      * @since 2.0.41
      */
-    const EVENT_FINISH = 'finish';
+    public const EVENT_FINISH = 'finish';
 
     /**
      * @var Connection the DB connection to be used when performing batch query.
@@ -183,7 +183,7 @@ class BatchQueryResult extends Component implements \Iterator
                 }
             }
         } catch (\PDOException $e) {
-            $errorCode = isset($e->errorInfo[1]) ? $e->errorInfo[1] : null;
+            $errorCode = $e->errorInfo[1] ?? null;
             if ($this->getDbDriverName() !== 'sqlsrv' || $errorCode !== $this->mssqlNoMoreRowsErrorCode) {
                 throw $e;
             }

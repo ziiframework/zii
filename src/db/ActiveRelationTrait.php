@@ -236,7 +236,7 @@ trait ActiveRelationTrait
         } elseif (is_array($this->via)) {
             // via relation
             /* @var $viaQuery ActiveRelationTrait|ActiveQueryTrait */
-            list($viaName, $viaQuery) = $this->via;
+            [$viaName, $viaQuery] = $this->via;
             if ($viaQuery->asArray === null) {
                 // inherit asArray from primary query
                 $viaQuery->asArray($this->asArray);
@@ -306,7 +306,7 @@ trait ActiveRelationTrait
                 }
             } else {
                 $key = $this->getModelKey($primaryModel, $link);
-                $value = isset($buckets[$key]) ? $buckets[$key] : ($this->multiple ? [] : null);
+                $value = $buckets[$key] ?? ($this->multiple ? [] : null);
             }
             if ($primaryModel instanceof ActiveRecordInterface) {
                 $primaryModel->populateRelation($name, $value);
@@ -347,18 +347,18 @@ trait ActiveRelationTrait
             if ($model instanceof ActiveRecordInterface) {
                 foreach ($models as $model) {
                     $key = $this->getModelKey($model, $relation->link);
-                    $model->populateRelation($name, isset($buckets[$key]) ? $buckets[$key] : []);
+                    $model->populateRelation($name, $buckets[$key] ?? []);
                 }
             } else {
                 foreach ($primaryModels as $i => $primaryModel) {
                     if ($this->multiple) {
                         foreach ($primaryModel as $j => $m) {
                             $key = $this->getModelKey($m, $relation->link);
-                            $primaryModels[$i][$j][$name] = isset($buckets[$key]) ? $buckets[$key] : [];
+                            $primaryModels[$i][$j][$name] = $buckets[$key] ?? [];
                         }
                     } elseif (!empty($primaryModel[$primaryName])) {
                         $key = $this->getModelKey($primaryModel[$primaryName], $relation->link);
-                        $primaryModels[$i][$primaryName][$name] = isset($buckets[$key]) ? $buckets[$key] : [];
+                        $primaryModels[$i][$primaryName][$name] = $buckets[$key] ?? [];
                     }
                 }
             }
@@ -448,7 +448,8 @@ trait ActiveRelationTrait
      * @param array $viaMap
      * @return array
      */
-    private function mapVia($map, $viaMap) {
+    private function mapVia($map, $viaMap)
+    {
         $resultMap = [];
         foreach ($map as $key => $linkKeys) {
             foreach (array_keys($linkKeys) as $linkKey) {

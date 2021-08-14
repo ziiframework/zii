@@ -117,8 +117,8 @@ class RateLimiter extends ActionFilter
      */
     public function checkRateLimit($user, $request, $response, $action)
     {
-        list($limit, $window) = $user->getRateLimit($request, $action);
-        list($allowance, $timestamp) = $user->loadAllowance($request, $action);
+        [$limit, $window] = $user->getRateLimit($request, $action);
+        [$allowance, $timestamp] = $user->loadAllowance($request, $action);
 
         $current = time();
 

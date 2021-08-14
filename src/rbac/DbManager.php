@@ -640,7 +640,7 @@ class DbManager extends BaseManager
     public function getRule($name)
     {
         if ($this->rules !== null) {
-            return isset($this->rules[$name]) ? $this->rules[$name] : null;
+            return $this->rules[$name] ?? null;
         }
 
         $row = (new Query())->select(['data'])
@@ -996,7 +996,7 @@ class DbManager extends BaseManager
 
         $data = $this->cache->get($this->cacheKey);
         if (is_array($data) && isset($data[0], $data[1], $data[2])) {
-            list($this->items, $this->rules, $this->parents) = $data;
+            [$this->items, $this->rules, $this->parents] = $data;
             return;
         }
 

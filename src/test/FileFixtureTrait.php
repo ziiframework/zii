@@ -53,12 +53,11 @@ trait FileFixtureTrait
         if (is_file($file)) {
             return require $file;
         }
-        
+
         if ($throwException) {
             throw new InvalidConfigException("Fixture data file does not exist: {$file}");
         }
 
         return [];
     }
-
 }

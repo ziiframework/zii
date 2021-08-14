@@ -48,7 +48,7 @@ class BaseStringHelper
         if ($length === null) {
             $length = static::byteLength($string);
         }
- 
+
         return mb_substr($string, $start, $length, '8bit');
     }
 
@@ -71,7 +71,7 @@ class BaseStringHelper
         if ($len > 0 && mb_substr($path, -$len) === $suffix) {
             $path = mb_substr($path, 0, -$len);
         }
- 
+
         $path = rtrim(str_replace('\\', '/', $path), '/');
         $pos = mb_strrpos($path, '/');
         if ($pos !== false) {
@@ -327,7 +327,7 @@ class BaseStringHelper
         $value = (string) $value;
 
         $localeInfo = localeconv();
-        $decimalSeparator = isset($localeInfo['decimal_point']) ? $localeInfo['decimal_point'] : null;
+        $decimalSeparator = $localeInfo['decimal_point'] ?? null;
 
         if ($decimalSeparator !== null && $decimalSeparator !== '.') {
             $value = str_replace($decimalSeparator, '.', $value);

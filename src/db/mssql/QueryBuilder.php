@@ -199,7 +199,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
             if ($checkValue !== null) {
                 $sqlAfter[] = "ALTER TABLE {$tableName} ADD CONSTRAINT " .
                     $this->db->quoteColumnName("CK_{$constraintBase}") .
-                    " CHECK (" . ($defaultValue instanceof Expression ?  $checkValue : new Expression($checkValue)) . ")";
+                    " CHECK (" . ($defaultValue instanceof Expression ? $checkValue : new Expression($checkValue)) . ")";
             }
 
             if ($type->isUnique()) {
@@ -286,19 +286,19 @@ class QueryBuilder extends \yii\db\QueryBuilder
         return $command;
     }
 
-     /**
-      * Builds a SQL command for adding or updating a comment to a table or a column. The command built will check if a comment
-      * already exists. If so, it will be updated, otherwise, it will be added.
-      *
-      * @param string $comment the text of the comment to be added. The comment will be properly quoted by the method.
-      * @param string $table the table to be commented or whose column is to be commented. The table name will be
-      * properly quoted by the method.
-      * @param string $column optional. The name of the column to be commented. If empty, the command will add the
-      * comment to the table instead. The column name will be properly quoted by the method.
-      * @return string the SQL statement for adding a comment.
-      * @throws InvalidArgumentException if the table does not exist.
-      * @since 2.0.24
-      */
+    /**
+     * Builds a SQL command for adding or updating a comment to a table or a column. The command built will check if a comment
+     * already exists. If so, it will be updated, otherwise, it will be added.
+     *
+     * @param string $comment the text of the comment to be added. The comment will be properly quoted by the method.
+     * @param string $table the table to be commented or whose column is to be commented. The table name will be
+     * properly quoted by the method.
+     * @param string $column optional. The name of the column to be commented. If empty, the command will add the
+     * comment to the table instead. The column name will be properly quoted by the method.
+     * @return string the SQL statement for adding a comment.
+     * @throws InvalidArgumentException if the table does not exist.
+     * @since 2.0.24
+     */
     protected function buildAddCommentSql($comment, $table, $column = null)
     {
         $tableSchema = $this->db->schema->getTableSchema($table);
@@ -307,7 +307,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
             throw new InvalidArgumentException("Table not found: $table");
         }
 
-        $schemaName = $tableSchema->schemaName ? "N'" . $tableSchema->schemaName . "'": 'SCHEMA_NAME()';
+        $schemaName = $tableSchema->schemaName ? "N'" . $tableSchema->schemaName . "'" : 'SCHEMA_NAME()';
         $tableName = "N" . $this->db->quoteValue($tableSchema->name);
         $columnName = $column ? "N" . $this->db->quoteValue($column) : null;
         $comment = "N" . $this->db->quoteValue($comment);
@@ -373,7 +373,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
             throw new InvalidArgumentException("Table not found: $table");
         }
 
-        $schemaName = $tableSchema->schemaName ? "N'" . $tableSchema->schemaName . "'": 'SCHEMA_NAME()';
+        $schemaName = $tableSchema->schemaName ? "N'" . $tableSchema->schemaName . "'" : 'SCHEMA_NAME()';
         $tableName = "N" . $this->db->quoteValue($tableSchema->name);
         $columnName = $column ? "N" . $this->db->quoteValue($column) : null;
 
@@ -483,7 +483,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
 
         $version2005orLater = version_compare($this->db->getSchema()->getServerVersion(), '9', '>=');
 
-        list($names, $placeholders, $values, $params) = $this->prepareInsertValues($table, $columns, $params);
+        [$names, $placeholders, $values, $params] = $this->prepareInsertValues($table, $columns, $params);
         $cols = [];
         $columns = [];
         if ($version2005orLater) {
@@ -526,7 +526,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
         $insertColumns = $this->normalizeTableRowData($table, $insertColumns, $params);
 
         /** @var Constraint[] $constraints */
-        list($uniqueNames, $insertNames, $updateNames) = $this->prepareUpsertColumns($table, $insertColumns, $updateColumns, $constraints);
+        [$uniqueNames, $insertNames, $updateNames] = $this->prepareUpsertColumns($table, $insertColumns, $updateColumns, $constraints);
         if (empty($uniqueNames)) {
             return $this->insert($table, $insertColumns, $params);
         }
@@ -546,7 +546,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
             $onCondition[] = $constraintCondition;
         }
         $on = $this->buildCondition($onCondition, $params);
-        list(, $placeholders, $values, $params) = $this->prepareInsertValues($table, $insertColumns, $params);
+        [, $placeholders, $values, $params] = $this->prepareInsertValues($table, $insertColumns, $params);
 
         /**
          * Fix number of select query params for old MSSQL version that does not support offset correctly.
@@ -586,7 +586,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
         }
         $updateColumns = $this->normalizeTableRowData($table, $updateColumns, $params);
 
-        list($updates, $params) = $this->prepareUpdateSets($table, $updateColumns, $params);
+        [$updates, $params] = $this->prepareUpdateSets($table, $updateColumns, $params);
         $updateSql = 'UPDATE SET ' . implode(', ', $updates);
         return "$mergeSql WHEN MATCHED THEN $updateSql WHEN NOT MATCHED THEN $insertSql;";
     }

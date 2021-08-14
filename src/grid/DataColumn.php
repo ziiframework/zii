@@ -131,7 +131,7 @@ class DataColumn extends Column
     public function init()
     {
         parent::init();
-        if($this->filterAttribute === null) {
+        if ($this->filterAttribute === null) {
             $this->filterAttribute = $this->attribute;
         }
     }

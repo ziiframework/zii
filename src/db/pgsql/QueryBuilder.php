@@ -27,27 +27,27 @@ class QueryBuilder extends \yii\db\QueryBuilder
      * Defines a UNIQUE index for [[createIndex()]].
      * @since 2.0.6
      */
-    const INDEX_UNIQUE = 'unique';
+    public const INDEX_UNIQUE = 'unique';
     /**
      * Defines a B-tree index for [[createIndex()]].
      * @since 2.0.6
      */
-    const INDEX_B_TREE = 'btree';
+    public const INDEX_B_TREE = 'btree';
     /**
      * Defines a hash index for [[createIndex()]].
      * @since 2.0.6
      */
-    const INDEX_HASH = 'hash';
+    public const INDEX_HASH = 'hash';
     /**
      * Defines a GiST index for [[createIndex()]].
      * @since 2.0.6
      */
-    const INDEX_GIST = 'gist';
+    public const INDEX_GIST = 'gist';
     /**
      * Defines a GIN index for [[createIndex()]].
      * @since 2.0.6
      */
-    const INDEX_GIN = 'gin';
+    public const INDEX_GIN = 'gin';
 
     /**
      * @var array mapping from abstract column types (keys) to physical column types (values).
@@ -143,13 +143,14 @@ class QueryBuilder extends \yii\db\QueryBuilder
         if (strpos($table, '.') !== false && strpos($name, '.') === false) {
             if (strpos($table, '{{') !== false) {
                 $table = preg_replace('/\\{\\{(.*?)\\}\\}/', '\1', $table);
-                list($schema, $table) = explode('.', $table);
-                if (strpos($schema, '%') === false)
+                [$schema, $table] = explode('.', $table);
+                if (strpos($schema, '%') === false) {
                     $name = $schema.'.'.$name;
-                else
+                } else {
                     $name = '{{'.$schema.'.'.$name.'}}';
+                }
             } else {
-                list($schema) = explode('.', $table);
+                [$schema] = explode('.', $table);
                 $name = $schema.'.'.$name;
             }
         }
@@ -334,7 +335,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
     private function newUpsert($table, $insertColumns, $updateColumns, &$params)
     {
         $insertSql = $this->insert($table, $insertColumns, $params);
-        list($uniqueNames, , $updateNames) = $this->prepareUpsertColumns($table, $insertColumns, $updateColumns);
+        [$uniqueNames, , $updateNames] = $this->prepareUpsertColumns($table, $insertColumns, $updateColumns);
         if (empty($uniqueNames)) {
             return $insertSql;
         }
@@ -353,7 +354,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
                 $updateColumns[$name] = new Expression('EXCLUDED.' . $this->db->quoteColumnName($name));
             }
         }
-        list($updates, $params) = $this->prepareUpdateSets($table, $updateColumns, $params);
+        [$updates, $params] = $this->prepareUpdateSets($table, $updateColumns, $params);
         return $insertSql . ' ON CONFLICT (' . implode(', ', $uniqueNames) . ') DO UPDATE SET ' . implode(', ', $updates);
     }
 
@@ -368,7 +369,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
     private function oldUpsert($table, $insertColumns, $updateColumns, &$params)
     {
         /** @var Constraint[] $constraints */
-        list($uniqueNames, $insertNames, $updateNames) = $this->prepareUpsertColumns($table, $insertColumns, $updateColumns, $constraints);
+        [$uniqueNames, $insertNames, $updateNames] = $this->prepareUpsertColumns($table, $insertColumns, $updateColumns, $constraints);
         if (empty($uniqueNames)) {
             return $this->insert($table, $insertColumns, $params);
         }
@@ -392,7 +393,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
                 }
             }
         }
-        list(, $placeholders, $values, $params) = $this->prepareInsertValues($table, $insertColumns, $params);
+        [, $placeholders, $values, $params] = $this->prepareInsertValues($table, $insertColumns, $params);
         $updateCondition = ['or'];
         $insertCondition = ['or'];
         $quotedTableName = $schema->quoteTableName($table);
@@ -432,7 +433,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
                 $updateColumns[$name] = new Expression($quotedName);
             }
         }
-        list($updates, $params) = $this->prepareUpdateSets($table, $updateColumns, $params);
+        [$updates, $params] = $this->prepareUpdateSets($table, $updateColumns, $params);
         $updateSql = 'UPDATE ' . $this->db->quoteTableName($table) . ' SET ' . implode(', ', $updates)
             . ' FROM "EXCLUDED" ' . $this->buildWhere($updateCondition, $params)
             . ' RETURNING ' . $this->db->quoteTableName($table) .'.*';

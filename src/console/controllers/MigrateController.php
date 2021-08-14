@@ -78,7 +78,7 @@ class MigrateController extends BaseMigrateController
      * Maximum length of a migration name.
      * @since 2.0.13
      */
-    const MAX_NAME_LENGTH = 180;
+    public const MAX_NAME_LENGTH = 180;
 
     /**
      * @var string the name of the table for keeping applied migration information.
@@ -542,9 +542,8 @@ class MigrateController extends BaseMigrateController
                 if (strncmp($chunk, 'foreignKey', 10) === 0) {
                     preg_match('/foreignKey\((\w*)\s?(\w*)\)/', $chunk, $matches);
                     $foreignKeys[$property] = [
-                        'table' => isset($matches[1])
-                            ? $matches[1]
-                            : preg_replace('/_id$/', '', $property),
+                        'table' => $matches[1]
+                            ?? preg_replace('/_id$/', '', $property),
                         'column' => !empty($matches[2])
                             ? $matches[2]
                             : null,

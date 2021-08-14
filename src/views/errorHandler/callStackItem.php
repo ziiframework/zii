@@ -10,11 +10,11 @@
 /* @var $args array */
 /* @var $handler \yii\web\ErrorHandler */
 $html = <<<HTML
-IDE
-<svg class="icon icon--new-window" focusable="false" aria-hidden="true" width="16" height="16">
-    <use href="#new-window"></use>
-</svg>
-HTML;
+    IDE
+    <svg class="icon icon--new-window" focusable="false" aria-hidden="true" width="16" height="16">
+        <use href="#new-window"></use>
+    </svg>
+    HTML;
 ?>
 <li class="<?= ($index === 1 || !$handler->isCoreFile($file)) ? 'application' : '' ?> call-stack-item"
     data-line="<?= (int) ($line - $begin) ?>">

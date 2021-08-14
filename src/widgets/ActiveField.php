@@ -850,14 +850,14 @@ class ActiveField extends Component
         $options['id'] = Html::getInputId($this->model, $this->attribute);
         $options['name'] = $this->attribute;
 
-        $options['container'] = isset($this->selectors['container']) ? $this->selectors['container'] : ".field-$inputID";
-        $options['input'] = isset($this->selectors['input']) ? $this->selectors['input'] : "#$inputID";
+        $options['container'] = $this->selectors['container'] ?? ".field-$inputID";
+        $options['input'] = $this->selectors['input'] ?? "#$inputID";
         if (isset($this->selectors['error'])) {
             $options['error'] = $this->selectors['error'];
         } elseif (isset($this->errorOptions['class'])) {
             $options['error'] = '.' . implode('.', preg_split('/\s+/', $this->errorOptions['class'], -1, PREG_SPLIT_NO_EMPTY));
         } else {
-            $options['error'] = isset($this->errorOptions['tag']) ? $this->errorOptions['tag'] : 'span';
+            $options['error'] = $this->errorOptions['tag'] ?? 'span';
         }
 
         $options['encodeError'] = !isset($this->errorOptions['encode']) || $this->errorOptions['encode'];

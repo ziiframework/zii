@@ -22,10 +22,10 @@ use yii\helpers\Console;
  */
 class ServeController extends Controller
 {
-    const EXIT_CODE_NO_DOCUMENT_ROOT = 2;
-    const EXIT_CODE_NO_ROUTING_FILE = 3;
-    const EXIT_CODE_ADDRESS_TAKEN_BY_ANOTHER_SERVER = 4;
-    const EXIT_CODE_ADDRESS_TAKEN_BY_ANOTHER_PROCESS = 5;
+    public const EXIT_CODE_NO_DOCUMENT_ROOT = 2;
+    public const EXIT_CODE_NO_ROUTING_FILE = 3;
+    public const EXIT_CODE_ADDRESS_TAKEN_BY_ANOTHER_SERVER = 4;
+    public const EXIT_CODE_ADDRESS_TAKEN_BY_ANOTHER_PROCESS = 5;
 
     /**
      * @var int port to serve on.
@@ -114,7 +114,7 @@ class ServeController extends Controller
      */
     protected function isAddressTaken($address)
     {
-        list($hostname, $port) = explode(':', $address);
+        [$hostname, $port] = explode(':', $address);
         $fp = @fsockopen($hostname, $port, $errno, $errstr, 3);
         if ($fp === false) {
             return false;

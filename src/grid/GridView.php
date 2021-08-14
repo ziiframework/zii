@@ -48,9 +48,9 @@ use yii\widgets\BaseListView;
  */
 class GridView extends BaseListView
 {
-    const FILTER_POS_HEADER = 'header';
-    const FILTER_POS_FOOTER = 'footer';
-    const FILTER_POS_BODY = 'body';
+    public const FILTER_POS_HEADER = 'header';
+    public const FILTER_POS_FOOTER = 'footer';
+    public const FILTER_POS_BODY = 'body';
 
     /**
      * @var string the default data column class if the class name is not explicitly specified when configuring a data column.
@@ -333,7 +333,7 @@ class GridView extends BaseListView
      */
     protected function getClientOptions()
     {
-        $filterUrl = isset($this->filterUrl) ? $this->filterUrl : Yii::$app->request->url;
+        $filterUrl = $this->filterUrl ?? Yii::$app->request->url;
         $id = $this->filterRowOptions['id'];
         $filterSelector = "#$id input, #$id select";
         if (isset($this->filterSelector)) {
@@ -575,8 +575,8 @@ class GridView extends BaseListView
             'class' => $this->dataColumnClass ?: DataColumn::className(),
             'grid' => $this,
             'attribute' => $matches[1],
-            'format' => isset($matches[3]) ? $matches[3] : 'text',
-            'label' => isset($matches[5]) ? $matches[5] : null,
+            'format' => $matches[3] ?? 'text',
+            'label' => $matches[5] ?? null,
         ]);
     }
 

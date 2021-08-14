@@ -645,7 +645,7 @@ class Component extends BaseObject
     public function getBehavior($name)
     {
         $this->ensureBehaviors();
-        return isset($this->_behaviors[$name]) ? $this->_behaviors[$name] : null;
+        return $this->_behaviors[$name] ?? null;
     }
 
     /**

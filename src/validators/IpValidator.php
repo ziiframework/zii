@@ -49,7 +49,7 @@ class IpValidator extends Validator
      * @see networks
      * @see ranges
      */
-    const NEGATION_CHAR = '!';
+    public const NEGATION_CHAR = '!';
 
     /**
      * @var array The network aliases, that can be used in [[ranges]].
@@ -335,7 +335,7 @@ class IpValidator extends Validator
         if (preg_match($this->getIpParsePattern(), $ip, $matches)) {
             $negation = ($matches[1] !== '') ? $matches[1] : null;
             $ip = $matches[2];
-            $cidr = isset($matches[4]) ? $matches[4] : null;
+            $cidr = $matches[4] ?? null;
         }
 
         if ($this->subnet === true && $cidr === null) {
@@ -426,7 +426,7 @@ class IpValidator extends Validator
         }
 
         foreach ($this->ranges as $string) {
-            list($isNegated, $range) = $this->parseNegatedRange($string);
+            [$isNegated, $range] = $this->parseNegatedRange($string);
             if ($this->inRange($ip, $cidr, $range)) {
                 return !$isNegated;
             }
@@ -463,11 +463,11 @@ class IpValidator extends Validator
     {
         $result = [];
         foreach ($ranges as $string) {
-            list($isRangeNegated, $range) = $this->parseNegatedRange($string);
+            [$isRangeNegated, $range] = $this->parseNegatedRange($string);
             if (isset($this->networks[$range])) {
                 $replacements = $this->prepareRanges($this->networks[$range]);
                 foreach ($replacements as &$replacement) {
-                    list($isReplacementNegated, $replacement) = $this->parseNegatedRange($replacement);
+                    [$isReplacementNegated, $replacement] = $this->parseNegatedRange($replacement);
                     $result[] = ($isRangeNegated && !$isReplacementNegated ? static::NEGATION_CHAR : '') . $replacement;
                 }
             } else {

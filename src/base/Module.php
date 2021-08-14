@@ -45,11 +45,11 @@ class Module extends ServiceLocator
      * @event ActionEvent an event raised before executing a controller action.
      * You may set [[ActionEvent::isValid]] to be `false` to cancel the action execution.
      */
-    const EVENT_BEFORE_ACTION = 'beforeAction';
+    public const EVENT_BEFORE_ACTION = 'beforeAction';
     /**
      * @event ActionEvent an event raised after executing a controller action.
      */
-    const EVENT_AFTER_ACTION = 'afterAction';
+    public const EVENT_AFTER_ACTION = 'afterAction';
 
     /**
      * @var array custom module parameters (name => value).
@@ -167,7 +167,7 @@ class Module extends ServiceLocator
     public static function getInstance()
     {
         $class = get_called_class();
-        return isset(Yii::$app->loadedModules[$class]) ? Yii::$app->loadedModules[$class] : null;
+        return Yii::$app->loadedModules[$class] ?? null;
     }
 
     /**
@@ -528,7 +528,7 @@ class Module extends ServiceLocator
         $parts = $this->createController($route);
         if (is_array($parts)) {
             /* @var $controller Controller */
-            list($controller, $actionID) = $parts;
+            [$controller, $actionID] = $parts;
             $oldController = Yii::$app->controller;
             Yii::$app->controller = $controller;
             $result = $controller->runAction($actionID, $params);
@@ -578,7 +578,7 @@ class Module extends ServiceLocator
         }
 
         if (strpos($route, '/') !== false) {
-            list($id, $route) = explode('/', $route, 2);
+            [$id, $route] = explode('/', $route, 2);
         } else {
             $id = $route;
             $route = '';
@@ -637,8 +637,8 @@ class Module extends ServiceLocator
         }
 
         $className = preg_replace_callback('%-([a-z0-9_])%i', function ($matches) {
-                return ucfirst($matches[1]);
-            }, ucfirst($className)) . 'Controller';
+            return ucfirst($matches[1]);
+        }, ucfirst($className)) . 'Controller';
         $className = ltrim($this->controllerNamespace . '\\' . str_replace('/', '\\', $prefix) . $className, '\\');
         if (strpos($className, '-') !== false || !class_exists($className)) {
             return null;

@@ -126,7 +126,7 @@ class InConditionBuilder implements ExpressionBuilderInterface
 
         foreach ($values as $i => $value) {
             if (is_array($value) || $value instanceof \ArrayAccess) {
-                $value = isset($value[$column]) ? $value[$column] : null;
+                $value = $value[$column] ?? null;
             }
             if ($value === null) {
                 continue;
@@ -214,7 +214,8 @@ class InConditionBuilder implements ExpressionBuilderInterface
      * @return string is null or is not null condition
      * @since 2.0.31
      */
-    protected function getNullCondition($operator, $column) {
+    protected function getNullCondition($operator, $column)
+    {
         $column = $this->queryBuilder->db->quoteColumnName($column);
         if ($operator === 'IN') {
             return sprintf('%s IS NULL', $column);

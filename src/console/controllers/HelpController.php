@@ -55,7 +55,7 @@ class HelpController extends Controller
                 throw new Exception("No help for unknown command \"$name\".");
             }
 
-            list($controller, $actionID) = $result;
+            [$controller, $actionID] = $result;
 
             $actions = $this->getActions($controller);
             if ($actionID !== '' || count($actions) === 1 && $actions[0] === $controller->defaultAction) {
@@ -78,7 +78,7 @@ class HelpController extends Controller
         foreach ($this->getCommandDescriptions() as $command => $description) {
             $result = Yii::$app->createController($command);
             /** @var $controller Controller */
-            list($controller, $actionID) = $result;
+            [$controller, $actionID] = $result;
             $actions = $this->getActions($controller);
             $prefix = $controller->getUniqueId();
             if ($controller->createAction($controller->defaultAction) !== null) {
@@ -106,7 +106,7 @@ class HelpController extends Controller
         }
 
         /** @var Controller $controller */
-        list($controller, $actionID) = $result;
+        [$controller, $actionID] = $result;
         $action = $controller->createAction($actionID);
         if ($action === null) {
             return;
@@ -139,7 +139,7 @@ class HelpController extends Controller
         }
 
         /** @var Controller $controller */
-        list($controller, $actionID) = $result;
+        [$controller, $actionID] = $result;
         $action = $controller->createAction($actionID);
         if ($action === null) {
             return;
@@ -176,7 +176,7 @@ class HelpController extends Controller
             if ($result === false || !$result[0] instanceof Controller) {
                 return false;
             }
-            list($controller, $actionID) = $result;
+            [$controller, $actionID] = $result;
             $actions = $this->getActions($controller);
             return $actions !== [];
         });
@@ -192,7 +192,7 @@ class HelpController extends Controller
         foreach ($this->getCommands() as $command) {
             $result = Yii::$app->createController($command);
             /** @var Controller $controller */
-            list($controller, $actionID) = $result;
+            [$controller, $actionID] = $result;
             $descriptions[$command] = $controller->getHelpSummary();
         }
 
@@ -301,7 +301,7 @@ class HelpController extends Controller
         foreach ($commands as $command => $description) {
             $result = Yii::$app->createController($command);
             /** @var $controller Controller */
-            list($controller, $actionID) = $result;
+            [$controller, $actionID] = $result;
             $actions = $this->getActions($controller);
             $prefix = $controller->getUniqueId();
             foreach ($actions as $action) {
@@ -314,7 +314,7 @@ class HelpController extends Controller
         }
         foreach ($commands as $command => $description) {
             $result = Yii::$app->createController($command);
-            list($controller, $actionID) = $result;
+            [$controller, $actionID] = $result;
             $actions = $this->getActions($controller);
             $this->stdout('- ' . $this->ansiFormat($command, Console::FG_YELLOW));
             $this->stdout(str_repeat(' ', $maxLength + 4 - strlen($command)));
@@ -440,11 +440,12 @@ class HelpController extends Controller
         if (!empty($args)) {
             foreach ($args as $name => $arg) {
                 $this->stdout($this->formatOptionHelp(
-                        '- ' . $this->ansiFormat($name, Console::FG_CYAN),
-                        $arg['required'],
-                        $arg['type'],
-                        $arg['default'],
-                        $arg['comment']) . "\n\n");
+                    '- ' . $this->ansiFormat($name, Console::FG_CYAN),
+                    $arg['required'],
+                    $arg['type'],
+                    $arg['default'],
+                    $arg['comment']
+                ) . "\n\n");
             }
         }
 
@@ -452,12 +453,16 @@ class HelpController extends Controller
             $this->stdout("\nOPTIONS\n\n", Console::BOLD);
             foreach ($options as $name => $option) {
                 $this->stdout($this->formatOptionHelp(
-                        $this->ansiFormat('--' . $name . $this->formatOptionAliases($controller, $name),
-                            Console::FG_RED, empty($option['required']) ? Console::FG_RED : Console::BOLD),
-                        !empty($option['required']),
-                        $option['type'],
-                        $option['default'],
-                        $option['comment']) . "\n\n");
+                    $this->ansiFormat(
+                            '--' . $name . $this->formatOptionAliases($controller, $name),
+                            Console::FG_RED,
+                            empty($option['required']) ? Console::FG_RED : Console::BOLD
+                        ),
+                    !empty($option['required']),
+                    $option['type'],
+                    $option['default'],
+                    $option['comment']
+                ) . "\n\n");
             }
         }
     }

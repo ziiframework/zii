@@ -19,16 +19,16 @@ use yii\base\NotSupportedException;
  */
 class BaseIpHelper
 {
-    const IPV4 = 4;
-    const IPV6 = 6;
+    public const IPV4 = 4;
+    public const IPV6 = 6;
     /**
      * The length of IPv6 address in bits
      */
-    const IPV6_ADDRESS_LENGTH = 128;
+    public const IPV6_ADDRESS_LENGTH = 128;
     /**
      * The length of IPv4 address in bits
      */
-    const IPV4_ADDRESS_LENGTH = 32;
+    public const IPV4_ADDRESS_LENGTH = 32;
 
 
     /**
@@ -68,8 +68,8 @@ class BaseIpHelper
      */
     public static function inRange($subnet, $range)
     {
-        list($ip, $mask) = array_pad(explode('/', $subnet), 2, null);
-        list($net, $netMask) = array_pad(explode('/', $range), 2, null);
+        [$ip, $mask] = array_pad(explode('/', $subnet), 2, null);
+        [$net, $netMask] = array_pad(explode('/', $range), 2, null);
 
         $ipVersion = static::getIpVersion($ip);
         $netVersion = static::getIpVersion($net);
@@ -78,8 +78,8 @@ class BaseIpHelper
         }
 
         $maxMask = $ipVersion === self::IPV4 ? self::IPV4_ADDRESS_LENGTH : self::IPV6_ADDRESS_LENGTH;
-        $mask = isset($mask) ? $mask : $maxMask;
-        $netMask = isset($netMask) ? $netMask : $maxMask;
+        $mask = $mask ?? $maxMask;
+        $netMask = $netMask ?? $maxMask;
 
         $binIp = static::ip2bin($ip);
         $binNet = static::ip2bin($net);

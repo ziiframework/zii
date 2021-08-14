@@ -45,11 +45,11 @@ class Controller extends \yii\base\Controller
     /**
      * @deprecated since 2.0.13. Use [[ExitCode::OK]] instead.
      */
-    const EXIT_CODE_NORMAL = 0;
+    public const EXIT_CODE_NORMAL = 0;
     /**
      * @deprecated since 2.0.13. Use [[ExitCode::UNSPECIFIED_ERROR]] instead.
      */
-    const EXIT_CODE_ERROR = 1;
+    public const EXIT_CODE_ERROR = 1;
 
     /**
      * @var bool whether to run the command interactively.
@@ -133,7 +133,7 @@ class Controller extends \yii\base\Controller
                             }
 
                             $message .= '. ' . Yii::t('yii', 'Aliases available: {aliases}', [
-                                'aliases' => implode(', ', $aliasesAvailable)
+                                'aliases' => implode(', ', $aliasesAvailable),
                             ]);
                         }
                         throw new Exception($message);
@@ -362,7 +362,7 @@ class Controller extends \yii\base\Controller
             return Console::prompt($text, $options);
         }
 
-        return isset($options['default']) ? $options['default'] : '';
+        return $options['default'] ?? '';
     }
 
     /**
@@ -570,7 +570,7 @@ class Controller extends \yii\base\Controller
                 continue;
             }
             $name = $reflection->getName();
-            $tag = isset($params[$i]) ? $params[$i] : '';
+            $tag = $params[$i] ?? '';
             if (preg_match('/^(\S+)\s+(\$\w+\s+)?(.*)/s', $tag, $matches)) {
                 $type = $matches[1];
                 $comment = $matches[3];
@@ -635,7 +635,7 @@ class Controller extends \yii\base\Controller
             $name = Inflector::camel2id($name, '-', true);
 
             if (isset($tags['var']) || isset($tags['property'])) {
-                $doc = isset($tags['var']) ? $tags['var'] : $tags['property'];
+                $doc = $tags['var'] ?? $tags['property'];
                 if (is_array($doc)) {
                     $doc = reset($doc);
                 }

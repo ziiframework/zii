@@ -145,7 +145,7 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
             return $this->_content;
         }
 
-        list($this->_content, $placeholders) = $data;
+        [$this->_content, $placeholders] = $data;
         if (!is_array($placeholders) || count($placeholders) === 0) {
             return $this->_content;
         }

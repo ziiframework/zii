@@ -245,7 +245,7 @@ class UploadedFile extends BaseObject
             self::$_files = [];
             if (isset($_FILES) && is_array($_FILES)) {
                 foreach ($_FILES as $class => $info) {
-                    $resource = isset($info['tmp_resource']) ? $info['tmp_resource'] : [];
+                    $resource = $info['tmp_resource'] ?? [];
                     self::loadFilesRecursive($class, $info['name'], $info['tmp_name'], $info['type'], $info['size'], $info['error'], $resource);
                 }
             }
@@ -267,7 +267,7 @@ class UploadedFile extends BaseObject
     {
         if (is_array($names)) {
             foreach ($names as $i => $name) {
-                $resource = isset($tempResources[$i]) ? $tempResources[$i] : [];
+                $resource = $tempResources[$i] ?? [];
                 self::loadFilesRecursive($key . '[' . $i . ']', $name, $tempNames[$i], $types[$i], $sizes[$i], $errors[$i], $resource);
             }
         } elseif ((int) $errors !== UPLOAD_ERR_NO_FILE) {

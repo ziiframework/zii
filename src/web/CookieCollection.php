@@ -88,7 +88,7 @@ class CookieCollection extends BaseObject implements \IteratorAggregate, \ArrayA
      */
     public function get($name)
     {
-        return isset($this->_cookies[$name]) ? $this->_cookies[$name] : null;
+        return $this->_cookies[$name] ?? null;
     }
 
     /**

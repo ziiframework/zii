@@ -35,7 +35,7 @@ class QueryBuilder extends \yii\base\BaseObject
     /**
      * The prefix for automatically generated query binding parameters.
      */
-    const PARAM_PREFIX = ':qp';
+    public const PARAM_PREFIX = ':qp';
 
     /**
      * @var Connection the database connection.
@@ -347,7 +347,7 @@ class QueryBuilder extends \yii\base\BaseObject
      */
     public function insert($table, $columns, &$params)
     {
-        list($names, $placeholders, $values, $params) = $this->prepareInsertValues($table, $columns, $params);
+        [$names, $placeholders, $values, $params] = $this->prepareInsertValues($table, $columns, $params);
         return 'INSERT INTO ' . $this->db->quoteTableName($table)
             . (!empty($names) ? ' (' . implode(', ', $names) . ')' : '')
             . (!empty($placeholders) ? ' VALUES (' . implode(', ', $placeholders) . ')' : $values);
@@ -373,7 +373,7 @@ class QueryBuilder extends \yii\base\BaseObject
         $placeholders = [];
         $values = ' DEFAULT VALUES';
         if ($columns instanceof Query) {
-            list($names, $values, $params) = $this->prepareInsertSelectSubQuery($columns, $schema, $params);
+            [$names, $values, $params] = $this->prepareInsertSelectSubQuery($columns, $schema, $params);
         } else {
             foreach ($columns as $name => $value) {
                 $names[] = $schema->quoteColumnName($name);
@@ -382,7 +382,7 @@ class QueryBuilder extends \yii\base\BaseObject
                 if ($value instanceof ExpressionInterface) {
                     $placeholders[] = $this->buildExpression($value, $params);
                 } elseif ($value instanceof \yii\db\Query) {
-                    list($sql, $params) = $this->build($value, $params);
+                    [$sql, $params] = $this->build($value, $params);
                     $placeholders[] = "($sql)";
                 } else {
                     $placeholders[] = $this->bindParam($value, $params);
@@ -409,7 +409,7 @@ class QueryBuilder extends \yii\base\BaseObject
             throw new InvalidArgumentException('Expected select query object with enumerated (named) parameters');
         }
 
-        list($values, $params) = $this->build($columns, $params);
+        [$values, $params] = $this->build($columns, $params);
         $names = [];
         $values = ' ' . $values;
         foreach ($columns->select as $title => $field) {
@@ -544,7 +544,7 @@ class QueryBuilder extends \yii\base\BaseObject
     protected function prepareUpsertColumns($table, $insertColumns, $updateColumns, &$constraints = [])
     {
         if ($insertColumns instanceof Query) {
-            list($insertNames) = $this->prepareInsertSelectSubQuery($insertColumns, $this->db->getSchema());
+            [$insertNames] = $this->prepareInsertSelectSubQuery($insertColumns, $this->db->getSchema());
         } else {
             $insertNames = array_map([$this->db, 'quoteColumnName'], array_keys($insertColumns));
         }
@@ -627,7 +627,7 @@ class QueryBuilder extends \yii\base\BaseObject
      */
     public function update($table, $columns, $condition, &$params)
     {
-        list($lines, $params) = $this->prepareUpdateSets($table, $columns, $params);
+        [$lines, $params] = $this->prepareUpdateSets($table, $columns, $params);
         $sql = 'UPDATE ' . $this->db->quoteTableName($table) . ' SET ' . implode(', ', $lines);
         $where = $this->buildWhere($condition, $params);
         return $where === '' ? $sql : $sql . ' ' . $where;
@@ -648,7 +648,6 @@ class QueryBuilder extends \yii\base\BaseObject
         $columnSchemas = $tableSchema !== null ? $tableSchema->columns : [];
         $sets = [];
         foreach ($columns as $name => $value) {
-
             $value = isset($columnSchemas[$name]) ? $columnSchemas[$name]->dbTypecast($value) : $value;
             if ($value instanceof ExpressionInterface) {
                 $placeholder = $this->buildExpression($value, $params);
@@ -1138,7 +1137,7 @@ class QueryBuilder extends \yii\base\BaseObject
     public function createView($viewName, $subQuery)
     {
         if ($subQuery instanceof Query) {
-            list($rawQuery, $params) = $this->build($subQuery);
+            [$rawQuery, $params] = $this->build($subQuery);
             array_walk(
                 $params,
                 function (&$param) {
@@ -1250,7 +1249,7 @@ class QueryBuilder extends \yii\base\BaseObject
                     $columns[$i] = $this->buildExpression($column, $params) . ' AS ' . $this->db->quoteColumnName($i);
                 }
             } elseif ($column instanceof Query) {
-                list($sql, $params) = $this->build($column, $params);
+                [$sql, $params] = $this->build($column, $params);
                 $columns[$i] = "($sql) AS " . $this->db->quoteColumnName($i);
             } elseif (is_string($i) && $i !== $column) {
                 if (strpos($column, '(') === false) {
@@ -1302,7 +1301,7 @@ class QueryBuilder extends \yii\base\BaseObject
                 throw new Exception('A join clause must be specified as an array of join type, join table, and optionally join condition.');
             }
             // 0:join type, 1:join table, 2:on-condition (optional)
-            list($joinType, $table) = $join;
+            [$joinType, $table] = $join;
             $tables = $this->quoteTableNames((array)$table, $params);
             $table = reset($tables);
             $joins[$i] = "$joinType $table";
@@ -1328,7 +1327,7 @@ class QueryBuilder extends \yii\base\BaseObject
     {
         foreach ($tables as $i => $table) {
             if ($table instanceof Query) {
-                list($sql, $params) = $this->build($table, $params);
+                [$sql, $params] = $this->build($table, $params);
                 $tables[$i] = "($sql) " . $this->db->quoteTableName($i);
             } elseif (is_string($i)) {
                 if (strpos($table, '(') === false) {
@@ -1488,7 +1487,7 @@ class QueryBuilder extends \yii\base\BaseObject
         foreach ($unions as $i => $union) {
             $query = $union['query'];
             if ($query instanceof Query) {
-                list($unions[$i]['query'], $params) = $this->build($query, $params);
+                [$unions[$i]['query'], $params] = $this->build($query, $params);
             }
 
             $result .= 'UNION ' . ($union['all'] ? 'ALL ' : '') . '( ' . $unions[$i]['query'] . ' ) ';
@@ -1520,13 +1519,13 @@ class QueryBuilder extends \yii\base\BaseObject
 
             $query = $with['query'];
             if ($query instanceof Query) {
-                list($with['query'], $params) = $this->build($query, $params);
+                [$with['query'], $params] = $this->build($query, $params);
             }
 
             $result[] = $with['alias'] . ' AS (' . $with['query'] . ')';
         }
 
-        return 'WITH ' . ($recursive ? 'RECURSIVE ' : '') . implode (', ', $result);
+        return 'WITH ' . ($recursive ? 'RECURSIVE ' : '') . implode(', ', $result);
     }
 
     /**

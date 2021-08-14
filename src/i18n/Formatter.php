@@ -56,27 +56,27 @@ class Formatter extends Component
     /**
      * @since 2.0.13
      */
-    const UNIT_SYSTEM_METRIC = 'metric';
+    public const UNIT_SYSTEM_METRIC = 'metric';
     /**
      * @since 2.0.13
      */
-    const UNIT_SYSTEM_IMPERIAL = 'imperial';
+    public const UNIT_SYSTEM_IMPERIAL = 'imperial';
     /**
      * @since 2.0.13
      */
-    const FORMAT_WIDTH_LONG = 'long';
+    public const FORMAT_WIDTH_LONG = 'long';
     /**
      * @since 2.0.13
      */
-    const FORMAT_WIDTH_SHORT = 'short';
+    public const FORMAT_WIDTH_SHORT = 'short';
     /**
      * @since 2.0.13
      */
-    const UNIT_LENGTH = 'length';
+    public const UNIT_LENGTH = 'length';
     /**
      * @since 2.0.13
      */
-    const UNIT_WEIGHT = 'mass';
+    public const UNIT_WEIGHT = 'mass';
 
     /**
      * @var string the text to be displayed when formatting a `null` value.
@@ -761,7 +761,7 @@ class Formatter extends Component
         $timeZone = $this->timeZone;
         // avoid time zone conversion for date-only and time-only values
         if ($type === 'date' || $type === 'time') {
-            list($timestamp, $hasTimeInfo, $hasDateInfo) = $this->normalizeDatetimeValue($value, true);
+            [$timestamp, $hasTimeInfo, $hasDateInfo] = $this->normalizeDatetimeValue($value, true);
             if (($type === 'date' && !$hasTimeInfo) || ($type === 'time' && !$hasDateInfo)) {
                 $timeZone = $this->defaultTimeZone;
             }
@@ -879,19 +879,23 @@ class Formatter extends Component
                 return $checkDateTimeInfo ? [$timestamp, true, true] : $timestamp;
             }
             if (
-                ($timestamp = DateTime::createFromFormat(
+                (
+                    $timestamp = DateTime::createFromFormat(
                     'Y-m-d|',
                     $value,
-                    new DateTimeZone($this->defaultTimeZone))
+                    new DateTimeZone($this->defaultTimeZone)
+                )
                 ) !== false
             ) { // try Y-m-d format (support invalid dates like 2012-13-01)
                 return $checkDateTimeInfo ? [$timestamp, false, true] : $timestamp;
             }
             if (
-                ($timestamp = DateTime::createFromFormat(
+                (
+                    $timestamp = DateTime::createFromFormat(
                     'Y-m-d H:i:s',
                     $value,
-                    new DateTimeZone($this->defaultTimeZone))
+                    new DateTimeZone($this->defaultTimeZone)
+                )
                 ) !== false
             ) { // try Y-m-d H:i:s format (support invalid dates like 2012-13-01 12:63:12)
                 return $checkDateTimeInfo ? [$timestamp, true, true] : $timestamp;
@@ -1421,7 +1425,7 @@ class Formatter extends Component
             return $this->nullDisplay;
         }
 
-        list($params, $position) = $this->formatNumber($value, $decimals, 4, $this->sizeFormatBase, $options, $textOptions);
+        [$params, $position] = $this->formatNumber($value, $decimals, 4, $this->sizeFormatBase, $options, $textOptions);
 
         if ($this->sizeFormatBase == 1024) {
             switch ($position) {
@@ -1477,7 +1481,7 @@ class Formatter extends Component
             return $this->nullDisplay;
         }
 
-        list($params, $position) = $this->formatNumber($value, $decimals, 4, $this->sizeFormatBase, $options, $textOptions);
+        [$params, $position] = $this->formatNumber($value, $decimals, 4, $this->sizeFormatBase, $options, $textOptions);
 
         if ($this->sizeFormatBase == 1024) {
             switch ($position) {
@@ -1616,7 +1620,7 @@ class Formatter extends Component
 
         $multipliers = array_values($this->measureUnits[$unitType][$this->systemOfUnits]);
 
-        list($params, $position) = $this->formatNumber(
+        [$params, $position] = $this->formatNumber(
             $this->normalizeNumericValue($value) * $this->baseUnits[$unitType][$this->systemOfUnits],
             $decimals,
             null,

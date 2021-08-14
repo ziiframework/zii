@@ -31,7 +31,7 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
     use ViewFinderTrait;
     use ConstraintFinderTrait;
 
-    const TYPE_JSONB = 'jsonb';
+    public const TYPE_JSONB = 'jsonb';
 
     /**
      * @var string the default schema used for the current session.
@@ -155,11 +155,11 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
     protected function findSchemaNames()
     {
         static $sql = <<<'SQL'
-SELECT "ns"."nspname"
-FROM "pg_namespace" AS "ns"
-WHERE "ns"."nspname" != 'information_schema' AND "ns"."nspname" NOT LIKE 'pg_%'
-ORDER BY "ns"."nspname" ASC
-SQL;
+            SELECT "ns"."nspname"
+            FROM "pg_namespace" AS "ns"
+            WHERE "ns"."nspname" != 'information_schema' AND "ns"."nspname" NOT LIKE 'pg_%'
+            ORDER BY "ns"."nspname" ASC
+            SQL;
 
         return $this->db->createCommand($sql)->queryColumn();
     }
@@ -173,12 +173,12 @@ SQL;
             $schema = $this->defaultSchema;
         }
         $sql = <<<'SQL'
-SELECT c.relname AS table_name
-FROM pg_class c
-INNER JOIN pg_namespace ns ON ns.oid = c.relnamespace
-WHERE ns.nspname = :schemaName AND c.relkind IN ('r','v','m','f', 'p')
-ORDER BY c.relname
-SQL;
+            SELECT c.relname AS table_name
+            FROM pg_class c
+            INNER JOIN pg_namespace ns ON ns.oid = c.relnamespace
+            WHERE ns.nspname = :schemaName AND c.relkind IN ('r','v','m','f', 'p')
+            ORDER BY c.relname
+            SQL;
         return $this->db->createCommand($sql, [':schemaName' => $schema])->queryColumn();
     }
 
@@ -219,23 +219,23 @@ SQL;
     protected function loadTableIndexes($tableName)
     {
         static $sql = <<<'SQL'
-SELECT
-    "ic"."relname" AS "name",
-    "ia"."attname" AS "column_name",
-    "i"."indisunique" AS "index_is_unique",
-    "i"."indisprimary" AS "index_is_primary"
-FROM "pg_class" AS "tc"
-INNER JOIN "pg_namespace" AS "tcns"
-    ON "tcns"."oid" = "tc"."relnamespace"
-INNER JOIN "pg_index" AS "i"
-    ON "i"."indrelid" = "tc"."oid"
-INNER JOIN "pg_class" AS "ic"
-    ON "ic"."oid" = "i"."indexrelid"
-INNER JOIN "pg_attribute" AS "ia"
-    ON "ia"."attrelid" = "i"."indexrelid"
-WHERE "tcns"."nspname" = :schemaName AND "tc"."relname" = :tableName
-ORDER BY "ia"."attnum" ASC
-SQL;
+            SELECT
+                "ic"."relname" AS "name",
+                "ia"."attname" AS "column_name",
+                "i"."indisunique" AS "index_is_unique",
+                "i"."indisprimary" AS "index_is_primary"
+            FROM "pg_class" AS "tc"
+            INNER JOIN "pg_namespace" AS "tcns"
+                ON "tcns"."oid" = "tc"."relnamespace"
+            INNER JOIN "pg_index" AS "i"
+                ON "i"."indrelid" = "tc"."oid"
+            INNER JOIN "pg_class" AS "ic"
+                ON "ic"."oid" = "i"."indexrelid"
+            INNER JOIN "pg_attribute" AS "ia"
+                ON "ia"."attrelid" = "i"."indexrelid"
+            WHERE "tcns"."nspname" = :schemaName AND "tc"."relname" = :tableName
+            ORDER BY "ia"."attnum" ASC
+            SQL;
 
         $resolvedName = $this->resolveTableName($tableName);
         $indexes = $this->db->createCommand($sql, [
@@ -320,12 +320,12 @@ SQL;
             $schema = $this->defaultSchema;
         }
         $sql = <<<'SQL'
-SELECT c.relname AS table_name
-FROM pg_class c
-INNER JOIN pg_namespace ns ON ns.oid = c.relnamespace
-WHERE ns.nspname = :schemaName AND (c.relkind = 'v' OR c.relkind = 'm')
-ORDER BY c.relname
-SQL;
+            SELECT c.relname AS table_name
+            FROM pg_class c
+            INNER JOIN pg_namespace ns ON ns.oid = c.relnamespace
+            WHERE ns.nspname = :schemaName AND (c.relkind = 'v' OR c.relkind = 'm')
+            ORDER BY c.relname
+            SQL;
         return $this->db->createCommand($sql, [':schemaName' => $schema])->queryColumn();
     }
 
@@ -342,29 +342,29 @@ SQL;
         //http://www.postgresql.org/message-id/26677.1086673982@sss.pgh.pa.us
 
         $sql = <<<SQL
-select
-    ct.conname as constraint_name,
-    a.attname as column_name,
-    fc.relname as foreign_table_name,
-    fns.nspname as foreign_table_schema,
-    fa.attname as foreign_column_name
-from
-    (SELECT ct.conname, ct.conrelid, ct.confrelid, ct.conkey, ct.contype, ct.confkey, generate_subscripts(ct.conkey, 1) AS s
-       FROM pg_constraint ct
-    ) AS ct
-    inner join pg_class c on c.oid=ct.conrelid
-    inner join pg_namespace ns on c.relnamespace=ns.oid
-    inner join pg_attribute a on a.attrelid=ct.conrelid and a.attnum = ct.conkey[ct.s]
-    left join pg_class fc on fc.oid=ct.confrelid
-    left join pg_namespace fns on fc.relnamespace=fns.oid
-    left join pg_attribute fa on fa.attrelid=ct.confrelid and fa.attnum = ct.confkey[ct.s]
-where
-    ct.contype='f'
-    and c.relname={$tableName}
-    and ns.nspname={$tableSchema}
-order by
-    fns.nspname, fc.relname, a.attnum
-SQL;
+            select
+                ct.conname as constraint_name,
+                a.attname as column_name,
+                fc.relname as foreign_table_name,
+                fns.nspname as foreign_table_schema,
+                fa.attname as foreign_column_name
+            from
+                (SELECT ct.conname, ct.conrelid, ct.confrelid, ct.conkey, ct.contype, ct.confkey, generate_subscripts(ct.conkey, 1) AS s
+                   FROM pg_constraint ct
+                ) AS ct
+                inner join pg_class c on c.oid=ct.conrelid
+                inner join pg_namespace ns on c.relnamespace=ns.oid
+                inner join pg_attribute a on a.attrelid=ct.conrelid and a.attnum = ct.conkey[ct.s]
+                left join pg_class fc on fc.oid=ct.confrelid
+                left join pg_namespace fns on fc.relnamespace=fns.oid
+                left join pg_attribute fa on fa.attrelid=ct.confrelid and fa.attnum = ct.confkey[ct.s]
+            where
+                ct.contype='f'
+                and c.relname={$tableName}
+                and ns.nspname={$tableSchema}
+            order by
+                fns.nspname, fc.relname, a.attnum
+            SQL;
 
         $constraints = [];
         foreach ($this->db->createCommand($sql)->queryAll() as $constraint) {
@@ -398,20 +398,20 @@ SQL;
     protected function getUniqueIndexInformation($table)
     {
         $sql = <<<'SQL'
-SELECT
-    i.relname as indexname,
-    pg_get_indexdef(idx.indexrelid, k + 1, TRUE) AS columnname
-FROM (
-  SELECT *, generate_subscripts(indkey, 1) AS k
-  FROM pg_index
-) idx
-INNER JOIN pg_class i ON i.oid = idx.indexrelid
-INNER JOIN pg_class c ON c.oid = idx.indrelid
-INNER JOIN pg_namespace ns ON c.relnamespace = ns.oid
-WHERE idx.indisprimary = FALSE AND idx.indisunique = TRUE
-AND c.relname = :tableName AND ns.nspname = :schemaName
-ORDER BY i.relname, k
-SQL;
+            SELECT
+                i.relname as indexname,
+                pg_get_indexdef(idx.indexrelid, k + 1, TRUE) AS columnname
+            FROM (
+              SELECT *, generate_subscripts(indkey, 1) AS k
+              FROM pg_index
+            ) idx
+            INNER JOIN pg_class i ON i.oid = idx.indexrelid
+            INNER JOIN pg_class c ON c.oid = idx.indrelid
+            INNER JOIN pg_namespace ns ON c.relnamespace = ns.oid
+            WHERE idx.indisprimary = FALSE AND idx.indisunique = TRUE
+            AND c.relname = :tableName AND ns.nspname = :schemaName
+            ORDER BY i.relname, k
+            SQL;
 
         return $this->db->createCommand($sql, [
             ':schemaName' => $table->schemaName,
@@ -470,68 +470,68 @@ SQL;
         }
 
         $sql = <<<SQL
-SELECT
-    d.nspname AS table_schema,
-    c.relname AS table_name,
-    a.attname AS column_name,
-    COALESCE(td.typname, tb.typname, t.typname) AS data_type,
-    COALESCE(td.typtype, tb.typtype, t.typtype) AS type_type,
-    (SELECT nspname FROM pg_namespace WHERE oid = COALESCE(td.typnamespace, tb.typnamespace, t.typnamespace)) AS type_scheme,
-    a.attlen AS character_maximum_length,
-    pg_catalog.col_description(c.oid, a.attnum) AS column_comment,
-    a.atttypmod AS modifier,
-    a.attnotnull = false AS is_nullable,
-    CAST(pg_get_expr(ad.adbin, ad.adrelid) AS varchar) AS column_default,
-    coalesce(pg_get_expr(ad.adbin, ad.adrelid) ~ 'nextval',false) {$orIdentity} AS is_autoinc,
-    pg_get_serial_sequence(quote_ident(d.nspname) || '.' || quote_ident(c.relname), a.attname) AS sequence_name,
-    CASE WHEN COALESCE(td.typtype, tb.typtype, t.typtype) = 'e'::char
-        THEN array_to_string((SELECT array_agg(enumlabel) FROM pg_enum WHERE enumtypid = COALESCE(td.oid, tb.oid, a.atttypid))::varchar[], ',')
-        ELSE NULL
-    END AS enum_values,
-    CASE atttypid
-         WHEN 21 /*int2*/ THEN 16
-         WHEN 23 /*int4*/ THEN 32
-         WHEN 20 /*int8*/ THEN 64
-         WHEN 1700 /*numeric*/ THEN
-              CASE WHEN atttypmod = -1
-               THEN null
-               ELSE ((atttypmod - 4) >> 16) & 65535
-               END
-         WHEN 700 /*float4*/ THEN 24 /*FLT_MANT_DIG*/
-         WHEN 701 /*float8*/ THEN 53 /*DBL_MANT_DIG*/
-         ELSE null
-      END   AS numeric_precision,
-      CASE
-        WHEN atttypid IN (21, 23, 20) THEN 0
-        WHEN atttypid IN (1700) THEN
-        CASE
-            WHEN atttypmod = -1 THEN null
-            ELSE (atttypmod - 4) & 65535
-        END
-           ELSE null
-      END AS numeric_scale,
-    CAST(
-             information_schema._pg_char_max_length(information_schema._pg_truetypid(a, t), information_schema._pg_truetypmod(a, t))
-             AS numeric
-    ) AS size,
-    a.attnum = any (ct.conkey) as is_pkey,
-    COALESCE(NULLIF(a.attndims, 0), NULLIF(t.typndims, 0), (t.typcategory='A')::int) AS dimension
-FROM
-    pg_class c
-    LEFT JOIN pg_attribute a ON a.attrelid = c.oid
-    LEFT JOIN pg_attrdef ad ON a.attrelid = ad.adrelid AND a.attnum = ad.adnum
-    LEFT JOIN pg_type t ON a.atttypid = t.oid
-    LEFT JOIN pg_type tb ON (a.attndims > 0 OR t.typcategory='A') AND t.typelem > 0 AND t.typelem = tb.oid OR t.typbasetype > 0 AND t.typbasetype = tb.oid
-    LEFT JOIN pg_type td ON t.typndims > 0 AND t.typbasetype > 0 AND tb.typelem = td.oid
-    LEFT JOIN pg_namespace d ON d.oid = c.relnamespace
-    LEFT JOIN pg_constraint ct ON ct.conrelid = c.oid AND ct.contype = 'p'
-WHERE
-    a.attnum > 0 AND t.typname != '' AND NOT a.attisdropped
-    AND c.relname = {$tableName}
-    AND d.nspname = {$schemaName}
-ORDER BY
-    a.attnum;
-SQL;
+            SELECT
+                d.nspname AS table_schema,
+                c.relname AS table_name,
+                a.attname AS column_name,
+                COALESCE(td.typname, tb.typname, t.typname) AS data_type,
+                COALESCE(td.typtype, tb.typtype, t.typtype) AS type_type,
+                (SELECT nspname FROM pg_namespace WHERE oid = COALESCE(td.typnamespace, tb.typnamespace, t.typnamespace)) AS type_scheme,
+                a.attlen AS character_maximum_length,
+                pg_catalog.col_description(c.oid, a.attnum) AS column_comment,
+                a.atttypmod AS modifier,
+                a.attnotnull = false AS is_nullable,
+                CAST(pg_get_expr(ad.adbin, ad.adrelid) AS varchar) AS column_default,
+                coalesce(pg_get_expr(ad.adbin, ad.adrelid) ~ 'nextval',false) {$orIdentity} AS is_autoinc,
+                pg_get_serial_sequence(quote_ident(d.nspname) || '.' || quote_ident(c.relname), a.attname) AS sequence_name,
+                CASE WHEN COALESCE(td.typtype, tb.typtype, t.typtype) = 'e'::char
+                    THEN array_to_string((SELECT array_agg(enumlabel) FROM pg_enum WHERE enumtypid = COALESCE(td.oid, tb.oid, a.atttypid))::varchar[], ',')
+                    ELSE NULL
+                END AS enum_values,
+                CASE atttypid
+                     WHEN 21 /*int2*/ THEN 16
+                     WHEN 23 /*int4*/ THEN 32
+                     WHEN 20 /*int8*/ THEN 64
+                     WHEN 1700 /*numeric*/ THEN
+                          CASE WHEN atttypmod = -1
+                           THEN null
+                           ELSE ((atttypmod - 4) >> 16) & 65535
+                           END
+                     WHEN 700 /*float4*/ THEN 24 /*FLT_MANT_DIG*/
+                     WHEN 701 /*float8*/ THEN 53 /*DBL_MANT_DIG*/
+                     ELSE null
+                  END   AS numeric_precision,
+                  CASE
+                    WHEN atttypid IN (21, 23, 20) THEN 0
+                    WHEN atttypid IN (1700) THEN
+                    CASE
+                        WHEN atttypmod = -1 THEN null
+                        ELSE (atttypmod - 4) & 65535
+                    END
+                       ELSE null
+                  END AS numeric_scale,
+                CAST(
+                         information_schema._pg_char_max_length(information_schema._pg_truetypid(a, t), information_schema._pg_truetypmod(a, t))
+                         AS numeric
+                ) AS size,
+                a.attnum = any (ct.conkey) as is_pkey,
+                COALESCE(NULLIF(a.attndims, 0), NULLIF(t.typndims, 0), (t.typcategory='A')::int) AS dimension
+            FROM
+                pg_class c
+                LEFT JOIN pg_attribute a ON a.attrelid = c.oid
+                LEFT JOIN pg_attrdef ad ON a.attrelid = ad.adrelid AND a.attnum = ad.adnum
+                LEFT JOIN pg_type t ON a.atttypid = t.oid
+                LEFT JOIN pg_type tb ON (a.attndims > 0 OR t.typcategory='A') AND t.typelem > 0 AND t.typelem = tb.oid OR t.typbasetype > 0 AND t.typbasetype = tb.oid
+                LEFT JOIN pg_type td ON t.typndims > 0 AND t.typbasetype > 0 AND tb.typelem = td.oid
+                LEFT JOIN pg_namespace d ON d.oid = c.relnamespace
+                LEFT JOIN pg_constraint ct ON ct.conrelid = c.oid AND ct.contype = 'p'
+            WHERE
+                a.attnum > 0 AND t.typname != '' AND NOT a.attisdropped
+                AND c.relname = {$tableName}
+                AND d.nspname = {$schemaName}
+            ORDER BY
+                a.attnum;
+            SQL;
         $columns = $this->db->createCommand($sql)->queryAll();
         if (empty($columns)) {
             return false;
@@ -661,32 +661,32 @@ SQL;
     private function loadTableConstraints($tableName, $returnType)
     {
         static $sql = <<<'SQL'
-SELECT
-    "c"."conname" AS "name",
-    "a"."attname" AS "column_name",
-    "c"."contype" AS "type",
-    "ftcns"."nspname" AS "foreign_table_schema",
-    "ftc"."relname" AS "foreign_table_name",
-    "fa"."attname" AS "foreign_column_name",
-    "c"."confupdtype" AS "on_update",
-    "c"."confdeltype" AS "on_delete",
-    pg_get_constraintdef("c"."oid") AS "check_expr"
-FROM "pg_class" AS "tc"
-INNER JOIN "pg_namespace" AS "tcns"
-    ON "tcns"."oid" = "tc"."relnamespace"
-INNER JOIN "pg_constraint" AS "c"
-    ON "c"."conrelid" = "tc"."oid"
-INNER JOIN "pg_attribute" AS "a"
-    ON "a"."attrelid" = "c"."conrelid" AND "a"."attnum" = ANY ("c"."conkey")
-LEFT JOIN "pg_class" AS "ftc"
-    ON "ftc"."oid" = "c"."confrelid"
-LEFT JOIN "pg_namespace" AS "ftcns"
-    ON "ftcns"."oid" = "ftc"."relnamespace"
-LEFT JOIN "pg_attribute" "fa"
-    ON "fa"."attrelid" = "c"."confrelid" AND "fa"."attnum" = ANY ("c"."confkey")
-WHERE "tcns"."nspname" = :schemaName AND "tc"."relname" = :tableName
-ORDER BY "a"."attnum" ASC, "fa"."attnum" ASC
-SQL;
+            SELECT
+                "c"."conname" AS "name",
+                "a"."attname" AS "column_name",
+                "c"."contype" AS "type",
+                "ftcns"."nspname" AS "foreign_table_schema",
+                "ftc"."relname" AS "foreign_table_name",
+                "fa"."attname" AS "foreign_column_name",
+                "c"."confupdtype" AS "on_update",
+                "c"."confdeltype" AS "on_delete",
+                pg_get_constraintdef("c"."oid") AS "check_expr"
+            FROM "pg_class" AS "tc"
+            INNER JOIN "pg_namespace" AS "tcns"
+                ON "tcns"."oid" = "tc"."relnamespace"
+            INNER JOIN "pg_constraint" AS "c"
+                ON "c"."conrelid" = "tc"."oid"
+            INNER JOIN "pg_attribute" AS "a"
+                ON "a"."attrelid" = "c"."conrelid" AND "a"."attnum" = ANY ("c"."conkey")
+            LEFT JOIN "pg_class" AS "ftc"
+                ON "ftc"."oid" = "c"."confrelid"
+            LEFT JOIN "pg_namespace" AS "ftcns"
+                ON "ftcns"."oid" = "ftc"."relnamespace"
+            LEFT JOIN "pg_attribute" "fa"
+                ON "fa"."attrelid" = "c"."confrelid" AND "fa"."attnum" = ANY ("c"."confkey")
+            WHERE "tcns"."nspname" = :schemaName AND "tc"."relname" = :tableName
+            ORDER BY "a"."attnum" ASC, "fa"."attnum" ASC
+            SQL;
         static $actionTypes = [
             'a' => 'NO ACTION',
             'r' => 'RESTRICT',
@@ -724,8 +724,8 @@ SQL;
                             'foreignSchemaName' => $constraint[0]['foreign_table_schema'],
                             'foreignTableName' => $constraint[0]['foreign_table_name'],
                             'foreignColumnNames' => array_keys(array_count_values(ArrayHelper::getColumn($constraint, 'foreign_column_name'))),
-                            'onDelete' => isset($actionTypes[$constraint[0]['on_delete']]) ? $actionTypes[$constraint[0]['on_delete']] : null,
-                            'onUpdate' => isset($actionTypes[$constraint[0]['on_update']]) ? $actionTypes[$constraint[0]['on_update']] : null,
+                            'onDelete' => $actionTypes[$constraint[0]['on_delete']] ?? null,
+                            'onUpdate' => $actionTypes[$constraint[0]['on_update']] ?? null,
                         ]);
                         break;
                     case 'u':

@@ -68,21 +68,21 @@ class Response extends \yii\base\Response
     /**
      * @event \yii\base\Event an event that is triggered at the beginning of [[send()]].
      */
-    const EVENT_BEFORE_SEND = 'beforeSend';
+    public const EVENT_BEFORE_SEND = 'beforeSend';
     /**
      * @event \yii\base\Event an event that is triggered at the end of [[send()]].
      */
-    const EVENT_AFTER_SEND = 'afterSend';
+    public const EVENT_AFTER_SEND = 'afterSend';
     /**
      * @event \yii\base\Event an event that is triggered right after [[prepare()]] is called in [[send()]].
      * You may respond to this event to filter the response content before it is sent to the client.
      */
-    const EVENT_AFTER_PREPARE = 'afterPrepare';
-    const FORMAT_RAW = 'raw';
-    const FORMAT_HTML = 'html';
-    const FORMAT_JSON = 'json';
-    const FORMAT_JSONP = 'jsonp';
-    const FORMAT_XML = 'xml';
+    public const EVENT_AFTER_PREPARE = 'afterPrepare';
+    public const FORMAT_RAW = 'raw';
+    public const FORMAT_HTML = 'html';
+    public const FORMAT_JSON = 'json';
+    public const FORMAT_JSONP = 'jsonp';
+    public const FORMAT_XML = 'xml';
 
     /**
      * @var string the response format. This determines how to convert [[data]] into [[content]]
@@ -292,7 +292,7 @@ class Response extends \yii\base\Response
             throw new InvalidArgumentException("The HTTP status code is invalid: $value");
         }
         if ($text === null) {
-            $this->statusText = isset(static::$httpStatuses[$this->_statusCode]) ? static::$httpStatuses[$this->_statusCode] : '';
+            $this->statusText = static::$httpStatuses[$this->_statusCode] ?? '';
         } else {
             $this->statusText = $text;
         }
@@ -457,7 +457,7 @@ class Response extends \yii\base\Response
         $chunkSize = 8 * 1024 * 1024; // 8MB per chunk
 
         if (is_array($this->stream)) {
-            list($handle, $begin, $end) = $this->stream;
+            [$handle, $begin, $end] = $this->stream;
 
             // only seek if stream is seekable
             if ($this->isSeekable($handle)) {
@@ -560,7 +560,7 @@ class Response extends \yii\base\Response
             throw new RangeNotSatisfiableHttpException();
         }
 
-        list($begin, $end) = $range;
+        [$begin, $end] = $range;
         if ($begin != 0 || $end != $contentLength - 1) {
             $this->setStatusCode(206);
             $headers->set('Content-Range', "bytes $begin-$end/$contentLength");
@@ -570,7 +570,7 @@ class Response extends \yii\base\Response
             $this->content = $content;
         }
 
-        $mimeType = isset($options['mimeType']) ? $options['mimeType'] : 'application/octet-stream';
+        $mimeType = $options['mimeType'] ?? 'application/octet-stream';
         $this->setDownloadHeaders($attachmentName, $mimeType, !empty($options['inline']), $end - $begin + 1);
 
         $this->format = self::FORMAT_RAW;
@@ -619,7 +619,7 @@ class Response extends \yii\base\Response
             throw new RangeNotSatisfiableHttpException();
         }
 
-        list($begin, $end) = $range;
+        [$begin, $end] = $range;
         if ($begin != 0 || $end != $fileSize - 1) {
             $this->setStatusCode(206);
             $headers->set('Content-Range', "bytes $begin-$end/$fileSize");
@@ -627,7 +627,7 @@ class Response extends \yii\base\Response
             $this->setStatusCode(200);
         }
 
-        $mimeType = isset($options['mimeType']) ? $options['mimeType'] : 'application/octet-stream';
+        $mimeType = $options['mimeType'] ?? 'application/octet-stream';
         $this->setDownloadHeaders($attachmentName, $mimeType, !empty($options['inline']), $end - $begin + 1);
 
         $this->format = self::FORMAT_RAW;

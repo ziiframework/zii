@@ -100,12 +100,12 @@ class Request extends \yii\base\Request
     /**
      * The name of the HTTP header for sending CSRF token.
      */
-    const CSRF_HEADER = 'X-CSRF-Token';
+    public const CSRF_HEADER = 'X-CSRF-Token';
     /**
      * The length of the CSRF token mask.
      * @deprecated since 2.0.12. The mask length is now equal to the token length.
      */
-    const CSRF_MASK_LENGTH = 8;
+    public const CSRF_MASK_LENGTH = 8;
 
     /**
      * @var bool whether to enable CSRF (Cross-Site Request Forgery) validation. Defaults to true.
@@ -280,7 +280,7 @@ class Request extends \yii\base\Request
     {
         $result = Yii::$app->getUrlManager()->parseRequest($this);
         if ($result !== false) {
-            list($route, $params) = $result;
+            [$route, $params] = $result;
             if ($this->_queryParams === null) {
                 $_GET = $params + $_GET; // preserve numeric keys
             } else {
@@ -634,7 +634,7 @@ class Request extends \yii\base\Request
             }
         }
 
-        return isset($params[$name]) ? $params[$name] : $defaultValue;
+        return $params[$name] ?? $defaultValue;
     }
 
     /**
@@ -710,7 +710,7 @@ class Request extends \yii\base\Request
     {
         $params = $this->getQueryParams();
 
-        return isset($params[$name]) ? $params[$name] : $defaultValue;
+        return $params[$name] ?? $defaultValue;
     }
 
     private $_hostInfo;
@@ -1082,7 +1082,7 @@ class Request extends \yii\base\Request
      */
     public function getQueryString()
     {
-        return isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '';
+        return $_SERVER['QUERY_STRING'] ?? '';
     }
 
     /**
@@ -1118,7 +1118,7 @@ class Request extends \yii\base\Request
      */
     public function getServerName()
     {
-        return isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : null;
+        return $_SERVER['SERVER_NAME'] ?? null;
     }
 
     /**
@@ -1263,7 +1263,7 @@ class Request extends \yii\base\Request
     public function getUserHost()
     {
         $userIp = $this->getUserIpFromIpHeaders();
-        if($userIp === null) {
+        if ($userIp === null) {
             return $this->getRemoteHost();
         }
         return gethostbyaddr($userIp);
@@ -1277,7 +1277,7 @@ class Request extends \yii\base\Request
      */
     public function getRemoteIP()
     {
-        return isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null;
+        return $_SERVER['REMOTE_ADDR'] ?? null;
     }
 
     /**
@@ -1290,7 +1290,7 @@ class Request extends \yii\base\Request
      */
     public function getRemoteHost()
     {
-        return isset($_SERVER['REMOTE_HOST']) ? $_SERVER['REMOTE_HOST'] : null;
+        return $_SERVER['REMOTE_HOST'] ?? null;
     }
 
     /**
@@ -1321,8 +1321,8 @@ class Request extends \yii\base\Request
      */
     public function getAuthCredentials()
     {
-        $username = isset($_SERVER['PHP_AUTH_USER']) ? $_SERVER['PHP_AUTH_USER'] : null;
-        $password = isset($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : null;
+        $username = $_SERVER['PHP_AUTH_USER'] ?? null;
+        $password = $_SERVER['PHP_AUTH_PW'] ?? null;
         if ($username !== null || $password !== null) {
             return [$username, $password];
         }
@@ -1554,7 +1554,7 @@ class Request extends \yii\base\Request
             ];
             foreach ($params as $param) {
                 if (strpos($param, '=') !== false) {
-                    list($key, $value) = explode('=', $param, 2);
+                    [$key, $value] = explode('=', $param, 2);
                     if ($key === 'q') {
                         $values['q'][2] = (float) $value;
                     } else {
@@ -1941,8 +1941,12 @@ class Request extends \yii\base\Request
         preg_match_all('/(?:[^",]++|"[^"]++")+/', $forwarded, $forwardedElements);
 
         foreach ($forwardedElements[0] as $forwardedPairs) {
-            preg_match_all('/(?P<key>\w+)\s*=\s*(?:(?P<value>[^",;]*[^",;\s])|"(?P<value2>[^"]+)")/', $forwardedPairs,
-                $matches, PREG_SET_ORDER);
+            preg_match_all(
+                '/(?P<key>\w+)\s*=\s*(?:(?P<value>[^",;]*[^",;\s])|"(?P<value2>[^"]+)")/',
+                $forwardedPairs,
+                $matches,
+                PREG_SET_ORDER
+            );
             $this->_secureForwardedHeaderParts[] = array_reduce($matches, function ($carry, $item) {
                 $value = $item['value'];
                 if (isset($item['value2']) && $item['value2'] !== '') {

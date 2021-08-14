@@ -56,22 +56,22 @@ class Transaction extends \yii\base\BaseObject
      * A constant representing the transaction isolation level `READ UNCOMMITTED`.
      * @see http://en.wikipedia.org/wiki/Isolation_%28database_systems%29#Isolation_levels
      */
-    const READ_UNCOMMITTED = 'READ UNCOMMITTED';
+    public const READ_UNCOMMITTED = 'READ UNCOMMITTED';
     /**
      * A constant representing the transaction isolation level `READ COMMITTED`.
      * @see http://en.wikipedia.org/wiki/Isolation_%28database_systems%29#Isolation_levels
      */
-    const READ_COMMITTED = 'READ COMMITTED';
+    public const READ_COMMITTED = 'READ COMMITTED';
     /**
      * A constant representing the transaction isolation level `REPEATABLE READ`.
      * @see http://en.wikipedia.org/wiki/Isolation_%28database_systems%29#Isolation_levels
      */
-    const REPEATABLE_READ = 'REPEATABLE READ';
+    public const REPEATABLE_READ = 'REPEATABLE READ';
     /**
      * A constant representing the transaction isolation level `SERIALIZABLE`.
      * @see http://en.wikipedia.org/wiki/Isolation_%28database_systems%29#Isolation_levels
      */
-    const SERIALIZABLE = 'SERIALIZABLE';
+    public const SERIALIZABLE = 'SERIALIZABLE';
 
     /**
      * @var Connection the database connection that this transaction is associated with.

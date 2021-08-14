@@ -112,7 +112,7 @@ class PhpManager extends BaseManager
      */
     public function getAssignments($userId)
     {
-        return isset($this->assignments[$userId]) ? $this->assignments[$userId] : [];
+        return $this->assignments[$userId] ?? [];
     }
 
     /**
@@ -309,7 +309,7 @@ class PhpManager extends BaseManager
      */
     public function getAssignment($roleName, $userId)
     {
-        return isset($this->assignments[$userId][$roleName]) ? $this->assignments[$userId][$roleName] : null;
+        return $this->assignments[$userId][$roleName] ?? null;
     }
 
     /**
@@ -356,7 +356,7 @@ class PhpManager extends BaseManager
      */
     public function getItem($name)
     {
-        return isset($this->items[$name]) ? $this->items[$name] : null;
+        return $this->items[$name] ?? null;
     }
 
     /**
@@ -377,7 +377,7 @@ class PhpManager extends BaseManager
      */
     public function getRule($name)
     {
-        return isset($this->rules[$name]) ? $this->rules[$name] : null;
+        return $this->rules[$name] ?? null;
     }
 
     /**
@@ -527,7 +527,7 @@ class PhpManager extends BaseManager
      */
     public function getChildren($name)
     {
-        return isset($this->children[$name]) ? $this->children[$name] : [];
+        return $this->children[$name] ?? [];
     }
 
     /**
@@ -728,9 +728,9 @@ class PhpManager extends BaseManager
 
             $this->items[$name] = new $class([
                 'name' => $name,
-                'description' => isset($item['description']) ? $item['description'] : null,
-                'ruleName' => isset($item['ruleName']) ? $item['ruleName'] : null,
-                'data' => isset($item['data']) ? $item['data'] : null,
+                'description' => $item['description'] ?? null,
+                'ruleName' => $item['ruleName'] ?? null,
+                'data' => $item['data'] ?? null,
                 'createdAt' => $itemsMtime,
                 'updatedAt' => $itemsMtime,
             ]);

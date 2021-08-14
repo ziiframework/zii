@@ -552,7 +552,8 @@ class FileValidator extends Validator
      * @throws \yii\base\InvalidConfigException
      * @since 2.0.26
      */
-    protected function getMimeTypeByFile($filePath) {
+    protected function getMimeTypeByFile($filePath)
+    {
         return FileHelper::getMimeType($filePath);
     }
 }

@@ -154,7 +154,7 @@ class Query extends Component implements QueryInterface, ExpressionInterface
         if ($db === null) {
             $db = Yii::$app->getDb();
         }
-        list($sql, $params) = $db->getQueryBuilder()->build($this);
+        [$sql, $params] = $db->getQueryBuilder()->build($this);
 
         $command = $db->createCommand($sql, $params);
         $this->setCommandCache($command);
@@ -545,39 +545,39 @@ class Query extends Component implements QueryInterface, ExpressionInterface
         foreach ($tableNames as $alias => $tableName) {
             if (is_string($tableName) && !is_string($alias)) {
                 $pattern = <<<PATTERN
-~
-^
-\s*
-(
-(?:['"`\[]|{{)
-.*?
-(?:['"`\]]|}})
-|
-\(.*?\)
-|
-.*?
-)
-(?:
-(?:
-    \s+
-    (?:as)?
-    \s*
-)
-(
-   (?:['"`\[]|{{)
-    .*?
-    (?:['"`\]]|}})
-    |
-    .*?
-)
-)?
-\s*
-$
-~iux
-PATTERN;
+                    ~
+                    ^
+                    \s*
+                    (
+                    (?:['"`\[]|{{)
+                    .*?
+                    (?:['"`\]]|}})
+                    |
+                    \(.*?\)
+                    |
+                    .*?
+                    )
+                    (?:
+                    (?:
+                        \s+
+                        (?:as)?
+                        \s*
+                    )
+                    (
+                       (?:['"`\[]|{{)
+                        .*?
+                        (?:['"`\]]|}})
+                        |
+                        .*?
+                    )
+                    )?
+                    \s*
+                    $
+                    ~iux
+                    PATTERN;
                 if (preg_match($pattern, $tableName, $matches)) {
                     if (isset($matches[2])) {
-                        list(, $tableName, $alias) = $matches;
+                        [, $tableName, $alias] = $matches;
                     } else {
                         $tableName = $alias = $matches[1];
                     }
