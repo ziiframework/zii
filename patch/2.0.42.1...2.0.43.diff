@@ -3327,7 +3327,7 @@ index e84714000e0..215999c12aa 100644
       */
 @@ -80,27 +24,11 @@ class SecurityTest extends TestCase
  
-     protected function setUp()
+     protected function setUp(): void
      {
 -        static::$functions = [];
 -        static::$fopen = null;
@@ -3337,7 +3337,7 @@ index e84714000e0..215999c12aa 100644
          $this->security->derivationIterations = 1000; // speed up test running
      }
  
--    protected function tearDown()
+-    protected function tearDown(): void
 -    {
 -        static::$functions = [];
 -        static::$fopen = null;
@@ -3432,7 +3432,7 @@ index e84714000e0..215999c12aa 100644
          for ($length = 1; $length < 64; $length++) {
              $key1 = $this->security->generateRandomKey($length);
 @@ -985,16 +845,6 @@ public function testGenerateRandomKey($functions)
-         $this->assertInternalType('string', $key2);
+         $this->assertIsString($key2);
          $this->assertEquals($length, strlen($key2));
          $this->assertNotEquals($key1, $key2);
 -
@@ -3443,7 +3443,7 @@ index e84714000e0..215999c12aa 100644
 -        static::$fopen = fopen('php://memory', 'rwb');
 -        $length = 1024 * 1024;
 -        $key1 = $this->security->generateRandomKey($length);
--        $this->assertInternalType('string', $key1);
+-        $this->assertIsString($key1);
 -        $this->assertEquals($length, strlen($key1));
      }
  
