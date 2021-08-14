@@ -31,7 +31,7 @@ class MimeTest extends TestCase
                 'application/x-bmp' => 'image/bmp',
                 'application/x-win-bitmap' => 'image/bmp',
             ],
-            require __DIR__ . '/../../../framework/helpers/mimeAliases.php'
+            require __DIR__ . '/../../../src/helpers/mimeAliases.php'
         );
     }
 
@@ -1025,7 +1025,7 @@ class MimeTest extends TestCase
                 'zirz' => 'application/vnd.zul',
                 'zmm' => 'application/vnd.handheld-entertainment+xml',
             ],
-            require __DIR__ . '/../../../framework/helpers/mimeTypes.php'
+            require __DIR__ . '/../../../src/helpers/mimeTypes.php'
         );
     }
 }
