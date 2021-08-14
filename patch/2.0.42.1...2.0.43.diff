@@ -3496,19 +3496,6 @@ index e84714000e0..215999c12aa 100644
      }
  }
 -} // closing namespace yiiunit\framework\base;
-diff --git a/tests/framework/db/CommandTest.php b/tests/framework/db/CommandTest.php
-index 526ee5c4c91..ec88e98dcbe 100644
---- a/tests/framework/db/CommandTest.php
-+++ b/tests/framework/db/CommandTest.php
-@@ -221,7 +221,7 @@ public function testBindParamValue()
-         }
-         $this->assertEquals($numericCol, $row['numeric_col']);
-         if ($this->driverName === 'mysql' || $this->driverName === 'oci' || (\defined('HHVM_VERSION') && \in_array($this->driverName, ['sqlite', 'pgsql']))) {
--            $this->assertEquals($boolCol, (int)$row['bool_col']);
-+            $this->assertEquals($boolCol, (int) $row['bool_col']);
-         } else {
-             $this->assertEquals($boolCol, $row['bool_col']);
-         }
 diff --git a/tests/framework/db/QueryTest.php b/tests/framework/db/QueryTest.php
 index 18179085e44..ac7df07ea39 100644
 --- a/tests/framework/db/QueryTest.php
