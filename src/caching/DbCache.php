@@ -276,7 +276,8 @@ class DbCache extends Cache
      */
     public function gc($force = false)
     {
-        if ($force || mt_rand(0, 1000000) < $this->gcProbability) {
+
+        if ($force || random_int(0, 1000000) < $this->gcProbability) {
             $this->db->createCommand()
                 ->delete($this->cacheTable, '[[expire]] > 0 AND [[expire]] < ' . time())
                 ->execute();
@@ -305,7 +306,7 @@ class DbCache extends Cache
     {
         if ($this->isVarbinaryDataField === null) {
             $this->isVarbinaryDataField = in_array($this->db->getDriverName(), ['sqlsrv', 'dblib']) &&
-                $this->db->getTableSchema('cache')->columns['data']->dbType === 'varbinary';
+                $this->db->getTableSchema($this->cacheTable)->columns['data']->dbType === 'varbinary';
         }
         return $this->isVarbinaryDataField;
     }
