@@ -3213,37 +3213,6 @@ index 5550fcd576e..1aa791b6f67 100644
      {
          $acceptableTypes = Yii::$app->getRequest()->getAcceptableContentTypes();
          if (empty($acceptableTypes) || (count($acceptableTypes) === 1 && array_keys($acceptableTypes)[0] === '*/*')) {
-diff --git a/src/widgets/ActiveField.php b/src/widgets/ActiveField.php
-index 4ffe3fc90fe..484d2998be4 100644
---- a/src/widgets/ActiveField.php
-+++ b/src/widgets/ActiveField.php
-@@ -551,7 +551,7 @@ public function radio($options = [], $enclosedByLabel = true)
- 
-         $this->addAriaAttributes($options);
-         $this->adjustLabelFor($options);
--        
-+
-         if ($enclosedByLabel) {
-             $this->parts['{input}'] = Html::activeRadio($this->model, $this->attribute, $options);
-             $this->parts['{label}'] = '';
-@@ -603,7 +603,7 @@ public function checkbox($options = [], $enclosedByLabel = true)
- 
-         $this->addAriaAttributes($options);
-         $this->adjustLabelFor($options);
--        
-+
-         if ($enclosedByLabel) {
-             $this->parts['{input}'] = Html::activeCheckbox($this->model, $this->attribute, $options);
-             $this->parts['{label}'] = '';
-@@ -756,7 +756,7 @@ public function radioList($items, $options = [])
-      * the following code, assuming that `$form` is your [[ActiveForm]] instance:
-      *
-      * ```php
--     * $form->field($model, 'date')->widget(\yii\widgets\MaskedInput::className(), [
-+     * $form->field($model, 'date')->widget(\yii\widgets\MaskedInput::class, [
-      *     'mask' => '99/99/9999',
-      * ]);
-      * ```
 diff --git a/src/widgets/MaskedInput.php b/src/widgets/MaskedInput.php
 index 8208e139846..632af1f3daa 100644
 --- a/src/widgets/MaskedInput.php
