@@ -29,7 +29,7 @@
         "lib-pcre": "*",
         "ext-json": "*",
         "ext-dom": "*",
-        "ziiframework/composer": "~3.2.1",
+        "ziiframework/composer": "~3.3.0",
         "ezyang/htmlpurifier": "^4.13",
         "cebe/markdown": "^1.0"
     },
