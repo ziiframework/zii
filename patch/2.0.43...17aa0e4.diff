@@ -846,19 +846,6 @@ index e61a9ed34ae..c3b9c420e27 100644
          }
  
          return $h;
-diff --git a/src/composer.json b/src/composer.json
-index b211cb5eea3..2875edb6657 100644
---- a/src/composer.json
-+++ b/src/composer.json
-@@ -59,7 +59,7 @@
-         "issues": "https://github.com/yiisoft/yii2/issues?state=open",
-         "forum": "http://www.yiiframework.com/forum/",
-         "wiki": "http://www.yiiframework.com/wiki/",
--        "irc": "irc://irc.libera.chat:6697/yii",
-+        "irc": "ircs://irc.libera.chat:6697/yii",
-         "source": "https://github.com/yiisoft/yii2"
-     },
-     "require": {
 diff --git a/src/console/Application.php b/src/console/Application.php
 index b8c07cdee49..4ee2535249d 100644
 --- a/src/console/Application.php
