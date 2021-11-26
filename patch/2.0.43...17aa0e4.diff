@@ -1651,41 +1651,6 @@ index 7a119d1171e..87e72dd18d1 100644
   * > since PHP 7.0, so you can skip the part with `\Exception` if your app uses only PHP 7.0 and higher.
   *
   * @property-read bool $isActive Whether this transaction is active. Only an active transaction can
-diff --git a/src/db/cubrid/Schema.php b/src/db/cubrid/Schema.php
-index a487235fdd6..73a06c4d130 100644
---- a/src/db/cubrid/Schema.php
-+++ b/src/db/cubrid/Schema.php
-@@ -326,7 +326,7 @@ protected function loadColumnSchema($info)
-      * Determines the PDO type for the given PHP data value.
-      * @param mixed $data the data whose PDO type is to be determined
-      * @return int the PDO type
--     * @see https://secure.php.net/manual/en/pdo.constants.php
-+     * @see https://www.php.net/manual/en/pdo.constants.php
-      */
-     public function getPdoType($data)
-     {
-diff --git a/src/db/oci/Schema.php b/src/db/oci/Schema.php
-index 7b1cc80997b..cba0b206a76 100644
---- a/src/db/oci/Schema.php
-+++ b/src/db/oci/Schema.php
-@@ -372,7 +372,7 @@ protected function getTableSequenceName($tableName)
- 
-     /**
-      * @Overrides method in class 'Schema'
--     * @see https://secure.php.net/manual/en/function.PDO-lastInsertId.php -> Oracle does not support this
-+     * @see https://www.php.net/manual/en/function.PDO-lastInsertId.php -> Oracle does not support this
-      *
-      * Returns the ID of the last inserted row or sequence value.
-      * @param string $sequenceName name of the sequence object (required by some DBMS)
-@@ -421,7 +421,7 @@ protected function createColumn($column)
-                     if ($defaultValue !== null) {
-                         if (
-                             strlen($defaultValue) > 2
--                            && strpos($defaultValue, "'") === 0
-+                            && strncmp($defaultValue, "'", 1) === 0
-                             && substr($defaultValue, -1) === "'"
-                         ) {
-                             $defaultValue = substr($defaultValue, 1, -1);
 diff --git a/src/db/pgsql/Schema.php b/src/db/pgsql/Schema.php
 index 8f0f1e7d42a..7f6b9d018cc 100644
 --- a/src/db/pgsql/Schema.php
