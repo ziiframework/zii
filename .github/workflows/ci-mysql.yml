@@ -31,7 +31,8 @@ jobs:
           - "8.1"
 
         mysql-version:
-          - "latest"
+          - "5.7"
+          - "8.0"
 
     services:
       mysql:
