@@ -73,4 +73,3 @@ jobs:
 
       - name: PHPUnit
         run: vendor/bin/phpunit --verbose --colors=always
-        if: matrix.php-version == '7.4'
