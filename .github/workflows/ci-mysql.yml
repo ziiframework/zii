@@ -12,7 +12,6 @@ on:
 
 env:
   COMPOSER_INSTALL_FLAGS: "--prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi"
-  BASE_PHP_EXTENSIONS: "apc, curl, dom, imagick, intl, mbstring, mcrypt, memcached, mysql, pdo, pdo_mysql, pdo_pgsql, pdo_sqlite, pgsql, sqlite"
 
 jobs:
   tests:
@@ -54,7 +53,7 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
           tools: pecl
-          extensions: $BASE_PHP_EXTENSIONS
+          extensions: apc, curl, dom, imagick, intl, mbstring, mcrypt, memcached, mysql, pdo, pdo_mysql, pdo_pgsql, pdo_sqlite, pgsql, sqlite
           ini-values: date.timezone='UTC'
 
       - name: Install dependencies
