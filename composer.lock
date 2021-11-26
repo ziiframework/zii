@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9a9328c2b5f1610132ec3c4e6ff8b200",
+    "content-hash": "e08cffb38e14070418546f1f2e4498f9",
     "packages": [
         {
             "name": "cebe/markdown",
@@ -126,24 +126,25 @@
         },
         {
             "name": "ziiframework/composer",
-            "version": "3.2.2",
+            "version": "3.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ziiframework/composer.git",
-                "reference": "f6d1118e76092b55d72958bfb755806984fc94eb"
+                "reference": "f0336a2e84783265ae946dad1a516012b9b86f60"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ziiframework/composer/zipball/f6d1118e76092b55d72958bfb755806984fc94eb",
-                "reference": "f6d1118e76092b55d72958bfb755806984fc94eb",
+                "url": "https://api.github.com/repos/ziiframework/composer/zipball/f0336a2e84783265ae946dad1a516012b9b86f60",
+                "reference": "f0336a2e84783265ae946dad1a516012b9b86f60",
                 "shasum": ""
             },
             "require": {
                 "composer-plugin-api": "^1.0|^2.0",
-                "ext-openssl": "*"
+                "ext-openssl": "*",
+                "php": ">=7.3.0"
             },
             "require-dev": {
-                "composer/composer": "^1.0|^2.0",
+                "composer/composer": "^2.0",
                 "phpunit/phpunit": "^8.5"
             },
             "type": "composer-plugin",
@@ -179,7 +180,7 @@
                 "issues": "https://github.com/ziiframework/composer/issues",
                 "source": "https://github.com/ziiframework/composer"
             },
-            "time": "2021-03-25T13:47:31+00:00"
+            "time": "2021-11-21T14:17:02+00:00"
         }
     ],
     "packages-dev": [
@@ -2002,7 +2003,8 @@
         "ext-mbstring": "*",
         "ext-ctype": "*",
         "lib-pcre": "*",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ext-dom": "*"
     },
     "platform-dev": [],
     "platform-overrides": {
