@@ -11,10 +11,10 @@ index e7d0d34f037..84af41acf00 100644
          "source": "https://github.com/yiisoft/yii2"
      },
      "minimum-stability": "dev",
-diff --git a/framework/BaseYii.php b/framework/BaseYii.php
+diff --git a/src/BaseYii.php b/src/BaseYii.php
 index 4a5302a0fa0..002b0f61ed8 100644
---- a/framework/BaseYii.php
-+++ b/framework/BaseYii.php
+--- a/src/BaseYii.php
++++ b/src/BaseYii.php
 @@ -31,15 +31,15 @@
   */
  defined('YII_ENV') or define('YII_ENV', 'prod');
@@ -139,10 +139,10 @@ index 4a5302a0fa0..002b0f61ed8 100644
       * message formatter. See [[\yii\i18n\I18N::translate()]] for more details.
       *
       * @param string $category the message category.
-diff --git a/framework/CHANGELOG.md b/framework/CHANGELOG.md
+diff --git a/src/CHANGELOG.md b/src/CHANGELOG.md
 index eaf515e26df..da783b578fe 100644
---- a/framework/CHANGELOG.md
-+++ b/framework/CHANGELOG.md
+--- a/src/CHANGELOG.md
++++ b/src/CHANGELOG.md
 @@ -1,6 +1,38 @@
  Yii Framework 2 Change Log
  ==========================
@@ -182,10 +182,10 @@ index eaf515e26df..da783b578fe 100644
  2.0.43 August 09, 2021
  ----------------------
  
-diff --git a/framework/UPGRADE.md b/framework/UPGRADE.md
+diff --git a/src/UPGRADE.md b/src/UPGRADE.md
 index 7ec63dcd92e..8a9a20a4737 100644
---- a/framework/UPGRADE.md
-+++ b/framework/UPGRADE.md
+--- a/src/UPGRADE.md
++++ b/src/UPGRADE.md
 @@ -51,6 +51,25 @@ if you want to upgrade from version A to version C and there is
  version B between A and C, you need to follow the instructions
  for both A and B.
@@ -230,10 +230,10 @@ index 7ec63dcd92e..8a9a20a4737 100644
  
  * Please update your main layout file by adding this line in the `<head>` section: `<?= Html::csrfMetaTags() ?>`.
    This change is needed because `yii\web\View` no longer automatically generates CSRF meta tags due to issue #3358.
-diff --git a/framework/assets/yii.activeForm.js b/framework/assets/yii.activeForm.js
+diff --git a/src/assets/yii.activeForm.js b/src/assets/yii.activeForm.js
 index ab44e0cbd8b..671f6dcc9f6 100644
---- a/framework/assets/yii.activeForm.js
-+++ b/framework/assets/yii.activeForm.js
+--- a/src/assets/yii.activeForm.js
++++ b/src/assets/yii.activeForm.js
 @@ -218,6 +218,7 @@
                      attributes: attributes,
                      submitting: false,
@@ -263,10 +263,10 @@ index ab44e0cbd8b..671f6dcc9f6 100644
                  }
              }
          } else {
-diff --git a/framework/assets/yii.validation.js b/framework/assets/yii.validation.js
+diff --git a/src/assets/yii.validation.js b/src/assets/yii.validation.js
 index 88f79decba3..2f1e06039b1 100644
---- a/framework/assets/yii.validation.js
-+++ b/framework/assets/yii.validation.js
+--- a/src/assets/yii.validation.js
++++ b/src/assets/yii.validation.js
 @@ -261,7 +261,7 @@ yii.validation = (function ($) {
              hash = hash == null ? options.hash : hash[options.caseSensitive ? 0 : 1];
              var v = options.caseSensitive ? value : value.toLowerCase();
@@ -276,10 +276,10 @@ index 88f79decba3..2f1e06039b1 100644
              }
              if (h != hash) {
                  pub.addMessage(messages, options.message, value);
-diff --git a/framework/base/Application.php b/framework/base/Application.php
+diff --git a/src/base/Application.php b/src/base/Application.php
 index 94f4be11787..3e095447c17 100644
---- a/framework/base/Application.php
-+++ b/framework/base/Application.php
+--- a/src/base/Application.php
++++ b/src/base/Application.php
 @@ -477,7 +477,7 @@ public function setVendorPath($path)
       * If time zone is not configured in php.ini or application config,
       * it will be set to UTC by default.
@@ -347,10 +347,10 @@ index 94f4be11787..3e095447c17 100644
      }
  
      /**
-diff --git a/framework/base/BaseObject.php b/framework/base/BaseObject.php
+diff --git a/src/base/BaseObject.php b/src/base/BaseObject.php
 index acb50ada50c..e5d4e1001c8 100644
---- a/framework/base/BaseObject.php
-+++ b/framework/base/BaseObject.php
+--- a/src/base/BaseObject.php
++++ b/src/base/BaseObject.php
 @@ -173,7 +173,7 @@ public function __set($name, $value)
       * Note that if the property is not defined, false will be returned.
       * @param string $name the property name or the event name
@@ -369,10 +369,10 @@ index acb50ada50c..e5d4e1001c8 100644
       */
      public function __unset($name)
      {
-diff --git a/framework/base/Component.php b/framework/base/Component.php
+diff --git a/src/base/Component.php b/src/base/Component.php
 index 47e872bd976..32f714cbcba 100644
---- a/framework/base/Component.php
-+++ b/framework/base/Component.php
+--- a/src/base/Component.php
++++ b/src/base/Component.php
 @@ -223,7 +223,7 @@ public function __set($name, $value)
       * will be implicitly called when executing `isset($component->property)`.
       * @param string $name the property name or the event name
@@ -391,10 +391,10 @@ index 47e872bd976..32f714cbcba 100644
       */
      public function __unset($name)
      {
-diff --git a/framework/base/DynamicModel.php b/framework/base/DynamicModel.php
+diff --git a/src/base/DynamicModel.php b/src/base/DynamicModel.php
 index 610e03d8335..4510596d95a 100644
---- a/framework/base/DynamicModel.php
-+++ b/framework/base/DynamicModel.php
+--- a/src/base/DynamicModel.php
++++ b/src/base/DynamicModel.php
 @@ -252,7 +252,6 @@ public function attributes()
       * Sets the attribute labels in a massive way.
       *
@@ -411,10 +411,10 @@ index 610e03d8335..4510596d95a 100644
       * @since 2.0.35
       *
       * @param string $attribute Attribute name
-diff --git a/framework/base/ErrorException.php b/framework/base/ErrorException.php
+diff --git a/src/base/ErrorException.php b/src/base/ErrorException.php
 index 03b662f3af9..657b8e390b8 100644
---- a/framework/base/ErrorException.php
-+++ b/framework/base/ErrorException.php
+--- a/src/base/ErrorException.php
++++ b/src/base/ErrorException.php
 @@ -32,7 +32,7 @@ class ErrorException extends \ErrorException
  
      /**
@@ -424,10 +424,10 @@ index 03b662f3af9..657b8e390b8 100644
       * @param string $message [optional]
       * @param int $code [optional]
       * @param int $severity [optional]
-diff --git a/framework/base/Model.php b/framework/base/Model.php
+diff --git a/src/base/Model.php b/src/base/Model.php
 index bbbb0d2cbfe..204242143c1 100644
---- a/framework/base/Model.php
-+++ b/framework/base/Model.php
+--- a/src/base/Model.php
++++ b/src/base/Model.php
 @@ -335,9 +335,9 @@ public function attributeHints()
       * Errors found during the validation can be retrieved via [[getErrors()]],
       * [[getFirstErrors()]] and [[getFirstError()]].
@@ -553,10 +553,10 @@ index bbbb0d2cbfe..204242143c1 100644
       */
      public function offsetUnset($offset)
      {
-diff --git a/framework/base/Security.php b/framework/base/Security.php
+diff --git a/src/base/Security.php b/src/base/Security.php
 index 49972d17bde..6276bf5a584 100644
---- a/framework/base/Security.php
-+++ b/framework/base/Security.php
+--- a/src/base/Security.php
++++ b/src/base/Security.php
 @@ -55,12 +55,12 @@ class Security extends Component
      ];
      /**
@@ -590,10 +590,10 @@ index 49972d17bde..6276bf5a584 100644
       * requires, for the Blowfish hash algorithm, a salt string in a specific format:
       * "$2a$", "$2x$" or "$2y$", a two digit cost parameter, "$", and 22 characters
       * from the alphabet "./0-9A-Za-z".
-diff --git a/framework/base/View.php b/framework/base/View.php
+diff --git a/src/base/View.php b/src/base/View.php
 index 41b3d9650ca..1cb79cfcf92 100644
---- a/framework/base/View.php
-+++ b/framework/base/View.php
+--- a/src/base/View.php
++++ b/src/base/View.php
 @@ -316,10 +316,10 @@ public function afterRender($viewFile, $params, &$output)
              $event = new ViewEvent([
                  'viewFile' => $viewFile,
@@ -615,10 +615,10 @@ index 41b3d9650ca..1cb79cfcf92 100644
       */
      public function renderPhpFile($_file_, $_params_ = [])
      {
-diff --git a/framework/behaviors/TimestampBehavior.php b/framework/behaviors/TimestampBehavior.php
+diff --git a/src/behaviors/TimestampBehavior.php b/src/behaviors/TimestampBehavior.php
 index 4b4f54c2af6..7f79fe3bc9d 100644
---- a/framework/behaviors/TimestampBehavior.php
-+++ b/framework/behaviors/TimestampBehavior.php
+--- a/src/behaviors/TimestampBehavior.php
++++ b/src/behaviors/TimestampBehavior.php
 @@ -84,7 +84,7 @@ class TimestampBehavior extends AttributeBehavior
      /**
       * {@inheritdoc}
@@ -637,10 +637,10 @@ index 4b4f54c2af6..7f79fe3bc9d 100644
       * will be used as value.
       */
      protected function getValue($event)
-diff --git a/framework/caching/ApcCache.php b/framework/caching/ApcCache.php
+diff --git a/src/caching/ApcCache.php b/src/caching/ApcCache.php
 index 50e893c4565..32b74eb5fbb 100644
---- a/framework/caching/ApcCache.php
-+++ b/framework/caching/ApcCache.php
+--- a/src/caching/ApcCache.php
++++ b/src/caching/ApcCache.php
 @@ -12,8 +12,8 @@
  /**
   * ApcCache provides APC caching in terms of an application component.
@@ -652,10 +652,10 @@ index 50e893c4565..32b74eb5fbb 100644
   * In order to enable APC or APCu for CLI you should add "apc.enable_cli = 1" to your php.ini.
   *
   * See [[Cache]] for common cache operations that ApcCache supports.
-diff --git a/framework/caching/Cache.php b/framework/caching/Cache.php
+diff --git a/src/caching/Cache.php b/src/caching/Cache.php
 index ea79e1427ae..a4afaee5eb4 100644
---- a/framework/caching/Cache.php
-+++ b/framework/caching/Cache.php
+--- a/src/caching/Cache.php
++++ b/src/caching/Cache.php
 @@ -261,14 +261,15 @@ public function set($key, $value, $duration = null, $dependency = null)
       * expiration time will be replaced with the new ones, respectively.
       *
@@ -697,10 +697,10 @@ index ea79e1427ae..a4afaee5eb4 100644
          if ($dependency !== null && $this->serializer !== false) {
              $dependency->evaluateDependency($this);
          }
-diff --git a/framework/caching/CacheInterface.php b/framework/caching/CacheInterface.php
+diff --git a/src/caching/CacheInterface.php b/src/caching/CacheInterface.php
 index cc344154570..2b14c25e397 100644
---- a/framework/caching/CacheInterface.php
-+++ b/framework/caching/CacheInterface.php
+--- a/src/caching/CacheInterface.php
++++ b/src/caching/CacheInterface.php
 @@ -112,13 +112,14 @@ public function set($key, $value, $duration = null, $dependency = null);
       * expiration time will be replaced with the new ones, respectively.
       *
@@ -718,10 +718,10 @@ index cc344154570..2b14c25e397 100644
  
      /**
       * Stores a value identified by a key into cache if the cache does not contain this key.
-diff --git a/framework/caching/ExpressionDependency.php b/framework/caching/ExpressionDependency.php
+diff --git a/src/caching/ExpressionDependency.php b/src/caching/ExpressionDependency.php
 index 503e6dc798d..09d6756bf83 100644
---- a/framework/caching/ExpressionDependency.php
-+++ b/framework/caching/ExpressionDependency.php
+--- a/src/caching/ExpressionDependency.php
++++ b/src/caching/ExpressionDependency.php
 @@ -15,7 +15,7 @@
   * the same as the one evaluated when storing the data to cache.
   *
@@ -740,10 +740,10 @@ index 503e6dc798d..09d6756bf83 100644
       */
      public $expression = 'true';
      /**
-diff --git a/framework/caching/FileCache.php b/framework/caching/FileCache.php
+diff --git a/src/caching/FileCache.php b/src/caching/FileCache.php
 index 378a84fb736..52a80c67b35 100644
---- a/framework/caching/FileCache.php
-+++ b/framework/caching/FileCache.php
+--- a/src/caching/FileCache.php
++++ b/src/caching/FileCache.php
 @@ -261,7 +261,7 @@ protected function gcRecursive($path, $expiredOnly)
      {
          if (($handle = opendir($path)) !== false) {
@@ -753,10 +753,10 @@ index 378a84fb736..52a80c67b35 100644
                      continue;
                  }
                  $fullPath = $path . DIRECTORY_SEPARATOR . $file;
-diff --git a/framework/caching/MemCache.php b/framework/caching/MemCache.php
+diff --git a/src/caching/MemCache.php b/src/caching/MemCache.php
 index 8fe5378b5d8..9c1e1791a3f 100644
---- a/framework/caching/MemCache.php
-+++ b/framework/caching/MemCache.php
+--- a/src/caching/MemCache.php
++++ b/src/caching/MemCache.php
 @@ -77,22 +77,22 @@ class MemCache extends Cache
       * By default the Memcached instances are destroyed at the end of the request. To create an instance that
       * persists between requests, you may specify a unique ID for the instance. All instances created with the
@@ -833,10 +833,10 @@ index 8fe5378b5d8..9c1e1791a3f 100644
       *
       * @since 2.0.31
       * @param int $duration
-diff --git a/framework/caching/MemCacheServer.php b/framework/caching/MemCacheServer.php
+diff --git a/src/caching/MemCacheServer.php b/src/caching/MemCacheServer.php
 index c6274814eee..96d10c46ad7 100644
---- a/framework/caching/MemCacheServer.php
-+++ b/framework/caching/MemCacheServer.php
+--- a/src/caching/MemCacheServer.php
++++ b/src/caching/MemCacheServer.php
 @@ -10,7 +10,7 @@
  /**
   * MemCacheServer represents the configuration data for a single memcache or memcached server.
@@ -846,10 +846,10 @@ index c6274814eee..96d10c46ad7 100644
   * of each configuration property.
   *
   * For more details and usage information on Cache, see the [guide article on caching](guide:caching-overview).
-diff --git a/framework/captcha/CaptchaAction.php b/framework/captcha/CaptchaAction.php
+diff --git a/src/captcha/CaptchaAction.php b/src/captcha/CaptchaAction.php
 index e61a9ed34ae..c3b9c420e27 100644
---- a/framework/captcha/CaptchaAction.php
-+++ b/framework/captcha/CaptchaAction.php
+--- a/src/captcha/CaptchaAction.php
++++ b/src/captcha/CaptchaAction.php
 @@ -150,7 +150,7 @@ public function run()
      public function generateValidationHash($code)
      {
@@ -859,10 +859,10 @@ index e61a9ed34ae..c3b9c420e27 100644
          }
  
          return $h;
-diff --git a/framework/composer.json b/framework/composer.json
+diff --git a/src/composer.json b/src/composer.json
 index b211cb5eea3..2875edb6657 100644
---- a/framework/composer.json
-+++ b/framework/composer.json
+--- a/src/composer.json
++++ b/src/composer.json
 @@ -59,7 +59,7 @@
          "issues": "https://github.com/yiisoft/yii2/issues?state=open",
          "forum": "http://www.yiiframework.com/forum/",
@@ -872,10 +872,10 @@ index b211cb5eea3..2875edb6657 100644
          "source": "https://github.com/yiisoft/yii2"
      },
      "require": {
-diff --git a/framework/console/Application.php b/framework/console/Application.php
+diff --git a/src/console/Application.php b/src/console/Application.php
 index b8c07cdee49..4ee2535249d 100644
---- a/framework/console/Application.php
-+++ b/framework/console/Application.php
+--- a/src/console/Application.php
++++ b/src/console/Application.php
 @@ -11,7 +11,7 @@
  use yii\base\InvalidRouteException;
  
@@ -885,10 +885,10 @@ index b8c07cdee49..4ee2535249d 100644
  defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
  defined('STDOUT') or define('STDOUT', fopen('php://stdout', 'w'));
  defined('STDERR') or define('STDERR', fopen('php://stderr', 'w'));
-diff --git a/framework/console/Controller.php b/framework/console/Controller.php
+diff --git a/src/console/Controller.php b/src/console/Controller.php
 index fa0555386cc..6fb573db946 100644
---- a/framework/console/Controller.php
-+++ b/framework/console/Controller.php
+--- a/src/console/Controller.php
++++ b/src/console/Controller.php
 @@ -226,7 +226,12 @@ public function bindActionParams($action, $params)
                  }
                  $args[] = $actionParams[$key] = $params[$key];
@@ -911,10 +911,10 @@ index fa0555386cc..6fb573db946 100644
       * @return int|bool Number of bytes printed or false on error
       */
      public function stderr($string)
-diff --git a/framework/console/UnknownCommandException.php b/framework/console/UnknownCommandException.php
+diff --git a/src/console/UnknownCommandException.php b/src/console/UnknownCommandException.php
 index 3dc4aed1bc7..29d00799b42 100644
---- a/framework/console/UnknownCommandException.php
-+++ b/framework/console/UnknownCommandException.php
+--- a/src/console/UnknownCommandException.php
++++ b/src/console/UnknownCommandException.php
 @@ -61,7 +61,7 @@ public function getName()
       *   available commands. The Levenshtein distance is defined as the minimal number of
       *   characters you have to replace, insert or delete to transform str1 into str2.
@@ -933,10 +933,10 @@ index 3dc4aed1bc7..29d00799b42 100644
       * @param array $actions available command names.
       * @param string $command the command to compare to.
       * @return array a list of suggested alternatives sorted by similarity.
-diff --git a/framework/console/controllers/BaseMigrateController.php b/framework/console/controllers/BaseMigrateController.php
+diff --git a/src/console/controllers/BaseMigrateController.php b/src/console/controllers/BaseMigrateController.php
 index 0d3f0de7d39..24280c36e7c 100644
---- a/framework/console/controllers/BaseMigrateController.php
-+++ b/framework/console/controllers/BaseMigrateController.php
+--- a/src/console/controllers/BaseMigrateController.php
++++ b/src/console/controllers/BaseMigrateController.php
 @@ -37,7 +37,7 @@ abstract class BaseMigrateController extends Controller
       */
      public $defaultAction = 'up';
@@ -973,10 +973,10 @@ index 0d3f0de7d39..24280c36e7c 100644
       * ```
       *
       * In case [[migrationPath]] is not set and no namespace is provided, the first entry of [[migrationNamespaces]] will be used.
-diff --git a/framework/console/controllers/MessageController.php b/framework/console/controllers/MessageController.php
+diff --git a/src/console/controllers/MessageController.php b/src/console/controllers/MessageController.php
 index a8278d9db5c..5eb1e312a08 100644
---- a/framework/console/controllers/MessageController.php
-+++ b/framework/console/controllers/MessageController.php
+--- a/src/console/controllers/MessageController.php
++++ b/src/console/controllers/MessageController.php
 @@ -58,12 +58,11 @@ class MessageController extends \yii\console\Controller
       */
      public $languages = [];
@@ -1022,10 +1022,10 @@ index a8278d9db5c..5eb1e312a08 100644
                      unset($obsolete[$pk]);
                  }
              }
-diff --git a/framework/console/controllers/MigrateController.php b/framework/console/controllers/MigrateController.php
+diff --git a/src/console/controllers/MigrateController.php b/src/console/controllers/MigrateController.php
 index 3f0efeaac12..8bf011fe42a 100644
---- a/framework/console/controllers/MigrateController.php
-+++ b/framework/console/controllers/MigrateController.php
+--- a/src/console/controllers/MigrateController.php
++++ b/src/console/controllers/MigrateController.php
 @@ -387,7 +387,7 @@ private function normalizeTableName($name)
              $name = substr($name, 0, -1);
          }
@@ -1044,10 +1044,10 @@ index 3f0efeaac12..8bf011fe42a 100644
                  return;
              }
          }
-diff --git a/framework/console/controllers/ServeController.php b/framework/console/controllers/ServeController.php
+diff --git a/src/console/controllers/ServeController.php b/src/console/controllers/ServeController.php
 index 67afee668b3..7df3b67c8f8 100644
---- a/framework/console/controllers/ServeController.php
-+++ b/framework/console/controllers/ServeController.php
+--- a/src/console/controllers/ServeController.php
++++ b/src/console/controllers/ServeController.php
 @@ -37,7 +37,7 @@ class ServeController extends Controller
      public $docroot = '@app/web';
      /**
@@ -1057,10 +1057,10 @@ index 67afee668b3..7df3b67c8f8 100644
       */
      public $router;
  
-diff --git a/framework/data/ActiveDataFilter.php b/framework/data/ActiveDataFilter.php
+diff --git a/src/data/ActiveDataFilter.php b/src/data/ActiveDataFilter.php
 index 88ad36254c2..5c46d0a449b 100644
---- a/framework/data/ActiveDataFilter.php
-+++ b/framework/data/ActiveDataFilter.php
+--- a/src/data/ActiveDataFilter.php
++++ b/src/data/ActiveDataFilter.php
 @@ -101,7 +101,7 @@ protected function buildCondition($condition)
  
          if (!empty($parts)) {
@@ -1070,10 +1070,10 @@ index 88ad36254c2..5c46d0a449b 100644
              } else {
                  $parts = array_shift($parts);
              }
-diff --git a/framework/data/DataProviderInterface.php b/framework/data/DataProviderInterface.php
+diff --git a/src/data/DataProviderInterface.php b/src/data/DataProviderInterface.php
 index 71ed1febfb9..0260c381e8f 100644
---- a/framework/data/DataProviderInterface.php
-+++ b/framework/data/DataProviderInterface.php
+--- a/src/data/DataProviderInterface.php
++++ b/src/data/DataProviderInterface.php
 @@ -61,7 +61,7 @@ public function getModels();
      public function getKeys();
  
@@ -1083,10 +1083,10 @@ index 71ed1febfb9..0260c381e8f 100644
       */
      public function getSort();
  
-diff --git a/framework/data/Sort.php b/framework/data/Sort.php
+diff --git a/src/data/Sort.php b/src/data/Sort.php
 index 0e620644272..bbb1ce9b336 100644
---- a/framework/data/Sort.php
-+++ b/framework/data/Sort.php
+--- a/src/data/Sort.php
++++ b/src/data/Sort.php
 @@ -305,8 +305,8 @@ public function getAttributeOrders($recalculate = false)
       * @param string $param the value of the [[sortParam]].
       * @return array the valid sort attributes.
@@ -1126,10 +1126,10 @@ index 0e620644272..bbb1ce9b336 100644
          } else {
              $directions = [$attribute => $direction];
          }
-diff --git a/framework/db/ActiveRecord.php b/framework/db/ActiveRecord.php
+diff --git a/src/db/ActiveRecord.php b/src/db/ActiveRecord.php
 index 0ccbcca6305..face7132b76 100644
---- a/framework/db/ActiveRecord.php
-+++ b/framework/db/ActiveRecord.php
+--- a/src/db/ActiveRecord.php
++++ b/src/db/ActiveRecord.php
 @@ -115,9 +115,13 @@ class ActiveRecord extends BaseActiveRecord
       */
      public function loadDefaultValues($skipIfSet = true)
@@ -1174,10 +1174,10 @@ index 0ccbcca6305..face7132b76 100644
       */
      public function delete()
      {
-diff --git a/framework/db/ActiveRelationTrait.php b/framework/db/ActiveRelationTrait.php
+diff --git a/src/db/ActiveRelationTrait.php b/src/db/ActiveRelationTrait.php
 index 461ea759cc2..8f2a6e44289 100644
---- a/framework/db/ActiveRelationTrait.php
-+++ b/framework/db/ActiveRelationTrait.php
+--- a/src/db/ActiveRelationTrait.php
++++ b/src/db/ActiveRelationTrait.php
 @@ -167,7 +167,7 @@ public function inverseOf($relationName)
  
      /**
@@ -1196,10 +1196,10 @@ index 461ea759cc2..8f2a6e44289 100644
       * objects for cross-DBMS relations, for example: `|MongoId`).
       * @return string normalized key value.
       */
-diff --git a/framework/db/ArrayExpression.php b/framework/db/ArrayExpression.php
+diff --git a/src/db/ArrayExpression.php b/src/db/ArrayExpression.php
 index 7a36793efb7..e473eb10ec2 100644
---- a/framework/db/ArrayExpression.php
-+++ b/framework/db/ArrayExpression.php
+--- a/src/db/ArrayExpression.php
++++ b/src/db/ArrayExpression.php
 @@ -69,7 +69,6 @@ public function __construct($value, $type = null, $dimension = 1)
  
      /**
@@ -1278,10 +1278,10 @@ index 7a36793efb7..e473eb10ec2 100644
       * @return Traversable An instance of an object implementing <b>Iterator</b> or
       * <b>Traversable</b>
       * @since 2.0.14.1
-diff --git a/framework/db/BatchQueryResult.php b/framework/db/BatchQueryResult.php
+diff --git a/src/db/BatchQueryResult.php b/src/db/BatchQueryResult.php
 index 5158e4b281d..c473d0ecd23 100644
---- a/framework/db/BatchQueryResult.php
-+++ b/framework/db/BatchQueryResult.php
+--- a/src/db/BatchQueryResult.php
++++ b/src/db/BatchQueryResult.php
 @@ -246,7 +246,7 @@ private function getDbDriverName()
      /**
       * Unserialization is disabled to prevent remote code execution in case application
@@ -1291,10 +1291,10 @@ index 5158e4b281d..c473d0ecd23 100644
       * @since 2.0.38
       */
      public function __wakeup()
-diff --git a/framework/db/Command.php b/framework/db/Command.php
+diff --git a/src/db/Command.php b/src/db/Command.php
 index 881a898a65a..53be1470dec 100644
---- a/framework/db/Command.php
-+++ b/framework/db/Command.php
+--- a/src/db/Command.php
++++ b/src/db/Command.php
 @@ -66,7 +66,7 @@ class Command extends Component
      public $pdoStatement;
      /**
@@ -1358,10 +1358,10 @@ index 881a898a65a..53be1470dec 100644
       * for valid fetch modes.
       * @return array the cache key
       * @since 2.0.16
-diff --git a/framework/db/Connection.php b/framework/db/Connection.php
+diff --git a/src/db/Connection.php b/src/db/Connection.php
 index c31a8689f47..74b954ffa43 100644
---- a/framework/db/Connection.php
-+++ b/framework/db/Connection.php
+--- a/src/db/Connection.php
++++ b/src/db/Connection.php
 @@ -15,11 +15,11 @@
  use yii\caching\CacheInterface;
  
@@ -1452,10 +1452,10 @@ index c31a8689f47..74b954ffa43 100644
       */
      public function useMaster(callable $callback)
      {
-diff --git a/framework/db/DataReader.php b/framework/db/DataReader.php
+diff --git a/src/db/DataReader.php b/src/db/DataReader.php
 index 50a2d7dadc3..a8c875606d1 100644
---- a/framework/db/DataReader.php
-+++ b/framework/db/DataReader.php
+--- a/src/db/DataReader.php
++++ b/src/db/DataReader.php
 @@ -37,7 +37,7 @@
   * Doing it the second time will throw an exception.
   *
@@ -1483,10 +1483,10 @@ index 50a2d7dadc3..a8c875606d1 100644
       */
      public function setFetchMode($mode)
      {
-diff --git a/framework/db/Exception.php b/framework/db/Exception.php
+diff --git a/src/db/Exception.php b/src/db/Exception.php
 index ae16407f85d..1fb68df43da 100644
---- a/framework/db/Exception.php
-+++ b/framework/db/Exception.php
+--- a/src/db/Exception.php
++++ b/src/db/Exception.php
 @@ -17,7 +17,7 @@ class Exception extends \yii\base\Exception
  {
      /**
@@ -1496,10 +1496,10 @@ index ae16407f85d..1fb68df43da 100644
       */
      public $errorInfo = [];
  
-diff --git a/framework/db/JsonExpression.php b/framework/db/JsonExpression.php
+diff --git a/src/db/JsonExpression.php b/src/db/JsonExpression.php
 index 0446ae87cc2..36b46030ae5 100644
---- a/framework/db/JsonExpression.php
-+++ b/framework/db/JsonExpression.php
+--- a/src/db/JsonExpression.php
++++ b/src/db/JsonExpression.php
 @@ -80,7 +80,7 @@ public function getType()
      /**
       * Specify data which should be serialized to JSON
@@ -1509,10 +1509,10 @@ index 0446ae87cc2..36b46030ae5 100644
       * @return mixed data which can be serialized by <b>json_encode</b>,
       * which is a value of any type other than a resource.
       * @since 2.0.14.2
-diff --git a/framework/db/Migration.php b/framework/db/Migration.php
+diff --git a/src/db/Migration.php b/src/db/Migration.php
 index a144d4a43f4..a8e2264f2c7 100644
---- a/framework/db/Migration.php
-+++ b/framework/db/Migration.php
+--- a/src/db/Migration.php
++++ b/src/db/Migration.php
 @@ -104,7 +104,7 @@ protected function getDb()
      /**
       * This method contains the logic to be executed when applying this migration.
@@ -1549,10 +1549,10 @@ index a144d4a43f4..a8e2264f2c7 100644
       * and should not proceed further. All other return values mean the migration succeeds.
       */
      public function safeDown()
-diff --git a/framework/db/PdoValue.php b/framework/db/PdoValue.php
+diff --git a/src/db/PdoValue.php b/src/db/PdoValue.php
 index 806eaa3bf31..3a0ce6f689c 100644
---- a/framework/db/PdoValue.php
-+++ b/framework/db/PdoValue.php
+--- a/src/db/PdoValue.php
++++ b/src/db/PdoValue.php
 @@ -16,9 +16,9 @@
   * [':name' => 'John', ':profile' => new PdoValue($profile, \PDO::PARAM_LOB)]`.
   * ```
@@ -1574,10 +1574,10 @@ index 806eaa3bf31..3a0ce6f689c 100644
       */
      private $type;
  
-diff --git a/framework/db/Query.php b/framework/db/Query.php
+diff --git a/src/db/Query.php b/src/db/Query.php
 index 1892c8a272e..d23893b3bc7 100644
---- a/framework/db/Query.php
-+++ b/framework/db/Query.php
+--- a/src/db/Query.php
++++ b/src/db/Query.php
 @@ -452,7 +452,7 @@ public function exists($db = null)
       * @param string|ExpressionInterface $selectExpression
       * @param Connection|null $db the database connection used to execute the query.
@@ -1587,10 +1587,10 @@ index 1892c8a272e..d23893b3bc7 100644
       */
      protected function queryScalar($selectExpression, $db)
      {
-diff --git a/framework/db/QueryBuilder.php b/framework/db/QueryBuilder.php
+diff --git a/src/db/QueryBuilder.php b/src/db/QueryBuilder.php
 index c6f74872313..bb032d78830 100644
---- a/framework/db/QueryBuilder.php
-+++ b/framework/db/QueryBuilder.php
+--- a/src/db/QueryBuilder.php
++++ b/src/db/QueryBuilder.php
 @@ -73,7 +73,7 @@ class QueryBuilder extends \yii\base\BaseObject
       *
       * In case you want to add custom conditions support, use the [[setConditionClasses()]] method.
@@ -1609,10 +1609,10 @@ index c6f74872313..bb032d78830 100644
       * @since 2.0.14
       */
      protected function defaultExpressionBuilders()
-diff --git a/framework/db/QueryTrait.php b/framework/db/QueryTrait.php
+diff --git a/src/db/QueryTrait.php b/src/db/QueryTrait.php
 index 46527dc9f1c..9f6b06434b2 100644
---- a/framework/db/QueryTrait.php
-+++ b/framework/db/QueryTrait.php
+--- a/src/db/QueryTrait.php
++++ b/src/db/QueryTrait.php
 @@ -39,8 +39,8 @@ trait QueryTrait
      /**
       * @var array|null how to sort the query results. This is used to construct the ORDER BY clause in a SQL statement.
@@ -1624,10 +1624,10 @@ index 46527dc9f1c..9f6b06434b2 100644
       * The array may also contain [[ExpressionInterface]] objects. If that is the case, the expressions
       * will be converted into strings without any change.
       */
-diff --git a/framework/db/Schema.php b/framework/db/Schema.php
+diff --git a/src/db/Schema.php b/src/db/Schema.php
 index 120141d1120..71a6ea57759 100644
---- a/framework/db/Schema.php
-+++ b/framework/db/Schema.php
+--- a/src/db/Schema.php
++++ b/src/db/Schema.php
 @@ -256,7 +256,7 @@ public function getQueryBuilder()
       * Determines the PDO type for the given PHP data value.
       * @param mixed $data the data whose PDO type is to be determined
@@ -1664,10 +1664,10 @@ index 120141d1120..71a6ea57759 100644
              return $name;
          }
          if (strpos($name, '{{') !== false) {
-diff --git a/framework/db/Transaction.php b/framework/db/Transaction.php
+diff --git a/src/db/Transaction.php b/src/db/Transaction.php
 index 7a119d1171e..87e72dd18d1 100644
---- a/framework/db/Transaction.php
-+++ b/framework/db/Transaction.php
+--- a/src/db/Transaction.php
++++ b/src/db/Transaction.php
 @@ -36,7 +36,7 @@
   * ```
   *
@@ -1677,10 +1677,10 @@ index 7a119d1171e..87e72dd18d1 100644
   * > since PHP 7.0, so you can skip the part with `\Exception` if your app uses only PHP 7.0 and higher.
   *
   * @property-read bool $isActive Whether this transaction is active. Only an active transaction can
-diff --git a/framework/db/cubrid/Schema.php b/framework/db/cubrid/Schema.php
+diff --git a/src/db/cubrid/Schema.php b/src/db/cubrid/Schema.php
 index a487235fdd6..73a06c4d130 100644
---- a/framework/db/cubrid/Schema.php
-+++ b/framework/db/cubrid/Schema.php
+--- a/src/db/cubrid/Schema.php
++++ b/src/db/cubrid/Schema.php
 @@ -326,7 +326,7 @@ protected function loadColumnSchema($info)
       * Determines the PDO type for the given PHP data value.
       * @param mixed $data the data whose PDO type is to be determined
@@ -1690,10 +1690,10 @@ index a487235fdd6..73a06c4d130 100644
       */
      public function getPdoType($data)
      {
-diff --git a/framework/db/oci/Schema.php b/framework/db/oci/Schema.php
+diff --git a/src/db/oci/Schema.php b/src/db/oci/Schema.php
 index 7b1cc80997b..cba0b206a76 100644
---- a/framework/db/oci/Schema.php
-+++ b/framework/db/oci/Schema.php
+--- a/src/db/oci/Schema.php
++++ b/src/db/oci/Schema.php
 @@ -372,7 +372,7 @@ protected function getTableSequenceName($tableName)
  
      /**
@@ -1712,10 +1712,10 @@ index 7b1cc80997b..cba0b206a76 100644
                              && substr($defaultValue, -1) === "'"
                          ) {
                              $defaultValue = substr($defaultValue, 1, -1);
-diff --git a/framework/db/pgsql/Schema.php b/framework/db/pgsql/Schema.php
+diff --git a/src/db/pgsql/Schema.php b/src/db/pgsql/Schema.php
 index 8f0f1e7d42a..7f6b9d018cc 100644
---- a/framework/db/pgsql/Schema.php
-+++ b/framework/db/pgsql/Schema.php
+--- a/src/db/pgsql/Schema.php
++++ b/src/db/pgsql/Schema.php
 @@ -443,7 +443,7 @@ public function findUniqueIndexes($table)
                  $row = array_change_key_case($row, CASE_LOWER);
              }
@@ -1725,10 +1725,10 @@ index 8f0f1e7d42a..7f6b9d018cc 100644
                  // postgres will quote names that are not lowercase-only
                  // https://github.com/yiisoft/yii2/issues/10613
                  $column = substr($column, 1, -1);
-diff --git a/framework/di/Container.php b/framework/di/Container.php
+diff --git a/src/di/Container.php b/src/di/Container.php
 index 19678348dee..8917754016b 100644
---- a/framework/di/Container.php
-+++ b/framework/di/Container.php
+--- a/src/di/Container.php
++++ b/src/di/Container.php
 @@ -26,8 +26,8 @@
   * Container supports constructor injection as well as property injection.
   *
@@ -1769,10 +1769,10 @@ index 19678348dee..8917754016b 100644
       *
       * For example, the following callback may be invoked using the Container to resolve the formatter dependency:
       *
-diff --git a/framework/di/Instance.php b/framework/di/Instance.php
+diff --git a/src/di/Instance.php b/src/di/Instance.php
 index bea4fe8cdd4..62fb50e1d2e 100644
---- a/framework/di/Instance.php
-+++ b/framework/di/Instance.php
+--- a/src/di/Instance.php
++++ b/src/di/Instance.php
 @@ -188,7 +188,7 @@ public function get($container = null)
       * @param array $state
       * @return Instance
@@ -1782,10 +1782,10 @@ index bea4fe8cdd4..62fb50e1d2e 100644
       * @since 2.0.12
       */
      public static function __set_state($state)
-diff --git a/framework/filters/AccessRule.php b/framework/filters/AccessRule.php
+diff --git a/src/filters/AccessRule.php b/src/filters/AccessRule.php
 index aece5ccf68a..8cb4fca24b7 100644
---- a/framework/filters/AccessRule.php
-+++ b/framework/filters/AccessRule.php
+--- a/src/filters/AccessRule.php
++++ b/src/filters/AccessRule.php
 @@ -62,8 +62,8 @@ class AccessRule extends Component
       * Note that it is preferred to check for permissions instead.
       *
@@ -1817,10 +1817,10 @@ index aece5ccf68a..8cb4fca24b7 100644
       * @since 2.0.12
       */
      public $roleParams = [];
-diff --git a/framework/filters/HttpCache.php b/framework/filters/HttpCache.php
+diff --git a/src/filters/HttpCache.php b/src/filters/HttpCache.php
 index 4964e59be75..2a6f6e32a4c 100644
---- a/framework/filters/HttpCache.php
-+++ b/framework/filters/HttpCache.php
+--- a/src/filters/HttpCache.php
++++ b/src/filters/HttpCache.php
 @@ -91,10 +91,10 @@ class HttpCache extends ActionFilter
       */
      public $cacheControlHeader = 'public, max-age=3600';
@@ -1834,10 +1834,10 @@ index 4964e59be75..2a6f6e32a4c 100644
       * for detailed explanation of these values.
       *
       * If this property is `null`, then `session_cache_limiter()` will not be called. As a result,
-diff --git a/framework/filters/PageCache.php b/framework/filters/PageCache.php
+diff --git a/src/filters/PageCache.php b/src/filters/PageCache.php
 index 774e8dbd479..1930aa0873f 100644
---- a/framework/filters/PageCache.php
-+++ b/framework/filters/PageCache.php
+--- a/src/filters/PageCache.php
++++ b/src/filters/PageCache.php
 @@ -124,7 +124,6 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
       * @var bool|array a boolean value indicating whether to cache all cookies, or an array of
       * cookie names indicating which cookies can be cached. Be very careful with caching cookies, because
@@ -1854,10 +1854,10 @@ index 774e8dbd479..1930aa0873f 100644
       * @since 2.0.4
       */
      public $cacheHeaders = true;
-diff --git a/framework/filters/auth/HttpBasicAuth.php b/framework/filters/auth/HttpBasicAuth.php
+diff --git a/src/filters/auth/HttpBasicAuth.php b/src/filters/auth/HttpBasicAuth.php
 index 8ba40e0bf73..546d0e628e6 100644
---- a/framework/filters/auth/HttpBasicAuth.php
-+++ b/framework/filters/auth/HttpBasicAuth.php
+--- a/src/filters/auth/HttpBasicAuth.php
++++ b/src/filters/auth/HttpBasicAuth.php
 @@ -37,7 +37,7 @@
   *             'class' => \yii\filters\auth\HttpBasicAuth::class,
   *             'auth' => function ($username, $password) {
@@ -1867,10 +1867,10 @@ index 8ba40e0bf73..546d0e628e6 100644
   *                     return $user;
   *                 }
   *                 return null;
-diff --git a/framework/helpers/BaseArrayHelper.php b/framework/helpers/BaseArrayHelper.php
+diff --git a/src/helpers/BaseArrayHelper.php b/src/helpers/BaseArrayHelper.php
 index 8bc7ef2bc0b..dcd28657c9e 100644
---- a/framework/helpers/BaseArrayHelper.php
-+++ b/framework/helpers/BaseArrayHelper.php
+--- a/src/helpers/BaseArrayHelper.php
++++ b/src/helpers/BaseArrayHelper.php
 @@ -70,6 +70,8 @@ public static function toArray($object, $properties = [], $recursive = true)
              }
  
@@ -1956,10 +1956,10 @@ index 8bc7ef2bc0b..dcd28657c9e 100644
                  $excludeFilters[] = substr($filter, 1);
                  continue;
              }
-diff --git a/framework/helpers/BaseFileHelper.php b/framework/helpers/BaseFileHelper.php
+diff --git a/src/helpers/BaseFileHelper.php b/src/helpers/BaseFileHelper.php
 index b1bf1c19e52..8dd20649e76 100644
---- a/framework/helpers/BaseFileHelper.php
-+++ b/framework/helpers/BaseFileHelper.php
+--- a/src/helpers/BaseFileHelper.php
++++ b/src/helpers/BaseFileHelper.php
 @@ -99,13 +99,12 @@ public static function normalizePath($path, $ds = DIRECTORY_SEPARATOR)
       * "path/to/zh-CN/view.php". If the file is not found, it will try a fallback with just a language code that is
       * "zh" i.e. "path/to/zh/view.php". If it is not found as well the original file will be returned.
@@ -2089,10 +2089,10 @@ index b1bf1c19e52..8dd20649e76 100644
              $result['flags'] |= self::PATTERN_ENDSWITH;
          }
          $result['pattern'] = $pattern;
-diff --git a/framework/helpers/BaseFormatConverter.php b/framework/helpers/BaseFormatConverter.php
+diff --git a/src/helpers/BaseFormatConverter.php b/src/helpers/BaseFormatConverter.php
 index 340f7d4447e..84417bfee04 100644
---- a/framework/helpers/BaseFormatConverter.php
-+++ b/framework/helpers/BaseFormatConverter.php
+--- a/src/helpers/BaseFormatConverter.php
++++ b/src/helpers/BaseFormatConverter.php
 @@ -91,7 +91,7 @@ class BaseFormatConverter
       *
       * Pattern constructs that are not supported by the PHP format will be removed.
@@ -2138,10 +2138,10 @@ index 340f7d4447e..84417bfee04 100644
          return strtr($pattern, [
              // Day
              'd' => 'dd',    // Day of the month, 2 digits with leading zeros 	01 to 31
-diff --git a/framework/helpers/BaseHtml.php b/framework/helpers/BaseHtml.php
+diff --git a/src/helpers/BaseHtml.php b/src/helpers/BaseHtml.php
 index 83caf53b8b0..5d89314971f 100644
---- a/framework/helpers/BaseHtml.php
-+++ b/framework/helpers/BaseHtml.php
+--- a/src/helpers/BaseHtml.php
++++ b/src/helpers/BaseHtml.php
 @@ -104,7 +104,7 @@ class BaseHtml
       * HTML entities in `$content` will not be further encoded.
       * @return string the encoded content
@@ -2192,10 +2192,10 @@ index 83caf53b8b0..5d89314971f 100644
       * @see removeCssClass()
       */
      public static function addCssClass(&$options, $class)
-diff --git a/framework/helpers/BaseInflector.php b/framework/helpers/BaseInflector.php
+diff --git a/src/helpers/BaseInflector.php b/src/helpers/BaseInflector.php
 index 2e01e761907..4cad3f92279 100644
---- a/framework/helpers/BaseInflector.php
-+++ b/framework/helpers/BaseInflector.php
+--- a/src/helpers/BaseInflector.php
++++ b/src/helpers/BaseInflector.php
 @@ -287,7 +287,7 @@ class BaseInflector
      /**
       * @var mixed Either a [[\Transliterator]], or a string from which a [[\Transliterator]] can be built
@@ -2222,10 +2222,10 @@ index 2e01e761907..4cad3f92279 100644
  
          return $ucwords ? StringHelper::mb_ucwords($label, self::encoding()) : $label;
      }
-diff --git a/framework/helpers/BaseJson.php b/framework/helpers/BaseJson.php
+diff --git a/src/helpers/BaseJson.php b/src/helpers/BaseJson.php
 index 2637653e845..ad41de7f714 100644
---- a/framework/helpers/BaseJson.php
-+++ b/framework/helpers/BaseJson.php
+--- a/src/helpers/BaseJson.php
++++ b/src/helpers/BaseJson.php
 @@ -9,8 +9,9 @@
  
  use yii\base\Arrayable;
@@ -2409,10 +2409,10 @@ index 2637653e845..ad41de7f714 100644
 +        return array_unique(call_user_func_array('array_merge', $lines));
      }
  }
-diff --git a/framework/helpers/BaseMarkdown.php b/framework/helpers/BaseMarkdown.php
+diff --git a/src/helpers/BaseMarkdown.php b/src/helpers/BaseMarkdown.php
 index 08da9c5b0e1..9b88c725018 100644
---- a/framework/helpers/BaseMarkdown.php
-+++ b/framework/helpers/BaseMarkdown.php
+--- a/src/helpers/BaseMarkdown.php
++++ b/src/helpers/BaseMarkdown.php
 @@ -45,7 +45,7 @@ class BaseMarkdown
      /**
       * @var string the markdown flavor to use when none is specified explicitly.
@@ -2422,10 +2422,10 @@ index 08da9c5b0e1..9b88c725018 100644
       */
      public static $defaultFlavor = 'original';
  
-diff --git a/framework/helpers/BaseStringHelper.php b/framework/helpers/BaseStringHelper.php
+diff --git a/src/helpers/BaseStringHelper.php b/src/helpers/BaseStringHelper.php
 index 8ab4db035d4..738147ea4c9 100644
---- a/framework/helpers/BaseStringHelper.php
-+++ b/framework/helpers/BaseStringHelper.php
+--- a/src/helpers/BaseStringHelper.php
++++ b/src/helpers/BaseStringHelper.php
 @@ -41,14 +41,14 @@ public static function byteLength($string)
       * @param int $length the desired portion length. If not specified or `null`, there will be
       * no limit on length i.e. the output will be until the end of the string.
@@ -2502,10 +2502,10 @@ index 8ab4db035d4..738147ea4c9 100644
          foreach ($parts as $key => $value) {
              $isEven = (bool)($key % 2);
              if ($ucfirstEven === $isEven) {
-diff --git a/framework/helpers/BaseUrl.php b/framework/helpers/BaseUrl.php
+diff --git a/src/helpers/BaseUrl.php b/src/helpers/BaseUrl.php
 index 4da728e6816..fdf4f53d3d6 100644
---- a/framework/helpers/BaseUrl.php
-+++ b/framework/helpers/BaseUrl.php
+--- a/src/helpers/BaseUrl.php
++++ b/src/helpers/BaseUrl.php
 @@ -248,7 +248,7 @@ public static function ensureScheme($url, $scheme)
              return $url;
          }
@@ -2515,10 +2515,10 @@ index 4da728e6816..fdf4f53d3d6 100644
              // e.g. //example.com/path/to/resource
              return $scheme === '' ? $url : "$scheme:$url";
          }
-diff --git a/framework/helpers/Markdown.php b/framework/helpers/Markdown.php
+diff --git a/src/helpers/Markdown.php b/src/helpers/Markdown.php
 index 8552d1320c9..c86e5e47664 100644
---- a/framework/helpers/Markdown.php
-+++ b/framework/helpers/Markdown.php
+--- a/src/helpers/Markdown.php
++++ b/src/helpers/Markdown.php
 @@ -23,7 +23,7 @@
   * For more details please refer to the [Markdown library documentation](https://github.com/cebe/markdown#readme).
   *
@@ -2528,10 +2528,10 @@ index 8552d1320c9..c86e5e47664 100644
   *
   * @author Carsten Brandt <mail@cebe.cc>
   * @since 2.0
-diff --git a/framework/helpers/ReplaceArrayValue.php b/framework/helpers/ReplaceArrayValue.php
+diff --git a/src/helpers/ReplaceArrayValue.php b/src/helpers/ReplaceArrayValue.php
 index a408af264d4..3ce281cd2e3 100644
---- a/framework/helpers/ReplaceArrayValue.php
-+++ b/framework/helpers/ReplaceArrayValue.php
+--- a/src/helpers/ReplaceArrayValue.php
++++ b/src/helpers/ReplaceArrayValue.php
 @@ -79,7 +79,7 @@ public function __construct($value)
       * @param array $state
       * @return ReplaceArrayValue
@@ -2541,10 +2541,10 @@ index a408af264d4..3ce281cd2e3 100644
       * @since 2.0.16
       */
      public static function __set_state($state)
-diff --git a/framework/helpers/UnsetArrayValue.php b/framework/helpers/UnsetArrayValue.php
+diff --git a/src/helpers/UnsetArrayValue.php b/src/helpers/UnsetArrayValue.php
 index e350c86e811..331b0619a43 100644
---- a/framework/helpers/UnsetArrayValue.php
-+++ b/framework/helpers/UnsetArrayValue.php
+--- a/src/helpers/UnsetArrayValue.php
++++ b/src/helpers/UnsetArrayValue.php
 @@ -54,7 +54,7 @@ class UnsetArrayValue
       *
       * @param array $state
@@ -2554,10 +2554,10 @@ index e350c86e811..331b0619a43 100644
       * @since 2.0.16
       */
      public static function __set_state($state)
-diff --git a/framework/i18n/Formatter.php b/framework/i18n/Formatter.php
+diff --git a/src/i18n/Formatter.php b/src/i18n/Formatter.php
 index 27bad524d5c..cf67ddfa0f0 100644
---- a/framework/i18n/Formatter.php
-+++ b/framework/i18n/Formatter.php
+--- a/src/i18n/Formatter.php
++++ b/src/i18n/Formatter.php
 @@ -35,7 +35,7 @@
   * You can access that instance via `Yii::$app->formatter`.
   *
@@ -2956,10 +2956,10 @@ index 27bad524d5c..cf67ddfa0f0 100644
       *   otherwise an exception is thrown.
       *
       * @param mixed $value the input value
-diff --git a/framework/i18n/GettextMessageSource.php b/framework/i18n/GettextMessageSource.php
+diff --git a/src/i18n/GettextMessageSource.php b/src/i18n/GettextMessageSource.php
 index d96fb5290f0..b3190ba4c63 100644
---- a/framework/i18n/GettextMessageSource.php
-+++ b/framework/i18n/GettextMessageSource.php
+--- a/src/i18n/GettextMessageSource.php
++++ b/src/i18n/GettextMessageSource.php
 @@ -8,6 +8,7 @@
  namespace yii\i18n;
  
@@ -3003,10 +3003,10 @@ index d96fb5290f0..b3190ba4c63 100644
          $messageFile = Yii::getAlias($this->basePath) . '/' . $language . '/' . $this->catalog;
          if ($this->useMoFile) {
              $messageFile .= self::MO_FILE_EXT;
-diff --git a/framework/i18n/Locale.php b/framework/i18n/Locale.php
+diff --git a/src/i18n/Locale.php b/src/i18n/Locale.php
 index 86b78de6a88..a0e1a1b48cf 100644
---- a/framework/i18n/Locale.php
-+++ b/framework/i18n/Locale.php
+--- a/src/i18n/Locale.php
++++ b/src/i18n/Locale.php
 @@ -14,7 +14,7 @@
  /**
   * Locale provides various locale information via convenient methods.
@@ -3016,10 +3016,10 @@ index 86b78de6a88..a0e1a1b48cf 100644
   *
   * @property-read string $currencySymbol This property is read-only.
   *
-diff --git a/framework/i18n/MessageFormatter.php b/framework/i18n/MessageFormatter.php
+diff --git a/src/i18n/MessageFormatter.php b/src/i18n/MessageFormatter.php
 index 7aec4824149..47e4246fd21 100644
---- a/framework/i18n/MessageFormatter.php
-+++ b/framework/i18n/MessageFormatter.php
+--- a/src/i18n/MessageFormatter.php
++++ b/src/i18n/MessageFormatter.php
 @@ -23,7 +23,7 @@
   *   substituted.
   * - Fixes PHP 5.5 weird placeholder replacement in case no arguments are provided at all (https://bugs.php.net/bug.php?id=65920).
@@ -3083,10 +3083,10 @@ index 7aec4824149..47e4246fd21 100644
                          $selector === 'one' && $arg - $offset == 1
                      ) {
                          $message = implode(',', str_replace('#', $arg - $offset, $plural[$i]));
-diff --git a/framework/i18n/PhpMessageSource.php b/framework/i18n/PhpMessageSource.php
+diff --git a/src/i18n/PhpMessageSource.php b/src/i18n/PhpMessageSource.php
 index 4bcfcd9adff..4dd860a5ced 100644
---- a/framework/i18n/PhpMessageSource.php
-+++ b/framework/i18n/PhpMessageSource.php
+--- a/src/i18n/PhpMessageSource.php
++++ b/src/i18n/PhpMessageSource.php
 @@ -8,6 +8,7 @@
  namespace yii\i18n;
  
@@ -3106,10 +3106,10 @@ index 4bcfcd9adff..4dd860a5ced 100644
          $messageFile = Yii::getAlias($this->basePath) . "/$language/";
          if (isset($this->fileMap[$category])) {
              $messageFile .= $this->fileMap[$category];
-diff --git a/framework/log/Dispatcher.php b/framework/log/Dispatcher.php
+diff --git a/src/log/Dispatcher.php b/src/log/Dispatcher.php
 index 8109e0b8978..9b4136c04f3 100644
---- a/framework/log/Dispatcher.php
-+++ b/framework/log/Dispatcher.php
+--- a/src/log/Dispatcher.php
++++ b/src/log/Dispatcher.php
 @@ -106,8 +106,8 @@ public function init()
  
      /**
@@ -3137,10 +3137,10 @@ index 8109e0b8978..9b4136c04f3 100644
          $this->_logger = $value;
          $this->_logger->dispatcher = $this;
      }
-diff --git a/framework/log/FileTarget.php b/framework/log/FileTarget.php
+diff --git a/src/log/FileTarget.php b/src/log/FileTarget.php
 index a29c67367af..157c0db50ed 100644
---- a/framework/log/FileTarget.php
-+++ b/framework/log/FileTarget.php
+--- a/src/log/FileTarget.php
++++ b/src/log/FileTarget.php
 @@ -64,9 +64,9 @@ class FileTarget extends Target
       * systems which do not play well with rename on open files. Rotation by renaming however is
       * a bit faster.
@@ -3153,10 +3153,10 @@ index a29c67367af..157c0db50ed 100644
       * the PHP documentation. By setting rotateByCopy to `true` you can work
       * around this problem.
       */
-diff --git a/framework/log/Logger.php b/framework/log/Logger.php
+diff --git a/src/log/Logger.php b/src/log/Logger.php
 index 42d71cc988d..a4f21dd4aa7 100644
---- a/framework/log/Logger.php
-+++ b/framework/log/Logger.php
+--- a/src/log/Logger.php
++++ b/src/log/Logger.php
 @@ -196,7 +196,7 @@ public function flush($final = false)
                  if (is_int($index)) {
                      $messages[] = $message;
@@ -3166,10 +3166,10 @@ index 42d71cc988d..a4f21dd4aa7 100644
                          $oppositeProfile = 'end-' . substr($index, 6);
                      } else {
                          $oppositeProfile = 'begin-' . substr($index, 4);
-diff --git a/framework/log/SyslogTarget.php b/framework/log/SyslogTarget.php
+diff --git a/src/log/SyslogTarget.php b/src/log/SyslogTarget.php
 index 6a9b0cfbb7d..84bde8941f5 100644
---- a/framework/log/SyslogTarget.php
-+++ b/framework/log/SyslogTarget.php
+--- a/src/log/SyslogTarget.php
++++ b/src/log/SyslogTarget.php
 @@ -27,9 +27,9 @@ class SyslogTarget extends Target
       */
      public $facility = LOG_USER;
@@ -3182,10 +3182,10 @@ index 6a9b0cfbb7d..84bde8941f5 100644
       * @since 2.0.11
       */
      public $options;
-diff --git a/framework/requirements/requirements.php b/framework/requirements/requirements.php
+diff --git a/src/requirements/requirements.php b/src/requirements/requirements.php
 index 29ab338b91b..b6e3d80965c 100644
---- a/framework/requirements/requirements.php
-+++ b/framework/requirements/requirements.php
+--- a/src/requirements/requirements.php
++++ b/src/requirements/requirements.php
 @@ -47,7 +47,7 @@
          'name' => 'MBString extension',
          'mandatory' => true,
@@ -3239,10 +3239,10 @@ index 29ab338b91b..b6e3d80965c 100644
          'memo' => 'Required for REST API to send XML responses via <code>yii\web\XmlResponseFormatter</code>.'
      ),
      array(
-diff --git a/framework/rest/CreateAction.php b/framework/rest/CreateAction.php
+diff --git a/src/rest/CreateAction.php b/src/rest/CreateAction.php
 index 82e77b72db1..82537a56ca8 100644
---- a/framework/rest/CreateAction.php
-+++ b/framework/rest/CreateAction.php
+--- a/src/rest/CreateAction.php
++++ b/src/rest/CreateAction.php
 @@ -52,7 +52,7 @@ public function run()
          if ($model->save()) {
              $response = Yii::$app->getResponse();
@@ -3252,10 +3252,10 @@ index 82e77b72db1..82537a56ca8 100644
              $response->getHeaders()->set('Location', Url::toRoute([$this->viewAction, 'id' => $id], true));
          } elseif (!$model->hasErrors()) {
              throw new ServerErrorHttpException('Failed to create the object for unknown reason.');
-diff --git a/framework/test/BaseActiveFixture.php b/framework/test/BaseActiveFixture.php
+diff --git a/src/test/BaseActiveFixture.php b/src/test/BaseActiveFixture.php
 index 317d0fa85f1..54c30c99384 100644
---- a/framework/test/BaseActiveFixture.php
-+++ b/framework/test/BaseActiveFixture.php
+--- a/src/test/BaseActiveFixture.php
++++ b/src/test/BaseActiveFixture.php
 @@ -84,7 +84,7 @@ public function load()
       *
       * @return array the data to be put into the database
@@ -3265,10 +3265,10 @@ index 317d0fa85f1..54c30c99384 100644
       */
      protected function getData()
      {
-diff --git a/framework/validators/CompareValidator.php b/framework/validators/CompareValidator.php
+diff --git a/src/validators/CompareValidator.php b/src/validators/CompareValidator.php
 index a57886d7c1d..fbe4d2cbe2b 100644
---- a/framework/validators/CompareValidator.php
-+++ b/framework/validators/CompareValidator.php
+--- a/src/validators/CompareValidator.php
++++ b/src/validators/CompareValidator.php
 @@ -16,7 +16,7 @@
   *
   * The value being compared with can be another attribute value
@@ -3293,10 +3293,10 @@ index a57886d7c1d..fbe4d2cbe2b 100644
                  case '!==':
                      $this->message = Yii::t('yii', '{attribute} must not be equal to "{compareValueOrAttribute}".');
                      break;
-diff --git a/framework/validators/DateValidator.php b/framework/validators/DateValidator.php
+diff --git a/src/validators/DateValidator.php b/src/validators/DateValidator.php
 index 24604cf6721..7d920108ab7 100644
---- a/framework/validators/DateValidator.php
-+++ b/framework/validators/DateValidator.php
+--- a/src/validators/DateValidator.php
++++ b/src/validators/DateValidator.php
 @@ -60,7 +60,7 @@ class DateValidator extends Validator
       * This property influences the default value of [[format]] and also sets the correct behavior when [[format]] is one of the intl
       * short formats, `short`, `medium`, `long`, or `full`.
@@ -3358,10 +3358,10 @@ index 24604cf6721..7d920108ab7 100644
       *
       * If [[timestampAttributeFormat]] is not set, this property will be ignored.
       * @see timestampAttributeFormat
-diff --git a/framework/validators/ExistValidator.php b/framework/validators/ExistValidator.php
+diff --git a/src/validators/ExistValidator.php b/src/validators/ExistValidator.php
 index 679bf57d26b..4b7d94f3861 100644
---- a/framework/validators/ExistValidator.php
-+++ b/framework/validators/ExistValidator.php
+--- a/src/validators/ExistValidator.php
++++ b/src/validators/ExistValidator.php
 @@ -133,7 +133,9 @@ private function checkTargetRelationExistence($model, $attribute)
  
          $connection = $model::getDb();
@@ -3373,10 +3373,10 @@ index 679bf57d26b..4b7d94f3861 100644
          } else {
              $exists = $relationQuery->exists();
          }
-diff --git a/framework/validators/FileValidator.php b/framework/validators/FileValidator.php
+diff --git a/src/validators/FileValidator.php b/src/validators/FileValidator.php
 index d67934ffd74..7a7f5c5c42b 100644
---- a/framework/validators/FileValidator.php
-+++ b/framework/validators/FileValidator.php
+--- a/src/validators/FileValidator.php
++++ b/src/validators/FileValidator.php
 @@ -62,8 +62,8 @@ class FileValidator extends Validator
       * Defaults to null, meaning no limit.
       * Note, the size limit is also affected by `upload_max_filesize` and `post_max_size` INI setting
@@ -3397,10 +3397,10 @@ index d67934ffd74..7a7f5c5c42b 100644
       * @see tooMany for the customized message when too many files are uploaded.
       */
      public $maxFiles = 1;
-diff --git a/framework/validators/UniqueValidator.php b/framework/validators/UniqueValidator.php
+diff --git a/src/validators/UniqueValidator.php b/src/validators/UniqueValidator.php
 index 7aa1e8131a4..f383ec9afc3 100644
---- a/framework/validators/UniqueValidator.php
-+++ b/framework/validators/UniqueValidator.php
+--- a/src/validators/UniqueValidator.php
++++ b/src/validators/UniqueValidator.php
 @@ -191,10 +191,10 @@ private function modelExists($targetClass, $conditions, $model)
                  // only select primary key to optimize query
                  $columnsCondition = array_flip($targetClass::primaryKey());
@@ -3423,10 +3423,10 @@ index 7aa1e8131a4..f383ec9afc3 100644
                      $prefixedColumn = "{$alias}.{$columnName}";
                  } else {
                      $prefixedColumn = "{$alias}.[[{$columnName}]]";
-diff --git a/framework/web/AssetBundle.php b/framework/web/AssetBundle.php
+diff --git a/src/web/AssetBundle.php b/src/web/AssetBundle.php
 index d04ad40eba6..aca626cd4d9 100644
---- a/framework/web/AssetBundle.php
-+++ b/framework/web/AssetBundle.php
+--- a/src/web/AssetBundle.php
++++ b/src/web/AssetBundle.php
 @@ -16,7 +16,7 @@
   * AssetBundle represents a collection of asset files, such as CSS, JS, images.
   *
@@ -3445,10 +3445,10 @@ index d04ad40eba6..aca626cd4d9 100644
       */
      public $sourcePath;
      /**
-diff --git a/framework/web/CompositeUrlRule.php b/framework/web/CompositeUrlRule.php
+diff --git a/src/web/CompositeUrlRule.php b/src/web/CompositeUrlRule.php
 index d707c64ccc4..550a6d7e738 100644
---- a/framework/web/CompositeUrlRule.php
-+++ b/framework/web/CompositeUrlRule.php
+--- a/src/web/CompositeUrlRule.php
++++ b/src/web/CompositeUrlRule.php
 @@ -132,8 +132,8 @@ protected function iterateRules($rules, $manager, $route, $params)
       *
       * @return null|int Status of the URL creation after the last [[createUrl()]] call. `null` if rule does not provide
@@ -3460,10 +3460,10 @@ index d707c64ccc4..550a6d7e738 100644
       * @since 2.0.12
       */
      public function getCreateUrlStatus()
-diff --git a/framework/web/Controller.php b/framework/web/Controller.php
+diff --git a/src/web/Controller.php b/src/web/Controller.php
 index b52cf80c9e1..2913e1993e4 100644
---- a/framework/web/Controller.php
-+++ b/framework/web/Controller.php
+--- a/src/web/Controller.php
++++ b/src/web/Controller.php
 @@ -177,7 +177,12 @@ public function bindActionParams($action, $params)
                  }
                  $args[] = $actionParams[$name] = $params[$name];
@@ -3478,10 +3478,10 @@ index b52cf80c9e1..2913e1993e4 100644
                  try {
                      $this->bindInjectedParams($type, $name, $args, $requestedParams);
                  } catch (HttpException $e) {
-diff --git a/framework/web/Cookie.php b/framework/web/Cookie.php
+diff --git a/src/web/Cookie.php b/src/web/Cookie.php
 index 84b694b4768..434e5cdf299 100644
---- a/framework/web/Cookie.php
-+++ b/framework/web/Cookie.php
+--- a/src/web/Cookie.php
++++ b/src/web/Cookie.php
 @@ -22,7 +22,7 @@ class Cookie extends \yii\base\BaseObject
       * during CSRF-prone request methods (e.g. POST, PUT, PATCH etc).
       * E.g. a POST request from https://otherdomain.com to https://yourdomain.com will not include the cookie, however a GET request will.
@@ -3511,10 +3511,10 @@ index 84b694b4768..434e5cdf299 100644
       * @since 2.0.43
       */
      const SAME_SITE_NONE = 'None';
-diff --git a/framework/web/DbSession.php b/framework/web/DbSession.php
+diff --git a/src/web/DbSession.php b/src/web/DbSession.php
 index d1ff105930b..d82484a4435 100644
---- a/framework/web/DbSession.php
-+++ b/framework/web/DbSession.php
+--- a/src/web/DbSession.php
++++ b/src/web/DbSession.php
 @@ -206,7 +206,7 @@ public function writeSession($id, $data)
          }
  
@@ -3524,10 +3524,10 @@ index d1ff105930b..d82484a4435 100644
          try {
              // ensure backwards compatability (fixed #9438)
              if ($this->writeCallback && !$this->fields) {
-diff --git a/framework/web/ErrorAction.php b/framework/web/ErrorAction.php
+diff --git a/src/web/ErrorAction.php b/src/web/ErrorAction.php
 index 81f06b643f7..67bd8a6d413 100644
---- a/framework/web/ErrorAction.php
-+++ b/framework/web/ErrorAction.php
+--- a/src/web/ErrorAction.php
++++ b/src/web/ErrorAction.php
 @@ -76,7 +76,7 @@ class ErrorAction extends Action
  
      /**
@@ -3537,10 +3537,10 @@ index 81f06b643f7..67bd8a6d413 100644
       * @since 2.0.11
       */
      protected $exception;
-diff --git a/framework/web/ErrorHandler.php b/framework/web/ErrorHandler.php
+diff --git a/src/web/ErrorHandler.php b/src/web/ErrorHandler.php
 index 0d573ad7927..5bb28dec3ee 100644
---- a/framework/web/ErrorHandler.php
-+++ b/framework/web/ErrorHandler.php
+--- a/src/web/ErrorHandler.php
++++ b/src/web/ErrorHandler.php
 @@ -401,7 +401,7 @@ public function createServerInformationLink()
              'http://lighttpd.net/' => ['lighttpd'],
              'http://gwan.com/' => ['g-wan', 'gwan'],
@@ -3550,10 +3550,10 @@ index 0d573ad7927..5bb28dec3ee 100644
          ];
          if (isset($_SERVER['SERVER_SOFTWARE'])) {
              foreach ($serverUrls as $url => $keywords) {
-diff --git a/framework/web/HeaderCollection.php b/framework/web/HeaderCollection.php
+diff --git a/src/web/HeaderCollection.php b/src/web/HeaderCollection.php
 index ee33a2795bd..0e03214511e 100644
---- a/framework/web/HeaderCollection.php
-+++ b/framework/web/HeaderCollection.php
+--- a/src/web/HeaderCollection.php
++++ b/src/web/HeaderCollection.php
 @@ -180,7 +180,7 @@ public function toArray()
       */
      public function fromArray(array $array)
@@ -3563,10 +3563,10 @@ index ee33a2795bd..0e03214511e 100644
      }
  
      /**
-diff --git a/framework/web/JsonResponseFormatter.php b/framework/web/JsonResponseFormatter.php
+diff --git a/src/web/JsonResponseFormatter.php b/src/web/JsonResponseFormatter.php
 index cb847c36e8d..2218ca0d9ab 100644
---- a/framework/web/JsonResponseFormatter.php
-+++ b/framework/web/JsonResponseFormatter.php
+--- a/src/web/JsonResponseFormatter.php
++++ b/src/web/JsonResponseFormatter.php
 @@ -26,6 +26,7 @@
   *         \yii\web\Response::FORMAT_JSON => [
   *              'class' => 'yii\web\JsonResponseFormatter',
@@ -3624,10 +3624,10 @@ index cb847c36e8d..2218ca0d9ab 100644
          } elseif ($response->content === null) {
              $response->content = 'null';
          }
-diff --git a/framework/web/Request.php b/framework/web/Request.php
+diff --git a/src/web/Request.php b/src/web/Request.php
 index 51dd502ba1b..bcaeb03af51 100644
---- a/framework/web/Request.php
-+++ b/framework/web/Request.php
+--- a/src/web/Request.php
++++ b/src/web/Request.php
 @@ -208,7 +208,7 @@ class Request extends \yii\base\Request
       * See [[IpValidator::::setRanges()|IpValidator::setRanges()]]
       * and [[IpValidator::networks]] for advanced matching.
@@ -3710,10 +3710,10 @@ index 51dd502ba1b..bcaeb03af51 100644
       * @since 2.0.28
       */
      protected function getUserIpFromIpHeader($ips)
-diff --git a/framework/web/Session.php b/framework/web/Session.php
+diff --git a/src/web/Session.php b/src/web/Session.php
 index a7de39f1824..5ac99277f50 100644
---- a/framework/web/Session.php
-+++ b/framework/web/Session.php
+--- a/src/web/Session.php
++++ b/src/web/Session.php
 @@ -101,7 +101,7 @@ class Session extends Component implements \IteratorAggregate, \ArrayAccess, \Co
      /**
       * @var array parameter-value pairs to override default session cookie parameters that are used for session_set_cookie_params() function
@@ -3858,10 +3858,10 @@ index a7de39f1824..5ac99277f50 100644
       */
      public function offsetUnset($offset)
      {
-diff --git a/framework/web/UploadedFile.php b/framework/web/UploadedFile.php
+diff --git a/src/web/UploadedFile.php b/src/web/UploadedFile.php
 index ed8fa111b89..a6609703cd5 100644
---- a/framework/web/UploadedFile.php
-+++ b/framework/web/UploadedFile.php
+--- a/src/web/UploadedFile.php
++++ b/src/web/UploadedFile.php
 @@ -54,7 +54,7 @@ class UploadedFile extends BaseObject
      public $size;
      /**
@@ -3871,10 +3871,10 @@ index ed8fa111b89..a6609703cd5 100644
       */
      public $error;
  
-diff --git a/framework/web/UrlNormalizerRedirectException.php b/framework/web/UrlNormalizerRedirectException.php
+diff --git a/src/web/UrlNormalizerRedirectException.php b/src/web/UrlNormalizerRedirectException.php
 index 195d45b8fd4..88147cf3a48 100644
---- a/framework/web/UrlNormalizerRedirectException.php
-+++ b/framework/web/UrlNormalizerRedirectException.php
+--- a/src/web/UrlNormalizerRedirectException.php
++++ b/src/web/UrlNormalizerRedirectException.php
 @@ -18,12 +18,12 @@ class UrlNormalizerRedirectException extends \yii\base\Exception
  {
      /**
@@ -3890,10 +3890,10 @@ index 195d45b8fd4..88147cf3a48 100644
       */
      public $scheme;
      /**
-diff --git a/framework/web/UrlRule.php b/framework/web/UrlRule.php
+diff --git a/src/web/UrlRule.php b/src/web/UrlRule.php
 index 25d3cd81faf..84719ecdad9 100644
---- a/framework/web/UrlRule.php
-+++ b/framework/web/UrlRule.php
+--- a/src/web/UrlRule.php
++++ b/src/web/UrlRule.php
 @@ -42,27 +42,27 @@ class UrlRule extends BaseObject implements UrlRuleInterface
      const CREATION_ONLY = 2;
      /**
@@ -3935,10 +3935,10 @@ index 25d3cd81faf..84719ecdad9 100644
       * @since 2.0.12
       */
      public function getCreateUrlStatus()
-diff --git a/framework/web/User.php b/framework/web/User.php
+diff --git a/src/web/User.php b/src/web/User.php
 index 1aa791b6f67..863b6d4b428 100644
---- a/framework/web/User.php
-+++ b/framework/web/User.php
+--- a/src/web/User.php
++++ b/src/web/User.php
 @@ -728,6 +728,10 @@ protected function renewAuthStatus()
                  $this->renewIdentityCookie();
              }
@@ -3950,10 +3950,10 @@ index 1aa791b6f67..863b6d4b428 100644
      }
  
      /**
-diff --git a/framework/web/View.php b/framework/web/View.php
+diff --git a/src/web/View.php b/src/web/View.php
 index 3d2f1e6dd3a..15a8f7b12df 100644
---- a/framework/web/View.php
-+++ b/framework/web/View.php
+--- a/src/web/View.php
++++ b/src/web/View.php
 @@ -133,6 +133,12 @@ class View extends \yii\base\View
  
      private $_assetManager;
@@ -3987,10 +3987,10 @@ index 3d2f1e6dd3a..15a8f7b12df 100644
          if (empty($depends)) {
              // register directly without AssetManager
              if ($appendTimestamp && Url::isRelative($url)) {
-diff --git a/framework/web/XmlResponseFormatter.php b/framework/web/XmlResponseFormatter.php
+diff --git a/src/web/XmlResponseFormatter.php b/src/web/XmlResponseFormatter.php
 index 40e9776bc72..e250cb4ab5e 100644
---- a/framework/web/XmlResponseFormatter.php
-+++ b/framework/web/XmlResponseFormatter.php
+--- a/src/web/XmlResponseFormatter.php
++++ b/src/web/XmlResponseFormatter.php
 @@ -10,7 +10,6 @@
  use DOMDocument;
  use DOMElement;
@@ -4138,10 +4138,10 @@ index 40e9776bc72..e250cb4ab5e 100644
          } catch (DOMException $e) {
              return false;
          }
-diff --git a/framework/widgets/ActiveField.php b/framework/widgets/ActiveField.php
+diff --git a/src/widgets/ActiveField.php b/src/widgets/ActiveField.php
 index 484d2998be4..9d86aeebab0 100644
---- a/framework/widgets/ActiveField.php
-+++ b/framework/widgets/ActiveField.php
+--- a/src/widgets/ActiveField.php
++++ b/src/widgets/ActiveField.php
 @@ -20,6 +20,8 @@
   *
   * For more details and usage information on ActiveField, see the [guide article on forms](guide:input-forms).
@@ -4177,10 +4177,10 @@ index 484d2998be4..9d86aeebab0 100644
                  $options['aria-invalid'] = 'true';
              }
          }
-diff --git a/framework/widgets/Menu.php b/framework/widgets/Menu.php
+diff --git a/src/widgets/Menu.php b/src/widgets/Menu.php
 index d9775d602d4..7e60700ccfd 100644
---- a/framework/widgets/Menu.php
-+++ b/framework/widgets/Menu.php
+--- a/src/widgets/Menu.php
++++ b/src/widgets/Menu.php
 @@ -306,7 +306,7 @@ protected function isItemActive($item)
      {
          if (isset($item['url']) && is_array($item['url']) && isset($item['url'][0])) {
