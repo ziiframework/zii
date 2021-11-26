@@ -16,7 +16,7 @@ env:
 
 jobs:
   phpunit:
-    name: PHP ${{ matrix.php-version }} on ${{ matrix.os-version }}
+    name: PHP ${{ matrix.php-version }} MySQL ${{ matrix.mysql-version }} on ${{ matrix.os-version }}
     if: "!contains(github.event.head_commit.message, 'skip ci')"
 
     runs-on: ${{ matrix.os-version }}
@@ -26,25 +26,27 @@ jobs:
       matrix:
         os-version: [ubuntu-latest]
         php-version: ['7.4', '8.0', '8.1']
+        mysql-version: ['5.7', '8.0']
 
     services:
       mysql:
-        image: mysql:5.7
+        image: mysql:${{ matrix.mysql-version }}
         env:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: yiitest
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
       postgres:
-        image: postgres:9.6
+        image: postgres:14
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: yiitest
         ports:
           - 5432:5432
-        options: --name=postgres --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: --name=postgres --health-cmd=pg_isready --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       - name: Generate french locale
@@ -65,7 +67,12 @@ jobs:
         uses: niden/actions-memcached@v7
 
       - name: Install dependencies
-        run: composer update $DEFAULT_COMPOSER_FLAGS
+        run: |
+          ls -l
+          rm -rf vendor/
+          rm -f composer.lock
+          composer self-update -vvv
+          composer install $DEFAULT_COMPOSER_FLAGS
 
       - name: PHPUnit
         run: vendor/bin/phpunit --verbose --colors=always
