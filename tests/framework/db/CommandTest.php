@@ -197,7 +197,7 @@ SQL;
         $row = $command->queryOne();
         $this->assertEquals($intCol, $row['int_col']);
         $this->assertEquals($charCol, $row['char_col']);
-        $this->assertContains($row['float_col'], [$floatCol, sprintf('%.3f', $floatCol)], "var_export:[" . var_export($row['float_col']) . "]");
+        $this->assertContains($row['float_col'], [$floatCol, sprintf('%.3f', $floatCol)], "var_export:[" . var_export($row, true) . "]");
         if ($this->driverName === 'mysql' || $this->driverName === 'sqlite') {
             $this->assertEquals($blobCol, $row['blob_col']);
         } elseif (\defined('HHVM_VERSION') && $this->driverName === 'pgsql') {
