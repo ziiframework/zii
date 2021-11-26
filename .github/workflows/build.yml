@@ -12,7 +12,6 @@ on:
 
 env:
   DEFAULT_COMPOSER_FLAGS: "--prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi"
-  XDEBUG_MODE: coverage, develop
 
 jobs:
   phpunit:
@@ -68,10 +67,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          ls -l
           rm -rf vendor/
           rm -f composer.lock
-          composer self-update -vvv
           composer install $DEFAULT_COMPOSER_FLAGS
 
       - name: PHPUnit

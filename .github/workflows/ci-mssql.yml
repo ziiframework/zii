@@ -12,29 +12,26 @@ on:
 
 jobs:
   tests:
-    name: PHP ${{ matrix.php }}-mssql-${{ matrix.mssql }}
+    name: PHP ${{ matrix.php-version }}-mssql-${{ matrix.mssql-version }}
 
-    env:
-      key: cache
-
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os-version }}
 
     strategy:
       matrix:
-        include:
-          - php: '7.4'
-            extensions: pdo, pdo_sqlsrv
-            mssql: 'server:2019-latest'
-          - php: '8.0'
-            extensions: pdo, pdo_sqlsrv
-            mssql: 'server:2019-latest'
-          - php: '8.1'
-            extensions: pdo, pdo_sqlsrv
-            mssql: 'server:2019-latest'
+        os-version:
+          - ubuntu-latest
+
+        php-version:
+          - "7.4"
+          - "8.0"
+          - "8.1"
+
+        mssql-version:
+          - "2019-latest"
 
     services:
       mssql:
-          image: mcr.microsoft.com/mssql/${{ matrix.mssql }}
+          image: mcr.microsoft.com/mssql/server:${{ matrix.mssql-version }}
           env:
               SA_PASSWORD: YourStrong!Passw0rd
               ACCEPT_EULA: Y
@@ -47,48 +44,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.4.0
 
-      - name: Create MS SQL Database
+      - name: Create MSSQL Database
         run: docker exec -i mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'YourStrong!Passw0rd' -Q 'CREATE DATABASE yiitest'
 
       - name: Install PHP with extensions
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php }}
-          extensions: ${{ matrix.extensions }}
+          php-version: ${{ matrix.php-version }}
+          tools: pecl
+          extensions: apc, curl, dom, imagick, intl, mbstring, mcrypt, memcached, mysql, pdo, pdo_mysql, pdo_pgsql, pdo_sqlite, pgsql, sqlite, pdo_sqlsrv
           ini-values: date.timezone='UTC'
-          tools: composer:v2, pecl
 
-      - name: Determine composer cache directory on Linux
-        run: echo "COMPOSER_CACHE_DIR=$(composer config cache-dir)" >> $GITHUB_ENV
-
-      - name: Cache dependencies installed with composer
-        uses: actions/cache@v2.1.6
-        with:
-          path: ${{ env.COMPOSER_CACHE_DIR }}
-          key: php${{ matrix.php }}-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: |
-            php${{ matrix.php }}-composer-
-
-      - name: Update composer
-        run: composer self-update
-
-      - name: Install dependencies with composer
-        run: composer update --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
-
-      - name: Install dependencies with composer php 8.0
-        if: matrix.php >= '8.0'
-        run: composer update --ignore-platform-reqs --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
-
-      - name: PHP Unit tests for PHP 7.4
-        run: vendor/bin/phpunit --coverage-clover=coverage.clover --group mssql --colors=always
-        if: matrix.php == '7.4'
-
-      - name: Run tests with phpunit without coverage
-        run: vendor/bin/phpunit --group mssql --colors=always
-
-      - name: Code coverage
+      - name: Install dependencies
         run: |
-          wget https://scrutinizer-ci.com/ocular.phar
-          php ocular.phar code-coverage:upload --format=php-clover coverage.clover
-        if: matrix.php == '7.4'
-        continue-on-error: true # if is fork
+          rm -rf vendor/
+          rm -f composer.lock
+          composer install --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
+
+      - name: PHPUnit
+        run: vendor/bin/phpunit --group mssql --colors=always
