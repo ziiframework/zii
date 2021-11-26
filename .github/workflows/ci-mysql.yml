@@ -1,29 +1,39 @@
-on:
-  - pull_request
-  - push
-
 name: ci-mysql
+
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+    branches:
+      - master
+      - main
+
+env:
+  COMPOSER_INSTALL_FLAGS: "--prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi"
+  BASE_PHP_EXTENSIONS: "apc, curl, dom, imagick, intl, mbstring, mcrypt, memcached, mysql, pdo, pdo_mysql, pdo_pgsql, pdo_sqlite, pgsql, sqlite"
 
 jobs:
   tests:
-    name: PHP ${{ matrix.php-version }}-mysql-${{ matrix.mysql-version }}
+    name: PHP ${{ matrix.php-version }} mysql ${{ matrix.mysql-version }} on ${{ matrix.os-version }}
     if: "!contains(github.event.head_commit.message, 'skip ci')"
-    env:
-      extensions: curl, intl, pdo, pdo_mysql
-      key: cache-v1
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.os-version }}
 
     strategy:
       matrix:
-        os:
+        os-version:
           - ubuntu-latest
 
         php-version:
           - "7.4"
+          - "8.0"
+          - "8.1"
 
         mysql-version:
-          - "latest"
+          - "5.7"
+          - "8.0"
 
     services:
       mysql:
@@ -39,43 +49,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.4.0
 
-      - name: Setup cache environment
-        id: cache-env
-        uses: shivammathur/cache-extensions@v1
-        with:
-          php-version: ${{ matrix.php-version }}
-          extensions: ${{ env.extensions }}
-          key: ${{ env.key }}
-
-      - name: Cache extensions
-        uses: actions/cache@v2.1.6
-        with:
-          path: ${{ steps.cache-env.outputs.dir }}
-          key: ${{ steps.cache-env.outputs.key }}
-          restore-keys: ${{ steps.cache-env.outputs.key }}
-
       - name: Install PHP with extensions
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
-          extensions: ${{ env.extensions }}
+          tools: pecl
+          extensions: $BASE_PHP_EXTENSIONS
           ini-values: date.timezone='UTC'
-          coverage: pcov
 
-      - name: Determine composer cache directory
-        if: matrix.os == 'ubuntu-latest'
-        run: echo "COMPOSER_CACHE_DIR=$(composer config cache-dir)" >> $GITHUB_ENV
+      - name: Install dependencies
+        run: |
+          rm -rf vendor/
+          rm -f composer.lock
+          composer install $COMPOSER_INSTALL_FLAGS
 
-      - name: Cache dependencies installed with composer
-        uses: actions/cache@v2.1.6
-        with:
-          path: ${{ env.COMPOSER_CACHE_DIR }}
-          key: php${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-${{ hashFiles('**/composer.json') }}
-          restore-keys: |
-            php${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-
-
-      - name: Install dependencies with composer
-        run: composer update --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
-
-      - name: Run mysql tests with phpunit
+      - name: PHPUnit
         run: vendor/bin/phpunit --group mysql --colors=always
