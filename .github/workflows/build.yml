@@ -16,9 +16,16 @@ env:
 
 jobs:
   phpunit:
-    name: PHP ${{ matrix.php }} on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+    name: PHP ${{ matrix.php-version }} on ${{ matrix.os-version }}
     if: "!contains(github.event.head_commit.message, 'skip ci')"
+
+    runs-on: ${{ matrix.os-version }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os-version: [ubuntu-latest]
+        php-version: ['7.4', '8.0', '8.1']
 
     services:
       mysql:
@@ -38,11 +45,6 @@ jobs:
         ports:
           - 5432:5432
         options: --name=postgres --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest]
-        php: ['7.4', '8.0', '8.1']
 
     steps:
       - name: Generate french locale
@@ -54,7 +56,7 @@ jobs:
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php }}
+          php-version: ${{ matrix.php-version }}
           tools: pecl
           extensions: apc, curl, dom, imagick, intl, mbstring, mcrypt, memcached, mysql, pdo, pdo_mysql, pdo_pgsql, pdo_sqlite, pgsql, sqlite
           ini-values: date.timezone='UTC', session.save_path="${{ runner.temp }}"
@@ -67,4 +69,4 @@ jobs:
 
       - name: PHPUnit
         run: vendor/bin/phpunit --verbose --colors=always
-        if: matrix.php == '7.4'
+        if: matrix.php-version == '7.4'
