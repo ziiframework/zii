@@ -22,175 +22,6 @@ index 8550239097a..0350dff093c 100644
      fwrite(STDERR, "Your php-cs-version is outdated: please upgrade it.\n");
      die(16);
  }
-diff --git a/build/controllers/DevController.php b/build/controllers/DevController.php
-index 6c9d3216355..fdd8022cc58 100644
---- a/build/controllers/DevController.php
-+++ b/build/controllers/DevController.php
-@@ -16,8 +16,8 @@
- /**
-  * This command helps to set up a dev environment with all extensions and applications.
-  *
-- * It will clone an extension or app repo and link the yii2 dev installation to the containted applications/extensions vendor dirs
-- * to help working on yii using the application to test it.
-+ * It will clone an extension or app repo and link the yii2 dev installation to the contained applications/extensions vendor dirs
-+ * to help to work on yii using the application to test it.
-  *
-  * @author Carsten Brandt <mail@cebe.cc>
-  * @since 2.0
-@@ -29,7 +29,7 @@ class DevController extends Controller
-      */
-     public $defaultAction = 'all';
-     /**
--     * @var bool whether to use HTTP when cloning github repositories
-+     * @var bool whether to use HTTP when cloning GitHub repositories
-      */
-     public $useHttp = false;
-     /**
-@@ -53,7 +53,6 @@ class DevController extends Controller
-         'bootstrap' => 'git@github.com:yiisoft/yii2-bootstrap.git',
-         'bootstrap4' => 'git@github.com:yiisoft/yii2-bootstrap4.git',
-         'bootstrap5' => 'git@github.com:yiisoft/yii2-bootstrap5.git',
--        'codeception' => 'git@github.com:yiisoft/yii2-codeception.git',
-         'composer' => 'git@github.com:yiisoft/yii2-composer.git',
-         'debug' => 'git@github.com:yiisoft/yii2-debug.git',
-         'elasticsearch' => 'git@github.com:yiisoft/yii2-elasticsearch.git',
-diff --git a/build/controllers/PhpDocController.php b/build/controllers/PhpDocController.php
-index 144413f8228..5aebe855191 100644
---- a/build/controllers/PhpDocController.php
-+++ b/build/controllers/PhpDocController.php
-@@ -14,7 +14,7 @@
- use yii\helpers\Json;
- 
- /**
-- * PhpDocController is there to help maintaining PHPDoc annotation in class files.
-+ * PhpDocController is there to help to maintain PHPDoc annotation in class files.
-  *
-  * @author Carsten Brandt <mail@cebe.cc>
-  * @author Alexander Makarov <sam@rmcreative.ru>
-@@ -733,19 +733,17 @@ protected function generateClassPropertyDocs($fileName)
-                 $docLine = ' * @property';
-                 $note = '';
-                 if (isset($prop['get'], $prop['set'])) {
--                    if ($prop['get']['type'] != $prop['set']['type']) {
-+                    if ($prop['get']['type'] !== $prop['set']['type']) {
-                         $note = ' Note that the type of this property differs in getter and setter.'
-                                 . ' See [[get' . ucfirst($propName) . '()]]'
-                                 . ' and [[set' . ucfirst($propName) . '()]] for details.';
-                     }
-                 } elseif (isset($prop['get'])) {
-                     if (!$this->hasSetterInParents($className, $propName)) {
--                        $note = ' This property is read-only.';
-                         $docLine .= '-read';
-                     }
-                 } elseif (isset($prop['set'])) {
-                     if (!$this->hasGetterInParents($className, $propName)) {
--                        $note = ' This property is write-only.';
-                         $docLine .= '-write';
-                     }
-                 } else {
-@@ -754,7 +752,7 @@ protected function generateClassPropertyDocs($fileName)
-                 $docLine .= ' ' . $this->getPropParam($prop, 'type') . " $$propName ";
-                 $comment = explode("\n", $this->getPropParam($prop, 'comment') . $note);
-                 foreach ($comment as &$cline) {
--                    $cline = ltrim($cline, '* ');
-+                    $cline = ltrim(rtrim($cline), '* ');
-                 }
-                 $docLine = wordwrap($docLine . implode(' ', $comment), 110, "\n * ") . "\n";
- 
-@@ -871,11 +869,11 @@ protected function hasSetterInParents($className, $propName)
-      */
-     protected function isBaseObject($className, \ReflectionClass $ref)
-     {
--        $isDepreceatedObject = false;
-+        $isDeprecatedObject = false;
-         if (PHP_VERSION_ID <= 70100) {
--            $isDepreceatedObject = $ref->isSubclassOf('yii\base\Object') || $className === 'yii\base\Object';
-+            $isDeprecatedObject = $ref->isSubclassOf('yii\base\Object') || $className === 'yii\base\Object';
-         }
--        return !$isDepreceatedObject && !$ref->isSubclassOf('yii\base\BaseObject') && $className !== 'yii\base\BaseObject';
-+        return !$isDeprecatedObject && !$ref->isSubclassOf('yii\base\BaseObject') && $className !== 'yii\base\BaseObject';
-     }
- 
-     private function shouldSkipClass($className)
-diff --git a/build/controllers/ReleaseController.php b/build/controllers/ReleaseController.php
-index e3d1765a993..1d73fa5f6d8 100644
---- a/build/controllers/ReleaseController.php
-+++ b/build/controllers/ReleaseController.php
-@@ -15,7 +15,7 @@
- use yii\helpers\FileHelper;
- 
- /**
-- * ReleaseController is there to help preparing releases.
-+ * ReleaseController is there to help to prepare releases.
-  *
-  * Get a version overview:
-  *
-@@ -53,7 +53,7 @@ class ReleaseController extends Controller
-      */
-     public $dryRun = false;
-     /**
--     * @var bool whether to fetch latest tags.
-+     * @var bool whether to fetch the latest tags.
-      */
-     public $update = false;
-     /**
-@@ -206,7 +206,7 @@ public function actionRelease(array $what)
-                 $newVersions[$k] = $this->version;
-             }
-         } else {
--            // otherwise get next patch or minor
-+            // otherwise, get next patch or minor
-             $newVersions = $this->getNextVersions($versions, self::PATCH);
-         }
- 
-@@ -629,7 +629,7 @@ protected function releaseApplication($name, $path, $version)
-         $this->stdout("\n\nThe following steps are left for you to do manually:\n\n");
-         $nextVersion2 = $this->getNextVersions($nextVersion, self::PATCH); // TODO support other versions
-         $this->stdout("- close the $version milestone on github and open new ones for {$nextVersion["app-$name"]} and {$nextVersion2["app-$name"]}: https://github.com/yiisoft/yii2-app-$name/milestones\n");
--        $this->stdout("- Create Application packages and upload them to framework releast at github:  ./build/build release/package app-$name\n");
-+        $this->stdout("- Create Application packages and upload them to framework release at github:  ./build/build release/package app-$name\n");
- 
-         $this->stdout("\n");
-     }
-@@ -803,7 +803,7 @@ protected function gitFetchTags($path)
-         try {
-             chdir($path);
-         } catch (\yii\base\ErrorException $e) {
--            throw new Exception('Failed to getch git tags in ' . $path . ': ' . $e->getMessage());
-+            throw new Exception('Failed to fetch git tags in ' . $path . ': ' . $e->getMessage());
-         }
-         exec('git fetch --tags', $output, $ret);
-         if ($ret != 0) {
-diff --git a/build/controllers/TranslationController.php b/build/controllers/TranslationController.php
-index b4d2164d262..dd89ad24ea9 100644
---- a/build/controllers/TranslationController.php
-+++ b/build/controllers/TranslationController.php
-@@ -29,7 +29,6 @@ class TranslationController extends Controller
-      * @param string $sourcePath the directory where the original documentation files are
-      * @param string $translationPath the directory where the translated documentation files are
-      * @param string $title custom title to use for report
--     * @return string
-      */
-     public function actionReport($sourcePath, $translationPath, $title = 'Translation report')
-     {
-diff --git a/build/controllers/Utf8Controller.php b/build/controllers/Utf8Controller.php
-index ca5175dbfd6..673d9bfdeeb 100644
---- a/build/controllers/Utf8Controller.php
-+++ b/build/controllers/Utf8Controller.php
-@@ -69,11 +69,11 @@ public function actionCheckGuide($directory = null)
-                 }
-                 if ($ord < 0x0020 && $ord != 0x000A && $ord != 0x0009 ||
-                     0x0080 <= $ord && $ord < 0x009F) {
--                    $this->found('CONTROL CHARARCTER', $c, $line, $pos, $file);
-+                    $this->found('CONTROL CHARACTER', $c, $line, $pos, $file);
-                     continue;
-                 }
- //                if ($ord > 0x009F) {
--//                    $this->found("NON ASCII CHARARCTER", $c, $line, $pos, $file);
-+//                    $this->found("NON ASCII CHARACTER", $c, $line, $pos, $file);
- //                    continue;
- //                }
-             }
 diff --git a/composer.json b/composer.json
 index e7d0d34f037..84af41acf00 100644
 --- a/composer.json
@@ -1790,32 +1621,32 @@ index d3224447e8a..98226c13575 100644
 --- a/docs/guide-ja/helper-json.md
 +++ b/docs/guide-ja/helper-json.md
 @@ -1,26 +1,25 @@
--Json ƒwƒ‹ƒp
+-Json ï¿½wï¿½ï¿½ï¿½p
 +Json ãƒ˜ãƒ«ãƒ‘
  ===========
  
--Json ƒwƒ‹ƒp‚Í JSON ‚ğƒGƒ“ƒR[ƒh‚¨‚æ‚ÑƒfƒR[ƒh‚·‚éˆê˜A‚ÌÃ“Iƒƒ\ƒbƒh‚ğ’ñ‹Ÿ‚µ‚Ü‚·B
--`[[yii\helpers\Json::encode()]]` ƒƒ\ƒbƒh‚ÍƒGƒ“ƒR[ƒhEƒGƒ‰[‚ğˆ—‚µ‚Ü‚·‚ªA
-- `[[yii\web\JsExpression]]` ƒIƒuƒWƒFƒNƒg‚ÌŒ`®‚Å•\Œ»‚³‚ê‚½ JavaScript ‚Ì®‚ÍƒGƒ“ƒR[ƒh‚µ‚Ü‚¹‚ñB
--Šù’è‚Å‚ÍƒGƒ“ƒR[ƒh‚Í `JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE` ‚ÌƒIƒvƒVƒ‡ƒ“‚Ås‚í‚ê‚Ü‚·B
--Ú×‚É‚Â‚¢‚Ä‚Í [PHP:json_encode](https://secure.php.net/manual/ja/function.json-encode.php) ‚ğQÆ‚µ‚Ä‰º‚³‚¢B
+-Json ï¿½wï¿½ï¿½ï¿½pï¿½ï¿½ JSON ï¿½ï¿½ï¿½Gï¿½ï¿½ï¿½Rï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½Ñƒfï¿½Rï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ÌÃ“Iï¿½ï¿½ï¿½\ï¿½bï¿½hï¿½ï¿½ñ‹Ÿ‚ï¿½ï¿½Ü‚ï¿½ï¿½B
+-`[[yii\helpers\Json::encode()]]` ï¿½ï¿½ï¿½\ï¿½bï¿½hï¿½ÍƒGï¿½ï¿½ï¿½Rï¿½[ï¿½hï¿½Eï¿½Gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½A
+- `[[yii\web\JsExpression]]` ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ÌŒ`ï¿½ï¿½ï¿½Å•\ï¿½ï¿½ï¿½ï¿½ï¿½ê‚½ JavaScript ï¿½Ìï¿½ï¿½ÍƒGï¿½ï¿½ï¿½Rï¿½[ï¿½hï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B
+-ï¿½ï¿½ï¿½ï¿½Å‚ÍƒGï¿½ï¿½ï¿½Rï¿½[ï¿½hï¿½ï¿½ `JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE` ï¿½ÌƒIï¿½vï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Åsï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
+-ï¿½Ú×‚É‚Â‚ï¿½ï¿½Ä‚ï¿½ [PHP:json_encode](https://secure.php.net/manual/ja/function.json-encode.php) ï¿½ï¿½ï¿½Qï¿½Æ‚ï¿½ï¿½Ä‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
 +Json ãƒ˜ãƒ«ãƒ‘ã¯ JSON ã‚’ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰ãŠã‚ˆã³ãƒ‡ã‚³ãƒ¼ãƒ‰ã™ã‚‹ä¸€é€£ã®é™çš„ãƒ¡ã‚½ãƒƒãƒ‰ã‚’æä¾›ã—ã¾ã™ã€‚
 +`[[yii\helpers\Json::encode()]]` ãƒ¡ã‚½ãƒƒãƒ‰ã¯ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰ãƒ»ã‚¨ãƒ©ãƒ¼ã‚’å‡¦ç†ã—ã¾ã™ãŒã€
 + `[[yii\web\JsExpression]]` ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å½¢å¼ã§è¡¨ç¾ã•ã‚ŒãŸ JavaScript ã®å¼ã¯ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰ã—ã¾ã›ã‚“ã€‚
 +æ—¢å®šã§ã¯ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰ã¯ `JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE` ã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã§è¡Œã‚ã‚Œã¾ã™ã€‚
 +è©³ç´°ã«ã¤ã„ã¦ã¯ [PHP:json_encode](https://www.php.net/manual/ja/function.json-encode.php) ã‚’å‚ç…§ã—ã¦ä¸‹ã•ã„ã€‚
  
--## ®Œ`o—Í <span id="pretty-print"></span>
+-## ï¿½ï¿½ï¿½`ï¿½oï¿½ï¿½ <span id="pretty-print"></span>
 +## æ•´å½¢å‡ºåŠ› <span id="pretty-print"></span>
  
--Šù’è‚Å‚Í `[[yii\helpers\Json::encode()]]` ƒƒ\ƒbƒh‚Í®Œ`‚³‚ê‚Ä‚¢‚È‚¢ JSON (‚·‚È‚í‚¿‹ó”’–³‚µ‚Ì‚à‚Ì) ‚ğo—Í‚µ‚Ü‚·B
--lŠÔ‚É‚Æ‚Á‚Ä“Ç‚İ‚â‚·‚¢‚à‚Ì‚É‚·‚é‚½‚ß‚ÉAu®Œ`o—Í pretty printingv‚ğ ON ‚É‚·‚é‚±‚Æ‚ªo—ˆ‚Ü‚·B
+-ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ `[[yii\helpers\Json::encode()]]` ï¿½ï¿½ï¿½\ï¿½bï¿½hï¿½Íï¿½ï¿½`ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ JSON (ï¿½ï¿½ï¿½È‚í‚¿ï¿½ó”’–ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½) ï¿½ï¿½ï¿½oï¿½Í‚ï¿½ï¿½Ü‚ï¿½ï¿½B
+-ï¿½lï¿½Ô‚É‚Æ‚ï¿½ï¿½Ä“Ç‚İ‚â‚·ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚É‚ï¿½ï¿½é‚½ï¿½ß‚ÉAï¿½uï¿½ï¿½ï¿½`ï¿½oï¿½ï¿½ pretty printingï¿½vï¿½ï¿½ ON ï¿½É‚ï¿½ï¿½é‚±ï¿½Æ‚ï¿½ï¿½oï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
 +æ—¢å®šã§ã¯ `[[yii\helpers\Json::encode()]]` ãƒ¡ã‚½ãƒƒãƒ‰ã¯æ•´å½¢ã•ã‚Œã¦ã„ãªã„ JSON (ã™ãªã‚ã¡ç©ºç™½ç„¡ã—ã®ã‚‚ã®) ã‚’å‡ºåŠ›ã—ã¾ã™ã€‚
 +äººé–“ã«ã¨ã£ã¦èª­ã¿ã‚„ã™ã„ã‚‚ã®ã«ã™ã‚‹ãŸã‚ã«ã€ã€Œæ•´å½¢å‡ºåŠ› pretty printingã€ã‚’ ON ã«ã™ã‚‹ã“ã¨ãŒå‡ºæ¥ã¾ã™ã€‚
  
--> Note: ®Œ`o—Í‚ÍŠJ”­’†‚ÌƒfƒoƒbƒO‚É‚Í–ğ—§‚Â‚Å‚µ‚å‚¤‚ªA»•iŠÂ‹«‚Å‚Í„§‚³‚ê‚Ü‚¹‚ñB
+-> Note: ï¿½ï¿½ï¿½`ï¿½oï¿½Í‚ÍŠJï¿½ï¿½ï¿½ï¿½ï¿½Ìƒfï¿½oï¿½bï¿½Oï¿½É‚Í–ğ—§‚Â‚Å‚ï¿½ï¿½å‚¤ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½iï¿½Â‹ï¿½ï¿½Å‚Íï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B
 -
--ƒCƒ“ƒXƒ^ƒ“ƒX‚²‚Æ‚É®Œ`o—Í‚ğ—LŒø‚É‚·‚é‚½‚ß‚É‚ÍƒIƒvƒVƒ‡ƒ“‚ğw’è‚·‚é‚±‚Æ‚ªo—ˆ‚Ü‚·B‚·‚È‚í‚¿ :
+-ï¿½Cï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½Æ‚Éï¿½ï¿½`ï¿½oï¿½Í‚ï¿½Lï¿½ï¿½ï¿½É‚ï¿½ï¿½é‚½ï¿½ß‚É‚ÍƒIï¿½vï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½wï¿½è‚·ï¿½é‚±ï¿½Æ‚ï¿½ï¿½oï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Bï¿½ï¿½ï¿½È‚í‚¿ :
 +> Note: æ•´å½¢å‡ºåŠ›ã¯é–‹ç™ºä¸­ã®ãƒ‡ãƒãƒƒã‚°ã«ã¯å½¹ç«‹ã¤ã§ã—ã‚‡ã†ãŒã€è£½å“ç’°å¢ƒã§ã¯æ¨å¥¨ã•ã‚Œã¾ã›ã‚“ã€‚
 +ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã”ã¨ã«æ•´å½¢å‡ºåŠ›ã‚’æœ‰åŠ¹ã«ã™ã‚‹ãŸã‚ã«ã¯ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚’æŒ‡å®šã™ã‚‹ã“ã¨ãŒå‡ºæ¥ã¾ã™ã€‚ã™ãªã‚ã¡ :
  
@@ -1823,10 +1654,10 @@ index d3224447e8a..98226c13575 100644
  $data = ['a' => 1, 'b' => 2];
  $json = yii\helpers\Json::encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
  ```
--JSON ƒwƒ‹ƒp‚Ì®Œ`o—Í‚ğƒOƒ[ƒoƒ‹‚É—LŒø‚É‚·‚é‚±‚Æ‚ào—ˆ‚Ü‚·B—á‚¦‚ÎAİ’èƒtƒ@ƒCƒ‹‚â index.php ‚Ì’†‚Å :
+-JSON ï¿½wï¿½ï¿½ï¿½pï¿½Ìï¿½ï¿½`ï¿½oï¿½Í‚ï¿½ï¿½Oï¿½ï¿½ï¿½[ï¿½oï¿½ï¿½ï¿½É—Lï¿½ï¿½ï¿½É‚ï¿½ï¿½é‚±ï¿½Æ‚ï¿½ï¿½oï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Bï¿½á‚¦ï¿½ÎAï¿½İ’ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ index.php ï¿½Ì’ï¿½ï¿½ï¿½ :
 +JSON ãƒ˜ãƒ«ãƒ‘ã®æ•´å½¢å‡ºåŠ›ã‚’ã‚°ãƒ­ãƒ¼ãƒãƒ«ã«æœ‰åŠ¹ã«ã™ã‚‹ã“ã¨ã‚‚å‡ºæ¥ã¾ã™ã€‚ä¾‹ãˆã°ã€è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚„ index.php ã®ä¸­ã§ :
  ```php
--yii\helpers\Json::$prettyPrint = YII_DEBUG; // ƒfƒoƒbƒOEƒ‚[ƒh‚Å‚Í®Œ`o—Í‚ğg—p
+-yii\helpers\Json::$prettyPrint = YII_DEBUG; // ï¿½fï¿½oï¿½bï¿½Oï¿½Eï¿½ï¿½ï¿½[ï¿½hï¿½Å‚Íï¿½ï¿½`ï¿½oï¿½Í‚ï¿½ï¿½gï¿½p
 +yii\helpers\Json::$prettyPrint = YII_DEBUG; // ãƒ‡ãƒãƒƒã‚°ãƒ»ãƒ¢ãƒ¼ãƒ‰ã§ã¯æ•´å½¢å‡ºåŠ›ã‚’ä½¿ç”¨
  ```
 diff --git a/docs/guide-ja/input-file-upload.md b/docs/guide-ja/input-file-upload.md
