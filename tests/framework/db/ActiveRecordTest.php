@@ -35,6 +35,7 @@ use yiiunit\data\ar\OrderWithNullFK;
 use yiiunit\data\ar\Profile;
 use yiiunit\data\ar\ProfileWithConstructor;
 use yiiunit\data\ar\Type;
+use yiiunit\data\ar\CroppedType;
 use yiiunit\framework\ar\ActiveRecordTestTrait;
 use yiiunit\TestCase;
 
@@ -1352,6 +1353,11 @@ abstract class ActiveRecordTest extends DatabaseTestCase
 
         $model->loadDefaultValues(false);
         $this->assertEquals('something', $model->char_col2);
+
+        // Cropped model with 2 attributes/columns
+        $model = new CroppedType();
+        $model->loadDefaultValues();
+        $this->assertEquals(['int_col2' => 1], $model->toArray());
     }
 
     public function testUnlinkAllViaTable()
