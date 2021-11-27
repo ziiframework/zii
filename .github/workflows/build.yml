@@ -26,7 +26,6 @@ jobs:
         os-version: [ubuntu-latest]
         php-version: ['7.4', '8.0', '8.1']
         mysql-version: ['5.7', '8.0']
-        mssql-version: ["2019-latest"]
 
     services:
       mysql:
@@ -48,16 +47,6 @@ jobs:
           - 5432:5432
         options: --name=postgres --health-cmd=pg_isready --health-interval=10s --health-timeout=5s --health-retries=3
 
-      mssql:
-        image: mcr.microsoft.com/mssql/server:${{ matrix.mssql-version }}
-        env:
-          SA_PASSWORD: YourStrong!Passw0rd
-          ACCEPT_EULA: Y
-          MSSQL_PID: Developer
-        ports:
-          - 1433:1433
-        options: --name=mssql --health-cmd="/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'YourStrong!Passw0rd' -Q 'SELECT 1'" --health-interval=10s --health-timeout=5s --health-retries=3
-
     steps:
       - name: Generate french locale
         run: sudo locale-gen fr_FR.UTF-8
@@ -70,7 +59,7 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
           tools: pecl
-          extensions: apc, curl, dom, imagick, intl, mbstring, mcrypt, memcached, mysql, pdo, pdo_mysql, pdo_pgsql, pdo_sqlite, pdo_sqlsrv, pgsql, sqlite
+          extensions: apc, curl, dom, imagick, intl, mbstring, mcrypt, memcached, mysql, pdo, pdo_mysql, pdo_pgsql, pdo_sqlite, pgsql, sqlite
           ini-values: date.timezone='UTC', session.save_path="${{ runner.temp }}"
 
       - name: Install Memcached
