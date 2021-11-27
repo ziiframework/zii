@@ -544,7 +544,7 @@ EOF;
         $am = $view->assetManager;
         // publishing without timestamp
         $result = $am->publish($path . '/data.txt');
-        $this->assertRegExp('/.*data.txt$/i', $result[1]);
+        $this->assertMatchesRegularExpression('/.*data.txt$/i', $result[1]);
         unset($view, $am, $result);
 
         $view = $this->getView();
@@ -552,7 +552,7 @@ EOF;
         // turn on timestamp appending
         $am->appendTimestamp = true;
         $result = $am->publish($path . '/data.txt');
-        $this->assertRegExp('/.*data.txt\?v=\d+$/i', $result[1]);
+        $this->assertMatchesRegularExpression('/.*data.txt\?v=\d+$/i', $result[1]);
     }
 
     /**
@@ -564,7 +564,7 @@ EOF;
 
         $view = $this->getView(['appendTimestamp' => true]);
         TestNonRelativeAsset::register($view);
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '~123<script src="http:\/\/example\.com\/js\/jquery\.js\?v=\d+"><\/script>4~',
             $view->renderFile('@yiiunit/data/views/rawlayout.php')
         );

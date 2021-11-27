@@ -1205,7 +1205,7 @@ SQL;
 
         $this->assertEmpty($schema->getTableChecks($tableName, true));
         $db->createCommand()->addCheck($name, $tableName, '[[int1]] > 1')->execute();
-        $this->assertRegExp('/^.*int1.*>.*1.*$/', $schema->getTableChecks($tableName, true)[0]->expression);
+        $this->assertMatchesRegularExpression('/^.*int1.*>.*1.*$/', $schema->getTableChecks($tableName, true)[0]->expression);
 
         $db->createCommand()->dropCheck($name, $tableName)->execute();
         $this->assertEmpty($schema->getTableChecks($tableName, true));
