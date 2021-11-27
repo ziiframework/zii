@@ -148,7 +148,7 @@ class BaseStringHelper
             return static::truncateHtml($string, $count, $suffix);
         }
 
-        $words = preg_split('/(\s+)/u', trim($string), null, PREG_SPLIT_DELIM_CAPTURE);
+        $words = preg_split('/(\s+)/u', trim($string), -1, PREG_SPLIT_DELIM_CAPTURE);
         if (count($words) / 2 > $count) {
             return implode('', array_slice($words, 0, ($count * 2) - 1)) . $suffix;
         }
@@ -316,7 +316,7 @@ class BaseStringHelper
      */
     public static function countWords($string)
     {
-        return count(preg_split('/\s+/u', $string, null, PREG_SPLIT_NO_EMPTY));
+        return count(preg_split('/\s+/u', $string, -1, PREG_SPLIT_NO_EMPTY));
     }
 
     /**
