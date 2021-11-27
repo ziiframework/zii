@@ -124,7 +124,7 @@ class AssetBundleTest extends \yiiunit\TestCase
         $this->assertFalse(is_dir($bundle->basePath));
         foreach ($bundle->js as $filename) {
             $publishedFile = $bundle->basePath . DIRECTORY_SEPARATOR . $filename;
-            $this->assertFileNotExists($publishedFile);
+            $this->assertFileDoesNotExist($publishedFile);
         }
     }
 
@@ -144,7 +144,7 @@ class AssetBundleTest extends \yiiunit\TestCase
         $this->assertFalse(is_dir($bundle->basePath));
         foreach ($bundle->js as $filename) {
             $publishedFile = $bundle->basePath . DIRECTORY_SEPARATOR . $filename;
-            $this->assertFileNotExists($publishedFile);
+            $this->assertFileDoesNotExist($publishedFile);
         }
     }
 
@@ -163,7 +163,7 @@ class AssetBundleTest extends \yiiunit\TestCase
         $bundle->publish($am);
 
         $notNeededFilesDir = dirname($bundle->basePath . DIRECTORY_SEPARATOR . $bundle->css[0]);
-        $this->assertFileNotExists($notNeededFilesDir);
+        $this->assertFileDoesNotExist($notNeededFilesDir);
 
         foreach ($bundle->js as $filename) {
             $publishedFile = $bundle->basePath . DIRECTORY_SEPARATOR . $filename;
