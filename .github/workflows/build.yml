@@ -82,8 +82,5 @@ jobs:
           rm -f composer.lock
           composer install $COMPOSER_INSTALL_FLAGS
 
-      - name: Create MSSQL Database
-        run: docker exec -i mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'YourStrong!Passw0rd' -Q 'CREATE DATABASE yiitest'
-
       - name: PHPUnit
         run: vendor/bin/phpunit --verbose --colors=always
