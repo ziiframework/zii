@@ -796,7 +796,7 @@ class Request extends \yii\base\Request
     public function getHostName()
     {
         if ($this->_hostName === null) {
-            $this->_hostName = parse_url($this->getHostInfo(), PHP_URL_HOST);
+            $this->_hostName = parse_url($this->getHostInfo() ?? '', PHP_URL_HOST);
         }
 
         return $this->_hostName;
