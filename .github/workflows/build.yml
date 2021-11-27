@@ -59,7 +59,7 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
           tools: pecl
-          extensions: apc, curl, dom, imagick, intl, mbstring, mcrypt, memcached, mysql, pdo, pdo_mysql, pdo_pgsql, pdo_sqlite, pgsql, sqlite
+          extensions: none, apc, curl, dom, imagick, intl, mbstring, mcrypt, memcached, mysql, pdo, pdo_mysql, pdo_pgsql, pdo_sqlite, pgsql, sqlite
           ini-values: date.timezone='UTC', session.save_path="${{ runner.temp }}"
 
       - name: Install Memcached
