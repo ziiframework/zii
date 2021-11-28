@@ -46,7 +46,11 @@
         ]
     },
     "config": {
-        "platform": {"php": "7.4"}
+        "platform": {
+            "php": "7.4"
+        },
+        "optimize-autoloader": true,
+        "sort-packages": true
     },
     "scripts": {
         "redo-install": [
