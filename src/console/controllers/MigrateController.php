@@ -387,7 +387,7 @@ class MigrateController extends BaseMigrateController
             $name = substr($name, 0, -1);
         }
 
-        if (strpos($name, '_') === 0) {
+        if (strncmp($name, '_', 1) === 0) {
             return substr($name, 1);
         }
 
@@ -606,7 +606,7 @@ class MigrateController extends BaseMigrateController
     protected function addDefaultPrimaryKey(&$fields)
     {
         foreach ($fields as $field) {
-            if (false !== strripos($field['decorators'], 'primarykey()')) {
+            if ($field['property'] === 'id' || false !== strripos($field['decorators'], 'primarykey()')) {
                 return;
             }
         }

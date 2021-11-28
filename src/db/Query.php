@@ -452,7 +452,7 @@ class Query extends Component implements QueryInterface, ExpressionInterface
      * @param string|ExpressionInterface $selectExpression
      * @param Connection|null $db the database connection used to execute the query.
      * @return bool|string|null
-     * @throws \Throwable if can't create command
+     * @throws \Exception if can't create command
      */
     protected function queryScalar($selectExpression, $db)
     {
@@ -921,7 +921,7 @@ PATTERN;
      */
     public function andFilterCompare($name, $value, $defaultOperator = '=')
     {
-        if (preg_match('/^(<>|>=|>|<=|<|=)/', $value, $matches)) {
+        if (preg_match('/^(<>|>=|>|<=|<|=)/', $value ?? '', $matches)) {
             $operator = $matches[1];
             $value = substr($value, strlen($operator));
         } else {

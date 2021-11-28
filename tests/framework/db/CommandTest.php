@@ -197,7 +197,7 @@ SQL;
         $row = $command->queryOne();
         $this->assertEquals($intCol, $row['int_col']);
         $this->assertEquals($charCol, $row['char_col']);
-        $this->assertContains($row['float_col'], [$floatCol, sprintf('%.3f', $floatCol)]);
+        $this->assertContains($row['float_col'], [$floatCol, (string)$floatCol, (float)$floatCol, sprintf('%.3f', $floatCol)]);
         if ($this->driverName === 'mysql' || $this->driverName === 'sqlite') {
             $this->assertEquals($blobCol, $row['blob_col']);
         } elseif (\defined('HHVM_VERSION') && $this->driverName === 'pgsql') {
@@ -1205,7 +1205,7 @@ SQL;
 
         $this->assertEmpty($schema->getTableChecks($tableName, true));
         $db->createCommand()->addCheck($name, $tableName, '[[int1]] > 1')->execute();
-        $this->assertRegExp('/^.*int1.*>.*1.*$/', $schema->getTableChecks($tableName, true)[0]->expression);
+        $this->assertMatchesRegularExpression('/^.*int1.*>.*1.*$/', $schema->getTableChecks($tableName, true)[0]->expression);
 
         $db->createCommand()->dropCheck($name, $tableName)->execute();
         $this->assertEmpty($schema->getTableChecks($tableName, true));

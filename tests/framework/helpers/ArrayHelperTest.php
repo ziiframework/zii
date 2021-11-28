@@ -114,6 +114,13 @@ class ArrayHelperTest extends TestCase
                 },
             ],
         ]));
+
+        // DateTime test
+        $this->assertEquals([
+            'date' => '2021-09-13 15:16:17.000000',
+            'timezone_type' => 3,
+            'timezone' => 'UTC',
+        ], ArrayHelper::toArray(new \DateTime('2021-09-13 15:16:17', new \DateTimeZone('UTC'))));
     }
 
     public function testRemove()
@@ -817,7 +824,12 @@ class ArrayHelperTest extends TestCase
 
     public function testGetValueNonexistingProperties1()
     {
-        $this->expectNotice();
+        if (PHP_VERSION_ID >= 80000) {
+            $this->expectWarning();
+        } else {
+            $this->expectNotice();
+        }
+
         $object = new Post1();
         ArrayHelper::getValue($object, 'nonExisting');
     }

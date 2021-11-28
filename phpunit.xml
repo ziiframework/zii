@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
+         bootstrap="tests/bootstrap.php"
+         backupGlobals="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         stopOnFailure="false"
+         printerClass="yiiunit\ResultPrinter"
+         colors="true"
+         verbose="true">
+  <coverage>
+    <include>
+      <directory suffix=".php">src</directory>
+    </include>
+    <exclude>
+      <file>src/i18n/GettextFile.php</file>
+      <file>src/web/ResponseFormatterInterface.php</file>
+      <directory suffix="Exception.php">src/base</directory>
+      <directory suffix=".php">src/db/mssql</directory>
+      <directory suffix=".php">src/bootstrap</directory>
+    </exclude>
+  </coverage>
+  <testsuites>
+    <testsuite name="Yii Test Suite">
+      <directory>tests</directory>
+    </testsuite>
+  </testsuites>
+</phpunit>

@@ -316,10 +316,10 @@ class View extends Component implements DynamicContentAwareInterface
             $event = new ViewEvent([
                 'viewFile' => $viewFile,
                 'params' => $params,
-                'output' => $output,
             ]);
+            $event->output =& $output;
+
             $this->trigger(self::EVENT_AFTER_RENDER, $event);
-            $output = $event->output;
         }
     }
 
@@ -336,7 +336,6 @@ class View extends Component implements DynamicContentAwareInterface
      * @param array $_params_ the parameters (name-value pairs) that will be extracted and made available in the view file.
      * @return string the rendering result
      * @throws \Exception
-     * @throws \Throwable
      */
     public function renderPhpFile($_file_, $_params_ = [])
     {
