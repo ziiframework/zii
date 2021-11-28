@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
          bootstrap="tests/bootstrap.php"
          backupGlobals="true"
-         colors="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          stopOnFailure="false"
-         printerClass="yiiunit\ResultPrinter">
+         printerClass="yiiunit\ResultPrinter"
+         colors="true"
+         verbose="true">
   <coverage>
     <include>
       <directory suffix=".php">src</directory>
