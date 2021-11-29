@@ -68,6 +68,10 @@ return (new PhpCsFixer\Config())
                 'yield',
             ],
         ],
+        'php_unit_set_up_tear_down_visibility' => true,
+        'php_unit_test_case_static_method_calls' => [
+            'call_type' => 'this',
+        ],
     ])
     ->setFinder(
         PhpCsFixer\Finder::create()
