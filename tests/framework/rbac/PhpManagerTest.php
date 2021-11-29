@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -12,9 +9,7 @@ namespace yii\rbac;
 
 /**
  * Mock for the filemtime() function for rbac classes. Avoid random test fails.
- *
  * @param string $file
- *
  * @return int
  */
 function filemtime($file)
@@ -24,7 +19,6 @@ function filemtime($file)
 
 /**
  * Mock for the time() function for rbac classes. Avoid random test fails.
- *
  * @return int
  */
 function time()
@@ -38,16 +32,47 @@ use Yii;
 
 /**
  * @group rbac
- *
  * @property ExposedPhpManager $auth
- *
- * @internal
- * @coversNothing
  */
-final class PhpManagerTest extends ManagerTestCase
+class PhpManagerTest extends ManagerTestCase
 {
     public static $filemtime;
     public static $time;
+
+    protected function getItemFile()
+    {
+        return Yii::$app->getRuntimePath() . '/rbac-items.php';
+    }
+
+    protected function getAssignmentFile()
+    {
+        return Yii::$app->getRuntimePath() . '/rbac-assignments.php';
+    }
+
+    protected function getRuleFile()
+    {
+        return Yii::$app->getRuntimePath() . '/rbac-rules.php';
+    }
+
+    protected function removeDataFiles()
+    {
+        @unlink($this->getItemFile());
+        @unlink($this->getAssignmentFile());
+        @unlink($this->getRuleFile());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function createManager()
+    {
+        return new ExposedPhpManager([
+            'itemFile' => $this->getItemFile(),
+            'assignmentFile' => $this->getAssignmentFile(),
+            'ruleFile' => $this->getRuleFile(),
+            'defaultRoles' => ['myDefaultRole'],
+        ]);
+    }
 
     protected function setUp(): void
     {
@@ -72,7 +97,7 @@ final class PhpManagerTest extends ManagerTestCase
         parent::tearDown();
     }
 
-    public function testSaveLoad(): void
+    public function testSaveLoad()
     {
         static::$time = static::$filemtime = \time();
 
@@ -86,13 +111,13 @@ final class PhpManagerTest extends ManagerTestCase
         $this->auth = $this->createManager();
         $this->auth->load();
 
-        $this->assertSame($items, $this->auth->items);
-        $this->assertSame($children, $this->auth->children);
-        $this->assertSame($assignments, $this->auth->assignments);
-        $this->assertSame($rules, $this->auth->rules);
+        $this->assertEquals($items, $this->auth->items);
+        $this->assertEquals($children, $this->auth->children);
+        $this->assertEquals($assignments, $this->auth->assignments);
+        $this->assertEquals($rules, $this->auth->rules);
     }
 
-    public function testUpdateItemName(): void
+    public function testUpdateItemName()
     {
         $this->prepareData();
 
@@ -102,7 +127,7 @@ final class PhpManagerTest extends ManagerTestCase
         $this->assertTrue($this->auth->update($name, $permission), 'You should be able to update name.');
     }
 
-    public function testUpdateDescription(): void
+    public function testUpdateDescription()
     {
         $this->prepareData();
         $name = 'readPost';
@@ -111,7 +136,7 @@ final class PhpManagerTest extends ManagerTestCase
         $this->assertTrue($this->auth->update($name, $permission), 'You should be able to save w/o changing name.');
     }
 
-    public function testOverwriteName(): void
+    public function testOverwriteName()
     {
         $this->expectException('\yii\base\InvalidArgumentException');
 
@@ -122,7 +147,7 @@ final class PhpManagerTest extends ManagerTestCase
         $this->auth->update($name, $permission);
     }
 
-    public function testSaveAssignments(): void
+    public function testSaveAssignments()
     {
         $this->auth->removeAll();
         $role = $this->auth->createRole('Admin');
@@ -134,40 +159,5 @@ final class PhpManagerTest extends ManagerTestCase
         $this->assertStringContainsString('NewAdmin', file_get_contents($this->getAssignmentFile()));
         $this->auth->remove($role);
         $this->assertStringNotContainsString('NewAdmin', file_get_contents($this->getAssignmentFile()));
-    }
-
-    protected function getItemFile()
-    {
-        return Yii::$app->getRuntimePath() . '/rbac-items.php';
-    }
-
-    protected function getAssignmentFile()
-    {
-        return Yii::$app->getRuntimePath() . '/rbac-assignments.php';
-    }
-
-    protected function getRuleFile()
-    {
-        return Yii::$app->getRuntimePath() . '/rbac-rules.php';
-    }
-
-    protected function removeDataFiles(): void
-    {
-        @unlink($this->getItemFile());
-        @unlink($this->getAssignmentFile());
-        @unlink($this->getRuleFile());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function createManager()
-    {
-        return new ExposedPhpManager([
-            'itemFile' => $this->getItemFile(),
-            'assignmentFile' => $this->getAssignmentFile(),
-            'ruleFile' => $this->getRuleFile(),
-            'defaultRoles' => ['myDefaultRole'],
-        ]);
     }
 }

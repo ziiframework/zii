@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -14,11 +11,8 @@ namespace yiiunit\framework\db\sqlite;
  * @group db
  * @group sqlite
  * @group validators
- *
- * @internal
- * @coversNothing
  */
-final class ExistValidatorTest extends \yiiunit\framework\validators\ExistValidatorTest
+class ExistValidatorTest extends \yiiunit\framework\validators\ExistValidatorTest
 {
     public $driverName = 'sqlite';
 }

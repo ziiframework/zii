@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -16,18 +13,15 @@ use yii\validators\ExistValidator;
  * @group db
  * @group pgsql
  * @group validators
- *
- * @internal
- * @coversNothing
  */
-final class ExistValidatorTest extends \yiiunit\framework\validators\ExistValidatorTest
+class ExistValidatorTest extends \yiiunit\framework\validators\ExistValidatorTest
 {
     public $driverName = 'pgsql';
 
     /**
      * @see https://github.com/yiisoft/yii2/issues/14274
      */
-    public function testWithCameCasedTableName(): void
+    public function testWithCameCasedTableName()
     {
         // The same target table
         $validator = new ExistValidator(['targetAttribute' => 'ref']);

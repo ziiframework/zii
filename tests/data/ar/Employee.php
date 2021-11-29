@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -13,18 +11,18 @@ namespace yiiunit\data\ar;
 use yii\db\ActiveQuery;
 
 /**
- * Class Employee.
+ * Class Employee
  *
- * @property int        $id
- * @property int        $department_id
- * @property string     $first_name
- * @property string     $last_name
- * @property string     $fullName
+ * @property int $id
+ * @property int $department_id
+ * @property string $first_name
+ * @property string $last_name
+ *
+ * @property string $fullName
  * @property Department $department
- * @property Dossier    $dossier
+ * @property Dossier $dossier
  *
  * @author Kolyunya <OleynikovNY@mail.ru>
- *
  * @since 2.0.12
  */
 class Employee extends ActiveRecord
@@ -44,7 +42,9 @@ class Employee extends ActiveRecord
      */
     public function getFullName()
     {
-        return $this->first_name . ' ' . $this->last_name;
+        $fullName = $this->first_name . ' ' . $this->last_name;
+
+        return $fullName;
     }
 
     /**

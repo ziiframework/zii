@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -18,11 +15,8 @@ use yii\db\Connection;
  *
  * @group db
  * @group mysql
- *
- * @internal
- * @coversNothing
  */
-final class DbMessageControllerTest extends BaseMessageControllerTest
+class DbMessageControllerTest extends BaseMessageControllerTest
 {
     protected static $driverName = 'mysql';
     protected static $database;
@@ -31,6 +25,31 @@ final class DbMessageControllerTest extends BaseMessageControllerTest
      * @var Connection
      */
     protected static $db;
+
+    protected static function runConsoleAction($route, $params = [])
+    {
+        if (Yii::$app === null) {
+            new \yii\console\Application([
+                'id' => 'Migrator',
+                'basePath' => '@yiiunit',
+                'controllerMap' => [
+                    'migrate' => EchoMigrateController::className(),
+                ],
+                'components' => [
+                    'db' => static::getConnection(),
+                ],
+            ]);
+        }
+
+        ob_start();
+        $result = Yii::$app->runAction($route, $params);
+        echo 'Result is ' . $result;
+        if ($result !== \yii\console\Controller::EXIT_CODE_NORMAL) {
+            ob_end_flush();
+        } else {
+            ob_end_clean();
+        }
+    }
 
     public static function setUpBeforeClass(): void
     {
@@ -49,7 +68,6 @@ final class DbMessageControllerTest extends BaseMessageControllerTest
     public static function tearDownAfterClass(): void
     {
         static::runConsoleAction('migrate/down', ['migrationPath' => '@yii/i18n/migrations/', 'interactive' => false]);
-
         if (static::$db) {
             static::$db->close();
         }
@@ -57,7 +75,7 @@ final class DbMessageControllerTest extends BaseMessageControllerTest
         parent::tearDownAfterClass();
     }
 
-    protected function tearDown(): void
+    public function tearDown(): void
     {
         parent::tearDown();
         Yii::$app = null;
@@ -67,7 +85,6 @@ final class DbMessageControllerTest extends BaseMessageControllerTest
      * @throws \yii\base\InvalidParamException
      * @throws \yii\db\Exception
      * @throws \yii\base\InvalidConfigException
-     *
      * @return \yii\db\Connection
      */
     public static function getConnection()
@@ -75,16 +92,13 @@ final class DbMessageControllerTest extends BaseMessageControllerTest
         if (static::$db == null) {
             $db = new Connection();
             $db->dsn = static::$database['dsn'];
-
             if (isset(static::$database['username'])) {
                 $db->username = static::$database['username'];
                 $db->password = static::$database['password'];
             }
-
             if (isset(static::$database['attributes'])) {
                 $db->attributes = static::$database['attributes'];
             }
-
             if (!$db->isActive) {
                 $db->open();
             }
@@ -92,66 +106,6 @@ final class DbMessageControllerTest extends BaseMessageControllerTest
         }
 
         return static::$db;
-    }
-
-    // DbMessage tests variants:
-
-    /**
-     * Source is marked instead of translation.
-     *
-     * @depends testMerge
-     */
-    public function testMarkObsoleteMessages(): void
-    {
-        $category = 'category';
-
-        $obsoleteMessage = 'obsolete message';
-        $obsoleteTranslation = 'obsolete translation';
-        $this->saveMessages([$obsoleteMessage => $obsoleteTranslation], $category);
-
-        $sourceFileContent = "Yii::t('{$category}', 'any new message');";
-        $this->createSourceFile($sourceFileContent);
-
-        $this->saveConfigFile($this->getConfig(['removeUnused' => false]));
-        $out = $this->runMessageControllerAction('extract', [$this->configFileName]);
-
-        $obsoleteMessage = '@@obsolete message@@';
-
-        $messages = $this->loadMessages($category);
-
-        $this->assertArrayHasKey($obsoleteMessage, $messages, "Obsolete message should not be removed. Command output:\n\n" . $out);
-        $this->assertSame($obsoleteTranslation, $messages[$obsoleteMessage], "Obsolete message was not marked properly. Command output:\n\n" . $out);
-    }
-
-    public function testMessagesSorting(): void
-    {
-        $this->markTestSkipped('There\'s no need to order messages for database');
-    }
-
-    protected static function runConsoleAction($route, $params = []): void
-    {
-        if (Yii::$app === null) {
-            new \yii\console\Application([
-                'id' => 'Migrator',
-                'basePath' => '@yiiunit',
-                'controllerMap' => [
-                    'migrate' => EchoMigrateController::className(),
-                ],
-                'components' => [
-                    'db' => static::getConnection(),
-                ],
-            ]);
-        }
-
-        ob_start();
-        $result = Yii::$app->runAction($route, $params);
-        echo 'Result is ' . $result;
-
-        if ($result !== \yii\console\Controller::EXIT_CODE_NORMAL) {
-            ob_end_flush();
-        } else {
-            ob_end_clean();
-        }
     }
 
     /**
@@ -171,13 +125,12 @@ final class DbMessageControllerTest extends BaseMessageControllerTest
     /**
      * {@inheritdoc}
      */
-    protected function saveMessages($messages, $category): void
+    protected function saveMessages($messages, $category)
     {
         static::$db->createCommand()->checkIntegrity(false, '', 'message')->execute();
         static::$db->createCommand()->truncateTable('message')->execute();
         static::$db->createCommand()->truncateTable('source_message')->execute();
         static::$db->createCommand()->checkIntegrity(true, '', 'message')->execute();
-
         foreach ($messages as $source => $translation) {
             $lastPk = static::$db->schema->insert('source_message', [
                 'category' => $category,
@@ -205,4 +158,39 @@ final class DbMessageControllerTest extends BaseMessageControllerTest
                 't2.language' => $this->language,
             ])->all(static::$db), 'message', 'translation');
     }
+
+    // DbMessage tests variants:
+
+    /**
+     * Source is marked instead of translation.
+     * @depends testMerge
+     */
+    public function testMarkObsoleteMessages()
+    {
+        $category = 'category';
+
+        $obsoleteMessage = 'obsolete message';
+        $obsoleteTranslation = 'obsolete translation';
+        $this->saveMessages([$obsoleteMessage => $obsoleteTranslation], $category);
+
+        $sourceFileContent = "Yii::t('{$category}', 'any new message');";
+        $this->createSourceFile($sourceFileContent);
+
+        $this->saveConfigFile($this->getConfig(['removeUnused' => false]));
+        $out = $this->runMessageControllerAction('extract', [$this->configFileName]);
+
+        $obsoleteMessage = '@@obsolete message@@';
+
+        $messages = $this->loadMessages($category);
+
+        $this->assertArrayHasKey($obsoleteMessage, $messages, "Obsolete message should not be removed. Command output:\n\n" . $out);
+        $this->assertEquals($obsoleteTranslation, $messages[$obsoleteMessage], "Obsolete message was not marked properly. Command output:\n\n" . $out);
+    }
+
+    public function testMessagesSorting()
+    {
+        $this->markTestSkipped('There\'s no need to order messages for database');
+    }
+
+
 }

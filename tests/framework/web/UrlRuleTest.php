@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -22,11 +19,8 @@ use yiiunit\TestCase;
 
 /**
  * @group web
- *
- * @internal
- * @coversNothing
  */
-final class UrlRuleTest extends TestCase
+class UrlRuleTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -34,24 +28,22 @@ final class UrlRuleTest extends TestCase
         $this->mockApplication();
     }
 
-    public function testCreateUrl(): void
+    public function testCreateUrl()
     {
         $manager = new UrlManager(['cache' => null]);
         $suites = $this->getTestsForCreateUrl();
-
         foreach ($suites as $i => $suite) {
-            [$name, $config, $tests] = $suite;
+            list($name, $config, $tests) = $suite;
             $rule = new UrlRule($config);
-
             foreach ($tests as $j => $test) {
-                [$route, $params, $expected] = $test;
+                list($route, $params, $expected) = $test;
                 $url = $rule->createUrl($manager, $route, $params);
-                $this->assertSame($expected, $url, "Test#{$i}-{$j}: {$name}");
+                $this->assertSame($expected, $url, "Test#$i-$j: $name");
             }
         }
     }
 
-    public function testParseRequest(): void
+    public function testParseRequest()
     {
         $manager = new UrlManager([
             'cache' => null,
@@ -59,26 +51,23 @@ final class UrlRuleTest extends TestCase
         ]);
         $request = new Request(['hostInfo' => 'http://en.example.com']);
         $suites = $this->getTestsForParseRequest();
-
         foreach ($suites as $i => $suite) {
-            [$name, $config, $tests] = $suite;
+            list($name, $config, $tests) = $suite;
             $rule = new UrlRule($config);
-
             foreach ($tests as $j => $test) {
                 $request->pathInfo = $test[0];
                 $expected = $test[1];
                 $result = $rule->parseRequest($manager, $request);
-
                 if ($expected === false) {
-                    $this->assertFalse($result, "Test#{$i}-{$j}: {$name}");
+                    $this->assertFalse($result, "Test#$i-$j: $name");
                 } else {
-                    $this->assertSame($expected, $result, "Test#{$i}-{$j}: {$name}");
+                    $this->assertEquals($expected, $result, "Test#$i-$j: $name");
                 }
             }
         }
     }
 
-    public function testParseRequestWithNormalizer(): void
+    public function testParseRequestWithNormalizer()
     {
         $manager = new UrlManager([
             'cache' => null,
@@ -86,31 +75,27 @@ final class UrlRuleTest extends TestCase
         ]);
         $request = new Request(['hostInfo' => 'http://en.example.com']);
         $suites = $this->getTestsForParseRequest();
-
         foreach ($suites as $i => $suite) {
-            [$name, $config, $tests] = $suite;
+            list($name, $config, $tests) = $suite;
             $rule = new UrlRule($config);
-
             foreach ($tests as $j => $test) {
                 $request->pathInfo = $test[0];
-                $expected = $test[2] ?? $test[1];
-
+                $expected = isset($test[2]) ? $test[2] : $test[1];
                 try {
                     $result = $rule->parseRequest($manager, $request);
-
                     if ($expected === false) {
-                        $this->assertFalse($result, "Test#{$i}-{$j}: {$name}");
+                        $this->assertFalse($result, "Test#$i-$j: $name");
                     } else {
-                        $this->assertSame($expected, $result, "Test#{$i}-{$j}: {$name}");
+                        $this->assertEquals($expected, $result, "Test#$i-$j: $name");
                     }
                 } catch (UrlNormalizerRedirectException $exc) {
-                    $this->assertSame([$expected[0]] + $expected[1], $exc->url, "Test#{$i}-{$j}: {$name}");
+                    $this->assertEquals([$expected[0]] + $expected[1], $exc->url, "Test#$i-$j: $name");
                 }
             }
         }
     }
 
-    public function testParseRequestWithUrlManagerCustomNormalizer(): void
+    public function testParseRequestWithUrlManagerCustomNormalizer()
     {
         $manager = new UrlManager([
             'cache' => null,
@@ -121,26 +106,22 @@ final class UrlRuleTest extends TestCase
         ]);
         $request = new Request(['hostInfo' => 'http://en.example.com']);
         $suites = $this->getTestsForParseRequest();
-
         foreach ($suites as $i => $suite) {
-            [$name, $config, $tests] = $suite;
+            list($name, $config, $tests) = $suite;
             $rule = new UrlRule($config);
-
             foreach ($tests as $j => $test) {
                 $request->pathInfo = $test[0];
-                $expected = $test[2] ?? $test[1];
-
+                $expected = isset($test[2]) ? $test[2] : $test[1];
                 try {
                     $result = $rule->parseRequest($manager, $request);
-
                     if ($expected === false) {
-                        $this->assertFalse($result, "Test#{$i}-{$j}: {$name}");
+                        $this->assertFalse($result, "Test#$i-$j: $name");
                     } else {
-                        $this->assertSame($expected, $result, "Test#{$i}-{$j}: {$name}");
+                        $this->assertEquals($expected, $result, "Test#$i-$j: $name");
                     }
                 } catch (UrlNormalizerRedirectException $exc) {
-                    $this->assertSame(UrlNormalizer::ACTION_REDIRECT_PERMANENT, $exc->statusCode, "Test-statusCode#{$i}-{$j}: {$name}");
-                    $this->assertSame([$expected[0]] + $expected[1], $exc->url, "Test#{$i}-{$j}: {$name}");
+                    $this->assertEquals(UrlNormalizer::ACTION_REDIRECT_PERMANENT, $exc->statusCode, "Test-statusCode#$i-$j: $name");
+                    $this->assertEquals([$expected[0]] + $expected[1], $exc->url, "Test#$i-$j: $name");
                 }
             }
         }
@@ -154,26 +135,22 @@ final class UrlRuleTest extends TestCase
         ]);
         $request = new Request(['hostInfo' => 'http://en.example.com']);
         $suites = $this->getTestsForParseRequest();
-
         foreach ($suites as $i => $suite) {
-            [$name, $config, $tests] = $suite;
+            list($name, $config, $tests) = $suite;
             $rule = new UrlRule($config);
-
             foreach ($tests as $j => $test) {
                 $request->pathInfo = $test[0];
-                $expected = $test[2] ?? $test[1];
-
+                $expected = isset($test[2]) ? $test[2] : $test[1];
                 try {
                     $result = $rule->parseRequest($manager, $request);
-
                     if ($expected === false) {
-                        $this->assertFalse($result, "Test#{$i}-{$j}: {$name}");
+                        $this->assertFalse($result, "Test#$i-$j: $name");
                     } else {
-                        $this->assertSame($expected, $result, "Test#{$i}-{$j}: {$name}");
+                        $this->assertEquals($expected, $result, "Test#$i-$j: $name");
                     }
                 } catch (UrlNormalizerRedirectException $exc) {
-                    $this->assertSame(UrlNormalizer::ACTION_REDIRECT_TEMPORARY, $exc->statusCode, "Test-statusCode#{$i}-{$j}: {$name}");
-                    $this->assertSame([$expected[0]] + $expected[1], $exc->url, "Test#{$i}-{$j}: {$name}");
+                    $this->assertEquals(UrlNormalizer::ACTION_REDIRECT_TEMPORARY, $exc->statusCode, "Test-statusCode#$i-$j: $name");
+                    $this->assertEquals([$expected[0]] + $expected[1], $exc->url, "Test#$i-$j: $name");
                 }
             }
         }
@@ -187,25 +164,21 @@ final class UrlRuleTest extends TestCase
         ]);
         $request = new Request(['hostInfo' => 'http://en.example.com']);
         $suites = $this->getTestsForParseRequest();
-
         foreach ($suites as $i => $suite) {
-            [$name, $config, $tests] = $suite;
+            list($name, $config, $tests) = $suite;
             $rule = new UrlRule($config);
-
             foreach ($tests as $j => $test) {
                 $request->pathInfo = $test[0];
                 $expected = $test[1];
-
                 try {
                     $result = $rule->parseRequest($manager, $request);
-
                     if ($expected === false) {
-                        $this->assertFalse($result, "Test#{$i}-{$j}: {$name}");
+                        $this->assertFalse($result, "Test#$i-$j: $name");
                     } else {
-                        $this->assertSame($expected, $result, "Test#{$i}-{$j}: {$name}");
+                        $this->assertEquals($expected, $result, "Test#$i-$j: $name");
                     }
                 } catch (NotFoundHttpException $exc) {
-                    $this->assertFalse($expected, "Test#{$i}-{$j}: {$name}");
+                    $this->assertFalse($expected, "Test#$i-$j: $name");
                 }
             }
         }
@@ -219,28 +192,24 @@ final class UrlRuleTest extends TestCase
         ]);
         $request = new Request(['hostInfo' => 'http://en.example.com']);
         $suites = $this->getTestsForParseRequest();
-
         foreach ($suites as $i => $suite) {
-            [$name, $config, $tests] = $suite;
+            list($name, $config, $tests) = $suite;
             $rule = new UrlRule($config);
-
             foreach ($tests as $j => $test) {
                 $request->pathInfo = $test[0];
-                $expected = $test[2] ?? $test[1];
+                $expected = isset($test[2]) ? $test[2] : $test[1];
                 $result = $rule->parseRequest($manager, $request);
-
                 if ($expected === false) {
-                    $this->assertFalse($result, "Test#{$i}-{$j}: {$name}");
+                    $this->assertFalse($result, "Test#$i-$j: $name");
                 } else {
-                    $this->assertSame($expected, $result, "Test#{$i}-{$j}: {$name}");
+                    $this->assertEquals($expected, $result, "Test#$i-$j: $name");
                 }
             }
         }
 
-        $normalizerAction = static function ($route) {
+        $normalizerAction = function ($route) {
             $route[1]['oldRoute'] = $route[0];
             $route[0] = 'site/myCustomRoute';
-
             return $route;
         };
         $manager = new UrlManager([
@@ -252,26 +221,23 @@ final class UrlRuleTest extends TestCase
         ]);
         $request = new Request(['hostInfo' => 'http://en.example.com']);
         $suites = $this->getTestsForParseRequest();
-
         foreach ($suites as $i => $suite) {
-            [$name, $config, $tests] = $suite;
+            list($name, $config, $tests) = $suite;
             $rule = new UrlRule($config);
-
             foreach ($tests as $j => $test) {
                 $request->pathInfo = $test[0];
                 $expected = isset($test[2]) ? $normalizerAction($test[2]) : $test[1];
                 $result = $rule->parseRequest($manager, $request);
-
                 if ($expected === false) {
-                    $this->assertFalse($result, "Test#{$i}-{$j}: {$name}");
+                    $this->assertFalse($result, "Test#$i-$j: $name");
                 } else {
-                    $this->assertSame($expected, $result, "Test#{$i}-{$j}: {$name}");
+                    $this->assertEquals($expected, $result, "Test#$i-$j: $name");
                 }
             }
         }
     }
 
-    public function testParseRequestWithUrlRuleCustomNormalizer(): void
+    public function testParseRequestWithUrlRuleCustomNormalizer()
     {
         $manager = new UrlManager([
             'cache' => null,
@@ -310,115 +276,17 @@ final class UrlRuleTest extends TestCase
             ],
         ]);
         $result = $rule->parseRequest($manager, $request);
-        $this->assertSame(['post/index', ['page' => 1, 'tag' => 'a']], $result);
+        $this->assertEquals(['post/index', ['page' => 1, 'tag' => 'a']], $result);
     }
 
-    public function testToString(): void
+    public function testToString()
     {
         $suites = $this->getTestsForToString();
-
         foreach ($suites as $i => $suite) {
-            [$name, $config, $test] = $suite;
+            list($name, $config, $test) = $suite;
             $rule = new UrlRule($config);
-            $this->assertSame($rule->__toString(), $test, "Test#{$i}: {$name}");
+            $this->assertEquals($rule->__toString(), $test, "Test#$i: $name");
         }
-    }
-
-    /**
-     * @dataProvider testGetCreateUrlStatusProvider
-     *
-     * @param array $config
-     * @param array $tests
-     */
-    public function testGetCreateUrlStatus($config, $tests): void
-    {
-        foreach ($tests as $test) {
-            [$route, $params, $expected, $status] = $test;
-
-            $this->mockWebApplication();
-            Yii::$app->set('request', new Request(['hostInfo' => 'http://example.com', 'scriptUrl' => '/index.php']));
-
-            $manager = new UrlManager([
-                'cache' => null,
-            ]);
-            $rule = new UrlRule($config);
-            $errorMessage = 'Failed test: ' . VarDumper::dumpAsString($test);
-            $this->assertSame($expected, $rule->createUrl($manager, $route, $params), $errorMessage);
-            $this->assertNotNull($status, $errorMessage);
-
-            if ($status > 0) {
-                $this->assertSame($status, $rule->getCreateUrlStatus() & $status, $errorMessage);
-            } else {
-                $this->assertSame($status, $rule->getCreateUrlStatus(), $errorMessage);
-            }
-        }
-    }
-
-    /**
-     * Provides test cases for getCreateUrlStatus() method.
-     *
-     * - first param are properties of the UrlRule
-     * - second param is an array of test cases, containing two element arrays:
-     *   - first element is the route to create
-     *   - second element is the array of params
-     *   - third element is the expected URL
-     *   - fourth element is the expected result of getCreateUrlStatus() method
-     */
-    public function testGetCreateUrlStatusProvider()
-    {
-        return [
-            'route' => [
-                // rule properties
-                [
-                    'pattern' => 'post/<page:\d+>/<tag>/<sort:yes|no>',
-                    'route' => 'post/index',
-                    'defaults' => ['page' => 1, 'sort' => 'yes'],
-                ],
-                // test cases: route, params, expected, createStatus
-                [
-                    ['post/index', ['page' => 1, 'tag' => 'a', 'sort' => 'yes'], 'post/a', UrlRule::CREATE_STATUS_SUCCESS],
-                    ['module/post/index', ['page' => 1, 'tag' => 'a', 'sort' => 'yes'], false, UrlRule::CREATE_STATUS_ROUTE_MISMATCH],
-                    ['post/index/action', ['page' => 1, 'tag' => 'a', 'sort' => 'yes'], false, UrlRule::CREATE_STATUS_ROUTE_MISMATCH],
-                ],
-            ],
-            'optional params' => [
-                // rule properties
-                [
-                    'pattern' => 'post/<page:\d+>/<tag>/<sort:yes|no>',
-                    'route' => 'post/index',
-                    'defaults' => ['page' => 1, 'sort' => 'yes'],
-                ],
-                // test cases: route, params, expected, createStatus
-                [
-                    ['post/index', ['page' => 1, 'tag' => 'a', 'sort' => 'yes'], 'post/a', UrlRule::CREATE_STATUS_SUCCESS],
-                    ['post/index', ['page' => 2, 'tag' => 'a', 'sort' => 'yes'], 'post/2/a', UrlRule::CREATE_STATUS_SUCCESS],
-                    ['post/index', ['page' => 2, 'tag' => 'a', 'sort' => 'no'], 'post/2/a/no', UrlRule::CREATE_STATUS_SUCCESS],
-                    ['post/index', ['page' => 1, 'tag' => 'a', 'sort' => 'no'], 'post/a/no', UrlRule::CREATE_STATUS_SUCCESS],
-                    [
-                        'post/index',
-                        ['page' => 1, 'tag' => 'a', 'sort' => 'no', 'category' => 'my-category'],
-                        'post/a/no?category=my-category',
-                        UrlRule::CREATE_STATUS_SUCCESS,
-                    ],
-                    ['post/index', ['page' => 1], false, UrlRule::CREATE_STATUS_PARAMS_MISMATCH],
-                    ['post/index', ['page' => '1abc', 'tag' => 'a'], false, UrlRule::CREATE_STATUS_PARAMS_MISMATCH],
-                    ['post/index', ['page' => 1, 'tag' => 'a', 'sort' => 'YES'], false, UrlRule::CREATE_STATUS_PARAMS_MISMATCH],
-                ],
-            ],
-            'parsing only' => [
-                // rule properties
-                [
-                    'pattern' => 'post/<page:\d+>/<tag>/<sort:yes|no>',
-                    'route' => 'post/index',
-                    'defaults' => ['page' => 1, 'sort' => 'yes'],
-                    'mode' => UrlRule::PARSING_ONLY,
-                ],
-                // test cases: route, params, expected, createStatus
-                [
-                    ['post/index', ['page' => 1, 'tag' => 'a', 'sort' => 'yes'], false, UrlRule::CREATE_STATUS_PARSING_ONLY],
-                ],
-            ],
-        ];
     }
 
     protected function getTestsForCreateUrl()
@@ -1419,6 +1287,101 @@ final class UrlRuleTest extends TestCase
                     'route' => 'post/index',
                 ],
                 'PUT,POST post/<id:\d+>',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider testGetCreateUrlStatusProvider
+     * @param array $config
+     * @param array $tests
+     */
+    public function testGetCreateUrlStatus($config, $tests)
+    {
+        foreach ($tests as $test) {
+            list($route, $params, $expected, $status) = $test;
+
+            $this->mockWebApplication();
+            Yii::$app->set('request', new Request(['hostInfo' => 'http://example.com', 'scriptUrl' => '/index.php']));
+
+            $manager = new UrlManager([
+                'cache' => null,
+            ]);
+            $rule = new UrlRule($config);
+            $errorMessage = 'Failed test: ' . VarDumper::dumpAsString($test);
+            $this->assertSame($expected, $rule->createUrl($manager, $route, $params), $errorMessage);
+            $this->assertNotNull($status, $errorMessage);
+            if ($status > 0) {
+                $this->assertSame($status, $rule->getCreateUrlStatus() & $status, $errorMessage);
+            } else {
+                $this->assertSame($status, $rule->getCreateUrlStatus(), $errorMessage);
+            }
+        }
+    }
+
+    /**
+     * Provides test cases for getCreateUrlStatus() method.
+     *
+     * - first param are properties of the UrlRule
+     * - second param is an array of test cases, containing two element arrays:
+     *   - first element is the route to create
+     *   - second element is the array of params
+     *   - third element is the expected URL
+     *   - fourth element is the expected result of getCreateUrlStatus() method
+     */
+    public function testGetCreateUrlStatusProvider()
+    {
+        return [
+            'route' => [
+                // rule properties
+                [
+                    'pattern' => 'post/<page:\d+>/<tag>/<sort:yes|no>',
+                    'route' => 'post/index',
+                    'defaults' => ['page' => 1, 'sort' => 'yes'],
+                ],
+                // test cases: route, params, expected, createStatus
+                [
+                    ['post/index', ['page' => 1, 'tag' => 'a', 'sort' => 'yes'], 'post/a', UrlRule::CREATE_STATUS_SUCCESS],
+                    ['module/post/index', ['page' => 1, 'tag' => 'a', 'sort' => 'yes'], false, UrlRule::CREATE_STATUS_ROUTE_MISMATCH],
+                    ['post/index/action', ['page' => 1, 'tag' => 'a', 'sort' => 'yes'], false, UrlRule::CREATE_STATUS_ROUTE_MISMATCH],
+                ],
+            ],
+            'optional params' => [
+                // rule properties
+                [
+                    'pattern' => 'post/<page:\d+>/<tag>/<sort:yes|no>',
+                    'route' => 'post/index',
+                    'defaults' => ['page' => 1, 'sort' => 'yes'],
+                ],
+                // test cases: route, params, expected, createStatus
+                [
+                    ['post/index', ['page' => 1, 'tag' => 'a', 'sort' => 'yes'], 'post/a', UrlRule::CREATE_STATUS_SUCCESS],
+                    ['post/index', ['page' => 2, 'tag' => 'a', 'sort' => 'yes'], 'post/2/a', UrlRule::CREATE_STATUS_SUCCESS],
+                    ['post/index', ['page' => 2, 'tag' => 'a', 'sort' => 'no'], 'post/2/a/no', UrlRule::CREATE_STATUS_SUCCESS],
+                    ['post/index', ['page' => 1, 'tag' => 'a', 'sort' => 'no'], 'post/a/no', UrlRule::CREATE_STATUS_SUCCESS],
+                    [
+                        'post/index',
+                        ['page' => 1, 'tag' => 'a', 'sort' => 'no', 'category' => 'my-category'],
+                        'post/a/no?category=my-category',
+                        UrlRule::CREATE_STATUS_SUCCESS,
+                    ],
+                    ['post/index', ['page' => 1], false, UrlRule::CREATE_STATUS_PARAMS_MISMATCH],
+                    ['post/index', ['page' => '1abc', 'tag' => 'a'], false, UrlRule::CREATE_STATUS_PARAMS_MISMATCH],
+                    ['post/index', ['page' => 1, 'tag' => 'a', 'sort' => 'YES'], false, UrlRule::CREATE_STATUS_PARAMS_MISMATCH],
+                ],
+            ],
+            'parsing only' => [
+                // rule properties
+                [
+                    'pattern' => 'post/<page:\d+>/<tag>/<sort:yes|no>',
+                    'route' => 'post/index',
+                    'defaults' => ['page' => 1, 'sort' => 'yes'],
+                    'mode' => UrlRule::PARSING_ONLY,
+                ],
+                // test cases: route, params, expected, createStatus
+                [
+                    ['post/index', ['page' => 1, 'tag' => 'a', 'sort' => 'yes'], false, UrlRule::CREATE_STATUS_PARSING_ONLY],
+                ],
             ],
         ];
     }

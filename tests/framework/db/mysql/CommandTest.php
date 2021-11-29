@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -13,17 +10,14 @@ namespace yiiunit\framework\db\mysql;
 /**
  * @group db
  * @group mysql
- *
- * @internal
- * @coversNothing
  */
-final class CommandTest extends \yiiunit\framework\db\CommandTest
+class CommandTest extends \yiiunit\framework\db\CommandTest
 {
     public $driverName = 'mysql';
 
     protected $upsertTestCharCast = 'CONVERT([[address]], CHAR)';
 
-    public function testAddDropCheck(): void
+    public function testAddDropCheck()
     {
         $this->markTestSkipped('MySQL does not support adding/dropping check constraints.');
     }

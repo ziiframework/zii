@@ -1,11 +1,8 @@
 <?php
-
-declare(strict_types=1);
-
 /**
- * @link http://www.yiiframework.com/
+ * @link      http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license   http://www.yiiframework.com/license/
  */
 
 namespace yiiunit\framework\caching;
@@ -14,15 +11,11 @@ use yii\db\Connection;
 
 /**
  * Class for testing file cache backend.
- *
  * @group db
  * @group caching
  * @group pgsql
- *
- * @internal
- * @coversNothing
  */
-final class PgSQLCacheTest extends DbCacheTest
+class PgSQLCacheTest extends DbCacheTest
 {
     protected static $driverName = 'pgsql';
     private $_connection;
@@ -32,7 +25,6 @@ final class PgSQLCacheTest extends DbCacheTest
         if (!extension_loaded('pdo') || !extension_loaded('pdo_pgsql')) {
             $this->markTestSkipped('pdo and pdo_pgsql extensions are required.');
         }
-
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('HHVMs PgSQL implementation does not seem to support blob colums in the way they are used here.');
         }
@@ -49,8 +41,7 @@ CREATE TABLE IF NOT EXISTS "cache"
     }
 
     /**
-     * @param bool $reset whether to clean up the test database
-     *
+     * @param  bool            $reset whether to clean up the test database
      * @return Connection
      */
     public function getConnection($reset = true)
@@ -62,11 +53,9 @@ CREATE TABLE IF NOT EXISTS "cache"
             $db->dsn = $params['dsn'];
             $db->username = $params['username'];
             $db->password = $params['password'];
-
             if ($reset) {
                 $db->open();
                 $lines = explode(';', file_get_contents($params['fixture']));
-
                 foreach ($lines as $line) {
                     if (trim($line) !== '') {
                         $db->pdo->exec($line);

@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -13,7 +10,7 @@ namespace yiiunit\data\ar;
 /**
  * Class Category.
  *
- * @property int    $id
+ * @property int $id
  * @property string $name
  */
 class Category extends ActiveRecord
@@ -31,8 +28,7 @@ class Category extends ActiveRecord
     public function getLimitedItems()
     {
         return $this->hasMany(Item::className(), ['category_id' => 'id'])
-            ->onCondition(['item.id' => [1, 2, 3]])
-        ;
+            ->onCondition(['item.id' => [1, 2, 3]]);
     }
 
     public function getOrderItems()

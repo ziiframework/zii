@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -19,11 +16,8 @@ use yiiunit\TestCase;
 /**
  * @group helpers
  * @group i18n
- *
- * @internal
- * @coversNothing
  */
-final class FormatConverterTest extends TestCase
+class FormatConverterTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -43,36 +37,39 @@ final class FormatConverterTest extends TestCase
         IntlTestHelper::resetIntlStatus();
     }
 
-    public function testIntlIcuToPhpShortForm(): void
+    public function testIntlIcuToPhpShortForm()
     {
-        $this->assertSame('n/j/y', FormatConverter::convertDateIcuToPhp('short', 'date', 'en-US'));
-        $this->assertSame('d.m.y', FormatConverter::convertDateIcuToPhp('short', 'date', 'de-DE'));
+        $this->assertEquals('n/j/y', FormatConverter::convertDateIcuToPhp('short', 'date', 'en-US'));
+        $this->assertEquals('d.m.y', FormatConverter::convertDateIcuToPhp('short', 'date', 'de-DE'));
     }
 
-    public function testIntlIcuToPhpShortFormDefaultLang(): void
+    public function testIntlIcuToPhpShortFormDefaultLang()
     {
         Yii::$app->language = 'en';
-        $this->assertSame('n/j/y', FormatConverter::convertDateIcuToPhp('short', 'date'));
+        $this->assertEquals('n/j/y', FormatConverter::convertDateIcuToPhp('short', 'date'));
         Yii::$app->language = 'de';
-        $this->assertSame('d.m.y', FormatConverter::convertDateIcuToPhp('short', 'date'));
+        $this->assertEquals('d.m.y', FormatConverter::convertDateIcuToPhp('short', 'date'));
     }
 
-    public function testIntlIcuToPhpShortFormTime(): void
+    public function testIntlIcuToPhpShortFormTime()
     {
-        $this->assertSame('g:i A', FormatConverter::convertDateIcuToPhp('short', 'time', 'en-US'));
-        $this->assertSame('H:i', FormatConverter::convertDateIcuToPhp('short', 'time', 'de-DE'));
+        $this->assertEquals('g:i A', FormatConverter::convertDateIcuToPhp('short', 'time', 'en-US'));
+        $this->assertEquals('H:i', FormatConverter::convertDateIcuToPhp('short', 'time', 'de-DE'));
     }
 
-    public function testIntlIcuToPhpShortFormDateTime(): void
+    public function testIntlIcuToPhpShortFormDateTime()
     {
-        $this->assertSame('n/j/y, g:i A', FormatConverter::convertDateIcuToPhp('short', 'datetime', 'en-US'));
-        $this->assertSame(PHP_VERSION_ID < 50600 ? 'd.m.y H:i' : 'd.m.y, H:i', FormatConverter::convertDateIcuToPhp('short', 'datetime', 'de-DE'));
+        $this->assertEquals('n/j/y, g:i A', FormatConverter::convertDateIcuToPhp('short', 'datetime', 'en-US'));
+        $this->assertEquals(
+            PHP_VERSION_ID < 50600 ? 'd.m.y H:i' : 'd.m.y, H:i',
+            FormatConverter::convertDateIcuToPhp('short', 'datetime', 'de-DE')
+        );
     }
 
-    public function testEscapedIcuToPhpMixedPatterns(): void
+    public function testEscapedIcuToPhpMixedPatterns()
     {
-        $this->assertSame('l, F j, Y \\a\\t g:i:s A T', FormatConverter::convertDateIcuToPhp('EEEE, MMMM d, y \'at\' h:mm:ss a zzzz'));
-        $this->assertSame('\\o\\\'\\c\\l\\o\\c\\k', FormatConverter::convertDateIcuToPhp('\'o\'\'clock\''));
+        $this->assertEquals('l, F j, Y \\a\\t g:i:s A T', FormatConverter::convertDateIcuToPhp('EEEE, MMMM d, y \'at\' h:mm:ss a zzzz'));
+        $this->assertEquals('\\o\\\'\\c\\l\\o\\c\\k', FormatConverter::convertDateIcuToPhp('\'o\'\'clock\''));
     }
 
     public function providerForICU2PHPPatterns()
@@ -183,45 +180,45 @@ final class FormatConverterTest extends TestCase
 
     /**
      * @dataProvider providerForICU2PHPPatterns
-     *
-     * @param mixed $pattern
-     * @param mixed $expected
      */
-    public function testEscapedIcuToPhpSinglePattern($pattern, $expected): void
+    public function testEscapedIcuToPhpSinglePattern($pattern, $expected)
     {
-        $this->assertSame($expected, FormatConverter::convertDateIcuToPhp($pattern));
+        $this->assertEquals($expected, FormatConverter::convertDateIcuToPhp($pattern));
     }
 
-    public function testEscapedIcuToJui(): void
+    public function testEscapedIcuToJui()
     {
-        $this->assertSame('DD, MM d, yy \'at\' ', FormatConverter::convertDateIcuToJui('EEEE, MMMM d, y \'at\' zzzz'));
-        $this->assertSame('\'o\'\'clock\'', FormatConverter::convertDateIcuToJui('\'o\'\'clock\''));
+        $this->assertEquals('DD, MM d, yy \'at\' ', FormatConverter::convertDateIcuToJui('EEEE, MMMM d, y \'at\' zzzz'));
+        $this->assertEquals('\'o\'\'clock\'', FormatConverter::convertDateIcuToJui('\'o\'\'clock\''));
     }
 
-    public function testIntlIcuToJuiShortForm(): void
+    public function testIntlIcuToJuiShortForm()
     {
-        $this->assertSame('m/d/y', FormatConverter::convertDateIcuToJui('short', 'date', 'en-US'));
-        $this->assertSame('dd.mm.y', FormatConverter::convertDateIcuToJui('short', 'date', 'de-DE'));
+        $this->assertEquals('m/d/y', FormatConverter::convertDateIcuToJui('short', 'date', 'en-US'));
+        $this->assertEquals('dd.mm.y', FormatConverter::convertDateIcuToJui('short', 'date', 'de-DE'));
     }
 
-    public function testIntlIcuToJuiShortFormDefaultLang(): void
+    public function testIntlIcuToJuiShortFormDefaultLang()
     {
         Yii::$app->language = 'en';
-        $this->assertSame('m/d/y', FormatConverter::convertDateIcuToJui('short', 'date'));
+        $this->assertEquals('m/d/y', FormatConverter::convertDateIcuToJui('short', 'date'));
         Yii::$app->language = 'de';
-        $this->assertSame('dd.mm.y', FormatConverter::convertDateIcuToJui('short', 'date'));
+        $this->assertEquals('dd.mm.y', FormatConverter::convertDateIcuToJui('short', 'date'));
     }
 
-    public function testIntlIcuToJuiShortFormTime(): void
+    public function testIntlIcuToJuiShortFormTime()
     {
-        $this->assertSame(': ', FormatConverter::convertDateIcuToJui('short', 'time', 'en-US'));
-        $this->assertSame(':', FormatConverter::convertDateIcuToJui('short', 'time', 'de-DE'));
+        $this->assertEquals(': ', FormatConverter::convertDateIcuToJui('short', 'time', 'en-US'));
+        $this->assertEquals(':', FormatConverter::convertDateIcuToJui('short', 'time', 'de-DE'));
     }
 
-    public function testIntlIcuToJuiShortFormDateTime(): void
+    public function testIntlIcuToJuiShortFormDateTime()
     {
-        $this->assertSame('m/d/y, : ', FormatConverter::convertDateIcuToJui('short', 'datetime', 'en-US'));
-        $this->assertSame(PHP_VERSION_ID < 50600 ? 'dd.mm.y :' : 'dd.mm.y, :', FormatConverter::convertDateIcuToJui('short', 'datetime', 'de-DE'));
+        $this->assertEquals('m/d/y, : ', FormatConverter::convertDateIcuToJui('short', 'datetime', 'en-US'));
+        $this->assertEquals(
+            PHP_VERSION_ID < 50600 ? 'dd.mm.y :' : 'dd.mm.y, :',
+            FormatConverter::convertDateIcuToJui('short', 'datetime', 'de-DE')
+        );
     }
 
     public function providerForICU2JUIPatterns()
@@ -331,35 +328,32 @@ final class FormatConverterTest extends TestCase
 
     /**
      * @dataProvider providerForICU2JUIPatterns
-     *
-     * @param mixed $pattern
-     * @param mixed $expected
      */
-    public function testEscapedIcuToJuiSinglePattern($pattern, $expected): void
+    public function testEscapedIcuToJuiSinglePattern($pattern, $expected)
     {
-        $this->assertSame($expected, FormatConverter::convertDateIcuToJui($pattern));
+        $this->assertEquals($expected, FormatConverter::convertDateIcuToJui($pattern));
     }
 
-    public function testIntlOneDigitIcu(): void
+    public function testIntlOneDigitIcu()
     {
         $formatter = new Formatter(['locale' => 'en-US']);
-        $this->assertSame('24.8.2014', $formatter->asDate('2014-8-24', 'php:d.n.Y'));
-        $this->assertSame('24.8.2014', $formatter->asDate('2014-8-24', 'd.M.yyyy'));
-        $this->assertSame('24.8.2014', $formatter->asDate('2014-8-24', 'd.L.yyyy'));
+        $this->assertEquals('24.8.2014', $formatter->asDate('2014-8-24', 'php:d.n.Y'));
+        $this->assertEquals('24.8.2014', $formatter->asDate('2014-8-24', 'd.M.yyyy'));
+        $this->assertEquals('24.8.2014', $formatter->asDate('2014-8-24', 'd.L.yyyy'));
     }
 
-    public function testOneDigitIcu(): void
+    public function testOneDigitIcu()
     {
         $formatter = new Formatter(['locale' => 'en-US']);
-        $this->assertSame('24.8.2014', $formatter->asDate('2014-8-24', 'php:d.n.Y'));
-        $this->assertSame('24.8.2014', $formatter->asDate('2014-8-24', 'd.M.yyyy'));
-        $this->assertSame('24.8.2014', $formatter->asDate('2014-8-24', 'd.L.yyyy'));
+        $this->assertEquals('24.8.2014', $formatter->asDate('2014-8-24', 'php:d.n.Y'));
+        $this->assertEquals('24.8.2014', $formatter->asDate('2014-8-24', 'd.M.yyyy'));
+        $this->assertEquals('24.8.2014', $formatter->asDate('2014-8-24', 'd.L.yyyy'));
     }
 
-    public function testIntlUtf8Ru(): void
+    public function testIntlUtf8Ru()
     {
-        $this->assertSame('d M Y \г.', FormatConverter::convertDateIcuToPhp("dd MMM y 'г'.", 'date', 'ru-RU'));
-        $this->assertSame("dd M yy 'г'.", FormatConverter::convertDateIcuToJui("dd MMM y 'г'.", 'date', 'ru-RU'));
+        $this->assertEquals('d M Y \г.', FormatConverter::convertDateIcuToPhp("dd MMM y 'г'.", 'date', 'ru-RU'));
+        $this->assertEquals("dd M yy 'г'.", FormatConverter::convertDateIcuToJui("dd MMM y 'г'.", 'date', 'ru-RU'));
 
         $formatter = new Formatter(['locale' => 'ru-RU']);
         // There is a dot after month name in updated ICU data and no dot in old data. Both are acceptable.
@@ -367,31 +361,31 @@ final class FormatConverterTest extends TestCase
         $this->assertMatchesRegularExpression('/24 авг\.? 2014 г\./', $formatter->asDate('2014-8-24', "dd MMM y 'г'."));
     }
 
-    public function testPhpToICUMixedPatterns(): void
+    public function testPhpToICUMixedPatterns()
     {
         $expected = "yyyy-MM-dd'T'HH:mm:ssxxx";
         $actual = FormatConverter::convertDatePhpToIcu('Y-m-d\TH:i:sP');
-        $this->assertSame($expected, $actual);
+        $this->assertEquals($expected, $actual);
 
         $expected = "yyyy-MM-dd'Yii'HH:mm:ssxxx";
         $actual = FormatConverter::convertDatePhpToIcu('Y-m-d\Y\i\iH:i:sP');
-        $this->assertSame($expected, $actual);
+        $this->assertEquals($expected, $actual);
 
         $expected = "yyyy-MM-dd'Yii'HH:mm:ssxxx''''";
-        $actual = FormatConverter::convertDatePhpToIcu("Y-m-d\\Y\\i\\iH:i:sP''");
-        $this->assertSame($expected, $actual);
+        $actual = FormatConverter::convertDatePhpToIcu("Y-m-d\Y\i\iH:i:sP''");
+        $this->assertEquals($expected, $actual);
 
-        $expected = "yyyy-MM-dd'Yii'\\HH:mm:ssxxx''''";
-        $actual = FormatConverter::convertDatePhpToIcu("Y-m-d\\Y\\i\\i\\\\H:i:sP''");
-        $this->assertSame($expected, $actual);
+        $expected = "yyyy-MM-dd'Yii'\HH:mm:ssxxx''''";
+        $actual = FormatConverter::convertDatePhpToIcu("Y-m-d\Y\i\i\\\\H:i:sP''");
+        $this->assertEquals($expected, $actual);
 
         $expected = "'dDjlNSwZWFmMntLoYyaBghHisueIOPTZcru'";
         $actual = FormatConverter::convertDatePhpToIcu('\d\D\j\l\N\S\w\Z\W\F\m\M\n\t\L\o\Y\y\a\B\g\h\H\i\s\u\e\I\O\P\T\Z\c\r\u');
-        $this->assertSame($expected, $actual);
+        $this->assertEquals($expected, $actual);
 
         $expected = "yyyy-MM-dd'T'HH:mm:ssxxx";
         $actual = FormatConverter::convertDatePhpToIcu('c');
-        $this->assertSame($expected, $actual);
+        $this->assertEquals($expected, $actual);
     }
 
     public function providerForPHP2ICUPatterns()
@@ -479,30 +473,27 @@ final class FormatConverterTest extends TestCase
 
     /**
      * @dataProvider providerForPHP2ICUPatterns
-     *
-     * @param mixed $pattern
-     * @param mixed $expected
      */
-    public function testPhpToICUSinglePattern($pattern, $expected): void
+    public function testPhpToICUSinglePattern($pattern, $expected)
     {
-        $this->assertSame($expected, FormatConverter::convertDatePhpToIcu($pattern));
+        $this->assertEquals($expected, FormatConverter::convertDatePhpToIcu($pattern));
     }
 
-    public function testPhpFormatC(): void
+    public function testPhpFormatC()
     {
         $time = time();
 
         $formatter = new Formatter(['locale' => 'en-US']);
-        $this->assertSame(date('c', $time), $formatter->asDatetime($time, 'php:c'));
+        $this->assertEquals(date('c', $time), $formatter->asDatetime($time, 'php:c'));
 
         date_default_timezone_set('Europe/Moscow');
         $formatter = new Formatter(['locale' => 'ru-RU', 'timeZone' => 'Europe/Moscow']);
-        $this->assertSame(date('c', $time), $formatter->asDatetime($time, 'php:c'));
+        $this->assertEquals(date('c', $time), $formatter->asDatetime($time, 'php:c'));
     }
 
-    public function testEscapedPhpToJuiMixedPatterns(): void
+    public function testEscapedPhpToJuiMixedPatterns()
     {
-        $this->assertSame('dd-mm-yy', FormatConverter::convertDatePhpToJui('d-m-Y'));
+        $this->assertEquals('dd-mm-yy', FormatConverter::convertDatePhpToJui('d-m-Y'));
     }
 
     public function providerForPHP2JUIPatterns()
@@ -550,12 +541,9 @@ final class FormatConverterTest extends TestCase
 
     /**
      * @dataProvider providerForPHP2JUIPatterns
-     *
-     * @param mixed $pattern
-     * @param mixed $expected
      */
-    public function testEscapedPhpToJuiSinglePattern($pattern, $expected): void
+    public function testEscapedPhpToJuiSinglePattern($pattern, $expected)
     {
-        $this->assertSame($expected, FormatConverter::convertDatePhpToJui($pattern));
+        $this->assertEquals($expected, FormatConverter::convertDatePhpToJui($pattern));
     }
 }
