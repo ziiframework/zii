@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\db\mysql;
 
 use yii\db\mysql\ColumnSchemaBuilder;
@@ -12,6 +12,7 @@ use yii\db\mysql\Schema;
 
 /**
  * ColumnSchemaBuilderTest tests ColumnSchemaBuilder for MySQL.
+ *
  * @group db
  * @group mysql
  */
@@ -21,7 +22,8 @@ class ColumnSchemaBuilderTest extends \yiiunit\framework\db\ColumnSchemaBuilderT
 
     /**
      * @param string $type
-     * @param int $length
+     * @param int    $length
+     *
      * @return ColumnSchemaBuilder
      */
     public function getColumnSchemaBuilder($type, $length = null)
@@ -48,7 +50,7 @@ class ColumnSchemaBuilderTest extends \yiiunit\framework\db\ColumnSchemaBuilderT
             ['string(50) NOT NULL COMMENT \'Property name\' COLLATE ascii_general_ci', Schema::TYPE_STRING, 50, [
                 ['comment', 'Property name'],
                 ['append', 'COLLATE ascii_general_ci'],
-                ['notNull']
+                ['notNull'],
             ]],
         ];
     }

@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\data\ar;
 
 use yii\db\ActiveQuery;
@@ -13,18 +13,19 @@ use yiiunit\framework\db\ActiveRecordTest;
 /**
  * Class Customer.
  *
- * @property int $id
+ * @property int    $id
  * @property string $name
  * @property string $email
  * @property string $address
- * @property int $status
+ * @property int    $status
  *
  * @method CustomerQuery findBySql($sql, $params = []) static
  */
 class Customer extends ActiveRecord
 {
-    const STATUS_ACTIVE = 1;
-    const STATUS_INACTIVE = 2;
+    public const STATUS_ACTIVE = 1;
+
+    public const STATUS_INACTIVE = 2;
 
     public $status2;
 
@@ -33,6 +34,16 @@ class Customer extends ActiveRecord
     public static function tableName()
     {
         return 'customer';
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * @return CustomerQuery
+     */
+    public static function find()
+    {
+        return new CustomerQuery(static::class);
     }
 
     public function getProfile()
@@ -81,25 +92,17 @@ class Customer extends ActiveRecord
         /* @var $rel ActiveQuery */
         $rel = $this->hasMany(Item::className(), ['id' => 'item_id']);
 
-        return $rel->viaTable('order_item', ['order_id' => 'id'], function ($q) {
+        return $rel->viaTable('order_item', ['order_id' => 'id'], static function ($q): void
+        {
             /* @var $q ActiveQuery */
             $q->viaTable('order', ['customer_id' => 'id']);
         })->orderBy('id');
     }
 
-    public function afterSave($insert, $changedAttributes)
+    public function afterSave($insert, $changedAttributes): void
     {
-        ActiveRecordTest::$afterSaveInsert = $insert;
+        ActiveRecordTest::$afterSaveInsert    = $insert;
         ActiveRecordTest::$afterSaveNewRecord = $this->isNewRecord;
         parent::afterSave($insert, $changedAttributes);
-    }
-
-    /**
-     * {@inheritdoc}
-     * @return CustomerQuery
-     */
-    public static function find()
-    {
-        return new CustomerQuery(\get_called_class());
     }
 }

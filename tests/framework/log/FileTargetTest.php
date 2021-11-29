@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\log;
 
 use Yii;
@@ -34,10 +34,11 @@ class FileTargetTest extends TestCase
     }
 
     /**
-     * Tests that log directory isn't created during init process
+     * Tests that log directory isn't created during init process.
+     *
      * @see https://github.com/yiisoft/yii2/issues/15662
      */
-    public function testInit()
+    public function testInit(): void
     {
         $logFile = Yii::getAlias('@yiiunit/runtime/log/filetargettest.log');
         FileHelper::removeDirectory(dirname($logFile));
@@ -52,25 +53,26 @@ class FileTargetTest extends TestCase
 
     /**
      * @dataProvider booleanDataProvider
+     *
      * @param bool $rotateByCopy
      */
-    public function testRotate($rotateByCopy)
+    public function testRotate($rotateByCopy): void
     {
         $logFile = Yii::getAlias('@yiiunit/runtime/log/filetargettest.log');
         FileHelper::removeDirectory(dirname($logFile));
         mkdir(dirname($logFile), 0777, true);
 
-        $logger = new Logger();
+        $logger     = new Logger();
         $dispatcher = new Dispatcher([
-            'logger' => $logger,
+            'logger'  => $logger,
             'targets' => [
                 'file' => [
-                    'class' => 'yii\log\FileTarget',
-                    'logFile' => $logFile,
-                    'levels' => ['warning'],
-                    'maxFileSize' => 1024, // 1 MB
-                    'maxLogFiles' => 1, // one file for rotation and one normal log file
-                    'logVars' => [],
+                    'class'        => 'yii\log\FileTarget',
+                    'logFile'      => $logFile,
+                    'levels'       => ['warning'],
+                    'maxFileSize'  => 1024, // 1 MB
+                    'maxLogFiles'  => 1, // one file for rotation and one normal log file
+                    'logVars'      => [],
                     'rotateByCopy' => $rotateByCopy,
                 ],
             ],

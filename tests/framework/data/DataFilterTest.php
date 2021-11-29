@@ -1,12 +1,13 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\data;
 
+use stdClass;
 use yii\base\DynamicModel;
 use yii\data\DataFilter;
 use yiiunit\data\base\Singer;
@@ -26,7 +27,7 @@ class DataFilterTest extends TestCase
 
     // Tests :
 
-    public function testSetupSearchModel()
+    public function testSetupSearchModel(): void
     {
         $builder = new DataFilter();
 
@@ -39,14 +40,15 @@ class DataFilterTest extends TestCase
         $this->assertTrue($model instanceof Singer);
 
         $builder->setSearchModel([
-            'class' => Singer::className(),
+            'class'    => Singer::className(),
             'scenario' => 'search',
         ]);
         $model = $builder->getSearchModel();
         $this->assertTrue($model instanceof Singer);
         $this->assertEquals('search', $model->getScenario());
 
-        $builder->setSearchModel(function () {
+        $builder->setSearchModel(static function ()
+        {
             return (new DynamicModel(['name' => null, 'price' => null]))
                 ->addRule(['name'], 'string', ['max' => 128])
                 ->addRule(['price'], 'number');
@@ -55,10 +57,10 @@ class DataFilterTest extends TestCase
         $this->assertTrue($model instanceof DynamicModel);
 
         $this->expectException('yii\base\InvalidConfigException');
-        $builder->setSearchModel(new \stdClass());
+        $builder->setSearchModel(new stdClass());
     }
 
-    public function testLoad()
+    public function testLoad(): void
     {
         $filterValue = [
             'name' => 'value',
@@ -71,7 +73,7 @@ class DataFilterTest extends TestCase
 
         $this->assertFalse($builder->load([]));
 
-        $builder = new DataFilter();
+        $builder                      = new DataFilter();
         $builder->filterAttributeName = 'search';
 
         $builder->load(['filter' => $filterValue]);
@@ -83,7 +85,8 @@ class DataFilterTest extends TestCase
 
     /**
      * Data provider for [[testValidate()]].
-     * @return array test data.
+     *
+     * @return array test data
      */
     public function dataProviderValidate()
     {
@@ -107,7 +110,7 @@ class DataFilterTest extends TestCase
             ],
             [
                 [
-                    'name' => 'foo',
+                    'name'   => 'foo',
                     'number' => '10',
                 ],
                 true,
@@ -115,7 +118,7 @@ class DataFilterTest extends TestCase
             ],
             [
                 [
-                    'fake' => 'foo',
+                    'fake'   => 'foo',
                     'number' => '10',
                 ],
                 false,
@@ -140,7 +143,7 @@ class DataFilterTest extends TestCase
             [
                 [
                     'and' => [
-                        'name' => ['eq' => 'foo'],
+                        'name'   => ['eq' => 'foo'],
                         'number' => ['in' => [1, 5, 8]],
                     ],
                 ],
@@ -259,21 +262,21 @@ class DataFilterTest extends TestCase
      * @dataProvider dataProviderValidate
      *
      * @param array $filter
-     * @param bool $expectedResult
+     * @param bool  $expectedResult
      * @param array $expectedErrors
      */
-    public function testValidate($filter, $expectedResult, $expectedErrors)
+    public function testValidate($filter, $expectedResult, $expectedErrors): void
     {
-        $builder = new DataFilter();
+        $builder     = new DataFilter();
         $searchModel = (new DynamicModel([
-                'name' => null,
-                'number' => null,
-                'price' => null,
-                'tags' => null,
-                'datetime' => null,
-                'date' => null,
-                'time' => null,
-            ]))
+            'name'     => null,
+            'number'   => null,
+            'price'    => null,
+            'tags'     => null,
+            'datetime' => null,
+            'date'     => null,
+            'time'     => null,
+        ]))
             ->addRule('name', 'string')
             ->addRule('number', 'integer', ['min' => 0, 'max' => 100])
             ->addRule('price', 'number')
@@ -291,7 +294,8 @@ class DataFilterTest extends TestCase
 
     /**
      * Data provider for [[testNormalize()]].
-     * @return array test data.
+     *
+     * @return array test data
      */
     public function dataProviderNormalize()
     {
@@ -310,11 +314,11 @@ class DataFilterTest extends TestCase
             ],
             [
                 [
-                    'name' => 'foo',
+                    'name'   => 'foo',
                     'number' => '10',
                 ],
                 [
-                    'name' => 'foo',
+                    'name'   => 'foo',
                     'number' => '10',
                 ],
             ],
@@ -357,11 +361,11 @@ class DataFilterTest extends TestCase
             [
                 [
                     'authorName' => 'John',
-                    'number' => '10',
+                    'number'     => '10',
                 ],
                 [
                     '{{author}}.[[name]]' => 'John',
-                    'number' => '10',
+                    'number'              => '10',
                 ],
             ],
             [
@@ -407,18 +411,18 @@ class DataFilterTest extends TestCase
      * @param array $filter
      * @param array $expectedResult
      */
-    public function testNormalize($filter, $expectedResult)
+    public function testNormalize($filter, $expectedResult): void
     {
-        $builder = new DataFilter();
+        $builder     = new DataFilter();
         $searchModel = (new DynamicModel([
-                'name' => null,
-                'number' => null,
-                'price' => null,
-                'tags' => null,
-                'datetime' => null,
-                'date' => null,
-                'time' => null,
-            ]))
+            'name'     => null,
+            'number'   => null,
+            'price'    => null,
+            'tags'     => null,
+            'datetime' => null,
+            'date'     => null,
+            'time'     => null,
+        ]))
             ->addRule('name', 'string')
             ->addRule('number', 'integer', ['min' => 0, 'max' => 100])
             ->addRule('price', 'number')
@@ -436,16 +440,16 @@ class DataFilterTest extends TestCase
         $this->assertEquals($expectedResult, $builder->normalize(false));
     }
 
-    public function testNormalizeNonDefaultNull()
+    public function testNormalizeNonDefaultNull(): void
     {
-        $builder = new DataFilter();
+        $builder            = new DataFilter();
         $builder->nullValue = 'abcde';
         $builder->setSearchModel((new DynamicModel(['name' => null]))->addRule('name', 'string'));
         $builder->filter = ['name' => 'abcde'];
         $this->assertEquals(['name' => null], $builder->normalize(false));
     }
 
-    public function testSetupErrorMessages()
+    public function testSetupErrorMessages(): void
     {
         $builder = new DataFilter();
         $builder->setErrorMessages([
@@ -456,7 +460,8 @@ class DataFilterTest extends TestCase
         $this->assertEquals('Test message', $errorMessages['unsupportedOperatorType']);
         $this->assertTrue(isset($errorMessages['unknownAttribute']));
 
-        $builder->setErrorMessages(function () {
+        $builder->setErrorMessages(static function ()
+        {
             return [
                 'unsupportedOperatorType' => 'Test message callback',
             ];

@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\db\mssql;
 
 use yii\db\Query;
@@ -17,48 +17,48 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
 {
     protected $driverName = 'sqlsrv';
 
-    public function testAutoQuoting()
+    public function testAutoQuoting(): void
     {
         $db = $this->getConnection(false);
 
-        $sql = 'SELECT [[id]], [[t.name]] FROM {{customer}} t';
+        $sql     = 'SELECT [[id]], [[t.name]] FROM {{customer}} t';
         $command = $db->createCommand($sql);
         $this->assertEquals('SELECT [id], [t].[name] FROM [customer] t', $command->sql);
     }
 
-    public function testPrepareCancel()
+    public function testPrepareCancel(): void
     {
         $this->markTestSkipped('MSSQL driver does not support this feature.');
     }
 
-    public function testBindParamValue()
+    public function testBindParamValue(): void
     {
         $db = $this->getConnection();
 
         // bindParam
-        $sql = 'INSERT INTO customer(email, name, address) VALUES (:email, :name, :address)';
+        $sql     = 'INSERT INTO customer(email, name, address) VALUES (:email, :name, :address)';
         $command = $db->createCommand($sql);
-        $email = 'user4@example.com';
-        $name = 'user4';
+        $email   = 'user4@example.com';
+        $name    = 'user4';
         $address = 'address4';
         $command->bindParam(':email', $email);
         $command->bindParam(':name', $name);
         $command->bindParam(':address', $address);
         $command->execute();
 
-        $sql = 'SELECT name FROM customer WHERE email=:email';
+        $sql     = 'SELECT name FROM customer WHERE email=:email';
         $command = $db->createCommand($sql);
         $command->bindParam(':email', $email);
         $this->assertEquals($name, $command->queryScalar());
 
-        $sql = 'INSERT INTO type (int_col, char_col, float_col, blob_col, numeric_col, bool_col) VALUES (:int_col, :char_col, :float_col, CONVERT([varbinary], :blob_col), :numeric_col, :bool_col)';
-        $command = $db->createCommand($sql);
-        $intCol = 123;
-        $charCol = 'abc';
-        $floatCol = 1.23;
-        $blobCol = "\x10\x11\x12";
+        $sql        = 'INSERT INTO type (int_col, char_col, float_col, blob_col, numeric_col, bool_col) VALUES (:int_col, :char_col, :float_col, CONVERT([varbinary], :blob_col), :numeric_col, :bool_col)';
+        $command    = $db->createCommand($sql);
+        $intCol     = 123;
+        $charCol    = 'abc';
+        $floatCol   = 1.23;
+        $blobCol    = "\x10\x11\x12";
         $numericCol = '1.23';
-        $boolCol = false;
+        $boolCol    = false;
         $command->bindParam(':int_col', $intCol);
         $command->bindParam(':char_col', $charCol);
         $command->bindParam(':float_col', $floatCol);
@@ -76,12 +76,12 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
         $this->assertEquals($numericCol, $row['numeric_col']);
 
         // bindValue
-        $sql = 'INSERT INTO customer(email, name, address) VALUES (:email, \'user5\', \'address5\')';
+        $sql     = 'INSERT INTO customer(email, name, address) VALUES (:email, \'user5\', \'address5\')';
         $command = $db->createCommand($sql);
         $command->bindValue(':email', 'user5@example.com');
         $command->execute();
 
-        $sql = 'SELECT email FROM customer WHERE name=:name';
+        $sql     = 'SELECT email FROM customer WHERE name=:name';
         $command = $db->createCommand($sql);
         $command->bindValue(':name', 'user5');
         $this->assertEquals('user5@example.com', $command->queryScalar());
@@ -89,18 +89,18 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
 
     public function paramsNonWhereProvider()
     {
-        return[
+        return [
             ['SELECT SUBSTRING(name, :len, 6) AS name FROM {{customer}} WHERE [[email]] = :email GROUP BY name'],
             ['SELECT SUBSTRING(name, :len, 6) as name FROM {{customer}} WHERE [[email]] = :email ORDER BY name'],
             ['SELECT SUBSTRING(name, :len, 6) FROM {{customer}} WHERE [[email]] = :email'],
         ];
     }
 
-    public function testAddDropDefaultValue()
+    public function testAddDropDefaultValue(): void
     {
-        $db = $this->getConnection(false);
+        $db        = $this->getConnection(false);
         $tableName = 'test_def';
-        $name = 'test_def_constraint';
+        $name      = 'test_def_constraint';
         /** @var \yii\db\pgsql\Schema $schema */
         $schema = $db->getSchema();
 
@@ -121,24 +121,24 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
 
     public function batchInsertSqlProvider()
     {
-        $data = parent::batchInsertSqlProvider();
-        $data['issue11242']['expected'] = 'INSERT INTO [type] ([int_col], [float_col], [char_col]) VALUES (NULL, NULL, \'Kyiv {{city}}, Ukraine\')';
-        $data['wrongBehavior']['expected'] = 'INSERT INTO [type] ([type].[int_col], [float_col], [char_col]) VALUES (\'\', \'\', \'Kyiv {{city}}, Ukraine\')';
+        $data                                                         = parent::batchInsertSqlProvider();
+        $data['issue11242']['expected']                               = 'INSERT INTO [type] ([int_col], [float_col], [char_col]) VALUES (NULL, NULL, \'Kyiv {{city}}, Ukraine\')';
+        $data['wrongBehavior']['expected']                            = 'INSERT INTO [type] ([type].[int_col], [float_col], [char_col]) VALUES (\'\', \'\', \'Kyiv {{city}}, Ukraine\')';
         $data['batchInsert binds params from expression']['expected'] = 'INSERT INTO [type] ([int_col]) VALUES (:qp1)';
         unset($data['batchIsert empty rows represented by ArrayObject']);
 
         return $data;
     }
 
-    public function testUpsertVarbinary()
+    public function testUpsertVarbinary(): void
     {
         $db = $this->getConnection();
 
         $testData = json_encode(['test' => 'string', 'test2' => 'integer']);
-        $params = [];
+        $params   = [];
 
-        $qb = $db->getQueryBuilder();
-        $sql = $qb->upsert('T_upsert_varbinary', ['id' => 1, 'blob_col' => $testData] , ['blob_col' => $testData], $params);
+        $qb  = $db->getQueryBuilder();
+        $sql = $qb->upsert('T_upsert_varbinary', ['id' => 1, 'blob_col' => $testData], ['blob_col' => $testData], $params);
 
         $result = $db->createCommand($sql, $params)->execute();
 

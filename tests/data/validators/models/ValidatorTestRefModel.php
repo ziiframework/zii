@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\data\validators\models;
 
 use yiiunit\data\ar\ActiveRecord;
@@ -17,6 +17,7 @@ use yiiunit\data\ar\ActiveRecord;
 class ValidatorTestRefModel extends ActiveRecord
 {
     public $test_val = 2;
+
     public $test_val_fail = 99;
 
     public static function tableName()

@@ -1,14 +1,14 @@
-<?php
+<?php declare(strict_types=1);
 
 /* @var $name string */
 /* @var $message string */
 /* @var $exception Exception */
 
 ?>
-Name: <?= $name ?>
+Name: <?php print $name; ?>
 
-Code: <?= Yii::$app->response->statusCode ?>
+Code: <?php print Yii::$app->response->statusCode; ?>
 
-Message: <?= $message ?>
+Message: <?php print $message; ?>
 
-Exception: <?= get_class($exception) ?>
+Exception: <?php print get_class($exception); ?>

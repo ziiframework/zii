@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\db;
 
 use yii\base\InvalidCallException;
@@ -13,17 +13,17 @@ use yii\db\Query;
 class UnqueryableQueryMock extends Query
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
-    public function one($db = null)
+    public function one($db = null): void
     {
         throw new InvalidCallException();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
-    public function all($db = null)
+    public function all($db = null): void
     {
         throw new InvalidCallException();
     }

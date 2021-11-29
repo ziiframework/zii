@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\db\pgsql;
 
 use yii\db\Query;
@@ -17,12 +17,14 @@ class QueryTest extends \yiiunit\framework\db\QueryTest
 {
     public $driverName = 'pgsql';
 
-    public function testBooleanValues()
+    public function testBooleanValues(): void
     {
-        $db = $this->getConnection();
+        $db      = $this->getConnection();
         $command = $db->createCommand();
-        $command->batchInsert('bool_values',
-            ['bool_col'], [
+        $command->batchInsert(
+            'bool_values',
+            ['bool_col'],
+            [
                 [true],
                 [false],
             ]

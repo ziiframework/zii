@@ -1,18 +1,18 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\validators;
 
 use yii\validators\EachValidator;
 use yiiunit\data\base\ArrayAccessObject;
 use yiiunit\data\base\Speaker;
 use yiiunit\data\validators\models\FakedValidationModel;
-use yiiunit\data\validators\models\ValidatorTestTypedPropModel;
 use yiiunit\data\validators\models\ValidatorTestEachAndInlineMethodModel;
+use yiiunit\data\validators\models\ValidatorTestTypedPropModel;
 use yiiunit\TestCase;
 
 /**
@@ -28,7 +28,7 @@ class EachValidatorTest extends TestCase
         $this->destroyApplication();
     }
 
-    public function testArrayFormat()
+    public function testArrayFormat(): void
     {
         $validator = new EachValidator(['rule' => ['required']]);
 
@@ -39,7 +39,7 @@ class EachValidatorTest extends TestCase
     /**
      * @depends testArrayFormat
      */
-    public function testValidate()
+    public function testValidate(): void
     {
         $validator = new EachValidator(['rule' => ['integer']]);
 
@@ -50,7 +50,7 @@ class EachValidatorTest extends TestCase
     /**
      * @depends testArrayFormat
      */
-    public function testFilter()
+    public function testFilter(): void
     {
         $model = FakedValidationModel::createWithAttributes([
             'attr_one' => [
@@ -65,7 +65,7 @@ class EachValidatorTest extends TestCase
     /**
      * @depends testValidate
      */
-    public function testAllowMessageFromRule()
+    public function testAllowMessageFromRule(): void
     {
         $model = FakedValidationModel::createWithAttributes([
             'attr_one' => [
@@ -87,7 +87,7 @@ class EachValidatorTest extends TestCase
     /**
      * @depends testValidate
      */
-    public function testCustomMessageValue()
+    public function testCustomMessageValue(): void
     {
         $model = FakedValidationModel::createWithAttributes([
             'attr_one' => [
@@ -101,7 +101,7 @@ class EachValidatorTest extends TestCase
 
         $model->clearErrors();
         $validator->allowMessageFromRule = false;
-        $validator->message = '{value} is invalid';
+        $validator->message              = '{value} is invalid';
         $validator->validateAttribute($model, 'attr_one');
         $this->assertEquals('TEXT is invalid', $model->getFirstError('attr_one'));
     }
@@ -111,7 +111,7 @@ class EachValidatorTest extends TestCase
      *
      * @depends testValidate
      */
-    public function testSkipOnEmpty()
+    public function testSkipOnEmpty(): void
     {
         $validator = new EachValidator(['rule' => ['integer', 'skipOnEmpty' => true]]);
         $this->assertTrue($validator->validate(['']));
@@ -139,7 +139,7 @@ class EachValidatorTest extends TestCase
      *
      * @depends testValidate
      */
-    public function testCompare()
+    public function testCompare(): void
     {
         $model = FakedValidationModel::createWithAttributes([
             'attr_one' => [
@@ -170,7 +170,7 @@ class EachValidatorTest extends TestCase
     /**
      * @depends testValidate
      */
-    public function testStopOnFirstError()
+    public function testStopOnFirstError(): void
     {
         $model = FakedValidationModel::createWithAttributes([
             'attr_one' => [
@@ -189,10 +189,10 @@ class EachValidatorTest extends TestCase
         $this->assertCount(2, $model->getErrors('attr_one'));
     }
 
-    public function testValidateArrayAccess()
+    public function testValidateArrayAccess(): void
     {
         $model = FakedValidationModel::createWithAttributes([
-            'attr_array' => new ArrayAccessObject([1,2,3]),
+            'attr_array' => new ArrayAccessObject([1, 2, 3]),
         ]);
 
         $validator = new EachValidator(['rule' => ['integer']]);
@@ -210,10 +210,11 @@ class EachValidatorTest extends TestCase
      * (ie: public array $dummy; where $dummy is array of booleans,
      * validator will try to assign these booleans one by one to $dummy)
      */
-    public function testTypedProperties()
+    public function testTypedProperties(): void
     {
         if (PHP_VERSION_ID < 70400) {
             $this->markTestSkipped('Can not be tested on PHP < 7.4');
+
             return;
         }
 
@@ -227,9 +228,9 @@ class EachValidatorTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/18011
      */
-    public function testErrorMessage()
+    public function testErrorMessage(): void
     {
-        $model = new Speaker();
+        $model              = new Speaker();
         $model->customLabel = ['invalid_ip'];
 
         $validator = new EachValidator(['rule' => ['ip']]);
@@ -243,9 +244,9 @@ class EachValidatorTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/18051
      */
-    public function testCustomMethod()
+    public function testCustomMethod(): void
     {
-        $model = new Speaker();
+        $model            = new Speaker();
         $model->firstName = ['a', 'b'];
 
         $validator = new EachValidator(['rule' => ['customValidatingMethod']]);
@@ -258,7 +259,7 @@ class EachValidatorTest extends TestCase
         $this->assertEquals(['a', 'b'], $model->firstName);
     }
 
-    public function testAnonymousMethod()
+    public function testAnonymousMethod(): void
     {
         $model = new ValidatorTestEachAndInlineMethodModel();
 

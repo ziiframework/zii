@@ -1,6 +1,7 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
@@ -21,7 +22,7 @@ class RequestTest extends TestCase
                     'controller',
                 ],
                 'expected' => [
-                    'route' => 'controller',
+                    'route'  => 'controller',
                     'params' => [
                     ],
                 ],
@@ -41,17 +42,17 @@ class RequestTest extends TestCase
                     '-alias_4=testValue',
                 ],
                 'expected' => [
-                    'route' => 'controller/route',
+                    'route'  => 'controller/route',
                     'params' => [
                         'param1',
                         '-12345',
-                        'option1' => true,
-                        'option2' => 'testValue',
+                        'option1'  => true,
+                        'option2'  => 'testValue',
                         'option-3' => 'testValue',
                         'option_4' => 'testValue',
                         '_aliases' => [
-                            'alias1' => true,
-                            'alias2' => 'testValue',
+                            'alias1'  => true,
+                            'alias2'  => 'testValue',
                             'alias-3' => 'testValue',
                             'alias_4' => 'testValue',
                         ],
@@ -78,12 +79,12 @@ class RequestTest extends TestCase
                     '-alias4=testValue',
                 ],
                 'expected' => [
-                    'route' => 'controller/route',
+                    'route'  => 'controller/route',
                     'params' => [
                         'param1',
                         '-12345',
-                        'option1' => '1',
-                        'option2' => 'testValue',
+                        'option1'  => '1',
+                        'option2'  => 'testValue',
                         '_aliases' => [
                             'alias1' => true,
                             'alias2' => 'testValue',
@@ -111,7 +112,7 @@ class RequestTest extends TestCase
                     '-alias2=testValue',
                 ],
                 'expected' => [
-                    'route' => 'controller/route',
+                    'route'  => 'controller/route',
                     'params' => [
                         'param1',
                         '-12345',
@@ -144,17 +145,17 @@ class RequestTest extends TestCase
                     'testValue3',
                 ],
                 'expected' => [
-                    'route' => 'controller/route',
+                    'route'  => 'controller/route',
                     'params' => [
                         'param1',
                         '-12345',
-                        'option1' => true,
-                        'option2' => 'testValue1',
+                        'option1'  => true,
+                        'option2'  => 'testValue1',
                         'option-3' => 'testValue2',
                         'option_4' => 'testValue3',
                         '_aliases' => [
-                            'alias1' => true,
-                            'alias2' => 'testValue1',
+                            'alias1'  => true,
+                            'alias2'  => 'testValue1',
                             'alias-3' => 'testValue2',
                             'alias_4' => 'testValue3',
                         ],
@@ -169,7 +170,7 @@ class RequestTest extends TestCase
                     '--0=test',
                     '--1=testing',
                 ],
-                'expected' => [],
+                'expected'  => [],
                 'exception' => [
                     '\yii\console\Exception',
                     'Parameter "0" is not valid',
@@ -180,11 +181,12 @@ class RequestTest extends TestCase
 
     /**
      * @dataProvider provider
-     * @param array $params
-     * @param array $expected
-     * @param array|null $expectedException
+     *
+     * @param array      $params
+     * @param array      $expected
+     * @param null|array $expectedException
      */
-    public function testResolve($params, $expected, $expectedException = null)
+    public function testResolve($params, $expected, $expectedException = null): void
     {
         if (isset($expectedException)) {
             $this->expectException($expectedException[0]);
@@ -194,7 +196,7 @@ class RequestTest extends TestCase
         $request = new Request();
 
         $request->setParams($params);
-        list($route, $params) = $request->resolve();
+        [$route, $params] = $request->resolve();
         $this->assertEquals($expected['route'], $route);
         $this->assertEquals($expected['params'], $params);
     }

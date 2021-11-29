@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\filters\auth;
 
 use Yii;
@@ -68,7 +68,7 @@ class TestController extends Controller
          */
         return [
             'authenticator' => [
-                'class' => CompositeAuth::className(),
+                'class'       => CompositeAuth::className(),
                 'authMethods' => $this->authMethods ?: [
                     TestAuth::className(),
                 ],
@@ -87,7 +87,7 @@ class CompositeAuthTest extends \yiiunit\TestCase
         parent::setUp();
 
         $_SERVER['SCRIPT_FILENAME'] = '/index.php';
-        $_SERVER['SCRIPT_NAME'] = '/index.php';
+        $_SERVER['SCRIPT_NAME']     = '/index.php';
 
         $appConfig = [
             'components' => [
@@ -103,7 +103,7 @@ class CompositeAuthTest extends \yiiunit\TestCase
         $this->mockWebApplication($appConfig);
     }
 
-    public function testCallingRunWithCompleteRoute()
+    public function testCallingRunWithCompleteRoute(): void
     {
         /** @var TestController $controller */
         $controller = Yii::$app->createController('test')[0];
@@ -113,29 +113,30 @@ class CompositeAuthTest extends \yiiunit\TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/7409
      */
-    public function testRunAction()
+    public function testRunAction(): void
     {
         /** @var TestController $controller */
         $controller = Yii::$app->createController('test')[0];
         $this->assertEquals('success', $controller->run('b'));
     }
 
-    public function testRunButWithActionIdOnly()
+    public function testRunButWithActionIdOnly(): void
     {
         /** @var TestController $controller */
         $controller = Yii::$app->createController('test')[0];
         $this->assertEquals('success', $controller->run('c'));
     }
 
-    public function testCompositeAuth()
+    public function testCompositeAuth(): void
     {
-        Yii::$app->request->headers->set('Authorization', base64_encode("foo:bar"));
+        Yii::$app->request->headers->set('Authorization', base64_encode('foo:bar'));
         /** @var TestAuthController $controller */
-        $controller = Yii::$app->createController('test')[0];
+        $controller              = Yii::$app->createController('test')[0];
         $controller->authMethods = [
             HttpBearerAuth::className(),
             TestAuth::className(),
         ];
+
         try {
             $this->assertEquals('success', $controller->run('b'));
         } catch (UnauthorizedHttpException $e) {

@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 /* @var $exception Exception */
 
 ?>
-Code: <?= Yii::$app->response->statusCode ?>
+Code: <?php print Yii::$app->response->statusCode; ?>
 
-Message: <?= $exception->getMessage() ?>
+Message: <?php print $exception->getMessage(); ?>
 
-Exception: <?= get_class($exception) ?>
+Exception: <?php print get_class($exception); ?>

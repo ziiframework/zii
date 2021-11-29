@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\filters\stubs;
 
 use yii\base\BaseObject;
@@ -39,7 +39,6 @@ class RateLimit extends BaseObject implements RateLimitInterface
 
         return $this;
     }
-
 
     public function saveAllowance($request, $action, $allowance, $timestamp)
     {

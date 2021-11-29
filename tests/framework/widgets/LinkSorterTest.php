@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\widgets;
 
 use yii\data\ActiveDataProvider;
@@ -31,70 +31,79 @@ class LinkSorterTest extends DatabaseTestCase
         $this->breadcrumbs = new Breadcrumbs();
     }
 
-    public function testLabelsSimple()
+    public function testLabelsSimple(): void
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Order::find(),
-            'models' => [new Order()],
+            'query'      => Order::find(),
+            'models'     => [new Order()],
             'totalCount' => 1,
-            'sort' => [
+            'sort'       => [
                 'route' => 'site/index',
             ],
         ]);
 
         ob_start();
-        echo ListView::widget([
+        print ListView::widget([
             'dataProvider' => $dataProvider,
-            'layout' => '{sorter}',
+            'layout'       => '{sorter}',
         ]);
         $actualHtml = ob_get_clean();
 
-        $this->assertNotFalse(strpos($actualHtml,
-            '<a href="/index.php?r=site%2Findex&amp;sort=customer_id" data-sort="customer_id">Customer</a>'));
-        $this->assertNotFalse(strpos($actualHtml,
-            '<a href="/index.php?r=site%2Findex&amp;sort=total" data-sort="total">Invoice Total</a>'));
+        $this->assertNotFalse(strpos(
+            $actualHtml,
+            '<a href="/index.php?r=site%2Findex&amp;sort=customer_id" data-sort="customer_id">Customer</a>'
+        ));
+        $this->assertNotFalse(strpos(
+            $actualHtml,
+            '<a href="/index.php?r=site%2Findex&amp;sort=total" data-sort="total">Invoice Total</a>'
+        ));
     }
 
-    public function testLabelsExplicit()
+    public function testLabelsExplicit(): void
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Order::find(),
-            'models' => [new Order()],
+            'query'      => Order::find(),
+            'models'     => [new Order()],
             'totalCount' => 1,
-            'sort' => [
+            'sort'       => [
                 'attributes' => ['total'],
-                'route' => 'site/index',
+                'route'      => 'site/index',
             ],
         ]);
 
         ob_start();
-        echo ListView::widget([
+        print ListView::widget([
             'dataProvider' => $dataProvider,
-            'layout' => '{sorter}',
+            'layout'       => '{sorter}',
         ]);
         $actualHtml = ob_get_clean();
 
-        $this->assertFalse(strpos($actualHtml,
-            '<a href="/index.php?r=site%2Findex&amp;sort=customer_id" data-sort="customer_id">Customer</a>'));
-        $this->assertNotFalse(strpos($actualHtml,
-            '<a href="/index.php?r=site%2Findex&amp;sort=total" data-sort="total">Invoice Total</a>'));
+        $this->assertFalse(strpos(
+            $actualHtml,
+            '<a href="/index.php?r=site%2Findex&amp;sort=customer_id" data-sort="customer_id">Customer</a>'
+        ));
+        $this->assertNotFalse(strpos(
+            $actualHtml,
+            '<a href="/index.php?r=site%2Findex&amp;sort=total" data-sort="total">Invoice Total</a>'
+        ));
     }
 
     /**
      * @see https://github.com/yiisoft/yii2/issues/15536
      */
-    public function testShouldTriggerInitEvent()
+    public function testShouldTriggerInitEvent(): void
     {
         $initTriggered = false;
         new LinkSorter(
             [
                 'sort' => [
                     'attributes' => ['total'],
-                    'route' => 'site/index',
+                    'route'      => 'site/index',
                 ],
-                'on init' => function () use (&$initTriggered) {
+                'on init' => static function () use (&$initTriggered): void
+                {
                     $initTriggered = true;
-                }
+                },
             ]
         );
 

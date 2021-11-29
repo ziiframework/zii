@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\data\helpers;
 
 /**
@@ -15,6 +15,7 @@ namespace yiiunit\data\helpers;
 class CustomDebugInfo
 {
     public $volume;
+
     public $unitPrice;
 
     /**
@@ -25,7 +26,7 @@ class CustomDebugInfo
     public function __debugInfo()
     {
         return [
-            'volume' => $this->volume,
+            'volume'     => $this->volume,
             'totalPrice' => $this->volume * $this->unitPrice,
         ];
     }

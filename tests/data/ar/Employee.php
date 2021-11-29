@@ -1,34 +1,34 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\data\ar;
 
 use yii\db\ActiveQuery;
 
 /**
- * Class Employee
+ * Class Employee.
  *
- * @property int $id
- * @property int $department_id
- * @property string $first_name
- * @property string $last_name
- *
- * @property string $fullName
+ * @property int        $id
+ * @property int        $department_id
+ * @property string     $first_name
+ * @property string     $last_name
+ * @property string     $fullName
  * @property Department $department
- * @property Dossier $dossier
+ * @property Dossier    $dossier
  *
  * @author Kolyunya <OleynikovNY@mail.ru>
+ *
  * @since 2.0.12
  */
 class Employee extends ActiveRecord
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public static function tableName()
     {
@@ -42,9 +42,7 @@ class Employee extends ActiveRecord
      */
     public function getFullName()
     {
-        $fullName = $this->first_name . ' ' . $this->last_name;
-
-        return $fullName;
+        return $this->first_name . ' ' . $this->last_name;
     }
 
     /**
@@ -58,8 +56,7 @@ class Employee extends ActiveRecord
             ->hasOne(Department::className(), [
                 'id' => 'department_id',
             ])
-            ->inverseOf('employees')
-        ;
+            ->inverseOf('employees');
     }
 
     /**
@@ -72,9 +69,8 @@ class Employee extends ActiveRecord
         return $this
             ->hasOne(Dossier::className(), [
                 'department_id' => 'department_id',
-                'employee_id' => 'id',
+                'employee_id'   => 'id',
             ])
-            ->inverseOf('employee')
-        ;
+            ->inverseOf('employee');
     }
 }

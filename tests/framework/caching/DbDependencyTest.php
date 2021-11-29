@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\caching;
 
 use yii\caching\ArrayCache;
@@ -17,13 +17,12 @@ use yiiunit\framework\db\DatabaseTestCase;
 class DbDependencyTest extends DatabaseTestCase
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected $driverName = 'sqlite';
 
-
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -32,21 +31,21 @@ class DbDependencyTest extends DatabaseTestCase
         $db = $this->getConnection(false);
 
         $db->createCommand()->createTable('dependency_item', [
-            'id' => 'pk',
+            'id'    => 'pk',
             'value' => 'string',
         ])->execute();
 
         $db->createCommand()->insert('dependency_item', ['value' => 'initial'])->execute();
     }
 
-    public function testIsChanged()
+    public function testIsChanged(): void
     {
-        $db = $this->getConnection(false);
+        $db    = $this->getConnection(false);
         $cache = new ArrayCache();
 
-        $dependency = new DbDependency();
-        $dependency->db = $db;
-        $dependency->sql = 'SELECT [[id]] FROM {{dependency_item}} ORDER BY [[id]] DESC LIMIT 1';
+        $dependency           = new DbDependency();
+        $dependency->db       = $db;
+        $dependency->sql      = 'SELECT [[id]] FROM {{dependency_item}} ORDER BY [[id]] DESC LIMIT 1';
         $dependency->reusable = false;
 
         $dependency->evaluateDependency($cache);

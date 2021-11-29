@@ -1,13 +1,13 @@
-<?php
+<?php declare(strict_types=1);
 /** @var \yii\web\View $this */
-/** @var string $static */
+/* @var string $static */
 $this->beginPage();
 $this->head();
 $this->beginBody();
 ?>
 {
-    "static": "<?= $static ?>",
-    "dynamic": "<?= $this->renderDynamic('return Yii::$app->params[\'dynamic\'];') ?>"
+    "static": "<?php print $static; ?>",
+    "dynamic": "<?php print $this->renderDynamic('return Yii::$app->params[\'dynamic\'];'); ?>"
 }
 <?php
 $this->endBody();

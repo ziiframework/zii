@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\behaviors;
 
 use Yii;
@@ -15,6 +15,7 @@ use yiiunit\TestCase;
 
 /**
  * Unit test for [[\yii\behaviors\AttributesBehavior]].
+ *
  * @see AttributesBehavior
  *
  * @group behaviors
@@ -33,26 +34,26 @@ class AttributesBehaviorTest extends TestCase
         }
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->mockApplication([
             'components' => [
                 'db' => [
                     'class' => '\yii\db\Connection',
-                    'dsn' => 'sqlite::memory:',
+                    'dsn'   => 'sqlite::memory:',
                 ],
             ],
         ]);
 
         $columns = [
-            'id' => 'pk',
-            'name' => 'string',
+            'id'    => 'pk',
+            'name'  => 'string',
             'alias' => 'string',
         ];
         Yii::$app->getDb()->createCommand()->createTable('test_attribute', $columns)->execute();
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         Yii::$app->getDb()->close();
         parent::tearDown();
@@ -95,21 +96,22 @@ class AttributesBehaviorTest extends TestCase
 
     /**
      * @dataProvider preserveNonEmptyValuesDataProvider
-     * @param string $aliasExpected
-     * @param bool $preserveNonEmptyValues
-     * @param string $name
-     * @param string|null $alias
+     *
+     * @param string      $aliasExpected
+     * @param bool        $preserveNonEmptyValues
+     * @param string      $name
+     * @param null|string $alias
      */
     public function testPreserveNonEmptyValues(
         $aliasExpected,
         $preserveNonEmptyValues,
         $name,
         $alias
-    ) {
-        $model = new ActiveRecordWithAttributesBehavior();
+    ): void {
+        $model                                             = new ActiveRecordWithAttributesBehavior();
         $model->attributesBehavior->preserveNonEmptyValues = $preserveNonEmptyValues;
-        $model->name = $name;
-        $model->alias = $alias;
+        $model->name                                       = $name;
+        $model->alias                                      = $alias;
         $model->validate();
 
         $this->assertEquals($aliasExpected, $model->alias);
@@ -140,8 +142,9 @@ class AttributesBehaviorTest extends TestCase
 
     /**
      * @dataProvider orderProvider
+     *
      * @param string $aliasExpected
-     * @param array $order
+     * @param array  $order
      * @param string $name
      * @param string $alias
      */
@@ -150,11 +153,11 @@ class AttributesBehaviorTest extends TestCase
         $order,
         $name,
         $alias
-    ) {
-        $model = new ActiveRecordWithAttributesBehavior();
+    ): void {
+        $model                            = new ActiveRecordWithAttributesBehavior();
         $model->attributesBehavior->order = $order;
-        $model->name = $name;
-        $model->alias = $alias;
+        $model->name                      = $name;
+        $model->alias                     = $alias;
         $model->validate();
 
         $this->assertEquals($aliasExpected, $model->alias);
@@ -164,44 +167,45 @@ class AttributesBehaviorTest extends TestCase
 /**
  * Test Active Record class with [[AttributesBehavior]] behavior attached.
  *
- * @property int $id
- * @property string $name
- * @property string $alias
- *
+ * @property int                $id
+ * @property string             $name
+ * @property string             $alias
  * @property AttributesBehavior $attributesBehavior
  */
 class ActiveRecordWithAttributesBehavior extends ActiveRecord
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
+     */
+    public static function tableName()
+    {
+        return 'test_attribute';
+    }
+
+    /**
+     * @inheritDoc
      */
     public function behaviors()
     {
         return [
             'attributes' => [
-                'class' => AttributesBehavior::className(),
+                'class'      => AttributesBehavior::className(),
                 'attributes' => [
                     'alias' => [
-                        self::EVENT_BEFORE_VALIDATE => function ($event) {
+                        self::EVENT_BEFORE_VALIDATE => static function ($event)
+                        {
                             return $event->sender->name;
                         },
                     ],
                     'name' => [
-                        self::EVENT_BEFORE_VALIDATE => function ($event, $attribute) {
+                        self::EVENT_BEFORE_VALIDATE => static function ($event, $attribute)
+                        {
                             return $attribute . ': ' . $event->sender->alias;
                         },
                     ],
                 ],
             ],
         ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function tableName()
-    {
-        return 'test_attribute';
     }
 
     /**

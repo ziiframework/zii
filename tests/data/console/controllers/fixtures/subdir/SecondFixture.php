@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\data\console\controllers\fixtures\subdir;
 
 use yii\test\Fixture;
@@ -12,12 +12,12 @@ use yiiunit\data\console\controllers\fixtures\FixtureStorage;
 
 class SecondFixture extends Fixture
 {
-    public function load()
+    public function load(): void
     {
         FixtureStorage::$subdirSecondFixtureData[] = 'some data set for subdir/second fixture';
     }
 
-    public function unload()
+    public function unload(): void
     {
         FixtureStorage::$subdirSecondFixtureData = [];
     }

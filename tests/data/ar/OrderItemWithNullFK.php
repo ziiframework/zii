@@ -1,18 +1,18 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\data\ar;
 
 /**
  * Class OrderItem.
  *
- * @property int $order_id
- * @property int $item_id
- * @property int $quantity
+ * @property int    $order_id
+ * @property int    $item_id
+ * @property int    $quantity
  * @property string $subtotal
  */
 class OrderItemWithNullFK extends ActiveRecord

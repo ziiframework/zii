@@ -1,16 +1,18 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\data\ar;
+
+use ReflectionClass;
 
 /**
  * ProfileWithConstructor.
  *
- * @property int $id
+ * @property int    $id
  * @property string $description
  */
 class ProfileWithConstructor extends ActiveRecord
@@ -20,12 +22,6 @@ class ProfileWithConstructor extends ActiveRecord
         return 'profile';
     }
 
-    public function __construct($description)
-    {
-        $this->description = $description;
-        parent::__construct();
-    }
-
     public static function instance($refresh = false)
     {
         return self::instantiate([]);
@@ -33,6 +29,12 @@ class ProfileWithConstructor extends ActiveRecord
 
     public static function instantiate($row)
     {
-        return (new \ReflectionClass(static::className()))->newInstanceWithoutConstructor();
+        return (new ReflectionClass(static::className()))->newInstanceWithoutConstructor();
+    }
+
+    public function __construct($description)
+    {
+        $this->description = $description;
+        parent::__construct();
     }
 }

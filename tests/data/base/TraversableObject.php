@@ -1,22 +1,29 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\data\base;
+
+use Countable;
+use Exception;
+use Iterator;
 
 /**
  * TraversableObject
  * Object that implements `\Traversable` and `\Countable`, but counting throws an exception;
  * Used for testing support for traversable objects instead of arrays.
+ *
  * @author Sam Mousa <sam@mousa.nl>
+ *
  * @since 2.0.8
  */
-class TraversableObject implements \Iterator, \Countable
+class TraversableObject implements Countable, Iterator
 {
     protected $data;
+
     private $position = 0;
 
     public function __construct(array $array)
@@ -25,16 +32,17 @@ class TraversableObject implements \Iterator, \Countable
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
+     *
      * @since 5.1.0
      */
-    public function count()
+    public function count(): void
     {
-        throw new \Exception('Count called on object that should only be traversed.');
+        throw new Exception('Count called on object that should only be traversed.');
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function current()
     {
@@ -42,15 +50,15 @@ class TraversableObject implements \Iterator, \Countable
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
-    public function next()
+    public function next(): void
     {
         $this->position++;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function key()
     {
@@ -58,7 +66,7 @@ class TraversableObject implements \Iterator, \Countable
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function valid()
     {
@@ -66,9 +74,9 @@ class TraversableObject implements \Iterator, \Countable
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->position = 0;
     }

@@ -1,23 +1,22 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\behaviors;
 
 use Yii;
 use yii\behaviors\OptimisticLockBehavior;
-use yii\web\Request;
 use yii\db\ActiveRecord;
 use yii\db\Connection;
-use yii\db\Expression;
-use yii\db\ExpressionInterface;
+use yii\web\Request;
 use yiiunit\TestCase;
 
 /**
  * Unit test for [[\yii\behaviors\OptimisticLockBehavior]].
+ *
  * @see OptimisticLockBehavior
  *
  * @group behaviors
@@ -36,31 +35,31 @@ class OptimisticLockBehaviorTest extends TestCase
         }
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->mockApplication([
             'components' => [
                 'db' => [
                     'class' => '\yii\db\Connection',
-                    'dsn' => 'sqlite::memory:',
+                    'dsn'   => 'sqlite::memory:',
                 ],
             ],
         ]);
 
         $columns = [
-            'id' => 'pk',
+            'id'      => 'pk',
             'version' => 'integer NOT NULL',
         ];
         Yii::$app->getDb()->createCommand()->createTable('test_auto_lock_version', $columns)->execute();
 
         $columns = [
-            'id' => 'pk',
+            'id'      => 'pk',
             'version' => 'string NOT NULL',
         ];
         Yii::$app->getDb()->createCommand()->createTable('test_auto_lock_version_string', $columns)->execute();
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         Yii::$app->getDb()->close();
         parent::tearDown();
@@ -70,12 +69,12 @@ class OptimisticLockBehaviorTest extends TestCase
 
     // Tests :
 
-    public function testUpdateRecordWithinConsoleRequest()
+    public function testUpdateRecordWithinConsoleRequest(): void
     {
         ActiveRecordLockVersion::$behaviors = [
             OptimisticLockBehavior::className(),
         ];
-        $model = new ActiveRecordLockVersion();
+        $model          = new ActiveRecordLockVersion();
         $model->version = 0;
         $this->assertEquals(true, $model->save(false), 'model is successfully saved');
 
@@ -93,8 +92,7 @@ class OptimisticLockBehaviorTest extends TestCase
         $this->assertEquals(2, $model->version, 'updated version should equal 2');
     }
 
-
-    public function testNewRecord()
+    public function testNewRecord(): void
     {
         // create a record without any version
 
@@ -127,8 +125,7 @@ class OptimisticLockBehaviorTest extends TestCase
         $this->assertEquals(8, $model->version, 'init version should equal 8');
     }
 
-
-    public function testUpdateRecord()
+    public function testUpdateRecord(): void
     {
         $request = new Request();
         Yii::$app->set('request', $request);
@@ -211,7 +208,7 @@ class OptimisticLockBehaviorTest extends TestCase
         $this->assertEquals(3, $model->version, 'updated version should equal 3');
     }
 
-     public function testDeleteRecord()
+    public function testDeleteRecord(): void
     {
         $request = new Request();
         Yii::$app->set('request', $request);
@@ -287,8 +284,15 @@ class OptimisticLockBehaviorTest extends TestCase
 class ActiveRecordLockVersion extends ActiveRecord
 {
     public static $behaviors;
+
     public static $lockAttribute = 'version';
+
     public static $tableName = 'test_auto_lock_version';
+
+    public static function tableName()
+    {
+        return static::$tableName;
+    }
 
     public function behaviors()
     {
@@ -298,10 +302,5 @@ class ActiveRecordLockVersion extends ActiveRecord
     public function optimisticLock()
     {
         return static::$lockAttribute;
-    }
-
-    public static function tableName()
-    {
-        return static::$tableName;
     }
 }

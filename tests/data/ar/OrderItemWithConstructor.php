@@ -1,18 +1,20 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\data\ar;
+
+use ReflectionClass;
 
 /**
  * OrderItemWithConstructor.
  *
- * @property int $order_id
- * @property int $item_id
- * @property int $quantity
+ * @property int    $order_id
+ * @property int    $item_id
+ * @property int    $quantity
  * @property string $subtotal
  */
 class OrderItemWithConstructor extends ActiveRecord
@@ -22,13 +24,6 @@ class OrderItemWithConstructor extends ActiveRecord
         return 'order_item';
     }
 
-    public function __construct($item_id, $quantity)
-    {
-        $this->item_id = $item_id;
-        $this->quantity = $quantity;
-        parent::__construct();
-    }
-
     public static function instance($refresh = false)
     {
         return self::instantiate([]);
@@ -36,7 +31,14 @@ class OrderItemWithConstructor extends ActiveRecord
 
     public static function instantiate($row)
     {
-        return (new \ReflectionClass(static::className()))->newInstanceWithoutConstructor();
+        return (new ReflectionClass(static::className()))->newInstanceWithoutConstructor();
+    }
+
+    public function __construct($item_id, $quantity)
+    {
+        $this->item_id  = $item_id;
+        $this->quantity = $quantity;
+        parent::__construct();
     }
 
     public function getOrder()

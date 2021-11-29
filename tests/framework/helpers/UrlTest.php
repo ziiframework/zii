@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\helpers;
 
 use Yii;
@@ -18,6 +18,7 @@ use yiiunit\TestCase;
 
 /**
  * UrlTest.
+ *
  * @group helpers
  */
 class UrlTest extends TestCase
@@ -28,17 +29,17 @@ class UrlTest extends TestCase
         $this->mockApplication([
             'components' => [
                 'request' => [
-                    'class' => 'yii\web\Request',
+                    'class'               => 'yii\web\Request',
                     'cookieValidationKey' => '123',
-                    'scriptUrl' => '/base/index.php',
-                    'hostInfo' => 'http://example.com/',
-                    'url' => '/base/index.php&r=site%2Fcurrent&id=42',
+                    'scriptUrl'           => '/base/index.php',
+                    'hostInfo'            => 'http://example.com/',
+                    'url'                 => '/base/index.php&r=site%2Fcurrent&id=42',
                 ],
                 'urlManager' => [
-                    'class' => 'yii\web\UrlManager',
-                    'baseUrl' => '/base',
+                    'class'     => 'yii\web\UrlManager',
+                    'baseUrl'   => '/base',
                     'scriptUrl' => '/base/index.php',
-                    'hostInfo' => 'http://example.com/',
+                    'hostInfo'  => 'http://example.com/',
                 ],
                 'user' => [
                     'identityClass' => UserIdentity::className(),
@@ -53,31 +54,7 @@ class UrlTest extends TestCase
         parent::tearDown();
     }
 
-    /**
-     * Mocks controller action with parameters.
-     *
-     * @param string $controllerId
-     * @param string $actionID
-     * @param string $moduleID
-     * @param array  $params
-     */
-    protected function mockAction($controllerId, $actionID, $moduleID = null, $params = [])
-    {
-        \Yii::$app->controller = $controller = new Controller($controllerId, \Yii::$app);
-        $controller->actionParams = $params;
-        $controller->action = new Action($actionID, $controller);
-
-        if ($moduleID !== null) {
-            $controller->module = new Module($moduleID);
-        }
-    }
-
-    protected function removeMockedAction()
-    {
-        \Yii::$app->controller = null;
-    }
-
-    public function testToRoute()
+    public function testToRoute(): void
     {
         $this->mockAction('page', 'view', null, ['id' => 10]);
 
@@ -107,9 +84,9 @@ class UrlTest extends TestCase
         $this->assertEquals('//example.com/base/index.php?r=stats%2Fuser%2Fview&id=42', Url::toRoute(['user/view', 'id' => 42], ''));
 
         // alias support
-        \Yii::setAlias('@userView', 'user/view');
+        Yii::setAlias('@userView', 'user/view');
         $this->assertEquals('/base/index.php?r=stats%2Fuser%2Fview', Url::toRoute('@userView'));
-        \Yii::setAlias('@userView', null);
+        Yii::setAlias('@userView', null);
 
         // In case there is no controller, an exception should be thrown for relative route
         $this->removeMockedAction();
@@ -118,7 +95,7 @@ class UrlTest extends TestCase
         Url::toRoute('site/view');
     }
 
-    public function testCurrent()
+    public function testCurrent(): void
     {
         $this->mockAction('page', 'view', null, []);
         Yii::$app->request->setQueryParams(['id' => 10, 'name' => 'test', 10 => 0]);
@@ -141,7 +118,7 @@ class UrlTest extends TestCase
         $this->assertEquals($uri . '&arr%5Battr_one%5D=1&arr%5Battr_two%5D=two', Url::current(['arr' => ['attr_two' => 'two']]));
     }
 
-    public function testPrevious()
+    public function testPrevious(): void
     {
         Yii::$app->getUser()->login(UserIdentity::findIdentity('user1'));
 
@@ -152,7 +129,7 @@ class UrlTest extends TestCase
         $this->assertEquals('/base/index.php', Url::previous());
     }
 
-    public function testTo()
+    public function testTo(): void
     {
         // is an array: the first array element is considered a route, while the rest of the name-value
         // pairs are treated as the parameters to be used for URL creation using Url::toRoute.
@@ -162,9 +139,9 @@ class UrlTest extends TestCase
         $this->assertEquals('/base/index.php?r=page%2Fview', Url::to(['']));
 
         // alias support
-        \Yii::setAlias('@pageEdit', 'edit');
+        Yii::setAlias('@pageEdit', 'edit');
         $this->assertEquals('/base/index.php?r=page%2Fedit&id=20', Url::to(['@pageEdit', 'id' => 20]));
-        \Yii::setAlias('@pageEdit', null);
+        Yii::setAlias('@pageEdit', null);
 
         $this->assertEquals('http://example.com/base/index.php?r=page%2Fedit&id=20', Url::to(['edit', 'id' => 20], true));
         $this->assertEquals('http://example.com/base/index.php?r=page%2Fedit', Url::to(['edit'], true));
@@ -183,11 +160,11 @@ class UrlTest extends TestCase
         // is a non-empty string: it will first be processed by [[Yii::getAlias()]]. If the result
         // is an absolute URL, it will be returned either without any change or, if schema was specified, with schema
         // replaced; Otherwise, the result will be prefixed with [[\yii\web\Request::baseUrl]] and returned.
-        \Yii::setAlias('@web1', 'http://test.example.com/test/me1');
-        \Yii::setAlias('@web2', 'test/me2');
-        \Yii::setAlias('@web3', '');
-        \Yii::setAlias('@web4', '/test');
-        \Yii::setAlias('@web5', '#test');
+        Yii::setAlias('@web1', 'http://test.example.com/test/me1');
+        Yii::setAlias('@web2', 'test/me2');
+        Yii::setAlias('@web3', '');
+        Yii::setAlias('@web4', '/test');
+        Yii::setAlias('@web5', '#test');
 
         $this->assertEquals('test/me1', Url::to('test/me1'));
         $this->assertEquals('javascript:test/me1', Url::to('javascript:test/me1'));
@@ -225,11 +202,11 @@ class UrlTest extends TestCase
         $this->assertEquals('//example.com/#test', Url::to('@web5', ''));
 
         // @see https://github.com/yiisoft/yii2/issues/13156
-        \Yii::setAlias('@cdn', '//cdn.example.com');
+        Yii::setAlias('@cdn', '//cdn.example.com');
         $this->assertEquals('http://cdn.example.com/images/logo.gif', Url::to('@cdn/images/logo.gif', 'http'));
         $this->assertEquals('//cdn.example.com/images/logo.gif', Url::to('@cdn/images/logo.gif', ''));
         $this->assertEquals('https://cdn.example.com/images/logo.gif', Url::to('@cdn/images/logo.gif', 'https'));
-        \Yii::setAlias('@cdn', null);
+        Yii::setAlias('@cdn', null);
 
         //In case there is no controller, throw an exception
         $this->removeMockedAction();
@@ -241,21 +218,21 @@ class UrlTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/11925
      */
-    public function testToWithSuffix()
+    public function testToWithSuffix(): void
     {
         Yii::$app->set('urlManager', [
-            'class' => 'yii\web\UrlManager',
+            'class'           => 'yii\web\UrlManager',
             'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'cache' => null,
-            'rules' => [
-                '<controller:\w+>/<id:\d+>' => '<controller>/view',
+            'showScriptName'  => false,
+            'cache'           => null,
+            'rules'           => [
+                '<controller:\w+>/<id:\d+>'              => '<controller>/view',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
-                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+                '<controller:\w+>/<action:\w+>'          => '<controller>/<action>',
             ],
-            'baseUrl' => '/',
+            'baseUrl'   => '/',
             'scriptUrl' => '/index.php',
-            'suffix' => '.html',
+            'suffix'    => '.html',
         ]);
         $url = Yii::$app->urlManager->createUrl(['/site/page', 'view' => 'about']);
         $this->assertEquals('/site/page.html?view=about', $url);
@@ -271,7 +248,7 @@ class UrlTest extends TestCase
         $this->assertMatchesRegularExpression('~<a href="/site/page.html\?view=about">~', $output);
     }
 
-    public function testBase()
+    public function testBase(): void
     {
         $this->mockAction('page', 'view', null, ['id' => 10]);
         $this->assertEquals('/base', Url::base());
@@ -280,7 +257,7 @@ class UrlTest extends TestCase
         $this->assertEquals('//example.com/base', Url::base(''));
     }
 
-    public function testHome()
+    public function testHome(): void
     {
         $this->assertEquals('/base/index.php', Url::home());
         $this->assertEquals('http://example.com/base/index.php', Url::home(true));
@@ -288,14 +265,14 @@ class UrlTest extends TestCase
         $this->assertEquals('//example.com/base/index.php', Url::home(''));
     }
 
-    public function testCanonical()
+    public function testCanonical(): void
     {
         $this->mockAction('page', 'view', null, ['id' => 10]);
         $this->assertEquals('http://example.com/base/index.php?r=page%2Fview&id=10', Url::canonical());
         $this->removeMockedAction();
     }
 
-    public function testIsRelative()
+    public function testIsRelative(): void
     {
         $this->assertTrue(Url::isRelative('/test/index.php'));
         $this->assertTrue(Url::isRelative('index.php'));
@@ -304,7 +281,7 @@ class UrlTest extends TestCase
         $this->assertFalse(Url::isRelative('https://example.com/'));
     }
 
-    public function testRemember()
+    public function testRemember(): void
     {
         Yii::$app->getUser()->login(UserIdentity::findIdentity('user1'));
 
@@ -315,5 +292,29 @@ class UrlTest extends TestCase
         Yii::$app->getUser()->setReturnUrl(null);
         Url::remember('test', 'remember-test');
         $this->assertSame('test', Yii::$app->getSession()->get('remember-test'));
+    }
+
+    /**
+     * Mocks controller action with parameters.
+     *
+     * @param string $controllerId
+     * @param string $actionID
+     * @param string $moduleID
+     * @param array  $params
+     */
+    protected function mockAction($controllerId, $actionID, $moduleID = null, $params = []): void
+    {
+        Yii::$app->controller     = $controller     = new Controller($controllerId, Yii::$app);
+        $controller->actionParams = $params;
+        $controller->action       = new Action($actionID, $controller);
+
+        if ($moduleID !== null) {
+            $controller->module = new Module($moduleID);
+        }
+    }
+
+    protected function removeMockedAction(): void
+    {
+        Yii::$app->controller = null;
     }
 }

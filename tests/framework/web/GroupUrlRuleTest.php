@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\web;
 
 use yii\web\GroupUrlRule;
@@ -24,50 +24,55 @@ class GroupUrlRuleTest extends TestCase
         $this->mockApplication();
     }
 
-    public function testCreateUrl()
+    public function testCreateUrl(): void
     {
         $manager = new UrlManager(['cache' => null]);
-        $suites = $this->getTestsForCreateUrl();
+        $suites  = $this->getTestsForCreateUrl();
+
         foreach ($suites as $i => $suite) {
-            list($name, $config, $tests) = $suite;
-            $rule = new GroupUrlRule($config);
+            [$name, $config, $tests] = $suite;
+            $rule                    = new GroupUrlRule($config);
+
             foreach ($tests as $j => $test) {
-                list($route, $params, $expected, $status) = $test;
-                $url = $rule->createUrl($manager, $route, $params);
-                $this->assertEquals($expected, $url, "Test#$i-$j: $name");
-                $this->assertSame($status, $rule->getCreateUrlStatus(), "Test#$i-$j: $name");
+                [$route, $params, $expected, $status] = $test;
+                $url                                  = $rule->createUrl($manager, $route, $params);
+                $this->assertEquals($expected, $url, "Test#{$i}-{$j}: {$name}");
+                $this->assertSame($status, $rule->getCreateUrlStatus(), "Test#{$i}-{$j}: {$name}");
             }
         }
     }
 
-    public function testParseRequest()
+    public function testParseRequest(): void
     {
         $manager = new UrlManager(['cache' => null]);
         $request = new Request(['hostInfo' => 'http://en.example.com']);
-        $suites = $this->getTestsForParseRequest();
+        $suites  = $this->getTestsForParseRequest();
+
         foreach ($suites as $i => $suite) {
-            list($name, $config, $tests) = $suite;
-            $rule = new GroupUrlRule($config);
+            [$name, $config, $tests] = $suite;
+            $rule                    = new GroupUrlRule($config);
+
             foreach ($tests as $j => $test) {
                 $request->pathInfo = $test[0];
-                $route = $test[1];
-                $params = isset($test[2]) ? $test[2] : [];
-                $result = $rule->parseRequest($manager, $request);
+                $route             = $test[1];
+                $params            = $test[2] ?? [];
+                $result            = $rule->parseRequest($manager, $request);
+
                 if ($route === false) {
-                    $this->assertFalse($result, "Test#$i-$j: $name");
+                    $this->assertFalse($result, "Test#{$i}-{$j}: {$name}");
                 } else {
-                    $this->assertEquals([$route, $params], $result, "Test#$i-$j: $name");
+                    $this->assertEquals([$route, $params], $result, "Test#{$i}-{$j}: {$name}");
                 }
             }
         }
     }
 
-    public function testParseVerb()
+    public function testParseVerb(): void
     {
         $config = [
             'prefix' => 'admin',
-            'rules' => [
-                'login' => 'user/login'
+            'rules'  => [
+                'login' => 'user/login',
             ],
         ];
         $rules = new GroupUrlRule($config);
@@ -75,7 +80,7 @@ class GroupUrlRuleTest extends TestCase
 
         $config = [
             'prefix' => 'admin',
-            'rules' => [
+            'rules'  => [
                 'login' => ['route' => 'user/login', 'pattern' => 'login', 'verb' => 'POST'],
             ],
         ];
@@ -86,8 +91,8 @@ class GroupUrlRuleTest extends TestCase
 
         $config = [
             'prefix' => 'admin',
-            'rules' => [
-                'POST login' => 'user/login'
+            'rules'  => [
+                'POST login' => 'user/login',
             ],
         ];
         $rules = new GroupUrlRule($config);
@@ -97,8 +102,8 @@ class GroupUrlRuleTest extends TestCase
 
         $config = [
             'prefix' => 'admin',
-            'rules' => [
-                'POST,GET login' => 'user/login'
+            'rules'  => [
+                'POST,GET login' => 'user/login',
             ],
         ];
         $rules = new GroupUrlRule($config);
@@ -123,7 +128,7 @@ class GroupUrlRuleTest extends TestCase
                 'no prefix',
                 [
                     'rules' => [
-                        'login' => 'user/login',
+                        'login'  => 'user/login',
                         'logout' => 'user/logout',
                     ],
                 ],
@@ -137,8 +142,8 @@ class GroupUrlRuleTest extends TestCase
                 'prefix only',
                 [
                     'prefix' => 'admin',
-                    'rules' => [
-                        'login' => 'user/login',
+                    'rules'  => [
+                        'login'  => 'user/login',
                         'logout' => 'user/logout',
                     ],
                 ],
@@ -151,10 +156,10 @@ class GroupUrlRuleTest extends TestCase
             [
                 'prefix and routePrefix different',
                 [
-                    'prefix' => '_',
+                    'prefix'      => '_',
                     'routePrefix' => 'admin',
-                    'rules' => [
-                        'login' => 'user/login',
+                    'rules'       => [
+                        'login'  => 'user/login',
                         'logout' => 'user/logout',
                     ],
                 ],
@@ -167,14 +172,14 @@ class GroupUrlRuleTest extends TestCase
             [
                 'ruleConfig with suffix',
                 [
-                    'prefix' => '_',
+                    'prefix'      => '_',
                     'routePrefix' => 'admin',
-                    'ruleConfig' => [
+                    'ruleConfig'  => [
                         'suffix' => '.html',
-                        'class' => 'yii\\web\\UrlRule',
+                        'class'  => 'yii\\web\\UrlRule',
                     ],
                     'rules' => [
-                        'login' => 'user/login',
+                        'login'  => 'user/login',
                         'logout' => 'user/logout',
                     ],
                 ],
@@ -187,22 +192,22 @@ class GroupUrlRuleTest extends TestCase
             [
                 'createStatus for failed statuses',
                 [
-                    'prefix' => '_',
+                    'prefix'      => '_',
                     'routePrefix' => 'admin',
-                    'ruleConfig' => [
+                    'ruleConfig'  => [
                         'suffix' => '.html',
-                        'class' => 'yii\web\UrlRule',
+                        'class'  => 'yii\web\UrlRule',
                     ],
                     'rules' => [
                         'login' => 'user/login',
                         [
                             'pattern' => 'logout',
-                            'route' => 'user/logout',
-                            'mode' => UrlRule::PARSING_ONLY,
+                            'route'   => 'user/logout',
+                            'mode'    => UrlRule::PARSING_ONLY,
                         ],
                         [
                             'pattern' => 'logout/<token:\w+>',
-                            'route' => 'user/logout',
+                            'route'   => 'user/logout',
                         ],
                     ],
                 ],
@@ -230,7 +235,7 @@ class GroupUrlRuleTest extends TestCase
                 'no prefix',
                 [
                     'rules' => [
-                        'login' => 'user/login',
+                        'login'  => 'user/login',
                         'logout' => 'user/logout',
                     ],
                 ],
@@ -244,8 +249,8 @@ class GroupUrlRuleTest extends TestCase
                 'prefix only',
                 [
                     'prefix' => 'admin',
-                    'rules' => [
-                        'login' => 'user/login',
+                    'rules'  => [
+                        'login'  => 'user/login',
                         'logout' => 'user/logout',
                     ],
                 ],
@@ -259,10 +264,10 @@ class GroupUrlRuleTest extends TestCase
             [
                 'prefix and routePrefix different',
                 [
-                    'prefix' => '_',
+                    'prefix'      => '_',
                     'routePrefix' => 'admin',
-                    'rules' => [
-                        'login' => 'user/login',
+                    'rules'       => [
+                        'login'  => 'user/login',
                         'logout' => 'user/logout',
                     ],
                 ],
@@ -276,14 +281,14 @@ class GroupUrlRuleTest extends TestCase
             [
                 'ruleConfig with suffix',
                 [
-                    'prefix' => '_',
+                    'prefix'      => '_',
                     'routePrefix' => 'admin',
-                    'ruleConfig' => [
+                    'ruleConfig'  => [
                         'suffix' => '.html',
-                        'class' => 'yii\\web\\UrlRule',
+                        'class'  => 'yii\\web\\UrlRule',
                     ],
                     'rules' => [
-                        'login' => 'user/login',
+                        'login'  => 'user/login',
                         'logout' => 'user/logout',
                     ],
                 ],

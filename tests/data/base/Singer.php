@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\data\base;
 
 use yii\base\Model;
@@ -17,7 +17,9 @@ class Singer extends Model
     public static $tableName;
 
     public $firstName;
+
     public $lastName;
+
     public $test;
 
     public static function tableName()
@@ -32,7 +34,10 @@ class Singer extends Model
             [['lastName'], 'required'],
             [['lastName'], 'string', 'max' => 25],
             [['underscore_style'], 'yii\captcha\CaptchaValidator'],
-            [['test'], 'required', 'when' => function ($model) { return $model->firstName === 'cebe'; }],
+            [['test'], 'required', 'when' => static function ($model)
+            {
+                return $model->firstName === 'cebe';
+            }, ],
         ];
     }
 }

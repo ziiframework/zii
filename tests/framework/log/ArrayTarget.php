@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\log;
 
 use yii\base\Exception;
@@ -20,7 +20,7 @@ class ArrayTarget extends Target
     /**
      * Exports log [[messages]] to a specific destination.
      */
-    public function export()
+    public function export(): void
     {
         // throw exception if message limit is reached
         throw new Exception('More than 1000000 messages logged.');

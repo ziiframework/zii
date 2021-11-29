@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\filters;
 
 use Yii;
@@ -19,8 +19,24 @@ use yiiunit\TestCase;
  */
 class AjaxFilterTest extends TestCase
 {
+    public function testFilter(): void
+    {
+        $this->mockWebApplication();
+        $controller = new Controller('id', Yii::$app);
+        $action     = new Action('test', $controller);
+        $filter     = new AjaxFilter();
+
+        $filter->request = $this->mockRequest(true);
+        $this->assertTrue($filter->beforeAction($action));
+
+        $filter->request = $this->mockRequest(false);
+        $this->expectException('yii\web\BadRequestHttpException');
+        $filter->beforeAction($action);
+    }
+
     /**
      * @param bool $isAjax
+     *
      * @return Request
      */
     protected function mockRequest($isAjax)
@@ -32,20 +48,5 @@ class AjaxFilterTest extends TestCase
         $request->method('getIsAjax')->willReturn($isAjax);
 
         return $request;
-    }
-
-    public function testFilter()
-    {
-        $this->mockWebApplication();
-        $controller = new Controller('id', Yii::$app);
-        $action = new Action('test', $controller);
-        $filter = new AjaxFilter();
-
-        $filter->request = $this->mockRequest(true);
-        $this->assertTrue($filter->beforeAction($action));
-
-        $filter->request = $this->mockRequest(false);
-        $this->expectException('yii\web\BadRequestHttpException');
-        $filter->beforeAction($action);
     }
 }

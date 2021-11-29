@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\rbac;
 
 use yii\rbac\Rule;
@@ -15,10 +15,11 @@ use yii\rbac\Rule;
 class AuthorRule extends Rule
 {
     public $name = 'isAuthor';
+
     public $reallyReally = false;
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function execute($user, $item, $params)
     {

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /* @var $this \yii\web\View */
 /* @var $content string */
 ?>
@@ -12,7 +12,7 @@
 <body>
 <?php $this->beginBody(); ?>
 
-<?= $content ?>
+<?php print $content; ?>
 
 <?php $this->endBody(); ?>
 </body>

@@ -1,7 +1,7 @@
-<?php
-
+<?php declare(strict_types=1);
 namespace yiiunit\framework\behaviors;
 
+use Exception;
 use PHPUnit_Framework_MockObject_MockObject;
 use yii\base\Widget;
 use yii\behaviors\CacheableWidgetBehavior;
@@ -18,19 +18,19 @@ class CacheableWidgetBehaviorTest extends TestCase
     /**
      * Default-initialized simple cacheable widget mock.
      *
-     * @var PHPUnit_Framework_MockObject_MockObject|SimpleCacheableWidget|CacheableWidgetBehavior
+     * @var CacheableWidgetBehavior|PHPUnit_Framework_MockObject_MockObject|SimpleCacheableWidget
      */
     private $simpleWidget;
 
     /**
      * Default-initialized dynamic cacheable widget mock.
      *
-     * @var PHPUnit_Framework_MockObject_MockObject|DynamicCacheableWidget|CacheableWidgetBehavior
+     * @var CacheableWidgetBehavior|DynamicCacheableWidget|PHPUnit_Framework_MockObject_MockObject
      */
     private $dynamicWidget;
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -39,9 +39,9 @@ class CacheableWidgetBehaviorTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
-    public function testWidgetIsRunWhenCacheIsEmpty()
+    public function testWidgetIsRunWhenCacheIsEmpty(): void
     {
         $this->simpleWidget
             ->expects($this->once())
@@ -52,9 +52,9 @@ class CacheableWidgetBehaviorTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
-    public function testWidgetIsNotRunWhenCacheIsNotEmpty()
+    public function testWidgetIsNotRunWhenCacheIsNotEmpty(): void
     {
         $this->simpleWidget->cacheDuration = 0;
         $this->simpleWidget
@@ -67,9 +67,9 @@ class CacheableWidgetBehaviorTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
-    public function testDynamicContent()
+    public function testDynamicContent(): void
     {
         $this->dynamicWidget->cacheDuration = 0;
         $this->dynamicWidget
@@ -84,9 +84,8 @@ class CacheableWidgetBehaviorTest extends TestCase
 
     /**
      * Initializes a mock application.
-     *
      */
-    private function initializeApplicationMock()
+    private function initializeApplicationMock(): void
     {
         $this->mockApplication([
             'components' => [
@@ -103,50 +102,52 @@ class CacheableWidgetBehaviorTest extends TestCase
 
     /**
      * Initializes mock widgets.
-     *
      */
-    private function initializeWidgetMocks()
+    private function initializeWidgetMocks(): void
     {
-        $this->simpleWidget = $this->getWidgetMock(SimpleCacheableWidget::className());
+        $this->simpleWidget  = $this->getWidgetMock(SimpleCacheableWidget::className());
         $this->dynamicWidget = $this->getWidgetMock(DynamicCacheableWidget::className());
     }
 
     /**
      * Returns a widget mock.
+     *
      * @param $widgetClass
+     *
      * @return PHPUnit_Framework_MockObject_MockObject
      */
     private function getWidgetMock($widgetClass)
     {
-        $widgetMock = $this->getMockBuilder($widgetClass)
+        return $this->getMockBuilder($widgetClass)
             ->setMethods(['run'])
             ->enableOriginalConstructor()
             ->enableProxyingToOriginalMethods()
             ->getMock();
-
-        return $widgetMock;
     }
 }
 
 class BaseCacheableWidget extends Widget
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function test()
     {
         ob_start();
         ob_implicit_flush(false);
+
         try {
             $out = '';
+
             if ($this->beforeRun()) {
                 $result = $this->run();
-                $out = $this->afterRun($result);
+                $out    = $this->afterRun($result);
             }
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             if (ob_get_level() > 0) {
                 ob_end_clean();
             }
+
             throw $exception;
         }
 
@@ -154,7 +155,7 @@ class BaseCacheableWidget extends Widget
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function behaviors()
     {
@@ -167,27 +168,24 @@ class BaseCacheableWidget extends Widget
 class SimpleCacheableWidget extends BaseCacheableWidget
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function run()
     {
-        $content = 'contents';
-
-        return $content;
+        return 'contents';
     }
 }
 
 class DynamicCacheableWidget extends BaseCacheableWidget
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function run()
     {
         $dynamicContentsExpression = 'return "dynamic contents: " . \Yii::$app->params["counter"]++;';
-        $dynamicContents = $this->view->renderDynamic($dynamicContentsExpression);
-        $content = '<div>' . $dynamicContents . '</div>';
+        $dynamicContents           = $this->view->renderDynamic($dynamicContentsExpression);
 
-        return $content;
+        return '<div>' . $dynamicContents . '</div>';
     }
 }

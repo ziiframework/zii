@@ -1,6 +1,7 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
@@ -22,26 +23,26 @@
 $config = [
     'databases' => [
         'mysql' => [
-            'dsn' => 'mysql:host=mysql;dbname=yiitest',
+            'dsn'      => 'mysql:host=mysql;dbname=yiitest',
             'username' => 'root',
             'password' => 'secret',
-            'fixture' => __DIR__ . '/mysql.sql',
+            'fixture'  => __DIR__ . '/mysql.sql',
         ],
         'sqlite' => [
-            'dsn' => 'sqlite::memory:',
+            'dsn'     => 'sqlite::memory:',
             'fixture' => __DIR__ . '/sqlite.sql',
         ],
         'sqlsrv' => [
-            'dsn' => 'sqlsrv:Server=mssql;Database=yii2test',
+            'dsn'      => 'sqlsrv:Server=mssql;Database=yii2test',
             'username' => 'sa',
             'password' => 'Microsoft-12345',
-            'fixture' => __DIR__ . '/mssql.sql',
+            'fixture'  => __DIR__ . '/mssql.sql',
         ],
         'pgsql' => [
-            'dsn' => 'pgsql:host=postgres;dbname=yiitest;port=5432;',
+            'dsn'      => 'pgsql:host=postgres;dbname=yiitest;port=5432;',
             'username' => 'postgres',
             'password' => 'postgres',
-            'fixture' => __DIR__ . '/postgres.sql',
+            'fixture'  => __DIR__ . '/postgres.sql',
         ],
     ],
 ];
