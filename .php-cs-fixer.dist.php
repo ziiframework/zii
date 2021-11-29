@@ -15,8 +15,8 @@ return (new PhpCsFixer\Config())
         '@PSR12:risky' => true,
         '@PHP74Migration' => true,
         '@PHP74Migration:risky' => true,
-        '@Symfony' => true,
-        '@Symfony:risky' => true,
+        '@PhpCsFixer' => true,
+        '@PhpCsFixer:risky' => true,
         'yoda_style' => false,
         'concat_space' => ['spacing' => 'one'],
         'header_comment' => ['header' => $header_comment_block, 'comment_type' => 'PHPDoc'], // TODO change to: comment_type => comment
@@ -79,6 +79,10 @@ return (new PhpCsFixer\Config())
         'php_unit_test_case_static_method_calls' => [
             'call_type' => 'this',
         ],
+        'native_constant_invocation' => false,
+        'native_function_casing' => false,
+        'native_function_invocation' => false,
+        'native_function_type_declaration_casing' => true,
     ])
     ->setFinder(
         PhpCsFixer\Finder::create()
