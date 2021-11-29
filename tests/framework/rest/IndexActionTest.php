@@ -1,5 +1,4 @@
-<?php
-
+<?php declare(strict_types=1);
 namespace yiiunit\framework\rest;
 
 use Yii;
@@ -22,7 +21,7 @@ class IndexActionTest extends TestCase
             'components' => [
                 'db' => [
                     'class' => '\yii\db\Connection',
-                    'dsn' => 'sqlite::memory:',
+                    'dsn'   => 'sqlite::memory:',
                 ],
                 'user' => [
                     'identityClass' => UserIdentity::className(),
@@ -30,32 +29,35 @@ class IndexActionTest extends TestCase
             ],
         ]);
         $columns = [
-            'id' => 'pk',
+            'id'   => 'pk',
             'name' => 'string',
         ];
         Yii::$app->getDb()->createCommand()->createTable(IndexActionModel::tableName(), $columns)->execute();
     }
 
-    public function testPrepareSearchQueryAttribute()
+    public function testPrepareSearchQueryAttribute(): void
     {
-        $sql = '';
+        $sql                  = '';
         Yii::$app->controller = new RestController(
             'rest',
-            new Module('rest'), [
-            'modelClass' => IndexActionModel::className(),
-            'actions' => [
-                'index' => [
-                    'class' => IndexAction::className(),
-                    'modelClass' => IndexActionModel::className(),
-                    'prepareSearchQuery' => function ($query, $requestParams) use (&$sql) {
-                        $this->assertTrue($query instanceof Query);
-                        $sql = $query->createCommand()->getRawSql();
+            new Module('rest'),
+            [
+                'modelClass' => IndexActionModel::className(),
+                'actions'    => [
+                    'index' => [
+                        'class'              => IndexAction::className(),
+                        'modelClass'         => IndexActionModel::className(),
+                        'prepareSearchQuery' => function ($query, $requestParams) use (&$sql)
+                        {
+                            $this->assertTrue($query instanceof Query);
+                            $sql = $query->createCommand()->getRawSql();
 
-                        return $query;
-                    },
+                            return $query;
+                        },
+                    ],
                 ],
-            ],
-        ]);
+            ]
+        );
         Yii::$app->controller->run('index');
 
         $this->assertEquals(
@@ -77,7 +79,6 @@ class RestController extends ActiveController
 
 class Module extends \yii\base\Module
 {
-
 }
 
 /**

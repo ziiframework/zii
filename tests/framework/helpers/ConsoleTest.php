@@ -1,16 +1,16 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\helpers;
 
 use Yii;
+use yii\base\DynamicModel;
 use yii\helpers\Console;
 use yiiunit\TestCase;
-use yii\base\DynamicModel;
 
 /**
  * @group helpers
@@ -28,116 +28,59 @@ class ConsoleTest extends TestCase
         $this->setupStreams();
     }
 
-    /**
-     * Set up streams for Console helper stub
-     */
-    protected function setupStreams()
-    {
-        ConsoleStub::$inputStream = fopen('php://memory', 'w+');
-        ConsoleStub::$outputStream = fopen('php://memory', 'w+');
-        ConsoleStub::$errorStream = fopen('php://memory', 'w+');
-    }
-
-    /**
-     * Clean streams in Console helper stub
-     */
-    protected function truncateStreams()
-    {
-        ftruncate(ConsoleStub::$inputStream, 0);
-        rewind(ConsoleStub::$inputStream);
-        ftruncate(ConsoleStub::$outputStream, 0);
-        rewind(ConsoleStub::$outputStream);
-        ftruncate(ConsoleStub::$errorStream, 0);
-        rewind(ConsoleStub::$errorStream);
-    }
-
-    /**
-     * Read data from Console helper stream, defaults to output stream
-     *
-     * @param resource $stream
-     * @return string
-     */
-    protected function readOutput($stream = null)
-    {
-        if ($stream === null) {
-            $stream = ConsoleStub::$outputStream;
-        }
-
-        rewind($stream);
-
-        $output = '';
-
-        while (!feof($stream) && ($buffer = fread($stream, 1024)) !== false) {
-            $output .= $buffer;
-        }
-
-        return $output;
-    }
-
-    /**
-     * Write passed arguments to Console helper input stream and rewind the position
-     * of a input stream pointer
-     */
-    protected function sendInput()
-    {
-        fwrite(ConsoleStub::$inputStream, implode(PHP_EOL, func_get_args()) . PHP_EOL);
-
-        rewind(ConsoleStub::$inputStream);
-    }
-
-    public function testStripAnsiFormat()
+    public function testStripAnsiFormat(): void
     {
         ob_start();
         ob_implicit_flush(false);
-        echo 'a';
+        print 'a';
         Console::moveCursorForward(1);
-        echo 'a';
+        print 'a';
         Console::moveCursorDown(1);
-        echo 'a';
+        print 'a';
         Console::moveCursorUp(1);
-        echo 'a';
+        print 'a';
         Console::moveCursorBackward(1);
-        echo 'a';
+        print 'a';
         Console::moveCursorNextLine(1);
-        echo 'a';
+        print 'a';
         Console::moveCursorPrevLine(1);
-        echo 'a';
+        print 'a';
         Console::moveCursorTo(1);
-        echo 'a';
+        print 'a';
         Console::moveCursorTo(1, 2);
-        echo 'a';
+        print 'a';
         Console::clearLine();
-        echo 'a';
+        print 'a';
         Console::clearLineAfterCursor();
-        echo 'a';
+        print 'a';
         Console::clearLineBeforeCursor();
-        echo 'a';
+        print 'a';
         Console::clearScreen();
-        echo 'a';
+        print 'a';
         Console::clearScreenAfterCursor();
-        echo 'a';
+        print 'a';
         Console::clearScreenBeforeCursor();
-        echo 'a';
+        print 'a';
         Console::scrollDown();
-        echo 'a';
+        print 'a';
         Console::scrollUp();
-        echo 'a';
+        print 'a';
         Console::hideCursor();
-        echo 'a';
+        print 'a';
         Console::showCursor();
-        echo 'a';
+        print 'a';
         Console::saveCursorPosition();
-        echo 'a';
+        print 'a';
         Console::restoreCursorPosition();
-        echo 'a';
+        print 'a';
         Console::beginAnsiFormat([Console::FG_GREEN, Console::BG_BLUE, Console::UNDERLINE]);
-        echo 'a';
+        print 'a';
         Console::endAnsiFormat();
-        echo 'a';
+        print 'a';
         Console::beginAnsiFormat([Console::xtermBgColor(128), Console::xtermFgColor(55)]);
-        echo 'a';
+        print 'a';
         Console::endAnsiFormat();
-        echo 'a';
+        print 'a';
         $output = Console::stripAnsiFormat(ob_get_clean());
         ob_implicit_flush(true);
         // $output = str_replace("\033", 'X003', $output );// uncomment for debugging
@@ -197,24 +140,83 @@ class ConsoleTest extends TestCase
 
     /**
      * @dataProvider ansiFormats
+     *
      * @param string $ansi
      * @param string $html
      */
-    public function testAnsi2Html($ansi, $html)
+    public function testAnsi2Html($ansi, $html): void
     {
         $this->assertEquals($html, Console::ansiToHtml($ansi));
     }
 
-    public function testErrorSummary()
+    public function testErrorSummary(): void
     {
-        $model = new TestConsoleModel();
+        $model       = new TestConsoleModel();
         $model->name = 'not_an_integer';
         $model->addError('name', 'Error message. Here are some chars: < >');
         $model->addError('name', 'Error message. Here are even more chars: ""');
         $model->validate(null, false);
-        $options = ['showAllErrors' => true];
-        $expectedHtml =  "Error message. Here are some chars: < >\nError message. Here are even more chars: \"\"";
+        $options      = ['showAllErrors' => true];
+        $expectedHtml = "Error message. Here are some chars: < >\nError message. Here are even more chars: \"\"";
         $this->assertEqualsWithoutLE($expectedHtml, Console::errorSummary($model, $options));
+    }
+
+    /**
+     * Set up streams for Console helper stub.
+     */
+    protected function setupStreams(): void
+    {
+        ConsoleStub::$inputStream  = fopen('php://memory', 'w+');
+        ConsoleStub::$outputStream = fopen('php://memory', 'w+');
+        ConsoleStub::$errorStream  = fopen('php://memory', 'w+');
+    }
+
+    /**
+     * Clean streams in Console helper stub.
+     */
+    protected function truncateStreams(): void
+    {
+        ftruncate(ConsoleStub::$inputStream, 0);
+        rewind(ConsoleStub::$inputStream);
+        ftruncate(ConsoleStub::$outputStream, 0);
+        rewind(ConsoleStub::$outputStream);
+        ftruncate(ConsoleStub::$errorStream, 0);
+        rewind(ConsoleStub::$errorStream);
+    }
+
+    /**
+     * Read data from Console helper stream, defaults to output stream.
+     *
+     * @param resource $stream
+     *
+     * @return string
+     */
+    protected function readOutput($stream = null)
+    {
+        if ($stream === null) {
+            $stream = ConsoleStub::$outputStream;
+        }
+
+        rewind($stream);
+
+        $output = '';
+
+        while (!feof($stream) && ($buffer = fread($stream, 1024)) !== false) {
+            $output .= $buffer;
+        }
+
+        return $output;
+    }
+
+    /**
+     * Write passed arguments to Console helper input stream and rewind the position
+     * of a input stream pointer.
+     */
+    protected function sendInput(): void
+    {
+        fwrite(ConsoleStub::$inputStream, implode(PHP_EOL, func_get_args()) . PHP_EOL);
+
+        rewind(ConsoleStub::$inputStream);
     }
 }
 
@@ -229,11 +231,11 @@ class TestConsoleModel extends DynamicModel
     {
         return [
             ['name', 'required'],
-            ['name', 'string', 'max' => 100]
+            ['name', 'string', 'max' => 100],
         ];
     }
 
-    public function init()
+    public function init(): void
     {
         $this->defineAttribute('name');
     }
@@ -241,7 +243,7 @@ class TestConsoleModel extends DynamicModel
     /**
      * @covers \yii\helpers\BaseConsole::input()
      */
-    public function testInput()
+    public function testInput(): void
     {
         $this->sendInput('test1');
         $result = ConsoleStub::input();
@@ -259,7 +261,7 @@ class TestConsoleModel extends DynamicModel
     /**
      * @covers \yii\helpers\BaseConsole::output()
      */
-    public function testOutput()
+    public function testOutput(): void
     {
         $result = ConsoleStub::output('Smth');
         $this->assertEquals('Smth' . PHP_EOL, $this->readOutput());
@@ -269,7 +271,7 @@ class TestConsoleModel extends DynamicModel
     /**
      * @covers \yii\helpers\BaseConsole::error()
      */
-    public function testError()
+    public function testError(): void
     {
         $result = ConsoleStub::error('SomeError');
         $this->assertEquals('SomeError' . PHP_EOL, $this->readOutput(ConsoleStub::$errorStream));
@@ -279,7 +281,7 @@ class TestConsoleModel extends DynamicModel
     /**
      * @covers \yii\helpers\BaseConsole::prompt()
      */
-    public function testPrompt()
+    public function testPrompt(): void
     {
         // testing output variations
 
@@ -328,9 +330,10 @@ class TestConsoleModel extends DynamicModel
 
         // testing custom callable check ("validator" param)
         $this->sendInput('cat', '15');
-        $result = ConsoleStub::prompt('SmthNumeric', ['validator' => function ($value, &$error) {
+        $result = ConsoleStub::prompt('SmthNumeric', ['validator' => static function ($value, &$error)
+        {
             return is_numeric($value);
-        }]);
+        }, ]);
         $this->assertEquals('SmthNumeric Invalid input.' . PHP_EOL . 'SmthNumeric ', $this->readOutput());
         $this->assertEquals('15', $result);
         $this->truncateStreams();
@@ -338,7 +341,8 @@ class TestConsoleModel extends DynamicModel
         // testing custom callable check with custom error message
         $this->sendInput('cat', '15');
         $result = ConsoleStub::prompt('SmthNumeric', [
-            'validator' => function ($value, &$error) {
+            'validator' => static function ($value, &$error)
+            {
                 if (!$response = is_numeric($value)) {
                     $error = 'RealCustomError';
                 }
@@ -354,10 +358,11 @@ class TestConsoleModel extends DynamicModel
         // testing combined options
         $this->sendInput('14', '15');
         $result = ConsoleStub::prompt('Combined', [
-            'required' => true,
-            'default' => 'kraken',
-            'pattern' => '/^\d+$/',
-            'validator' => function ($value, &$error) {
+            'required'  => true,
+            'default'   => 'kraken',
+            'pattern'   => '/^\d+$/',
+            'validator' => static function ($value, &$error)
+            {
                 return $value == 15;
             },
             'error' => 'CustomError',
@@ -370,7 +375,7 @@ class TestConsoleModel extends DynamicModel
     /**
      * @covers \yii\helpers\BaseConsole::confirm()
      */
-    public function testConfirm()
+    public function testConfirm(): void
     {
         $this->sendInput('y');
         ConsoleStub::confirm('Are you sure?');
@@ -410,7 +415,7 @@ class TestConsoleModel extends DynamicModel
     /**
      * @covers \yii\helpers\BaseConsole::select()
      */
-    public function testSelect()
+    public function testSelect(): void
     {
         $options = [
             'c' => 'cat',

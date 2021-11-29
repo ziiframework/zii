@@ -1,11 +1,11 @@
-<?php
+<?php declare(strict_types=1);
 namespace yiiunit\framework\helpers;
 
-use yiiunit\TestCase;
 use yii\helpers\BaseConsole;
+use yiiunit\TestCase;
 
 /**
- * Unit test for [[yii\helpers\BaseConsole]]
+ * Unit test for [[yii\helpers\BaseConsole]].
  *
  * @see BaseConsole
  * @group helpers
@@ -21,34 +21,34 @@ class BaseConsoleTest extends TestCase
     /**
      * @test
      */
-    public function renderColoredString()
+    public function renderColoredString(): void
     {
-        $data = '%yfoo';
-        $actual = BaseConsole::renderColoredString($data);
+        $data     = '%yfoo';
+        $actual   = BaseConsole::renderColoredString($data);
         $expected = "\033[33mfoo";
         $this->assertEquals($expected, $actual);
 
-        $actual = BaseConsole::renderColoredString($data, false);
-        $expected = "foo";
+        $actual   = BaseConsole::renderColoredString($data, false);
+        $expected = 'foo';
         $this->assertEquals($expected, $actual);
     }
 
     /**
      * @test
      */
-    public function ansiColorizedSubstr_withoutColors()
+    public function ansiColorizedSubstr_withoutColors(): void
     {
         $str = 'FooBar';
 
-        $actual = BaseConsole::ansiColorizedSubstr($str, 0, 3);
+        $actual   = BaseConsole::ansiColorizedSubstr($str, 0, 3);
         $expected = BaseConsole::renderColoredString('Foo');
         $this->assertEquals($expected, $actual);
 
-        $actual = BaseConsole::ansiColorizedSubstr($str, 3, 3);
+        $actual   = BaseConsole::ansiColorizedSubstr($str, 3, 3);
         $expected = BaseConsole::renderColoredString('Bar');
         $this->assertEquals($expected, $actual);
 
-        $actual = BaseConsole::ansiColorizedSubstr($str, 1, 4);
+        $actual   = BaseConsole::ansiColorizedSubstr($str, 1, 4);
         $expected = BaseConsole::renderColoredString('ooBa');
         $this->assertEquals($expected, $actual);
     }
@@ -56,16 +56,17 @@ class BaseConsoleTest extends TestCase
     /**
      * @test
      * @dataProvider ansiColorizedSubstr_withColors_data
+     *
      * @param $str
      * @param $start
      * @param $length
      * @param $expected
      */
-    public function ansiColorizedSubstr_withColors($str, $start, $length, $expected)
+    public function ansiColorizedSubstr_withColors($str, $start, $length, $expected): void
     {
         $ansiStr = BaseConsole::renderColoredString($str);
 
-        $ansiActual = BaseConsole::ansiColorizedSubstr($ansiStr, $start, $length);
+        $ansiActual   = BaseConsole::ansiColorizedSubstr($ansiStr, $start, $length);
         $ansiExpected = BaseConsole::renderColoredString($expected);
         $this->assertEquals($ansiExpected, $ansiActual);
     }
@@ -81,7 +82,7 @@ class BaseConsoleTest extends TestCase
         ];
     }
 
-    public function testAnsiStrlen()
+    public function testAnsiStrlen(): void
     {
         $this->assertSame(3, BaseConsole::ansiStrlen('Foo'));
         $this->assertSame(3, BaseConsole::ansiStrlen(BaseConsole::renderColoredString('Bar%y')));

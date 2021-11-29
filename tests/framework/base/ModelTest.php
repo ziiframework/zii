@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\base;
 
 use yii\base\Model;
@@ -25,7 +25,7 @@ class ModelTest extends TestCase
         $this->mockApplication();
     }
 
-    public function testGetAttributeLabel()
+    public function testGetAttributeLabel(): void
     {
         $speaker = new Speaker();
         $this->assertEquals('First Name', $speaker->getAttributeLabel('firstName'));
@@ -33,27 +33,27 @@ class ModelTest extends TestCase
         $this->assertEquals('Underscore Style', $speaker->getAttributeLabel('underscore_style'));
     }
 
-    public function testGetAttributes()
+    public function testGetAttributes(): void
     {
-        $speaker = new Speaker();
+        $speaker            = new Speaker();
         $speaker->firstName = 'Qiang';
-        $speaker->lastName = 'Xue';
+        $speaker->lastName  = 'Xue';
 
         $this->assertEquals([
-            'firstName' => 'Qiang',
-            'lastName' => 'Xue',
-            'customLabel' => null,
+            'firstName'        => 'Qiang',
+            'lastName'         => 'Xue',
+            'customLabel'      => null,
             'underscore_style' => null,
         ], $speaker->getAttributes());
 
         $this->assertEquals([
             'firstName' => 'Qiang',
-            'lastName' => 'Xue',
+            'lastName'  => 'Xue',
         ], $speaker->getAttributes(['firstName', 'lastName']));
 
         $this->assertEquals([
             'firstName' => 'Qiang',
-            'lastName' => 'Xue',
+            'lastName'  => 'Xue',
         ], $speaker->getAttributes(null, ['customLabel', 'underscore_style']));
 
         $this->assertEquals([
@@ -61,7 +61,7 @@ class ModelTest extends TestCase
         ], $speaker->getAttributes(['firstName', 'lastName'], ['lastName', 'customLabel', 'underscore_style']));
     }
 
-    public function testSetAttributes()
+    public function testSetAttributes(): void
     {
         // by default mass assignment doesn't work at all
         $speaker = new Speaker();
@@ -81,7 +81,7 @@ class ModelTest extends TestCase
         $this->assertEquals('Qiang', $speaker->firstName);
     }
 
-    public function testLoad()
+    public function testLoad(): void
     {
         $singer = new Singer();
         $this->assertEquals('Singer', $singer->formName());
@@ -89,25 +89,25 @@ class ModelTest extends TestCase
         $post = ['firstName' => 'Qiang'];
 
         Speaker::$formName = '';
-        $model = new Speaker();
+        $model             = new Speaker();
         $model->setScenario('test');
         $this->assertTrue($model->load($post));
         $this->assertEquals('Qiang', $model->firstName);
 
         Speaker::$formName = 'Speaker';
-        $model = new Speaker();
+        $model             = new Speaker();
         $model->setScenario('test');
         $this->assertTrue($model->load(['Speaker' => $post]));
         $this->assertEquals('Qiang', $model->firstName);
 
         Speaker::$formName = 'Speaker';
-        $model = new Speaker();
+        $model             = new Speaker();
         $model->setScenario('test');
         $this->assertFalse($model->load(['Example' => []]));
         $this->assertEquals('', $model->firstName);
     }
 
-    public function testLoadMultiple()
+    public function testLoadMultiple(): void
     {
         $data = [
             ['firstName' => 'Thomas', 'lastName' => 'Anderson'],
@@ -115,7 +115,7 @@ class ModelTest extends TestCase
         ];
 
         Speaker::$formName = '';
-        $neo = new Speaker();
+        $neo               = new Speaker();
         $neo->setScenario('test');
         $smith = new Speaker();
         $smith->setScenario('test');
@@ -124,7 +124,7 @@ class ModelTest extends TestCase
         $this->assertEquals('Smith', $smith->lastName);
 
         Speaker::$formName = 'Speaker';
-        $neo = new Speaker();
+        $neo               = new Speaker();
         $neo->setScenario('test');
         $smith = new Speaker();
         $smith->setScenario('test');
@@ -133,7 +133,7 @@ class ModelTest extends TestCase
         $this->assertEquals('Smith', $smith->lastName);
 
         Speaker::$formName = 'Speaker';
-        $neo = new Speaker();
+        $neo               = new Speaker();
         $neo->setScenario('test');
         $smith = new Speaker();
         $smith->setScenario('test');
@@ -142,7 +142,7 @@ class ModelTest extends TestCase
         $this->assertEquals('', $smith->lastName);
     }
 
-    public function testActiveAttributes()
+    public function testActiveAttributes(): void
     {
         // by default mass assignment doesn't work at all
         $speaker = new Speaker();
@@ -153,7 +153,7 @@ class ModelTest extends TestCase
         $this->assertEquals(['firstName', 'lastName', 'underscore_style'], $speaker->activeAttributes());
     }
 
-    public function testActiveAttributesAreUnique()
+    public function testActiveAttributesAreUnique(): void
     {
         // by default mass assignment doesn't work at all
         $speaker = new Speaker();
@@ -164,7 +164,7 @@ class ModelTest extends TestCase
         $this->assertEquals(['firstName', 'underscore_style'], $speaker->activeAttributes());
     }
 
-    public function testIsAttributeSafe()
+    public function testIsAttributeSafe(): void
     {
         // by default mass assignment doesn't work at all
         $speaker = new Speaker();
@@ -175,21 +175,21 @@ class ModelTest extends TestCase
         $this->assertTrue($speaker->isAttributeSafe('firstName'));
     }
 
-    public function testIsAttributeSafeForIntegerAttribute()
+    public function testIsAttributeSafeForIntegerAttribute(): void
     {
-        $model = new RulesModel();
+        $model        = new RulesModel();
         $model->rules = [
             [
                 [123456], 'safe',
-            ]
+            ],
         ];
 
         $this->assertTrue($model->isAttributeSafe(123456));
     }
 
-    public function testSafeScenarios()
+    public function testSafeScenarios(): void
     {
-        $model = new RulesModel();
+        $model        = new RulesModel();
         $model->rules = [
             // validated and safe on every scenario
             [['account_id', 'user_id'], 'required'],
@@ -201,7 +201,7 @@ class ModelTest extends TestCase
         $this->assertEquals([], $model->safeAttributes());
         $this->assertEquals([], $model->activeAttributes());
 
-        $model = new RulesModel();
+        $model        = new RulesModel();
         $model->rules = [
             // validated and safe on every scenario
             [['account_id', 'user_id'], 'required'],
@@ -219,7 +219,7 @@ class ModelTest extends TestCase
         $this->assertEquals(['account_id', 'user_id', 'email', 'name'], $model->safeAttributes());
         $this->assertEquals(['account_id', 'user_id', 'email', 'name'], $model->activeAttributes());
 
-        $model = new RulesModel();
+        $model        = new RulesModel();
         $model->rules = [
             // validated and safe on every scenario
             [['account_id', 'user_id'], 'required'],
@@ -239,9 +239,9 @@ class ModelTest extends TestCase
         $this->assertEquals(['account_id', 'user_id', 'email', 'name'], $model->activeAttributes());
     }
 
-    public function testUnsafeAttributes()
+    public function testUnsafeAttributes(): void
     {
-        $model = new RulesModel();
+        $model        = new RulesModel();
         $model->rules = [
             [['name', '!email'], 'required'], // Name is safe to set, but email is not. Both are required
         ];
@@ -251,7 +251,7 @@ class ModelTest extends TestCase
         $this->assertNull($model->email);
         $this->assertFalse($model->validate());
 
-        $model = new RulesModel();
+        $model        = new RulesModel();
         $model->rules = [
             [['name'], 'required'],
             [['!user_id'], 'default', 'value' => '3426'],
@@ -260,7 +260,7 @@ class ModelTest extends TestCase
         $this->assertTrue($model->validate());
         $this->assertEquals('3426', $model->user_id);
 
-        $model = new RulesModel();
+        $model        = new RulesModel();
         $model->rules = [
             [['name', 'email'], 'required'],
             [['!email'], 'safe'],
@@ -269,7 +269,7 @@ class ModelTest extends TestCase
         $model->attributes = ['name' => 'mdmunir', 'email' => 'm2792684@mdm.com'];
         $this->assertFalse($model->validate());
 
-        $model = new RulesModel();
+        $model        = new RulesModel();
         $model->rules = [
             [['name', 'email'], 'required'],
             [['email'], 'email'],
@@ -286,7 +286,7 @@ class ModelTest extends TestCase
         $this->assertNotEquals('d426@mdm.com', $model->email);
     }
 
-    public function testErrors()
+    public function testErrors(): void
     {
         $speaker = new Speaker();
 
@@ -335,7 +335,7 @@ class ModelTest extends TestCase
         $this->assertFalse($speaker->hasErrors());
     }
 
-    public function testAddErrors()
+    public function testAddErrors(): void
     {
         $singer = new Singer();
 
@@ -355,7 +355,7 @@ class ModelTest extends TestCase
         $singer->clearErrors();
         $errors = [
             'firstName' => ['Something is wrong!'],
-            'lastName' => ['Another one!'],
+            'lastName'  => ['Another one!'],
         ];
         $singer->addErrors($errors);
         $this->assertEquals($singer->getErrors(), $errors);
@@ -363,7 +363,7 @@ class ModelTest extends TestCase
         $singer->clearErrors();
         $errors = [
             'firstName' => ['Something is wrong!', 'Totally wrong!'],
-            'lastName' => ['Another one!'],
+            'lastName'  => ['Another one!'],
         ];
         $singer->addErrors($errors);
         $this->assertEquals($singer->getErrors(), $errors);
@@ -371,13 +371,13 @@ class ModelTest extends TestCase
         $singer->clearErrors();
         $errors = [
             'firstName' => ['Something is wrong!', 'Totally wrong!'],
-            'lastName' => ['Another one!', 'Totally wrong!'],
+            'lastName'  => ['Another one!', 'Totally wrong!'],
         ];
         $singer->addErrors($errors);
         $this->assertEquals($singer->getErrors(), $errors);
     }
 
-    public function testArraySyntax()
+    public function testArraySyntax(): void
     {
         $speaker = new Speaker();
 
@@ -396,13 +396,14 @@ class ModelTest extends TestCase
 
         // iteration
         $attributes = [];
+
         foreach ($speaker as $key => $attribute) {
             $attributes[$key] = $attribute;
         }
         $this->assertEquals([
-            'firstName' => 'Qiang',
-            'lastName' => null,
-            'customLabel' => null,
+            'firstName'        => 'Qiang',
+            'lastName'         => null,
+            'customLabel'      => null,
             'underscore_style' => null,
         ], $attributes);
 
@@ -414,46 +415,46 @@ class ModelTest extends TestCase
         $this->assertFalse(isset($speaker['firstName']));
     }
 
-    public function testDefaults()
+    public function testDefaults(): void
     {
         $singer = new Model();
         $this->assertEquals([], $singer->rules());
         $this->assertEquals([], $singer->attributeLabels());
     }
 
-    public function testDefaultScenarios()
+    public function testDefaultScenarios(): void
     {
         $singer = new Singer();
         $this->assertEquals(['default' => ['lastName', 'underscore_style', 'test']], $singer->scenarios());
 
         $scenarios = [
-            'default' => ['id', 'name', 'description'],
+            'default'        => ['id', 'name', 'description'],
             'administration' => ['name', 'description', 'is_disabled'],
         ];
         $model = new ComplexModel1();
         $this->assertEquals($scenarios, $model->scenarios());
         $scenarios = [
-            'default' => ['id', 'name', 'description'],
+            'default'                    => ['id', 'name', 'description'],
             'suddenlyUnexpectedScenario' => ['name', 'description'],
-            'administration' => ['id', 'name', 'description', 'is_disabled'],
+            'administration'             => ['id', 'name', 'description', 'is_disabled'],
         ];
         $model = new ComplexModel2();
         $this->assertEquals($scenarios, $model->scenarios());
     }
 
-    public function testValidatorsWithDifferentScenarios()
+    public function testValidatorsWithDifferentScenarios(): void
     {
         $model = new CustomScenariosModel();
-        self::assertCount(3, $model->getActiveValidators());
-        self::assertCount(2, $model->getActiveValidators('name'));
+        $this->assertCount(3, $model->getActiveValidators());
+        $this->assertCount(2, $model->getActiveValidators('name'));
 
         $model->setScenario('secondScenario');
-        self::assertCount(2, $model->getActiveValidators());
-        self::assertCount(2, $model->getActiveValidators('id'));
-        self::assertCount(0, $model->getActiveValidators('name'), 'This attribute has no validators in current scenario.');
+        $this->assertCount(2, $model->getActiveValidators());
+        $this->assertCount(2, $model->getActiveValidators('id'));
+        $this->assertCount(0, $model->getActiveValidators('name'), 'This attribute has no validators in current scenario.');
     }
 
-    public function testIsAttributeRequired()
+    public function testIsAttributeRequired(): void
     {
         $singer = new Singer();
         $this->assertFalse($singer->isAttributeRequired('firstName'));
@@ -467,7 +468,7 @@ class ModelTest extends TestCase
         $this->assertFalse($singer->isAttributeRequired('test'));
     }
 
-    public function testCreateValidators()
+    public function testCreateValidators(): void
     {
         $this->expectException('yii\base\InvalidConfigException');
         $this->expectExceptionMessage('Invalid validation rule: a rule must specify both attribute names and validator type.');
@@ -480,7 +481,7 @@ class ModelTest extends TestCase
      * Ensure 'safe' validator works for write-only properties.
      * Normal validator can not work here though.
      */
-    public function testValidateWriteOnly()
+    public function testValidateWriteOnly(): void
     {
         $model = new WriteOnlyModel();
 
@@ -490,19 +491,20 @@ class ModelTest extends TestCase
         $this->assertTrue($model->validate());
     }
 
-    public function testValidateAttributeNames()
+    public function testValidateAttributeNames(): void
     {
-        $model = new ComplexModel1();
+        $model       = new ComplexModel1();
         $model->name = 'Some value';
         $this->assertTrue($model->validate(['name']), 'Should validate only name attribute');
         $this->assertTrue($model->validate('name'), 'Should validate only name attribute');
         $this->assertFalse($model->validate(), 'Should validate all attributes');
     }
 
-    public function testFormNameWithAnonymousClass()
+    public function testFormNameWithAnonymousClass(): void
     {
         if (PHP_VERSION_ID < 70000) {
             $this->markTestSkipped('Can not be tested on PHP < 7.0');
+
             return;
         }
 
@@ -518,8 +520,11 @@ class ModelTest extends TestCase
 class ComplexModel1 extends Model
 {
     public $name;
+
     public $description;
+
     public $id;
+
     public $is_disabled;
 
     public function rules()
@@ -555,7 +560,7 @@ class WriteOnlyModel extends Model
         ];
     }
 
-    public function setPassword($pw)
+    public function setPassword($pw): void
     {
         $this->passwordHash = $pw;
     }
@@ -564,6 +569,7 @@ class WriteOnlyModel extends Model
 class CustomScenariosModel extends Model
 {
     public $id;
+
     public $name;
 
     public function rules()
@@ -579,7 +585,7 @@ class CustomScenariosModel extends Model
     {
         return [
             self::SCENARIO_DEFAULT => ['id', 'name'],
-            'secondScenario' => ['id'],
+            'secondScenario'       => ['id'],
         ];
     }
 }

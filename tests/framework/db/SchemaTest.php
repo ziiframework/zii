@@ -1,12 +1,17 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\db;
 
+use function count;
+use function gettype;
+use function is_array;
+use function is_object;
+use Exception;
 use PDO;
 use yii\caching\ArrayCache;
 use yii\caching\FileCache;
@@ -34,13 +39,14 @@ abstract class SchemaTest extends DatabaseTestCase
         ];
     }
 
-    public function testGetSchemaNames()
+    public function testGetSchemaNames(): void
     {
         /* @var $schema Schema */
         $schema = $this->getConnection()->schema;
 
         $schemas = $schema->getSchemaNames();
         $this->assertNotEmpty($schemas);
+
         foreach ($this->expectedSchemas as $schema) {
             $this->assertContains($schema, $schemas);
         }
@@ -48,11 +54,13 @@ abstract class SchemaTest extends DatabaseTestCase
 
     /**
      * @dataProvider pdoAttributesProvider
+     *
      * @param array $pdoAttributes
      */
-    public function testGetTableNames($pdoAttributes)
+    public function testGetTableNames($pdoAttributes): void
     {
         $connection = $this->getConnection();
+
         foreach ($pdoAttributes as $name => $value) {
             if ($name === PDO::ATTR_EMULATE_PREPARES && $connection->driverName === 'sqlsrv') {
                 continue;
@@ -64,8 +72,10 @@ abstract class SchemaTest extends DatabaseTestCase
         $schema = $connection->schema;
 
         $tables = $schema->getTableNames();
+
         if ($this->driverName === 'sqlsrv') {
-            $tables = array_map(static function ($item) {
+            $tables = array_map(static function ($item)
+            {
                 return trim($item, '[]');
             }, $tables);
         }
@@ -81,11 +91,13 @@ abstract class SchemaTest extends DatabaseTestCase
 
     /**
      * @dataProvider pdoAttributesProvider
+     *
      * @param array $pdoAttributes
      */
-    public function testGetTableSchemas($pdoAttributes)
+    public function testGetTableSchemas($pdoAttributes): void
     {
         $connection = $this->getConnection();
+
         foreach ($pdoAttributes as $name => $value) {
             if ($name === PDO::ATTR_EMULATE_PREPARES && $connection->driverName === 'sqlsrv') {
                 continue;
@@ -96,28 +108,29 @@ abstract class SchemaTest extends DatabaseTestCase
         $schema = $connection->schema;
 
         $tables = $schema->getTableSchemas();
-        $this->assertEquals(\count($schema->getTableNames()), \count($tables));
+        $this->assertEquals(count($schema->getTableNames()), count($tables));
+
         foreach ($tables as $table) {
             $this->assertInstanceOf('yii\db\TableSchema', $table);
         }
     }
 
-    public function testGetTableSchemasWithAttrCase()
+    public function testGetTableSchemasWithAttrCase(): void
     {
         $db = $this->getConnection(false);
-        $db->slavePdo->setAttribute(\PDO::ATTR_CASE, \PDO::CASE_LOWER);
-        $this->assertEquals(\count($db->schema->getTableNames()), \count($db->schema->getTableSchemas()));
+        $db->slavePdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
+        $this->assertEquals(count($db->schema->getTableNames()), count($db->schema->getTableSchemas()));
 
-        $db->slavePdo->setAttribute(\PDO::ATTR_CASE, \PDO::CASE_UPPER);
-        $this->assertEquals(\count($db->schema->getTableNames()), \count($db->schema->getTableSchemas()));
+        $db->slavePdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_UPPER);
+        $this->assertEquals(count($db->schema->getTableNames()), count($db->schema->getTableSchemas()));
     }
 
-    public function testGetNonExistingTableSchema()
+    public function testGetNonExistingTableSchema(): void
     {
         $this->assertNull($this->getConnection()->schema->getTableSchema('nonexisting_table'));
     }
 
-    public function testSchemaCache()
+    public function testSchemaCache(): void
     {
         /* @var $db Connection */
         $db = $this->getConnection();
@@ -126,9 +139,9 @@ abstract class SchemaTest extends DatabaseTestCase
         $schema = $db->schema;
 
         $schema->db->enableSchemaCache = true;
-        $schema->db->schemaCache = new FileCache();
-        $noCacheTable = $schema->getTableSchema('type', true);
-        $cachedTable = $schema->getTableSchema('type', false);
+        $schema->db->schemaCache       = new FileCache();
+        $noCacheTable                  = $schema->getTableSchema('type', true);
+        $cachedTable                   = $schema->getTableSchema('type', false);
         $this->assertEquals($noCacheTable, $cachedTable);
 
         $db->createCommand()->renameTable('type', 'type_test');
@@ -141,14 +154,14 @@ abstract class SchemaTest extends DatabaseTestCase
     /**
      * @depends testSchemaCache
      */
-    public function testRefreshTableSchema()
+    public function testRefreshTableSchema(): void
     {
         /* @var $schema Schema */
         $schema = $this->getConnection()->schema;
 
         $schema->db->enableSchemaCache = true;
-        $schema->db->schemaCache = new FileCache();
-        $noCacheTable = $schema->getTableSchema('type', true);
+        $schema->db->schemaCache       = new FileCache();
+        $noCacheTable                  = $schema->getTableSchema('type', true);
 
         $schema->refreshTableSchema('type');
         $refreshedTable = $schema->getTableSchema('type', false);
@@ -160,18 +173,19 @@ abstract class SchemaTest extends DatabaseTestCase
         $configs = [
             [
                 'prefix' => '',
-                'name' => 'type',
+                'name'   => 'type',
             ],
             [
                 'prefix' => '',
-                'name' => '{{%type}}',
+                'name'   => '{{%type}}',
             ],
             [
                 'prefix' => 'ty',
-                'name' => '{{%pe}}',
+                'name'   => '{{%pe}}',
             ],
         ];
         $data = [];
+
         foreach ($configs as $config) {
             foreach ($configs as $testConfig) {
                 if ($config === $testConfig) {
@@ -193,6 +207,7 @@ abstract class SchemaTest extends DatabaseTestCase
                 ];
             }
         }
+
         return $data;
     }
 
@@ -200,20 +215,20 @@ abstract class SchemaTest extends DatabaseTestCase
      * @dataProvider tableSchemaCachePrefixesProvider
      * @depends      testSchemaCache
      */
-    public function testTableSchemaCacheWithTablePrefixes($tablePrefix, $tableName, $testTablePrefix, $testTableName)
+    public function testTableSchemaCacheWithTablePrefixes($tablePrefix, $tableName, $testTablePrefix, $testTableName): void
     {
         /* @var $schema Schema */
-        $schema = $this->getConnection()->schema;
+        $schema                        = $this->getConnection()->schema;
         $schema->db->enableSchemaCache = true;
 
         $schema->db->tablePrefix = $tablePrefix;
         $schema->db->schemaCache = new ArrayCache();
-        $noCacheTable = $schema->getTableSchema($tableName, true);
+        $noCacheTable            = $schema->getTableSchema($tableName, true);
         $this->assertInstanceOf(TableSchema::className(), $noCacheTable);
 
         // Compare
         $schema->db->tablePrefix = $testTablePrefix;
-        $testNoCacheTable = $schema->getTableSchema($testTableName);
+        $testNoCacheTable        = $schema->getTableSchema($testTableName);
         $this->assertSame($noCacheTable, $testNoCacheTable);
 
         $schema->db->tablePrefix = $tablePrefix;
@@ -231,7 +246,7 @@ abstract class SchemaTest extends DatabaseTestCase
         $this->assertNotSame($testNoCacheTable, $testRefreshedTable);
     }
 
-    public function testCompositeFk()
+    public function testCompositeFk(): void
     {
         /* @var $schema Schema */
         $schema = $this->getConnection()->schema;
@@ -245,18 +260,18 @@ abstract class SchemaTest extends DatabaseTestCase
         $this->assertEquals('item_id', $table->foreignKeys['FK_composite_fk_order_item']['item_id']);
     }
 
-    public function testGetPDOType()
+    public function testGetPDOType(): void
     {
         $values = [
-            [null, \PDO::PARAM_NULL],
-            ['', \PDO::PARAM_STR],
-            ['hello', \PDO::PARAM_STR],
-            [0, \PDO::PARAM_INT],
-            [1, \PDO::PARAM_INT],
-            [1337, \PDO::PARAM_INT],
-            [true, \PDO::PARAM_BOOL],
-            [false, \PDO::PARAM_BOOL],
-            [$fp = fopen(__FILE__, 'rb'), \PDO::PARAM_LOB],
+            [null, PDO::PARAM_NULL],
+            ['', PDO::PARAM_STR],
+            ['hello', PDO::PARAM_STR],
+            [0, PDO::PARAM_INT],
+            [1, PDO::PARAM_INT],
+            [1337, PDO::PARAM_INT],
+            [true, PDO::PARAM_BOOL],
+            [false, PDO::PARAM_BOOL],
+            [$fp = fopen(__FILE__, 'rb'), PDO::PARAM_LOB],
         ];
 
         /* @var $schema Schema */
@@ -272,225 +287,225 @@ abstract class SchemaTest extends DatabaseTestCase
     {
         return [
             'int_col' => [
-                'type' => 'integer',
-                'dbType' => 'int(11)',
-                'phpType' => 'integer',
-                'allowNull' => false,
+                'type'          => 'integer',
+                'dbType'        => 'int(11)',
+                'phpType'       => 'integer',
+                'allowNull'     => false,
                 'autoIncrement' => false,
-                'enumValues' => null,
-                'size' => 11,
-                'precision' => 11,
-                'scale' => null,
-                'defaultValue' => null,
+                'enumValues'    => null,
+                'size'          => 11,
+                'precision'     => 11,
+                'scale'         => null,
+                'defaultValue'  => null,
             ],
             'int_col2' => [
-                'type' => 'integer',
-                'dbType' => 'int(11)',
-                'phpType' => 'integer',
-                'allowNull' => true,
+                'type'          => 'integer',
+                'dbType'        => 'int(11)',
+                'phpType'       => 'integer',
+                'allowNull'     => true,
                 'autoIncrement' => false,
-                'enumValues' => null,
-                'size' => 11,
-                'precision' => 11,
-                'scale' => null,
-                'defaultValue' => 1,
+                'enumValues'    => null,
+                'size'          => 11,
+                'precision'     => 11,
+                'scale'         => null,
+                'defaultValue'  => 1,
             ],
             'tinyint_col' => [
-                'type' => 'tinyint',
-                'dbType' => 'tinyint(3)',
-                'phpType' => 'integer',
-                'allowNull' => true,
+                'type'          => 'tinyint',
+                'dbType'        => 'tinyint(3)',
+                'phpType'       => 'integer',
+                'allowNull'     => true,
                 'autoIncrement' => false,
-                'enumValues' => null,
-                'size' => 3,
-                'precision' => 3,
-                'scale' => null,
-                'defaultValue' => 1,
+                'enumValues'    => null,
+                'size'          => 3,
+                'precision'     => 3,
+                'scale'         => null,
+                'defaultValue'  => 1,
             ],
             'smallint_col' => [
-                'type' => 'smallint',
-                'dbType' => 'smallint(1)',
-                'phpType' => 'integer',
-                'allowNull' => true,
+                'type'          => 'smallint',
+                'dbType'        => 'smallint(1)',
+                'phpType'       => 'integer',
+                'allowNull'     => true,
                 'autoIncrement' => false,
-                'enumValues' => null,
-                'size' => 1,
-                'precision' => 1,
-                'scale' => null,
-                'defaultValue' => 1,
+                'enumValues'    => null,
+                'size'          => 1,
+                'precision'     => 1,
+                'scale'         => null,
+                'defaultValue'  => 1,
             ],
             'char_col' => [
-                'type' => 'char',
-                'dbType' => 'char(100)',
-                'phpType' => 'string',
-                'allowNull' => false,
+                'type'          => 'char',
+                'dbType'        => 'char(100)',
+                'phpType'       => 'string',
+                'allowNull'     => false,
                 'autoIncrement' => false,
-                'enumValues' => null,
-                'size' => 100,
-                'precision' => 100,
-                'scale' => null,
-                'defaultValue' => null,
+                'enumValues'    => null,
+                'size'          => 100,
+                'precision'     => 100,
+                'scale'         => null,
+                'defaultValue'  => null,
             ],
             'char_col2' => [
-                'type' => 'string',
-                'dbType' => 'varchar(100)',
-                'phpType' => 'string',
-                'allowNull' => true,
+                'type'          => 'string',
+                'dbType'        => 'varchar(100)',
+                'phpType'       => 'string',
+                'allowNull'     => true,
                 'autoIncrement' => false,
-                'enumValues' => null,
-                'size' => 100,
-                'precision' => 100,
-                'scale' => null,
-                'defaultValue' => 'something',
+                'enumValues'    => null,
+                'size'          => 100,
+                'precision'     => 100,
+                'scale'         => null,
+                'defaultValue'  => 'something',
             ],
             'char_col3' => [
-                'type' => 'text',
-                'dbType' => 'text',
-                'phpType' => 'string',
-                'allowNull' => true,
+                'type'          => 'text',
+                'dbType'        => 'text',
+                'phpType'       => 'string',
+                'allowNull'     => true,
                 'autoIncrement' => false,
-                'enumValues' => null,
-                'size' => null,
-                'precision' => null,
-                'scale' => null,
-                'defaultValue' => null,
+                'enumValues'    => null,
+                'size'          => null,
+                'precision'     => null,
+                'scale'         => null,
+                'defaultValue'  => null,
             ],
             'enum_col' => [
-                'type' => 'string',
-                'dbType' => "enum('a','B','c,D')",
-                'phpType' => 'string',
-                'allowNull' => true,
+                'type'          => 'string',
+                'dbType'        => "enum('a','B','c,D')",
+                'phpType'       => 'string',
+                'allowNull'     => true,
                 'autoIncrement' => false,
-                'enumValues' => ['a', 'B', 'c,D'],
-                'size' => null,
-                'precision' => null,
-                'scale' => null,
-                'defaultValue' => null,
+                'enumValues'    => ['a', 'B', 'c,D'],
+                'size'          => null,
+                'precision'     => null,
+                'scale'         => null,
+                'defaultValue'  => null,
             ],
             'float_col' => [
-                'type' => 'double',
-                'dbType' => 'double(4,3)',
-                'phpType' => 'double',
-                'allowNull' => false,
+                'type'          => 'double',
+                'dbType'        => 'double(4,3)',
+                'phpType'       => 'double',
+                'allowNull'     => false,
                 'autoIncrement' => false,
-                'enumValues' => null,
-                'size' => 4,
-                'precision' => 4,
-                'scale' => 3,
-                'defaultValue' => null,
+                'enumValues'    => null,
+                'size'          => 4,
+                'precision'     => 4,
+                'scale'         => 3,
+                'defaultValue'  => null,
             ],
             'float_col2' => [
-                'type' => 'double',
-                'dbType' => 'double',
-                'phpType' => 'double',
-                'allowNull' => true,
+                'type'          => 'double',
+                'dbType'        => 'double',
+                'phpType'       => 'double',
+                'allowNull'     => true,
                 'autoIncrement' => false,
-                'enumValues' => null,
-                'size' => null,
-                'precision' => null,
-                'scale' => null,
-                'defaultValue' => 1.23,
+                'enumValues'    => null,
+                'size'          => null,
+                'precision'     => null,
+                'scale'         => null,
+                'defaultValue'  => 1.23,
             ],
             'blob_col' => [
-                'type' => 'binary',
-                'dbType' => 'blob',
-                'phpType' => 'resource',
-                'allowNull' => true,
+                'type'          => 'binary',
+                'dbType'        => 'blob',
+                'phpType'       => 'resource',
+                'allowNull'     => true,
                 'autoIncrement' => false,
-                'enumValues' => null,
-                'size' => null,
-                'precision' => null,
-                'scale' => null,
-                'defaultValue' => null,
+                'enumValues'    => null,
+                'size'          => null,
+                'precision'     => null,
+                'scale'         => null,
+                'defaultValue'  => null,
             ],
             'numeric_col' => [
-                'type' => 'decimal',
-                'dbType' => 'decimal(5,2)',
-                'phpType' => 'string',
-                'allowNull' => true,
+                'type'          => 'decimal',
+                'dbType'        => 'decimal(5,2)',
+                'phpType'       => 'string',
+                'allowNull'     => true,
                 'autoIncrement' => false,
-                'enumValues' => null,
-                'size' => 5,
-                'precision' => 5,
-                'scale' => 2,
-                'defaultValue' => '33.22',
+                'enumValues'    => null,
+                'size'          => 5,
+                'precision'     => 5,
+                'scale'         => 2,
+                'defaultValue'  => '33.22',
             ],
             'time' => [
-                'type' => 'timestamp',
-                'dbType' => 'timestamp',
-                'phpType' => 'string',
-                'allowNull' => false,
+                'type'          => 'timestamp',
+                'dbType'        => 'timestamp',
+                'phpType'       => 'string',
+                'allowNull'     => false,
                 'autoIncrement' => false,
-                'enumValues' => null,
-                'size' => null,
-                'precision' => null,
-                'scale' => null,
-                'defaultValue' => '2002-01-01 00:00:00',
+                'enumValues'    => null,
+                'size'          => null,
+                'precision'     => null,
+                'scale'         => null,
+                'defaultValue'  => '2002-01-01 00:00:00',
             ],
             'bool_col' => [
-                'type' => 'tinyint',
-                'dbType' => 'tinyint(1)',
-                'phpType' => 'integer',
-                'allowNull' => false,
+                'type'          => 'tinyint',
+                'dbType'        => 'tinyint(1)',
+                'phpType'       => 'integer',
+                'allowNull'     => false,
                 'autoIncrement' => false,
-                'enumValues' => null,
-                'size' => 1,
-                'precision' => 1,
-                'scale' => null,
-                'defaultValue' => null,
+                'enumValues'    => null,
+                'size'          => 1,
+                'precision'     => 1,
+                'scale'         => null,
+                'defaultValue'  => null,
             ],
             'bool_col2' => [
-                'type' => 'tinyint',
-                'dbType' => 'tinyint(1)',
-                'phpType' => 'integer',
-                'allowNull' => true,
+                'type'          => 'tinyint',
+                'dbType'        => 'tinyint(1)',
+                'phpType'       => 'integer',
+                'allowNull'     => true,
                 'autoIncrement' => false,
-                'enumValues' => null,
-                'size' => 1,
-                'precision' => 1,
-                'scale' => null,
-                'defaultValue' => 1,
+                'enumValues'    => null,
+                'size'          => 1,
+                'precision'     => 1,
+                'scale'         => null,
+                'defaultValue'  => 1,
             ],
             'ts_default' => [
-                'type' => 'timestamp',
-                'dbType' => 'timestamp',
-                'phpType' => 'string',
-                'allowNull' => false,
+                'type'          => 'timestamp',
+                'dbType'        => 'timestamp',
+                'phpType'       => 'string',
+                'allowNull'     => false,
                 'autoIncrement' => false,
-                'enumValues' => null,
-                'size' => null,
-                'precision' => null,
-                'scale' => null,
-                'defaultValue' => new Expression('CURRENT_TIMESTAMP'),
+                'enumValues'    => null,
+                'size'          => null,
+                'precision'     => null,
+                'scale'         => null,
+                'defaultValue'  => new Expression('CURRENT_TIMESTAMP'),
             ],
             'bit_col' => [
-                'type' => 'integer',
-                'dbType' => 'bit(8)',
-                'phpType' => 'integer',
-                'allowNull' => false,
+                'type'          => 'integer',
+                'dbType'        => 'bit(8)',
+                'phpType'       => 'integer',
+                'allowNull'     => false,
                 'autoIncrement' => false,
-                'enumValues' => null,
-                'size' => 8,
-                'precision' => 8,
-                'scale' => null,
-                'defaultValue' => 130, // b'10000010'
+                'enumValues'    => null,
+                'size'          => 8,
+                'precision'     => 8,
+                'scale'         => null,
+                'defaultValue'  => 130, // b'10000010'
             ],
             'json_col' => [
-                'type' => 'json',
-                'dbType' => 'json',
-                'phpType' => 'array',
-                'allowNull' => true,
+                'type'          => 'json',
+                'dbType'        => 'json',
+                'phpType'       => 'array',
+                'allowNull'     => true,
                 'autoIncrement' => false,
-                'enumValues' => null,
-                'size' => null,
-                'precision' => null,
-                'scale' => null,
-                'defaultValue' => null,
+                'enumValues'    => null,
+                'size'          => null,
+                'precision'     => null,
+                'scale'         => null,
+                'defaultValue'  => null,
             ],
         ];
     }
 
-    public function testNegativeDefaultValues()
+    public function testNegativeDefaultValues(): void
     {
         /* @var $schema Schema */
         $schema = $this->getConnection()->schema;
@@ -504,7 +519,7 @@ abstract class SchemaTest extends DatabaseTestCase
         $this->assertEquals(-33.22, $table->getColumn('numeric_col')->defaultValue);
     }
 
-    public function testColumnSchema()
+    public function testColumnSchema(): void
     {
         $columns = $this->getExpectedColumns();
 
@@ -518,34 +533,36 @@ abstract class SchemaTest extends DatabaseTestCase
 
         foreach ($table->columns as $name => $column) {
             $expected = $columns[$name];
-            $this->assertSame($expected['dbType'], $column->dbType, "dbType of column $name does not match. type is $column->type, dbType is $column->dbType.");
-            $this->assertSame($expected['phpType'], $column->phpType, "phpType of column $name does not match. type is $column->type, dbType is $column->dbType.");
-            $this->assertSame($expected['type'], $column->type, "type of column $name does not match.");
-            $this->assertSame($expected['allowNull'], $column->allowNull, "allowNull of column $name does not match.");
-            $this->assertSame($expected['autoIncrement'], $column->autoIncrement, "autoIncrement of column $name does not match.");
-            $this->assertSame($expected['enumValues'], $column->enumValues, "enumValues of column $name does not match.");
-            $this->assertSame($expected['size'], $column->size, "size of column $name does not match.");
-            $this->assertSame($expected['precision'], $column->precision, "precision of column $name does not match.");
-            $this->assertSame($expected['scale'], $column->scale, "scale of column $name does not match.");
-            if (\is_object($expected['defaultValue'])) {
-                $this->assertIsObject($column->defaultValue, "defaultValue of column $name is expected to be an object but it is not.");
-                $this->assertEquals((string)$expected['defaultValue'], (string)$column->defaultValue, "defaultValue of column $name does not match.");
+            $this->assertSame($expected['dbType'], $column->dbType, "dbType of column {$name} does not match. type is {$column->type}, dbType is {$column->dbType}.");
+            $this->assertSame($expected['phpType'], $column->phpType, "phpType of column {$name} does not match. type is {$column->type}, dbType is {$column->dbType}.");
+            $this->assertSame($expected['type'], $column->type, "type of column {$name} does not match.");
+            $this->assertSame($expected['allowNull'], $column->allowNull, "allowNull of column {$name} does not match.");
+            $this->assertSame($expected['autoIncrement'], $column->autoIncrement, "autoIncrement of column {$name} does not match.");
+            $this->assertSame($expected['enumValues'], $column->enumValues, "enumValues of column {$name} does not match.");
+            $this->assertSame($expected['size'], $column->size, "size of column {$name} does not match.");
+            $this->assertSame($expected['precision'], $column->precision, "precision of column {$name} does not match.");
+            $this->assertSame($expected['scale'], $column->scale, "scale of column {$name} does not match.");
+
+            if (is_object($expected['defaultValue'])) {
+                $this->assertIsObject($column->defaultValue, "defaultValue of column {$name} is expected to be an object but it is not.");
+                $this->assertEquals((string) $expected['defaultValue'], (string) $column->defaultValue, "defaultValue of column {$name} does not match.");
             } else {
-                $this->assertEquals($expected['defaultValue'], $column->defaultValue, "defaultValue of column $name does not match.");
+                $this->assertEquals($expected['defaultValue'], $column->defaultValue, "defaultValue of column {$name} does not match.");
             }
+
             if (isset($expected['dimension'])) { // PgSQL only
-                $this->assertSame($expected['dimension'], $column->dimension, "dimension of column $name does not match");
+                $this->assertSame($expected['dimension'], $column->dimension, "dimension of column {$name} does not match");
             }
         }
     }
 
-    public function testColumnSchemaDbTypecastWithEmptyCharType()
+    public function testColumnSchemaDbTypecastWithEmptyCharType(): void
     {
         $columnSchema = new ColumnSchema(['type' => Schema::TYPE_CHAR]);
         $this->assertSame('', $columnSchema->dbTypecast(''));
     }
 
-    public function testFindUniqueIndexes()
+    public function testFindUniqueIndexes(): void
     {
         if ($this->driverName === 'sqlsrv') {
             $this->markTestSkipped('`\yii\db\mssql\Schema::findUniqueIndexes()` returns only unique constraints not unique indexes.');
@@ -555,10 +572,10 @@ abstract class SchemaTest extends DatabaseTestCase
 
         try {
             $db->createCommand()->dropTable('uniqueIndex')->execute();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
         $db->createCommand()->createTable('uniqueIndex', [
-            'somecol' => 'string',
+            'somecol'  => 'string',
             'someCol2' => 'string',
         ])->execute();
 
@@ -581,7 +598,7 @@ abstract class SchemaTest extends DatabaseTestCase
 
         $uniqueIndexes = $schema->findUniqueIndexes($schema->getTableSchema('uniqueIndex', true));
         $this->assertEquals([
-            'somecolUnique' => ['somecol'],
+            'somecolUnique'  => ['somecol'],
             'someCol2Unique' => ['someCol2'],
         ], $uniqueIndexes);
 
@@ -590,13 +607,13 @@ abstract class SchemaTest extends DatabaseTestCase
 
         $uniqueIndexes = $schema->findUniqueIndexes($schema->getTableSchema('uniqueIndex', true));
         $this->assertEquals([
-            'somecolUnique' => ['somecol'],
-            'someCol2Unique' => ['someCol2'],
+            'somecolUnique'        => ['somecol'],
+            'someCol2Unique'       => ['someCol2'],
             'another unique index' => ['someCol2'],
         ], $uniqueIndexes);
     }
 
-    public function testContraintTablesExistance()
+    public function testContraintTablesExistance(): void
     {
         $tableNames = [
             'T_constraints_1',
@@ -605,6 +622,7 @@ abstract class SchemaTest extends DatabaseTestCase
             'T_constraints_4',
         ];
         $schema = $this->getConnection()->getSchema();
+
         foreach ($tableNames as $tableName) {
             $tableSchema = $schema->getTableSchema($tableName);
             $this->assertInstanceOf('yii\db\TableSchema', $tableSchema, $tableName);
@@ -615,105 +633,105 @@ abstract class SchemaTest extends DatabaseTestCase
     {
         return [
             '1: primary key' => ['T_constraints_1', 'primaryKey', new Constraint([
-                'name' => AnyValue::getInstance(),
+                'name'        => AnyValue::getInstance(),
                 'columnNames' => ['C_id'],
             ])],
             '1: check' => ['T_constraints_1', 'checks', [
                 new CheckConstraint([
-                    'name' => AnyValue::getInstance(),
+                    'name'        => AnyValue::getInstance(),
                     'columnNames' => ['C_check'],
-                    'expression' => "C_check <> ''",
+                    'expression'  => "C_check <> ''",
                 ]),
             ]],
             '1: unique' => ['T_constraints_1', 'uniques', [
                 new Constraint([
-                    'name' => 'CN_unique',
+                    'name'        => 'CN_unique',
                     'columnNames' => ['C_unique'],
                 ]),
             ]],
             '1: index' => ['T_constraints_1', 'indexes', [
                 new IndexConstraint([
-                    'name' => AnyValue::getInstance(),
+                    'name'        => AnyValue::getInstance(),
                     'columnNames' => ['C_id'],
-                    'isUnique' => true,
-                    'isPrimary' => true,
+                    'isUnique'    => true,
+                    'isPrimary'   => true,
                 ]),
                 new IndexConstraint([
-                    'name' => 'CN_unique',
+                    'name'        => 'CN_unique',
                     'columnNames' => ['C_unique'],
-                    'isPrimary' => false,
-                    'isUnique' => true,
+                    'isPrimary'   => false,
+                    'isUnique'    => true,
                 ]),
             ]],
             '1: default' => ['T_constraints_1', 'defaultValues', false],
 
             '2: primary key' => ['T_constraints_2', 'primaryKey', new Constraint([
-                'name' => 'CN_pk',
+                'name'        => 'CN_pk',
                 'columnNames' => ['C_id_1', 'C_id_2'],
             ])],
             '2: unique' => ['T_constraints_2', 'uniques', [
                 new Constraint([
-                    'name' => 'CN_constraints_2_multi',
+                    'name'        => 'CN_constraints_2_multi',
                     'columnNames' => ['C_index_2_1', 'C_index_2_2'],
                 ]),
             ]],
             '2: index' => ['T_constraints_2', 'indexes', [
                 new IndexConstraint([
-                    'name' => AnyValue::getInstance(),
+                    'name'        => AnyValue::getInstance(),
                     'columnNames' => ['C_id_1', 'C_id_2'],
-                    'isUnique' => true,
-                    'isPrimary' => true,
+                    'isUnique'    => true,
+                    'isPrimary'   => true,
                 ]),
                 new IndexConstraint([
-                    'name' => 'CN_constraints_2_single',
+                    'name'        => 'CN_constraints_2_single',
                     'columnNames' => ['C_index_1'],
-                    'isPrimary' => false,
-                    'isUnique' => false,
+                    'isPrimary'   => false,
+                    'isUnique'    => false,
                 ]),
                 new IndexConstraint([
-                    'name' => 'CN_constraints_2_multi',
+                    'name'        => 'CN_constraints_2_multi',
                     'columnNames' => ['C_index_2_1', 'C_index_2_2'],
-                    'isPrimary' => false,
-                    'isUnique' => true,
+                    'isPrimary'   => false,
+                    'isUnique'    => true,
                 ]),
             ]],
-            '2: check' => ['T_constraints_2', 'checks', []],
+            '2: check'   => ['T_constraints_2', 'checks', []],
             '2: default' => ['T_constraints_2', 'defaultValues', false],
 
             '3: primary key' => ['T_constraints_3', 'primaryKey', null],
             '3: foreign key' => ['T_constraints_3', 'foreignKeys', [
                 new ForeignKeyConstraint([
-                    'name' => 'CN_constraints_3',
-                    'columnNames' => ['C_fk_id_1', 'C_fk_id_2'],
-                    'foreignTableName' => 'T_constraints_2',
+                    'name'               => 'CN_constraints_3',
+                    'columnNames'        => ['C_fk_id_1', 'C_fk_id_2'],
+                    'foreignTableName'   => 'T_constraints_2',
                     'foreignColumnNames' => ['C_id_1', 'C_id_2'],
-                    'onDelete' => 'CASCADE',
-                    'onUpdate' => 'CASCADE',
+                    'onDelete'           => 'CASCADE',
+                    'onUpdate'           => 'CASCADE',
                 ]),
             ]],
             '3: unique' => ['T_constraints_3', 'uniques', []],
-            '3: index' => ['T_constraints_3', 'indexes', [
+            '3: index'  => ['T_constraints_3', 'indexes', [
                 new IndexConstraint([
-                    'name' => 'CN_constraints_3',
+                    'name'        => 'CN_constraints_3',
                     'columnNames' => ['C_fk_id_1', 'C_fk_id_2'],
-                    'isUnique' => false,
-                    'isPrimary' => false,
+                    'isUnique'    => false,
+                    'isPrimary'   => false,
                 ]),
             ]],
-            '3: check' => ['T_constraints_3', 'checks', []],
+            '3: check'   => ['T_constraints_3', 'checks', []],
             '3: default' => ['T_constraints_3', 'defaultValues', false],
 
             '4: primary key' => ['T_constraints_4', 'primaryKey', new Constraint([
-                'name' => AnyValue::getInstance(),
+                'name'        => AnyValue::getInstance(),
                 'columnNames' => ['C_id'],
             ])],
             '4: unique' => ['T_constraints_4', 'uniques', [
                 new Constraint([
-                    'name' => 'CN_constraints_4',
+                    'name'        => 'CN_constraints_4',
                     'columnNames' => ['C_col_1', 'C_col_2'],
                 ]),
             ]],
-            '4: check' => ['T_constraints_4', 'checks', []],
+            '4: check'   => ['T_constraints_4', 'checks', []],
             '4: default' => ['T_constraints_4', 'defaultValues', false],
         ];
     }
@@ -730,11 +748,12 @@ abstract class SchemaTest extends DatabaseTestCase
 
     /**
      * @dataProvider constraintsProvider
+     *
      * @param string $tableName
      * @param string $type
-     * @param mixed $expected
+     * @param mixed  $expected
      */
-    public function testTableSchemaConstraints($tableName, $type, $expected)
+    public function testTableSchemaConstraints($tableName, $type, $expected): void
     {
         if ($expected === false) {
             $this->expectException('yii\base\NotSupportedException');
@@ -746,11 +765,12 @@ abstract class SchemaTest extends DatabaseTestCase
 
     /**
      * @dataProvider uppercaseConstraintsProvider
+     *
      * @param string $tableName
      * @param string $type
-     * @param mixed $expected
+     * @param mixed  $expected
      */
-    public function testTableSchemaConstraintsWithPdoUppercase($tableName, $type, $expected)
+    public function testTableSchemaConstraintsWithPdoUppercase($tableName, $type, $expected): void
     {
         if ($expected === false) {
             $this->expectException('yii\base\NotSupportedException');
@@ -764,11 +784,12 @@ abstract class SchemaTest extends DatabaseTestCase
 
     /**
      * @dataProvider lowercaseConstraintsProvider
+     *
      * @param string $tableName
      * @param string $type
-     * @param mixed $expected
+     * @param mixed  $expected
      */
-    public function testTableSchemaConstraintsWithPdoLowercase($tableName, $type, $expected)
+    public function testTableSchemaConstraintsWithPdoLowercase($tableName, $type, $expected): void
     {
         if ($expected === false) {
             $this->expectException('yii\base\NotSupportedException');
@@ -780,9 +801,10 @@ abstract class SchemaTest extends DatabaseTestCase
         $this->assertMetadataEquals($expected, $constraints);
     }
 
-    private function assertMetadataEquals($expected, $actual)
+    private function assertMetadataEquals($expected, $actual): void
     {
-        $gettype = \gettype($expected);
+        $gettype = gettype($expected);
+
         if ($gettype === 'boolean') {
             $this->assertIsBool($actual);
         } elseif ($gettype === 'integer') {
@@ -800,28 +822,31 @@ abstract class SchemaTest extends DatabaseTestCase
         } elseif ($gettype === 'NULL' || $gettype === 'null') {
             $this->assertNull($actual);
         } elseif ($gettype === 'unknown type') {
-            throw new \Exception('unknown expected type');
+            throw new Exception('unknown expected type');
         }
 
-        if (\is_array($expected)) {
+        if (is_array($expected)) {
             $this->normalizeArrayKeys($expected, false);
             $this->normalizeArrayKeys($actual, false);
         }
         $this->normalizeConstraints($expected, $actual);
-        if (\is_array($expected)) {
+
+        if (is_array($expected)) {
             $this->normalizeArrayKeys($expected, true);
             $this->normalizeArrayKeys($actual, true);
         }
         $this->assertEquals($expected, $actual);
     }
 
-    private function normalizeArrayKeys(array &$array, $caseSensitive)
+    private function normalizeArrayKeys(array &$array, $caseSensitive): void
     {
         $newArray = [];
+
         foreach ($array as $value) {
             if ($value instanceof Constraint) {
-                $key = (array)$value;
+                $key = (array) $value;
                 unset($key['name'], $key['foreignSchemaName']);
+
                 foreach ($key as $keyName => $keyValue) {
                     if ($keyValue instanceof AnyCaseValue) {
                         $key[$keyName] = $keyValue->value;
@@ -839,9 +864,9 @@ abstract class SchemaTest extends DatabaseTestCase
         $array = $newArray;
     }
 
-    private function normalizeConstraints(&$expected, &$actual)
+    private function normalizeConstraints(&$expected, &$actual): void
     {
-        if (\is_array($expected)) {
+        if (is_array($expected)) {
             foreach ($expected as $key => $value) {
                 if (!$value instanceof Constraint || !isset($actual[$key]) || !$actual[$key] instanceof Constraint) {
                     continue;
@@ -854,17 +879,17 @@ abstract class SchemaTest extends DatabaseTestCase
         }
     }
 
-    private function normalizeConstraintPair(Constraint $expectedConstraint, Constraint $actualConstraint)
+    private function normalizeConstraintPair(Constraint $expectedConstraint, Constraint $actualConstraint): void
     {
         if ($expectedConstraint::className() !== $actualConstraint::className()) {
             return;
         }
 
-        foreach (array_keys((array)$expectedConstraint) as $name) {
-            if ($expectedConstraint->$name instanceof AnyValue) {
-                $actualConstraint->$name = $expectedConstraint->$name;
-            } elseif ($expectedConstraint->$name instanceof AnyCaseValue) {
-                $actualConstraint->$name = new AnyCaseValue($actualConstraint->$name);
+        foreach (array_keys((array) $expectedConstraint) as $name) {
+            if ($expectedConstraint->{$name} instanceof AnyValue) {
+                $actualConstraint->{$name} = $expectedConstraint->{$name};
+            } elseif ($expectedConstraint->{$name} instanceof AnyCaseValue) {
+                $actualConstraint->{$name} = new AnyCaseValue($actualConstraint->{$name});
             }
         }
     }

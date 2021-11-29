@@ -1,12 +1,14 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\console\controllers;
 
+use Exception;
+use ReflectionClass;
 use Yii;
 use yii\console\controllers\AssetController;
 use yii\helpers\ArrayHelper;
@@ -17,6 +19,7 @@ use yiiunit\TestCase;
 
 /**
  * Unit test for [[\yii\console\controllers\AssetController]].
+ *
  * @see AssetController
  *
  * @group console
@@ -24,235 +27,32 @@ use yiiunit\TestCase;
 class AssetControllerTest extends TestCase
 {
     /**
-     * @var string path for the test files.
+     * @var string path for the test files
      */
     protected $testFilePath = '';
+
     /**
-     * @var string test assets path.
+     * @var string test assets path
      */
     protected $testAssetsBasePath = '';
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->mockApplication();
-        $this->testFilePath = Yii::getAlias('@yiiunit/runtime') . DIRECTORY_SEPARATOR . str_replace('\\', '_', get_class($this)) . uniqid();
+        $this->testFilePath = Yii::getAlias('@yiiunit/runtime') . DIRECTORY_SEPARATOR . str_replace('\\', '_', static::class) . uniqid();
         $this->createDir($this->testFilePath);
         $this->testAssetsBasePath = $this->testFilePath . DIRECTORY_SEPARATOR . 'assets';
         $this->createDir($this->testAssetsBasePath);
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->removeDir($this->testFilePath);
     }
 
-    /**
-     * Creates directory.
-     * @param string $dirName directory full name.
-     */
-    protected function createDir($dirName)
-    {
-        FileHelper::createDirectory($dirName);
-    }
-
-    /**
-     * Removes directory.
-     * @param string $dirName directory full name
-     */
-    protected function removeDir($dirName)
-    {
-        if (!empty($dirName)) {
-            FileHelper::removeDirectory($dirName);
-        }
-    }
-
-    /**
-     * Creates test asset controller instance.
-     * @return AssetControllerMock
-     */
-    protected function createAssetController()
-    {
-        $module = $this->getMockBuilder('yii\\base\\Module')
-            ->setMethods(['fake'])
-            ->setConstructorArgs(['console'])
-            ->getMock();
-        $assetController = new AssetControllerMock('asset', $module);
-        $assetController->interactive = false;
-        $assetController->jsCompressor = 'cp {from} {to}';
-        $assetController->cssCompressor = 'cp {from} {to}';
-
-        return $assetController;
-    }
-
-    /**
-     * Emulates running of the asset controller action.
-     * @param  string $actionID id of action to be run.
-     * @param  array  $args     action arguments.
-     * @return string command output.
-     */
-    protected function runAssetControllerAction($actionID, array $args = [])
-    {
-        $controller = $this->createAssetController();
-        $controller->run($actionID, $args);
-        return $controller->flushStdOutBuffer();
-    }
-
-    /**
-     * Creates test compress config.
-     * @param array[] $bundles asset bundles config.
-     * @param array $config additional config.
-     * @return array config array.
-     */
-    protected function createCompressConfig(array $bundles, array $config = [])
-    {
-        static $classNumber = 0;
-        $classNumber++;
-        $className = $this->declareAssetBundleClass(['class' => 'AssetBundleAll' . $classNumber]);
-        $baseUrl = '/test';
-        $config = ArrayHelper::merge($config, [
-            'bundles' => $bundles,
-            'targets' => [
-                $className => [
-                    'basePath' => $this->testAssetsBasePath,
-                    'baseUrl' => $baseUrl,
-                    'js' => 'all.js',
-                    'css' => 'all.css',
-                ],
-            ],
-            'assetManager' => [
-                'basePath' => $this->testAssetsBasePath,
-                'baseUrl' => '',
-            ],
-        ]);
-
-        return $config;
-    }
-
-    /**
-     * Creates test compress config file.
-     * @param string $fileName output file name.
-     * @param array[] $bundles asset bundles config.
-     * @param array $config additional config parameters.
-     * @throws \Exception on failure.
-     */
-    protected function createCompressConfigFile($fileName, array $bundles, array $config = [])
-    {
-        $content = '<?php return ' . var_export($this->createCompressConfig($bundles, $config), true) . ';';
-        if (file_put_contents($fileName, $content) <= 0) {
-            throw new \Exception("Unable to create file '{$fileName}'!");
-        }
-    }
-
-    /**
-     * Creates test asset file.
-     * @param string $fileRelativeName file name relative to [[testFilePath]]
-     * @param string $content file content
-     * @param string $fileBasePath base path for the created files, if not set [[testFilePath]] is used.
-     * @throws \Exception on failure.
-     */
-    protected function createAssetSourceFile($fileRelativeName, $content, $fileBasePath = null)
-    {
-        if ($fileBasePath === null) {
-            $fileBasePath = $this->testFilePath;
-        }
-        $fileFullName = $fileBasePath . DIRECTORY_SEPARATOR . $fileRelativeName;
-        $this->createDir(dirname($fileFullName));
-        if (file_put_contents($fileFullName, $content) <= 0) {
-            throw new \Exception("Unable to create file '{$fileFullName}'!");
-        }
-    }
-
-    /**
-     * Creates a list of asset source files.
-     * @param array $files assert source files in format: file/relative/name => fileContent
-     * @param string $fileBasePath base path for the created files, if not set [[testFilePath]]
-     */
-    protected function createAssetSourceFiles(array $files, $fileBasePath = null)
-    {
-        foreach ($files as $name => $content) {
-            $this->createAssetSourceFile($name, $content, $fileBasePath);
-        }
-    }
-
-    /**
-     * Invokes the asset controller method even if it is protected.
-     * @param  string $methodName name of the method to be invoked.
-     * @param  array  $args       method arguments.
-     * @return mixed  method invoke result.
-     */
-    protected function invokeAssetControllerMethod($methodName, array $args = [])
-    {
-        $controller = $this->createAssetController();
-        $controllerClassReflection = new \ReflectionClass(get_class($controller));
-        $methodReflection = $controllerClassReflection->getMethod($methodName);
-        $methodReflection->setAccessible(true);
-        $result = $methodReflection->invokeArgs($controller, $args);
-        $methodReflection->setAccessible(false);
-
-        return $result;
-    }
-
-    /**
-     * Composes asset bundle class source code.
-     * @param  array  $config asset bundle config.
-     * @return string class source code.
-     */
-    protected function composeAssetBundleClassSource(array &$config)
-    {
-        $config = array_merge(
-            [
-                'namespace' => StringHelper::dirname(get_class($this)),
-                'class' => 'AppAsset',
-                'sourcePath' => null,
-                'basePath' => $this->testFilePath,
-                'baseUrl' => '',
-                'css' => [],
-                'js' => [],
-                'depends' => [],
-            ],
-            $config
-        );
-        foreach ($config as $name => $value) {
-            if (!in_array($name, ['namespace', 'class'])) {
-                $config[$name] = VarDumper::export($value);
-            }
-        }
-
-        $source = <<<EOL
-namespace {$config['namespace']};
-
-use yii\web\AssetBundle;
-
-class {$config['class']} extends AssetBundle
-{
-    public \$sourcePath = {$config['sourcePath']};
-    public \$basePath = {$config['basePath']};
-    public \$baseUrl = {$config['baseUrl']};
-    public \$css = {$config['css']};
-    public \$js = {$config['js']};
-    public \$depends = {$config['depends']};
-}
-EOL;
-
-        return $source;
-    }
-
-    /**
-     * Declares asset bundle class according to given configuration.
-     * @param  array  $config asset bundle config.
-     * @return string new class full name.
-     */
-    protected function declareAssetBundleClass(array $config)
-    {
-        $sourceCode = $this->composeAssetBundleClassSource($config);
-        eval($sourceCode);
-
-        return $config['namespace'] . '\\' . $config['class'];
-    }
-
     // Tests :
 
-    public function testActionTemplate()
+    public function testActionTemplate(): void
     {
         $configFileName = $this->testFilePath . DIRECTORY_SEPARATOR . 'config.php';
         $this->runAssetControllerAction('template', [$configFileName]);
@@ -261,7 +61,7 @@ EOL;
         $this->assertIsArray($config, 'Invalid config created!');
     }
 
-    public function testActionCompress()
+    public function testActionCompress(): void
     {
         // Given :
         $cssFiles = [
@@ -287,7 +87,7 @@ EOL;
         $this->createAssetSourceFiles($jsFiles);
         $assetBundleClassName = $this->declareAssetBundleClass([
             'css' => array_keys($cssFiles),
-            'js' => array_keys($jsFiles),
+            'js'  => array_keys($jsFiles),
         ]);
 
         $bundles = [
@@ -319,10 +119,12 @@ EOL;
         $this->assertFileExists($compressedJsFileName, 'Unable to compress JS files!');
 
         $compressedCssFileContent = file_get_contents($compressedCssFileName);
+
         foreach ($cssFiles as $name => $content) {
             $this->assertStringContainsString($content, $compressedCssFileContent, "Source of '{$name}' is missing in combined file!");
         }
         $compressedJsFileContent = file_get_contents($compressedJsFileName);
+
         foreach ($jsFiles as $name => $content) {
             $this->assertStringContainsString($content, $compressedJsFileContent, "Source of '{$name}' is missing in combined file!");
         }
@@ -333,14 +135,14 @@ EOL;
      *
      * @see https://github.com/yiisoft/yii2/issues/5194
      */
-    public function testCompressExternalAsset()
+    public function testCompressExternalAsset(): void
     {
         // Given :
         $externalAssetConfig = [
-            'class' => 'ExternalAsset',
+            'class'      => 'ExternalAsset',
             'sourcePath' => null,
-            'basePath' => null,
-            'js' => [
+            'basePath'   => null,
+            'js'         => [
                 '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js',
             ],
             'css' => [
@@ -363,9 +165,9 @@ EOL;
         ];
         $this->createAssetSourceFiles($jsFiles);
         $regularAssetBundleClassName = $this->declareAssetBundleClass([
-            'class' => 'RegularAsset',
-            'css' => array_keys($cssFiles),
-            'js' => array_keys($jsFiles),
+            'class'   => 'RegularAsset',
+            'css'     => array_keys($cssFiles),
+            'js'      => array_keys($jsFiles),
             'depends' => [
                 $externalAssetBundleClassName,
             ],
@@ -400,36 +202,36 @@ EOL;
      *
      * @see https://github.com/yiisoft/yii2/issues/7539
      */
-    public function testDetectCircularDependency()
+    public function testDetectCircularDependency(): void
     {
         // Given :
         $namespace = __NAMESPACE__;
 
         $this->declareAssetBundleClass([
             'namespace' => $namespace,
-            'class' => 'AssetStart',
-            'depends' => [
+            'class'     => 'AssetStart',
+            'depends'   => [
                 $namespace . '\AssetA',
             ],
         ]);
         $this->declareAssetBundleClass([
             'namespace' => $namespace,
-            'class' => 'AssetA',
-            'depends' => [
+            'class'     => 'AssetA',
+            'depends'   => [
                 $namespace . '\AssetB',
             ],
         ]);
         $this->declareAssetBundleClass([
             'namespace' => $namespace,
-            'class' => 'AssetB',
-            'depends' => [
+            'class'     => 'AssetB',
+            'depends'   => [
                 $namespace . '\AssetC',
             ],
         ]);
         $this->declareAssetBundleClass([
             'namespace' => $namespace,
-            'class' => 'AssetC',
-            'depends' => [
+            'class'     => 'AssetC',
+            'depends'   => [
                 $namespace . '\AssetA',
             ],
         ]);
@@ -453,7 +255,8 @@ EOL;
 
     /**
      * Data provider for [[testAdjustCssUrl()]].
-     * @return array test data.
+     *
+     * @return array test data
      */
     public function adjustCssUrlDataProvider()
     {
@@ -563,7 +366,7 @@ EOL;
      * @param $outputFilePath
      * @param $expectedCssContent
      */
-    public function testAdjustCssUrl($cssContent, $inputFilePath, $outputFilePath, $expectedCssContent)
+    public function testAdjustCssUrl($cssContent, $inputFilePath, $outputFilePath, $expectedCssContent): void
     {
         $adjustedCssContent = $this->invokeAssetControllerMethod('adjustCssUrl', [$cssContent, $inputFilePath, $outputFilePath]);
 
@@ -572,6 +375,7 @@ EOL;
 
     /**
      * Data provider for [[testFindRealPath()]].
+     *
      * @return array test data
      */
     public function findRealPathDataProvider()
@@ -610,10 +414,10 @@ EOL;
      * @param string $sourcePath
      * @param string $expectedRealPath
      */
-    public function testFindRealPath($sourcePath, $expectedRealPath)
+    public function testFindRealPath($sourcePath, $expectedRealPath): void
     {
         $expectedRealPath = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $expectedRealPath);
-        $realPath = $this->invokeAssetControllerMethod('findRealPath', [$sourcePath]);
+        $realPath         = $this->invokeAssetControllerMethod('findRealPath', [$sourcePath]);
         $this->assertEquals($expectedRealPath, $realPath);
     }
 
@@ -622,7 +426,7 @@ EOL;
      *
      * @see https://github.com/yiisoft/yii2/issues/9708
      */
-    public function testActionCompressDeleteSource()
+    public function testActionCompressDeleteSource(): void
     {
         // Given :
         $cssFiles = [
@@ -642,10 +446,10 @@ EOL;
         $this->createAssetSourceFiles($cssFiles, $sourcePath);
         $this->createAssetSourceFiles($jsFiles, $sourcePath);
         $assetBundleClassName = $this->declareAssetBundleClass([
-            'class' => 'AssetDelete',
-            'css' => array_keys($cssFiles),
-            'js' => array_keys($jsFiles),
-            'basePath' => null,
+            'class'      => 'AssetDelete',
+            'css'        => array_keys($cssFiles),
+            'js'         => array_keys($jsFiles),
+            'basePath'   => null,
             'sourcePath' => $sourcePath,
         ]);
 
@@ -692,7 +496,7 @@ EOL;
      *
      * @see https://github.com/yiisoft/yii2/issues/10567
      */
-    public function testActionCompressOverrideAsExternal()
+    public function testActionCompressOverrideAsExternal(): void
     {
         // Given :
         $cssFiles = [
@@ -712,8 +516,8 @@ EOL;
         //$this->createAssetSourceFiles($jsFiles, $sourcePath);
         $assetBundleClassName = $this->declareAssetBundleClass([
             'class' => 'AssetOverrideExternal',
-            'css' => array_keys($cssFiles),
-            'js' => array_keys($jsFiles),
+            'css'   => array_keys($cssFiles),
+            'js'    => array_keys($jsFiles),
         ]);
 
         $bundles = [
@@ -722,12 +526,12 @@ EOL;
         $bundleFile = $this->testFilePath . DIRECTORY_SEPARATOR . 'bundle_override_as_external.php';
 
         // Keep source :
-        $configFile = $this->testFilePath . DIRECTORY_SEPARATOR . 'config_override_as_external.php';
+        $configFile                = $this->testFilePath . DIRECTORY_SEPARATOR . 'config_override_as_external.php';
         $assetBundleOverrideConfig = [
             'sourcePath' => null,
-            'basePath' => null,
-            'baseUrl' => null,
-            'css' => [
+            'basePath'   => null,
+            'baseUrl'    => null,
+            'css'        => [
                 '//some.cdn.com/js/override_external.css',
             ],
             'js' => [
@@ -748,6 +552,232 @@ EOL;
 
         $this->assertEquals($assetBundleOverrideConfig['css'], $bundlesConfig[$assetBundleClassName]['css']);
         $this->assertEquals($assetBundleOverrideConfig['js'], $bundlesConfig[$assetBundleClassName]['js']);
+    }
+
+    /**
+     * Creates directory.
+     *
+     * @param string $dirName directory full name
+     */
+    protected function createDir($dirName): void
+    {
+        FileHelper::createDirectory($dirName);
+    }
+
+    /**
+     * Removes directory.
+     *
+     * @param string $dirName directory full name
+     */
+    protected function removeDir($dirName): void
+    {
+        if (!empty($dirName)) {
+            FileHelper::removeDirectory($dirName);
+        }
+    }
+
+    /**
+     * Creates test asset controller instance.
+     *
+     * @return AssetControllerMock
+     */
+    protected function createAssetController()
+    {
+        $module = $this->getMockBuilder('yii\\base\\Module')
+            ->setMethods(['fake'])
+            ->setConstructorArgs(['console'])
+            ->getMock();
+        $assetController                = new AssetControllerMock('asset', $module);
+        $assetController->interactive   = false;
+        $assetController->jsCompressor  = 'cp {from} {to}';
+        $assetController->cssCompressor = 'cp {from} {to}';
+
+        return $assetController;
+    }
+
+    /**
+     * Emulates running of the asset controller action.
+     *
+     * @param string $actionID id of action to be run
+     * @param array  $args     action arguments
+     *
+     * @return string command output
+     */
+    protected function runAssetControllerAction($actionID, array $args = [])
+    {
+        $controller = $this->createAssetController();
+        $controller->run($actionID, $args);
+
+        return $controller->flushStdOutBuffer();
+    }
+
+    /**
+     * Creates test compress config.
+     *
+     * @param array[] $bundles asset bundles config
+     * @param array   $config  additional config
+     *
+     * @return array config array
+     */
+    protected function createCompressConfig(array $bundles, array $config = [])
+    {
+        static $classNumber = 0;
+        $classNumber++;
+        $className = $this->declareAssetBundleClass(['class' => 'AssetBundleAll' . $classNumber]);
+        $baseUrl   = '/test';
+        $config    = ArrayHelper::merge($config, [
+            'bundles' => $bundles,
+            'targets' => [
+                $className => [
+                    'basePath' => $this->testAssetsBasePath,
+                    'baseUrl'  => $baseUrl,
+                    'js'       => 'all.js',
+                    'css'      => 'all.css',
+                ],
+            ],
+            'assetManager' => [
+                'basePath' => $this->testAssetsBasePath,
+                'baseUrl'  => '',
+            ],
+        ]);
+
+        return $config;
+    }
+
+    /**
+     * Creates test compress config file.
+     *
+     * @param string  $fileName output file name
+     * @param array[] $bundles  asset bundles config
+     * @param array   $config   additional config parameters
+     *
+     * @throws Exception on failure
+     */
+    protected function createCompressConfigFile($fileName, array $bundles, array $config = []): void
+    {
+        $content = '<?php return ' . var_export($this->createCompressConfig($bundles, $config), true) . ';';
+
+        if (file_put_contents($fileName, $content) <= 0) {
+            throw new Exception("Unable to create file '{$fileName}'!");
+        }
+    }
+
+    /**
+     * Creates test asset file.
+     *
+     * @param string $fileRelativeName file name relative to [[testFilePath]]
+     * @param string $content          file content
+     * @param string $fileBasePath     base path for the created files, if not set [[testFilePath]] is used
+     *
+     * @throws Exception on failure
+     */
+    protected function createAssetSourceFile($fileRelativeName, $content, $fileBasePath = null): void
+    {
+        if ($fileBasePath === null) {
+            $fileBasePath = $this->testFilePath;
+        }
+        $fileFullName = $fileBasePath . DIRECTORY_SEPARATOR . $fileRelativeName;
+        $this->createDir(dirname($fileFullName));
+
+        if (file_put_contents($fileFullName, $content) <= 0) {
+            throw new Exception("Unable to create file '{$fileFullName}'!");
+        }
+    }
+
+    /**
+     * Creates a list of asset source files.
+     *
+     * @param array  $files        assert source files in format: file/relative/name => fileContent
+     * @param string $fileBasePath base path for the created files, if not set [[testFilePath]]
+     */
+    protected function createAssetSourceFiles(array $files, $fileBasePath = null): void
+    {
+        foreach ($files as $name => $content) {
+            $this->createAssetSourceFile($name, $content, $fileBasePath);
+        }
+    }
+
+    /**
+     * Invokes the asset controller method even if it is protected.
+     *
+     * @param string $methodName name of the method to be invoked
+     * @param array  $args       method arguments
+     *
+     * @return mixed method invoke result
+     */
+    protected function invokeAssetControllerMethod($methodName, array $args = [])
+    {
+        $controller                = $this->createAssetController();
+        $controllerClassReflection = new ReflectionClass(get_class($controller));
+        $methodReflection          = $controllerClassReflection->getMethod($methodName);
+        $methodReflection->setAccessible(true);
+        $result = $methodReflection->invokeArgs($controller, $args);
+        $methodReflection->setAccessible(false);
+
+        return $result;
+    }
+
+    /**
+     * Composes asset bundle class source code.
+     *
+     * @param array $config asset bundle config
+     *
+     * @return string class source code
+     */
+    protected function composeAssetBundleClassSource(array &$config)
+    {
+        $config = array_merge(
+            [
+                'namespace'  => StringHelper::dirname(static::class),
+                'class'      => 'AppAsset',
+                'sourcePath' => null,
+                'basePath'   => $this->testFilePath,
+                'baseUrl'    => '',
+                'css'        => [],
+                'js'         => [],
+                'depends'    => [],
+            ],
+            $config
+        );
+
+        foreach ($config as $name => $value) {
+            if (!in_array($name, ['namespace', 'class'], true)) {
+                $config[$name] = VarDumper::export($value);
+            }
+        }
+
+        $source = <<<EOL
+namespace {$config['namespace']};
+
+use yii\web\AssetBundle;
+
+class {$config['class']} extends AssetBundle
+{
+    public \$sourcePath = {$config['sourcePath']};
+    public \$basePath = {$config['basePath']};
+    public \$baseUrl = {$config['baseUrl']};
+    public \$css = {$config['css']};
+    public \$js = {$config['js']};
+    public \$depends = {$config['depends']};
+}
+EOL;
+
+        return $source;
+    }
+
+    /**
+     * Declares asset bundle class according to given configuration.
+     *
+     * @param array $config asset bundle config
+     *
+     * @return string new class full name
+     */
+    protected function declareAssetBundleClass(array $config)
+    {
+        $sourceCode = $this->composeAssetBundleClassSource($config);
+        eval($sourceCode);
+
+        return $config['namespace'] . '\\' . $config['class'];
     }
 }
 

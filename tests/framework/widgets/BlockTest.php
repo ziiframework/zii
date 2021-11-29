@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\widgets;
 
 use yii\widgets\Block;
@@ -24,15 +24,16 @@ class BlockTest extends \yiiunit\TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/15536
      */
-    public function testShouldTriggerInitEvent()
+    public function testShouldTriggerInitEvent(): void
     {
         $initTriggered = false;
 
         $block = new Block(
             [
-                'on init' => function () use (&$initTriggered) {
+                'on init' => static function () use (&$initTriggered): void
+                {
                     $initTriggered = true;
-                }
+                },
             ]
         );
 

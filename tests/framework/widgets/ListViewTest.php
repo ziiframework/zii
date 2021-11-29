@@ -1,15 +1,16 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\widgets;
 
-use yii\web\Request;
+use Yii;
 use yii\data\ArrayDataProvider;
 use yii\data\DataProviderInterface;
+use yii\web\Request;
 use yii\widgets\ListView;
 use yiiunit\TestCase;
 
@@ -24,36 +25,36 @@ class ListViewTest extends TestCase
         $this->mockApplication();
     }
 
-    public function testEmptyListShown()
+    public function testEmptyListShown(): void
     {
         ob_start();
         $this->getListView([
             'dataProvider' => new ArrayDataProvider(['allModels' => []]),
-            'emptyText' => 'Nothing at all',
+            'emptyText'    => 'Nothing at all',
         ])->run();
         $out = ob_get_clean();
 
         $this->assertEqualsWithoutLE('<div id="w0" class="list-view"><div class="empty">Nothing at all</div></div>', $out);
     }
 
-    public function testEmpty()
+    public function testEmpty(): void
     {
         ob_start();
         $this->getListView([
             'dataProvider' => new ArrayDataProvider(['allModels' => []]),
-            'emptyText' => false,
+            'emptyText'    => false,
         ])->run();
         $out = ob_get_clean();
 
         $this->assertEqualsWithoutLE('<div id="w0" class="list-view"></div>', $out);
     }
 
-    public function testEmptyListNotShown()
+    public function testEmptyListNotShown(): void
     {
         ob_start();
         $this->getListView([
             'dataProvider' => new ArrayDataProvider(['allModels' => []]),
-            'showOnEmpty' => true,
+            'showOnEmpty'  => true,
         ])->run();
         $out = ob_get_clean();
 
@@ -65,33 +66,7 @@ HTML
         , $out);
     }
 
-    /**
-     * @param array $options
-     * @return ListView
-     */
-    private function getListView($options = [])
-    {
-        return new ListView(array_merge([
-            'id' => 'w0',
-            'dataProvider' => $this->getDataProvider(),
-        ], $options));
-    }
-
-    /**
-     * @return DataProviderInterface
-     */
-    private function getDataProvider($additionalConfig = [])
-    {
-        return new ArrayDataProvider(array_merge([
-            'allModels' => [
-                ['id' => 1, 'login' => 'silverfire'],
-                ['id' => 2, 'login' => 'samdark'],
-                ['id' => 3, 'login' => 'cebe'],
-            ],
-        ], $additionalConfig));
-    }
-
-    public function testSimplyListView()
+    public function testSimplyListView(): void
     {
         ob_start();
         $this->getListView()->run();
@@ -107,7 +82,7 @@ HTML
         , $out);
     }
 
-    public function testWidgetOptions()
+    public function testWidgetOptions(): void
     {
         ob_start();
         $this->getListView(['options' => ['class' => 'test-passed'], 'separator' => ''])->run();
@@ -133,7 +108,8 @@ HTML
 </div>',
             ],
             [
-                function ($model, $key, $index, $widget) {
+                static function ($model, $key, $index, $widget)
+                {
                     return "Item #{$index}: {$model['login']} - Widget: " . $widget->className();
                 },
                 '<div id="w0" class="list-view"><div class="summary">Showing <b>1-3</b> of <b>3</b> items.</div>
@@ -155,10 +131,11 @@ HTML
 
     /**
      * @dataProvider itemViewOptions
-     * @param mixed $itemView
+     *
+     * @param mixed  $itemView
      * @param string $expected
      */
-    public function testItemViewOptions($itemView, $expected)
+    public function testItemViewOptions($itemView, $expected): void
     {
         ob_start();
         $this->getListView(['itemView' => $itemView])->run();
@@ -179,14 +156,15 @@ HTML
 </div>',
             ],
             [
-                function ($model, $key, $index, $widget) {
+                static function ($model, $key, $index, $widget)
+                {
                     return [
-                        'tag' => 'span',
+                        'tag'  => 'span',
                         'data' => [
-                            'test' => 'passed',
-                            'key' => $key,
+                            'test'  => 'passed',
+                            'key'   => $key,
                             'index' => $index,
-                            'id' => $model['id'],
+                            'id'    => $model['id'],
                         ],
                     ];
                 },
@@ -201,10 +179,11 @@ HTML
 
     /**
      * @dataProvider itemOptions
-     * @param mixed $itemOptions
+     *
+     * @param mixed  $itemOptions
      * @param string $expected
      */
-    public function testItemOptions($itemOptions, $expected)
+    public function testItemOptions($itemOptions, $expected): void
     {
         ob_start();
         $this->getListView(['itemOptions' => $itemOptions])->run();
@@ -213,28 +192,33 @@ HTML
         $this->assertEqualsWithoutLE($expected, $out);
     }
 
-    public function testBeforeAndAfterItem()
+    public function testBeforeAndAfterItem(): void
     {
-        $before = function ($model, $key, $index, $widget) {
+        $before = static function ($model, $key, $index, $widget)
+        {
             $widget = get_class($widget);
-            return "<!-- before: {$model['id']}, key: $key, index: $index, widget: $widget -->";
+
+            return "<!-- before: {$model['id']}, key: {$key}, index: {$index}, widget: {$widget} -->";
         };
-        $after = function ($model, $key, $index, $widget) {
+        $after = static function ($model, $key, $index, $widget)
+        {
             if ($model['id'] === 1) {
                 return null;
             }
             $widget = get_class($widget);
-            return "<!-- after: {$model['id']}, key: $key, index: $index, widget: $widget -->";
+
+            return "<!-- after: {$model['id']}, key: {$key}, index: {$index}, widget: {$widget} -->";
         };
 
         ob_start();
         $this->getListView([
             'beforeItem' => $before,
-            'afterItem' => $after,
+            'afterItem'  => $after,
         ])->run();
         $out = ob_get_clean();
 
-        $this->assertEqualsWithoutLE(<<<HTML
+        $this->assertEqualsWithoutLE(
+            <<<HTML
 <div id="w0" class="list-view"><div class="summary">Showing <b>1-3</b> of <b>3</b> items.</div>
 <!-- before: 1, key: 0, index: 0, widget: yii\widgets\ListView -->
 <div data-key="0">0</div>
@@ -246,18 +230,20 @@ HTML
 <!-- after: 3, key: 2, index: 2, widget: yii\widgets\ListView -->
 </div>
 HTML
-    , $out
-);
+    ,
+            $out
+        );
     }
 
     /**
      * @see https://github.com/yiisoft/yii2/pull/14596
      */
-    public function testShouldTriggerInitEvent()
+    public function testShouldTriggerInitEvent(): void
     {
         $initTriggered = false;
         $this->getListView([
-            'on init' => function () use (&$initTriggered) {
+            'on init' => static function () use (&$initTriggered): void
+            {
                 $initTriggered = true;
             },
             'dataProvider' => new ArrayDataProvider(['allModels' => []]),
@@ -265,7 +251,7 @@ HTML
         $this->assertTrue($initTriggered);
     }
 
-    public function testNoDataProvider()
+    public function testNoDataProvider(): void
     {
         $this->expectException('yii\base\InvalidConfigException');
         $this->expectExceptionMessage('The "dataProvider" property must be set.');
@@ -276,14 +262,14 @@ HTML
     {
         return [
             'no sort attributes' => [[]],
-            'sorter false' => [['dataProvider' => $this->getDataProvider(['sort' => false])]],
+            'sorter false'       => [['dataProvider' => $this->getDataProvider(['sort' => false])]],
         ];
     }
 
     /**
      * @dataProvider providerForNoSorter
      */
-    public function testRenderNoSorter($additionalConfig)
+    public function testRenderNoSorter($additionalConfig): void
     {
         $config = array_merge(['layout' => '{sorter}'], $additionalConfig);
 
@@ -294,30 +280,30 @@ HTML
         $this->assertEqualsWithoutLE('<div id="w0" class="list-view"></div>', $out);
     }
 
-    public function testRenderSorterOnlyWithNoItems()
+    public function testRenderSorterOnlyWithNoItems(): void
     {
         // by default sorter is skipped when there are no items during run()
         $out = (new ListView([
-            'id' => 'w0',
+            'id'           => 'w0',
             'dataProvider' => $this->getDataProvider(['allModels' => [], 'sort' => ['attributes' => ['id']]]),
         ]))->renderSorter();
 
         $this->assertEquals('', $out);
     }
 
-    public function testRenderSorter()
+    public function testRenderSorter(): void
     {
-        \Yii::$app->set('request', new Request(['scriptUrl' => '/']));
+        Yii::$app->set('request', new Request(['scriptUrl' => '/']));
 
         ob_start();
         $this->getListView([
-            'layout' => '{sorter}',
+            'layout'       => '{sorter}',
             'dataProvider' => $this->getDataProvider([
                 'sort' => [
                     'attributes' => ['id'],
-                    'route' => 'list/view',
-                ]
-            ])
+                    'route'      => 'list/view',
+                ],
+            ]),
         ])->run();
         $out = ob_get_clean();
 
@@ -326,7 +312,7 @@ HTML
 </ul></div>', $out);
     }
 
-    public function testRenderSummaryWhenPaginationIsFalseAndSummaryIsNull()
+    public function testRenderSummaryWhenPaginationIsFalseAndSummaryIsNull(): void
     {
         ob_start();
         $this->getListView(['dataProvider' => $this->getDataProvider(['pagination' => false])])->run();
@@ -358,12 +344,39 @@ HTML
     /**
      * @dataProvider providerForSummary
      */
-    public function testRenderSummaryWhenSummaryIsCustom($summary, $result)
+    public function testRenderSummaryWhenSummaryIsCustom($summary, $result): void
     {
         ob_start();
         $this->getListView(['summary' => $summary])->run();
         $out = ob_get_clean();
 
         $this->assertEqualsWithoutLE($result, $out);
+    }
+
+    /**
+     * @param array $options
+     *
+     * @return ListView
+     */
+    private function getListView($options = [])
+    {
+        return new ListView(array_merge([
+            'id'           => 'w0',
+            'dataProvider' => $this->getDataProvider(),
+        ], $options));
+    }
+
+    /**
+     * @return DataProviderInterface
+     */
+    private function getDataProvider($additionalConfig = [])
+    {
+        return new ArrayDataProvider(array_merge([
+            'allModels' => [
+                ['id' => 1, 'login' => 'silverfire'],
+                ['id' => 2, 'login' => 'samdark'],
+                ['id' => 3, 'login' => 'cebe'],
+            ],
+        ], $additionalConfig));
     }
 }

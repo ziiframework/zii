@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\console\controllers;
 
 use yii\console\controllers\CacheController;
@@ -15,9 +15,9 @@ use yii\console\controllers\CacheController;
 class SilencedCacheController extends CacheController
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
-    public function stdout($string)
+    public function stdout($string): void
     {
         // do nothing
     }

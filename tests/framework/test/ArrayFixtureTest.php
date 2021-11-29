@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\test;
 
 use yii\test\ArrayFixture;
@@ -26,7 +26,7 @@ class ArrayFixtureTest extends TestCase
         $this->_fixture = new ArrayFixture();
     }
 
-    public function testLoadUnloadParticularFile()
+    public function testLoadUnloadParticularFile(): void
     {
         $this->_fixture->dataFile = '@yiiunit/framework/test/data/array_fixture.php';
         $this->assertEmpty($this->_fixture->data, 'fixture data should be empty');
@@ -38,7 +38,7 @@ class ArrayFixtureTest extends TestCase
         $this->assertEquals('customer2@example.com', $this->_fixture['customer2']['email'], 'second fixture data should match');
     }
 
-    public function testNothingToLoad()
+    public function testNothingToLoad(): void
     {
         $this->_fixture->dataFile = false;
         $this->assertEmpty($this->_fixture->data, 'fixture data should be empty');
@@ -47,7 +47,7 @@ class ArrayFixtureTest extends TestCase
         $this->assertEmpty($this->_fixture->data, 'fixture data should not be loaded');
     }
 
-    public function testWrongDataFileException()
+    public function testWrongDataFileException(): void
     {
         $this->expectException('\yii\base\InvalidConfigException');
         $this->_fixture->dataFile = 'wrong/fixtures/data/path/alias';

@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\db\sqlite;
 
 /**
@@ -15,53 +15,52 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
 {
     protected $driverName = 'sqlite';
 
-    public function testAutoQuoting()
+    public function testAutoQuoting(): void
     {
         $db = $this->getConnection(false);
 
-        $sql = 'SELECT [[id]], [[t.name]] FROM {{customer}} t';
+        $sql     = 'SELECT [[id]], [[t.name]] FROM {{customer}} t';
         $command = $db->createCommand($sql);
         $this->assertEquals('SELECT `id`, `t`.`name` FROM `customer` t', $command->sql);
     }
 
     /**
      * @dataProvider upsertProvider
-     * @param array $firstData
-     * @param array $secondData
      */
-    public function testUpsert(array $firstData, array $secondData)
+    public function testUpsert(array $firstData, array $secondData): void
     {
         if (version_compare($this->getConnection(false)->getServerVersion(), '3.8.3', '<')) {
             $this->markTestSkipped('SQLite < 3.8.3 does not support "WITH" keyword.');
+
             return;
         }
 
         parent::testUpsert($firstData, $secondData);
     }
 
-    public function testAddDropPrimaryKey()
+    public function testAddDropPrimaryKey(): void
     {
         $this->markTestSkipped('SQLite does not support adding/dropping primary keys.');
     }
 
-    public function testAddDropForeignKey()
+    public function testAddDropForeignKey(): void
     {
         $this->markTestSkipped('SQLite does not support adding/dropping foreign keys.');
     }
 
-    public function testAddDropUnique()
+    public function testAddDropUnique(): void
     {
         $this->markTestSkipped('SQLite does not support adding/dropping unique constraints.');
     }
 
-    public function testAddDropCheck()
+    public function testAddDropCheck(): void
     {
         $this->markTestSkipped('SQLite does not support adding/dropping check constraints.');
     }
 
-    public function testMultiStatementSupport()
+    public function testMultiStatementSupport(): void
     {
-        $db = $this->getConnection(false);
+        $db  = $this->getConnection(false);
         $sql = <<<'SQL'
 DROP TABLE IF EXISTS {{T_multistatement}};
 CREATE TABLE {{T_multistatement}} (
@@ -77,11 +76,11 @@ SQL;
         ])->execute();
         $this->assertSame([
             [
-                'intcol' => '41',
+                'intcol'  => '41',
                 'textcol' => 'foo',
             ],
             [
-                'intcol' => '42',
+                'intcol'  => '42',
                 'textcol' => 'bar',
             ],
         ], $db->createCommand('SELECT * FROM {{T_multistatement}}')->queryAll());
@@ -92,13 +91,13 @@ SELECT * FROM {{T_multistatement}}
 SQL;
         $this->assertSame([
             [
-                'intcol' => '410',
+                'intcol'  => '410',
                 'textcol' => 'foo',
             ],
         ], $db->createCommand($sql, [
             'newInt' => 410,
-            'val1' => 'foo',
-            'val2' => 'bar',
+            'val1'   => 'foo',
+            'val2'   => 'bar',
         ])->queryAll());
     }
 

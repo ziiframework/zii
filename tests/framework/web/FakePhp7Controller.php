@@ -1,27 +1,28 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\web;
 
 use yii\web\Controller;
 
 /**
  * @author Brandon Kelly <branodn@craftcms.com>
+ *
  * @since 2.0.31
  */
 class FakePhp7Controller extends Controller
 {
     public $enableCsrfValidation = false;
 
-    public function actionAksi1(int $foo, float $bar = null, bool $true, bool $false)
+    public function actionAksi1(int $foo, float $bar = null, bool $true, bool $false): void
     {
     }
 
-    public function actionStringy(string $foo = null)
+    public function actionStringy(string $foo = null): void
     {
     }
 }

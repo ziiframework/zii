@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\db;
 
 use yii\base\Event;
@@ -22,16 +22,18 @@ use yiiunit\data\ar\Profile;
  */
 abstract class ActiveQueryTest extends DatabaseTestCase
 {
-    public function setUp(): void
+    use GetTablesAliasTestTrait;
+
+    protected function setUp(): void
     {
         parent::setUp();
         ActiveRecord::$db = $this->getConnection();
     }
 
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $config = [
-            'on' => ['a' => 'b'],
+            'on'       => ['a' => 'b'],
             'joinWith' => ['dummy relation'],
         ];
         $query = new ActiveQuery(Customer::className(), $config);
@@ -40,10 +42,11 @@ abstract class ActiveQueryTest extends DatabaseTestCase
         $this->assertEquals($query->joinWith, $config['joinWith']);
     }
 
-    public function testTriggerInitEvent()
+    public function testTriggerInitEvent(): void
     {
-        $where = '1==1';
-        $callback = function (\yii\base\Event $event) use ($where) {
+        $where    = '1==1';
+        $callback = static function (Event $event) use ($where): void
+        {
             $event->sender->where = $where;
         };
         Event::on(ActiveQuery::className(), ActiveQuery::EVENT_INIT, $callback);
@@ -55,18 +58,18 @@ abstract class ActiveQueryTest extends DatabaseTestCase
     /**
      * @todo tests for internal logic of prepare()
      */
-    public function testPrepare()
+    public function testPrepare(): void
     {
-        $query = new ActiveQuery(Customer::className());
+        $query   = new ActiveQuery(Customer::className());
         $builder = new QueryBuilder(new Connection());
-        $result = $query->prepare($builder);
+        $result  = $query->prepare($builder);
         $this->assertInstanceOf('yii\db\Query', $result);
     }
 
-    public function testPopulate_EmptyRows()
+    public function testPopulate_EmptyRows(): void
     {
-        $query = new ActiveQuery(Customer::className());
-        $rows = [];
+        $query  = new ActiveQuery(Customer::className());
+        $rows   = [];
         $result = $query->populate([]);
         $this->assertEquals($rows, $result);
     }
@@ -74,10 +77,10 @@ abstract class ActiveQueryTest extends DatabaseTestCase
     /**
      * @todo tests for internal logic of populate()
      */
-    public function testPopulate_FilledRows()
+    public function testPopulate_FilledRows(): void
     {
-        $query = new ActiveQuery(Customer::className());
-        $rows = $query->all();
+        $query  = new ActiveQuery(Customer::className());
+        $rows   = $query->all();
         $result = $query->populate($rows);
         $this->assertEquals($rows, $result);
     }
@@ -85,9 +88,9 @@ abstract class ActiveQueryTest extends DatabaseTestCase
     /**
      * @todo tests for internal logic of one()
      */
-    public function testOne()
+    public function testOne(): void
     {
-        $query = new ActiveQuery(Customer::className());
+        $query  = new ActiveQuery(Customer::className());
         $result = $query->one();
         $this->assertInstanceOf('yiiunit\data\ar\Customer', $result);
     }
@@ -95,9 +98,9 @@ abstract class ActiveQueryTest extends DatabaseTestCase
     /**
      * @todo test internal logic of createCommand()
      */
-    public function testCreateCommand()
+    public function testCreateCommand(): void
     {
-        $query = new ActiveQuery(Customer::className());
+        $query  = new ActiveQuery(Customer::className());
         $result = $query->createCommand();
         $this->assertInstanceOf('yii\db\Command', $result);
     }
@@ -105,9 +108,9 @@ abstract class ActiveQueryTest extends DatabaseTestCase
     /**
      * @todo tests for internal logic of queryScalar()
      */
-    public function testQueryScalar()
+    public function testQueryScalar(): void
     {
-        $query = new ActiveQuery(Customer::className());
+        $query  = new ActiveQuery(Customer::className());
         $result = $this->invokeMethod($query, 'queryScalar', ['name', null]);
         $this->assertEquals('user1', $result);
     }
@@ -115,9 +118,9 @@ abstract class ActiveQueryTest extends DatabaseTestCase
     /**
      * @todo tests for internal logic of joinWith()
      */
-    public function testJoinWith()
+    public function testJoinWith(): void
     {
-        $query = new ActiveQuery(Customer::className());
+        $query  = new ActiveQuery(Customer::className());
         $result = $query->joinWith('profile');
         $this->assertEquals([
             [['profile'], true, 'LEFT JOIN'],
@@ -127,16 +130,16 @@ abstract class ActiveQueryTest extends DatabaseTestCase
     /**
      * @todo tests for internal logic of innerJoinWith()
      */
-    public function testInnerJoinWith()
+    public function testInnerJoinWith(): void
     {
-        $query = new ActiveQuery(Customer::className());
+        $query  = new ActiveQuery(Customer::className());
         $result = $query->innerJoinWith('profile');
         $this->assertEquals([
             [['profile'], true, 'INNER JOIN'],
         ], $result->joinWith);
     }
 
-    public function testBuildJoinWithRemoveDuplicateJoinByTableName()
+    public function testBuildJoinWithRemoveDuplicateJoinByTableName(): void
     {
         $query = new ActiveQuery(Customer::className());
         $query->innerJoinWith('orders')
@@ -146,12 +149,12 @@ abstract class ActiveQueryTest extends DatabaseTestCase
             [
                 'INNER JOIN',
                 'order',
-                '{{customer}}.[[id]] = {{order}}.[[customer_id]]'
+                '{{customer}}.[[id]] = {{order}}.[[customer_id]]',
             ],
             [
                 'LEFT JOIN',
                 'order_item',
-                '{{order}}.[[id]] = {{order_item}}.[[order_id]]'
+                '{{order}}.[[id]] = {{order_item}}.[[order_id]]',
             ],
         ], $query->join);
     }
@@ -159,71 +162,71 @@ abstract class ActiveQueryTest extends DatabaseTestCase
     /**
      * @todo tests for the regex inside getQueryTableName
      */
-    public function testGetQueryTableName_from_not_set()
+    public function testGetQueryTableName_from_not_set(): void
     {
-        $query = new ActiveQuery(Customer::className());
+        $query  = new ActiveQuery(Customer::className());
         $result = $this->invokeMethod($query, 'getTableNameAndAlias');
         $this->assertEquals(['customer', 'customer'], $result);
     }
 
-    public function testGetQueryTableName_from_set()
+    public function testGetQueryTableName_from_set(): void
     {
         $options = ['from' => ['alias' => 'customer']];
-        $query = new ActiveQuery(Customer::className(), $options);
-        $result = $this->invokeMethod($query, 'getTableNameAndAlias');
+        $query   = new ActiveQuery(Customer::className(), $options);
+        $result  = $this->invokeMethod($query, 'getTableNameAndAlias');
         $this->assertEquals(['customer', 'alias'], $result);
     }
 
-    public function testOnCondition()
+    public function testOnCondition(): void
     {
-        $query = new ActiveQuery(Customer::className());
-        $on = ['active' => true];
+        $query  = new ActiveQuery(Customer::className());
+        $on     = ['active' => true];
         $params = ['a' => 'b'];
         $result = $query->onCondition($on, $params);
         $this->assertEquals($on, $result->on);
         $this->assertEquals($params, $result->params);
     }
 
-    public function testAndOnCondition_on_not_set()
+    public function testAndOnCondition_on_not_set(): void
     {
-        $query = new ActiveQuery(Customer::className());
-        $on = ['active' => true];
+        $query  = new ActiveQuery(Customer::className());
+        $on     = ['active' => true];
         $params = ['a' => 'b'];
         $result = $query->andOnCondition($on, $params);
         $this->assertEquals($on, $result->on);
         $this->assertEquals($params, $result->params);
     }
 
-    public function testAndOnCondition_on_set()
+    public function testAndOnCondition_on_set(): void
     {
-        $onOld = ['active' => true];
-        $query = new ActiveQuery(Customer::className());
+        $onOld     = ['active' => true];
+        $query     = new ActiveQuery(Customer::className());
         $query->on = $onOld;
 
-        $on = ['active' => true];
+        $on     = ['active' => true];
         $params = ['a' => 'b'];
         $result = $query->andOnCondition($on, $params);
         $this->assertEquals(['and', $onOld, $on], $result->on);
         $this->assertEquals($params, $result->params);
     }
 
-    public function testOrOnCondition_on_not_set()
+    public function testOrOnCondition_on_not_set(): void
     {
-        $query = new ActiveQuery(Customer::className());
-        $on = ['active' => true];
+        $query  = new ActiveQuery(Customer::className());
+        $on     = ['active' => true];
         $params = ['a' => 'b'];
         $result = $query->orOnCondition($on, $params);
         $this->assertEquals($on, $result->on);
         $this->assertEquals($params, $result->params);
     }
 
-    public function testOrOnCondition_on_set()
+    public function testOrOnCondition_on_set(): void
     {
-        $onOld = ['active' => true];
-        $query = new ActiveQuery(Customer::className());
+        $onOld     = ['active' => true];
+        $query     = new ActiveQuery(Customer::className());
         $query->on = $onOld;
 
-        $on = ['active' => true];
+        $on     = ['active' => true];
         $params = ['a' => 'b'];
         $result = $query->orOnCondition($on, $params);
         $this->assertEquals(['or', $onOld, $on], $result->on);
@@ -233,39 +236,33 @@ abstract class ActiveQueryTest extends DatabaseTestCase
     /**
      * @todo tests for internal logic of viaTable()
      */
-    public function testViaTable()
+    public function testViaTable(): void
     {
-        $query = new ActiveQuery(Customer::className(), ['primaryModel' => new Order()]);
+        $query  = new ActiveQuery(Customer::className(), ['primaryModel' => new Order()]);
         $result = $query->viaTable(Profile::className(), ['id' => 'item_id']);
         $this->assertInstanceOf('yii\db\ActiveQuery', $result);
         $this->assertInstanceOf('yii\db\ActiveQuery', $result->via);
     }
 
-    public function testAlias_not_set()
+    public function testAlias_not_set(): void
     {
-        $query = new ActiveQuery(Customer::className());
+        $query  = new ActiveQuery(Customer::className());
         $result = $query->alias('alias');
         $this->assertInstanceOf('yii\db\ActiveQuery', $result);
         $this->assertEquals(['alias' => 'customer'], $result->from);
     }
 
-    public function testAlias_yet_set()
+    public function testAlias_yet_set(): void
     {
-        $aliasOld = ['old'];
-        $query = new ActiveQuery(Customer::className());
+        $aliasOld    = ['old'];
+        $query       = new ActiveQuery(Customer::className());
         $query->from = $aliasOld;
-        $result = $query->alias('alias');
+        $result      = $query->alias('alias');
         $this->assertInstanceOf('yii\db\ActiveQuery', $result);
         $this->assertEquals(['alias' => 'old'], $result->from);
     }
 
-    use GetTablesAliasTestTrait;
-    protected function createQuery()
-    {
-        return new ActiveQuery(null);
-    }
-
-    public function testGetTableNames_notFilledFrom()
+    public function testGetTableNames_notFilledFrom(): void
     {
         $query = new ActiveQuery(Profile::className());
 
@@ -276,7 +273,7 @@ abstract class ActiveQueryTest extends DatabaseTestCase
         ], $tables);
     }
 
-    public function testGetTableNames_wontFillFrom()
+    public function testGetTableNames_wontFillFrom(): void
     {
         $query = new ActiveQuery(Profile::className());
         $this->assertEquals($query->from, null);
@@ -285,12 +282,12 @@ abstract class ActiveQueryTest extends DatabaseTestCase
     }
 
     /**
-     * https://github.com/yiisoft/yii2/issues/5341
+     * https://github.com/yiisoft/yii2/issues/5341.
      *
      * Issue:     Plan     1 -- * Account * -- * User
      * Our Tests: Category 1 -- * Item    * -- * Order
      */
-    public function testDeeplyNestedTableRelationWith()
+    public function testDeeplyNestedTableRelationWith(): void
     {
         /* @var $category Category */
         $categories = Category::find()->with('orders')->indexBy('id')->all();
@@ -311,5 +308,10 @@ abstract class ActiveQueryTest extends DatabaseTestCase
         $this->assertEquals(1, count($orders));
         $this->assertInstanceOf(Order::className(), $orders[0]);
         $this->assertEquals(2, $orders[0]->id);
+    }
+
+    protected function createQuery()
+    {
+        return new ActiveQuery(null);
     }
 }

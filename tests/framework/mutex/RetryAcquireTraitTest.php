@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\mutex;
 
 use Yii;
@@ -24,11 +24,11 @@ class RetryAcquireTraitTest extends TestCase
     /**
      * @throws InvalidConfigException
      */
-    public function testRetryAcquire()
+    public function testRetryAcquire(): void
     {
         $mutexName = __FUNCTION__;
-        $mutexOne = $this->createMutex();
-        $mutexTwo = $this->createMutex();
+        $mutexOne  = $this->createMutex();
+        $mutexTwo  = $this->createMutex();
 
         $this->assertTrue(
             $mutexOne->acquire($mutexName),
@@ -82,8 +82,9 @@ class RetryAcquireTraitTest extends TestCase
     }
 
     /**
-     * @return DumbMutex
      * @throws InvalidConfigException
+     *
+     * @return DumbMutex
      */
     private function createMutex()
     {

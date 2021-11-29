@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\validators;
 
 use yii\base\Exception;
@@ -27,7 +27,7 @@ abstract class ExistValidatorTest extends DatabaseTestCase
         ActiveRecord::$db = $this->getConnection();
     }
 
-    public function testValidateValueExpectedException()
+    public function testValidateValueExpectedException(): void
     {
         try {
             $val = new ExistValidator();
@@ -48,7 +48,7 @@ abstract class ExistValidatorTest extends DatabaseTestCase
         }
     }
 
-    public function testValidateValue()
+    public function testValidateValue(): void
     {
         $val = new ExistValidator(['targetClass' => ValidatorTestRefModel::className(), 'targetAttribute' => 'id']);
         $this->assertTrue($val->validate(2));
@@ -57,87 +57,87 @@ abstract class ExistValidatorTest extends DatabaseTestCase
         $this->assertFalse($val->validate(['1']));
     }
 
-    public function testValidateAttribute()
+    public function testValidateAttribute(): void
     {
         // existing value on different table
         $val = new ExistValidator(['targetClass' => ValidatorTestMainModel::className(), 'targetAttribute' => 'id']);
-        $m = ValidatorTestRefModel::findOne(['id' => 1]);
+        $m   = ValidatorTestRefModel::findOne(['id' => 1]);
         $val->validateAttribute($m, 'ref');
         $this->assertFalse($m->hasErrors());
         // non-existing value on different table
         $val = new ExistValidator(['targetClass' => ValidatorTestMainModel::className(), 'targetAttribute' => 'id']);
-        $m = ValidatorTestRefModel::findOne(['id' => 6]);
+        $m   = ValidatorTestRefModel::findOne(['id' => 6]);
         $val->validateAttribute($m, 'ref');
         $this->assertTrue($m->hasErrors('ref'));
         // existing value on same table
         $val = new ExistValidator(['targetAttribute' => 'ref']);
-        $m = ValidatorTestRefModel::findOne(['id' => 2]);
+        $m   = ValidatorTestRefModel::findOne(['id' => 2]);
         $val->validateAttribute($m, 'test_val');
         $this->assertFalse($m->hasErrors());
         // non-existing value on same table
         $val = new ExistValidator(['targetAttribute' => 'ref']);
-        $m = ValidatorTestRefModel::findOne(['id' => 5]);
+        $m   = ValidatorTestRefModel::findOne(['id' => 5]);
         $val->validateAttribute($m, 'test_val_fail');
         $this->assertTrue($m->hasErrors('test_val_fail'));
         // check for given value (true)
         $val = new ExistValidator();
-        $m = ValidatorTestRefModel::findOne(['id' => 3]);
+        $m   = ValidatorTestRefModel::findOne(['id' => 3]);
         $val->validateAttribute($m, 'ref');
         $this->assertFalse($m->hasErrors());
         // check for given defaults (false)
-        $val = new ExistValidator();
-        $m = ValidatorTestRefModel::findOne(['id' => 4]);
+        $val        = new ExistValidator();
+        $m          = ValidatorTestRefModel::findOne(['id' => 4]);
         $m->a_field = 'some new value';
         $val->validateAttribute($m, 'a_field');
         $this->assertTrue($m->hasErrors('a_field'));
         // existing array
-        $val = new ExistValidator(['targetAttribute' => 'ref']);
+        $val             = new ExistValidator(['targetAttribute' => 'ref']);
         $val->allowArray = true;
-        $m = new ValidatorTestRefModel();
-        $m->test_val = [2, 3, 4, 5];
+        $m               = new ValidatorTestRefModel();
+        $m->test_val     = [2, 3, 4, 5];
         $val->validateAttribute($m, 'test_val');
         $this->assertFalse($m->hasErrors('test_val'));
         // existing non-unique array
-        $val = new ExistValidator(['targetAttribute' => 'ref']);
+        $val             = new ExistValidator(['targetAttribute' => 'ref']);
         $val->allowArray = true;
-        $m = new ValidatorTestRefModel();
-        $m->test_val = [2, 2, 3, 3, 4, 4, 5, 5];
+        $m               = new ValidatorTestRefModel();
+        $m->test_val     = [2, 2, 3, 3, 4, 4, 5, 5];
         $val->validateAttribute($m, 'test_val');
         $this->assertFalse($m->hasErrors('test_val'));
         // non-existing array
-        $val = new ExistValidator(['targetAttribute' => 'ref']);
+        $val             = new ExistValidator(['targetAttribute' => 'ref']);
         $val->allowArray = true;
-        $m = new ValidatorTestRefModel();
-        $m->test_val = [95, 96, 97, 98];
+        $m               = new ValidatorTestRefModel();
+        $m->test_val     = [95, 96, 97, 98];
         $val->validateAttribute($m, 'test_val');
         $this->assertTrue($m->hasErrors('test_val'));
         // partial-existing array
-        $val = new ExistValidator(['targetAttribute' => 'ref']);
+        $val             = new ExistValidator(['targetAttribute' => 'ref']);
         $val->allowArray = true;
-        $m = new ValidatorTestRefModel();
-        $m->test_val = [2, 97, 3, 98];
+        $m               = new ValidatorTestRefModel();
+        $m->test_val     = [2, 97, 3, 98];
         $val->validateAttribute($m, 'test_val');
         $this->assertTrue($m->hasErrors('test_val'));
         // existing array (allowArray = false)
-        $val = new ExistValidator(['targetAttribute' => 'ref']);
+        $val             = new ExistValidator(['targetAttribute' => 'ref']);
         $val->allowArray = false;
-        $m = new ValidatorTestRefModel();
-        $m->test_val = [2, 3, 4, 5];
+        $m               = new ValidatorTestRefModel();
+        $m->test_val     = [2, 3, 4, 5];
         $val->validateAttribute($m, 'test_val');
         $this->assertTrue($m->hasErrors('test_val'));
         // non-existing array (allowArray = false)
-        $val = new ExistValidator(['targetAttribute' => 'ref']);
+        $val             = new ExistValidator(['targetAttribute' => 'ref']);
         $val->allowArray = false;
-        $m = new ValidatorTestRefModel();
-        $m->test_val = [95, 96, 97, 98];
+        $m               = new ValidatorTestRefModel();
+        $m->test_val     = [95, 96, 97, 98];
         $val->validateAttribute($m, 'test_val');
         $this->assertTrue($m->hasErrors('test_val'));
     }
 
-    public function testValidateCompositeKeys()
+    public function testValidateCompositeKeys(): void
     {
         $val = new ExistValidator([
-            'targetClass' => OrderItem::className(),
+            'targetClass'     => OrderItem::className(),
             'targetAttribute' => ['order_id', 'item_id'],
         ]);
         // validate old record
@@ -157,14 +157,14 @@ abstract class ExistValidatorTest extends DatabaseTestCase
         $this->assertTrue($m->hasErrors('order_id'));
 
         $val = new ExistValidator([
-            'targetClass' => OrderItem::className(),
+            'targetClass'     => OrderItem::className(),
             'targetAttribute' => ['id' => 'order_id'],
         ]);
         // validate old record
         $m = Order::findOne(1);
         $val->validateAttribute($m, 'id');
         $this->assertFalse($m->hasErrors('id'));
-        $m = Order::findOne(1);
+        $m     = Order::findOne(1);
         $m->id = 10;
         $val->validateAttribute($m, 'id');
         $this->assertTrue($m->hasErrors('id'));
@@ -180,13 +180,13 @@ abstract class ExistValidatorTest extends DatabaseTestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/14150
      */
-    public function testTargetTableWithAlias()
+    public function testTargetTableWithAlias(): void
     {
-        $oldTableName = OrderItem::$tableName;
+        $oldTableName         = OrderItem::$tableName;
         OrderItem::$tableName = '{{%order_item}}';
 
         $val = new ExistValidator([
-            'targetClass' => OrderItem::className(),
+            'targetClass'     => OrderItem::className(),
             'targetAttribute' => ['id' => 'order_id'],
         ]);
 
@@ -199,21 +199,22 @@ abstract class ExistValidatorTest extends DatabaseTestCase
 
     /**
      * Test expresssion in targetAttribute.
+     *
      * @see https://github.com/yiisoft/yii2/issues/14304
      */
-    public function testExpresionInAttributeColumnName()
+    public function testExpresionInAttributeColumnName(): void
     {
         $val = new ExistValidator([
-           'targetClass' => OrderItem::className(),
-           'targetAttribute' => ['id' => 'COALESCE([[order_id]], 0)'],
-       ]);
+            'targetClass'     => OrderItem::className(),
+            'targetAttribute' => ['id' => 'COALESCE([[order_id]], 0)'],
+        ]);
 
         $m = new Order(['id' => 1]);
         $val->validateAttribute($m, 'id');
         $this->assertFalse($m->hasErrors('id'));
     }
 
-    public function testTargetRelation()
+    public function testTargetRelation(): void
     {
         $val = new ExistValidator(['targetRelation' => 'references']);
 
@@ -226,42 +227,45 @@ abstract class ExistValidatorTest extends DatabaseTestCase
         $this->assertTrue($m->hasErrors('id'));
     }
 
-    public function testTargetRelationWithFilter()
+    public function testTargetRelationWithFilter(): void
     {
-        $val = new ExistValidator(['targetRelation' => 'references', 'filter' => function ($query) {
-            $query->andWhere(['a_field' => 'ref_to_2']);
-        }]);
+        $val = new ExistValidator(['targetRelation' => 'references', 'filter' => static function ($query): void
+         {
+             $query->andWhere(['a_field' => 'ref_to_2']);
+         }, ]);
         $m = ValidatorTestMainModel::findOne(2);
         $val->validateAttribute($m, 'id');
         $this->assertFalse($m->hasErrors('id'));
 
-        $val = new ExistValidator(['targetRelation' => 'references', 'filter' => function ($query) {
-            $query->andWhere(['a_field' => 'ref_to_3']);
-        }]);
+        $val = new ExistValidator(['targetRelation' => 'references', 'filter' => static function ($query): void
+         {
+             $query->andWhere(['a_field' => 'ref_to_3']);
+         }, ]);
         $m = ValidatorTestMainModel::findOne(2);
         $val->validateAttribute($m, 'id');
         $this->assertTrue($m->hasErrors('id'));
     }
 
-    public function testForceMaster()
+    public function testForceMaster(): void
     {
-        $connection = $this->getConnectionWithInvalidSlave();
+        $connection       = $this->getConnectionWithInvalidSlave();
         ActiveRecord::$db = $connection;
 
         $model = null;
-        $connection->useMaster(function() use (&$model) {
+        $connection->useMaster(static function () use (&$model): void
+        {
             $model = ValidatorTestMainModel::findOne(2);
         });
 
         $validator = new ExistValidator([
-            'forceMasterDb' => true,
+            'forceMasterDb'  => true,
             'targetRelation' => 'references',
         ]);
         $validator->validateAttribute($model, 'id');
 
         $this->expectException('\yii\base\InvalidConfigException');
         $validator = new ExistValidator([
-            'forceMasterDb' => false,
+            'forceMasterDb'  => false,
             'targetRelation' => 'references',
         ]);
         $validator->validateAttribute($model, 'id');

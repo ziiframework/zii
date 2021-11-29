@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\base;
 
 use Yii;
@@ -19,12 +19,12 @@ class ControllerTest extends TestCase
 {
     public static $actionRuns = [];
 
-    public function testRunAction()
+    public function testRunAction(): void
     {
         $this->mockApplication();
 
         static::$actionRuns = [];
-        $controller = new TestController('test-controller', Yii::$app);
+        $controller         = new TestController('test-controller', Yii::$app);
         $this->assertNull($controller->action);
         $result = $controller->runAction('test1');
         $this->assertEquals('test1', $result);
@@ -48,18 +48,19 @@ class ControllerTest extends TestCase
 
     /**
      * @dataProvider createInlineActionProvider
-     * @param string $controllerClass
-     * @param string $actionId
-     * @param string|null $expectedActionMethod
+     *
+     * @param string      $controllerClass
+     * @param string      $actionId
+     * @param null|string $expectedActionMethod
      */
-    public function testCreateInlineAction($controllerClass, $actionId, $expectedActionMethod)
+    public function testCreateInlineAction($controllerClass, $actionId, $expectedActionMethod): void
     {
         $this->mockApplication();
         /** @var Controller $controller */
         $controller = new $controllerClass('test-controller', Yii::$app);
 
         /** @var InlineAction $action */
-        $action = $controller->createAction($actionId);
+        $action       = $controller->createAction($actionId);
         $actionMethod = $action !== null ? $action->actionMethod : null;
 
         $this->assertEquals($expectedActionMethod, $actionMethod);
@@ -83,7 +84,7 @@ class ControllerTest extends TestCase
      *
      * @dataProvider actionIdMethodProvider
      */
-    public function testActionIdMethod($input, $expected)
+    public function testActionIdMethod($input, $expected): void
     {
         $this->assertSame($expected, preg_match('/^(?:[a-z0-9_]+-)*[a-z0-9_]+$/', $input));
     }
@@ -107,51 +108,46 @@ class ControllerTest extends TestCase
     }
 }
 
-
 class TestController extends Controller
 {
     public function actionTest1()
     {
         ControllerTest::$actionRuns[] = $this->action->uniqueId;
+
         return 'test1';
     }
 
     public function actionTest2()
     {
         ControllerTest::$actionRuns[] = $this->action->uniqueId;
+
         return 'test2';
     }
 
-    public function actionTest3()
+    public function actionTest3(): void
     {
-
     }
 
-    public function actionTestTest()
+    public function actionTestTest(): void
     {
-
     }
 
-    public function actionTest_test()
+    public function actionTest_test(): void
     {
-
     }
 }
 
 class Test1Controller extends Controller
 {
-    public function actionTest_1()
+    public function actionTest_1(): void
     {
-
     }
 
-    public function actionTest_test()
+    public function actionTest_test(): void
     {
-
     }
 
-    public function actionTestTest_test_2()
+    public function actionTestTest_test_2(): void
     {
-
     }
 }

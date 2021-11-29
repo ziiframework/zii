@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\web\stubs;
 
 use yii\base\Model;
@@ -12,7 +12,9 @@ use yii\base\Model;
 class ModelStub extends Model
 {
     public $id;
+
     public $title;
+
     public $hidden;
 
     public function toArray(array $fields = [], array $expand = [], $recursive = true)

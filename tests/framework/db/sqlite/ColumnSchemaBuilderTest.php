@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\db\sqlite;
 
 use yii\db\Schema;
@@ -12,6 +12,7 @@ use yii\db\sqlite\ColumnSchemaBuilder;
 
 /**
  * ColumnSchemaBuilderTest tests ColumnSchemaBuilder for SQLite.
+ *
  * @group db
  * @group sqlite
  */
@@ -21,7 +22,8 @@ class ColumnSchemaBuilderTest extends \yiiunit\framework\db\ColumnSchemaBuilderT
 
     /**
      * @param string $type
-     * @param int $length
+     * @param int    $length
+     *
      * @return ColumnSchemaBuilder
      */
     public function getColumnSchemaBuilder($type, $length = null)

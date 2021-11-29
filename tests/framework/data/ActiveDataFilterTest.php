@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\data;
 
 use yii\base\DynamicModel;
@@ -31,12 +31,12 @@ class ActiveDataFilterTest extends TestCase
             ],
             [
                 [
-                    'name' => 'some',
+                    'name'   => 'some',
                     'number' => '2',
                 ],
                 [
                     'AND',
-                    ['name' => 'some'],
+                    ['name'   => 'some'],
                     ['number' => '2'],
                 ],
             ],
@@ -49,7 +49,7 @@ class ActiveDataFilterTest extends TestCase
                 ],
                 [
                     'AND',
-                    ['name' => 'some'],
+                    ['name'   => 'some'],
                     ['number' => '2'],
                 ],
             ],
@@ -105,7 +105,7 @@ class ActiveDataFilterTest extends TestCase
                     'OR',
                     [
                         'AND',
-                        ['name' => 'some'],
+                        ['name'   => 'some'],
                         ['number' => '2'],
                     ],
                     [
@@ -136,23 +136,23 @@ class ActiveDataFilterTest extends TestCase
             ],
             [
                 [
-                    'name' => 'NULL',
+                    'name'   => 'NULL',
                     'number' => 'NULL',
-                    'price' => 'NULL',
-                    'tags' => ['NULL'],
+                    'price'  => 'NULL',
+                    'tags'   => ['NULL'],
                 ],
                 [
                     'AND',
-                    ['name' => ''],
+                    ['name'   => ''],
                     ['number' => null],
-                    ['price' => null],
-                    ['tags' => [null]],
+                    ['price'  => null],
+                    ['tags'   => [null]],
                 ],
             ],
             [
                 [
                     'number' => [
-                        'neq' => 'NULL'
+                        'neq' => 'NULL',
                     ],
                 ],
                 ['!=', 'number', null],
@@ -166,9 +166,9 @@ class ActiveDataFilterTest extends TestCase
      * @param array $filter
      * @param array $expectedResult
      */
-    public function testBuild($filter, $expectedResult)
+    public function testBuild($filter, $expectedResult): void
     {
-        $builder = new ActiveDataFilter();
+        $builder     = new ActiveDataFilter();
         $searchModel = (new DynamicModel(['name' => null, 'number' => null, 'price' => null, 'tags' => null]))
             ->addRule('name', 'trim')
             ->addRule('name', 'string')
@@ -185,19 +185,21 @@ class ActiveDataFilterTest extends TestCase
     /**
      * @depends testBuild
      */
-    public function testBuildCallback()
+    public function testBuildCallback(): void
     {
-        $builder = new ActiveDataFilter();
+        $builder     = new ActiveDataFilter();
         $searchModel = (new DynamicModel(['name' => null]))
             ->addRule('name', 'trim')
             ->addRule('name', 'string');
 
         $builder->setSearchModel($searchModel);
 
-        $builder->conditionBuilders['OR'] = function ($operator, $condition) {
+        $builder->conditionBuilders['OR'] = static function ($operator, $condition)
+        {
             return ['CALLBACK-OR', $condition];
         };
-        $builder->conditionBuilders['LIKE'] = function ($operator, $condition, $attribute) {
+        $builder->conditionBuilders['LIKE'] = static function ($operator, $condition, $attribute)
+        {
             return ['CALLBACK-LIKE', $operator, $condition, $attribute];
         };
 

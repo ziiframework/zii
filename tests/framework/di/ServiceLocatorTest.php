@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\di;
 
 use yii\base\BaseObject;
@@ -22,6 +22,7 @@ class Creator
 class TestClass extends BaseObject
 {
     public $prop1 = 1;
+
     public $prop2;
 }
 
@@ -31,17 +32,19 @@ class TestSubclass extends TestClass
 
 /**
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  * @group di
  */
 class ServiceLocatorTest extends TestCase
 {
-    public function testCallable()
+    public function testCallable(): void
     {
         // anonymous function
         $container = new ServiceLocator();
         $className = TestClass::className();
-        $container->set($className, function () {
+        $container->set($className, static function ()
+        {
             return new TestClass([
                 'prop1' => 100,
                 'prop2' => 200,
@@ -62,16 +65,16 @@ class ServiceLocatorTest extends TestCase
         $this->assertNull($object->prop2);
     }
 
-    public function testObject()
+    public function testObject(): void
     {
-        $object = new TestClass();
+        $object    = new TestClass();
         $className = TestClass::className();
         $container = new ServiceLocator();
         $container->set($className, $object);
         $this->assertSame($container->get($className), $object);
     }
 
-    public function testDi3Compatibility()
+    public function testDi3Compatibility(): void
     {
         $config = [
             'components' => [
@@ -88,8 +91,7 @@ class ServiceLocatorTest extends TestCase
         $this->assertInstanceOf(TestSubclass::className(), $app->get('test'));
     }
 
-
-    public function testShared()
+    public function testShared(): void
     {
         // with configuration: shared
         $container = new ServiceLocator();
@@ -112,12 +114,12 @@ class ServiceLocatorTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/11771
      */
-    public function testModulePropertyIsset()
+    public function testModulePropertyIsset(): void
     {
         $config = [
             'components' => [
                 'inputWidget' => [
-                    'name' => 'foo bar',
+                    'name'  => 'foo bar',
                     'class' => 'yii\widgets\InputWidget',
                 ],
             ],

@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\widgets;
 
 use yii\widgets\Spaceless;
@@ -14,30 +14,30 @@ use yii\widgets\Spaceless;
  */
 class SpacelessTest extends \yiiunit\TestCase
 {
-    public function testWidget()
+    public function testWidget(): void
     {
         ob_start();
         ob_implicit_flush(false);
 
-        echo "<body>\n";
+        print "<body>\n";
 
         Spaceless::begin();
-        echo "\t<div class='wrapper'>\n";
+        print "\t<div class='wrapper'>\n";
 
         Spaceless::begin();
-        echo "\t\t<div class='left-column'>\n";
-        echo "\t\t\t<p>This is a left bar!</p>\n";
-        echo "\t\t</div>\n\n";
-        echo "\t\t<div class='right-column'>\n";
-        echo "\t\t\t<p>This is a right bar!</p>\n";
-        echo "\t\t</div>\n";
+        print "\t\t<div class='left-column'>\n";
+        print "\t\t\t<p>This is a left bar!</p>\n";
+        print "\t\t</div>\n\n";
+        print "\t\t<div class='right-column'>\n";
+        print "\t\t\t<p>This is a right bar!</p>\n";
+        print "\t\t</div>\n";
         Spaceless::end();
 
-        echo "\t</div>\n";
+        print "\t</div>\n";
         Spaceless::end();
 
-        echo "\t<p>Bye!</p>\n";
-        echo "</body>\n";
+        print "\t<p>Bye!</p>\n";
+        print "</body>\n";
 
         $expected = "<body>\n<div class='wrapper'><div class='left-column'><p>This is a left bar!</p>" .
             "</div><div class='right-column'><p>This is a right bar!</p></div></div>\t<p>Bye!</p>\n</body>\n";
@@ -47,14 +47,15 @@ class SpacelessTest extends \yiiunit\TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/15536
      */
-    public function testShouldTriggerInitEvent()
+    public function testShouldTriggerInitEvent(): void
     {
         $initTriggered = false;
-        $spaceless = Spaceless::begin(
+        $spaceless     = Spaceless::begin(
             [
-                'on init' => function () use (&$initTriggered) {
+                'on init' => static function () use (&$initTriggered): void
+                {
                     $initTriggered = true;
-                }
+                },
             ]
         );
         Spaceless::end();

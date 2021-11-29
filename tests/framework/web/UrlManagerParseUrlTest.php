@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @see http://www.yiiframework.com/
+ *
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
 namespace yiiunit\framework\web;
 
 use yii\caching\ArrayCache;
@@ -45,33 +45,13 @@ use yiiunit\TestCase;
  */
 class UrlManagerParseUrlTest extends TestCase
 {
-    protected function getUrlManager($config = [])
-    {
-        // in this test class, all tests have enablePrettyUrl enabled.
-        $config['enablePrettyUrl'] = true;
-        // normalizer is tested in UrlNormalizerTest
-        $config['normalizer'] = false;
-
-        return new UrlManager(array_merge([
-            'cache' => null,
-        ], $config));
-    }
-
-    protected function getRequest($pathInfo, $hostInfo = 'http://www.example.com', $method = 'GET', $config = [])
-    {
-        $config['pathInfo'] = $pathInfo;
-        $config['hostInfo'] = $hostInfo;
-        $_POST['_method'] = $method;
-        return new Request($config);
-    }
-
     protected function tearDown(): void
     {
         unset($_POST['_method']);
         parent::tearDown();
     }
 
-    public function testWithoutRules()
+    public function testWithoutRules(): void
     {
         $manager = $this->getUrlManager();
 
@@ -89,9 +69,9 @@ class UrlManagerParseUrlTest extends TestCase
         $this->assertEquals(['module/site/index/', []], $result);
     }
 
-    public function testWithoutRulesStrict()
+    public function testWithoutRulesStrict(): void
     {
-        $manager = $this->getUrlManager();
+        $manager                      = $this->getUrlManager();
         $manager->enableStrictParsing = true;
 
         // empty pathinfo
@@ -114,9 +94,10 @@ class UrlManagerParseUrlTest extends TestCase
 
     /**
      * @dataProvider suffixProvider
+     *
      * @param string $suffix
      */
-    public function testWithoutRulesWithSuffix($suffix)
+    public function testWithoutRulesWithSuffix($suffix): void
     {
         $manager = $this->getUrlManager(['suffix' => $suffix]);
 
@@ -126,28 +107,28 @@ class UrlManagerParseUrlTest extends TestCase
         // normal pathinfo
         $result = $manager->parseRequest($this->getRequest('site/index'));
         $this->assertFalse($result);
-        $result = $manager->parseRequest($this->getRequest("site/index$suffix"));
+        $result = $manager->parseRequest($this->getRequest("site/index{$suffix}"));
         $this->assertEquals(['site/index', []], $result);
         // pathinfo with module
         $result = $manager->parseRequest($this->getRequest('module/site/index'));
         $this->assertFalse($result);
-        $result = $manager->parseRequest($this->getRequest("module/site/index$suffix"));
+        $result = $manager->parseRequest($this->getRequest("module/site/index{$suffix}"));
         $this->assertEquals(['module/site/index', []], $result);
         // pathinfo with trailing slashes
         if ($suffix !== '/') {
             $result = $manager->parseRequest($this->getRequest('module/site/index/'));
             $this->assertFalse($result);
         }
-        $result = $manager->parseRequest($this->getRequest("module/site/index/$suffix"));
+        $result = $manager->parseRequest($this->getRequest("module/site/index/{$suffix}"));
         $this->assertEquals(['module/site/index/', []], $result);
     }
 
-    public function testSimpleRules()
+    public function testSimpleRules(): void
     {
         $config = [
             'rules' => [
-                'post/<id:\d+>' => 'post/view',
-                'posts' => 'post/index',
+                'post/<id:\d+>'         => 'post/view',
+                'posts'                 => 'post/index',
                 'book/<id:\d+>/<title>' => 'book/view',
             ],
         ];
@@ -170,16 +151,16 @@ class UrlManagerParseUrlTest extends TestCase
         $this->assertEquals(['module/site/index', []], $result);
     }
 
-    public function testSimpleRulesStrict()
+    public function testSimpleRulesStrict(): void
     {
         $config = [
             'rules' => [
-                'post/<id:\d+>' => 'post/view',
-                'posts' => 'post/index',
+                'post/<id:\d+>'         => 'post/view',
+                'posts'                 => 'post/index',
                 'book/<id:\d+>/<title>' => 'book/view',
             ],
         ];
-        $manager = $this->getUrlManager($config);
+        $manager                      = $this->getUrlManager($config);
         $manager->enableStrictParsing = true;
 
         // matching pathinfo
@@ -201,14 +182,15 @@ class UrlManagerParseUrlTest extends TestCase
 
     /**
      * @dataProvider suffixProvider
+     *
      * @param string $suffix
      */
-    public function testSimpleRulesWithSuffix($suffix)
+    public function testSimpleRulesWithSuffix($suffix): void
     {
         $config = [
             'rules' => [
-                'post/<id:\d+>' => 'post/view',
-                'posts' => 'post/index',
+                'post/<id:\d+>'         => 'post/view',
+                'posts'                 => 'post/index',
                 'book/<id:\d+>/<title>' => 'book/view',
             ],
             'suffix' => $suffix,
@@ -218,16 +200,17 @@ class UrlManagerParseUrlTest extends TestCase
         // matching pathinfo
         $result = $manager->parseRequest($this->getRequest('book/123/this+is+sample'));
         $this->assertFalse($result);
-        $result = $manager->parseRequest($this->getRequest("book/123/this+is+sample$suffix"));
+        $result = $manager->parseRequest($this->getRequest("book/123/this+is+sample{$suffix}"));
         $this->assertEquals(['book/view', ['id' => '123', 'title' => 'this+is+sample']], $result);
         // trailing slash is significant, no match
         $result = $manager->parseRequest($this->getRequest('book/123/this+is+sample/'));
+
         if ($suffix === '/') {
             $this->assertEquals(['book/view', ['id' => '123', 'title' => 'this+is+sample']], $result);
         } else {
             $this->assertFalse($result);
         }
-        $result = $manager->parseRequest($this->getRequest("book/123/this+is+sample/$suffix"));
+        $result = $manager->parseRequest($this->getRequest("book/123/this+is+sample/{$suffix}"));
         $this->assertEquals(['book/123/this+is+sample/', []], $result);
         // empty pathinfo
         $result = $manager->parseRequest($this->getRequest(''));
@@ -235,45 +218,47 @@ class UrlManagerParseUrlTest extends TestCase
         // normal pathinfo
         $result = $manager->parseRequest($this->getRequest('site/index'));
         $this->assertFalse($result);
-        $result = $manager->parseRequest($this->getRequest("site/index$suffix"));
+        $result = $manager->parseRequest($this->getRequest("site/index{$suffix}"));
         $this->assertEquals(['site/index', []], $result);
         // pathinfo with module
         $result = $manager->parseRequest($this->getRequest('module/site/index'));
         $this->assertFalse($result);
-        $result = $manager->parseRequest($this->getRequest("module/site/index$suffix"));
+        $result = $manager->parseRequest($this->getRequest("module/site/index{$suffix}"));
         $this->assertEquals(['module/site/index', []], $result);
     }
 
     /**
      * @dataProvider suffixProvider
+     *
      * @param string $suffix
      */
-    public function testSimpleRulesWithSuffixStrict($suffix)
+    public function testSimpleRulesWithSuffixStrict($suffix): void
     {
         $config = [
             'rules' => [
-                'post/<id:\d+>' => 'post/view',
-                'posts' => 'post/index',
+                'post/<id:\d+>'         => 'post/view',
+                'posts'                 => 'post/index',
                 'book/<id:\d+>/<title>' => 'book/view',
             ],
             'suffix' => $suffix,
         ];
-        $manager = $this->getUrlManager($config);
+        $manager                      = $this->getUrlManager($config);
         $manager->enableStrictParsing = true;
 
         // matching pathinfo
         $result = $manager->parseRequest($this->getRequest('book/123/this+is+sample'));
         $this->assertFalse($result);
-        $result = $manager->parseRequest($this->getRequest("book/123/this+is+sample$suffix"));
+        $result = $manager->parseRequest($this->getRequest("book/123/this+is+sample{$suffix}"));
         $this->assertEquals(['book/view', ['id' => '123', 'title' => 'this+is+sample']], $result);
         // trailing slash is significant, no match
         $result = $manager->parseRequest($this->getRequest('book/123/this+is+sample/'));
+
         if ($suffix === '/') {
             $this->assertEquals(['book/view', ['id' => '123', 'title' => 'this+is+sample']], $result);
         } else {
             $this->assertFalse($result);
         }
-        $result = $manager->parseRequest($this->getRequest("book/123/this+is+sample/$suffix"));
+        $result = $manager->parseRequest($this->getRequest("book/123/this+is+sample/{$suffix}"));
         $this->assertFalse($result);
         // empty pathinfo
         $result = $manager->parseRequest($this->getRequest(''));
@@ -281,56 +266,52 @@ class UrlManagerParseUrlTest extends TestCase
         // normal pathinfo
         $result = $manager->parseRequest($this->getRequest('site/index'));
         $this->assertFalse($result);
-        $result = $manager->parseRequest($this->getRequest("site/index$suffix"));
+        $result = $manager->parseRequest($this->getRequest("site/index{$suffix}"));
         $this->assertFalse($result);
         // pathinfo with module
         $result = $manager->parseRequest($this->getRequest('module/site/index'));
         $this->assertFalse($result);
-        $result = $manager->parseRequest($this->getRequest("module/site/index$suffix"));
+        $result = $manager->parseRequest($this->getRequest("module/site/index{$suffix}"));
         $this->assertFalse($result);
     }
-
-
 
     // TODO implement with hostinfo
 
-
-
-    public function testParseRESTRequest()
+    public function testParseRESTRequest(): void
     {
         $request = new Request();
 
         // pretty URL rules
         $manager = new UrlManager([
             'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'cache' => null,
-            'rules' => [
+            'showScriptName'  => false,
+            'cache'           => null,
+            'rules'           => [
                 'PUT,POST post/<id>/<title>' => 'post/create',
-                'DELETE post/<id>' => 'post/delete',
-                'post/<id>/<title>' => 'post/view',
-                'POST/GET' => 'post/get',
+                'DELETE post/<id>'           => 'post/delete',
+                'post/<id>/<title>'          => 'post/view',
+                'POST/GET'                   => 'post/get',
             ],
         ]);
         // matching pathinfo GET request
         $_SERVER['REQUEST_METHOD'] = 'GET';
-        $request->pathInfo = 'post/123/this+is+sample';
-        $result = $manager->parseRequest($request);
+        $request->pathInfo         = 'post/123/this+is+sample';
+        $result                    = $manager->parseRequest($request);
         $this->assertEquals(['post/view', ['id' => '123', 'title' => 'this+is+sample']], $result);
         // matching pathinfo PUT/POST request
         $_SERVER['REQUEST_METHOD'] = 'PUT';
-        $request->pathInfo = 'post/123/this+is+sample';
-        $result = $manager->parseRequest($request);
+        $request->pathInfo         = 'post/123/this+is+sample';
+        $result                    = $manager->parseRequest($request);
         $this->assertEquals(['post/create', ['id' => '123', 'title' => 'this+is+sample']], $result);
         $_SERVER['REQUEST_METHOD'] = 'POST';
-        $request->pathInfo = 'post/123/this+is+sample';
-        $result = $manager->parseRequest($request);
+        $request->pathInfo         = 'post/123/this+is+sample';
+        $result                    = $manager->parseRequest($request);
         $this->assertEquals(['post/create', ['id' => '123', 'title' => 'this+is+sample']], $result);
 
         // no wrong matching
         $_SERVER['REQUEST_METHOD'] = 'POST';
-        $request->pathInfo = 'POST/GET';
-        $result = $manager->parseRequest($request);
+        $request->pathInfo         = 'POST/GET';
+        $result                    = $manager->parseRequest($request);
         $this->assertEquals(['post/get', []], $result);
 
         // createUrl should ignore REST rules
@@ -338,7 +319,7 @@ class UrlManagerParseUrlTest extends TestCase
             'components' => [
                 'request' => [
                     'hostInfo' => 'http://localhost/',
-                    'baseUrl' => '/app',
+                    'baseUrl'  => '/app',
                 ],
             ],
         ], \yii\web\Application::className());
@@ -348,7 +329,7 @@ class UrlManagerParseUrlTest extends TestCase
         unset($_SERVER['REQUEST_METHOD']);
     }
 
-    public function testAppendRules()
+    public function testAppendRules(): void
     {
         $manager = $this->getUrlManager(['rules' => ['post/<id:\d+>' => 'post/view']]);
 
@@ -357,14 +338,14 @@ class UrlManagerParseUrlTest extends TestCase
         $this->assertInstanceOf('yii\web\UrlRuleInterface', $firstRule);
 
         $manager->addRules([
-            'posts' => 'post/index',
+            'posts'                 => 'post/index',
             'book/<id:\d+>/<title>' => 'book/view',
         ]);
         $this->assertCount(3, $manager->rules);
         $this->assertSame($firstRule, $manager->rules[0]);
     }
 
-    public function testPrependRules()
+    public function testPrependRules(): void
     {
         $manager = $this->getUrlManager(['rules' => ['post/<id:\d+>' => 'post/view']]);
 
@@ -373,7 +354,7 @@ class UrlManagerParseUrlTest extends TestCase
         $this->assertInstanceOf('yii\web\UrlRuleInterface', $firstRule);
 
         $manager->addRules([
-            'posts' => 'post/index',
+            'posts'                 => 'post/index',
             'book/<id:\d+>/<title>' => 'book/view',
         ], false);
         $this->assertCount(3, $manager->rules);
@@ -381,7 +362,7 @@ class UrlManagerParseUrlTest extends TestCase
         $this->assertSame($firstRule, $manager->rules[2]);
     }
 
-    public function testRulesCache()
+    public function testRulesCache(): void
     {
         $arrayCache = new ArrayCache();
 
@@ -393,25 +374,29 @@ class UrlManagerParseUrlTest extends TestCase
         $this->assertCount(1, $manager->rules);
         $firstRule = $manager->rules[0];
         $this->assertInstanceOf('yii\web\UrlRuleInterface', $firstRule);
-        $this->assertCount(1, $this->getInaccessibleProperty($arrayCache, '_cache'),
+        $this->assertCount(
+            1,
+            $this->getInaccessibleProperty($arrayCache, '_cache'),
             'Cache contains the only one record that represents initial built rules'
         );
 
         $manager->addRules(['posts' => 'post/index']);
         $manager->addRules([
-            'book/<id:\d+>/<title>' => 'book/view',
-            'book/<id:\d+>/<author>' => 'book/view'
+            'book/<id:\d+>/<title>'  => 'book/view',
+            'book/<id:\d+>/<author>' => 'book/view',
         ]);
 
         $this->assertCount(4, $manager->rules);
         $this->assertSame($firstRule, $manager->rules[0]);
-        $this->assertCount(3, $this->getInaccessibleProperty($arrayCache, '_cache'),
+        $this->assertCount(
+            3,
+            $this->getInaccessibleProperty($arrayCache, '_cache'),
             'The addRules() method was called twice, adding 3 new rules to the UrlManager, but we have only ' .
             'two additional caches: one for each addRules() method call.'
         );
     }
 
-    public function testRulesCacheIsUsed()
+    public function testRulesCacheIsUsed(): void
     {
         $arrayCache = $this->getMockBuilder('yii\caching\ArrayCache')
             ->setMethods(['get', 'set'])
@@ -438,16 +423,16 @@ class UrlManagerParseUrlTest extends TestCase
     /**
      * Test a scenario where catch-all rule is used at the end for a CMS but module names should use the module actions and controllers.
      */
-    public function testModuleRoute()
+    public function testModuleRoute(): void
     {
         $modules = 'user|my-admin';
 
         $manager = $this->getUrlManager([
             'rules' => [
-                "<module:$modules>" => '<module>',
-                "<module:$modules>/<controller>" => '<module>/<controller>',
-                "<module:$modules>/<controller>/<action>" => '<module>/<controller>/<action>',
-                '<url:[a-zA-Z0-9-/]+>' => 'site/index',
+                "<module:{$modules}>"                       => '<module>',
+                "<module:{$modules}>/<controller>"          => '<module>/<controller>',
+                "<module:{$modules}>/<controller>/<action>" => '<module>/<controller>/<action>',
+                '<url:[a-zA-Z0-9-/]+>'                      => 'site/index',
             ],
         ]);
 
@@ -460,6 +445,26 @@ class UrlManagerParseUrlTest extends TestCase
 
         $result = $manager->parseRequest($this->getRequest('users/somecontroller/someaction'));
         $this->assertEquals(['site/index', ['url' => 'users/somecontroller/someaction']], $result);
+    }
 
+    protected function getUrlManager($config = [])
+    {
+        // in this test class, all tests have enablePrettyUrl enabled.
+        $config['enablePrettyUrl'] = true;
+        // normalizer is tested in UrlNormalizerTest
+        $config['normalizer'] = false;
+
+        return new UrlManager(array_merge([
+            'cache' => null,
+        ], $config));
+    }
+
+    protected function getRequest($pathInfo, $hostInfo = 'http://www.example.com', $method = 'GET', $config = [])
+    {
+        $config['pathInfo'] = $pathInfo;
+        $config['hostInfo'] = $hostInfo;
+        $_POST['_method']   = $method;
+
+        return new Request($config);
     }
 }
