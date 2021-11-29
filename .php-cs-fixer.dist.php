@@ -35,12 +35,18 @@ return (new PhpCsFixer\Config())
 //            ],
 //        ],
         'phpdoc_no_alias_tag' => false,
+        'fully_qualified_strict_types' => true,
         'static_lambda' => true,
+        'lambda_not_used_import' => true,
         'global_namespace_import' => [
             'import_classes' => true,
             'import_constants' => true,
             'import_functions' => true,
         ],
+        'no_leading_import_slash' => true,
+        'no_unused_imports' => true,
+        'single_import_per_statement' => true,
+        'single_line_after_imports' => true,
         'strict_comparison' => false, // TODO remove
         'echo_tag_syntax' => ['format' => 'short'],
         'blank_line_after_namespace' => true,
