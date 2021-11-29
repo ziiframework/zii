@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,8 +14,11 @@ namespace yiiunit\framework\db\mssql;
  * @group db
  * @group mssql
  * @group data
+ *
+ * @internal
+ * @coversNothing
  */
-class ActiveDataProviderTest extends \yiiunit\framework\data\ActiveDataProviderTest
+final class ActiveDataProviderTest extends \yiiunit\framework\data\ActiveDataProviderTest
 {
     public $driverName = 'sqlsrv';
 }

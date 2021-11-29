@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -9,11 +12,15 @@ namespace yiiunit\framework\rbac;
 
 /**
  * SqliteManagerTest.
+ *
  * @group db
  * @group rbac
  * @group sqlite
+ *
+ * @internal
+ * @coversNothing
  */
-class SqliteManagerTest extends DbManagerTestCase
+final class SqliteManagerTest extends DbManagerTestCase
 {
     protected static $driverName = 'sqlite';
 

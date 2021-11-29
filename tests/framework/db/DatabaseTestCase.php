@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +10,9 @@
 
 namespace yiiunit\framework\db;
 
+use Exception;
+use function extension_loaded;
+use Yii;
 use yii\caching\DummyCache;
 use yii\db\Connection;
 use yiiunit\TestCase;
@@ -23,11 +29,10 @@ abstract class DatabaseTestCase extends TestCase
      */
     private $_db;
 
-
     protected function setUp(): void
     {
         if ($this->driverName === null) {
-            throw new \Exception('driverName is not set for a DatabaseTestCase.');
+            throw new Exception('driverName is not set for a DatabaseTestCase.');
         }
 
         parent::setUp();
@@ -35,7 +40,7 @@ abstract class DatabaseTestCase extends TestCase
         $this->database = $databases[$this->driverName];
         $pdo_database = 'pdo_' . $this->driverName;
 
-        if (!\extension_loaded('pdo') || !\extension_loaded($pdo_database)) {
+        if (!extension_loaded('pdo') || !extension_loaded($pdo_database)) {
             $this->markTestSkipped('pdo and ' . $pdo_database . ' extension are required.');
         }
         $this->mockApplication();
@@ -50,8 +55,9 @@ abstract class DatabaseTestCase extends TestCase
     }
 
     /**
-     * @param  bool $reset whether to clean up the test database
-     * @param  bool $open  whether to open and populate test database
+     * @param bool $reset whether to clean up the test database
+     * @param bool $open  whether to open and populate test database
+     *
      * @return \yii\db\Connection
      */
     public function getConnection($reset = true, $open = true)
@@ -60,15 +66,17 @@ abstract class DatabaseTestCase extends TestCase
             return $this->_db;
         }
         $config = $this->database;
+
         if (isset($config['fixture'])) {
             $fixture = $config['fixture'];
             unset($config['fixture']);
         } else {
             $fixture = null;
         }
+
         try {
             $this->_db = $this->prepareDatabase($config, $fixture, $open);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->markTestSkipped('Something wrong when preparing database: ' . $e->getMessage());
         }
 
@@ -80,14 +88,17 @@ abstract class DatabaseTestCase extends TestCase
         if (!isset($config['class'])) {
             $config['class'] = 'yii\db\Connection';
         }
-        /* @var $db \yii\db\Connection */
-        $db = \Yii::createObject($config);
+        /** @var \yii\db\Connection $db */
+        $db = Yii::createObject($config);
+
         if (!$open) {
             return $db;
         }
         $db->open();
+
         if ($fixture !== null) {
             $lines = explode(';', file_get_contents($fixture));
+
             foreach ($lines as $line) {
                 if (trim($line) !== '') {
                     $db->pdo->exec($line);
@@ -100,7 +111,9 @@ abstract class DatabaseTestCase extends TestCase
 
     /**
      * Adjust dbms specific escaping.
+     *
      * @param $sql
+     *
      * @return mixed
      */
     protected function replaceQuotes($sql)
@@ -114,6 +127,7 @@ abstract class DatabaseTestCase extends TestCase
                 return str_replace(['\\[', '\\]'], ['[', ']'], preg_replace('/(\[\[)|((?<!(\[))\]\])/', '"', $sql));
             case 'sqlsrv':
                 return str_replace(['[[', ']]'], ['[', ']'], $sql);
+
             default:
                 return $sql;
         }

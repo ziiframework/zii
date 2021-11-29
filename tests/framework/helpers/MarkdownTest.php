@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -15,8 +18,11 @@ use yiiunit\TestCase;
  *
  * @author Misbahul D Munir <misbahuldmunir@gmail.com>
  * @group helpers
+ *
+ * @internal
+ * @coversNothing
  */
-class MarkdownTest extends TestCase
+final class MarkdownTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -26,7 +32,7 @@ class MarkdownTest extends TestCase
         $this->destroyApplication();
     }
 
-    public function testOriginalFlavor()
+    public function testOriginalFlavor(): void
     {
         $text = <<<'TEXT'
 html
@@ -36,24 +42,24 @@ new line 2
 TEXT;
 
         Markdown::$defaultFlavor = 'original';
-        $this->assertEquals(Markdown::process($text), Markdown::process($text, 'original'));
+        $this->assertSame(Markdown::process($text), Markdown::process($text, 'original'));
 
         Markdown::$defaultFlavor = 'gfm-comment';
-        $this->assertNotEquals(Markdown::process($text), Markdown::process($text, 'original'));
-        $this->assertEquals(Markdown::process($text), Markdown::process($text, 'gfm-comment'));
+        $this->assertNotSame(Markdown::process($text), Markdown::process($text, 'original'));
+        $this->assertSame(Markdown::process($text), Markdown::process($text, 'gfm-comment'));
     }
 
-    public function testProcessInvalidParamException()
+    public function testProcessInvalidParamException(): void
     {
         $this->expectException('\yii\base\InvalidParamException');
         $this->expectExceptionMessage("Markdown flavor 'undefined' is not defined.");
         Markdown::process('foo', 'undefined');
     }
 
-    public function testProcessParagraph()
+    public function testProcessParagraph(): void
     {
         $actual = Markdown::processParagraph('foo');
         $expected = 'foo';
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,13 +10,15 @@
 
 namespace yiiunit\framework\widgets;
 
-use Yii;
 use yii\widgets\Menu;
 
 /**
  * @group widgets
+ *
+ * @internal
+ * @coversNothing
  */
-class MenuTest extends \yiiunit\TestCase
+final class MenuTest extends \yiiunit\TestCase
 {
     protected function setUp(): void
     {
@@ -21,7 +26,7 @@ class MenuTest extends \yiiunit\TestCase
         $this->mockApplication();
     }
 
-    public function testEncodeLabel()
+    public function testEncodeLabel(): void
     {
         $output = Menu::widget([
             'route' => 'test/test',
@@ -75,7 +80,7 @@ HTML;
     /**
      * @see https://github.com/yiisoft/yii2/issues/8064
      */
-    public function testTagOption()
+    public function testTagOption(): void
     {
         $output = Menu::widget([
             'route' => 'test/test',
@@ -132,7 +137,7 @@ HTML;
         $this->assertEqualsWithoutLE($expected, $output);
     }
 
-    public function testItemTemplate()
+    public function testItemTemplate(): void
     {
         $output = Menu::widget([
             'route' => 'test/test',
@@ -164,7 +169,7 @@ HTML;
         $this->assertEqualsWithoutLE($expected, $output);
     }
 
-    public function testActiveItemClosure()
+    public function testActiveItemClosure(): void
     {
         $output = Menu::widget([
             'route' => 'test/test',
@@ -176,9 +181,7 @@ HTML;
                     'label' => 'item1',
                     'url' => '#',
                     'template' => 'label: {label}; url: {url}',
-                    'active' => function ($item, $hasActiveChild, $isItemActive, $widget) {
-                        return isset($item, $hasActiveChild, $isItemActive, $widget);
-                    },
+                    'active' => static fn ($item, $hasActiveChild, $isItemActive, $widget) => isset($item, $hasActiveChild, $isItemActive, $widget),
                 ],
                 [
                     'label' => 'item2',
@@ -201,7 +204,7 @@ HTML;
         $this->assertEqualsWithoutLE($expected, $output);
     }
 
-    public function testItemClassAsArray()
+    public function testItemClassAsArray(): void
     {
         $output = Menu::widget([
             'route' => 'test/test',
@@ -256,7 +259,7 @@ HTML;
         $this->assertEqualsWithoutLE($expected, $output);
     }
 
-    public function testItemClassAsString()
+    public function testItemClassAsString(): void
     {
         $output = Menu::widget([
             'route' => 'test/test',

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,9 +14,13 @@ use yiiunit\data\base\Singer;
 use yiiunit\data\base\Speaker;
 use yiiunit\TestCase;
 
-class StaticInstanceTraitTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class StaticInstanceTraitTest extends TestCase
 {
-    public function testInstance()
+    public function testInstance(): void
     {
         $speakerModel = Speaker::instance();
         $this->assertTrue($speakerModel instanceof Speaker);
