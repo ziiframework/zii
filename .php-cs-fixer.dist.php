@@ -50,6 +50,7 @@ return (new PhpCsFixer\Config())
         'strict_comparison' => false, // TODO remove
         'echo_tag_syntax' => ['format' => 'short'],
         'no_unneeded_curly_braces' => true,
+        'final_internal_class' => false,
         'blank_line_after_namespace' => true,
         'blank_line_before_statement' => [
             'statements' => [
