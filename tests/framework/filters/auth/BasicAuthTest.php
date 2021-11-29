@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,24 +11,27 @@
 namespace yiiunit\framework\filters\auth;
 
 use Yii;
-use yii\filters\auth\HttpBasicAuth;
-use yiiunit\framework\filters\stubs\UserIdentity;
 use yii\base\Event;
+use yii\filters\auth\HttpBasicAuth;
 use yii\web\User;
+use yiiunit\framework\filters\stubs\UserIdentity;
 
 /**
  * @group filters
+ *
  * @author Dmitry Naumenko <d.naumenko.a@gmail.com>
+ *
  * @since 2.0.7
  */
 class BasicAuthTest extends AuthTest
 {
     /**
      * @dataProvider tokenProvider
+     *
      * @param string|null $token
      * @param string|null $login
      */
-    public function testHttpBasicAuth($token, $login)
+    public function testHttpBasicAuth($token, $login): void
     {
         $original = $_SERVER;
 
@@ -38,10 +44,11 @@ class BasicAuthTest extends AuthTest
 
     /**
      * @dataProvider tokenProvider
+     *
      * @param string|null $token
      * @param string|null $login
      */
-    public function testHttpBasicAuthWithHttpAuthorizationHeader($token, $login)
+    public function testHttpBasicAuthWithHttpAuthorizationHeader($token, $login): void
     {
         $original = $_SERVER;
 
@@ -53,10 +60,11 @@ class BasicAuthTest extends AuthTest
 
     /**
      * @dataProvider tokenProvider
+     *
      * @param string|null $token
      * @param string|null $login
      */
-    public function testHttpBasicAuthWithRedirectHttpAuthorizationHeader($token, $login)
+    public function testHttpBasicAuthWithRedirectHttpAuthorizationHeader($token, $login): void
     {
         $original = $_SERVER;
 
@@ -68,16 +76,17 @@ class BasicAuthTest extends AuthTest
 
     /**
      * @dataProvider tokenProvider
+     *
      * @param string|null $token
      * @param string|null $login
      */
-    public function testHttpBasicAuthCustom($token, $login)
+    public function testHttpBasicAuthCustom($token, $login): void
     {
         $_SERVER['PHP_AUTH_USER'] = $login;
         $_SERVER['PHP_AUTH_PW'] = 'whatever, we are testers';
         $filter = [
             'class' => HttpBasicAuth::className(),
-            'auth' => function ($username, $password) {
+            'auth' => static function ($username, $password) {
                 if (is_string($username) && preg_match('/\d$/', $username)) {
                     return UserIdentity::findIdentity($username);
                 }
@@ -91,13 +100,14 @@ class BasicAuthTest extends AuthTest
     /**
      * This tests checks, that:
      *  - HttpBasicAuth does not call `auth` closure, when a user is already authenticated
-     *  - HttpBasicAuth does not switch identity, even when the user identity to be set is the same as current user's one
+     *  - HttpBasicAuth does not switch identity, even when the user identity to be set is the same as current user's one.
      *
      * @dataProvider tokenProvider
+     *
      * @param string|null $token
      * @param string|null $login
      */
-    public function testHttpBasicAuthIssue15658($token, $login)
+    public function testHttpBasicAuthIssue15658($token, $login): void
     {
         $_SERVER['PHP_AUTH_USER'] = $login;
         $_SERVER['PHP_AUTH_PW'] = 'y0u7h1nk175r34l?';
@@ -110,7 +120,7 @@ class BasicAuthTest extends AuthTest
 
         $filter = [
             'class' => HttpBasicAuth::className(),
-            'auth' => function ($username, $password) {
+            'auth' => function ($username, $password): void {
                 $this->fail('Authentication closure should not be called when user is already authenticated');
             },
         ];
@@ -130,13 +140,14 @@ class BasicAuthTest extends AuthTest
 
     /**
      * @dataProvider tokenProvider
+     *
      * @param string|null $token
      * @param string|null $login
      */
-    public function testAfterLoginEventIsTriggered18031($token, $login)
+    public function testAfterLoginEventIsTriggered18031($token, $login): void
     {
         $triggered = false;
-        Event::on('\yii\web\User', User::EVENT_AFTER_LOGIN, function ($event) use (&$triggered) {
+        Event::on('\yii\web\User', User::EVENT_AFTER_LOGIN, function ($event) use (&$triggered): void {
             $triggered = true;
             $this->assertTrue($triggered);
         });

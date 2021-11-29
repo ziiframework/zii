@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,10 +10,12 @@
 
 namespace yiiunit\framework\caching;
 
+use function time;
 use yii\caching\DbCache;
 
 /**
  * Class for testing file cache backend.
+ *
  * @group db
  * @group caching
  */
@@ -39,7 +44,8 @@ class DbCacheTest extends CacheTestCase
     }
 
     /**
-     * @param  bool            $reset whether to clean up the test database
+     * @param bool $reset whether to clean up the test database
+     *
      * @return \yii\db\Connection
      */
     public function getConnection($reset = true)
@@ -51,9 +57,11 @@ class DbCacheTest extends CacheTestCase
             $db->dsn = $params['dsn'];
             $db->username = $params['username'];
             $db->password = $params['password'];
+
             if ($reset) {
                 $db->open();
                 $lines = explode(';', file_get_contents($params['fixture']));
+
                 foreach ($lines as $line) {
                     if (trim($line) !== '') {
                         $db->pdo->exec($line);
@@ -78,37 +86,37 @@ class DbCacheTest extends CacheTestCase
         return $this->_cacheInstance;
     }
 
-    public function testExpire()
+    public function testExpire(): void
     {
         $cache = $this->getCacheInstance();
 
-        static::$time = \time();
+        static::$time = time();
         $this->assertTrue($cache->set('expire_test', 'expire_test', 2));
-        static::$time++;
+        ++static::$time;
         $this->assertEquals('expire_test', $cache->get('expire_test'));
-        static::$time++;
+        ++static::$time;
         $this->assertFalse($cache->get('expire_test'));
     }
 
-    public function testExpireAdd()
+    public function testExpireAdd(): void
     {
         $cache = $this->getCacheInstance();
 
-        static::$time = \time();
+        static::$time = time();
         $this->assertTrue($cache->add('expire_testa', 'expire_testa', 2));
-        static::$time++;
+        ++static::$time;
         $this->assertEquals('expire_testa', $cache->get('expire_testa'));
-        static::$time++;
+        ++static::$time;
         $this->assertFalse($cache->get('expire_testa'));
     }
 
-    public function testSynchronousSetWithTheSameKey()
+    public function testSynchronousSetWithTheSameKey(): void
     {
         $KEY = 'sync-test-key';
         $VALUE = 'sync-test-value';
 
         $cache = $this->getCacheInstance();
-        static::$time = \time();
+        static::$time = time();
 
         $this->assertTrue($cache->set($KEY, $VALUE, 60));
         $this->assertTrue($cache->set($KEY, $VALUE, 60));

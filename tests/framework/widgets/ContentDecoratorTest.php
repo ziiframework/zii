@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -24,18 +27,16 @@ class ContentDecoratorTest extends \yiiunit\TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/15536
      */
-    public function testShouldTriggerInitEvent()
+    public function testShouldTriggerInitEvent(): void
     {
         $initTriggered = false;
 
-        $contentDecorator = new ContentDecorator(
-            [
+        $contentDecorator = new ContentDecorator([
                 'viewFile' => '@app/views/layouts/base.php',
-                'on init' => function () use (&$initTriggered) {
+                'on init' => static function () use (&$initTriggered): void {
                     $initTriggered = true;
-                }
-            ]
-        );
+                },
+            ]);
 
         ob_get_clean();
 

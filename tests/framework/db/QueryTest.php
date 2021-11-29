@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +10,7 @@
 
 namespace yiiunit\framework\db;
 
+use function in_array;
 use yii\caching\ArrayCache;
 use yii\db\Connection;
 use yii\db\Expression;
@@ -15,7 +19,9 @@ use yii\db\Schema;
 
 abstract class QueryTest extends DatabaseTestCase
 {
-    public function testSelect()
+    use GetTablesAliasTestTrait;
+
+    public function testSelect(): void
     {
         // default
         $query = new Query();
@@ -104,14 +110,14 @@ abstract class QueryTest extends DatabaseTestCase
         $this->assertEquals(['DISTINCT ON(tour_dates.date_from) tour_dates.date_from', 'tour_dates.id' => 'tour_dates.id'], $query->select);
     }
 
-    public function testFrom()
+    public function testFrom(): void
     {
         $query = new Query();
         $query->from('user');
         $this->assertEquals(['user'], $query->from);
     }
 
-    public function testFromTableIsArrayWithExpression()
+    public function testFromTableIsArrayWithExpression(): void
     {
         $query = new Query();
         $tables = new Expression('(SELECT id,name FROM user) u');
@@ -119,14 +125,12 @@ abstract class QueryTest extends DatabaseTestCase
         $this->assertInstanceOf('\yii\db\Expression', $query->from[0]);
     }
 
-    use GetTablesAliasTestTrait;
-
     protected function createQuery()
     {
         return new Query();
     }
 
-    public function testWhere()
+    public function testWhere(): void
     {
         $query = new Query();
         $query->where('id = :id', [':id' => 1]);
@@ -142,7 +146,7 @@ abstract class QueryTest extends DatabaseTestCase
         $this->assertEquals([':id' => 1, ':name' => 'something', ':age' => '30'], $query->params);
     }
 
-    public function testFilterWhereWithHashFormat()
+    public function testFilterWhereWithHashFormat(): void
     {
         $query = new Query();
         $query->filterWhere([
@@ -159,7 +163,7 @@ abstract class QueryTest extends DatabaseTestCase
         $this->assertEquals(['id' => 0], $query->where);
     }
 
-    public function testFilterWhereWithOperatorFormat()
+    public function testFilterWhereWithOperatorFormat(): void
     {
         $query = new Query();
         $condition = ['like', 'name', 'Alex'];
@@ -194,7 +198,7 @@ abstract class QueryTest extends DatabaseTestCase
         $this->assertEquals($condition, $query->where);
     }
 
-    public function testFilterHavingWithHashFormat()
+    public function testFilterHavingWithHashFormat(): void
     {
         $query = new Query();
         $query->filterHaving([
@@ -211,7 +215,7 @@ abstract class QueryTest extends DatabaseTestCase
         $this->assertEquals(['id' => 0], $query->having);
     }
 
-    public function testFilterHavingWithOperatorFormat()
+    public function testFilterHavingWithOperatorFormat(): void
     {
         $query = new Query();
         $condition = ['like', 'name', 'Alex'];
@@ -246,7 +250,7 @@ abstract class QueryTest extends DatabaseTestCase
         $this->assertEquals($condition, $query->having);
     }
 
-    public function testFilterRecursively()
+    public function testFilterRecursively(): void
     {
         $query = new Query();
         $query->filterWhere(['and', ['like', 'name', ''], ['like', 'title', ''], ['id' => 1], ['not', ['like', 'name', '']]]);
@@ -257,7 +261,7 @@ abstract class QueryTest extends DatabaseTestCase
     {
     }*/
 
-    public function testGroup()
+    public function testGroup(): void
     {
         $query = new Query();
         $query->groupBy('team');
@@ -270,7 +274,7 @@ abstract class QueryTest extends DatabaseTestCase
         $this->assertEquals(['team', 'company', 'age'], $query->groupBy);
     }
 
-    public function testHaving()
+    public function testHaving(): void
     {
         $query = new Query();
         $query->having('id = :id', [':id' => 1]);
@@ -286,7 +290,7 @@ abstract class QueryTest extends DatabaseTestCase
         $this->assertEquals([':id' => 1, ':name' => 'something', ':age' => '30'], $query->params);
     }
 
-    public function testOrder()
+    public function testOrder(): void
     {
         $query = new Query();
         $query->orderBy('team');
@@ -313,7 +317,7 @@ abstract class QueryTest extends DatabaseTestCase
         $this->assertEquals([$expression, $expression], $query->orderBy);
     }
 
-    public function testLimitOffset()
+    public function testLimitOffset(): void
     {
         $query = new Query();
         $query->limit(10)->offset(5);
@@ -321,7 +325,7 @@ abstract class QueryTest extends DatabaseTestCase
         $this->assertEquals(5, $query->offset);
     }
 
-    public function testLimitOffsetWithExpression()
+    public function testLimitOffsetWithExpression(): void
     {
         $query = (new Query())->from('customer')->select('id')->orderBy('id');
         $query
@@ -335,7 +339,7 @@ abstract class QueryTest extends DatabaseTestCase
         // make sure int => string for strict equals
         foreach ($columnValues as $i => $columnValue) {
             if (is_int($columnValue)) {
-                $columnValues[$i] = (string)$columnValue;
+                $columnValues[$i] = (string) $columnValue;
             }
         }
 
@@ -344,25 +348,23 @@ abstract class QueryTest extends DatabaseTestCase
         $this->assertContains('3', $columnValues);
     }
 
-    public function testUnion()
+    public function testUnion(): void
     {
         $connection = $this->getConnection();
         $query = (new Query())
             ->select(['id', 'name'])
             ->from('item')
             ->limit(2)
-            ->union(
-                (new Query())
+            ->union((new Query())
                     ->select(['id', 'name'])
                     ->from(['category'])
-                    ->limit(2)
-            );
+                    ->limit(2));
         $result = $query->all($connection);
         $this->assertNotEmpty($result);
         $this->assertCount(4, $result);
     }
 
-    public function testOne()
+    public function testOne(): void
     {
         $db = $this->getConnection();
 
@@ -373,7 +375,7 @@ abstract class QueryTest extends DatabaseTestCase
         $this->assertFalse($result);
     }
 
-    public function testExists()
+    public function testExists(): void
     {
         $db = $this->getConnection();
 
@@ -384,7 +386,7 @@ abstract class QueryTest extends DatabaseTestCase
         $this->assertFalse($result);
     }
 
-    public function testColumn()
+    public function testColumn(): void
     {
         $db = $this->getConnection();
         $result = (new Query())->select('name')->from('customer')->orderBy(['id' => SORT_DESC])->column($db);
@@ -410,9 +412,7 @@ abstract class QueryTest extends DatabaseTestCase
         $result = (new Query())->from('customer')
             ->select(['name', 'id'])
             ->orderBy(['id' => SORT_DESC])
-            ->indexBy(function ($row) {
-                return $row['id'] * 2;
-            })
+            ->indexBy(static fn ($row) => $row['id'] * 2)
             ->column($db);
         $this->assertEquals([6 => 'user3', 4 => 'user2', 2 => 'user1'], $result);
 
@@ -424,23 +424,25 @@ abstract class QueryTest extends DatabaseTestCase
         $this->assertEquals(['user3' => 'user3', 'user2' => 'user2', 'user1' => 'user1'], $result);
     }
 
-
     /**
      * Ensure no ambiguous column error occurs on indexBy with JOIN.
      *
      * @see https://github.com/yiisoft/yii2/issues/13859
      */
-    public function testAmbiguousColumnIndexBy()
+    public function testAmbiguousColumnIndexBy(): void
     {
         switch ($this->driverName) {
             case 'pgsql':
             case 'sqlite':
                 $selectExpression = "(customer.name || ' in ' || p.description) AS name";
+
                 break;
             case 'cubird':
             case 'mysql':
                 $selectExpression = "concat(customer.name,' in ', p.description) name";
+
                 break;
+
             default:
                 $this->markTestIncomplete('CONCAT syntax for this DBMS is not added to the test yet.');
         }
@@ -455,7 +457,7 @@ abstract class QueryTest extends DatabaseTestCase
         ], $result);
     }
 
-    public function testCount()
+    public function testCount(): void
     {
         $db = $this->getConnection();
 
@@ -480,7 +482,7 @@ abstract class QueryTest extends DatabaseTestCase
      * @depends testFilterWhereWithHashFormat
      * @depends testFilterWhereWithOperatorFormat
      */
-    public function testAndFilterCompare()
+    public function testAndFilterCompare(): void
     {
         $query = new Query();
 
@@ -513,9 +515,9 @@ abstract class QueryTest extends DatabaseTestCase
      *
      * @depends testCount
      */
-    public function testCountHavingWithoutGroupBy()
+    public function testCountHavingWithoutGroupBy(): void
     {
-        if (!\in_array($this->driverName, ['mysql'])) {
+        if (!in_array($this->driverName, ['mysql'])) {
             $this->markTestSkipped("{$this->driverName} does not support having without group by.");
         }
 
@@ -525,7 +527,7 @@ abstract class QueryTest extends DatabaseTestCase
         $this->assertEquals(1, $count);
     }
 
-    public function testEmulateExecution()
+    public function testEmulateExecution(): void
     {
         $db = $this->getConnection();
 
@@ -595,16 +597,16 @@ abstract class QueryTest extends DatabaseTestCase
     }
 
     /**
-     * @param Connection $db
      * @param string $tableName
      * @param string $columnName
-     * @param array $condition
      * @param string $operator
+     *
      * @return int
      */
     protected function countLikeQuery(Connection $db, $tableName, $columnName, array $condition, $operator = 'or')
     {
         $whereCondition = [$operator];
+
         foreach ($condition as $value) {
             $whereCondition[] = ['like', $columnName, $value];
         }
@@ -612,6 +614,7 @@ abstract class QueryTest extends DatabaseTestCase
             ->from($tableName)
             ->where($whereCondition)
             ->count('*', $db);
+
         if (is_numeric($result)) {
             $result = (int) $result;
         }
@@ -622,7 +625,7 @@ abstract class QueryTest extends DatabaseTestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/13745
      */
-    public function testMultipleLikeConditions()
+    public function testMultipleLikeConditions(): void
     {
         $db = $this->getConnection();
         $tableName = 'like_test';
@@ -668,22 +671,18 @@ abstract class QueryTest extends DatabaseTestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/15355
      */
-    public function testExpressionInFrom()
+    public function testExpressionInFrom(): void
     {
         $db = $this->getConnection();
         $query = (new Query())
-            ->from(
-                new \yii\db\Expression(
-                    '(SELECT [[id]], [[name]], [[email]], [[address]], [[status]] FROM {{customer}}) c'
-                )
-            )
+            ->from(new \yii\db\Expression('(SELECT [[id]], [[name]], [[email]], [[address]], [[status]] FROM {{customer}}) c'))
             ->where(['status' => 2]);
 
         $result = $query->one($db);
         $this->assertEquals('user3', $result['name']);
     }
 
-    public function testQueryCache()
+    public function testQueryCache(): void
     {
         $db = $this->getConnection();
         $db->enableQueryCache = true;
@@ -700,27 +699,25 @@ abstract class QueryTest extends DatabaseTestCase
         $this->assertEquals('user11', $query->where(['id' => 1])->scalar($db), 'Query reflects DB changes when caching is disabled');
 
         // Connection cache
-        $db->cache(function (Connection $db) use ($query, $update) {
+        $db->cache(function (Connection $db) use ($query, $update): void {
             $this->assertEquals('user2', $query->where(['id' => 2])->scalar($db), 'Asserting initial value for user #2');
 
             $update->bindValues([':id' => 2, ':name' => 'user22'])->execute();
             $this->assertEquals('user2', $query->where(['id' => 2])->scalar($db), 'Query does NOT reflect DB changes when wrapped in connection caching');
 
-            $db->noCache(function () use ($query, $db) {
+            $db->noCache(function () use ($query, $db): void {
                 $this->assertEquals('user22', $query->where(['id' => 2])->scalar($db), 'Query reflects DB changes when wrapped in connection caching and noCache simultaneously');
             });
 
             $this->assertEquals('user2', $query->where(['id' => 2])->scalar($db), 'Cache does not get changes after getting newer data from DB in noCache block.');
         }, 10);
 
-
         $db->enableQueryCache = false;
-        $db->cache(function ($db) use ($query, $update) {
+        $db->cache(function ($db) use ($query, $update): void {
             $this->assertEquals('user22', $query->where(['id' => 2])->scalar($db), 'When cache is disabled for the whole connection, Query inside cache block does not get cached');
             $update->bindValues([':id' => 2, ':name' => 'user2'])->execute();
             $this->assertEquals('user2', $query->where(['id' => 2])->scalar($db));
         }, 10);
-
 
         $db->enableQueryCache = true;
         $query->cache();
@@ -730,17 +727,16 @@ abstract class QueryTest extends DatabaseTestCase
         $this->assertEquals('user11', $query->where(['id' => 1])->scalar($db), 'When both Connection and Query have cache enabled, we get cached value');
         $this->assertEquals('user1', $query->noCache()->where(['id' => 1])->scalar($db), 'When Query has disabled cache, we get actual data');
 
-        $db->cache(function (Connection $db) use ($query, $update) {
+        $db->cache(function (Connection $db) use ($query): void {
             $this->assertEquals('user1', $query->noCache()->where(['id' => 1])->scalar($db));
             $this->assertEquals('user11', $query->cache()->where(['id' => 1])->scalar($db));
         }, 10);
     }
 
-
     /**
-     * checks that all needed properties copied from source to new query
+     * checks that all needed properties copied from source to new query.
      */
-    public function testQueryCreation()
+    public function testQueryCreation(): void
     {
         $where = 'id > :min_user_id';
         $limit = 50;
@@ -753,7 +749,7 @@ abstract class QueryTest extends DatabaseTestCase
         $groupBy = 'id';
         $having = ['>', 'articles_count', 0];
         $params = [':min_user_id' => 100];
-        list($joinType, $joinTable, $joinOn) = $join =  ['INNER', 'articles', 'articles.author_id=users.id'];
+        [$joinType, $joinTable, $joinOn] = $join = ['INNER', 'articles', 'articles.author_id=users.id'];
 
         $unionQuery = (new Query())
             ->select('id, name, 1000 as articles_count')
@@ -797,9 +793,6 @@ abstract class QueryTest extends DatabaseTestCase
         $this->assertEquals($params, $newQuery->params);
         $this->assertEquals([$join], $newQuery->join);
         $this->assertEquals([['query' => $unionQuery, 'all' => false]], $newQuery->union);
-        $this->assertEquals(
-            [['query' => $withQuery, 'alias' => $from, 'recursive' => false]],
-            $newQuery->withQueries
-        );
+        $this->assertEquals([['query' => $withQuery, 'alias' => $from, 'recursive' => false]], $newQuery->withQueries);
     }
 }

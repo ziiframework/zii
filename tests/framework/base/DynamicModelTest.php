@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -21,7 +24,7 @@ class DynamicModelTest extends TestCase
         $this->mockApplication();
     }
 
-    public function testValidateData()
+    public function testValidateData(): void
     {
         $email = 'invalid';
         $name = 'long name';
@@ -37,7 +40,7 @@ class DynamicModelTest extends TestCase
         $this->assertTrue($model->hasErrors('age'));
     }
 
-    public function testAddRule()
+    public function testAddRule(): void
     {
         $model = new DynamicModel();
         $this->assertEquals(0, $model->getValidators()->count());
@@ -49,7 +52,7 @@ class DynamicModelTest extends TestCase
         $this->assertEquals(3, $model->getValidators()->count());
     }
 
-    public function testValidateWithAddRule()
+    public function testValidateWithAddRule(): void
     {
         $email = 'invalid';
         $name = 'long name';
@@ -65,7 +68,7 @@ class DynamicModelTest extends TestCase
         $this->assertTrue($model->hasErrors('age'));
     }
 
-    public function testDynamicProperty()
+    public function testDynamicProperty(): void
     {
         $email = 'invalid';
         $name = 'long name';
@@ -80,7 +83,7 @@ class DynamicModelTest extends TestCase
         $age = $model->age;
     }
 
-    public function testLoad()
+    public function testLoad(): void
     {
         $dynamic = new DynamicModel();
         //define two attributes

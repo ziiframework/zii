@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -26,7 +29,7 @@ class UrlNormalizerTest extends TestCase
         $this->mockApplication();
     }
 
-    public function testNormalizePathInfo()
+    public function testNormalizePathInfo(): void
     {
         $normalizer = new UrlNormalizer();
         $this->assertEquals('post/123/', $normalizer->normalizePathInfo('post//123//', '/a/'));
@@ -53,7 +56,7 @@ class UrlNormalizerTest extends TestCase
         $this->assertEquals('post/123/', $normalizer->normalizePathInfo('post//123//', ''));
     }
 
-    public function testNormalizeRoute()
+    public function testNormalizeRoute(): void
     {
         $normalizer = new UrlNormalizer();
         $route = ['site/index', ['id' => 1, 'name' => 'test']];
@@ -61,6 +64,7 @@ class UrlNormalizerTest extends TestCase
         // 404 error as default action
         $normalizer->action = UrlNormalizer::ACTION_NOT_FOUND;
         $expected = new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
+
         try {
             $result = $normalizer->normalizeRoute($route);
             $this->fail('Expected throwing NotFoundHttpException');
@@ -71,6 +75,7 @@ class UrlNormalizerTest extends TestCase
         // 301 redirect as default action
         $normalizer->action = UrlNormalizer::ACTION_REDIRECT_PERMANENT;
         $expected = new UrlNormalizerRedirectException([$route[0]] + $route[1], 301);
+
         try {
             $result = $normalizer->normalizeRoute($route);
             $this->fail('Expected throwing UrlNormalizerRedirectException');
@@ -81,6 +86,7 @@ class UrlNormalizerTest extends TestCase
         // 302 redirect as default action
         $normalizer->action = UrlNormalizer::ACTION_REDIRECT_TEMPORARY;
         $expected = new UrlNormalizerRedirectException([$route[0]] + $route[1], 302);
+
         try {
             $result = $normalizer->normalizeRoute($route);
             $this->fail('Expected throwing UrlNormalizerRedirectException');
@@ -93,9 +99,10 @@ class UrlNormalizerTest extends TestCase
         $this->assertEquals($route, $normalizer->normalizeRoute($route));
 
         // custom callback which modifies the route
-        $normalizer->action = function ($route, $normalizer) {
+        $normalizer->action = static function ($route, $normalizer) {
             $route[0] = 'site/redirect';
             $route['normalizeTrailingSlash'] = $normalizer->normalizeTrailingSlash;
+
             return $route;
         };
         $expected = $route;
@@ -104,10 +111,11 @@ class UrlNormalizerTest extends TestCase
         $this->assertEquals($expected, $normalizer->normalizeRoute($route));
 
         // custom callback which throw custom 404 error
-        $normalizer->action = function ($route, $normalizer) {
+        $normalizer->action = static function ($route, $normalizer): void {
             throw new NotFoundHttpException('Custom error message.');
         };
         $expected = new NotFoundHttpException('Custom error message.');
+
         try {
             $result = $normalizer->normalizeRoute($route);
             $this->fail('Expected throwing NotFoundHttpException');
@@ -121,7 +129,7 @@ class UrlNormalizerTest extends TestCase
      *
      * Trailing slash is insignificant if normalizer is enabled.
      */
-    public function testUrlManager()
+    public function testUrlManager(): void
     {
         $config = [
             'enablePrettyUrl' => true,

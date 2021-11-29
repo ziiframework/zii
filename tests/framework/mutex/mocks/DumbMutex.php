@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +10,7 @@
 
 namespace yiiunit\framework\mutex\mocks;
 
+use function microtime;
 use yii\mutex\Mutex;
 use yii\mutex\RetryAcquireTrait;
 
@@ -28,7 +32,8 @@ class DumbMutex extends Mutex
     protected function acquireLock($name, $timeout = 0)
     {
         return $this->retryAcquire($timeout, function () {
-            $this->attemptsTime[] = \microtime(true);
+            $this->attemptsTime[] = microtime(true);
+
             if (!static::$locked) {
                 static::$locked = true;
 
