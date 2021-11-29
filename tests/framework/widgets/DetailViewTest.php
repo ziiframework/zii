@@ -73,8 +73,8 @@ class DetailViewTest extends \yiiunit\TestCase
     public function testUnicodeAttributeNames(): void
     {
         $model                       = new UnicodeAttributesModelMock();
-        $model->ИдeнтификaтopToвapa  = 'A00001';
-        $model->τo_αvαγvωριστικό_τoυ = 'A00002';
+        $model->ИдентификаторТовара = 'A00001';
+        $model->το_αναγνωριστικό_του = 'A00002';
 
         $this->detailView = new PublicDetailView([
             'model'      => $model,
@@ -399,14 +399,14 @@ class UnicodeAttributesModelMock extends Model
      *
      * @var mixed
      */
-    public $ИдeнтификaтopToвapa;
+    public $ИдентификаторТовара;
 
     /**
      * ID (Greek).
      *
      * @var mixed
      */
-    public $τo_αvαγvωριστικό_τoυ;
+    public $το_αναγνωριστικό_του;
 }
 
 class PublicDetailView extends DetailView
