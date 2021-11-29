@@ -286,6 +286,6 @@ return (new PhpCsFixer\Config())
     ])
     ->setFinder(
         PhpCsFixer\Finder::create()
-            ->in(__DIR__ . '/tests/framework')
             ->exclude(__DIR__ . '/tests/framework/di/stubs')
+            ->in(__DIR__ . '/tests/framework')
     );
