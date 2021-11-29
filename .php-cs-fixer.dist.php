@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-return (new PhpCsFixer\Config())->setRules([
+return (new PhpCsFixer\Config())
+    ->setRiskyAllowed(true)
+    ->setRules([
     '@PSR12' => true,
     '@PHP74Migration' => true,
     '@Symfony' => true,
