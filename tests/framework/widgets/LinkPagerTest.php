@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\widgets;
 
 use yii\data\Pagination;
@@ -28,80 +28,95 @@ class LinkPagerTest extends \yiiunit\TestCase
         ]);
     }
 
-    public function testFirstLastPageLabels(): void
+    /**
+     * Get pagination.
+     * @param int $page
+     * @return Pagination
+     */
+    private function getPagination($page)
     {
-        $pagination = $this->getPagination(5);
-        $output     = LinkPager::widget([
-            'pagination'     => $pagination,
-            'firstPageLabel' => true,
-            'lastPageLabel'  => true,
-        ]);
+        $pagination = new Pagination();
+        $pagination->setPage($page);
+        $pagination->totalCount = 500;
+        $pagination->route = 'test';
 
-        $this->assertStringContainsString('<li class="first"><a href="/?r=test&amp;page=1" data-page="0">1</a></li>', $output);
-        $this->assertStringContainsString('<li class="last"><a href="/?r=test&amp;page=25" data-page="24">25</a></li>', $output);
-
-        $output = LinkPager::widget([
-            'pagination'     => $pagination,
-            'firstPageLabel' => 'First',
-            'lastPageLabel'  => 'Last',
-        ]);
-
-        $this->assertStringContainsString('<li class="first"><a href="/?r=test&amp;page=1" data-page="0">First</a></li>', $output);
-        $this->assertStringContainsString('<li class="last"><a href="/?r=test&amp;page=25" data-page="24">Last</a></li>', $output);
-
-        $output = LinkPager::widget([
-            'pagination'     => $pagination,
-            'firstPageLabel' => false,
-            'lastPageLabel'  => false,
-        ]);
-
-        $this->assertStringNotContainsString('<li class="first">', $output);
-        $this->assertStringNotContainsString('<li class="last">', $output);
+        return $pagination;
     }
 
-    public function testDisabledPageElementOptions(): void
+    public function testFirstLastPageLabels()
+    {
+        $pagination = $this->getPagination(5);
+        $output = LinkPager::widget([
+            'pagination' => $pagination,
+            'firstPageLabel' => true,
+            'lastPageLabel' => true,
+        ]);
+
+        static::assertStringContainsString('<li class="first"><a href="/?r=test&amp;page=1" data-page="0">1</a></li>', $output);
+        static::assertStringContainsString('<li class="last"><a href="/?r=test&amp;page=25" data-page="24">25</a></li>', $output);
+
+        $output = LinkPager::widget([
+            'pagination' => $pagination,
+            'firstPageLabel' => 'First',
+            'lastPageLabel' => 'Last',
+        ]);
+
+        static::assertStringContainsString('<li class="first"><a href="/?r=test&amp;page=1" data-page="0">First</a></li>', $output);
+        static::assertStringContainsString('<li class="last"><a href="/?r=test&amp;page=25" data-page="24">Last</a></li>', $output);
+
+        $output = LinkPager::widget([
+            'pagination' => $pagination,
+            'firstPageLabel' => false,
+            'lastPageLabel' => false,
+        ]);
+
+        static::assertStringNotContainsString('<li class="first">', $output);
+        static::assertStringNotContainsString('<li class="last">', $output);
+    }
+
+    public function testDisabledPageElementOptions()
     {
         $output = LinkPager::widget([
-            'pagination'                    => $this->getPagination(0),
+            'pagination' => $this->getPagination(0),
             'disabledListItemSubTagOptions' => ['class' => 'foo-bar'],
         ]);
 
-        $this->assertStringContainsString('<span class="foo-bar">&laquo;</span>', $output);
+        static::assertStringContainsString('<span class="foo-bar">&laquo;</span>', $output);
     }
 
-    public function testDisabledPageElementOptionsWithTagOption(): void
+    public function testDisabledPageElementOptionsWithTagOption()
     {
         $output = LinkPager::widget([
-            'pagination'                    => $this->getPagination(0),
+            'pagination' => $this->getPagination(0),
             'disabledListItemSubTagOptions' => ['class' => 'foo-bar', 'tag' => 'div'],
         ]);
 
-        $this->assertStringContainsString('<div class="foo-bar">&laquo;</div>', $output);
+        static::assertStringContainsString('<div class="foo-bar">&laquo;</div>', $output);
     }
 
-    public function testDisableCurrentPageButton(): void
+    public function testDisableCurrentPageButton()
     {
         $pagination = $this->getPagination(5);
-        $output     = LinkPager::widget([
-            'pagination'               => $pagination,
+        $output = LinkPager::widget([
+            'pagination' => $pagination,
             'disableCurrentPageButton' => false,
         ]);
 
-        $this->assertStringContainsString('<li class="active"><a href="/?r=test&amp;page=6" data-page="5">6</a></li>', $output);
+        static::assertStringContainsString('<li class="active"><a href="/?r=test&amp;page=6" data-page="5">6</a></li>', $output);
 
         $output = LinkPager::widget([
-            'pagination'               => $pagination,
+            'pagination' => $pagination,
             'disableCurrentPageButton' => true,
         ]);
 
-        $this->assertStringContainsString('<li class="active disabled"><span>6</span></li>', $output);
+        static::assertStringContainsString('<li class="active disabled"><span>6</span></li>', $output);
     }
 
-    public function testOptionsWithTagOption(): void
+    public function testOptionsWithTagOption()
     {
         $output = LinkPager::widget([
             'pagination' => $this->getPagination(5),
-            'options'    => [
+            'options' => [
                 'tag' => 'div',
             ],
         ]);
@@ -110,12 +125,12 @@ class LinkPagerTest extends \yiiunit\TestCase
         $this->assertTrue(StringHelper::endsWith($output, '</div>'));
     }
 
-    public function testLinkWrapOptions(): void
+    public function testLinkWrapOptions()
     {
         $output = LinkPager::widget([
-            'pagination'           => $this->getPagination(1),
+            'pagination' => $this->getPagination(1),
             'linkContainerOptions' => [
-                'tag'   => 'div',
+                'tag' => 'div',
                 'class' => 'my-class',
             ],
         ]);
@@ -133,34 +148,16 @@ class LinkPagerTest extends \yiiunit\TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/15536
      */
-    public function testShouldTriggerInitEvent(): void
+    public function testShouldTriggerInitEvent()
     {
         $initTriggered = false;
-        $output        = LinkPager::widget([
+        $output = LinkPager::widget([
             'pagination' => $this->getPagination(1),
-            'on init'    => static function () use (&$initTriggered): void
-            {
+            'on init' => function () use (&$initTriggered) {
                 $initTriggered = true;
-            },
+            }
         ]);
 
         $this->assertTrue($initTriggered);
-    }
-
-    /**
-     * Get pagination.
-     *
-     * @param int $page
-     *
-     * @return Pagination
-     */
-    private function getPagination($page)
-    {
-        $pagination = new Pagination();
-        $pagination->setPage($page);
-        $pagination->totalCount = 500;
-        $pagination->route      = 'test';
-
-        return $pagination;
     }
 }

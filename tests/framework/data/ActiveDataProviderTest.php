@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\data;
 
 use yii\base\InvalidCallException;
@@ -19,7 +19,6 @@ use yiiunit\framework\db\UnqueryableQueryMock;
 
 /**
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  *
  * @group data
@@ -33,7 +32,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         ActiveRecord::$db = $this->getConnection();
     }
 
-    public function testActiveQuery(): void
+    public function testActiveQuery()
     {
         $provider = new ActiveDataProvider([
             'query' => Order::find()->orderBy('id'),
@@ -46,7 +45,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertEquals([1, 2, 3], $provider->getKeys());
 
         $provider = new ActiveDataProvider([
-            'query'      => Order::find(),
+            'query' => Order::find(),
             'pagination' => [
                 'pageSize' => 2,
             ],
@@ -55,7 +54,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertCount(2, $orders);
     }
 
-    public function testActiveRelation(): void
+    public function testActiveRelation()
     {
         /* @var $customer Customer */
         $customer = Customer::findOne(2);
@@ -69,7 +68,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertEquals([2, 3], $provider->getKeys());
 
         $provider = new ActiveDataProvider([
-            'query'      => $customer->getOrders(),
+            'query' => $customer->getOrders(),
             'pagination' => [
                 'pageSize' => 1,
             ],
@@ -78,10 +77,10 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertCount(1, $orders);
     }
 
-    public function testActiveRelationVia(): void
+    public function testActiveRelationVia()
     {
         /* @var $order Order */
-        $order    = Order::findOne(2);
+        $order = Order::findOne(2);
         $provider = new ActiveDataProvider([
             'query' => $order->getItems(),
         ]);
@@ -93,7 +92,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertEquals([3, 4, 5], $provider->getKeys());
 
         $provider = new ActiveDataProvider([
-            'query'      => $order->getItems(),
+            'query' => $order->getItems(),
             'pagination' => [
                 'pageSize' => 2,
             ],
@@ -102,10 +101,10 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertCount(2, $items);
     }
 
-    public function testActiveRelationViaTable(): void
+    public function testActiveRelationViaTable()
     {
         /* @var $order Order */
-        $order    = Order::findOne(1);
+        $order = Order::findOne(1);
         $provider = new ActiveDataProvider([
             'query' => $order->getBooks(),
         ]);
@@ -115,7 +114,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertInstanceOf(Item::className(), $items[1]);
 
         $provider = new ActiveDataProvider([
-            'query'      => $order->getBooks(),
+            'query' => $order->getBooks(),
             'pagination' => [
                 'pageSize' => 1,
             ],
@@ -124,11 +123,11 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertCount(1, $items);
     }
 
-    public function testQuery(): void
+    public function testQuery()
     {
-        $query    = new Query();
+        $query = new Query();
         $provider = new ActiveDataProvider([
-            'db'    => $this->getConnection(),
+            'db' => $this->getConnection(),
             'query' => $query->from('order')->orderBy('id'),
         ]);
         $orders = $provider->getModels();
@@ -136,10 +135,10 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertIsArray($orders[0]);
         $this->assertEquals([0, 1, 2], $provider->getKeys());
 
-        $query    = new Query();
+        $query = new Query();
         $provider = new ActiveDataProvider([
-            'db'         => $this->getConnection(),
-            'query'      => $query->from('order'),
+            'db' => $this->getConnection(),
+            'query' => $query->from('order'),
             'pagination' => [
                 'pageSize' => 2,
             ],
@@ -148,11 +147,11 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertCount(2, $orders);
     }
 
-    public function testRefresh(): void
+    public function testRefresh()
     {
-        $query    = new Query();
+        $query = new Query();
         $provider = new ActiveDataProvider([
-            'db'    => $this->getConnection(),
+            'db' => $this->getConnection(),
             'query' => $query->from('order')->orderBy('id'),
         ]);
         $this->assertCount(3, $provider->getModels());
@@ -163,11 +162,11 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertCount(2, $provider->getModels());
     }
 
-    public function testPaginationBeforeModels(): void
+    public function testPaginationBeforeModels()
     {
-        $query    = new Query();
+        $query = new Query();
         $provider = new ActiveDataProvider([
-            'db'    => $this->getConnection(),
+            'db' => $this->getConnection(),
             'query' => $query->from('order')->orderBy('id'),
         ]);
         $pagination = $provider->getPagination();
@@ -181,11 +180,11 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertCount(2, $provider->getModels());
     }
 
-    public function testDoesNotPerformQueryWhenHasNoModels(): void
+    public function testDoesNotPerformQueryWhenHasNoModels()
     {
-        $query    = new UnqueryableQueryMock();
+        $query = new UnqueryableQueryMock();
         $provider = new ActiveDataProvider([
-            'db'    => $this->getConnection(),
+            'db' => $this->getConnection(),
             'query' => $query->from('order')->where('0=1'),
         ]);
         $pagination = $provider->getPagination();

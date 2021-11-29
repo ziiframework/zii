@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\base;
 
 use yii\base\DynamicModel;
@@ -21,11 +21,11 @@ class DynamicModelTest extends TestCase
         $this->mockApplication();
     }
 
-    public function testValidateData(): void
+    public function testValidateData()
     {
         $email = 'invalid';
-        $name  = 'long name';
-        $age   = '';
+        $name = 'long name';
+        $age = '';
         $model = DynamicModel::validateData(compact('name', 'email', 'age'), [
             [['email', 'name', 'age'], 'required'],
             ['email', 'email'],
@@ -37,7 +37,7 @@ class DynamicModelTest extends TestCase
         $this->assertTrue($model->hasErrors('age'));
     }
 
-    public function testAddRule(): void
+    public function testAddRule()
     {
         $model = new DynamicModel();
         $this->assertEquals(0, $model->getValidators()->count());
@@ -49,11 +49,11 @@ class DynamicModelTest extends TestCase
         $this->assertEquals(3, $model->getValidators()->count());
     }
 
-    public function testValidateWithAddRule(): void
+    public function testValidateWithAddRule()
     {
         $email = 'invalid';
-        $name  = 'long name';
-        $age   = '';
+        $name = 'long name';
+        $age = '';
         $model = new DynamicModel(compact('name', 'email', 'age'));
         $model->addRule(['email', 'name', 'age'], 'required')
             ->addRule('email', 'email')
@@ -65,10 +65,10 @@ class DynamicModelTest extends TestCase
         $this->assertTrue($model->hasErrors('age'));
     }
 
-    public function testDynamicProperty(): void
+    public function testDynamicProperty()
     {
         $email = 'invalid';
-        $name  = 'long name';
+        $name = 'long name';
         $model = new DynamicModel(compact('name', 'email'));
         $this->assertEquals($email, $model->email);
         $this->assertEquals($name, $model->name);
@@ -80,7 +80,7 @@ class DynamicModelTest extends TestCase
         $age = $model->age;
     }
 
-    public function testLoad(): void
+    public function testLoad()
     {
         $dynamic = new DynamicModel();
         //define two attributes
@@ -91,7 +91,7 @@ class DynamicModelTest extends TestCase
         // define your sample data
         $data = [
             'DynamicModel' => [
-                'name'   => $name = 'your name 2',
+                'name' => $name = 'your name 2',
                 'mobile' => $mobile = 'my number mobile',
             ],
         ];

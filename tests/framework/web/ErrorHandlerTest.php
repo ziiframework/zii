@@ -1,13 +1,12 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\web;
 
-use Exception;
 use Yii;
 use yii\web\NotFoundHttpException;
 use yii\web\View;
@@ -20,17 +19,17 @@ class ErrorHandlerTest extends TestCase
         parent::setUp();
         $this->mockWebApplication([
             'controllerNamespace' => 'yiiunit\\data\\controllers',
-            'components'          => [
+            'components' => [
                 'errorHandler' => [
-                    'class'         => 'yiiunit\framework\web\ErrorHandler',
-                    'errorView'     => '@yiiunit/data/views/errorHandler.php',
+                    'class' => 'yiiunit\framework\web\ErrorHandler',
+                    'errorView' => '@yiiunit/data/views/errorHandler.php',
                     'exceptionView' => '@yiiunit/data/views/errorHandlerForAssetFiles.php',
                 ],
             ],
         ]);
     }
 
-    public function testCorrectResponseCodeInErrorView(): void
+    public function testCorrectResponseCodeInErrorView()
     {
         /** @var ErrorHandler $handler */
         $handler = Yii::$app->getErrorHandler();
@@ -43,20 +42,20 @@ Message: This message is displayed to end user
 Exception: yii\web\NotFoundHttpException', $out);
     }
 
-    public function testClearAssetFilesInErrorView(): void
+    public function testClearAssetFilesInErrorView()
     {
         Yii::$app->getView()->registerJsFile('somefile.js');
         /** @var ErrorHandler $handler */
         $handler = Yii::$app->getErrorHandler();
         ob_start(); // suppress response output
-        $this->invokeMethod($handler, 'renderException', [new Exception('Some Exception')]);
+        $this->invokeMethod($handler, 'renderException', [new \Exception('Some Exception')]);
         ob_get_clean();
         $out = Yii::$app->response->data;
         $this->assertEqualsWithoutLE('Exception View
 ', $out);
     }
 
-    public function testClearAssetFilesInErrorActionView(): void
+    public function testClearAssetFilesInErrorActionView()
     {
         Yii::$app->getErrorHandler()->errorAction = 'test/error';
         Yii::$app->getView()->registerJs("alert('hide me')", View::POS_END);
@@ -70,11 +69,11 @@ Exception: yii\web\NotFoundHttpException', $out);
         $this->assertStringNotContainsString('<script', $out);
     }
 
-    public function testRenderCallStackItem(): void
+    public function testRenderCallStackItem()
     {
-        $handler            = Yii::$app->getErrorHandler();
+        $handler = Yii::$app->getErrorHandler();
         $handler->traceLine = '<a href="netbeans://open?file={file}&line={line}">{html}</a>';
-        $file               = \yii\BaseYii::getAlias('@yii/web/Application.php');
+        $file = \yii\BaseYii::getAlias('@yii/web/Application.php');
 
         $out = $handler->renderCallStackItem($file, 63, \yii\web\Application::className(), null, null, null);
 
@@ -114,24 +113,23 @@ Exception: yii\web\NotFoundHttpException', $out);
     /**
      * @dataProvider dataHtmlEncode
      */
-    public function testHtmlEncode($text, $expected): void
+    public function testHtmlEncode($text, $expected)
     {
         $handler = Yii::$app->getErrorHandler();
 
         $this->assertSame($expected, $handler->htmlEncode($text));
     }
 
-    public function testHtmlEncodeWithUnicodeSequence(): void
+    public function testHtmlEncodeWithUnicodeSequence()
     {
         if (PHP_VERSION_ID < 70000) {
             $this->markTestSkipped('Can not be tested on PHP < 7.0');
-
             return;
         }
 
         $handler = Yii::$app->getErrorHandler();
 
-        $text     = "a \t=<>&\"'\x80\u{20bd}`\u{000a}\u{000c}\u{0000}";
+        $text = "a \t=<>&\"'\x80\u{20bd}`\u{000a}\u{000c}\u{0000}";
         $expected = "a \t=&lt;&gt;&amp;\"'�₽`\n\u{000c}\u{0000}";
 
         $this->assertSame($expected, $handler->htmlEncode($text));

@@ -1,12 +1,12 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
 
 // override information about intl
+
 namespace yiiunit\framework\i18n {
     use yiiunit\TestCase;
 
@@ -18,16 +18,13 @@ namespace yiiunit\framework\i18n {
          * Emulate disabled intl extension.
          *
          * Enable it only for tests prefixed with testIntl.
-         *
          * @param Testcase $test
          */
-        public static function setIntlStatus($test): void
+        public static function setIntlStatus($test)
         {
             static::$enableIntl = null;
-
             if (strncmp($test->getName(false), 'testIntl', 8) === 0) {
                 static::$enableIntl = true;
-
                 if (!extension_loaded('intl')) {
                     $test->markTestSkipped('intl extension is not installed.');
                 }
@@ -36,12 +33,13 @@ namespace yiiunit\framework\i18n {
             }
         }
 
-        public static function resetIntlStatus(): void
+        public static function resetIntlStatus()
         {
             static::$enableIntl = null;
         }
     }
 }
+
 namespace yii\i18n {
     use yiiunit\framework\i18n\IntlTestHelper;
 
@@ -56,6 +54,7 @@ namespace yii\i18n {
         }
     }
 }
+
 namespace yii\helpers {
     use yiiunit\framework\i18n\IntlTestHelper;
 
@@ -70,6 +69,7 @@ namespace yii\helpers {
         }
     }
 }
+
 namespace yii\validators {
     use yiiunit\framework\i18n\IntlTestHelper;
 

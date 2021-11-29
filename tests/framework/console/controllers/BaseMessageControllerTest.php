@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\console\controllers;
 
 use Yii;
@@ -15,68 +15,162 @@ use yiiunit\TestCase;
 
 /**
  * Base for [[\yii\console\controllers\MessageController]] unit tests.
- *
  * @see MessageController
  */
 abstract class BaseMessageControllerTest extends TestCase
 {
     protected $sourcePath = '';
-
     protected $configFileName = '';
-
     protected $language = 'en';
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->mockApplication();
         $this->sourcePath = Yii::getAlias('@yiiunit/runtime/test_source');
         FileHelper::createDirectory($this->sourcePath, 0777);
-
         if (!file_exists($this->sourcePath)) {
             $this->markTestIncomplete('Unit tests runtime directory should have writable permissions!');
         }
         $this->configFileName = $this->generateConfigFileName();
     }
 
-    protected function tearDown(): void
+    /**
+     * Generate random config name.
+     *
+     * @return string
+     */
+    protected function generateConfigFileName()
+    {
+        $this->configFileName = Yii::getAlias('@yiiunit/runtime')
+            . DIRECTORY_SEPARATOR . 'message_controller_test_config-' . md5(uniqid()) . '.php';
+
+        return $this->configFileName;
+    }
+
+    public function tearDown(): void
     {
         FileHelper::removeDirectory($this->sourcePath);
-
         if (file_exists($this->configFileName)) {
             unlink($this->configFileName);
         }
     }
 
-    // Tests:
-
-    public function testActionConfig(): void
+    /**
+     * Creates test message controller instance.
+     * @return MessageControllerMock message command instance.
+     */
+    protected function createMessageController()
     {
-        $configFileName = $this->configFileName;
-        $out            = $this->runMessageControllerAction('config', [$configFileName]);
-        $this->assertFileExists(
-            $configFileName,
-            "Unable to create config file from template. Command output:\n\n" . $out
-        );
+        $module = $this->getMockBuilder('yii\\base\\Module')
+            ->setMethods(['fake'])
+            ->setConstructorArgs(['console'])
+            ->getMock();
+        $messageController = new MessageControllerMock('message', $module);
+        $messageController->interactive = false;
+
+        return $messageController;
     }
 
-    public function testActionConfigSubDir(): void
+    /**
+     * Emulates running of the message controller action.
+     * @param  string $actionID id of action to be run.
+     * @param  array  $args     action arguments.
+     * @return string command output.
+     */
+    protected function runMessageControllerAction($actionID, array $args = [])
+    {
+        $controller = $this->createMessageController();
+        $controller->run($actionID, $args);
+        return $controller->flushStdOutBuffer();
+    }
+
+    /**
+     * Creates message command config file named as [[configFileName]].
+     * @param array $config message command config.
+     */
+    protected function saveConfigFile(array $config)
+    {
+        if (file_exists($this->configFileName)) {
+            unlink($this->configFileName);
+        }
+        $fileContent = '<?php return ' . VarDumper::export($config) . ';';
+        // save new config on random name to bypass HHVM cache
+        // https://github.com/facebook/hhvm/issues/1447
+        file_put_contents($this->generateConfigFileName(), $fileContent);
+    }
+
+    /**
+     * Creates source file with given content.
+     * @param string $content file content
+     * @return string path to source file
+     */
+    protected function createSourceFile($content)
+    {
+        $fileName = $this->sourcePath . DIRECTORY_SEPARATOR . md5(uniqid()) . '.php';
+        file_put_contents($fileName, "<?php\n" . $content);
+        return $fileName;
+    }
+
+    /**
+     * Saves messages.
+     *
+     * @param array $messages
+     * @param string $category
+     */
+    abstract protected function saveMessages($messages, $category);
+
+    /**
+     * Loads messages.
+     *
+     * @param string $category
+     * @return array
+     */
+    abstract protected function loadMessages($category);
+
+    /**
+     * @return array default config
+     */
+    abstract protected function getDefaultConfig();
+
+    /**
+     * Returns config.
+     *
+     * @param array $additionalConfig
+     * @return array
+     */
+    protected function getConfig($additionalConfig = [])
+    {
+        return array_merge($this->getDefaultConfig(), $additionalConfig);
+    }
+
+    // Tests:
+
+    public function testActionConfig()
+    {
+        $configFileName = $this->configFileName;
+        $out = $this->runMessageControllerAction('config', [$configFileName]);
+        $this->assertFileExists($configFileName,
+            "Unable to create config file from template. Command output:\n\n" . $out);
+    }
+
+    public function testActionConfigSubDir()
     {
         $configFileName = Yii::getAlias('@yiiunit/runtime/not_existing_subdir') . DIRECTORY_SEPARATOR . 'message_controller_test_config-' . md5(uniqid()) . '.php';
-        $out            = $this->runMessageControllerAction('config', [$configFileName]);
+        $out = $this->runMessageControllerAction('config', [$configFileName]);
         $this->assertFileExists($configFileName, "Unable to create config file in subdirectory. Command output:\n\n" . $out);
     }
 
-    public function testConfigFileNotExist(): void
+    public function testConfigFileNotExist()
     {
         $this->expectException('yii\\console\\Exception');
         $this->runMessageControllerAction('extract', ['not_existing_file.php']);
     }
 
-    public function testCreateTranslation(): void
+    public function testCreateTranslation()
     {
-        $category          = 'test.category1';
-        $message           = 'test message';
-        $message2          = 'test message 2';
+        $category = 'test.category1';
+        $message = 'test message';
+        $message2 = 'test message 2';
         $sourceFileContent = "Yii::t('{$category}', '{$message}');\n\Yii::t('{$category}', '{$message2}');";
         $this->createSourceFile($sourceFileContent);
 
@@ -84,17 +178,17 @@ abstract class BaseMessageControllerTest extends TestCase
         $out = $this->runMessageControllerAction('extract', [$this->configFileName]);
 
         $messages = $this->loadMessages($category);
-        $this->assertArrayHasKey($message, $messages, "\"{$message}\" is missing in translation file. Command output:\n\n" . $out);
-        $this->assertArrayHasKey($message2, $messages, "\"{$message2}\" is missing in translation file. Command output:\n\n" . $out);
+        $this->assertArrayHasKey($message, $messages, "\"$message\" is missing in translation file. Command output:\n\n" . $out);
+        $this->assertArrayHasKey($message2, $messages, "\"$message2\" is missing in translation file. Command output:\n\n" . $out);
     }
 
     /**
      * @depends testCreateTranslation
      */
-    public function testNothingToSave(): void
+    public function testNothingToSave()
     {
-        $category          = 'test_category2';
-        $message           = 'test message';
+        $category = 'test_category2';
+        $message = 'test message';
         $sourceFileContent = "Yii::t('{$category}', '{$message}');";
         $this->createSourceFile($sourceFileContent);
 
@@ -102,27 +196,25 @@ abstract class BaseMessageControllerTest extends TestCase
         $out = $this->runMessageControllerAction('extract', [$this->configFileName]);
         $out .= $this->runMessageControllerAction('extract', [$this->configFileName]);
 
-        $this->assertNotFalse(
-            strpos($out, 'Nothing to save'),
-            "Controller should respond with \"Nothing to save\" if there's nothing to update. Command output:\n\n" . $out
-        );
+        $this->assertNotFalse(strpos($out, 'Nothing to save'),
+            "Controller should respond with \"Nothing to save\" if there's nothing to update. Command output:\n\n" . $out);
     }
 
     /**
      * @depends testCreateTranslation
      */
-    public function testMerge(): void
+    public function testMerge()
     {
         $category = 'test_category3';
 
-        $existingMessage            = 'test existing message';
+        $existingMessage = 'test existing message';
         $existingMessageTranslation = 'test existing message translation';
         $this->saveMessages(
             [$existingMessage => $existingMessageTranslation],
             $category
         );
 
-        $newMessage        = 'test new message';
+        $newMessage = 'test new message';
         $sourceFileContent = "Yii::t('{$category}', '{$existingMessage}');";
         $sourceFileContent .= "Yii::t('{$category}', '{$newMessage}');";
         $this->createSourceFile($sourceFileContent);
@@ -131,8 +223,8 @@ abstract class BaseMessageControllerTest extends TestCase
         $out = $this->runMessageControllerAction('extract', [$this->configFileName]);
 
         $messages = $this->loadMessages($category);
-        $this->assertArrayHasKey($newMessage, $messages, "Unable to add new message: \"{$newMessage}\". Command output:\n\n" . $out);
-        $this->assertArrayHasKey($existingMessage, $messages, "Unable to keep existing message: \"{$existingMessage}\". Command output:\n\n" . $out);
+        $this->assertArrayHasKey($newMessage, $messages, "Unable to add new message: \"$newMessage\". Command output:\n\n" . $out);
+        $this->assertArrayHasKey($existingMessage, $messages, "Unable to keep existing message: \"$existingMessage\". Command output:\n\n" . $out);
         $this->assertEquals('', $messages[$newMessage], "Wrong new message content. Command output:\n\n" . $out);
         $this->assertEquals($existingMessageTranslation, $messages[$existingMessage], "Unable to keep existing message content. Command output:\n\n" . $out);
     }
@@ -140,11 +232,11 @@ abstract class BaseMessageControllerTest extends TestCase
     /**
      * @depends testMerge
      */
-    public function testMarkObsoleteMessages(): void
+    public function testMarkObsoleteMessages()
     {
         $category = 'category';
 
-        $obsoleteMessage     = 'obsolete message';
+        $obsoleteMessage = 'obsolete message';
         $obsoleteTranslation = 'obsolete translation';
         $this->saveMessages([$obsoleteMessage => $obsoleteTranslation], $category);
 
@@ -163,11 +255,11 @@ abstract class BaseMessageControllerTest extends TestCase
     /**
      * @depends testMerge
      */
-    public function removeObsoleteMessages(): void
+    public function removeObsoleteMessages()
     {
         $category = 'category';
 
-        $obsoleteMessage     = 'obsolete message';
+        $obsoleteMessage = 'obsolete message';
         $obsoleteTranslation = 'obsolete translation';
         $this->saveMessages([$obsoleteMessage => $obsoleteTranslation], $category);
 
@@ -185,20 +277,20 @@ abstract class BaseMessageControllerTest extends TestCase
     /**
      * @depends testMerge
      */
-    public function testMergeWithContentZero(): void
+    public function testMergeWithContentZero()
     {
         $category = 'test_category5';
 
-        $zeroMessage         = 'test zero message';
-        $zeroMessageContent  = '0';
-        $falseMessage        = 'test false message';
+        $zeroMessage = 'test zero message';
+        $zeroMessageContent = '0';
+        $falseMessage = 'test false message';
         $falseMessageContent = 'false';
         $this->saveMessages([
-            $zeroMessage  => $zeroMessageContent,
+            $zeroMessage => $zeroMessageContent,
             $falseMessage => $falseMessageContent,
         ], $category);
 
-        $newMessage        = 'test new message';
+        $newMessage = 'test new message';
         $sourceFileContent = "Yii::t('{$category}', '{$zeroMessage}');";
         $sourceFileContent .= "Yii::t('{$category}', '{$falseMessage}');";
         $sourceFileContent .= "Yii::t('{$category}', '{$newMessage}');";
@@ -208,22 +300,18 @@ abstract class BaseMessageControllerTest extends TestCase
         $out = $this->runMessageControllerAction('extract', [$this->configFileName]);
 
         $messages = $this->loadMessages($category);
-        $this->assertSame(
-            $zeroMessageContent,
+        $this->assertSame($zeroMessageContent,
             $messages[$zeroMessage],
-            "Message content \"0\" is lost. Command output:\n\n" . $out
-        );
-        $this->assertSame(
-            $falseMessageContent,
+            "Message content \"0\" is lost. Command output:\n\n" . $out);
+        $this->assertSame($falseMessageContent,
             $messages[$falseMessage],
-            "Message content \"false\" is lost. Command output:\n\n" . $out
-        );
+            "Message content \"false\" is lost. Command output:\n\n" . $out);
     }
 
     /**
      * @depends testCreateTranslation
      */
-    public function testMultipleTranslators(): void
+    public function testMultipleTranslators()
     {
         $category = 'test_category6';
 
@@ -237,7 +325,6 @@ abstract class BaseMessageControllerTest extends TestCase
             'second message',
         ];
         $sourceFileContent = '';
-
         foreach ($sourceMessages as $key => $message) {
             $sourceFileContent .= $translators[$key] . "('{$category}', '{$message}');\n";
         }
@@ -256,7 +343,7 @@ abstract class BaseMessageControllerTest extends TestCase
     /**
      * @depends testCreateTranslation
      */
-    public function testMultipleCategories(): void
+    public function testMultipleCategories()
     {
         $category1 = 'category1';
         $category2 = 'category2';
@@ -269,8 +356,8 @@ abstract class BaseMessageControllerTest extends TestCase
 
         // Generate initial translation
         $sourceFileContent = "Yii::t('{$category1}', '{$message1}'); Yii::t('{$category2}', '{$message2}');";
-        $source            = $this->createSourceFile($sourceFileContent);
-        $out               = $this->runMessageControllerAction('extract', [$this->configFileName]);
+        $source = $this->createSourceFile($sourceFileContent);
+        $out = $this->runMessageControllerAction('extract', [$this->configFileName]);
         unlink($source);
 
         $messages1 = $this->loadMessages($category1);
@@ -282,7 +369,7 @@ abstract class BaseMessageControllerTest extends TestCase
 
         // Change source code, run translation again
         $sourceFileContent = "Yii::t('{$category1}', '{$message1}'); Yii::t('{$category2}', '{$message3}');";
-        $source            = $this->createSourceFile($sourceFileContent);
+        $source = $this->createSourceFile($sourceFileContent);
         $out .= "\n" . $this->runMessageControllerAction('extract', [$this->configFileName]);
         unlink($source);
 
@@ -293,12 +380,12 @@ abstract class BaseMessageControllerTest extends TestCase
         $this->assertArrayNotHasKey($message2, $messages2, "message2 found in category2. Command output:\n\n" . $out);
     }
 
-    public function testIgnoreCategories(): void
+    public function testIgnoreCategories()
     {
-        $category1          = 'category1';
-        $category2          = 'category2';
+        $category1 = 'category1';
+        $category2 = 'category2';
         $category3_wildcard = 'category3*';
-        $category3_test     = 'category3-test';
+        $category3_test = 'category3-test';
 
         $message1 = 'message1';
         $message2 = 'message2';
@@ -308,8 +395,8 @@ abstract class BaseMessageControllerTest extends TestCase
 
         // Generate initial translation
         $sourceFileContent = "Yii::t('{$category1}', '{$message1}'); Yii::t('{$category2}', '{$message2}'); Yii::t('{$category3_test}', '{$message3}');";
-        $source            = $this->createSourceFile($sourceFileContent);
-        $out               = $this->runMessageControllerAction('extract', [$this->configFileName]);
+        $source = $this->createSourceFile($sourceFileContent);
+        $out = $this->runMessageControllerAction('extract', [$this->configFileName]);
         unlink($source);
 
         $messages1 = $this->loadMessages($category1);
@@ -323,7 +410,7 @@ abstract class BaseMessageControllerTest extends TestCase
 
         // Change source code, run translation again
         $sourceFileContent = "Yii::t('{$category1}', '{$message1}'); Yii::t('{$category2}', '{$message3}');";
-        $source            = $this->createSourceFile($sourceFileContent);
+        $source = $this->createSourceFile($sourceFileContent);
         $out .= "\n" . $this->runMessageControllerAction('extract', [$this->configFileName]);
         unlink($source);
 
@@ -339,11 +426,11 @@ abstract class BaseMessageControllerTest extends TestCase
      *
      * @see https://github.com/yiisoft/yii2/issues/8286
      */
-    public function testCreateTranslationFromNested(): void
+    public function testCreateTranslationFromNested()
     {
-        $category          = 'test.category1';
-        $mainMessage       = 'main message';
-        $nestedMessage     = 'nested message';
+        $category = 'test.category1';
+        $mainMessage = 'main message';
+        $nestedMessage = 'nested message';
         $sourceFileContent = "Yii::t('{$category}', '{$mainMessage}', ['param' => Yii::t('{$category}', '{$nestedMessage}')]);";
         $this->createSourceFile($sourceFileContent);
 
@@ -351,8 +438,8 @@ abstract class BaseMessageControllerTest extends TestCase
         $out = $this->runMessageControllerAction('extract', [$this->configFileName]);
 
         $messages = $this->loadMessages($category);
-        $this->assertArrayHasKey($mainMessage, $messages, "\"{$mainMessage}\" is missing in translation file. Command output:\n\n" . $out);
-        $this->assertArrayHasKey($nestedMessage, $messages, "\"{$nestedMessage}\" is missing in translation file. Command output:\n\n" . $out);
+        $this->assertArrayHasKey($mainMessage, $messages, "\"$mainMessage\" is missing in translation file. Command output:\n\n" . $out);
+        $this->assertArrayHasKey($nestedMessage, $messages, "\"$nestedMessage\" is missing in translation file. Command output:\n\n" . $out);
     }
 
     /**
@@ -360,10 +447,10 @@ abstract class BaseMessageControllerTest extends TestCase
      *
      * @see https://github.com/yiisoft/yii2/issues/11502
      */
-    public function testMissingLanguage(): void
+    public function testMissingLanguage()
     {
-        $category          = 'multiLangCategory';
-        $mainMessage       = 'multiLangMessage';
+        $category = 'multiLangCategory';
+        $mainMessage = 'multiLangMessage';
         $sourceFileContent = "Yii::t('{$category}', '{$mainMessage}');";
         $this->createSourceFile($sourceFileContent);
 
@@ -374,11 +461,11 @@ abstract class BaseMessageControllerTest extends TestCase
         $this->saveConfigFile($this->getConfig(['languages' => [$this->language, $secondLanguage]]));
         $out .= $this->runMessageControllerAction('extract', [$this->configFileName]);
 
-        $firstLanguage  = $this->language;
+        $firstLanguage = $this->language;
         $this->language = $secondLanguage;
-        $messages       = $this->loadMessages($category);
+        $messages = $this->loadMessages($category);
         $this->language = $firstLanguage;
-        $this->assertArrayHasKey($mainMessage, $messages, "\"{$mainMessage}\" for language \"{$secondLanguage}\" is missing in translation file. Command output:\n\n" . $out);
+        $this->assertArrayHasKey($mainMessage, $messages, "\"$mainMessage\" for language \"$secondLanguage\" is missing in translation file. Command output:\n\n" . $out);
     }
 
     /**
@@ -386,10 +473,10 @@ abstract class BaseMessageControllerTest extends TestCase
      *
      * @see https://github.com/yiisoft/yii2/issues/13824
      */
-    public function testCreateTranslationFromConcatenatedString(): void
+    public function testCreateTranslationFromConcatenatedString()
     {
-        $category          = 'test.category1';
-        $mainMessage       = 'main message second message third message';
+        $category = 'test.category1';
+        $mainMessage = 'main message second message third message';
         $sourceFileContent = "Yii::t('{$category}', 'main message' .   \" second message\".' third message');";
         $this->createSourceFile($sourceFileContent);
 
@@ -397,17 +484,14 @@ abstract class BaseMessageControllerTest extends TestCase
         $out = $this->runMessageControllerAction('extract', [$this->configFileName]);
 
         $messages = $this->loadMessages($category);
-        $this->assertArrayHasKey(
-            $mainMessage,
-            $messages,
-            "\"{$mainMessage}\" is missing in translation file. Command output:\n\n" . $out
-        );
+        $this->assertArrayHasKey($mainMessage, $messages,
+            "\"$mainMessage\" is missing in translation file. Command output:\n\n" . $out);
     }
 
     /**
      * @see https://github.com/yiisoft/yii2/issues/14016
      */
-    public function testShouldNotMarkUnused(): void
+    public function testShouldNotMarkUnused()
     {
         $category = 'testShouldNotMarkUnused';
 
@@ -426,23 +510,23 @@ abstract class BaseMessageControllerTest extends TestCase
         $this->createSourceFile($sourceFileContent);
 
         $this->saveConfigFile($this->getConfig(['markUnused' => false]));
-        $out      = $this->runMessageControllerAction('extract', [$this->configFileName]);
+        $out = $this->runMessageControllerAction('extract', [$this->configFileName]);
         $messages = $this->loadMessages($category);
 
-        $this->assertArrayHasKey($key1, $messages, "{$key1} isn't there. Command output:\n\n" . $out);
-        $this->assertArrayHasKey($key2, $messages, "{$key2} isn't there. Command output:\n\n" . $out);
+        $this->assertArrayHasKey($key1, $messages, "$key1 isn't there. Command output:\n\n" . $out);
+        $this->assertArrayHasKey($key2, $messages, "$key2 isn't there. Command output:\n\n" . $out);
 
         $value1 = $messages[$key1];
         $value2 = $messages[$key2];
 
-        $this->assertEquals('', $value1, "Message at {$key1} should be empty but it is {$value1}. Command output:\n\n" . $out);
-        $this->assertEquals('', $value2, "Message at {$key2} should be empty but it is {$value2}. Command output:\n\n" . $out);
+        $this->assertEquals('', $value1, "Message at $key1 should be empty but it is $value1. Command output:\n\n" . $out);
+        $this->assertEquals('', $value2, "Message at $key2 should be empty but it is $value2. Command output:\n\n" . $out);
     }
 
     /**
      * @see https://github.com/yiisoft/yii2/issues/13792
      */
-    public function testShouldNotRemoveUnused(): void
+    public function testShouldNotRemoveUnused()
     {
         $category = 'my';
 
@@ -462,27 +546,27 @@ abstract class BaseMessageControllerTest extends TestCase
 
         $this->saveConfigFile($this->getConfig([
             'removeUnused' => false,
-            'markUnused'   => false,
+            'markUnused' => false,
         ]));
-        $out      = $this->runMessageControllerAction('extract', [$this->configFileName]);
+        $out = $this->runMessageControllerAction('extract', [$this->configFileName]);
         $messages = $this->loadMessages($category);
 
-        $this->assertArrayHasKey($key1, $messages, "{$key1} isn't there. Command output:\n\n" . $out);
-        $this->assertArrayHasKey($key2, $messages, "{$key2} isn't there. Command output:\n\n" . $out);
+        $this->assertArrayHasKey($key1, $messages, "$key1 isn't there. Command output:\n\n" . $out);
+        $this->assertArrayHasKey($key2, $messages, "$key2 isn't there. Command output:\n\n" . $out);
 
         $value1 = $messages[$key1];
         $value2 = $messages[$key2];
 
-        $this->assertEquals('test translation', $value1, "Message at {$key1} should be be \"test translation\" but it is {$value1}. Command output:\n\n" . $out);
-        $this->assertEquals('unused translation', $value2, "Message at {$key2} should be \"unused translation\" but it is {$value2}. Command output:\n\n" . $out);
+        $this->assertEquals('test translation', $value1, "Message at $key1 should be be \"test translation\" but it is $value1. Command output:\n\n" . $out);
+        $this->assertEquals('unused translation', $value2, "Message at $key2 should be \"unused translation\" but it is $value2. Command output:\n\n" . $out);
     }
 
     /**
      * @see https://github.com/yiisoft/yii2/issues/16828
      */
-    public function testPartialTranslator(): void
+    public function testPartialTranslator()
     {
-        $category     = 'category';
+        $category = 'category';
         $negativeKey1 = 'Should not find this';
         $negativeKey2 = 'not applicable';
         $negativeKey3 = 'do not extract this';
@@ -514,7 +598,7 @@ abstract class BaseMessageControllerTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/17098
      */
-    public function testMessageExtractActionWhenMessageUsingParamsReturnedFromMethodCalls(): void
+    public function testMessageExtractActionWhenMessageUsingParamsReturnedFromMethodCalls()
     {
         $sourceFileContent = "
             echo PHP_EOL, Yii::t('app', '1. Simple message');
@@ -547,21 +631,21 @@ abstract class BaseMessageControllerTest extends TestCase
         $messages = $this->loadMessages('app');
 
         $this->assertEquals([
-            '1. Simple message'                              => '',
-            '2. Message with simple param {val}'             => '',
+            '1. Simple message' => '',
+            '2. Message with simple param {val}' => '',
             '3. Message with param from function call {val}' => '',
-            '4. Message with param from method call {val}'   => '',
-            '5. Simple message'                              => '',
-            '6. Message with simple param {val}'             => '',
+            '4. Message with param from method call {val}' => '',
+            '5. Simple message' => '',
+            '6. Message with simple param {val}' => '',
             '7. Message with param from function call {val}' => '',
         ], $messages);
     }
 
-    public function testMessagesSorting(): void
+    public function testMessagesSorting()
     {
         $category = 'test_order_category';
-        $key1     = 'key1';
-        $key2     = 'key2';
+        $key1 = 'key1';
+        $key2 = 'key2';
 
         $sourceFileContent = "Yii::t('{$category}', '{$key1}');Yii::t('{$category}', '{$key2}');";
         $this->createSourceFile($sourceFileContent);
@@ -576,6 +660,7 @@ abstract class BaseMessageControllerTest extends TestCase
         $keys = array_keys($this->loadMessages($category));
         $this->assertEquals([$key1, $key2], $keys, "The order of messages should be '{$key1}, {$key2}' when sort equals true");
 
+
         $this->saveMessages([$key2 => 'already translated'], $category);
         $this->saveConfigFile($this->getConfig([
             'sort' => false,
@@ -583,117 +668,6 @@ abstract class BaseMessageControllerTest extends TestCase
         $this->runMessageControllerAction('extract', [$this->configFileName]);
         $keys = array_keys($this->loadMessages($category));
         $this->assertEquals([$key2, $key1], $keys, "The order of messages should be '{$key2}, {$key1}' when sort equals false and {$key1} was added later");
-    }
-
-    /**
-     * Generate random config name.
-     *
-     * @return string
-     */
-    protected function generateConfigFileName()
-    {
-        $this->configFileName = Yii::getAlias('@yiiunit/runtime')
-            . DIRECTORY_SEPARATOR . 'message_controller_test_config-' . md5(uniqid()) . '.php';
-
-        return $this->configFileName;
-    }
-
-    /**
-     * Creates test message controller instance.
-     *
-     * @return MessageControllerMock message command instance
-     */
-    protected function createMessageController()
-    {
-        $module = $this->getMockBuilder('yii\\base\\Module')
-            ->setMethods(['fake'])
-            ->setConstructorArgs(['console'])
-            ->getMock();
-        $messageController              = new MessageControllerMock('message', $module);
-        $messageController->interactive = false;
-
-        return $messageController;
-    }
-
-    /**
-     * Emulates running of the message controller action.
-     *
-     * @param string $actionID id of action to be run
-     * @param array  $args     action arguments
-     *
-     * @return string command output
-     */
-    protected function runMessageControllerAction($actionID, array $args = [])
-    {
-        $controller = $this->createMessageController();
-        $controller->run($actionID, $args);
-
-        return $controller->flushStdOutBuffer();
-    }
-
-    /**
-     * Creates message command config file named as [[configFileName]].
-     *
-     * @param array $config message command config
-     */
-    protected function saveConfigFile(array $config): void
-    {
-        if (file_exists($this->configFileName)) {
-            unlink($this->configFileName);
-        }
-        $fileContent = '<?php return ' . VarDumper::export($config) . ';';
-        // save new config on random name to bypass HHVM cache
-        // https://github.com/facebook/hhvm/issues/1447
-        file_put_contents($this->generateConfigFileName(), $fileContent);
-    }
-
-    /**
-     * Creates source file with given content.
-     *
-     * @param string $content file content
-     *
-     * @return string path to source file
-     */
-    protected function createSourceFile($content)
-    {
-        $fileName = $this->sourcePath . DIRECTORY_SEPARATOR . md5(uniqid()) . '.php';
-        file_put_contents($fileName, "<?php\n" . $content);
-
-        return $fileName;
-    }
-
-    /**
-     * Saves messages.
-     *
-     * @param array  $messages
-     * @param string $category
-     */
-    abstract protected function saveMessages($messages, $category);
-
-    /**
-     * Loads messages.
-     *
-     * @param string $category
-     *
-     * @return array
-     */
-    abstract protected function loadMessages($category);
-
-    /**
-     * @return array default config
-     */
-    abstract protected function getDefaultConfig();
-
-    /**
-     * Returns config.
-     *
-     * @param array $additionalConfig
-     *
-     * @return array
-     */
-    protected function getConfig($additionalConfig = [])
-    {
-        return array_merge($this->getDefaultConfig(), $additionalConfig);
     }
 }
 

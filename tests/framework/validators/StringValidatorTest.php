@@ -1,13 +1,12 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\validators;
 
-use stdClass;
 use yii\validators\StringValidator;
 use yiiunit\data\validators\models\FakedValidationModel;
 use yiiunit\TestCase;
@@ -17,7 +16,7 @@ use yiiunit\TestCase;
  */
 class StringValidatorTest extends TestCase
 {
-    protected function setUp(): void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -25,7 +24,7 @@ class StringValidatorTest extends TestCase
         $this->destroyApplication();
     }
 
-    public function testValidateValue(): void
+    public function testValidateValue()
     {
         $val = new StringValidator();
         $this->assertFalse($val->validate(['not a string']));
@@ -34,7 +33,7 @@ class StringValidatorTest extends TestCase
         $this->assertFalse($val->validate(false));
     }
 
-    public function testValidateValueLength(): void
+    public function testValidateValueLength()
     {
         $val = new StringValidator(['length' => 25]);
         $this->assertTrue($val->validate(str_repeat('x', 25)));
@@ -59,7 +58,7 @@ class StringValidatorTest extends TestCase
         $this->assertFalse($val->validate(str_repeat('x', 30)));
     }
 
-    public function testValidateValueMinMax(): void
+    public function testValidateValueMinMax()
     {
         $val = new StringValidator(['min' => 10]);
         $this->assertTrue($val->validate(str_repeat('x', 10)));
@@ -73,10 +72,10 @@ class StringValidatorTest extends TestCase
         $this->assertFalse($val->validate(str_repeat('b', 25)));
     }
 
-    public function testValidateAttribute(): void
+    public function testValidateAttribute()
     {
-        $val                = new StringValidator();
-        $model              = new FakedValidationModel();
+        $val = new StringValidator();
+        $model = new FakedValidationModel();
         $model->attr_string = 'a tet string';
         $val->validateAttribute($model, 'attr_string');
         $this->assertFalse($model->hasErrors());
@@ -86,31 +85,31 @@ class StringValidatorTest extends TestCase
         $model->attr_string = false;
         $val->validateAttribute($model, 'attr_string');
         $this->assertTrue($model->hasErrors());
-        $val                = new StringValidator(['length' => 20]);
-        $model              = new FakedValidationModel();
+        $val = new StringValidator(['length' => 20]);
+        $model = new FakedValidationModel();
         $model->attr_string = str_repeat('x', 20);
         $val->validateAttribute($model, 'attr_string');
         $this->assertFalse($model->hasErrors());
-        $model              = new FakedValidationModel();
+        $model = new FakedValidationModel();
         $model->attr_string = 'abc';
         $val->validateAttribute($model, 'attr_string');
         $this->assertTrue($model->hasErrors('attr_string'));
-        $val                = new StringValidator(['max' => 2]);
-        $model              = new FakedValidationModel();
+        $val = new StringValidator(['max' => 2]);
+        $model = new FakedValidationModel();
         $model->attr_string = 'a';
         $val->validateAttribute($model, 'attr_string');
         $this->assertFalse($model->hasErrors());
-        $model              = new FakedValidationModel();
+        $model = new FakedValidationModel();
         $model->attr_string = 'abc';
         $val->validateAttribute($model, 'attr_string');
         $this->assertTrue($model->hasErrors('attr_string'));
-        $val   = new StringValidator(['max' => 1]);
+        $val = new StringValidator(['max' => 1]);
         $model = FakedValidationModel::createWithAttributes(['attr_str' => ['abc']]);
         $val->validateAttribute($model, 'attr_str');
         $this->assertTrue($model->hasErrors('attr_str'));
     }
 
-    public function testEnsureMessagesOnInit(): void
+    public function testEnsureMessagesOnInit()
     {
         $val = new StringValidator(['min' => 1, 'max' => 2]);
         $this->assertIsString($val->message);
@@ -118,13 +117,13 @@ class StringValidatorTest extends TestCase
         $this->assertIsString($val->tooShort);
     }
 
-    public function testCustomErrorMessageInValidateAttribute(): void
+    public function testCustomErrorMessageInValidateAttribute()
     {
         $val = new StringValidator([
-            'min'      => 5,
+            'min' => 5,
             'tooShort' => '{attribute} to short. Min is {min}',
         ]);
-        $model              = new FakedValidationModel();
+        $model = new FakedValidationModel();
         $model->attr_string = 'abc';
         $val->validateAttribute($model, 'attr_string');
         $this->assertTrue($model->hasErrors('attr_string'));
@@ -135,9 +134,9 @@ class StringValidatorTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/13327
      */
-    public function testValidateValueInNonStrictMode(): void
+    public function testValidateValueInNonStrictMode()
     {
-        $val         = new StringValidator();
+        $val = new StringValidator();
         $val->strict = false;
 
         // string
@@ -145,7 +144,7 @@ class StringValidatorTest extends TestCase
 
         // non-scalar
         $this->assertFalse($val->validate(['array']));
-        $this->assertFalse($val->validate(new stdClass()));
+        $this->assertFalse($val->validate(new \stdClass()));
         $this->assertFalse($val->validate(null));
 
         // bool

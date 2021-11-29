@@ -1,39 +1,22 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\caching;
 
 use yii\caching\MemCache;
 
 /**
  * Class for testing memcache cache backend.
- *
  * @group memcache
  * @group caching
  */
 class MemCacheTest extends CacheTestCase
 {
-    private $_cacheInstance;
-
-    public function testExpire(): void
-    {
-        if (getenv('GITHUB_ACTIONS') == 'true') {
-            $this->markTestSkipped('Can not reliably test memcache expiry on GitHub actions.');
-        }
-        parent::testExpire();
-    }
-
-    public function testExpireAdd(): void
-    {
-        if (getenv('GITHUB_ACTIONS') == 'true') {
-            $this->markTestSkipped('Can not reliably test memcache expiry on GitHub actions.');
-        }
-        parent::testExpireAdd();
-    }
+    private $_cacheInstance = null;
 
     /**
      * @return MemCache
@@ -54,5 +37,21 @@ class MemCacheTest extends CacheTestCase
         }
 
         return $this->_cacheInstance;
+    }
+
+    public function testExpire()
+    {
+        if (getenv('GITHUB_ACTIONS') == 'true') {
+            $this->markTestSkipped('Can not reliably test memcache expiry on GitHub actions.');
+        }
+        parent::testExpire();
+    }
+
+    public function testExpireAdd()
+    {
+        if (getenv('GITHUB_ACTIONS') == 'true') {
+            $this->markTestSkipped('Can not reliably test memcache expiry on GitHub actions.');
+        }
+        parent::testExpireAdd();
     }
 }

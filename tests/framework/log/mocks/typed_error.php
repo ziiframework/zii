@@ -1,5 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
-function typed_error_test_mock(string $test): void
-{
+function typed_error_test_mock(string $test) {
 }

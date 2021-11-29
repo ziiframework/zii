@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\behaviors;
 
 use Yii;
@@ -15,7 +15,6 @@ use yiiunit\TestCase;
 
 /**
  * Unit test for [[\yii\behaviors\AttributeBehavior]].
- *
  * @see AttributeBehavior
  *
  * @group behaviors
@@ -34,26 +33,26 @@ class AttributeBehaviorTest extends TestCase
         }
     }
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->mockApplication([
             'components' => [
                 'db' => [
                     'class' => '\yii\db\Connection',
-                    'dsn'   => 'sqlite::memory:',
+                    'dsn' => 'sqlite::memory:',
                 ],
             ],
         ]);
 
         $columns = [
-            'id'    => 'pk',
-            'name'  => 'string',
+            'id' => 'pk',
+            'name' => 'string',
             'alias' => 'string',
         ];
         Yii::$app->getDb()->createCommand()->createTable('test_attribute', $columns)->execute();
     }
 
-    protected function tearDown(): void
+    public function tearDown(): void
     {
         Yii::$app->getDb()->close();
         parent::tearDown();
@@ -96,22 +95,21 @@ class AttributeBehaviorTest extends TestCase
 
     /**
      * @dataProvider preserveNonEmptyValuesDataProvider
-     *
-     * @param string      $aliasExpected
-     * @param bool        $preserveNonEmptyValues
-     * @param string      $name
-     * @param null|string $alias
+     * @param string $aliasExpected
+     * @param bool $preserveNonEmptyValues
+     * @param string $name
+     * @param string|null $alias
      */
     public function testPreserveNonEmptyValues(
         $aliasExpected,
         $preserveNonEmptyValues,
         $name,
         $alias
-    ): void {
-        $model                                            = new ActiveRecordWithAttributeBehavior();
+    ) {
+        $model = new ActiveRecordWithAttributeBehavior();
         $model->attributeBehavior->preserveNonEmptyValues = $preserveNonEmptyValues;
-        $model->name                                      = $name;
-        $model->alias                                     = $alias;
+        $model->name = $name;
+        $model->alias = $alias;
         $model->validate();
 
         $this->assertEquals($aliasExpected, $model->alias);
@@ -121,38 +119,38 @@ class AttributeBehaviorTest extends TestCase
 /**
  * Test Active Record class with [[AttributeBehavior]] behavior attached.
  *
- * @property int               $id
- * @property string            $name
- * @property string            $alias
+ * @property int $id
+ * @property string $name
+ * @property string $alias
+ *
  * @property AttributeBehavior $attributeBehavior
  */
 class ActiveRecordWithAttributeBehavior extends ActiveRecord
 {
     /**
-     * @inheritDoc
-     */
-    public static function tableName()
-    {
-        return 'test_attribute';
-    }
-
-    /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function behaviors()
     {
         return [
             'attribute' => [
-                'class'      => AttributeBehavior::className(),
+                'class' => AttributeBehavior::className(),
                 'attributes' => [
                     self::EVENT_BEFORE_VALIDATE => 'alias',
                 ],
-                'value' => static function ($event)
-                {
+                'value' => function ($event) {
                     return $event->sender->name;
                 },
             ],
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function tableName()
+    {
+        return 'test_attribute';
     }
 
     /**

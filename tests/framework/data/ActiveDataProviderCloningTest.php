@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\data;
 
 use yii\data\ActiveDataProvider;
@@ -13,12 +13,12 @@ use yiiunit\TestCase;
 
 class ActiveDataProviderCloningTest extends TestCase
 {
-    public function testClone(): void
+    public function testClone()
     {
         $queryFirst = new Query();
 
         $dataProviderFirst = new ActiveDataProvider([
-            'query' => $queryFirst,
+            'query' => $queryFirst
         ]);
 
         $dataProviderSecond = clone $dataProviderFirst;

@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\i18n;
 
 use yii\i18n\MessageFormatter;
@@ -12,33 +12,22 @@ use yiiunit\TestCase;
 
 /**
  * @author Alexander Makarov <sam@rmcreative.ru>
- *
  * @since 2.0
  * @group i18n
  */
 class MessageFormatterTest extends TestCase
 {
-    public const N = 'n';
-
-    public const N_VALUE = 42;
-
-    public const F = 'f';
-
-    public const F_VALUE = 2e+8;
-
-    public const F_VALUE_FORMATTED = '200,000,000';
-
-    public const D = 'd';
-
-    public const D_VALUE = 200000000.101;
-
-    public const D_VALUE_FORMATTED = '200,000,000.101';
-
-    public const D_VALUE_FORMATTED_INTEGER = '200,000,000';
-
-    public const SUBJECT = 'сабж';
-
-    public const SUBJECT_VALUE = 'Answer to the Ultimate Question of Life, the Universe, and Everything';
+    const N = 'n';
+    const N_VALUE = 42;
+    const F = 'f';
+    const F_VALUE = 2e+8;
+    const F_VALUE_FORMATTED = '200,000,000';
+    const D = 'd';
+    const D_VALUE = 200000000.101;
+    const D_VALUE_FORMATTED = '200,000,000.101';
+    const D_VALUE_FORMATTED_INTEGER = '200,000,000';
+    const SUBJECT = 'сабж';
+    const SUBJECT_VALUE = 'Answer to the Ultimate Question of Life, the Universe, and Everything';
 
     public function patterns()
     {
@@ -47,7 +36,7 @@ class MessageFormatterTest extends TestCase
                 '{' . self::SUBJECT . '} is {' . self::N . ', number}', // pattern
                 self::SUBJECT_VALUE . ' is ' . self::N_VALUE, // expected
                 [ // params
-                    self::N       => self::N_VALUE,
+                    self::N => self::N_VALUE,
                     self::SUBJECT => self::SUBJECT_VALUE,
                 ],
             ],
@@ -56,7 +45,7 @@ class MessageFormatterTest extends TestCase
                 '{' . self::SUBJECT . '} is {' . self::N . ', number, integer}', // pattern
                 self::SUBJECT_VALUE . ' is ' . self::N_VALUE, // expected
                 [ // params
-                    self::N       => self::N_VALUE,
+                    self::N => self::N_VALUE,
                     self::SUBJECT => self::SUBJECT_VALUE,
                 ],
             ],
@@ -68,6 +57,7 @@ class MessageFormatterTest extends TestCase
                     self::F => self::F_VALUE,
                 ],
             ],
+
 
             [
                 'Here is a big number: {' . self::F . ', number, integer}', // pattern
@@ -116,9 +106,9 @@ _MSG_
                 'ralph invites beep and 3 other people to his party.',
                 [
                     'gender_of_host' => 'male',
-                    'num_guests'     => 4,
-                    'host'           => 'ralph',
-                    'guest'          => 'beep',
+                    'num_guests' => 4,
+                    'host' => 'ralph',
+                    'guest' => 'beep',
                 ],
                 defined('INTL_ICU_VERSION') && version_compare(INTL_ICU_VERSION, '4.8', '<'),
                 'select format is available in ICU > 4.4 and plural format with =X selector is avilable since 4.8',
@@ -128,7 +118,7 @@ _MSG_
                 '{name} is {gender} and {gender, select, female{she} male{he} other{it}} loves Yii!',
                 'Alexander is male and he loves Yii!',
                 [
-                    'name'   => 'Alexander',
+                    'name' => 'Alexander',
                     'gender' => 'male',
                 ],
                 defined('INTL_ICU_VERSION') && version_compare(INTL_ICU_VERSION, '4.4.2', '<'),
@@ -140,12 +130,12 @@ _MSG_
                 '{name} is {gender} and {gender, select, female{she} male{he} other{it}} loves Yii!',
                 'Alexander is male and he loves Yii!',
                 [
-                    'name'   => 'Alexander',
+                    'name' => 'Alexander',
                     'gender' => 'male',
-                    // following should not be replaced
-                    'he'  => 'wtf',
+                     // following should not be replaced
+                    'he' => 'wtf',
                     'she' => 'wtf',
-                    'it'  => 'wtf',
+                    'it' => 'wtf',
                 ],
                 defined('INTL_ICU_VERSION') && version_compare(INTL_ICU_VERSION, '4.4.2', '<'),
                 'select format is available in ICU > 4.4',
@@ -156,10 +146,10 @@ _MSG_
                 '{name} is {gender} and {gender, select, female{she} male{{he}} other{it}} loves Yii!',
                 'Alexander is male and wtf loves Yii!',
                 [
-                    'name'   => 'Alexander',
+                    'name' => 'Alexander',
                     'gender' => 'male',
-                    'he'     => 'wtf',
-                    'she'    => 'wtf',
+                    'he' => 'wtf',
+                    'she' => 'wtf',
                 ],
                 defined('INTL_ICU_VERSION') && version_compare(INTL_ICU_VERSION, '4.8', '<'),
                 'parameters in select format do not seem to work in ICU < 4.8',
@@ -170,10 +160,10 @@ _MSG_
                 '{gender} and {gender, select, female{she} male{{he}} other{it}} loves {nr, number} is {gender}!',
                 'male and wtf loves 42 is male!',
                 [
-                    'nr'     => 42,
+                    'nr' => 42,
                     'gender' => 'male',
-                    'he'     => 'wtf',
-                    'she'    => 'wtf',
+                    'he' => 'wtf',
+                    'she' => 'wtf',
                 ],
                 defined('INTL_ICU_VERSION') && version_compare(INTL_ICU_VERSION, '4.4.2', '<'),
                 'select format is available in ICU > 4.4',
@@ -196,36 +186,36 @@ _MSG_
                 'Showing <b>{begin, number}-{end, number}</b> of <b>{totalCount, number}</b> {totalCount, plural, one{item} other{items}}.',
                 'Showing <b>1-10</b> of <b>12</b> items.',
                 [// A
-                    'begin'      => 1,
-                    'end'        => 10,
-                    'count'      => 10,
+                    'begin' => 1,
+                    'end' => 10,
+                    'count' => 10,
                     'totalCount' => 12,
-                    'page'       => 1,
-                    'pageCount'  => 2,
+                    'page' => 1,
+                    'pageCount' => 2,
                 ],
             ],
             [
                 'Showing <b>{begin, number}-{end, number}</b> of <b>{totalCount, number}</b> {totalCount, plural, one{item} other{items}}.',
                 'Showing <b>1-1</b> of <b>1</b> item.',
                 [// B
-                    'begin'      => 1,
-                    'end'        => 1,
-                    'count'      => 1,
+                    'begin' => 1,
+                    'end' => 1,
+                    'count' => 1,
                     'totalCount' => 1,
-                    'page'       => 1,
-                    'pageCount'  => 1,
+                    'page' => 1,
+                    'pageCount' => 1,
                 ],
             ],
             [
                 'Showing <b>{begin, number}-{end, number}</b> of <b>{totalCount, number}</b> {totalCount, plural, one{item} other{items}}.',
                 'Showing <b>0-0</b> of <b>0</b> items.',
                 [// C
-                    'begin'      => 0,
-                    'end'        => 0,
-                    'count'      => 0,
+                    'begin' => 0,
+                    'end' => 0,
+                    'count' => 0,
                     'totalCount' => 0,
-                    'page'       => 1,
-                    'pageCount'  => 1,
+                    'page' => 1,
+                    'pageCount' => 1,
                 ],
             ],
             [
@@ -246,7 +236,7 @@ _MSG_
                 [
                     'begin' => 5,
                     'count' => 1,
-                    'end'   => 10,
+                    'end' => 10,
                 ],
             ],
             [
@@ -278,8 +268,8 @@ _MSG_
                 '{gender, select, female{Уважаемая} other{Уважаемый}} {firstname},',
                 'Уважаемый Vadim,',
                 [
-                    'gender'    => null,
-                    'firstname' => 'Vadim',
+                    'gender' => null,
+                    'firstname' => 'Vadim'
                 ],
             ],
         ];
@@ -338,8 +328,8 @@ _MSG_
                 '{monkeyCount,number,integer} monkeys on {trees,number,integer} trees make {monkeysPerTree,number} monkeys per tree',
                 '4,560 monkeys on 123 trees make 37.073 monkeys per tree',
                 [
-                    'monkeyCount'    => 4560,
-                    'trees'          => 123,
+                    'monkeyCount' => 4560,
+                    'trees' => 123,
                     'monkeysPerTree' => 37.073,
                 ],
                 'en-US',
@@ -349,8 +339,8 @@ _MSG_
                 '{monkeyCount,number,integer} Affen auf {trees,number,integer} Bäumen sind {monkeysPerTree,number} Affen pro Baum',
                 '4.560 Affen auf 123 Bäumen sind 37,073 Affen pro Baum',
                 [
-                    'monkeyCount'    => 4560,
-                    'trees'          => 123,
+                    'monkeyCount' => 4560,
+                    'trees' => 123,
                     'monkeysPerTree' => 37.073,
                 ],
                 'de',
@@ -360,66 +350,64 @@ _MSG_
 
     /**
      * @dataProvider patterns
-     *
      * @param string $pattern
      * @param string $expected
-     * @param array  $args
-     * @param bool   $skip
+     * @param array $args
+     * @param bool $skip
      * @param string $skipMessage
      */
-    public function testNamedArguments($pattern, $expected, $args, $skip = false, $skipMessage = ''): void
+    public function testNamedArguments($pattern, $expected, $args, $skip = false, $skipMessage = '')
     {
         if ($skip) {
             $this->markTestSkipped($skipMessage);
         }
         $formatter = new MessageFormatter();
-        $result    = $formatter->format($pattern, $args, 'en-US');
+        $result = $formatter->format($pattern, $args, 'en-US');
         $this->assertEquals($expected, $result, $formatter->getErrorMessage());
     }
 
     /**
      * @dataProvider parsePatterns
-     *
      * @param string $pattern
      * @param string $expected
-     * @param array  $args
+     * @param array $args
      * @param string $locale
      */
-    public function testParseNamedArguments($pattern, $expected, $args, $locale = 'en-US'): void
+    public function testParseNamedArguments($pattern, $expected, $args, $locale = 'en-US')
     {
         if (!extension_loaded('intl')) {
             $this->markTestSkipped('intl not installed. Skipping.');
         }
 
         $formatter = new MessageFormatter();
-        $result    = $formatter->parse($pattern, $expected, $locale);
+        $result = $formatter->parse($pattern, $expected, $locale);
         $this->assertEquals($args, $result, $formatter->getErrorMessage() . ' Pattern: ' . $pattern);
     }
 
-    public function testInsufficientArguments(): void
+    public function testInsufficientArguments()
     {
         $expected = '{' . self::SUBJECT . '} is ' . self::N_VALUE;
 
         $formatter = new MessageFormatter();
-        $result    = $formatter->format('{' . self::SUBJECT . '} is {' . self::N . ', number}', [
+        $result = $formatter->format('{' . self::SUBJECT . '} is {' . self::N . ', number}', [
             self::N => self::N_VALUE,
         ], 'en-US');
 
         $this->assertEquals($expected, $result, $formatter->getErrorMessage());
     }
 
-    public function testNoParams(): void
+    public function testNoParams()
     {
-        $pattern   = '{' . self::SUBJECT . '} is ' . self::N;
+        $pattern = '{' . self::SUBJECT . '} is ' . self::N;
         $formatter = new MessageFormatter();
-        $result    = $formatter->format($pattern, [], 'en-US');
+        $result = $formatter->format($pattern, [], 'en-US');
         $this->assertEquals($pattern, $result, $formatter->getErrorMessage());
     }
 
-    public function testMalformedFormatter(): void
+    public function testMalformedFormatter()
     {
         $formatter = new MessageFormatter();
-        $result    = $formatter->format('{word,umber}', ['word' => 'test'], 'en-US'); // typo is intentional, message pattern should be invalid
+        $result = $formatter->format('{word,umber}', ['word' => 'test'], 'en-US'); // typo is intentional, message pattern should be invalid
         $this->assertFalse($result);
         $this->assertNotEmpty($formatter->getErrorMessage());
     }

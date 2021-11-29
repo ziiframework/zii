@@ -1,13 +1,12 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\validators;
 
-use stdclass;
 use yii\validators\DefaultValueValidator;
 use yiiunit\TestCase;
 
@@ -24,11 +23,11 @@ class DefaultValueValidatorTest extends TestCase
         $this->destroyApplication();
     }
 
-    public function testValidateAttribute(): void
+    public function testValidateAttribute()
     {
-        $val        = new DefaultValueValidator();
+        $val = new DefaultValueValidator();
         $val->value = 'test_value';
-        $obj        = new stdclass();
+        $obj = new \stdclass();
         $obj->attrA = 'attrA';
         $obj->attrB = null;
         $obj->attrC = '';
@@ -38,7 +37,7 @@ class DefaultValueValidatorTest extends TestCase
         $this->assertEquals($val->value, $obj->attrB);
         $this->assertEquals($objB->attrA, $obj->attrA);
         $val->value = 'new_test_value';
-        $obj        = clone $objB; // get clean object
+        $obj = clone $objB; // get clean object
         $val->validateAttribute($obj, 'attrC');
         $this->assertEquals('new_test_value', $obj->attrC);
         $this->assertEquals($objB->attrA, $obj->attrA);

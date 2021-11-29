@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\console\controllers;
 
 use Yii;
@@ -17,10 +17,9 @@ use yii\i18n\GettextPoFile;
 class POMessageControllerTest extends BaseMessageControllerTest
 {
     protected $messagePath;
-
     protected $catalog = 'messages';
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -28,23 +27,23 @@ class POMessageControllerTest extends BaseMessageControllerTest
         FileHelper::createDirectory($this->messagePath, 0777);
     }
 
-    protected function tearDown(): void
+    public function tearDown(): void
     {
         parent::tearDown();
         FileHelper::removeDirectory($this->messagePath);
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getDefaultConfig()
     {
         return [
-            'format'      => 'po',
-            'languages'   => [$this->language],
-            'sourcePath'  => $this->sourcePath,
+            'format' => 'po',
+            'languages' => [$this->language],
+            'sourcePath' => $this->sourcePath,
             'messagePath' => $this->messagePath,
-            'overwrite'   => true,
+            'overwrite' => true,
         ];
     }
 
@@ -57,16 +56,15 @@ class POMessageControllerTest extends BaseMessageControllerTest
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
-    protected function saveMessages($messages, $category): void
+    protected function saveMessages($messages, $category)
     {
         $messageFilePath = $this->getMessageFilePath();
         FileHelper::createDirectory(dirname($messageFilePath), 0777);
         $gettext = new GettextPoFile();
 
         $data = [];
-
         foreach ($messages as $message => $translation) {
             $data[$category . chr(4) . $message] = $translation;
         }
@@ -75,18 +73,16 @@ class POMessageControllerTest extends BaseMessageControllerTest
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function loadMessages($category)
     {
         $messageFilePath = $this->getMessageFilePath();
-
         if (!file_exists($messageFilePath)) {
             return [];
         }
 
         $gettext = new GettextPoFile();
-
         return $gettext->load($messageFilePath, $category);
     }
 }

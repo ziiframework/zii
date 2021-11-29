@@ -1,15 +1,13 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
 
 /* @var $this \yiiunit\framework\db\CommandTest  */
 
-$rows = call_user_func(static function ()
-{
+$rows = call_user_func(function () {
     if (false) {
         yield [];
     }

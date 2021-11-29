@@ -1,15 +1,17 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\behaviors;
 
 use Yii;
+use yii\base\BaseObject;
 use yii\behaviors\BlameableBehavior;
 use yii\db\ActiveRecord;
+use yii\db\BaseActiveRecord;
 use yiiunit\TestCase;
 
 /**
@@ -26,26 +28,26 @@ class BlameableBehaviorConsoleTest extends TestCase
         }
     }
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->mockApplication([
             'components' => [
                 'db' => [
                     'class' => '\yii\db\Connection',
-                    'dsn'   => 'sqlite::memory:',
+                    'dsn' => 'sqlite::memory:',
                 ],
             ],
         ]);
 
         $columns = [
-            'name'       => 'string',
+            'name' => 'string',
             'created_by' => 'integer',
             'updated_by' => 'integer',
         ];
         Yii::$app->getDb()->createCommand()->createTable('test_blame', $columns)->execute();
     }
 
-    protected function tearDown(): void
+    public function tearDown(): void
     {
         Yii::$app->getDb()->close();
         parent::tearDown();
@@ -53,12 +55,12 @@ class BlameableBehaviorConsoleTest extends TestCase
         gc_collect_cycles();
     }
 
-    public function testDefaultValue(): void
+    public function testDefaultValue()
     {
         $model = new ActiveRecordBlameableConsole([
             'as blameable' => [
-                'class'        => BlameableBehavior::className(),
-                'defaultValue' => 2,
+                'class' => BlameableBehavior::className(),
+                'defaultValue' => 2
             ],
         ]);
 
@@ -69,9 +71,9 @@ class BlameableBehaviorConsoleTest extends TestCase
         $this->assertEquals(2, $model->updated_by);
     }
 
-    public function testDefaultValueWithClosure(): void
+    public function testDefaultValueWithClosure()
     {
-        $model       = new ActiveRecordBlameableConsoleWithDefaultValueClosure();
+        $model = new ActiveRecordBlameableConsoleWithDefaultValueClosure();
         $model->name = __METHOD__;
         $model->beforeSave(true);
 
@@ -86,11 +88,10 @@ class ActiveRecordBlameableConsoleWithDefaultValueClosure extends ActiveRecordBl
     {
         return [
             'blameable' => [
-                'class'        => BlameableBehavior::className(),
-                'defaultValue' => static function ()
-                {
+                'class' => BlameableBehavior::className(),
+                'defaultValue' => function () {
                     return 10 + 1;
-                },
+                }
             ],
         ];
     }
@@ -99,23 +100,14 @@ class ActiveRecordBlameableConsoleWithDefaultValueClosure extends ActiveRecordBl
 /**
  * Test Active Record class with [[BlameableBehavior]] behavior attached.
  *
- * @property string            $name
- * @property int               $created_by
- * @property int               $updated_by
+ * @property string $name
+ * @property int $created_by
+ * @property int $updated_by
+ *
  * @property BlameableBehavior $blameable
  */
 class ActiveRecordBlameableConsole extends ActiveRecord
 {
-    public static function tableName()
-    {
-        return 'test_blame';
-    }
-
-    public static function primaryKey()
-    {
-        return ['name'];
-    }
-
     public function behaviors()
     {
         return [
@@ -125,11 +117,21 @@ class ActiveRecordBlameableConsole extends ActiveRecord
         ];
     }
 
+    public static function tableName()
+    {
+        return 'test_blame';
+    }
+
     /**
      * @return BlameableBehavior
      */
     public function getBlameable()
     {
         return $this->getBehavior('blameable');
+    }
+
+    public static function primaryKey()
+    {
+        return ['name'];
     }
 }

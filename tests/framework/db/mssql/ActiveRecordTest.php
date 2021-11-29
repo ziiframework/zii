@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\db\mssql;
 
 use yiiunit\data\ar\TestTrigger;
@@ -18,7 +18,7 @@ class ActiveRecordTest extends \yiiunit\framework\db\ActiveRecordTest
 {
     public $driverName = 'sqlsrv';
 
-    public function testExplicitPkOnAutoIncrement(): void
+    public function testExplicitPkOnAutoIncrement()
     {
         $this->markTestSkipped('MSSQL does not support explicit value for an IDENTITY column.');
     }
@@ -26,7 +26,7 @@ class ActiveRecordTest extends \yiiunit\framework\db\ActiveRecordTest
     /**
      * @throws \yii\db\Exception
      */
-    public function testSaveWithTrigger(): void
+    public function testSaveWithTrigger()
     {
         $db = $this->getConnection();
 
@@ -48,7 +48,7 @@ BEGIN
 END';
         $db->createCommand($sql)->execute();
 
-        $record            = new TestTrigger();
+        $record = new TestTrigger();
         $record->stringcol = 'test';
         $this->assertTrue($record->save(false));
         $this->assertEquals(1, $record->id);
@@ -60,7 +60,7 @@ END';
     /**
      * @throws \yii\db\Exception
      */
-    public function testSaveWithComputedColumn(): void
+    public function testSaveWithComputedColumn()
     {
         $db = $this->getConnection();
 
@@ -78,7 +78,7 @@ END';
         $sql = 'ALTER TABLE [dbo].[test_trigger] ADD [computed_column] AS dbo.TESTFUNC([ID])';
         $db->createCommand($sql)->execute();
 
-        $record            = new TestTrigger();
+        $record = new TestTrigger();
         $record->stringcol = 'test';
         $this->assertTrue($record->save(false));
         $this->assertEquals(1, $record->id);

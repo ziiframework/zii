@@ -1,15 +1,16 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\web;
 
 use RuntimeException;
 use Yii;
 use yii\base\InlineAction;
+use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\ServerErrorHttpException;
@@ -30,13 +31,13 @@ class ControllerTest extends TestCase
 
         $this->mockWebApplication();
         $this->controller = new FakeController('fake', new \yii\web\Application([
-            'id'         => 'app',
-            'basePath'   => __DIR__,
+            'id' => 'app',
+            'basePath' => __DIR__,
             'components' => [
                 'request' => [
                     'cookieValidationKey' => 'wefJDF8sfdsfSDefwqdxj9oq',
-                    'scriptFile'          => __DIR__ . '/index.php',
-                    'scriptUrl'           => '/index.php',
+                    'scriptFile' => __DIR__ . '/index.php',
+                    'scriptUrl' => '/index.php',
                 ],
             ],
         ]));
@@ -44,169 +45,160 @@ class ControllerTest extends TestCase
         Yii::$app->controller = $this->controller;
     }
 
-    public function testBindActionParams(): void
+    public function testBindActionParams()
     {
         $aksi1 = new InlineAction('aksi1', $this->controller, 'actionAksi1');
 
-        $params            = ['fromGet' => 'from query params', 'q' => 'd426', 'validator' => 'available'];
-        [$fromGet, $other] = $this->controller->bindActionParams($aksi1, $params);
+        $params = ['fromGet' => 'from query params', 'q' => 'd426', 'validator' => 'available'];
+        list($fromGet, $other) = $this->controller->bindActionParams($aksi1, $params);
         $this->assertEquals('from query params', $fromGet);
         $this->assertEquals('default', $other);
 
-        $params            = ['fromGet' => 'from query params', 'q' => 'd426', 'other' => 'available'];
-        [$fromGet, $other] = $this->controller->bindActionParams($aksi1, $params);
+        $params = ['fromGet' => 'from query params', 'q' => 'd426', 'other' => 'available'];
+        list($fromGet, $other) = $this->controller->bindActionParams($aksi1, $params);
         $this->assertEquals('from query params', $fromGet);
         $this->assertEquals('available', $other);
     }
 
-    public function testNullableInjectedActionParams(): void
+    public function testNullableInjectedActionParams()
     {
         if (PHP_VERSION_ID < 70100) {
             $this->markTestSkipped('Can not be tested on PHP < 7.1');
-
             return;
         }
 
         // Use the PHP71 controller for this test
         $this->controller = new FakePhp71Controller('fake', new \yii\web\Application([
-            'id'       => 'app',
+            'id' => 'app',
             'basePath' => __DIR__,
 
             'components' => [
                 'request' => [
                     'cookieValidationKey' => 'wefJDF8sfdsfSDefwqdxj9oq',
-                    'scriptFile'          => __DIR__ . '/index.php',
-                    'scriptUrl'           => '/index.php',
+                    'scriptFile' => __DIR__ . '/index.php',
+                    'scriptUrl' => '/index.php',
                 ],
             ],
         ]));
         $this->mockWebApplication(['controller' => $this->controller]);
 
         $injectionAction = new InlineAction('injection', $this->controller, 'actionNullableInjection');
-        $params          = [];
-        $args            = $this->controller->bindActionParams($injectionAction, $params);
+        $params = [];
+        $args = $this->controller->bindActionParams($injectionAction, $params);
         $this->assertEquals(Yii::$app->request, $args[0]);
         $this->assertNull($args[1]);
     }
 
-    public function testModelBindingHttpException(): void
-    {
+    public function testModelBindingHttpException() {
         if (PHP_VERSION_ID < 70100) {
             $this->markTestSkipped('Can not be tested on PHP < 7.1');
-
             return;
         }
 
         $this->controller = new FakePhp71Controller('fake', new \yii\web\Application([
-            'id'        => 'app',
-            'basePath'  => __DIR__,
+            'id' => 'app',
+            'basePath' => __DIR__,
             'container' => [
                 'definitions' => [
-                    \yiiunit\framework\web\stubs\ModelBindingStub::className() => [\yiiunit\framework\web\stubs\ModelBindingStub::className(), 'build'],
-                ],
+                    \yiiunit\framework\web\stubs\ModelBindingStub::className() => [ \yiiunit\framework\web\stubs\ModelBindingStub::className() , "build"],
+                ]
             ],
             'components' => [
                 'request' => [
                     'cookieValidationKey' => 'wefJDF8sfdsfSDefwqdxj9oq',
-                    'scriptFile'          => __DIR__ . '/index.php',
-                    'scriptUrl'           => '/index.php',
+                    'scriptFile' => __DIR__ . '/index.php',
+                    'scriptUrl' => '/index.php',
                 ],
             ],
         ]));
         Yii::$container->set(VendorImage::className(), VendorImage::className());
         $this->mockWebApplication(['controller' => $this->controller]);
         $injectionAction = new InlineAction('injection', $this->controller, 'actionModelBindingInjection');
-        $this->expectException(get_class(new NotFoundHttpException('Not Found Item.')));
+        $this->expectException(get_class(new NotFoundHttpException("Not Found Item.")));
         $this->expectExceptionMessage('Not Found Item.');
         $this->controller->bindActionParams($injectionAction, []);
     }
 
-    public function testInjectionContainerException(): void
+    public function testInjectionContainerException()
     {
         if (PHP_VERSION_ID < 70100) {
             $this->markTestSkipped('Can not be tested on PHP < 7.1');
-
             return;
         }
         // Use the PHP71 controller for this test
         $this->controller = new FakePhp71Controller('fake', new \yii\web\Application([
-            'id'       => 'app',
+            'id' => 'app',
             'basePath' => __DIR__,
 
             'components' => [
                 'request' => [
                     'cookieValidationKey' => 'wefJDF8sfdsfSDefwqdxj9oq',
-                    'scriptFile'          => __DIR__ . '/index.php',
-                    'scriptUrl'           => '/index.php',
+                    'scriptFile' => __DIR__ . '/index.php',
+                    'scriptUrl' => '/index.php',
                 ],
             ],
         ]));
         $this->mockWebApplication(['controller' => $this->controller]);
 
         $injectionAction = new InlineAction('injection', $this->controller, 'actionInjection');
-        $params          = ['between' => 'test', 'after' => 'another', 'before' => 'test'];
-        Yii::$container->set(VendorImage::className(), static function (): void
-        {
-            throw new RuntimeException('uh oh');
-        });
+        $params = ['between' => 'test', 'after' => 'another', 'before' => 'test'];
+        Yii::$container->set(VendorImage::className(), function() { throw new \RuntimeException('uh oh'); });
 
         $this->expectException(get_class(new RuntimeException()));
         $this->expectExceptionMessage('uh oh');
         $this->controller->bindActionParams($injectionAction, $params);
     }
 
-    public function testUnknownInjection(): void
+    public function testUnknownInjection()
     {
         if (PHP_VERSION_ID < 70100) {
             $this->markTestSkipped('Can not be tested on PHP < 7.1');
-
             return;
         }
         // Use the PHP71 controller for this test
         $this->controller = new FakePhp71Controller('fake', new \yii\web\Application([
-            'id'         => 'app',
-            'basePath'   => __DIR__,
+            'id' => 'app',
+            'basePath' => __DIR__,
             'components' => [
                 'request' => [
                     'cookieValidationKey' => 'wefJDF8sfdsfSDefwqdxj9oq',
-                    'scriptFile'          => __DIR__ . '/index.php',
-                    'scriptUrl'           => '/index.php',
+                    'scriptFile' => __DIR__ . '/index.php',
+                    'scriptUrl' => '/index.php',
                 ],
             ],
         ]));
         $this->mockWebApplication(['controller' => $this->controller]);
 
         $injectionAction = new InlineAction('injection', $this->controller, 'actionInjection');
-        $params          = ['between' => 'test', 'after' => 'another', 'before' => 'test'];
+        $params = ['between' => 'test', 'after' => 'another', 'before' => 'test'];
         Yii::$container->clear(VendorImage::className());
         $this->expectException(get_class(new ServerErrorHttpException()));
         $this->expectExceptionMessage('Could not load required service: vendorImage');
         $this->controller->bindActionParams($injectionAction, $params);
     }
 
-    public function testInjectedActionParams(): void
+    public function testInjectedActionParams()
     {
         if (PHP_VERSION_ID < 70100) {
             $this->markTestSkipped('Can not be tested on PHP < 7.1');
-
             return;
         }
         // Use the PHP71 controller for this test
         $this->controller = new FakePhp71Controller('fake', new \yii\web\Application([
-            'id'         => 'app',
-            'basePath'   => __DIR__,
+            'id' => 'app',
+            'basePath' => __DIR__,
             'components' => [
                 'request' => [
                     'cookieValidationKey' => 'wefJDF8sfdsfSDefwqdxj9oq',
-                    'scriptFile'          => __DIR__ . '/index.php',
-                    'scriptUrl'           => '/index.php',
+                    'scriptFile' => __DIR__ . '/index.php',
+                    'scriptUrl' => '/index.php',
                 ],
             ],
         ]));
         $this->mockWebApplication(['controller' => $this->controller]);
 
         $injectionAction = new InlineAction('injection', $this->controller, 'actionInjection');
-        $params          = ['between' => 'test', 'after' => 'another', 'before' => 'test'];
+        $params = ['between' => 'test', 'after' => 'another', 'before' => 'test'];
         Yii::$container->set(VendorImage::className(), VendorImage::className());
         $args = $this->controller->bindActionParams($injectionAction, $params);
         $this->assertEquals($params['before'], $args[0]);
@@ -220,21 +212,20 @@ class ControllerTest extends TestCase
         $this->assertEquals($params['after'], $args[5]);
     }
 
-    public function testInjectedActionParamsFromModule(): void
+    public function testInjectedActionParamsFromModule()
     {
         if (PHP_VERSION_ID < 70100) {
             $this->markTestSkipped('Can not be tested on PHP < 7.1');
-
             return;
         }
         $module = new \yii\base\Module('fake', new \yii\web\Application([
-            'id'         => 'app',
-            'basePath'   => __DIR__,
+            'id' => 'app',
+            'basePath' => __DIR__,
             'components' => [
                 'request' => [
                     'cookieValidationKey' => 'wefJDF8sfdsfSDefwqdxj9oq',
-                    'scriptFile'          => __DIR__ . '/index.php',
-                    'scriptUrl'           => '/index.php',
+                    'scriptFile' => __DIR__ . '/index.php',
+                    'scriptUrl' => '/index.php',
                 ],
             ],
         ]));
@@ -246,7 +237,7 @@ class ControllerTest extends TestCase
         $this->mockWebApplication(['controller' => $this->controller]);
 
         $injectionAction = new InlineAction('injection', $this->controller, 'actionModuleServiceInjection');
-        $args            = $this->controller->bindActionParams($injectionAction, []);
+        $args = $this->controller->bindActionParams($injectionAction, []);
         $this->assertInstanceOf(\yii\data\ArrayDataProvider::className(), $args[0]);
         $this->assertEquals('Module yii\base\Module DI: yii\data\DataProviderInterface $dataProvider', Yii::$app->requestedParams['dataProvider']);
     }
@@ -254,23 +245,22 @@ class ControllerTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/17701
      */
-    public function testBindTypedActionParams(): void
+    public function testBindTypedActionParams()
     {
         if (PHP_VERSION_ID < 70000) {
             $this->markTestSkipped('Can not be tested on PHP < 7.0');
-
             return;
         }
 
         // Use the PHP7 controller for this test
         $this->controller = new FakePhp7Controller('fake', new \yii\web\Application([
-            'id'         => 'app',
-            'basePath'   => __DIR__,
+            'id' => 'app',
+            'basePath' => __DIR__,
             'components' => [
                 'request' => [
                     'cookieValidationKey' => 'wefJDF8sfdsfSDefwqdxj9oq',
-                    'scriptFile'          => __DIR__ . '/index.php',
-                    'scriptUrl'           => '/index.php',
+                    'scriptFile' => __DIR__ . '/index.php',
+                    'scriptUrl' => '/index.php',
                 ],
             ],
         ]));
@@ -278,8 +268,8 @@ class ControllerTest extends TestCase
 
         $aksi1 = new InlineAction('aksi1', $this->controller, 'actionAksi1');
 
-        $params                     = ['foo' => '100', 'bar' => null, 'true' => 'on', 'false' => 'false'];
-        [$foo, $bar, $true, $false] = $this->controller->bindActionParams($aksi1, $params);
+        $params = ['foo' => '100', 'bar' => null, 'true' => 'on', 'false' => 'false'];
+        list($foo, $bar, $true, $false) = $this->controller->bindActionParams($aksi1, $params);
         $this->assertSame(100, $foo);
         $this->assertSame(null, $bar);
         $this->assertSame(true, $true);
@@ -287,13 +277,13 @@ class ControllerTest extends TestCase
 
         // allow nullable argument to be set to empty string (as null)
         // https://github.com/yiisoft/yii2/issues/18450
-        $params  = ['foo' => 100, 'bar' => '', 'true' => true, 'false' => true];
-        [, $bar] = $this->controller->bindActionParams($aksi1, $params);
+        $params = ['foo' => 100, 'bar' => '', 'true' => true, 'false' => true];
+        list(, $bar) = $this->controller->bindActionParams($aksi1, $params);
         $this->assertSame(null, $bar);
 
         // make sure nullable string argument is not set to null when empty string is passed
         $stringy = new InlineAction('stringy', $this->controller, 'actionStringy');
-        [$foo]   = $this->controller->bindActionParams($stringy, ['foo' => '']);
+        list($foo) = $this->controller->bindActionParams($stringy, ['foo' => '']);
         $this->assertSame('', $foo);
 
         $params = ['foo' => 'oops', 'bar' => null];
@@ -302,10 +292,10 @@ class ControllerTest extends TestCase
         $this->controller->bindActionParams($aksi1, $params);
     }
 
-    public function testAsJson(): void
+    public function testAsJson()
     {
         $data = [
-            'test'    => 123,
+            'test' => 123,
             'example' => 'data',
         ];
         $result = $this->controller->asJson($data);
@@ -315,10 +305,10 @@ class ControllerTest extends TestCase
         $this->assertEquals($data, $result->data);
     }
 
-    public function testAsXml(): void
+    public function testAsXml()
     {
         $data = [
-            'test'    => 123,
+            'test' => 123,
             'example' => 'data',
         ];
         $result = $this->controller->asXml($data);
@@ -328,7 +318,7 @@ class ControllerTest extends TestCase
         $this->assertEquals($data, $result->data);
     }
 
-    public function testRedirect(): void
+    public function testRedirect()
     {
         $_SERVER['REQUEST_URI'] = 'http://test-domain.com/';
         $this->assertEquals($this->controller->redirect('')->headers->get('location'), '/');

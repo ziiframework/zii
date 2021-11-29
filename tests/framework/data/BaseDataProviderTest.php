@@ -1,13 +1,12 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\data;
 
-use ReflectionClass;
 use yii\data\BaseDataProvider;
 use yiiunit\TestCase;
 
@@ -16,9 +15,9 @@ use yiiunit\TestCase;
  */
 class BaseDataProviderTest extends TestCase
 {
-    public function testGenerateId(): void
+    public function testGenerateId()
     {
-        $rc = new ReflectionClass(BaseDataProvider::className());
+        $rc = new \ReflectionClass(BaseDataProvider::className());
         $rp = $rc->getProperty('counter');
         $rp->setAccessible(true);
         $rp->setValue(null);
@@ -34,7 +33,7 @@ class BaseDataProviderTest extends TestCase
 class ConcreteDataProvider extends BaseDataProvider
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function prepareModels()
     {
@@ -42,7 +41,7 @@ class ConcreteDataProvider extends BaseDataProvider
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function prepareKeys($models)
     {
@@ -50,7 +49,7 @@ class ConcreteDataProvider extends BaseDataProvider
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function prepareTotalCount()
     {

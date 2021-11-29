@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\widgets;
 
 use yii\base\DynamicModel;
@@ -23,7 +23,7 @@ class ActiveFormTest extends \yiiunit\TestCase
         $this->mockApplication();
     }
 
-    public function testBooleanAttributes(): void
+    public function testBooleanAttributes()
     {
         $o = ['template' => '{input}'];
 
@@ -47,6 +47,7 @@ EOF
 EOF
             , (string) $form->field($model, 'name', $o)->input('email', ['required' => false]));
 
+
         $this->assertEqualsWithoutLE(<<<'EOF'
 <div class="form-group field-dynamicmodel-name">
 <input type="email" id="dynamicmodel-name" class="form-control" name="DynamicModel[name]" required="test">
@@ -55,11 +56,11 @@ EOF
             , (string) $form->field($model, 'name', $o)->input('email', ['required' => 'test']));
     }
 
-    public function testIssue5356(): void
+    public function testIssue5356()
     {
         $o = ['template' => '{input}'];
 
-        $model             = new DynamicModel(['categories']);
+        $model = new DynamicModel(['categories']);
         $model->categories = 1;
         ob_start();
         $form = ActiveForm::begin(['action' => '/something', 'enableClientScript' => false]);
@@ -79,7 +80,7 @@ EOF
              , (string) $form->field($model, 'categories', $o)->listBox(['apple', 'banana', 'avocado'], ['multiple' => true]));
     }
 
-    public function testOutputBuffering(): void
+    public function testOutputBuffering()
     {
         $obLevel = ob_get_level();
         ob_start();
@@ -87,7 +88,7 @@ EOF
         $model = new DynamicModel(['name']);
 
         $form = ActiveForm::begin(['id' => 'someform', 'action' => '/someform', 'enableClientScript' => false]);
-        print "\n" . $form->field($model, 'name') . "\n";
+        echo "\n" . $form->field($model, 'name') . "\n";
         ActiveForm::end();
 
         $content = ob_get_clean();
@@ -107,7 +108,7 @@ HTML
 , $content);
     }
 
-    public function testRegisterClientScript(): void
+    public function testRegisterClientScript()
     {
         $this->mockWebApplication();
         $_SERVER['REQUEST_URI'] = 'http://example.com/';
@@ -137,18 +138,17 @@ HTML
     /**
      * @see https://github.com/yiisoft/yii2/issues/15536
      */
-    public function testShouldTriggerInitEvent(): void
+    public function testShouldTriggerInitEvent()
     {
         $initTriggered = false;
         ob_start();
         $form = ActiveForm::begin(
             [
-                'action'             => '/something',
+                'action' => '/something',
                 'enableClientScript' => false,
-                'on init'            => static function () use (&$initTriggered): void
-                {
+                'on init' => function () use (&$initTriggered) {
                     $initTriggered = true;
-                },
+                }
             ]
         );
         ActiveForm::end();
@@ -160,15 +160,15 @@ HTML
      * @see https://github.com/yiisoft/yii2/issues/15476
      * @see https://github.com/yiisoft/yii2/issues/16892
      */
-    public function testValidationStateOnInput(): void
+    public function testValidationStateOnInput()
     {
         $model = new DynamicModel(['name']);
         $model->addError('name', 'I have an error!');
         ob_start();
         $form = ActiveForm::begin([
-            'action'             => '/something',
+            'action' => '/something',
             'enableClientScript' => false,
-            'validationStateOn'  => ActiveForm::VALIDATION_STATE_ON_INPUT,
+            'validationStateOn' => ActiveForm::VALIDATION_STATE_ON_INPUT,
         ]);
         ActiveForm::end();
         ob_end_clean();
@@ -182,6 +182,7 @@ HTML
 </div>
 EOF
         , (string) $form->field($model, 'name'));
+
 
         $this->assertEqualsWithoutLE(<<<'EOF'
 <div class="form-group field-dynamicmodel-name">

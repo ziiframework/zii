@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\base;
 
 use yii\base\Object;
@@ -18,7 +18,7 @@ class BCObject extends \yii\base\Object
         Object::__construct($config);
     }
 
-    public function init(): void
+    public function init()
     {
         static::$initCalled = true;
     }

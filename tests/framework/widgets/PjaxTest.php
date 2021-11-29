@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\widgets;
 
 use yii\data\ArrayDataProvider;
@@ -14,17 +14,11 @@ use yiiunit\TestCase;
 
 class PjaxTest extends TestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->mockWebApplication();
-    }
-
-    public function testGeneratedIdByPjaxWidget(): void
+    public function testGeneratedIdByPjaxWidget()
     {
         ListView::$counter = 0;
-        Pjax::$counter     = 0;
-        $nonPjaxWidget1    = new ListView(['dataProvider' => new ArrayDataProvider()]);
+        Pjax::$counter = 0;
+        $nonPjaxWidget1 = new ListView(['dataProvider' => new ArrayDataProvider()]);
         ob_start();
         $pjax1 = new Pjax();
         ob_end_clean();
@@ -39,19 +33,24 @@ class PjaxTest extends TestCase
         $this->assertEquals('p1', $pjax2->options['id']);
     }
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->mockWebApplication();
+    }
+
     /**
      * @see https://github.com/yiisoft/yii2/issues/15536
      */
-    public function testShouldTriggerInitEvent(): void
+    public function testShouldTriggerInitEvent()
     {
         $initTriggered = false;
         ob_start();
         $pjax = new Pjax(
             [
-                'on init' => static function () use (&$initTriggered): void
-                {
+                'on init' => function () use (&$initTriggered) {
                     $initTriggered = true;
-                },
+                }
             ]
         );
         ob_end_clean();

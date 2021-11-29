@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\behaviors;
 
 use Yii;
@@ -28,13 +28,13 @@ class BlameableBehaviorTest extends TestCase
         }
     }
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->mockApplication([
             'components' => [
                 'db' => [
                     'class' => '\yii\db\Connection',
-                    'dsn'   => 'sqlite::memory:',
+                    'dsn' => 'sqlite::memory:',
                 ],
                 'user' => [
                     'class' => 'yiiunit\framework\behaviors\UserMock',
@@ -43,7 +43,7 @@ class BlameableBehaviorTest extends TestCase
         ]);
 
         $columns = [
-            'name'       => 'string',
+            'name' => 'string',
             'created_by' => 'integer',
             'updated_by' => 'integer',
         ];
@@ -52,7 +52,7 @@ class BlameableBehaviorTest extends TestCase
         $this->getUser()->login(10);
     }
 
-    protected function tearDown(): void
+    public function tearDown(): void
     {
         Yii::$app->getDb()->close();
         parent::tearDown();
@@ -60,11 +60,19 @@ class BlameableBehaviorTest extends TestCase
         gc_collect_cycles();
     }
 
-    public function testInsertUserIsGuest(): void
+    /**
+     * @return UserMock
+     */
+    private function getUser()
+    {
+        return Yii::$app->get('user');
+    }
+
+    public function testInsertUserIsGuest()
     {
         $this->getUser()->logout();
 
-        $model       = new ActiveRecordBlameable();
+        $model = new ActiveRecordBlameable();
         $model->name = __METHOD__;
         $model->beforeSave(true);
 
@@ -72,9 +80,9 @@ class BlameableBehaviorTest extends TestCase
         $this->assertNull($model->updated_by);
     }
 
-    public function testInsertUserIsNotGuest(): void
+    public function testInsertUserIsNotGuest()
     {
-        $model       = new ActiveRecordBlameable();
+        $model = new ActiveRecordBlameable();
         $model->name = __METHOD__;
         $model->beforeSave(true);
 
@@ -82,14 +90,14 @@ class BlameableBehaviorTest extends TestCase
         $this->assertEquals(10, $model->updated_by);
     }
 
-    public function testUpdateUserIsNotGuest(): void
+    public function testUpdateUserIsNotGuest()
     {
-        $model       = new ActiveRecordBlameable();
+        $model = new ActiveRecordBlameable();
         $model->name = __METHOD__;
         $model->save();
 
         $this->getUser()->login(20);
-        $model       = ActiveRecordBlameable::findOne(['name' => __METHOD__]);
+        $model = ActiveRecordBlameable::findOne(['name' => __METHOD__]);
         $model->name = __CLASS__;
         $model->save();
 
@@ -97,10 +105,10 @@ class BlameableBehaviorTest extends TestCase
         $this->assertEquals(20, $model->updated_by);
     }
 
-    public function testInsertCustomValue(): void
+    public function testInsertCustomValue()
     {
-        $model                        = new ActiveRecordBlameable();
-        $model->name                  = __METHOD__;
+        $model = new ActiveRecordBlameable();
+        $model->name = __METHOD__;
         $model->getBlameable()->value = 42;
         $model->beforeSave(true);
 
@@ -108,12 +116,11 @@ class BlameableBehaviorTest extends TestCase
         $this->assertEquals(42, $model->updated_by);
     }
 
-    public function testInsertClosure(): void
+    public function testInsertClosure()
     {
-        $model                        = new ActiveRecordBlameable();
-        $model->name                  = __METHOD__;
-        $model->getBlameable()->value = static function ($event)
-        {
+        $model = new ActiveRecordBlameable();
+        $model->name = __METHOD__;
+        $model->getBlameable()->value = function ($event) {
             return strlen($event->sender->name); // $model->name;
         };
         $model->beforeSave(true);
@@ -122,14 +129,14 @@ class BlameableBehaviorTest extends TestCase
         $this->assertEquals(strlen($model->name), $model->updated_by);
     }
 
-    public function testCustomAttributesAndEvents(): void
+    public function testCustomAttributesAndEvents()
     {
         $model = new ActiveRecordBlameable([
             'as blameable' => [
-                'class'      => BlameableBehavior::className(),
+                'class' => BlameableBehavior::className(),
                 'attributes' => [
                     BaseActiveRecord::EVENT_BEFORE_VALIDATE => 'created_by',
-                    BaseActiveRecord::EVENT_BEFORE_INSERT   => ['created_by', 'updated_by'],
+                    BaseActiveRecord::EVENT_BEFORE_INSERT => ['created_by', 'updated_by'],
                 ],
             ],
         ]);
@@ -148,14 +155,14 @@ class BlameableBehaviorTest extends TestCase
         $this->assertEquals(20, $model->updated_by);
     }
 
-    public function testDefaultValue(): void
+    public function testDefaultValue()
     {
         $this->getUser()->logout();
 
         $model = new ActiveRecordBlameable([
             'as blameable' => [
-                'class'        => BlameableBehavior::className(),
-                'defaultValue' => 2,
+                'class' => BlameableBehavior::className(),
+                'defaultValue' => 2
             ],
         ]);
 
@@ -166,9 +173,9 @@ class BlameableBehaviorTest extends TestCase
         $this->assertEquals(2, $model->updated_by);
     }
 
-    public function testDefaultValueWithClosure(): void
+    public function testDefaultValueWithClosure()
     {
-        $model       = new ActiveRecordBlameableWithDefaultValueClosure();
+        $model = new ActiveRecordBlameableWithDefaultValueClosure();
         $model->name = __METHOD__;
         $model->beforeSave(true);
 
@@ -178,14 +185,6 @@ class BlameableBehaviorTest extends TestCase
         $this->assertEquals(11, $model->created_by);
         $this->assertEquals(11, $model->updated_by);
     }
-
-    /**
-     * @return UserMock
-     */
-    private function getUser()
-    {
-        return Yii::$app->get('user');
-    }
 }
 
 class ActiveRecordBlameableWithDefaultValueClosure extends ActiveRecordBlameable
@@ -194,11 +193,10 @@ class ActiveRecordBlameableWithDefaultValueClosure extends ActiveRecordBlameable
     {
         return [
             'blameable' => [
-                'class'        => BlameableBehavior::className(),
-                'defaultValue' => function ()
-                {
+                'class' => BlameableBehavior::className(),
+                'defaultValue' => function () {
                     return $this->created_by + 1;
-                },
+                }
             ],
         ];
     }
@@ -207,23 +205,14 @@ class ActiveRecordBlameableWithDefaultValueClosure extends ActiveRecordBlameable
 /**
  * Test Active Record class with [[BlameableBehavior]] behavior attached.
  *
- * @property string            $name
- * @property int               $created_by
- * @property int               $updated_by
+ * @property string $name
+ * @property int $created_by
+ * @property int $updated_by
+ *
  * @property BlameableBehavior $blameable
  */
 class ActiveRecordBlameable extends ActiveRecord
 {
-    public static function tableName()
-    {
-        return 'test_blame';
-    }
-
-    public static function primaryKey()
-    {
-        return ['name'];
-    }
-
     public function behaviors()
     {
         return [
@@ -233,12 +222,22 @@ class ActiveRecordBlameable extends ActiveRecord
         ];
     }
 
+    public static function tableName()
+    {
+        return 'test_blame';
+    }
+
     /**
      * @return BlameableBehavior
      */
     public function getBlameable()
     {
         return $this->getBehavior('blameable');
+    }
+
+    public static function primaryKey()
+    {
+        return ['name'];
     }
 }
 
@@ -248,15 +247,15 @@ class UserMock extends BaseObject
 
     public $isGuest = true;
 
-    public function login($id): void
+    public function login($id)
     {
         $this->isGuest = false;
-        $this->id      = $id;
+        $this->id = $id;
     }
 
-    public function logout(): void
+    public function logout()
     {
         $this->isGuest = true;
-        $this->id      = null;
+        $this->id = null;
     }
 }

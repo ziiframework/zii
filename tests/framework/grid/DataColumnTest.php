@@ -1,13 +1,12 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\grid;
 
-use ReflectionMethod;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
@@ -27,21 +26,20 @@ class DataColumnTest extends \yiiunit\TestCase
     /**
      * @see DataColumn::getHeaderCellLabel()
      */
-    public function testColumnLabels_OnEmpty_ArrayProvider(): void
+    public function testColumnLabels_OnEmpty_ArrayProvider()
     {
         $this->mockApplication();
         $grid = new GridView([
             'dataProvider' => new ArrayDataProvider([
-                'allModels'  => [],
+                'allModels' => [],
                 'totalCount' => 0,
                 'modelClass' => Order::className(),
             ]),
             'columns' => ['customer_id', 'total'],
         ]);
         $labels = [];
-
         foreach ($grid->columns as $column) {
-            $method = new ReflectionMethod($column, 'getHeaderCellLabel');
+            $method = new \ReflectionMethod($column, 'getHeaderCellLabel');
             $method->setAccessible(true);
             $labels[] = $method->invoke($column);
         }
@@ -51,21 +49,20 @@ class DataColumnTest extends \yiiunit\TestCase
     /**
      * @see DataColumn::getHeaderCellLabel()
      */
-    public function testColumnLabels_OnEmpty_ArrayProvider_WithFilterModel(): void
+    public function testColumnLabels_OnEmpty_ArrayProvider_WithFilterModel()
     {
         $this->mockApplication();
         $grid = new GridView([
             'dataProvider' => new ArrayDataProvider([
-                'allModels'  => [],
+                'allModels' => [],
                 'totalCount' => 0,
             ]),
-            'columns'     => ['customer_id', 'total'],
+            'columns' => ['customer_id', 'total'],
             'filterModel' => new Order(),
         ]);
         $labels = [];
-
         foreach ($grid->columns as $column) {
-            $method = new ReflectionMethod($column, 'getHeaderCellLabel');
+            $method = new \ReflectionMethod($column, 'getHeaderCellLabel');
             $method->setAccessible(true);
             $labels[] = $method->invoke($column);
         }
@@ -76,25 +73,25 @@ class DataColumnTest extends \yiiunit\TestCase
      * @see DataColumn::$filter
      * @see DataColumn::renderFilterCellContent()
      */
-    public function testFilterInput_String(): void
+    public function testFilterInput_String()
     {
         $this->mockApplication();
         $filterInput = '<input type="text"/>';
-        $grid        = new GridView([
+        $grid = new GridView([
             'dataProvider' => new ArrayDataProvider([
-                'allModels'  => [],
+                'allModels' => [],
                 'totalCount' => 0,
             ]),
             'columns' => [
                 0 => [
                     'attribute' => 'customer_id',
-                    'filter'    => $filterInput,
+                    'filter' => $filterInput,
                 ],
             ],
         ]);
         //print_r($grid->columns);exit();
         $dataColumn = $grid->columns[0];
-        $method     = new ReflectionMethod($dataColumn, 'renderFilterCellContent');
+        $method = new \ReflectionMethod($dataColumn, 'renderFilterCellContent');
         $method->setAccessible(true);
         $result = $method->invoke($dataColumn);
         $this->assertEquals($result, $filterInput);
@@ -104,13 +101,13 @@ class DataColumnTest extends \yiiunit\TestCase
      * @see DataColumn::$filter
      * @see DataColumn::renderFilterCellContent()
      */
-    public function testFilterHasMaxLengthWhenIsAnActiveTextInput(): void
+    public function testFilterHasMaxLengthWhenIsAnActiveTextInput()
     {
         $this->mockApplication([
             'components' => [
                 'db' => [
                     'class' => '\yii\db\Connection',
-                    'dsn'   => 'sqlite::memory:',
+                    'dsn' => 'sqlite::memory:',
                 ],
             ],
         ]);
@@ -118,63 +115,64 @@ class DataColumnTest extends \yiiunit\TestCase
         ActiveRecord::$db = Yii::$app->getDb();
         Yii::$app->getDb()->createCommand()->createTable(Singer::tableName(), [
             'firstName' => 'string',
-            'lastName'  => 'string',
+            'lastName' => 'string'
         ])->execute();
 
         $filterInput = '<input type="text" class="form-control" name="Singer[lastName]" maxlength="25">';
-        $grid        = new GridView([
+        $grid = new GridView([
             'dataProvider' => new ActiveDataProvider(),
-            'filterModel'  => new Singer(),
-            'columns'      => [
-                0 => 'lastName',
+            'filterModel' => new Singer(),
+            'columns' => [
+                0 => 'lastName'
             ],
         ]);
 
         $dataColumn = $grid->columns[0];
-        $method     = new ReflectionMethod($dataColumn, 'renderFilterCellContent');
+        $method = new \ReflectionMethod($dataColumn, 'renderFilterCellContent');
         $method->setAccessible(true);
         $result = $method->invoke($dataColumn);
         $this->assertEquals($result, $filterInput);
     }
 
+
     /**
      * @see DataColumn::$filter
      * @see DataColumn::renderFilterCellContent()
      */
-    public function testFilterInput_Array(): void
+    public function testFilterInput_Array()
     {
         $this->mockApplication([
             'components' => [
                 'db' => [
                     'class' => '\yii\db\Connection',
-                    'dsn'   => 'sqlite::memory:',
+                    'dsn' => 'sqlite::memory:',
                 ],
             ],
         ]);
         $columns = [
-            'id'          => 'pk',
+            'id' => 'pk',
             'customer_id' => 'integer',
         ];
         ActiveRecord::$db = Yii::$app->getDb();
         Yii::$app->getDb()->createCommand()->createTable(Order::tableName(), $columns)->execute();
 
         $filterInput = [1, 2];
-        $grid        = new GridView([
+        $grid = new GridView([
             'dataProvider' => new ArrayDataProvider([
-                'allModels'  => [],
+                'allModels' => [],
                 'totalCount' => 0,
             ]),
             'columns' => [
                 0 => [
                     'attribute' => 'customer_id',
-                    'filter'    => $filterInput,
+                    'filter' => $filterInput,
                 ],
             ],
             'filterModel' => new Order(),
         ]);
 
         $dataColumn = $grid->columns[0];
-        $method     = new ReflectionMethod($dataColumn, 'renderFilterCellContent');
+        $method = new \ReflectionMethod($dataColumn, 'renderFilterCellContent');
         $method->setAccessible(true);
         $result = $method->invoke($dataColumn);
 
@@ -192,18 +190,18 @@ HTML
      * @see DataColumn::$filter
      * @see DataColumn::renderFilterCellContent()
      */
-    public function testFilterInput_FormatBoolean(): void
+    public function testFilterInput_FormatBoolean()
     {
         $this->mockApplication([
             'components' => [
                 'db' => [
                     'class' => '\yii\db\Connection',
-                    'dsn'   => 'sqlite::memory:',
+                    'dsn' => 'sqlite::memory:',
                 ],
             ],
         ]);
         $columns = [
-            'id'          => 'pk',
+            'id' => 'pk',
             'customer_id' => 'integer',
         ];
         ActiveRecord::$db = Yii::$app->getDb();
@@ -211,20 +209,20 @@ HTML
 
         $grid = new GridView([
             'dataProvider' => new ArrayDataProvider([
-                'allModels'  => [],
+                'allModels' => [],
                 'totalCount' => 0,
             ]),
             'columns' => [
                 0 => [
                     'attribute' => 'customer_id',
-                    'format'    => 'boolean', // does not make sense for this column but should still output proper dropdown list
+                    'format' => 'boolean', // does not make sense for this column but should still output proper dropdown list
                 ],
             ],
             'filterModel' => new Order(),
         ]);
 
         $dataColumn = $grid->columns[0];
-        $method     = new ReflectionMethod($dataColumn, 'renderFilterCellContent');
+        $method = new \ReflectionMethod($dataColumn, 'renderFilterCellContent');
         $method->setAccessible(true);
         $result = $method->invoke($dataColumn);
 
@@ -242,7 +240,7 @@ HTML
      * @see DataColumn::$filterAttribute
      * @see DataColumn::renderFilterCellContent()
      */
-    public function testFilterInputWithFilterAttribute(): void
+    public function testFilterInputWithFilterAttribute()
     {
         $this->mockApplication();
 
@@ -252,7 +250,7 @@ HTML
             ]),
             'columns' => [
                 0 => [
-                    'attribute'       => 'username',
+                    'attribute' => 'username',
                     'filterAttribute' => 'user_id',
                 ],
             ],
@@ -260,7 +258,7 @@ HTML
         ]);
 
         $dataColumn = $grid->columns[0];
-        $method     = new ReflectionMethod($dataColumn, 'renderFilterCellContent');
+        $method = new \ReflectionMethod($dataColumn, 'renderFilterCellContent');
         $method->setAccessible(true);
         $result = $method->invoke($dataColumn);
 

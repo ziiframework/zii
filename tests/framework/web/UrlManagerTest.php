@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\web;
 
 use Yii;
@@ -32,6 +32,31 @@ use yiiunit\TestCase;
  */
 class UrlManagerTest extends TestCase
 {
+    protected function getUrlManager($config = [], $showScriptName = true, $enableStrictParsing = false)
+    {
+        // in this test class, all tests have enablePrettyUrl disabled.
+        $config['enablePrettyUrl'] = false;
+        $config['cache'] = null;
+
+        // baseUrl should not be used when prettyUrl is disabled
+        // trigger an exception here in case it gets called
+        $config['baseUrl'] = null;
+        $this->mockApplication();
+        Yii::$app->set('request', function () {
+            $this->fail('Request component should not be accessed by UrlManager with current settings.');
+        });
+
+        // set default values if they are not set
+        $config = array_merge([
+            'scriptUrl' => '/index.php',
+            'hostInfo' => 'http://www.example.com',
+            'showScriptName' => $showScriptName,
+            'enableStrictParsing' => $enableStrictParsing,
+        ], $config);
+
+        return new UrlManager($config);
+    }
+
     /**
      * $showScriptName and $enableStrictParsing should have no effect in default format.
      * Passing these options ensures that.
@@ -48,22 +73,21 @@ class UrlManagerTest extends TestCase
 
     /**
      * @dataProvider ignoredOptionsProvider
-     *
      * @param bool $showScriptName
      * @param bool $enableStrictParsing
      */
-    public function testCreateUrlSimple($showScriptName, $enableStrictParsing): void
+    public function testCreateUrlSimple($showScriptName, $enableStrictParsing)
     {
         // default setting with '/' as base url
         $manager = $this->getUrlManager([], $showScriptName, $enableStrictParsing);
-        $url     = $manager->createUrl('post/view');
+        $url = $manager->createUrl('post/view');
         $this->assertEquals('/index.php?r=post%2Fview', $url);
         $url = $manager->createUrl(['post/view']);
         $this->assertEquals('/index.php?r=post%2Fview', $url);
 
         // default setting with '/test/' as base url
         $manager = $this->getUrlManager([
-            'baseUrl'   => '/test/',
+            'baseUrl' => '/test/',
             'scriptUrl' => '/test',
         ], $showScriptName, $enableStrictParsing);
         $url = $manager->createUrl('post/view');
@@ -74,20 +98,19 @@ class UrlManagerTest extends TestCase
 
     /**
      * @dataProvider ignoredOptionsProvider
-     *
      * @param bool $showScriptName
      * @param bool $enableStrictParsing
      */
-    public function testCreateUrlWithParams($showScriptName, $enableStrictParsing): void
+    public function testCreateUrlWithParams($showScriptName, $enableStrictParsing)
     {
         // default setting with '/' as base url
         $manager = $this->getUrlManager([], $showScriptName, $enableStrictParsing);
-        $url     = $manager->createUrl(['post/view', 'id' => 1, 'title' => 'sample post']);
+        $url = $manager->createUrl(['post/view', 'id' => 1, 'title' => 'sample post']);
         $this->assertEquals('/index.php?r=post%2Fview&id=1&title=sample+post', $url);
 
         // default setting with '/test/' as base url
         $manager = $this->getUrlManager([
-            'baseUrl'   => '/test/',
+            'baseUrl' => '/test/',
             'scriptUrl' => '/test',
         ], $showScriptName, $enableStrictParsing);
         $url = $manager->createUrl(['post/view', 'id' => 1, 'title' => 'sample post']);
@@ -98,22 +121,21 @@ class UrlManagerTest extends TestCase
      * @dataProvider ignoredOptionsProvider
      *
      * @see https://github.com/yiisoft/yii2/pull/9596
-     *
      * @param bool $showScriptName
      * @param bool $enableStrictParsing
      */
-    public function testCreateUrlWithAnchor($showScriptName, $enableStrictParsing): void
+    public function testCreateUrlWithAnchor($showScriptName, $enableStrictParsing)
     {
         // default setting with '/' as base url
         $manager = $this->getUrlManager([], $showScriptName, $enableStrictParsing);
-        $url     = $manager->createUrl(['post/view', '#' => 'anchor']);
+        $url = $manager->createUrl(['post/view', '#' => 'anchor']);
         $this->assertEquals('/index.php?r=post%2Fview#anchor', $url);
         $url = $manager->createUrl(['post/view', 'id' => 1, 'title' => 'sample post', '#' => 'anchor']);
         $this->assertEquals('/index.php?r=post%2Fview&id=1&title=sample+post#anchor', $url);
 
         // default setting with '/test/' as base url
         $manager = $this->getUrlManager([
-            'baseUrl'   => '/test/',
+            'baseUrl' => '/test/',
             'scriptUrl' => '/test',
         ], $showScriptName, $enableStrictParsing);
         $url = $manager->createUrl(['post/view', '#' => 'anchor']);
@@ -124,14 +146,13 @@ class UrlManagerTest extends TestCase
 
     /**
      * @dataProvider ignoredOptionsProvider
-     *
      * @param bool $showScriptName
      * @param bool $enableStrictParsing
      */
-    public function testCreateAbsoluteUrl($showScriptName, $enableStrictParsing): void
+    public function testCreateAbsoluteUrl($showScriptName, $enableStrictParsing)
     {
         $manager = $this->getUrlManager([], $showScriptName, $enableStrictParsing);
-        $url     = $manager->createAbsoluteUrl('post/view');
+        $url = $manager->createAbsoluteUrl('post/view');
         $this->assertEquals('http://www.example.com/index.php?r=post%2Fview', $url);
         $url = $manager->createAbsoluteUrl(['post/view']);
         $this->assertEquals('http://www.example.com/index.php?r=post%2Fview', $url);
@@ -157,7 +178,7 @@ class UrlManagerTest extends TestCase
         $this->assertEquals('//www.example.com/index.php?r=post%2Fview', $url);
 
         $manager->hostInfo = 'https://www.example.com';
-        $url               = $manager->createAbsoluteUrl(['post/view', 'id' => 1, 'title' => 'sample post']);
+        $url = $manager->createAbsoluteUrl(['post/view', 'id' => 1, 'title' => 'sample post']);
         $this->assertEquals('https://www.example.com/index.php?r=post%2Fview&id=1&title=sample+post', $url);
 
         $url = $manager->createAbsoluteUrl(['post/view', 'id' => 1, 'title' => 'sample post'], 'https');
@@ -172,17 +193,15 @@ class UrlManagerTest extends TestCase
 
     /**
      * Test normalisation of different routes.
-     *
      * @dataProvider ignoredOptionsProvider
-     *
      * @param bool $showScriptName
      * @param bool $enableStrictParsing
      */
-    public function testCreateUrlRouteVariants($showScriptName, $enableStrictParsing): void
+    public function testCreateUrlRouteVariants($showScriptName, $enableStrictParsing)
     {
         // default setting with '/' as base url
         $manager = $this->getUrlManager([], $showScriptName, $enableStrictParsing);
-        $url     = $manager->createUrl(['/post/view']);
+        $url = $manager->createUrl(['/post/view']);
         $this->assertEquals('/index.php?r=post%2Fview', $url);
         $url = $manager->createUrl(['/post/view/']);
         $this->assertEquals('/index.php?r=post%2Fview', $url);
@@ -191,6 +210,7 @@ class UrlManagerTest extends TestCase
         $url = $manager->createUrl(['/post/view/']);
         $this->assertEquals('/index.php?r=post%2Fview', $url);
     }
+
 
     /**
      * @return array provides different names for UrlManager::$routeParam
@@ -206,10 +226,9 @@ class UrlManagerTest extends TestCase
 
     /**
      * @dataProvider routeParamProvider
-     *
      * @param string $routeParam
      */
-    public function testParseRequest($routeParam): void
+    public function testParseRequest($routeParam)
     {
         $manager = $this->getUrlManager(['routeParam' => $routeParam]);
         $request = new Request();
@@ -236,7 +255,7 @@ class UrlManagerTest extends TestCase
         $this->assertEquals(5, $request->getQueryParam('id'));
     }
 
-    public function testSetBaseUrl(): void
+    public function testSetBaseUrl()
     {
         $manager = $this->getUrlManager();
 
@@ -246,31 +265,5 @@ class UrlManagerTest extends TestCase
         Yii::setAlias('@testAlias', 'example.com/');
         $manager->setBaseUrl('@testAlias');
         $this->assertEquals('example.com', $manager->getBaseUrl());
-    }
-
-    protected function getUrlManager($config = [], $showScriptName = true, $enableStrictParsing = false)
-    {
-        // in this test class, all tests have enablePrettyUrl disabled.
-        $config['enablePrettyUrl'] = false;
-        $config['cache']           = null;
-
-        // baseUrl should not be used when prettyUrl is disabled
-        // trigger an exception here in case it gets called
-        $config['baseUrl'] = null;
-        $this->mockApplication();
-        Yii::$app->set('request', function (): void
-        {
-            $this->fail('Request component should not be accessed by UrlManager with current settings.');
-        });
-
-        // set default values if they are not set
-        $config = array_merge([
-            'scriptUrl'           => '/index.php',
-            'hostInfo'            => 'http://www.example.com',
-            'showScriptName'      => $showScriptName,
-            'enableStrictParsing' => $enableStrictParsing,
-        ], $config);
-
-        return new UrlManager($config);
     }
 }

@@ -1,13 +1,12 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\db;
 
-use function call_user_func_array;
 use yii\db\ColumnSchemaBuilder;
 use yii\db\Expression;
 use yii\db\Schema;
@@ -16,8 +15,7 @@ abstract class ColumnSchemaBuilderTest extends DatabaseTestCase
 {
     /**
      * @param string $type
-     * @param int    $length
-     *
+     * @param int $length
      * @return ColumnSchemaBuilder
      */
     public function getColumnSchemaBuilder($type, $length = null)
@@ -51,32 +49,30 @@ abstract class ColumnSchemaBuilderTest extends DatabaseTestCase
 
     /**
      * @dataProvider typesProvider
-     *
-     * @param string   $expected
-     * @param string   $type
-     * @param null|int $length
-     * @param mixed    $calls
+     * @param string $expected
+     * @param string $type
+     * @param int|null $length
+     * @param mixed $calls
      */
-    public function testCustomTypes($expected, $type, $length, $calls): void
+    public function testCustomTypes($expected, $type, $length, $calls)
     {
         $this->checkBuildString($expected, $type, $length, $calls);
     }
 
     /**
-     * @param string   $expected
-     * @param string   $type
-     * @param null|int $length
-     * @param array    $calls
+     * @param string $expected
+     * @param string $type
+     * @param int|null $length
+     * @param array $calls
      */
-    public function checkBuildString($expected, $type, $length, $calls): void
+    public function checkBuildString($expected, $type, $length, $calls)
     {
         $builder = $this->getColumnSchemaBuilder($type, $length);
-
         foreach ($calls as $call) {
             $method = array_shift($call);
-            call_user_func_array([$builder, $method], $call);
+            \call_user_func_array([$builder, $method], $call);
         }
 
-        $this->assertEquals($expected, $builder->__toString());
+        self::assertEquals($expected, $builder->__toString());
     }
 }

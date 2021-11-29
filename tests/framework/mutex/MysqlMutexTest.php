@@ -1,13 +1,12 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\mutex;
 
-use Yii;
 use yii\mutex\MysqlMutex;
 use yiiunit\framework\db\DatabaseTestCase;
 
@@ -25,15 +24,14 @@ class MysqlMutexTest extends DatabaseTestCase
     protected $driverName = 'mysql';
 
     /**
-     * @throws \yii\base\InvalidConfigException
-     *
      * @return MysqlMutex
+     * @throws \yii\base\InvalidConfigException
      */
     protected function createMutex()
     {
-        return Yii::createObject([
+        return \Yii::createObject([
             'class' => MysqlMutex::className(),
-            'db'    => $this->getConnection(),
+            'db' => $this->getConnection(),
         ]);
     }
 }

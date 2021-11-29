@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\i18n;
 
 use yii\i18n\GettextPoFile;
@@ -21,12 +21,12 @@ class GettextPoFileTest extends TestCase
         $this->mockApplication();
     }
 
-    public function testLoad(): void
+    public function testLoad()
     {
-        $poFile     = new GettextPoFile();
+        $poFile = new GettextPoFile();
         $poFilePath = __DIR__ . '/../../data/i18n/test.po';
-        $context1   = $poFile->load($poFilePath, 'context1');
-        $context2   = $poFile->load($poFilePath, 'context2');
+        $context1 = $poFile->load($poFilePath, 'context1');
+        $context2 = $poFile->load($poFilePath, 'context2');
 
         // item count
         $this->assertCount(4, $context1);
@@ -42,37 +42,35 @@ class GettextPoFileTest extends TestCase
         $this->assertArrayHasKey("test1\\\ntest2\n\\\\\ntest3", $context2);
 
         // translated messages
-        $this->assertTrue(in_array('', $context1, true));
-        $this->assertTrue(in_array("Олицетворение однократно. Представленный лексико-семантический анализ является\nпсихолингвистическим в своей основе, но механизм сочленений полидисперсен. Впечатление\nоднократно. Различное расположение выбирает сюжетный механизм сочленений.", $context1, true));
-        $this->assertTrue(in_array('Строка номер два.', $context1, true));
-        $this->assertTrue(in_array('Короткий перевод.', $context1, true));
+        $this->assertTrue(in_array('', $context1));
+        $this->assertTrue(in_array("Олицетворение однократно. Представленный лексико-семантический анализ является\nпсихолингвистическим в своей основе, но механизм сочленений полидисперсен. Впечатление\nоднократно. Различное расположение выбирает сюжетный механизм сочленений.", $context1));
+        $this->assertTrue(in_array('Строка номер два.', $context1));
+        $this->assertTrue(in_array('Короткий перевод.', $context1));
 
-        $this->assertTrue(in_array("Другой\n\nконтекст.\n", $context2, true));
-        $this->assertTrue(in_array("тест1\\\nтест2\n\\\\\nтест3", $context2, true));
+        $this->assertTrue(in_array("Другой\n\nконтекст.\n", $context2));
+        $this->assertTrue(in_array("тест1\\\nтест2\n\\\\\nтест3", $context2));
     }
 
-    public function testSave(): void
+    public function testSave()
     {
         // initial data
-        $s        = chr(4);
+        $s = chr(4);
         $messages = [
-            'Hello!'                           => 'Привет!',
-            "context1{$s}Hello?"               => 'Привет?',
-            'Hello!?'                          => '',
-            "context1{$s}Hello!?!"             => '',
-            "context2{$s}\"Quotes\""           => '"Кавычки"',
-            "context2{$s}\nNew lines\n"        => "\nПереносы строк\n",
-            "context2{$s}\tTabs\t"             => "\tТабы\t",
+            'Hello!' => 'Привет!',
+            "context1{$s}Hello?" => 'Привет?',
+            'Hello!?' => '',
+            "context1{$s}Hello!?!" => '',
+            "context2{$s}\"Quotes\"" => '"Кавычки"',
+            "context2{$s}\nNew lines\n" => "\nПереносы строк\n",
+            "context2{$s}\tTabs\t" => "\tТабы\t",
             "context2{$s}\rCarriage returns\r" => "\rВозвраты кареток\r",
         ];
 
         // create temporary directory and dump messages
         $poFileDirectory = __DIR__ . '/../../runtime/i18n';
-
         if (!is_dir($poFileDirectory)) {
             mkdir($poFileDirectory);
         }
-
         if (is_file($poFileDirectory . '/test.po')) {
             unlink($poFileDirectory . '/test.po');
         }
@@ -88,24 +86,24 @@ class GettextPoFileTest extends TestCase
         $this->assertCount(2, $context1);
 
         $this->assertArrayHasKey('Hello?', $context1);
-        $this->assertTrue(in_array('Привет?', $context1, true));
+        $this->assertTrue(in_array('Привет?', $context1));
 
         $this->assertArrayHasKey('Hello!?!', $context1);
-        $this->assertTrue(in_array('', $context1, true));
+        $this->assertTrue(in_array('', $context1));
 
         // context2
         $this->assertCount(4, $context2);
 
         $this->assertArrayHasKey('"Quotes"', $context2);
-        $this->assertTrue(in_array('"Кавычки"', $context2, true));
+        $this->assertTrue(in_array('"Кавычки"', $context2));
 
         $this->assertArrayHasKey("\nNew lines\n", $context2);
-        $this->assertTrue(in_array("\nПереносы строк\n", $context2, true));
+        $this->assertTrue(in_array("\nПереносы строк\n", $context2));
 
         $this->assertArrayHasKey("\tTabs\t", $context2);
-        $this->assertTrue(in_array("\tТабы\t", $context2, true));
+        $this->assertTrue(in_array("\tТабы\t", $context2));
 
         $this->assertArrayHasKey("\rCarriage returns\r", $context2);
-        $this->assertTrue(in_array("\rВозвраты кареток\r", $context2, true));
+        $this->assertTrue(in_array("\rВозвраты кареток\r", $context2));
     }
 }

@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\i18n;
 
 use yii\i18n\Locale;
@@ -37,7 +37,7 @@ class LocaleTest extends TestCase
         $this->locale = null;
     }
 
-    public function testGetCurrencyCode(): void
+    public function testGetCurrencyCode()
     {
         $this->locale->locale = 'de-DE';
         $this->assertSame('€', $this->locale->getCurrencySymbol('EUR'));

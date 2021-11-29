@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\web;
 
 use Error;
@@ -53,16 +53,15 @@ class ResponseTest extends \yiiunit\TestCase
 
     /**
      * @dataProvider rightRanges
-     *
      * @param string $rangeHeader
      * @param string $expectedHeader
-     * @param int    $length
+     * @param int $length
      * @param string $expectedContent
      */
-    public function testSendFileRanges($rangeHeader, $expectedHeader, $length, $expectedContent): void
+    public function testSendFileRanges($rangeHeader, $expectedHeader, $length, $expectedContent)
     {
-        $dataFile              = Yii::getAlias('@yiiunit/data/web/data.txt');
-        $fullContent           = file_get_contents($dataFile);
+        $dataFile = \Yii::getAlias('@yiiunit/data/web/data.txt');
+        $fullContent = file_get_contents($dataFile);
         $_SERVER['HTTP_RANGE'] = 'bytes=' . $rangeHeader;
         ob_start();
         $this->response->sendFile($dataFile)->send();
@@ -74,7 +73,7 @@ class ResponseTest extends \yiiunit\TestCase
         $this->assertEquals('bytes', $headers->get('Accept-Ranges'));
         $this->assertEquals('bytes ' . $expectedHeader . '/' . StringHelper::byteLength($fullContent), $headers->get('Content-Range'));
         $this->assertEquals('text/plain', $headers->get('Content-Type'));
-        $this->assertEquals("{$length}", $headers->get('Content-Length'));
+        $this->assertEquals("$length", $headers->get('Content-Length'));
     }
 
     public function wrongRanges()
@@ -91,22 +90,26 @@ class ResponseTest extends \yiiunit\TestCase
 
     /**
      * @dataProvider wrongRanges
-     *
      * @param string $rangeHeader
      */
-    public function testSendFileWrongRanges($rangeHeader): void
+    public function testSendFileWrongRanges($rangeHeader)
     {
         $this->expectException('yii\web\RangeNotSatisfiableHttpException');
 
-        $dataFile              = Yii::getAlias('@yiiunit/data/web/data.txt');
+        $dataFile = \Yii::getAlias('@yiiunit/data/web/data.txt');
         $_SERVER['HTTP_RANGE'] = 'bytes=' . $rangeHeader;
         $this->response->sendFile($dataFile);
+    }
+
+    protected function generateTestFileContent()
+    {
+        return '12ёжик3456798áèabcdefghijklmnopqrstuvwxyz!"§$%&/(ёжик)=?';
     }
 
     /**
      * @see https://github.com/yiisoft/yii2/issues/7529
      */
-    public function testSendContentAsFile(): void
+    public function testSendContentAsFile()
     {
         ob_start();
         $this->response->sendContentAsFile('test', 'test.txt')->send([
@@ -114,15 +117,15 @@ class ResponseTest extends \yiiunit\TestCase
         ]);
         $content = ob_get_clean();
 
-        $this->assertEquals('test', $content);
-        $this->assertEquals(200, $this->response->statusCode);
+        static::assertEquals('test', $content);
+        static::assertEquals(200, $this->response->statusCode);
         $headers = $this->response->headers;
-        $this->assertEquals('application/octet-stream', $headers->get('Content-Type'));
-        $this->assertEquals('attachment; filename="test.txt"', $headers->get('Content-Disposition'));
-        $this->assertEquals(4, $headers->get('Content-Length'));
+        static::assertEquals('application/octet-stream', $headers->get('Content-Type'));
+        static::assertEquals('attachment; filename="test.txt"', $headers->get('Content-Disposition'));
+        static::assertEquals(4, $headers->get('Content-Length'));
     }
 
-    public function testRedirect(): void
+    public function testRedirect()
     {
         $_SERVER['REQUEST_URI'] = 'http://test-domain.com/';
         $this->assertEquals($this->response->redirect('')->headers->get('location'), '/');
@@ -142,21 +145,17 @@ class ResponseTest extends \yiiunit\TestCase
     /**
      * @dataProvider dataProviderAjaxRedirectInternetExplorer11
      */
-    public function testAjaxRedirectInternetExplorer11($userAgent, $statusCodes): void
-    {
+    public function testAjaxRedirectInternetExplorer11($userAgent, $statusCodes) {
         $_SERVER['REQUEST_URI'] = 'http://test-domain.com/';
-        $request                = Yii::$app->request;
+        $request= Yii::$app->request;
         /* @var $request TestRequestComponent */
-        $request->getIssAjaxOverride   = true;
+        $request->getIssAjaxOverride = true;
         $request->getUserAgentOverride = $userAgent;
-
-        foreach ([true, false] as $pjaxOverride) {
+        foreach([true, false] as $pjaxOverride) {
             $request->getIsPjaxOverride = $pjaxOverride;
-
-            foreach (['GET', 'POST'] as $methodOverride) {
+            foreach(['GET', 'POST'] as $methodOverride) {
                 $request->getMethodOverride = $methodOverride;
-
-                foreach ($statusCodes as $statusCode => $expectStatusCode) {
+                foreach($statusCodes as $statusCode => $expectStatusCode) {
                     $this->assertEquals($expectStatusCode, $this->response->redirect(['view'], $statusCode)->statusCode);
                 }
             }
@@ -164,15 +163,13 @@ class ResponseTest extends \yiiunit\TestCase
     }
 
     /**
-     * @see https://blogs.msdn.microsoft.com/ieinternals/2013/09/21/internet-explorer-11s-many-user-agent-strings/
-     * @see https://stackoverflow.com/a/31279980/6856708
-     * @see https://developers.whatismybrowser.com/useragents/explore/software_name/chrome/
-     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent/Firefox
-     *
+     * @link https://blogs.msdn.microsoft.com/ieinternals/2013/09/21/internet-explorer-11s-many-user-agent-strings/
+     * @link https://stackoverflow.com/a/31279980/6856708
+     * @link https://developers.whatismybrowser.com/useragents/explore/software_name/chrome/
+     * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent/Firefox
      * @return array
      */
-    public function dataProviderAjaxRedirectInternetExplorer11()
-    {
+    public function dataProviderAjaxRedirectInternetExplorer11() {
         return [
             ['Mozilla/5.0 (Android 4.4; Mobile; rv:41.0) Gecko/41.0 Firefox/41.0', [301 => 301, 302 => 302]],                   // Firefox
             ['Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko', [301 => 200, 302 => 200]],                        // IE 11
@@ -185,11 +182,10 @@ class ResponseTest extends \yiiunit\TestCase
 
     /**
      * @dataProvider dataProviderSetStatusCodeByException
-     *
-     * @param Exception $exception
-     * @param int       $statusCode
+     * @param \Exception $exception
+     * @param int $statusCode
      */
-    public function testSetStatusCodeByException($exception, $statusCode): void
+    public function testSetStatusCodeByException($exception, $statusCode)
     {
         $this->response->setStatusCodeByException($exception);
         $this->assertEquals($statusCode, $this->response->getStatusCode());
@@ -198,7 +194,7 @@ class ResponseTest extends \yiiunit\TestCase
     /**
      * @see https://github.com/yiisoft/yii2/pull/18290
      */
-    public function testNonSeekableStream(): void
+    public function testNonSeekableStream()
     {
         $stream = fopen('php://output', 'r+');
         ob_start();
@@ -206,7 +202,7 @@ class ResponseTest extends \yiiunit\TestCase
             ->sendStreamAsFile($stream, 'test-stream')
             ->send();
         ob_get_clean();
-        $this->assertEquals(200, $this->response->statusCode);
+        static::assertEquals(200, $this->response->statusCode);
     }
 
     public function dataProviderSetStatusCodeByException()
@@ -265,10 +261,10 @@ class ResponseTest extends \yiiunit\TestCase
     /**
      * @dataProvider formatDataProvider
      */
-    public function testSkipFormatter($format, $content): void
+    public function testSkipFormatter($format, $content)
     {
-        $response          = new Response();
-        $response->format  = $format;
+        $response = new Response();
+        $response->format = $format;
         $response->content = $content;
         ob_start();
         $response->send();
@@ -280,21 +276,20 @@ class ResponseTest extends \yiiunit\TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/17094
      */
-    public function testEmptyContentOn204(): void
+    public function testEmptyContentOn204()
     {
         $this->assertEmptyContentOn(204);
     }
 
-    public function testSettingContentToNullOn204(): void
+    public function testSettingContentToNullOn204()
     {
-        $this->assertEmptyContentOn(204, function ($response): void
-        {
-            /* @var $response Response */
+        $this->assertEmptyContentOn(204, function ($response) {
+            /** @var $response Response */
             $this->assertSame($response->content, '');
         });
     }
 
-    public function testSettingStreamToNullOn204(): void
+    public function testSettingStreamToNullOn204()
     {
         $this->assertSettingStreamToNullOn(204);
     }
@@ -302,7 +297,7 @@ class ResponseTest extends \yiiunit\TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/18199
      */
-    public function testEmptyContentOn304(): void
+    public function testEmptyContentOn304()
     {
         $this->assertEmptyContentOn(304);
     }
@@ -310,31 +305,30 @@ class ResponseTest extends \yiiunit\TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/18199
      */
-    public function testSettingContentToNullOn304(): void
+    public function testSettingContentToNullOn304()
     {
-        $this->assertEmptyContentOn(304, function ($response): void
-        {
-            /* @var $response Response */
+        $this->assertEmptyContentOn(304, function ($response) {
+            /** @var $response Response */
             $this->assertSame($response->content, '');
         });
     }
 
-    public function testSettingStreamToNullOn304(): void
+    public function testSettingStreamToNullOn304()
     {
         $this->assertSettingStreamToNullOn(304);
     }
 
-    public function testSendFileWithInvalidCharactersInFileName(): void
+    public function testSendFileWithInvalidCharactersInFileName()
     {
         $response = new Response();
-        $dataFile = Yii::getAlias('@yiiunit/data/web/data.txt');
+        $dataFile = \Yii::getAlias('@yiiunit/data/web/data.txt');
 
         $response->sendFile($dataFile, "test\x7Ftest.txt");
 
         $this->assertSame("attachment; filename=\"test_test.txt\"; filename*=utf-8''test%7Ftest.txt", $response->headers['content-disposition']);
     }
 
-    public function testSameSiteCookie(): void
+    public function testSameSiteCookie()
     {
         $response = new Response();
         $response->cookies->add(new \yii\web\Cookie([
@@ -351,20 +345,15 @@ class ResponseTest extends \yiiunit\TestCase
         $this->assertEquals('', $content);
     }
 
-    protected function generateTestFileContent()
-    {
-        return '12ёжик3456798áèabcdefghijklmnopqrstuvwxyz!"§$%&/(ёжик)=?';
-    }
-
     /**
      * Asserts that given a status code, the response will have an empty content body. If the lambda is present, it will
      * call the lambda what is supposed to handle other assertions.
      *
-     * @param int           $statusCode
-     * @param null|callable $callback   lambda in charge to handle other assertions
-     *                                  callable(\yii\web\Response $response):void
+     * @param int $statusCode
+     * @param callable|null $callback lambda in charge to handle other assertions
+     *                                callable(\yii\web\Response $response):void
      */
-    protected function assertEmptyContentOn($statusCode, $callback = null): void
+    protected function assertEmptyContentOn($statusCode, $callback = null)
     {
         $response = new Response();
         $response->setStatusCode($statusCode);
@@ -382,14 +371,14 @@ class ResponseTest extends \yiiunit\TestCase
 
     /**
      * Asserts that given a status code, the response will have an empty content body, no matter
-     * if the response is a stream as file.
+     * if the response is a stream as file
      *
      * @param int $statusCode
      */
-    protected function assertSettingStreamToNullOn($statusCode): void
+    protected function assertSettingStreamToNullOn($statusCode)
     {
         $response = new Response();
-        $dataFile = Yii::getAlias('@yiiunit/data/web/data.txt');
+        $dataFile = \Yii::getAlias('@yiiunit/data/web/data.txt');
 
         $response->sendFile($dataFile);
         $response->setStatusCode($statusCode);

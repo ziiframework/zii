@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\console\controllers;
 
 use Yii;
@@ -17,7 +17,6 @@ use yiiunit\TestCase;
 
 /**
  * Unit test for [[\yii\console\controllers\MigrateController]].
- *
  * @see MigrateController
  *
  * @group console
@@ -27,16 +26,16 @@ class MigrateControllerTest extends TestCase
 {
     use MigrateControllerTestTrait;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->migrateControllerClass = EchoMigrateController::className();
-        $this->migrationBaseClass     = Migration::className();
+        $this->migrationBaseClass = Migration::className();
 
         $this->mockApplication([
             'components' => [
                 'db' => [
                     'class' => 'yii\db\Connection',
-                    'dsn'   => 'sqlite::memory:',
+                    'dsn' => 'sqlite::memory:',
                 ],
             ],
         ]);
@@ -45,34 +44,81 @@ class MigrateControllerTest extends TestCase
         parent::setUp();
     }
 
-    protected function tearDown(): void
+    public function tearDown(): void
     {
         $this->tearDownMigrationPath();
         parent::tearDown();
     }
 
-    public function assertFileContent($expectedFile, $class, $table, $namespace = null): void
+    /**
+     * @return array applied migration entries
+     */
+    protected function getMigrationHistory()
+    {
+        $query = new Query();
+        return $query->from('migration')->all();
+    }
+
+    public function assertFileContent($expectedFile, $class, $table, $namespace = null)
     {
         if ($namespace) {
             $namespace = "namespace {$namespace};\n\n";
         }
-        $expected = include Yii::getAlias("@yiiunit/data/console/migrate_create/{$expectedFile}.php");
+        $expected = include Yii::getAlias("@yiiunit/data/console/migrate_create/$expectedFile.php");
         $expected = str_replace('{table}', $table, $expected);
         $this->assertEqualsWithoutLE($expected, $this->parseNameClassMigration($class));
     }
 
-    public function assertFileContentJunction($expectedFile, $class, $junctionTable, $firstTable, $secondTable, $namespace = null): void
+    protected function assertCommandCreatedFile($expectedFile, $migrationName, $table, $params = [])
+    {
+        $params[0] = $migrationName;
+        list($config, $namespace, $class) = $this->prepareMigrationNameData($migrationName);
+
+        $this->runMigrateControllerAction('create', $params, $config);
+        $this->assertFileContent($expectedFile, $class, $table, $namespace);
+    }
+
+    public function assertFileContentJunction($expectedFile, $class, $junctionTable, $firstTable, $secondTable, $namespace = null)
     {
         if ($namespace) {
             $namespace = "namespace {$namespace};\n\n";
         }
-        $expected = include Yii::getAlias("@yiiunit/data/console/migrate_create/{$expectedFile}.php");
+        $expected = include Yii::getAlias("@yiiunit/data/console/migrate_create/$expectedFile.php");
         $expected = str_replace(
             ['{junctionTable}', '{firstTable}', '{secondTable}'],
             [$junctionTable, $firstTable, $secondTable],
             $expected
         );
         $this->assertEqualsWithoutLE($expected, $this->parseNameClassMigration($class));
+    }
+
+    protected function assertCommandCreatedJunctionFile($expectedFile, $migrationName, $junctionTable, $firstTable, $secondTable)
+    {
+        list($config, $namespace, $class) = $this->prepareMigrationNameData($migrationName);
+
+        $this->runMigrateControllerAction('create', [$migrationName], $config);
+        $this->assertSame(ExitCode::OK, $this->getExitCode());
+        $this->assertFileContentJunction($expectedFile, $class, $junctionTable, $firstTable, $secondTable, $namespace);
+    }
+
+    protected function prepareMigrationNameData($migrationName)
+    {
+        $config = [];
+        $namespace = null;
+
+        $lastSlashPosition = strrpos($migrationName, '\\');
+        if ($lastSlashPosition !== false) {
+            $config = [
+                'migrationPath' => null,
+                'migrationNamespaces' => [$this->migrationNamespace],
+            ];
+            $class = 'M' . gmdate('ymdHis') . Inflector::camelize(substr($migrationName, $lastSlashPosition + 1));
+            $namespace = substr($migrationName, 0, $lastSlashPosition);
+        } else {
+            $class = 'm' . gmdate('ymd_His') . '_' . $migrationName;
+        }
+
+        return [$config, $namespace, $class];
     }
 
     /**
@@ -121,7 +167,7 @@ class MigrateControllerTest extends TestCase
             ],
             'create_prefix' => [
                 'useTablePrefix' => true,
-                'fields'         => 'user_id:integer:foreignKey,
+                'fields' => 'user_id:integer:foreignKey,
                     product_id:foreignKey:integer:unsigned:notNull,
                     order_id:integer:foreignKey(user_order):notNull,
                     created_at:dateTime:notNull',
@@ -152,7 +198,7 @@ class MigrateControllerTest extends TestCase
             ],
             'add_columns_prefix' => [
                 'useTablePrefix' => true,
-                'fields'         => 'user_id:integer:foreignKey,
+                'fields' => 'user_id:integer:foreignKey,
                     product_id:foreignKey:integer:unsigned:notNull,
                     order_id:integer:foreignKey(user_order):notNull,
                     created_at:dateTime:notNull',
@@ -258,10 +304,10 @@ class MigrateControllerTest extends TestCase
      * @param string $expectedFile
      * @param string $migrationName
      * @param string $table
-     * @param array  $params
+     * @param array $params
      * @dataProvider generateMigrationDataProvider
      */
-    public function testGenerateMigration($expectedFile, $migrationName, $table, $params): void
+    public function testGenerateMigration($expectedFile, $migrationName, $table, $params)
     {
         $this->migrationNamespace = 'yiiunit\runtime\test_migrations';
 
@@ -305,7 +351,7 @@ class MigrateControllerTest extends TestCase
      * @param string $secondTable
      * @dataProvider generateJunctionMigrationDataProvider
      */
-    public function testGenerateJunctionMigration($migrationName, $junctionTable, $firstTable, $secondTable): void
+    public function testGenerateJunctionMigration($migrationName, $junctionTable, $firstTable, $secondTable)
     {
         $this->migrationNamespace = 'yiiunit\runtime\test_migrations';
 
@@ -325,7 +371,7 @@ class MigrateControllerTest extends TestCase
         );
     }
 
-    public function testUpdatingLongNamedMigration(): void
+    public function testUpdatingLongNamedMigration()
     {
         $this->createMigration(str_repeat('a', 180));
 
@@ -336,10 +382,10 @@ class MigrateControllerTest extends TestCase
         $this->assertStringContainsString('is too long. Its not possible to apply this migration.', $result);
     }
 
-    public function testNamedMigrationWithCustomLimit(): void
+    public function testNamedMigrationWithCustomLimit()
     {
         Yii::$app->db->createCommand()->createTable('migration', [
-            'version'    => 'varchar(255) NOT NULL PRIMARY KEY', // varchar(255) is longer than the default of 180
+            'version' => 'varchar(255) NOT NULL PRIMARY KEY', // varchar(255) is longer than the default of 180
             'apply_time' => 'integer',
         ])->execute();
 
@@ -352,10 +398,9 @@ class MigrateControllerTest extends TestCase
         $this->assertStringContainsString('Migrated up successfully.', $result);
     }
 
-    public function testCreateLongNamedMigration(): void
+    public function testCreateLongNamedMigration()
     {
-        $this->setOutputCallback(static function ($output)
-        {
+        $this->setOutputCallback(function ($output) {
             return null;
         });
 
@@ -365,20 +410,17 @@ class MigrateControllerTest extends TestCase
         $this->expectExceptionMessage('The migration name is too long.');
 
         $controller = $this->createMigrateController([]);
-        $params[0]  = $migrationName;
+        $params[0] = $migrationName;
         $controller->run('create', $params);
     }
 
     /**
      * Test the migrate:fresh command.
-     *
      * @dataProvider refreshMigrationDataProvider
-     *
      * @param $db
-     *
      * @throws \yii\db\Exception
      */
-    public function testRefreshMigration($db): void
+    public function testRefreshMigration($db)
     {
         if ($db !== 'default') {
             $this->switchDbConnection($db);
@@ -413,15 +455,15 @@ class MigrateControllerTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/12980
      */
-    public function testGetMigrationHistory(): void
+    public function testGetMigrationHistory()
     {
         $controllerConfig = [
-            'migrationPath'       => null,
+            'migrationPath' => null,
             'migrationNamespaces' => [$this->migrationNamespace],
         ];
         $this->runMigrateControllerAction('history', [], $controllerConfig);
 
-        $controller     = $this->createMigrateController($controllerConfig);
+        $controller = $this->createMigrateController($controllerConfig);
         $controller->db = Yii::$app->db;
 
         Yii::$app->db->createCommand()
@@ -464,54 +506,5 @@ class MigrateControllerTest extends TestCase
             ],
             array_keys($rows)
         );
-    }
-
-    /**
-     * @return array applied migration entries
-     */
-    protected function getMigrationHistory()
-    {
-        $query = new Query();
-
-        return $query->from('migration')->all();
-    }
-
-    protected function assertCommandCreatedFile($expectedFile, $migrationName, $table, $params = []): void
-    {
-        $params[0]                    = $migrationName;
-        [$config, $namespace, $class] = $this->prepareMigrationNameData($migrationName);
-
-        $this->runMigrateControllerAction('create', $params, $config);
-        $this->assertFileContent($expectedFile, $class, $table, $namespace);
-    }
-
-    protected function assertCommandCreatedJunctionFile($expectedFile, $migrationName, $junctionTable, $firstTable, $secondTable): void
-    {
-        [$config, $namespace, $class] = $this->prepareMigrationNameData($migrationName);
-
-        $this->runMigrateControllerAction('create', [$migrationName], $config);
-        $this->assertSame(ExitCode::OK, $this->getExitCode());
-        $this->assertFileContentJunction($expectedFile, $class, $junctionTable, $firstTable, $secondTable, $namespace);
-    }
-
-    protected function prepareMigrationNameData($migrationName)
-    {
-        $config    = [];
-        $namespace = null;
-
-        $lastSlashPosition = strrpos($migrationName, '\\');
-
-        if ($lastSlashPosition !== false) {
-            $config = [
-                'migrationPath'       => null,
-                'migrationNamespaces' => [$this->migrationNamespace],
-            ];
-            $class     = 'M' . gmdate('ymdHis') . Inflector::camelize(substr($migrationName, $lastSlashPosition + 1));
-            $namespace = substr($migrationName, 0, $lastSlashPosition);
-        } else {
-            $class = 'm' . gmdate('ymd_His') . '_' . $migrationName;
-        }
-
-        return [$config, $namespace, $class];
     }
 }

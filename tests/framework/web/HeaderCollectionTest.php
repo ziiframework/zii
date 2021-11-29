@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\web;
 
 use yii\web\HeaderCollection;
@@ -15,10 +15,10 @@ use yiiunit\TestCase;
  */
 class HeaderCollectionTest extends TestCase
 {
-    public function testFromArray(): void
+    public function testFromArray()
     {
         $headerCollection = new HeaderCollection();
-        $location         = 'my-test-location';
+        $location = 'my-test-location';
         $headerCollection->fromArray([
             'Location' => [$location],
         ]);

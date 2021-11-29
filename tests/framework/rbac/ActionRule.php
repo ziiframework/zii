@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\rbac;
 
 use yii\rbac\Rule;
@@ -15,10 +15,7 @@ use yii\rbac\Rule;
 class ActionRule extends Rule
 {
     public $name = 'action_rule';
-
     public $action = 'read';
-
-    protected $someProtectedProperty;
 
     /**
      * Private and protected properties to ensure that serialized object
@@ -29,6 +26,7 @@ class ActionRule extends Rule
      * @see https://github.com/yiisoft/yii2/issues/12681
      */
     private $somePrivateProperty;
+    protected $someProtectedProperty;
 
     public function execute($user, $item, $params)
     {

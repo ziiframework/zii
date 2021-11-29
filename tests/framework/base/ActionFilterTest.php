@@ -1,13 +1,12 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\base;
 
-use ReflectionClass;
 use Yii;
 use yii\base\Action;
 use yii\base\ActionFilter;
@@ -26,7 +25,7 @@ class ActionFilterTest extends TestCase
         $this->mockApplication();
     }
 
-    public function testFilter(): void
+    public function testFilter()
     {
         // no filters
         $controller = new FakeController('fake', Yii::$app);
@@ -87,6 +86,7 @@ class ActionFilterTest extends TestCase
         $this->assertEquals([1, 3, 2], $controller->result);
     }
 
+
     public function actionFilterProvider()
     {
         return [
@@ -101,17 +101,16 @@ class ActionFilterTest extends TestCase
 
     /**
      * @dataProvider actionFilterProvider
-     *
-     * @param array|string $filterClass
+     * @param string|array $filterClass
      */
-    public function testActive($filterClass): void
+    public function testActive($filterClass)
     {
         $this->mockWebApplication();
 
-        /** @var ActionFilter $filter */
-        $filter     = Yii::createObject($filterClass);
-        $reflection = new ReflectionClass($filter);
-        $method     = $reflection->getMethod('isActive');
+        /** @var $filter ActionFilter */
+        $filter = Yii::createObject($filterClass);
+        $reflection = new \ReflectionClass($filter);
+        $method = $reflection->getMethod('isActive');
         $method->setAccessible(true);
 
         $controller = new \yii\web\Controller('test', Yii::$app);
@@ -120,12 +119,12 @@ class ActionFilterTest extends TestCase
         $this->assertTrue($method->invokeArgs($filter, [new Action('index', $controller)]));
         $this->assertTrue($method->invokeArgs($filter, [new Action('view', $controller)]));
 
-        $filter->only   = ['index'];
+        $filter->only = ['index'];
         $filter->except = [];
         $this->assertTrue($method->invokeArgs($filter, [new Action('index', $controller)]));
         $this->assertFalse($method->invokeArgs($filter, [new Action('view', $controller)]));
 
-        $filter->only   = ['index', 'view'];
+        $filter->only = ['index', 'view'];
         $filter->except = ['view'];
         $this->assertTrue($method->invokeArgs($filter, [new Action('index', $controller)]));
         $this->assertFalse($method->invokeArgs($filter, [new Action('view', $controller)]));
@@ -139,23 +138,23 @@ class ActionFilterTest extends TestCase
     /**
      * @depends testActive
      */
-    public function testActiveWildcard(): void
+    public function testActiveWildcard()
     {
         $this->mockWebApplication();
 
-        $filter     = new ActionFilter();
-        $reflection = new ReflectionClass($filter);
-        $method     = $reflection->getMethod('isActive');
+        $filter = new ActionFilter();
+        $reflection = new \ReflectionClass($filter);
+        $method = $reflection->getMethod('isActive');
         $method->setAccessible(true);
 
         $controller = new \yii\web\Controller('test', Yii::$app);
 
-        $filter->only   = ['test/*'];
+        $filter->only = ['test/*'];
         $filter->except = [];
         $this->assertFalse($method->invokeArgs($filter, [new Action('index', $controller)]));
         $this->assertTrue($method->invokeArgs($filter, [new Action('test/index', $controller)]));
 
-        $filter->only   = [];
+        $filter->only = [];
         $filter->except = ['test/*'];
         $this->assertTrue($method->invokeArgs($filter, [new Action('index', $controller)]));
         $this->assertFalse($method->invokeArgs($filter, [new Action('test/index', $controller)]));
@@ -165,7 +164,6 @@ class ActionFilterTest extends TestCase
 class FakeController extends Controller
 {
     public $result;
-
     public $behaviors = [];
 
     public function behaviors()
@@ -182,17 +180,16 @@ class FakeController extends Controller
 class Filter1 extends ActionFilter
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function beforeAction($action)
     {
         $action->controller->result[] = 1;
-
         return true;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function afterAction($action, $result)
     {
@@ -203,17 +200,16 @@ class Filter1 extends ActionFilter
 class Filter2 extends ActionFilter
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function beforeAction($action)
     {
         $action->controller->result[] = 2;
-
         return false;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function afterAction($action, $result)
     {
@@ -224,17 +220,16 @@ class Filter2 extends ActionFilter
 class Filter3 extends ActionFilter
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function beforeAction($action)
     {
         $action->controller->result[] = 3;
-
         return true;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function afterAction($action, $result)
     {
@@ -244,7 +239,7 @@ class Filter3 extends ActionFilter
 
 class MockUser extends User
 {
-    public function init(): void
+    public function init()
     {
         // do not call parent to avoid the need to mock configuration
     }

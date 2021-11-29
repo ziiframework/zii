@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\base;
 
 use yii\base\Security;
@@ -15,7 +15,7 @@ use yiiunit\TestCase;
  */
 class SecurityTest extends TestCase
 {
-    public const CRYPT_VECTORS = 'old';
+    const CRYPT_VECTORS = 'old';
 
     /**
      * @var ExposedSecurity
@@ -25,16 +25,16 @@ class SecurityTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->security                       = new ExposedSecurity();
+        $this->security = new ExposedSecurity();
         $this->security->derivationIterations = 1000; // speed up test running
     }
 
     // Tests :
 
-    public function testHashData(): void
+    public function testHashData()
     {
-        $data       = 'known data';
-        $key        = 'secret';
+        $data = 'known data';
+        $key = 'secret';
         $hashedData = $this->security->hashData($data, $key);
         $this->assertNotSame($data, $hashedData);
         $this->assertEquals($data, $this->security->validateData($hashedData, $key));
@@ -42,36 +42,36 @@ class SecurityTest extends TestCase
         $this->assertFalse($this->security->validateData($hashedData, $key));
     }
 
-    public function testPasswordHash(): void
+    public function testPasswordHash()
     {
         $this->security->passwordHashCost = 4;  // minimum blowfish's value is enough for tests
 
         $password = 'secret';
-        $hash     = $this->security->generatePasswordHash($password);
+        $hash = $this->security->generatePasswordHash($password);
         $this->assertTrue($this->security->validatePassword($password, $hash));
         $this->assertFalse($this->security->validatePassword('test', $hash));
     }
 
-    public function testEncryptByPassword(): void
+    public function testEncryptByPassword()
     {
         $data = 'known data';
-        $key  = 'secret';
+        $key = 'secret';
 
         $encryptedData = $this->security->encryptByPassword($data, $key);
         $this->assertNotSame($data, $encryptedData);
         $decryptedData = $this->security->decryptByPassword($encryptedData, $key);
         $this->assertEquals($data, $decryptedData);
 
-        $tampered      = $encryptedData;
-        $tampered[20]  = ~$tampered[20];
+        $tampered = $encryptedData;
+        $tampered[20] = ~$tampered[20];
         $decryptedData = $this->security->decryptByPassword($tampered, $key);
         $this->assertFalse($decryptedData);
     }
 
-    public function testEncryptByKey(): void
+    public function testEncryptByKey()
     {
         $data = 'known data';
-        $key  = $this->security->generateRandomKey(80);
+        $key = $this->security->generateRandomKey(80);
 
         $encryptedData = $this->security->encryptByKey($data, $key);
         $this->assertNotSame($data, $encryptedData);
@@ -82,8 +82,8 @@ class SecurityTest extends TestCase
         $decryptedData = $this->security->decryptByKey($encryptedData, $key, $key);
         $this->assertEquals($data, $decryptedData);
 
-        $tampered      = $encryptedData;
-        $tampered[20]  = ~$tampered[20];
+        $tampered = $encryptedData;
+        $tampered[20] = ~$tampered[20];
         $decryptedData = $this->security->decryptByKey($tampered, $key);
         $this->assertFalse($decryptedData);
 
@@ -97,9 +97,10 @@ class SecurityTest extends TestCase
      * The output can then be used for testing compatibility of data encrypted in one
      * version of Yii and decrypted in another.
      */
-    public function notestGenerateVectors(): void
+    public function notestGenerateVectors()
     {
-        $bin1024 = 'badec0c7d9ca734e161a1df6ca4daa8cdbf6b3bbb60ec404b47a23226ec266b1
+        $bin1024 =
+            'badec0c7d9ca734e161a1df6ca4daa8cdbf6b3bbb60ec404b47a23226ec266b1
             3837ffc969e9c23e2bbba72facb491a6a3271193a35026a9ebc93698d689bf7b
             84fc384f544cc5d71c2945c8c48ae6348c753322fcaf75171b7d8f1e178e8545
             3d5c79f03bae6d9705cabbe7004ec81e188812a66313297fcf5d4c61a48614d2
@@ -146,33 +147,33 @@ class SecurityTest extends TestCase
         ];
 
         foreach (['Key', 'Password'] as $method) {
-            $keygen  = 'generateRandom' . ($method === 'Key' ? 'Key' : 'String');
+            $keygen = 'generateRandom' . ($method === 'Key' ? 'Key' : 'String');
             $encrypt = 'encryptBy' . $method;
             $decrypt = 'decryptBy' . $method;
 
             foreach ($inputs as $data) {
-                $key       = $this->security->{$keygen}(16);
-                $encrypted = $this->security->{$encrypt}($data, $key);
+                $key = $this->security->$keygen(16);
+                $encrypted = $this->security->$encrypt($data, $key);
 
-                $keyHex       = $method === 'Key' ? bin2hex($key) : $key;
-                $dataHex      = trim(chunk_split(bin2hex($data), 64, "\n\t"));
+                $keyHex = $method === 'Key' ? bin2hex($key) : $key;
+                $dataHex = trim(chunk_split(bin2hex($data), 64, "\n\t"));
                 $encryptedHex = trim(chunk_split(bin2hex($encrypted), 64, "\n\t"));
 
-                print <<<TEXT
+                echo <<<TEXT
 [
-    '{$keyHex}',
-    '{$dataHex}',
-    '{$encryptedHex}',
+    '$keyHex',
+    '$dataHex',
+    '$encryptedHex',
 ],
 
 TEXT;
 
-                $key2       = $method === 'Key' ? hex2bin(preg_replace('{\s+}', '', $keyHex)) : $key;
-                $data2      = hex2bin(preg_replace('{\s+}', '', $dataHex));
+                $key2 = $method === 'Key' ? hex2bin(preg_replace('{\s+}', '', $keyHex)) : $key;
+                $data2 = hex2bin(preg_replace('{\s+}', '', $dataHex));
                 $encrypted2 = hex2bin(preg_replace('{\s+}', '', $encryptedHex));
 
-                $this->assertEquals($data, $this->security->{$decrypt}($encrypted2, $key2));
-                $this->assertEquals($data2, $this->security->{$decrypt}($encrypted2, $key));
+                $this->assertEquals($data, $this->security->$decrypt($encrypted2, $key2));
+                $this->assertEquals($data2, $this->security->$decrypt($encrypted2, $key));
             }
         }
     }
@@ -475,14 +476,14 @@ TEXT;
     /**
      * @dataProvider dataProviderEncryptByKeyCompat
      *
-     * @param string $key       encryption key hex string
-     * @param string $data      plaintext hex string
+     * @param string $key encryption key hex string
+     * @param string $data plaintext hex string
      * @param string $encrypted ciphertext hex string
      */
-    public function testEncryptByKeyCompat($key, $data, $encrypted): void
+    public function testEncryptByKeyCompat($key, $data, $encrypted)
     {
-        $key       = hex2bin(preg_replace('{\s+}', '', $key));
-        $data      = hex2bin(preg_replace('{\s+}', '', $data));
+        $key = hex2bin(preg_replace('{\s+}', '', $key));
+        $data = hex2bin(preg_replace('{\s+}', '', $data));
         $encrypted = hex2bin(preg_replace('{\s+}', '', $encrypted));
 
         $this->assertEquals($data, $this->security->decryptByKey($encrypted, $key));
@@ -786,17 +787,18 @@ TEXT;
     /**
      * @dataProvider dataProviderEncryptByPasswordCompat
      *
-     * @param string $password  encryption password
-     * @param string $data      plaintext hex string
+     * @param string $password encryption password
+     * @param string $data plaintext hex string
      * @param string $encrypted ciphertext hex string
      */
-    public function testEncryptByPasswordCompat($password, $data, $encrypted): void
+    public function testEncryptByPasswordCompat($password, $data, $encrypted)
     {
-        $data      = hex2bin(preg_replace('{\s+}', '', $data));
+        $data = hex2bin(preg_replace('{\s+}', '', $data));
         $encrypted = hex2bin(preg_replace('{\s+}', '', $encrypted));
 
         $this->assertEquals($data, $this->security->decryptByPassword($encrypted, $password));
     }
+
 
     public function randomKeyInvalidInputs()
     {
@@ -811,16 +813,15 @@ TEXT;
 
     /**
      * @dataProvider randomKeyInvalidInputs
-     *
      * @param mixed $input
      */
-    public function testRandomKeyInvalidInput($input): void
+    public function testRandomKeyInvalidInput($input)
     {
         $this->expectException('\yii\base\InvalidParamException');
         $key1 = $this->security->generateRandomKey($input);
     }
 
-    public function testGenerateRandomKey(): void
+    public function testGenerateRandomKey()
     {
         // test various string lengths
         for ($length = 1; $length < 64; $length++) {
@@ -830,7 +831,6 @@ TEXT;
             $key2 = $this->security->generateRandomKey($length);
             $this->assertIsString($key2);
             $this->assertEquals($length, strlen($key2));
-
             if ($length >= 7) { // avoid random test failure, short strings are likely to collide
                 $this->assertNotEquals($key1, $key2);
             }
@@ -838,7 +838,7 @@ TEXT;
 
         // test for /dev/urandom, reading larger data to see if loop works properly
         $length = 1024 * 1024;
-        $key1   = $this->security->generateRandomKey($length);
+        $key1 = $this->security->generateRandomKey($length);
         $this->assertIsString($key1);
         $this->assertEquals($length, strlen($key1));
         $key2 = $this->security->generateRandomKey($length);
@@ -847,10 +847,23 @@ TEXT;
         $this->assertNotEquals($key1, $key2);
     }
 
-    public function testGenerateRandomString(): void
+    protected function randTime(Security $security, $count, $length, $message)
+    {
+        $t = microtime(true);
+        for ($i = 0; $i < $count; $i += 1) {
+            $key = $security->generateRandomKey($length);
+        }
+        $t = microtime(true) - $t;
+        $nbytes = number_format($count * $length, 0);
+        $milisec = number_format(1000 * ($t), 3);
+        $rate = number_format($count * $length / $t / 1000000, 3);
+        fwrite(STDERR, "$message: $count x $length B = $nbytes B in $milisec ms => $rate MB/s\n");
+    }
+
+    public function testGenerateRandomString()
     {
         $length = 21;
-        $key    = $this->security->generateRandomString($length);
+        $key = $this->security->generateRandomString($length);
         $this->assertEquals($length, strlen($key));
         $this->assertEquals(1, preg_match('/[A-Za-z0-9_-]+/', $key));
     }
@@ -939,14 +952,14 @@ TEXT;
      * @param string $hash
      * @param string $password
      * @param string $salt
-     * @param int    $iterations
-     * @param int    $length
+     * @param int $iterations
+     * @param int $length
      * @param string $okm
      */
-    public function testPbkdf2($hash, $password, $salt, $iterations, $length, $okm): void
+    public function testPbkdf2($hash, $password, $salt, $iterations, $length, $okm)
     {
         $this->security->derivationIterations = $iterations;
-        $DK                                   = $this->security->pbkdf2($hash, $password, $salt, $iterations, $length);
+        $DK = $this->security->pbkdf2($hash, $password, $salt, $iterations, $length);
         $this->assertEquals($okm, bin2hex($DK));
     }
 
@@ -956,66 +969,66 @@ TEXT;
         return [
             [
                 'Hash' => 'sha256',
-                'IKM'  => '0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b',
+                'IKM' => '0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b',
                 'salt' => '000102030405060708090a0b0c',
                 'info' => 'f0f1f2f3f4f5f6f7f8f9',
-                'L'    => 42,
-                'PRK'  => '077709362c2e32df0ddc3f0dc47bba6390b6c73bb50f9c3122ec844ad7c2b3e5',
-                'OKM'  => '3cb25f25faacd57a90434f64d0362f2a2d2d0a90cf1a5a4c5db02d56ecc4c5bf34007208d5b887185865',
+                'L' => 42,
+                'PRK' => '077709362c2e32df0ddc3f0dc47bba6390b6c73bb50f9c3122ec844ad7c2b3e5',
+                'OKM' => '3cb25f25faacd57a90434f64d0362f2a2d2d0a90cf1a5a4c5db02d56ecc4c5bf34007208d5b887185865',
             ],
             [
                 'Hash' => 'sha256',
-                'IKM'  => '000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f',
+                'IKM' => '000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f',
                 'salt' => '606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeaf',
                 'info' => 'b0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff',
-                'L'    => 82,
-                'PRK'  => '06a6b88c5853361a06104c9ceb35b45cef760014904671014a193f40c15fc244',
-                'OKM'  => 'b11e398dc80327a1c8e7f78c596a49344f012eda2d4efad8a050cc4c19afa97c59045a99cac7827271cb41c65e590e09da3275600c2f09b8367793a9aca3db71cc30c58179ec3e87c14c01d5c1f3434f1d87',
+                'L' => 82,
+                'PRK' => '06a6b88c5853361a06104c9ceb35b45cef760014904671014a193f40c15fc244',
+                'OKM' => 'b11e398dc80327a1c8e7f78c596a49344f012eda2d4efad8a050cc4c19afa97c59045a99cac7827271cb41c65e590e09da3275600c2f09b8367793a9aca3db71cc30c58179ec3e87c14c01d5c1f3434f1d87',
             ],
             [
                 'Hash' => 'sha256',
-                'IKM'  => '0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b',
+                'IKM' => '0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b',
                 'salt' => '',
                 'info' => '',
-                'L'    => 42,
-                'PRK'  => '19ef24a32c717b167f33a91d6f648bdf96596776afdb6377ac434c1c293ccb04',
-                'OKM'  => '8da4e775a563c18f715f802a063c5a31b8a11f5c5ee1879ec3454e5f3c738d2d9d201395faa4b61a96c8',
+                'L' => 42,
+                'PRK' => '19ef24a32c717b167f33a91d6f648bdf96596776afdb6377ac434c1c293ccb04',
+                'OKM' => '8da4e775a563c18f715f802a063c5a31b8a11f5c5ee1879ec3454e5f3c738d2d9d201395faa4b61a96c8',
             ],
             [
                 'Hash' => 'sha1',
-                'IKM'  => '0b0b0b0b0b0b0b0b0b0b0b',
+                'IKM' => '0b0b0b0b0b0b0b0b0b0b0b',
                 'salt' => '000102030405060708090a0b0c',
                 'info' => 'f0f1f2f3f4f5f6f7f8f9',
-                'L'    => 42,
-                'PRK'  => '9b6c18c432a7bf8f0e71c8eb88f4b30baa2ba243',
-                'OKM'  => '085a01ea1b10f36933068b56efa5ad81a4f14b822f5b091568a9cdd4f155fda2c22e422478d305f3f896',
+                'L' => 42,
+                'PRK' => '9b6c18c432a7bf8f0e71c8eb88f4b30baa2ba243',
+                'OKM' => '085a01ea1b10f36933068b56efa5ad81a4f14b822f5b091568a9cdd4f155fda2c22e422478d305f3f896',
             ],
             [
                 'Hash' => 'sha1',
-                'IKM'  => '000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f',
+                'IKM' => '000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f',
                 'salt' => '606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeaf',
                 'info' => 'b0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff',
-                'L'    => 82,
-                'PRK'  => '8adae09a2a307059478d309b26c4115a224cfaf6',
-                'OKM'  => '0bd770a74d1160f7c9f12cd5912a06ebff6adcae899d92191fe4305673ba2ffe8fa3f1a4e5ad79f3f334b3b202b2173c486ea37ce3d397ed034c7f9dfeb15c5e927336d0441f4c4300e2cff0d0900b52d3b4',
+                'L' => 82,
+                'PRK' => '8adae09a2a307059478d309b26c4115a224cfaf6',
+                'OKM' => '0bd770a74d1160f7c9f12cd5912a06ebff6adcae899d92191fe4305673ba2ffe8fa3f1a4e5ad79f3f334b3b202b2173c486ea37ce3d397ed034c7f9dfeb15c5e927336d0441f4c4300e2cff0d0900b52d3b4',
             ],
             [
                 'Hash' => 'sha1',
-                'IKM'  => '0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b',
+                'IKM' => '0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b',
                 'salt' => '',
                 'info' => '',
-                'L'    => 42,
-                'PRK'  => 'da8c8a73c7fa77288ec6f5e7c297786aa0d32d01',
-                'OKM'  => '0ac1af7002b3d761d1e55298da9d0506b9ae52057220a306e07b6b87e8df21d0ea00033de03984d34918',
+                'L' => 42,
+                'PRK' => 'da8c8a73c7fa77288ec6f5e7c297786aa0d32d01',
+                'OKM' => '0ac1af7002b3d761d1e55298da9d0506b9ae52057220a306e07b6b87e8df21d0ea00033de03984d34918',
             ],
             [
                 'Hash' => 'sha1',
-                'IKM'  => '0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c',
+                'IKM' => '0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c',
                 'salt' => null,
                 'info' => '',
-                'L'    => 42,
-                'PRK'  => '2adccada18779e7c2077ad2eb19d3f3e731385dd',
-                'OKM'  => '2c91117204d745f3500d636a62f64f0ab3bae548aa53d423b0d1f27ebba6f5e5673a081d70cce7acfc48',
+                'L' => 42,
+                'PRK' => '2adccada18779e7c2077ad2eb19d3f3e731385dd',
+                'OKM' => '2c91117204d745f3500d636a62f64f0ab3bae548aa53d423b0d1f27ebba6f5e5673a081d70cce7acfc48',
             ],
         ];
     }
@@ -1027,11 +1040,11 @@ TEXT;
      * @param string $ikm
      * @param string $salt
      * @param string $info
-     * @param int    $l
+     * @param int $l
      * @param string $prk
      * @param string $okm
      */
-    public function testHkdf($hash, $ikm, $salt, $info, $l, $prk, $okm): void
+    public function testHkdf($hash, $ikm, $salt, $info, $l, $prk, $okm)
     {
         $dk = $this->security->hkdf($hash, hex2bin($ikm), hex2bin($salt), hex2bin($info), $l);
         $this->assertEquals($okm, bin2hex($dk));
@@ -1063,30 +1076,29 @@ TEXT;
      * @param $expected
      * @param $actual
      */
-    public function testCompareStrings($expected, $actual): void
+    public function testCompareStrings($expected, $actual)
     {
         $this->assertEquals(strcmp($expected, $actual) === 0, $this->security->compareString($expected, $actual));
     }
 
     /**
      * @dataProvider maskProvider
-     *
      * @param mixed $unmaskedToken
      */
-    public function testMasking($unmaskedToken): void
+    public function testMasking($unmaskedToken)
     {
         $maskedToken = $this->security->maskToken($unmaskedToken);
         $this->assertGreaterThan(mb_strlen($unmaskedToken, '8bit') * 2, mb_strlen($maskedToken, '8bit'));
         $this->assertEquals($unmaskedToken, $this->security->unmaskToken($maskedToken));
     }
 
-    public function testUnMaskingInvalidStrings(): void
+    public function testUnMaskingInvalidStrings()
     {
         $this->assertEquals('', $this->security->unmaskToken(''));
         $this->assertEquals('', $this->security->unmaskToken('1'));
     }
 
-    public function testMaskingInvalidStrings(): void
+    public function testMaskingInvalidStrings()
     {
         $this->expectException('\yii\base\InvalidParamException');
         $this->security->maskToken('');
@@ -1103,19 +1115,5 @@ TEXT;
             ['Token with special characters: %d1    5"'],
             ['Token with UTF8 character: †'],
         ];
-    }
-
-    protected function randTime(Security $security, $count, $length, $message): void
-    {
-        $t = microtime(true);
-
-        for ($i = 0; $i < $count; $i++) {
-            $key = $security->generateRandomKey($length);
-        }
-        $t       = microtime(true) - $t;
-        $nbytes  = number_format($count * $length, 0);
-        $milisec = number_format(1000 * ($t), 3);
-        $rate    = number_format($count * $length / $t / 1000000, 3);
-        fwrite(STDERR, "{$message}: {$count} x {$length} B = {$nbytes} B in {$milisec} ms => {$rate} MB/s\n");
     }
 }

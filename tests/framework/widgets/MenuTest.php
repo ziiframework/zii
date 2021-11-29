@@ -1,12 +1,13 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\widgets;
 
+use Yii;
 use yii\widgets\Menu;
 
 /**
@@ -20,22 +21,22 @@ class MenuTest extends \yiiunit\TestCase
         $this->mockApplication();
     }
 
-    public function testEncodeLabel(): void
+    public function testEncodeLabel()
     {
         $output = Menu::widget([
-            'route'        => 'test/test',
-            'params'       => [],
+            'route' => 'test/test',
+            'params' => [],
             'encodeLabels' => true,
-            'items'        => [
+            'items' => [
                 [
                     'encode' => false,
-                    'label'  => '<span class="glyphicon glyphicon-user"></span> Users',
-                    'url'    => '#',
+                    'label' => '<span class="glyphicon glyphicon-user"></span> Users',
+                    'url' => '#',
                 ],
                 [
                     'encode' => true,
-                    'label'  => 'Authors & Publications',
-                    'url'    => '#',
+                    'label' => 'Authors & Publications',
+                    'url' => '#',
                 ],
             ],
         ]);
@@ -47,19 +48,19 @@ HTML;
         $this->assertEqualsWithoutLE($expected, $output);
 
         $output = Menu::widget([
-            'route'        => 'test/test',
-            'params'       => [],
+            'route' => 'test/test',
+            'params' => [],
             'encodeLabels' => false,
-            'items'        => [
+            'items' => [
                 [
                     'encode' => false,
-                    'label'  => '<span class="glyphicon glyphicon-user"></span> Users',
-                    'url'    => '#',
+                    'label' => '<span class="glyphicon glyphicon-user"></span> Users',
+                    'url' => '#',
                 ],
                 [
                     'encode' => true,
-                    'label'  => 'Authors & Publications',
-                    'url'    => '#',
+                    'label' => 'Authors & Publications',
+                    'url' => '#',
                 ],
             ],
         ]);
@@ -74,24 +75,24 @@ HTML;
     /**
      * @see https://github.com/yiisoft/yii2/issues/8064
      */
-    public function testTagOption(): void
+    public function testTagOption()
     {
         $output = Menu::widget([
-            'route'        => 'test/test',
-            'params'       => [],
+            'route' => 'test/test',
+            'params' => [],
             'encodeLabels' => true,
-            'options'      => [
+            'options' => [
                 'tag' => false,
             ],
             'items' => [
                 [
-                    'label'   => 'item1',
-                    'url'     => '#',
+                    'label' => 'item1',
+                    'url' => '#',
                     'options' => ['tag' => 'div'],
                 ],
                 [
-                    'label'   => 'item2',
-                    'url'     => '#',
+                    'label' => 'item2',
+                    'url' => '#',
                     'options' => ['tag' => false],
                 ],
             ],
@@ -104,20 +105,20 @@ HTML;
         $this->assertEqualsWithoutLE($expected, $output);
 
         $output = Menu::widget([
-            'route'        => 'test/test',
-            'params'       => [],
+            'route' => 'test/test',
+            'params' => [],
             'encodeLabels' => true,
-            'options'      => [
+            'options' => [
                 'tag' => false,
             ],
             'items' => [
                 [
                     'label' => 'item1',
-                    'url'   => '#',
+                    'url' => '#',
                 ],
                 [
                     'label' => 'item2',
-                    'url'   => '#',
+                    'url' => '#',
                 ],
             ],
             'itemOptions' => ['tag' => false],
@@ -131,21 +132,21 @@ HTML;
         $this->assertEqualsWithoutLE($expected, $output);
     }
 
-    public function testItemTemplate(): void
+    public function testItemTemplate()
     {
         $output = Menu::widget([
-            'route'         => 'test/test',
-            'params'        => [],
-            'linkTemplate'  => '',
+            'route' => 'test/test',
+            'params' => [],
+            'linkTemplate' => '',
             'labelTemplate' => '',
-            'items'         => [
+            'items' => [
                 [
-                    'label'    => 'item1',
-                    'url'      => '#',
+                    'label' => 'item1',
+                    'url' => '#',
                     'template' => 'label: {label}; url: {url}',
                 ],
                 [
-                    'label'    => 'item2',
+                    'label' => 'item2',
                     'template' => 'label: {label}',
                 ],
                 [
@@ -163,30 +164,29 @@ HTML;
         $this->assertEqualsWithoutLE($expected, $output);
     }
 
-    public function testActiveItemClosure(): void
+    public function testActiveItemClosure()
     {
         $output = Menu::widget([
-            'route'         => 'test/test',
-            'params'        => [],
-            'linkTemplate'  => '',
+            'route' => 'test/test',
+            'params' => [],
+            'linkTemplate' => '',
             'labelTemplate' => '',
-            'items'         => [
+            'items' => [
                 [
-                    'label'    => 'item1',
-                    'url'      => '#',
+                    'label' => 'item1',
+                    'url' => '#',
                     'template' => 'label: {label}; url: {url}',
-                    'active'   => static function ($item, $hasActiveChild, $isItemActive, $widget)
-                    {
+                    'active' => function ($item, $hasActiveChild, $isItemActive, $widget) {
                         return isset($item, $hasActiveChild, $isItemActive, $widget);
                     },
                 ],
                 [
-                    'label'    => 'item2',
+                    'label' => 'item2',
                     'template' => 'label: {label}',
-                    'active'   => false,
+                    'active' => false,
                 ],
                 [
-                    'label'  => 'item3 (no template)',
+                    'label' => 'item3 (no template)',
                     'active' => 'somestring',
                 ],
             ],
@@ -201,18 +201,18 @@ HTML;
         $this->assertEqualsWithoutLE($expected, $output);
     }
 
-    public function testItemClassAsArray(): void
+    public function testItemClassAsArray()
     {
         $output = Menu::widget([
-            'route'          => 'test/test',
-            'params'         => [],
-            'encodeLabels'   => true,
+            'route' => 'test/test',
+            'params' => [],
+            'encodeLabels' => true,
             'activeCssClass' => 'item-active',
-            'items'          => [
+            'items' => [
                 [
-                    'label'   => 'item1',
-                    'url'     => '#',
-                    'active'  => true,
+                    'label' => 'item1',
+                    'url' => '#',
+                    'active' => true,
                     'options' => [
                         'class' => [
                             'someclass',
@@ -220,8 +220,8 @@ HTML;
                     ],
                 ],
                 [
-                    'label'   => 'item2',
-                    'url'     => '#',
+                    'label' => 'item2',
+                    'url' => '#',
                     'options' => [
                         'class' => [
                             'another-class',
@@ -232,11 +232,11 @@ HTML;
                 ],
                 [
                     'label' => 'item3',
-                    'url'   => '#',
+                    'url' => '#',
                 ],
                 [
-                    'label'   => 'item4',
-                    'url'     => '#',
+                    'label' => 'item4',
+                    'url' => '#',
                     'options' => [
                         'class' => [
                             'some-other-class',
@@ -256,36 +256,36 @@ HTML;
         $this->assertEqualsWithoutLE($expected, $output);
     }
 
-    public function testItemClassAsString(): void
+    public function testItemClassAsString()
     {
         $output = Menu::widget([
-            'route'          => 'test/test',
-            'params'         => [],
-            'encodeLabels'   => true,
+            'route' => 'test/test',
+            'params' => [],
+            'encodeLabels' => true,
             'activeCssClass' => 'item-active',
-            'items'          => [
+            'items' => [
                 [
-                    'label'   => 'item1',
-                    'url'     => '#',
+                    'label' => 'item1',
+                    'url' => '#',
                     'options' => [
                         'class' => 'someclass',
                     ],
                 ],
                 [
                     'label' => 'item2',
-                    'url'   => '#',
+                    'url' => '#',
                 ],
                 [
-                    'label'   => 'item3',
-                    'url'     => '#',
+                    'label' => 'item3',
+                    'url' => '#',
                     'options' => [
                         'class' => 'some classes',
                     ],
                 ],
                 [
-                    'label'   => 'item4',
-                    'url'     => '#',
-                    'active'  => true,
+                    'label' => 'item4',
+                    'url' => '#',
+                    'active' => true,
                     'options' => [
                         'class' => 'another-class other--class two classes',
                     ],

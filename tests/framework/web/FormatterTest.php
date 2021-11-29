@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\web;
 
 use yii\web\Response;
@@ -16,7 +16,6 @@ abstract class FormatterTest extends \yiiunit\TestCase
      * @var Response
      */
     public $response;
-
     /**
      * @var ResponseFormatterInterface
      */
@@ -25,14 +24,19 @@ abstract class FormatterTest extends \yiiunit\TestCase
     protected function setUp(): void
     {
         $this->mockApplication();
-        $this->response  = new Response();
+        $this->response = new Response();
         $this->formatter = $this->getFormatterInstance();
     }
 
     /**
+     * @return ResponseFormatterInterface
+     */
+    abstract protected function getFormatterInstance();
+
+    /**
      * Formatter should not format null.
      */
-    public function testFormatNull(): void
+    public function testFormatNull()
     {
         $this->response->data = null;
         $this->formatter->format($this->response);
@@ -44,7 +48,7 @@ abstract class FormatterTest extends \yiiunit\TestCase
      * @param string $json the expected JSON body
      * @dataProvider formatScalarDataProvider
      */
-    public function testFormatScalar($data, $json): void
+    public function testFormatScalar($data, $json)
     {
         $this->response->data = $data;
         $this->formatter->format($this->response);
@@ -56,7 +60,7 @@ abstract class FormatterTest extends \yiiunit\TestCase
      * @param string $json the expected JSON body
      * @dataProvider formatArrayDataProvider
      */
-    public function testFormatArrays($data, $json): void
+    public function testFormatArrays($data, $json)
     {
         $this->response->data = $data;
         $this->formatter->format($this->response);
@@ -68,7 +72,7 @@ abstract class FormatterTest extends \yiiunit\TestCase
      * @param string $json the expected JSON body
      * @dataProvider formatTraversableObjectDataProvider
      */
-    public function testFormatTraversableObjects($data, $json): void
+    public function testFormatTraversableObjects($data, $json)
     {
         $this->response->data = $data;
         $this->formatter->format($this->response);
@@ -80,7 +84,7 @@ abstract class FormatterTest extends \yiiunit\TestCase
      * @param string $json the expected JSON body
      * @dataProvider formatObjectDataProvider
      */
-    public function testFormatObjects($data, $json): void
+    public function testFormatObjects($data, $json)
     {
         $this->response->data = $data;
         $this->formatter->format($this->response);
@@ -88,19 +92,14 @@ abstract class FormatterTest extends \yiiunit\TestCase
     }
 
     /**
-     * @param mixed  $data           the data to be formatted
+     * @param mixed  $data the data to be formatted
      * @param string $expectedResult the expected body
      * @dataProvider formatModelDataProvider
      */
-    public function testFormatModels($data, $expectedResult): void
+    public function testFormatModels($data, $expectedResult)
     {
         $this->response->data = $data;
         $this->formatter->format($this->response);
         $this->assertEquals($expectedResult, $this->response->content);
     }
-
-    /**
-     * @return ResponseFormatterInterface
-     */
-    abstract protected function getFormatterInstance();
 }

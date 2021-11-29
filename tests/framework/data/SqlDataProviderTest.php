@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\data;
 
 use yii\data\SqlDataProvider;
@@ -17,28 +17,28 @@ class SqlDataProviderTest extends DatabaseTestCase
 {
     protected $driverName = 'sqlite';
 
-    public function testGetModels(): void
+    public function testGetModels()
     {
         $dataProvider = new SqlDataProvider([
             'sql' => 'select * from `customer`',
-            'db'  => $this->getConnection(),
+            'db' => $this->getConnection(),
         ]);
         $this->assertCount(3, $dataProvider->getModels());
     }
 
-    public function testTotalCount(): void
+    public function testTotalCount()
     {
         $dataProvider = new SqlDataProvider([
             'sql' => 'select * from `customer`',
-            'db'  => $this->getConnection(),
+            'db' => $this->getConnection(),
         ]);
         $this->assertEquals(3, $dataProvider->getTotalCount());
     }
 
-    public function testTotalCountWithParams(): void
+    public function testTotalCountWithParams()
     {
         $dataProvider = new SqlDataProvider([
-            'sql'    => 'select * from `customer` where id > :minimum',
+            'sql' => 'select * from `customer` where id > :minimum',
             'params' => [
                 ':minimum' => -1,
             ],
@@ -50,30 +50,29 @@ class SqlDataProviderTest extends DatabaseTestCase
     public function providerForOrderByColumn()
     {
         return [
-            'no marks'                                     => ['name'],
-            'no marks dot'                                 => ['customer.name'],
-            'mysql'                                        => ['`name`'],
-            'mysql dot'                                    => ['`customer`.`name`'],
-            'sqlite, pgsql, oracle, mysql ansi quotes'     => ['"name"'],
+            'no marks' => ['name'],
+            'no marks dot' => ['customer.name'],
+            'mysql' => ['`name`'],
+            'mysql dot' => ['`customer`.`name`'],
+            'sqlite, pgsql, oracle, mysql ansi quotes' => ['"name"'],
             'sqlite, pgsql, oracle, mysql ansi quotes dot' => ['"customer"."name"'],
-            'mssql'                                        => ['[name]'],
-            'mssql dot'                                    => ['[customer].[name]'],
+            'mssql' => ['[name]'],
+            'mssql dot' => ['[customer].[name]'],
         ];
     }
 
     /**
      * @dataProvider providerForOrderByColumn
-     *
      * @see https://github.com/yiisoft/yii2/issues/18552
      */
-    public function testRemovingOrderBy($column): void
+    public function testRemovingOrderBy($column)
     {
         $dataProvider = new SqlDataProvider([
-            'sql'  => 'select * from `customer` order by ' . $column . ' desc',
-            'db'   => $this->getConnection(),
+            'sql' => 'select * from `customer` order by ' . $column . ' desc',
+            'db' => $this->getConnection(),
             'sort' => [
                 'attributes' => ['email'],
-                'params'     => ['sort' => '-email'],
+                'params' => ['sort' => '-email']
             ],
         ]);
         $modelsSorted = $dataProvider->getModels();

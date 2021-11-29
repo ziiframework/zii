@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 namespace yiiunit\framework\web;
 
 use yii\base\Component;
@@ -17,15 +17,14 @@ class UserIdentity extends Component implements IdentityInterface
 
     public static function findIdentity($id)
     {
-        if (in_array($id, static::$ids, true)) {
-            $identitiy      = new static();
+        if (in_array($id, static::$ids)) {
+            $identitiy = new static();
             $identitiy->_id = $id;
-
             return $identitiy;
         }
     }
 
-    public static function findIdentityByAccessToken($token, $type = null): void
+    public static function findIdentityByAccessToken($token, $type = null)
     {
         throw new NotSupportedException();
     }

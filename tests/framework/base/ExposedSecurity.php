@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\base;
 
 use yii\base\Security;
@@ -15,7 +15,7 @@ use yii\base\Security;
 class ExposedSecurity extends Security
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function hkdf($algo, $inputKey, $salt = null, $info = null, $length = 0)
     {
@@ -23,7 +23,7 @@ class ExposedSecurity extends Security
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function pbkdf2($algo, $password, $salt, $iterations, $length = 0)
     {
@@ -31,7 +31,7 @@ class ExposedSecurity extends Security
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function shouldUseLibreSSL()
     {

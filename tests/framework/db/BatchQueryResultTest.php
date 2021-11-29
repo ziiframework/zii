@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\db;
 
 use yii\db\BatchQueryResult;
@@ -14,13 +14,13 @@ use yiiunit\data\ar\Customer;
 
 abstract class BatchQueryResultTest extends DatabaseTestCase
 {
-    protected function setUp(): void
+    public function setUp(): void
     {
         parent::setUp();
         ActiveRecord::$db = $this->getConnection();
     }
 
-    public function testQuery(): void
+    public function testQuery()
     {
         $db = $this->getConnection();
 
@@ -35,7 +35,7 @@ abstract class BatchQueryResultTest extends DatabaseTestCase
         // normal query
         $query = new Query();
         $query->from('customer')->orderBy('id');
-        $batch   = $query->batch(2, $db);
+        $batch = $query->batch(2, $db);
         $allRows = $this->getAllRowsFromBatch($batch);
         $this->assertCount(3, $allRows);
         $this->assertEquals('user1', $allRows[0]['name']);
@@ -51,8 +51,7 @@ abstract class BatchQueryResultTest extends DatabaseTestCase
         $query = new Query();
         $query->from('customer')->where(['id' => 100]);
         $allRows = [];
-        $batch   = $query->batch(2, $db);
-
+        $batch = $query->batch(2, $db);
         foreach ($batch as $rows) {
             $allRows = array_merge($allRows, $rows);
         }
@@ -86,11 +85,11 @@ abstract class BatchQueryResultTest extends DatabaseTestCase
         $this->assertEquals('address3', $allRows['user3']['address']);
     }
 
-    public function testActiveQuery(): void
+    public function testActiveQuery()
     {
         $db = $this->getConnection();
 
-        $query     = Customer::find()->orderBy('id');
+        $query = Customer::find()->orderBy('id');
         $customers = $this->getAllRowsFromBatch($query->batch(2, $db));
         $this->assertCount(3, $customers);
         $this->assertEquals('user1', $customers[0]->name);
@@ -98,9 +97,8 @@ abstract class BatchQueryResultTest extends DatabaseTestCase
         $this->assertEquals('user3', $customers[2]->name);
 
         // batch with eager loading
-        $query     = Customer::find()->with('orders')->orderBy('id');
+        $query = Customer::find()->with('orders')->orderBy('id');
         $customers = $this->getAllRowsFromBatch($query->batch(2, $db));
-
         foreach ($customers as $customer) {
             $this->assertTrue($customer->isRelationPopulated('orders'));
         }
@@ -110,9 +108,9 @@ abstract class BatchQueryResultTest extends DatabaseTestCase
         $this->assertCount(0, $customers[2]->orders);
     }
 
-    public function testBatchWithoutDbParameter(): void
+    public function testBatchWithoutDbParameter()
     {
-        $query     = Customer::find()->orderBy('id')->limit(3);
+        $query = Customer::find()->orderBy('id')->limit(3);
         $customers = $this->getAllRowsFromBatch($query->batch(2));
         $this->assertCount(3, $customers);
         $this->assertEquals('user1', $customers[0]->name);
@@ -120,9 +118,9 @@ abstract class BatchQueryResultTest extends DatabaseTestCase
         $this->assertEquals('user3', $customers[2]->name);
     }
 
-    public function testBatchWithIndexBy(): void
+    public function testBatchWithIndexBy()
     {
-        $query     = Customer::find()->orderBy('id')->limit(3)->indexBy('id');
+        $query = Customer::find()->orderBy('id')->limit(3)->indexBy('id');
         $customers = $this->getAllRowsFromBatch($query->batch(2));
         $this->assertCount(3, $customers);
         $this->assertEquals('user1', $customers[0]->name);
@@ -133,7 +131,6 @@ abstract class BatchQueryResultTest extends DatabaseTestCase
     protected function getAllRowsFromBatch(BatchQueryResult $batch)
     {
         $allRows = [];
-
         foreach ($batch as $rows) {
             $allRows = array_merge($allRows, $rows);
         }
@@ -144,7 +141,6 @@ abstract class BatchQueryResultTest extends DatabaseTestCase
     protected function getAllRowsFromEach(BatchQueryResult $each)
     {
         $allRows = [];
-
         foreach ($each as $index => $row) {
             $allRows[$index] = $row;
         }

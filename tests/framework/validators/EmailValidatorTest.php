@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\validators;
 
 use yii\validators\EmailValidator;
@@ -24,7 +24,7 @@ class EmailValidatorTest extends TestCase
         $this->destroyApplication();
     }
 
-    public function testValidateValue(): void
+    public function testValidateValue()
     {
         $validator = new EmailValidator();
 
@@ -63,16 +63,17 @@ class EmailValidatorTest extends TestCase
         $this->assertFalse($validator->validate('Short Name <localPartMoreThan64Characters-blah-blah-blah-blah-blah-blah-blah-blah@example.com>'));
         $this->assertFalse($validator->validate('Short Name <domainNameIsMoreThan254Characters@example-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah.com>'));
         $this->assertFalse($validator->validate(['developer@yiiframework.com']));
+
     }
 
-    public function testValidateValueIdn(): void
+    public function testValidateValueIdn()
     {
         if (!function_exists('idn_to_ascii')) {
             $this->markTestSkipped('Intl extension required');
 
             return;
         }
-        $validator            = new EmailValidator();
+        $validator = new EmailValidator();
         $validator->enableIDN = true;
 
         $this->assertTrue($validator->validate('5011@example.com'));
@@ -111,7 +112,7 @@ class EmailValidatorTest extends TestCase
         $this->assertFalse($validator->validate('Короткое имя <тест@это-доменное-имя.после-преобразования-в-idn.будет-содержать-больше-254-символов.бла-бла-бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.com>'));
     }
 
-    public function testValidateValueMx(): void
+    public function testValidateValueMx()
     {
         $validator = new EmailValidator();
 
@@ -123,22 +124,21 @@ class EmailValidatorTest extends TestCase
         $validator->checkDNS = true;
         $this->assertFalse($validator->validate('test@nonexistingsubdomain.example.com'));
 
-        $validator->checkDNS  = true;
+        $validator->checkDNS = true;
         $validator->allowName = true;
-        $emails               = [
+        $emails = [
             'ipetrov@gmail.com',
             'Ivan Petrov <ipetrov@gmail.com>',
         ];
-
         foreach ($emails as $email) {
-            $this->assertTrue($validator->validate($email), "Email: '{$email}' failed to validate(checkDNS=true, allowName=true)");
+            $this->assertTrue($validator->validate($email), "Email: '$email' failed to validate(checkDNS=true, allowName=true)");
         }
     }
 
-    public function testValidateAttribute(): void
+    public function testValidateAttribute()
     {
-        $validator         = new EmailValidator();
-        $model             = new FakedValidationModel();
+        $validator = new EmailValidator();
+        $model = new FakedValidationModel();
         $model->attr_email = '5011@gmail.com';
         $validator->validateAttribute($model, 'attr_email');
         $this->assertFalse($model->hasErrors('attr_email'));
@@ -173,38 +173,33 @@ class EmailValidatorTest extends TestCase
 
     /**
      * Test malicious email addresses that can be used to exploit SwiftMailer vulnerability CVE-2016-10074 while IDN is disabled.
-     *
      * @see https://legalhackers.com/advisories/SwiftMailer-Exploit-Remote-Code-Exec-CVE-2016-10074-Vuln.html
      *
      * @dataProvider malformedAddressesProvider
-     *
      * @param string $value
      */
-    public function testMalformedAddressesIdnDisabled($value): void
+    public function testMalformedAddressesIdnDisabled($value)
     {
-        $validator            = new EmailValidator();
+        $validator = new EmailValidator();
         $validator->enableIDN = false;
         $this->assertFalse($validator->validate($value));
     }
 
     /**
      * Test malicious email addresses that can be used to exploit SwiftMailer vulnerability CVE-2016-10074 while IDN is enabled.
-     *
      * @see https://legalhackers.com/advisories/SwiftMailer-Exploit-Remote-Code-Exec-CVE-2016-10074-Vuln.html
      *
      * @dataProvider malformedAddressesProvider
-     *
      * @param string $value
      */
-    public function testMalformedAddressesIdnEnabled($value): void
+    public function testMalformedAddressesIdnEnabled($value)
     {
         if (!function_exists('idn_to_ascii')) {
             $this->markTestSkipped('Intl extension required');
-
             return;
         }
 
-        $val            = new EmailValidator();
+        $val = new EmailValidator();
         $val->enableIDN = true;
         $this->assertFalse($val->validate($value));
     }

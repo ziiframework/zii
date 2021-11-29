@@ -1,13 +1,12 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\web;
 
-use Yii;
 use yii\helpers\FileHelper;
 use yii\web\AssetConverter;
 
@@ -25,8 +24,7 @@ class AssetConverterTest extends \yiiunit\TestCase
     {
         parent::setUp();
         $this->mockApplication();
-        $this->tmpPath = Yii::$app->runtimePath . '/assetConverterTest_' . getmypid();
-
+        $this->tmpPath = \Yii::$app->runtimePath . '/assetConverterTest_' . getmypid();
         if (!is_dir($this->tmpPath)) {
             mkdir($this->tmpPath, 0777, true);
         }
@@ -42,12 +40,10 @@ class AssetConverterTest extends \yiiunit\TestCase
 
     // Tests :
 
-    public function testConvert(): void
+    public function testConvert()
     {
         $tmpPath = $this->tmpPath;
-        file_put_contents(
-            $tmpPath . '/test.php',
-            <<<EOF
+        file_put_contents($tmpPath . '/test.php', <<<EOF
 <?php
 
 echo "Hello World!\n";
@@ -55,7 +51,7 @@ echo "Hello Yii!";
 EOF
         );
 
-        $converter                  = new AssetConverter();
+        $converter = new AssetConverter();
         $converter->commands['php'] = ['txt', 'php {from} > {to}'];
         $this->assertEquals('test.txt', $converter->convert('test.php', $tmpPath));
 
@@ -66,19 +62,17 @@ EOF
     /**
      * @depends testConvert
      */
-    public function testForceConvert(): void
+    public function testForceConvert()
     {
         $tmpPath = $this->tmpPath;
-        file_put_contents(
-            $tmpPath . '/test.php',
-            <<<'EOF'
+        file_put_contents($tmpPath . '/test.php', <<<'EOF'
 <?php
 
 echo microtime();
 EOF
         );
 
-        $converter                  = new AssetConverter();
+        $converter = new AssetConverter();
         $converter->commands['php'] = ['txt', 'php {from} > {to}'];
 
         $converter->convert('test.php', $tmpPath);

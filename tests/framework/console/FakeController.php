@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\console;
 
 use yii\console\Controller;
@@ -12,22 +12,21 @@ use yii\console\Response;
 
 /**
  * @author Misbahul D Munir <misbahuldmunir@gmail.com>
- *
  * @since 2.0
  */
 class FakeController extends Controller
 {
-    private static $_wasActionIndexCalled = false;
-
     public $test;
 
     public $testArray = [];
 
     public $alias;
 
+    private static $_wasActionIndexCalled = false;
+
     public static function getWasActionIndexCalled()
     {
-        $wasCalled                   = self::$_wasActionIndexCalled;
+        $wasCalled = self::$_wasActionIndexCalled;
         self::$_wasActionIndexCalled = false;
 
         return $wasCalled;
@@ -45,20 +44,20 @@ class FakeController extends Controller
     public function optionAliases()
     {
         return [
-            't'  => 'test',
+            't' => 'test',
             'ta' => 'testArray',
-            'a'  => 'alias',
+            'a' => 'alias',
         ];
     }
 
-    public function actionIndex(): void
+    public function actionIndex()
     {
         self::$_wasActionIndexCalled = true;
     }
 
     public function actionAksi1($fromParam, $other = 'default')
     {
-        return [$fromParam, $other];
+        return[$fromParam, $other];
     }
 
     public function actionAksi2(array $values, $value)
@@ -66,7 +65,7 @@ class FakeController extends Controller
         return [$values, $value];
     }
 
-    public function actionAksi3($available, $missing): void
+    public function actionAksi3($available, $missing)
     {
     }
 
@@ -102,9 +101,8 @@ class FakeController extends Controller
 
     public function actionResponse($status = 0)
     {
-        $response             = new Response();
+        $response = new Response();
         $response->exitStatus = (int) $status;
-
         return $response;
     }
 }

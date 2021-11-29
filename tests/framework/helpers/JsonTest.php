@@ -1,20 +1,16 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\helpers;
 
-use DateTime;
-use DateTimeZone;
-use SplStack;
-use stdClass;
 use yii\helpers\Json;
 use yii\web\JsExpression;
-use yiiunit\framework\models\JsonModel;
 use yiiunit\framework\web\Post;
+use yiiunit\framework\models\JsonModel;
 use yiiunit\TestCase;
 
 /**
@@ -31,7 +27,7 @@ class JsonTest extends TestCase
         $this->destroyApplication();
     }
 
-    public function testEncode(): void
+    public function testEncode()
     {
         // Arrayable data encoding
         $dataArrayable = $this->getMockBuilder('\yii\base\Arrayable')->getMock();
@@ -56,9 +52,9 @@ class JsonTest extends TestCase
         // simple object with zero indexed keys encoding
         $data = (object) [
             0 => 1,
-            1 => 2,
+            1 => 2
         ];
-        $default              = Json::$keepObjectType;
+        $default = Json::$keepObjectType;
         Json::$keepObjectType = true;
         $this->assertSame('{"0":1,"1":2}', Json::encode($data));
         Json::$keepObjectType = false;
@@ -68,22 +64,22 @@ class JsonTest extends TestCase
         // empty data encoding
         $data = [];
         $this->assertSame('[]', Json::encode($data));
-        $data = new stdClass();
+        $data = new \stdClass();
         $this->assertSame('{}', Json::encode($data));
 
         // expression encoding
         $expression = 'function () {}';
-        $data       = new JsExpression($expression);
+        $data = new JsExpression($expression);
         $this->assertSame($expression, Json::encode($data));
 
         // complex data
         $expression1 = 'function (a) {}';
         $expression2 = 'function (b) {}';
-        $data        = [
+        $data = [
             'a' => [1, new JsExpression($expression1)],
             'b' => new JsExpression($expression2),
         ];
-        $this->assertSame("{\"a\":[1,{$expression1}],\"b\":{$expression2}}", Json::encode($data));
+        $this->assertSame("{\"a\":[1,$expression1],\"b\":$expression2}", Json::encode($data));
 
         // https://github.com/yiisoft/yii2/issues/957
         $data = (object) null;
@@ -93,15 +89,15 @@ class JsonTest extends TestCase
         $data = new JsonModel();
         $this->assertSame('{"json":"serializable"}', Json::encode($data));
         // https://github.com/yiisoft/yii2/issues/12043
-        $data       = new JsonModel();
+        $data = new JsonModel();
         $data->data = [];
         $this->assertSame('[]', Json::encode($data));
-        $data       = new JsonModel();
+        $data = new JsonModel();
         $data->data = (object) null;
         $this->assertSame('{}', Json::encode($data));
     }
 
-    public function testHtmlEncode(): void
+    public function testHtmlEncode()
     {
         // HTML escaped chars
         $data = '&<>"\'/';
@@ -123,17 +119,17 @@ class JsonTest extends TestCase
 
         // expression encoding
         $expression = 'function () {}';
-        $data       = new JsExpression($expression);
+        $data = new JsExpression($expression);
         $this->assertSame($expression, Json::htmlEncode($data));
 
         // complex data
         $expression1 = 'function (a) {}';
         $expression2 = 'function (b) {}';
-        $data        = [
+        $data = [
             'a' => [1, new JsExpression($expression1)],
             'b' => new JsExpression($expression2),
         ];
-        $this->assertSame("{\"a\":[1,{$expression1}],\"b\":{$expression2}}", Json::htmlEncode($data));
+        $this->assertSame("{\"a\":[1,$expression1],\"b\":$expression2}", Json::htmlEncode($data));
 
         // https://github.com/yiisoft/yii2/issues/957
         $data = (object) null;
@@ -167,17 +163,17 @@ class JsonTest extends TestCase
         $document = simplexml_load_string($xml);
         $this->assertSame('{"child1":{},"child2":{"subElement":"sub"}}', Json::encode($document));
 
-        $postsStack = new SplStack();
+        $postsStack = new \SplStack();
         $postsStack->push(new Post(915, 'record1'));
         $postsStack->push(new Post(456, 'record2'));
 
         $this->assertSame('{"1":{"id":456,"title":"record2"},"0":{"id":915,"title":"record1"}}', Json::encode($postsStack));
     }
 
-    public function testDecode(): void
+    public function testDecode()
     {
         // empty value
-        $json   = '';
+        $json = '';
         $actual = Json::decode($json);
         $this->assertNull($actual);
 
@@ -198,7 +194,7 @@ class JsonTest extends TestCase
     /**
      * @covers ::decode
      */
-    public function testDecodeInvalidParamException(): void
+    public function testDecodeInvalidParamException()
     {
         $this->expectException('\yii\base\InvalidArgumentException');
         $this->expectExceptionMessage('Invalid JSON data.');
@@ -208,7 +204,7 @@ class JsonTest extends TestCase
     /**
      * @covers ::decode
      */
-    public function testHandleJsonError(): void
+    public function testHandleJsonError()
     {
         // basic syntax error
         try {
@@ -220,7 +216,7 @@ class JsonTest extends TestCase
 
         // unsupported type since PHP 5.5
         try {
-            $fp   = fopen('php://stdin', 'r');
+            $fp = fopen('php://stdin', 'r');
             $data = ['a' => $fp];
             Json::encode($data);
             fclose($fp);
@@ -233,14 +229,14 @@ class JsonTest extends TestCase
         }
     }
 
-    public function testErrorSummary(): void
+    public function testErrorSummary()
     {
-        $model       = new JsonModel();
+        $model = new JsonModel();
         $model->name = 'not_an_integer';
         $model->addError('name', 'Error message. Here are some chars: < >');
         $model->addError('name', 'Error message. Here are even more chars: ""');
         $model->validate(null, false);
-        $options      = ['showAllErrors' => true];
+        $options = ['showAllErrors' => true];
         $expectedHtml = '["Error message. Here are some chars: < >","Error message. Here are even more chars: \"\""]';
         $this->assertEquals($expectedHtml, Json::errorSummary($model, $options));
     }
@@ -249,9 +245,9 @@ class JsonTest extends TestCase
      * @see https://github.com/yiisoft/yii2/issues/17760
      * @covers ::encode
      */
-    public function testEncodeDateTime(): void
+    public function testEncodeDateTime()
     {
-        $input  = new DateTime('October 12, 2014', new DateTimeZone('UTC'));
+        $input = new \DateTime('October 12, 2014', new \DateTimeZone('UTC'));
         $output = Json::encode($input);
         $this->assertEquals('{"date":"2014-10-12 00:00:00.000000","timezone_type":3,"timezone":"UTC"}', $output);
     }
@@ -259,30 +255,30 @@ class JsonTest extends TestCase
     /**
      * @covers ::encode
      */
-    public function testPrettyPrint(): void
+    public function testPrettyPrint()
     {
         $defaultValue = Json::$prettyPrint;
-        $input        = ['a' => 1, 'b' => 2];
-        $defOutput    = '{"a":1,"b":2}';
-        $ppOutput     = "{\n    \"a\": 1,\n    \"b\": 2\n}";
+        $input = ['a' => 1, 'b' => 2];
+        $defOutput = '{"a":1,"b":2}';
+        $ppOutput = "{\n    \"a\": 1,\n    \"b\": 2\n}";
 
         // Test unchanged options
         Json::$prettyPrint = null;
-        $output            = Json::encode($input, 320);
+        $output = Json::encode($input, 320);
         $this->assertEquals($defOutput, $output);
         $output = Json::encode($input, 448);
         $this->assertEquals($ppOutput, $output);
 
         // Test pretty print enabled
         Json::$prettyPrint = true;
-        $output            = Json::encode($input, 320);
+        $output = Json::encode($input, 320);
         $this->assertEquals($ppOutput, $output);
         $output = Json::encode($input, 448);
         $this->assertEquals($ppOutput, $output);
 
         // Test pretty print disabled
         Json::$prettyPrint = false;
-        $output            = Json::encode($input, 320);
+        $output = Json::encode($input, 320);
         $this->assertEquals($defOutput, $output);
         $output = Json::encode($input, 448);
         $this->assertEquals($defOutput, $output);

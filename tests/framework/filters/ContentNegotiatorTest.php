@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * @see http://www.yiiframework.com/
- *
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
+
 namespace yiiunit\framework\filters;
 
 use Yii;
@@ -27,30 +27,41 @@ class ContentNegotiatorTest extends TestCase
         $this->mockWebApplication();
     }
 
-    public function testWhenLanguageGETParamIsArray(): void
+    protected function mockActionAndFilter()
     {
-        [$action, $filter] = $this->mockActionAndFilter();
+        $action = new Action('test', new Controller('id', Yii::$app));
+        $filter = new ContentNegotiator([
+            'request' => new Request(),
+            'response' => new Response(),
+        ]);
 
-        $_SERVER['REQUEST_METHOD']    = 'GET';
+        return [$action, $filter];
+    }
+
+    public function testWhenLanguageGETParamIsArray()
+    {
+        list($action, $filter) = $this->mockActionAndFilter();
+
+        $_SERVER['REQUEST_METHOD'] = 'GET';
         $_GET[$filter->languageParam] = [
             'foo',
             'string-index' => 'bar',
         ];
 
-        $targetLanguage    = 'de';
+        $targetLanguage = 'de';
         $filter->languages = [$targetLanguage, 'ru', 'en'];
 
         $filter->beforeAction($action);
         $this->assertEquals($targetLanguage, Yii::$app->language);
     }
 
-    public function testWhenFormatGETParamIsArray(): void
+    public function testWhenFormatGETParamIsArray()
     {
         $this->expectException('yii\web\BadRequestHttpException');
         $this->expectExceptionMessageMatches("|Invalid data received for GET parameter '.+'|");
-        [$action, $filter] = $this->mockActionAndFilter();
+        list($action, $filter) = $this->mockActionAndFilter();
 
-        $_SERVER['REQUEST_METHOD']  = 'GET';
+        $_SERVER['REQUEST_METHOD'] = 'GET';
         $_GET[$filter->formatParam] = [
             'format-A',
             'string-index' => 'format-B',
@@ -58,45 +69,45 @@ class ContentNegotiatorTest extends TestCase
 
         $filter->formats = [
             'application/json' => Response::FORMAT_JSON,
-            'application/xml'  => Response::FORMAT_XML,
+            'application/xml' => Response::FORMAT_XML,
         ];
 
         $filter->beforeAction($action);
     }
 
-    public function testVaryHeader(): void
+    public function testVaryHeader()
     {
-        [$action, $filter] = $this->mockActionAndFilter();
-        $filter->formats   = [];
+        list($action, $filter) = $this->mockActionAndFilter();
+        $filter->formats = [];
         $filter->languages = [];
         $filter->beforeAction($action);
         $this->assertFalse($filter->response->getHeaders()->has('Vary'));
 
-        [$action, $filter] = $this->mockActionAndFilter();
-        $filter->formats   = ['application/json' => Response::FORMAT_JSON];
+        list($action, $filter) = $this->mockActionAndFilter();
+        $filter->formats = ['application/json' => Response::FORMAT_JSON];
         $filter->languages = ['en'];
         $filter->beforeAction($action);
         $this->assertFalse($filter->response->getHeaders()->has('Vary'));  // There is still nothing to vary
 
-        [$action, $filter] = $this->mockActionAndFilter();
-        $filter->formats   = [
+        list($action, $filter) = $this->mockActionAndFilter();
+        $filter->formats = [
             'application/json' => Response::FORMAT_JSON,
-            'application/xml'  => Response::FORMAT_XML,
+            'application/xml' => Response::FORMAT_XML,
         ];
         $filter->languages = [];
         $filter->beforeAction($action);
         $this->assertContains('Accept', $filter->response->getHeaders()->get('Vary', [], false));
 
-        [$action, $filter] = $this->mockActionAndFilter();
-        $filter->formats   = [];
+        list($action, $filter) = $this->mockActionAndFilter();
+        $filter->formats = [];
         $filter->languages = ['en', 'de'];
         $filter->beforeAction($action);
         $this->assertContains('Accept-Language', $filter->response->getHeaders()->get('Vary', [], false));
 
-        [$action, $filter] = $this->mockActionAndFilter();
-        $filter->formats   = [
+        list($action, $filter) = $this->mockActionAndFilter();
+        $filter->formats = [
             'application/json' => Response::FORMAT_JSON,
-            'application/xml'  => Response::FORMAT_XML,
+            'application/xml' => Response::FORMAT_XML,
         ];
         $filter->languages = ['en', 'de'];
         $filter->beforeAction($action);
@@ -105,7 +116,7 @@ class ContentNegotiatorTest extends TestCase
         $this->assertContains('Accept-Language', $varyHeader);
     }
 
-    public function testNegotiateContentType(): void
+    public function testNegotiateContentType()
     {
         $filter = new ContentNegotiator([
             'formats' => [
@@ -118,16 +129,5 @@ class ContentNegotiatorTest extends TestCase
         $this->expectException('\yii\web\NotAcceptableHttpException');
         Yii::$app->request->setAcceptableContentTypes(['application/xml' => ['q' => 1, 'version' => '2.0']]);
         $filter->negotiate();
-    }
-
-    protected function mockActionAndFilter()
-    {
-        $action = new Action('test', new Controller('id', Yii::$app));
-        $filter = new ContentNegotiator([
-            'request'  => new Request(),
-            'response' => new Response(),
-        ]);
-
-        return [$action, $filter];
     }
 }
