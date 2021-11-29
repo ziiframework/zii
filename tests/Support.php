@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +10,9 @@
 
 namespace yiiunit;
 
+use Exception;
+use ReflectionException;
+use ReflectionObject;
 
 class Support
 {
@@ -15,14 +21,14 @@ class Support
      */
     public static function readObjectAttribute(object $object, string $attributeName)
     {
-        $reflector = new \ReflectionObject($object);
+        $reflector = new ReflectionObject($object);
 
         do {
             try {
                 $attribute = $reflector->getProperty($attributeName);
 
                 if (!$attribute || $attribute->isPublic()) {
-                    return $object->$attributeName;
+                    return $object->{$attributeName};
                 }
 
                 $attribute->setAccessible(true);
@@ -32,13 +38,11 @@ class Support
                 } finally {
                     $attribute->setAccessible(false);
                 }
-            } catch (\ReflectionException $e) {
+            } catch (ReflectionException $e) {
                 // do nothing
             }
         } while ($reflector = $reflector->getParentClass());
 
-        throw new \Exception(
-            sprintf('Attribute "%s" not found in object.', $attributeName)
-        );
+        throw new Exception(sprintf('Attribute "%s" not found in object.', $attributeName));
     }
 }

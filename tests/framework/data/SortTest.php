@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -13,11 +16,15 @@ use yiiunit\TestCase;
 
 /**
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  *
  * @group data
+ *
+ * @internal
+ * @coversNothing
  */
-class SortTest extends TestCase
+final class SortTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -25,7 +32,7 @@ class SortTest extends TestCase
         $this->mockApplication();
     }
 
-    public function testGetOrders()
+    public function testGetOrders(): void
     {
         $sort = new Sort([
             'attributes' => [
@@ -43,20 +50,20 @@ class SortTest extends TestCase
 
         $orders = $sort->getOrders();
         $this->assertCount(3, $orders);
-        $this->assertEquals(SORT_ASC, $orders['age']);
-        $this->assertEquals(SORT_DESC, $orders['first_name']);
-        $this->assertEquals(SORT_DESC, $orders['last_name']);
+        $this->assertSame(SORT_ASC, $orders['age']);
+        $this->assertSame(SORT_DESC, $orders['first_name']);
+        $this->assertSame(SORT_DESC, $orders['last_name']);
 
         $sort->enableMultiSort = false;
         $orders = $sort->getOrders(true);
         $this->assertCount(1, $orders);
-        $this->assertEquals(SORT_ASC, $orders['age']);
+        $this->assertSame(SORT_ASC, $orders['age']);
     }
 
     /**
      * @depends testGetOrders
      */
-    public function testGetAttributeOrders()
+    public function testGetAttributeOrders(): void
     {
         $sort = new Sort([
             'attributes' => [
@@ -74,19 +81,19 @@ class SortTest extends TestCase
 
         $orders = $sort->getAttributeOrders();
         $this->assertCount(2, $orders);
-        $this->assertEquals(SORT_ASC, $orders['age']);
-        $this->assertEquals(SORT_DESC, $orders['name']);
+        $this->assertSame(SORT_ASC, $orders['age']);
+        $this->assertSame(SORT_DESC, $orders['name']);
 
         $sort->enableMultiSort = false;
         $orders = $sort->getAttributeOrders(true);
         $this->assertCount(1, $orders);
-        $this->assertEquals(SORT_ASC, $orders['age']);
+        $this->assertSame(SORT_ASC, $orders['age']);
     }
 
     /**
      * @depends testGetAttributeOrders
      */
-    public function testGetAttributeOrder()
+    public function testGetAttributeOrder(): void
     {
         $sort = new Sort([
             'attributes' => [
@@ -102,15 +109,15 @@ class SortTest extends TestCase
             'enableMultiSort' => true,
         ]);
 
-        $this->assertEquals(SORT_ASC, $sort->getAttributeOrder('age'));
-        $this->assertEquals(SORT_DESC, $sort->getAttributeOrder('name'));
+        $this->assertSame(SORT_ASC, $sort->getAttributeOrder('age'));
+        $this->assertSame(SORT_DESC, $sort->getAttributeOrder('name'));
         $this->assertNull($sort->getAttributeOrder('xyz'));
     }
 
     /**
      * @depends testGetAttributeOrders
      */
-    public function testSetAttributeOrders()
+    public function testSetAttributeOrders(): void
     {
         $sort = new Sort([
             'attributes' => [
@@ -131,22 +138,22 @@ class SortTest extends TestCase
             'name' => SORT_ASC,
         ];
         $sort->setAttributeOrders($orders);
-        $this->assertEquals($orders, $sort->getAttributeOrders());
+        $this->assertSame($orders, $sort->getAttributeOrders());
 
         $sort->enableMultiSort = false;
         $sort->setAttributeOrders($orders);
-        $this->assertEquals(['age' => SORT_DESC], $sort->getAttributeOrders());
+        $this->assertSame(['age' => SORT_DESC], $sort->getAttributeOrders());
         $sort->setAttributeOrders($orders, false);
-        $this->assertEquals($orders, $sort->getAttributeOrders());
+        $this->assertSame($orders, $sort->getAttributeOrders());
 
         $orders = ['unexistingAttribute' => SORT_ASC];
         $sort->setAttributeOrders($orders);
-        $this->assertEquals([], $sort->getAttributeOrders());
+        $this->assertSame([], $sort->getAttributeOrders());
         $sort->setAttributeOrders($orders, false);
-        $this->assertEquals($orders, $sort->getAttributeOrders());
+        $this->assertSame($orders, $sort->getAttributeOrders());
     }
 
-    public function testCreateSortParam()
+    public function testCreateSortParam(): void
     {
         $sort = new Sort([
             'attributes' => [
@@ -165,31 +172,31 @@ class SortTest extends TestCase
 
         $sort->params = ['sort' => 'age,-name'];
         $sort->getAttributeOrders(true);
-        $this->assertEquals('-age,-name', $sort->createSortParam('age'));
-        $this->assertEquals('age', $sort->createSortParam('name'));
+        $this->assertSame('-age,-name', $sort->createSortParam('age'));
+        $this->assertSame('age', $sort->createSortParam('name'));
 
         $sort->params = ['sort' => 'age'];
         $sort->getAttributeOrders(true);
-        $this->assertEquals('-age', $sort->createSortParam('age'));
+        $this->assertSame('-age', $sort->createSortParam('age'));
 
         $sort->params = ['sort' => '-age'];
         $sort->getAttributeOrders(true);
-        $this->assertEquals('', $sort->createSortParam('age'));
+        $this->assertSame('', $sort->createSortParam('age'));
 
         $sort->params = ['sort' => 'age'];
         $sort->getAttributeOrders(true);
-        $this->assertEquals('name,age', $sort->createSortParam('name'));
+        $this->assertSame('name,age', $sort->createSortParam('name'));
 
         $sort->params = ['sort' => 'name,age'];
         $sort->getAttributeOrders(true);
-        $this->assertEquals('-name,age', $sort->createSortParam('name'));
+        $this->assertSame('-name,age', $sort->createSortParam('name'));
 
         $sort->params = ['sort' => '-name,age'];
         $sort->getAttributeOrders(true);
-        $this->assertEquals('age', $sort->createSortParam('name'));
+        $this->assertSame('age', $sort->createSortParam('name'));
     }
 
-    public function testCreateUrl()
+    public function testCreateUrl(): void
     {
         $manager = new UrlManager([
             'baseUrl' => '/',
@@ -213,14 +220,14 @@ class SortTest extends TestCase
             'route' => 'site/index',
         ]);
 
-        $this->assertEquals('/index.php?r=site%2Findex&sort=-age%2C-name', $sort->createUrl('age'));
-        $this->assertEquals('/index.php?r=site%2Findex&sort=age', $sort->createUrl('name'));
+        $this->assertSame('/index.php?r=site%2Findex&sort=-age%2C-name', $sort->createUrl('age'));
+        $this->assertSame('/index.php?r=site%2Findex&sort=age', $sort->createUrl('name'));
     }
 
     /**
      * @depends testCreateUrl
      */
-    public function testLink()
+    public function testLink(): void
     {
         $this->mockApplication();
         $manager = new UrlManager([
@@ -245,10 +252,10 @@ class SortTest extends TestCase
             'route' => 'site/index',
         ]);
 
-        $this->assertEquals('<a class="asc" href="/index.php?r=site%2Findex&amp;sort=-age%2C-name" data-sort="-age,-name">Age</a>', $sort->link('age'));
+        $this->assertSame('<a class="asc" href="/index.php?r=site%2Findex&amp;sort=-age%2C-name" data-sort="-age,-name">Age</a>', $sort->link('age'));
     }
 
-    public function testParseSortParam()
+    public function testParseSortParam(): void
     {
         $sort = new CustomSort([
             'attributes' => [
@@ -264,8 +271,8 @@ class SortTest extends TestCase
             'enableMultiSort' => true,
         ]);
 
-        $this->assertEquals(SORT_ASC, $sort->getAttributeOrder('age'));
-        $this->assertEquals(SORT_DESC, $sort->getAttributeOrder('name'));
+        $this->assertSame(SORT_ASC, $sort->getAttributeOrder('age'));
+        $this->assertSame(SORT_DESC, $sort->getAttributeOrder('name'));
     }
 
     /**
@@ -273,7 +280,7 @@ class SortTest extends TestCase
      *
      * @see https://github.com/yiisoft/yii2/pull/13260
      */
-    public function testGetExpressionOrders()
+    public function testGetExpressionOrders(): void
     {
         $sort = new Sort([
             'attributes' => [
@@ -286,13 +293,13 @@ class SortTest extends TestCase
 
         $sort->params = ['sort' => '-name'];
         $orders = $sort->getOrders();
-        $this->assertEquals(1, count($orders));
-        $this->assertEquals('[[last_name]] DESC NULLS LAST', $orders[0]);
+        $this->assertSame(1, count($orders));
+        $this->assertSame('[[last_name]] DESC NULLS LAST', $orders[0]);
 
         $sort->params = ['sort' => 'name'];
         $orders = $sort->getOrders(true);
-        $this->assertEquals(1, count($orders));
-        $this->assertEquals('[[last_name]] ASC NULLS FIRST', $orders[0]);
+        $this->assertSame(1, count($orders));
+        $this->assertSame('[[last_name]] ASC NULLS FIRST', $orders[0]);
     }
 }
 
@@ -301,6 +308,7 @@ class CustomSort extends Sort
     protected function parseSortParam($params)
     {
         $attributes = [];
+
         foreach ($params as $item) {
             $attributes[] = ($item['dir'] == 'desc') ? '-' . $item['field'] : $item['field'];
         }

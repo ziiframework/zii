@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -20,8 +23,11 @@ use yiiunit\framework\rbac\AuthorRule;
 
 /**
  * @group filters
+ *
+ * @internal
+ * @coversNothing
  */
-class AccessRuleTest extends \yiiunit\TestCase
+final class AccessRuleTest extends \yiiunit\TestCase
 {
     protected function setUp(): void
     {
@@ -33,94 +39,7 @@ class AccessRuleTest extends \yiiunit\TestCase
         $this->mockWebApplication();
     }
 
-    /**
-     * @param string $method
-     * @return Request
-     */
-    protected function mockRequest($method = 'GET')
-    {
-        /** @var Request $request */
-        $request = $this->getMockBuilder('\yii\web\Request')
-            ->setMethods(['getMethod'])
-            ->getMock();
-        $request->method('getMethod')->willReturn($method);
-
-        return $request;
-    }
-
-    /**
-     * @param string $userid optional user id
-     * @return User
-     */
-    protected function mockUser($userid = null)
-    {
-        $user = new User([
-            'identityClass' => UserIdentity::className(),
-            'enableAutoLogin' => false,
-        ]);
-        if ($userid !== null) {
-            $user->setIdentity(UserIdentity::findIdentity($userid));
-        }
-
-        return $user;
-    }
-
-    /**
-     * @return Action
-     */
-    protected function mockAction()
-    {
-        $controller = new Controller('site', Yii::$app);
-        return new Action('test', $controller);
-    }
-
-    /**
-     * @return \yii\rbac\BaseManager
-     */
-    protected function mockAuthManager()
-    {
-        $auth = new MockAuthManager();
-        // add "createPost" permission
-        $createPost = $auth->createPermission('createPost');
-        $createPost->description = 'Create a post';
-        $auth->add($createPost);
-
-        // add "updatePost" permission
-        $updatePost = $auth->createPermission('updatePost');
-        $updatePost->description = 'Update post';
-        $auth->add($updatePost);
-
-        // add "updateOwnPost" permission
-        $updateOwnPost = $auth->createPermission('updateOwnPost');
-        $updateOwnPost->description = 'Update post';
-        $updateRule = new AuthorRule();
-        $auth->add($updateRule);
-        $updateOwnPost->ruleName = $updateRule->name;
-        $auth->add($updateOwnPost);
-        $auth->addChild($updateOwnPost, $updatePost);
-
-        // add "author" role and give this role the "createPost" permission
-        $author = $auth->createRole('author');
-        $auth->add($author);
-        $auth->addChild($author, $createPost);
-        $auth->addChild($author, $updateOwnPost);
-
-        // add "admin" role and give this role the "updatePost" permission
-        // as well as the permissions of the "author" role
-        $admin = $auth->createRole('admin');
-        $auth->add($admin);
-        $auth->addChild($admin, $updatePost);
-        $auth->addChild($admin, $author);
-
-        // Assign roles to users. 1 and 2 are IDs returned by IdentityInterface::getId()
-        // usually implemented in your User model.
-        $auth->assign($author, 'user2');
-        $auth->assign($admin, 'user1');
-
-        return $auth;
-    }
-
-    public function testMatchAction()
+    public function testMatchAction(): void
     {
         $action = $this->mockAction();
         $user = false;
@@ -148,7 +67,7 @@ class AccessRuleTest extends \yiiunit\TestCase
         $this->assertNull($rule->allows($action, $user, $request));
     }
 
-    public function testMatchController()
+    public function testMatchController(): void
     {
         $action = $this->mockAction();
         $user = false;
@@ -180,7 +99,7 @@ class AccessRuleTest extends \yiiunit\TestCase
     /**
      * @depends testMatchController
      */
-    public function testMatchControllerWildcard()
+    public function testMatchControllerWildcard(): void
     {
         $action = $this->mockAction();
         $user = false;
@@ -212,10 +131,10 @@ class AccessRuleTest extends \yiiunit\TestCase
      * Data provider for testMatchRole.
      *
      * @return array or arrays
-     *           the id of the action
-     *           should the action allow (true) or disallow (false)
-     *           test user id
-     *           expected match result (true, false, null)
+     *               the id of the action
+     *               should the action allow (true) or disallow (false)
+     *               test user id
+     *               expected match result (true, false, null)
      */
     public function matchRoleProvider()
     {
@@ -240,14 +159,14 @@ class AccessRuleTest extends \yiiunit\TestCase
             ['update', true,  'unknown', ['authorID' => 'user2'], null],
 
             // user2 is author, can only edit own posts
-            ['update', true,  'user2',   function () { return ['authorID' => 'user2']; }, true],
-            ['update', true,  'user2',   function () { return ['authorID' => 'user1']; }, null],
+            ['update', true,  'user2',   static fn () => ['authorID' => 'user2'], true],
+            ['update', true,  'user2',   static fn () => ['authorID' => 'user1'], null],
             // user1 is admin, can update all posts
-            ['update', true,  'user1',   function () { return ['authorID' => 'user1']; }, true],
-            ['update', true,  'user1',   function () { return ['authorID' => 'user2']; }, true],
+            ['update', true,  'user1',   static fn () => ['authorID' => 'user1'], true],
+            ['update', true,  'user1',   static fn () => ['authorID' => 'user2'], true],
             // unknown user can not edit anything
-            ['update', true,  'unknown', function () { return ['authorID' => 'user1']; }, null],
-            ['update', true,  'unknown', function () { return ['authorID' => 'user2']; }, null],
+            ['update', true,  'unknown', static fn () => ['authorID' => 'user1'], null],
+            ['update', true,  'unknown', static fn () => ['authorID' => 'user2'], null],
         ];
     }
 
@@ -255,13 +174,14 @@ class AccessRuleTest extends \yiiunit\TestCase
      * Test that a user matches certain roles.
      *
      * @dataProvider matchRoleProvider
-     * @param string $actionid the action id
-     * @param bool $allow whether the rule should allow access
-     * @param string $userid the userid to check
+     *
+     * @param string        $actionid   the action id
+     * @param bool          $allow      whether the rule should allow access
+     * @param string        $userid     the userid to check
      * @param array|Closure $roleParams params for $roleParams
-     * @param bool $expected the expected result or null
+     * @param bool          $expected   the expected result or null
      */
-    public function testMatchRole($actionid, $allow, $userid, $roleParams, $expected)
+    public function testMatchRole($actionid, $allow, $userid, $roleParams, $expected): void
     {
         $action = $this->mockAction();
         $auth = $this->mockAuthManager();
@@ -278,7 +198,7 @@ class AccessRuleTest extends \yiiunit\TestCase
 
         $user = $this->mockUser($userid);
         $user->accessChecker = $auth;
-        $this->assertEquals($expected, $rule->allows($action, $user, $request));
+        $this->assertSame($expected, $rule->allows($action, $user, $request));
     }
 
     /**
@@ -286,7 +206,7 @@ class AccessRuleTest extends \yiiunit\TestCase
      *
      * @see https://github.com/yiisoft/yii2/issues/4793
      */
-    public function testMatchRoleWithoutUser()
+    public function testMatchRoleWithoutUser(): void
     {
         $action = $this->mockAction();
         $request = $this->mockRequest();
@@ -300,7 +220,7 @@ class AccessRuleTest extends \yiiunit\TestCase
         $rule->allows($action, false, $request);
     }
 
-    public function testMatchRoleSpecial()
+    public function testMatchRoleSpecial(): void
     {
         $action = $this->mockAction();
         $request = $this->mockRequest();
@@ -309,7 +229,7 @@ class AccessRuleTest extends \yiiunit\TestCase
 
         $rule = new AccessRule();
         $rule->allow = true;
-        $rule->roleParams = function () {
+        $rule->roleParams = function (): void {
             $this->assertTrue(false, 'Should not be executed');
         };
 
@@ -326,7 +246,7 @@ class AccessRuleTest extends \yiiunit\TestCase
         $this->assertTrue($rule->allows($action, $guest, $request));
     }
 
-    public function testMatchRolesAndPermissions()
+    public function testMatchRolesAndPermissions(): void
     {
         $action = $this->mockAction();
         $user = $this->getMockBuilder('\yii\web\User')->getMock();
@@ -364,9 +284,9 @@ class AccessRuleTest extends \yiiunit\TestCase
     }
 
     /**
-     * Test that callable object can be used as roleParams values
+     * Test that callable object can be used as roleParams values.
      */
-    public function testMatchRoleWithRoleParamsCallable()
+    public function testMatchRoleWithRoleParamsCallable(): void
     {
         $action = $this->mockAction();
         $action->id = 'update';
@@ -384,10 +304,10 @@ class AccessRuleTest extends \yiiunit\TestCase
         $user = $this->mockUser('user2');
         $user->accessChecker = $auth;
 
-        $this->assertEquals(true, $rule->allows($action, $user, $request));
+        $this->assertTrue($rule->allows($action, $user, $request));
     }
 
-    public function testMatchVerb()
+    public function testMatchVerb(): void
     {
         $action = $this->mockAction();
         $user = false;
@@ -418,7 +338,7 @@ class AccessRuleTest extends \yiiunit\TestCase
 
     // TODO test match custom callback
 
-    public function testMatchIP()
+    public function testMatchIP(): void
     {
         $action = $this->mockAction();
         $user = false;
@@ -508,7 +428,7 @@ class AccessRuleTest extends \yiiunit\TestCase
         $this->assertNull($rule->allows($action, $user, $request));
     }
 
-    public function testMatchIPWildcard()
+    public function testMatchIPWildcard(): void
     {
         $action = $this->mockAction();
         $user = false;
@@ -549,7 +469,7 @@ class AccessRuleTest extends \yiiunit\TestCase
         $this->assertNull($rule->allows($action, $user, $request));
     }
 
-    public function testMatchIPMask()
+    public function testMatchIPMask(): void
     {
         $action = $this->mockAction();
         $user = false;
@@ -588,6 +508,98 @@ class AccessRuleTest extends \yiiunit\TestCase
         $this->assertNull($rule->allows($action, $user, $request));
         $rule->allow = false;
         $this->assertNull($rule->allows($action, $user, $request));
+    }
+
+    /**
+     * @param string $method
+     *
+     * @return Request
+     */
+    protected function mockRequest($method = 'GET')
+    {
+        /** @var Request $request */
+        $request = $this->getMockBuilder('\yii\web\Request')
+            ->setMethods(['getMethod'])
+            ->getMock()
+        ;
+        $request->method('getMethod')->willReturn($method);
+
+        return $request;
+    }
+
+    /**
+     * @param string $userid optional user id
+     *
+     * @return User
+     */
+    protected function mockUser($userid = null)
+    {
+        $user = new User([
+            'identityClass' => UserIdentity::className(),
+            'enableAutoLogin' => false,
+        ]);
+
+        if ($userid !== null) {
+            $user->setIdentity(UserIdentity::findIdentity($userid));
+        }
+
+        return $user;
+    }
+
+    /**
+     * @return Action
+     */
+    protected function mockAction()
+    {
+        $controller = new Controller('site', Yii::$app);
+
+        return new Action('test', $controller);
+    }
+
+    /**
+     * @return \yii\rbac\BaseManager
+     */
+    protected function mockAuthManager()
+    {
+        $auth = new MockAuthManager();
+        // add "createPost" permission
+        $createPost = $auth->createPermission('createPost');
+        $createPost->description = 'Create a post';
+        $auth->add($createPost);
+
+        // add "updatePost" permission
+        $updatePost = $auth->createPermission('updatePost');
+        $updatePost->description = 'Update post';
+        $auth->add($updatePost);
+
+        // add "updateOwnPost" permission
+        $updateOwnPost = $auth->createPermission('updateOwnPost');
+        $updateOwnPost->description = 'Update post';
+        $updateRule = new AuthorRule();
+        $auth->add($updateRule);
+        $updateOwnPost->ruleName = $updateRule->name;
+        $auth->add($updateOwnPost);
+        $auth->addChild($updateOwnPost, $updatePost);
+
+        // add "author" role and give this role the "createPost" permission
+        $author = $auth->createRole('author');
+        $auth->add($author);
+        $auth->addChild($author, $createPost);
+        $auth->addChild($author, $updateOwnPost);
+
+        // add "admin" role and give this role the "updatePost" permission
+        // as well as the permissions of the "author" role
+        $admin = $auth->createRole('admin');
+        $auth->add($admin);
+        $auth->addChild($admin, $updatePost);
+        $auth->addChild($admin, $author);
+
+        // Assign roles to users. 1 and 2 are IDs returned by IdentityInterface::getId()
+        // usually implemented in your User model.
+        $auth->assign($author, 'user2');
+        $auth->assign($admin, 'user1');
+
+        return $auth;
     }
 }
 

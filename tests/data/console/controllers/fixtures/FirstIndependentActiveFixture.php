@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -13,7 +16,7 @@ class FirstIndependentActiveFixture extends ActiveFixture
 {
     public $modelClass = 'yiiunit\data\ar\Profile';
 
-    public function load()
+    public function load(): void
     {
         FixtureStorage::$activeFixtureSequence[] = self::className();
         parent::load();

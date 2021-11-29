@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,7 +14,11 @@ use yii\base\DynamicModel;
 use yii\data\ActiveDataFilter;
 use yiiunit\TestCase;
 
-class ActiveDataFilterTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class ActiveDataFilterTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -152,7 +159,7 @@ class ActiveDataFilterTest extends TestCase
             [
                 [
                     'number' => [
-                        'neq' => 'NULL'
+                        'neq' => 'NULL',
                     ],
                 ],
                 ['!=', 'number', null],
@@ -166,7 +173,7 @@ class ActiveDataFilterTest extends TestCase
      * @param array $filter
      * @param array $expectedResult
      */
-    public function testBuild($filter, $expectedResult)
+    public function testBuild($filter, $expectedResult): void
     {
         $builder = new ActiveDataFilter();
         $searchModel = (new DynamicModel(['name' => null, 'number' => null, 'price' => null, 'tags' => null]))
@@ -174,32 +181,30 @@ class ActiveDataFilterTest extends TestCase
             ->addRule('name', 'string')
             ->addRule('number', 'integer', ['min' => 0, 'max' => 100])
             ->addRule('price', 'number')
-            ->addRule('tags', 'each', ['rule' => ['string']]);
+            ->addRule('tags', 'each', ['rule' => ['string']])
+        ;
 
         $builder->setSearchModel($searchModel);
 
         $builder->filter = $filter;
-        $this->assertEquals($expectedResult, $builder->build());
+        $this->assertSame($expectedResult, $builder->build());
     }
 
     /**
      * @depends testBuild
      */
-    public function testBuildCallback()
+    public function testBuildCallback(): void
     {
         $builder = new ActiveDataFilter();
         $searchModel = (new DynamicModel(['name' => null]))
             ->addRule('name', 'trim')
-            ->addRule('name', 'string');
+            ->addRule('name', 'string')
+        ;
 
         $builder->setSearchModel($searchModel);
 
-        $builder->conditionBuilders['OR'] = function ($operator, $condition) {
-            return ['CALLBACK-OR', $condition];
-        };
-        $builder->conditionBuilders['LIKE'] = function ($operator, $condition, $attribute) {
-            return ['CALLBACK-LIKE', $operator, $condition, $attribute];
-        };
+        $builder->conditionBuilders['OR'] = static fn ($operator, $condition) => ['CALLBACK-OR', $condition];
+        $builder->conditionBuilders['LIKE'] = static fn ($operator, $condition, $attribute) => ['CALLBACK-LIKE', $operator, $condition, $attribute];
 
         $builder->filter = [
             'or' => [
@@ -214,7 +219,7 @@ class ActiveDataFilterTest extends TestCase
                 ['name' => 'another'],
             ],
         ];
-        $this->assertEquals($expectedResult, $builder->build());
+        $this->assertSame($expectedResult, $builder->build());
 
         $builder->filter = [
             'name' => [
@@ -222,6 +227,6 @@ class ActiveDataFilterTest extends TestCase
             ],
         ];
         $expectedResult = ['CALLBACK-LIKE', 'LIKE', 'foo', 'name'];
-        $this->assertEquals($expectedResult, $builder->build());
+        $this->assertSame($expectedResult, $builder->build());
     }
 }

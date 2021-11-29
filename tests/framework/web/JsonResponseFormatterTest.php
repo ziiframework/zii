@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,26 +10,23 @@
 
 namespace yiiunit\framework\web;
 
+use SplStack;
 use yii\helpers\Json;
 use yii\web\JsonResponseFormatter;
 use yiiunit\framework\web\stubs\ModelStub;
 
 /**
  * @author Alexander Makarov <sam@rmcreative.ru>
+ *
  * @since 2.0.3
  *
  * @group web
+ *
+ * @internal
+ * @coversNothing
  */
-class JsonResponseFormatterTest extends FormatterTest
+final class JsonResponseFormatterTest extends FormatterTest
 {
-    /**
-     * @return JsonResponseFormatter
-     */
-    protected function getFormatterInstance($configuration = [])
-    {
-        return new JsonResponseFormatter($configuration);
-    }
-
     public function formatScalarDataProvider()
     {
         return [
@@ -91,7 +91,7 @@ class JsonResponseFormatterTest extends FormatterTest
 
     public function formatTraversableObjectDataProvider()
     {
-        $postsStack = new \SplStack();
+        $postsStack = new SplStack();
         $postsStack->push(new Post(915, 'record1'));
         $postsStack->push(new Post(456, 'record2'));
 
@@ -159,95 +159,105 @@ class JsonResponseFormatterTest extends FormatterTest
     }
 
     /**
-     * @param mixed  $data the data to be formatted
-     * @param string $json the expected JSON body
+     * @param mixed  $data       the data to be formatted
+     * @param string $json       the expected JSON body
      * @param string $prettyJson the expected pretty JSON body
      * @dataProvider formatArrayDataProvider
      */
-    public function testFormatArraysPretty($data, $json, $prettyJson)
+    public function testFormatArraysPretty($data, $json, $prettyJson): void
     {
         $this->response->data = $data;
         $this->formatter->prettyPrint = true;
         $this->formatter->format($this->response);
-        $this->assertEquals($prettyJson, $this->response->content);
+        $this->assertSame($prettyJson, $this->response->content);
     }
 
     /**
-     * @param array $configuration JSON formatter configuration array.
-     * @param string $contentTypeExpected Expected value of the response `Content-Type` header.
+     * @param array  $configuration       JSON formatter configuration array
+     * @param string $contentTypeExpected expected value of the response `Content-Type` header
      * @dataProvider contentTypeGenerationDataProvider
      */
-    public function testContentTypeGeneration($configuration, $contentTypeExpected)
+    public function testContentTypeGeneration($configuration, $contentTypeExpected): void
     {
         $formatter = $this->getFormatterInstance($configuration);
         $formatter->format($this->response);
         $contentTypeActual = $this->response->headers->get('Content-Type');
 
-        $this->assertEquals($contentTypeExpected, $contentTypeActual);
+        $this->assertSame($contentTypeExpected, $contentTypeActual);
     }
 
     /**
      * Formatter must return 'null' string.
      */
-    public function testFormatNull()
+    public function testFormatNull(): void
     {
         $this->response->data = null;
         $this->formatter->format($this->response);
-        $this->assertEquals('null', $this->response->content);
+        $this->assertSame('null', $this->response->content);
     }
 
     /**
      * Formatter must return early sets content,
-     * e.g. content may be sets by PageCache filter
+     * e.g. content may be sets by PageCache filter.
      */
-    public function testFormatFilledContent()
+    public function testFormatFilledContent(): void
     {
         $content = '{"text": "early seted content"}';
         $this->response->data = null;
         $this->response->content = $content;
         $this->formatter->format($this->response);
-        $this->assertEquals($content, $this->response->content);
+        $this->assertSame($content, $this->response->content);
     }
 
     /**
-     * Formatter configuration keepObjectType affects how zero-indexed objects are encoded
+     * Formatter configuration keepObjectType affects how zero-indexed objects are encoded.
      */
-    public function testFormatZeroIndexedObjectKeepObject()
+    public function testFormatZeroIndexedObjectKeepObject(): void
     {
         $formatter = $this->getFormatterInstance([
             'keepObjectType' => true,
         ]);
-        $this->response->data = (object)['test'];
+        $this->response->data = (object) ['test'];
         $formatter->format($this->response);
-        $this->assertEquals('{"0":"test"}', $this->response->content);
+        $this->assertSame('{"0":"test"}', $this->response->content);
     }
 
     /**
-     * Formatter configuration keepObjectType affects how zero-indexed objects are encoded
+     * Formatter configuration keepObjectType affects how zero-indexed objects are encoded.
      */
-    public function testFormatZeroIndexedObjectAllowArray()
+    public function testFormatZeroIndexedObjectAllowArray(): void
     {
         $formatter = $this->getFormatterInstance([
             'keepObjectType' => false,
         ]);
-        $this->response->data = (object)['test'];
+        $this->response->data = (object) ['test'];
         $formatter->format($this->response);
-        $this->assertEquals('["test"]', $this->response->content);
+        $this->assertSame('["test"]', $this->response->content);
     }
 
     /**
-     * Formatter configuration keepObjectType reverts Json::$keepObjectType to its previous value
+     * Formatter configuration keepObjectType reverts Json::$keepObjectType to its previous value.
      */
-    public function testFormatCleanupKeepObjectType()
+    public function testFormatCleanupKeepObjectType(): void
     {
         $default = Json::$keepObjectType;
         Json::$keepObjectType = false;
         $formatter = $this->getFormatterInstance([
             'keepObjectType' => true,
         ]);
-        $this->response->data = (object)['test'];
+        $this->response->data = (object) ['test'];
         $formatter->format($this->response);
         $this->assertFalse(Json::$keepObjectType);
         Json::$keepObjectType = $default;
+    }
+
+    /**
+     * @param mixed $configuration
+     *
+     * @return JsonResponseFormatter
+     */
+    protected function getFormatterInstance($configuration = [])
+    {
+        return new JsonResponseFormatter($configuration);
     }
 }

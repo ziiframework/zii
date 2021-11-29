@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +10,7 @@
 
 namespace yiiunit\framework\mutex;
 
+use Yii;
 use yii\mutex\PgsqlMutex;
 use yiiunit\framework\db\DatabaseTestCase;
 
@@ -16,20 +20,24 @@ use yiiunit\framework\db\DatabaseTestCase;
  * @group mutex
  * @group db
  * @group pgsql
+ *
+ * @internal
+ * @coversNothing
  */
-class PgsqlMutexTest extends DatabaseTestCase
+final class PgsqlMutexTest extends DatabaseTestCase
 {
     use MutexTestTrait;
 
     protected $driverName = 'pgsql';
 
     /**
-     * @return PgsqlMutex
      * @throws \yii\base\InvalidConfigException
+     *
+     * @return PgsqlMutex
      */
     protected function createMutex()
     {
-        return \Yii::createObject([
+        return Yii::createObject([
             'class' => PgsqlMutex::className(),
             'db' => $this->getConnection(),
         ]);
