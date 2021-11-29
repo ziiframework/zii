@@ -11,7 +11,7 @@ return (new PhpCsFixer\Config())
     '@PHP74Migration:risky' => true,
     '@PhpCsFixer' => true,
     '@PhpCsFixer:risky' => true,
-    'yoda_style ' => false,
+    'yoda_style' => false,
     'heredoc_indentation' => false,
     'method_argument_space' => [
         'on_multiline' => 'ensure_single_line',
