@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -9,11 +12,12 @@ namespace yii\web;
 
 /**
  * Mock for the time() function for web classes.
+ *
  * @return int
  */
 function time()
 {
-    return \yiiunit\framework\web\UserTest::$time ?: \time();
+    return \yiiunit\framework\web\UserTest::$time ?: time();
 }
 
 namespace yiiunit\framework\web;
@@ -29,12 +33,15 @@ use yiiunit\TestCase;
 
 /**
  * @group web
+ *
+ * @internal
+ * @coversNothing
  */
-class UserTest extends TestCase
+final class UserTest extends TestCase
 {
     /**
      * @var int virtual time to be returned by mocked time() function.
-     * Null means normal time() behavior.
+     *          Null means normal time() behavior.
      */
     public static $time;
 
@@ -45,7 +52,7 @@ class UserTest extends TestCase
         parent::tearDown();
     }
 
-    public function testLoginExpires()
+    public function testLoginExpires(): void
     {
         $appConfig = [
             'components' => [
@@ -56,8 +63,8 @@ class UserTest extends TestCase
                 'authManager' => [
                     'class' => PhpManager::className(),
                     'itemFile' => '@runtime/user_test_rbac_items.php',
-                     'assignmentFile' => '@runtime/user_test_rbac_assignments.php',
-                     'ruleFile' => '@runtime/user_test_rbac_rules.php',
+                    'assignmentFile' => '@runtime/user_test_rbac_assignments.php',
+                    'ruleFile' => '@runtime/user_test_rbac_rules.php',
                 ],
             ],
         ];
@@ -71,7 +78,7 @@ class UserTest extends TestCase
         $am->assign($role, 'user1');
 
         Yii::$app->session->removeAll();
-        static::$time = \time();
+        static::$time = time();
         Yii::$app->user->login(UserIdentity::findIdentity('user1'));
 
 //        print_r(Yii::$app->session);
@@ -94,9 +101,10 @@ class UserTest extends TestCase
 
     /**
      * Make sure autologin works more than once.
+     *
      * @see https://github.com/yiisoft/yii2/issues/11825
      */
-    public function testIssue11825()
+    public function testIssue11825(): void
     {
         global $cookiesMock;
         $cookiesMock = new CookieCollection();
@@ -120,7 +128,7 @@ class UserTest extends TestCase
         $this->mockWebApplication($appConfig);
 
         Yii::$app->session->removeAll();
-        static::$time = \time();
+        static::$time = time();
         Yii::$app->user->login(UserIdentity::findIdentity('user1'), 20);
 
         // User is logged in
@@ -147,7 +155,7 @@ class UserTest extends TestCase
         $this->assertTrue(Yii::$app->user->isGuest);
     }
 
-    public function testCookieCleanup()
+    public function testCookieCleanup(): void
     {
         global $cookiesMock;
 
@@ -175,41 +183,20 @@ class UserTest extends TestCase
         $cookie->value = 'junk';
         $cookiesMock->add($cookie);
         Yii::$app->user->getIdentity();
-        $this->assertEquals(strlen($cookiesMock->getValue(Yii::$app->user->identityCookie['name'])), 0);
+        $this->assertSame(\strlen($cookiesMock->getValue(Yii::$app->user->identityCookie['name'])), 0);
 
         Yii::$app->user->login(UserIdentity::findIdentity('user1'), 3600);
         $this->assertFalse(Yii::$app->user->isGuest);
         $this->assertSame(Yii::$app->user->id, 'user1');
-        $this->assertNotEquals(strlen($cookiesMock->getValue(Yii::$app->user->identityCookie['name'])), 0);
+        $this->assertNotSame(\strlen($cookiesMock->getValue(Yii::$app->user->identityCookie['name'])), 0);
 
         Yii::$app->user->login(UserIdentity::findIdentity('user2'), 0);
         $this->assertFalse(Yii::$app->user->isGuest);
         $this->assertSame(Yii::$app->user->id, 'user2');
-        $this->assertEquals(strlen($cookiesMock->getValue(Yii::$app->user->identityCookie['name'])), 0);
+        $this->assertSame(\strlen($cookiesMock->getValue(Yii::$app->user->identityCookie['name'])), 0);
     }
 
-    /**
-     * Resets request, response and $_SERVER.
-     */
-    protected function reset()
-    {
-        static $server;
-
-        if (!isset($server)) {
-            $server = $_SERVER;
-        }
-
-        $_SERVER = $server;
-        Yii::$app->set('response', ['class' => 'yii\web\Response']);
-        Yii::$app->set('request', [
-            'class' => 'yii\web\Request',
-            'scriptFile' => __DIR__ . '/index.php',
-            'scriptUrl' => '/index.php',
-            'url' => '',
-        ]);
-        Yii::$app->user->setReturnUrl(null);
-    }
-    public function testLoginRequired()
+    public function testLoginRequired(): void
     {
         $appConfig = [
             'components' => [
@@ -226,53 +213,52 @@ class UserTest extends TestCase
         ];
         $this->mockWebApplication($appConfig);
 
-
         $user = Yii::$app->user;
 
         $this->reset();
         Yii::$app->request->setUrl('normal');
         $user->loginRequired();
-        $this->assertEquals('normal', $user->getReturnUrl());
+        $this->assertSame('normal', $user->getReturnUrl());
         $this->assertTrue(Yii::$app->response->getIsRedirection());
-
 
         $this->reset();
         Yii::$app->request->setUrl('ajax');
         $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
 
         $user->loginRequired();
-        $this->assertEquals(Yii::$app->getHomeUrl(), $user->getReturnUrl());
+        $this->assertSame(Yii::$app->getHomeUrl(), $user->getReturnUrl());
         // AJAX requests don't update returnUrl but they do cause redirection.
         $this->assertTrue(Yii::$app->response->getIsRedirection());
 
         $user->loginRequired(false);
-        $this->assertEquals('ajax', $user->getReturnUrl());
+        $this->assertSame('ajax', $user->getReturnUrl());
         $this->assertTrue(Yii::$app->response->getIsRedirection());
 
         $this->reset();
         Yii::$app->request->setUrl('json-only');
         $_SERVER['HTTP_ACCEPT'] = 'Accept:  text/json, q=0.1';
         $user->loginRequired(true, false);
-        $this->assertEquals('json-only', $user->getReturnUrl());
+        $this->assertSame('json-only', $user->getReturnUrl());
         $this->assertTrue(Yii::$app->response->getIsRedirection());
 
         $this->reset();
         Yii::$app->request->setUrl('json-only');
         $_SERVER['HTTP_ACCEPT'] = 'text/json,q=0.1';
         $user->loginRequired(true, false);
-        $this->assertEquals('json-only', $user->getReturnUrl());
+        $this->assertSame('json-only', $user->getReturnUrl());
         $this->assertTrue(Yii::$app->response->getIsRedirection());
 
         $this->reset();
         Yii::$app->request->setUrl('accept-all');
         $_SERVER['HTTP_ACCEPT'] = '*/*;q=0.1';
         $user->loginRequired();
-        $this->assertEquals('accept-all', $user->getReturnUrl());
+        $this->assertSame('accept-all', $user->getReturnUrl());
         $this->assertTrue(Yii::$app->response->getIsRedirection());
 
         $this->reset();
         Yii::$app->request->setUrl('json-and-accept-all');
         $_SERVER['HTTP_ACCEPT'] = 'text/json, */*; q=0.1';
+
         try {
             $user->loginRequired();
         } catch (ForbiddenHttpException $e) {
@@ -283,14 +269,14 @@ class UserTest extends TestCase
         Yii::$app->request->setUrl('accept-html-json');
         $_SERVER['HTTP_ACCEPT'] = 'text/json; q=1, text/html; q=0.1';
         $user->loginRequired();
-        $this->assertEquals('accept-html-json', $user->getReturnUrl());
+        $this->assertSame('accept-html-json', $user->getReturnUrl());
         $this->assertTrue(Yii::$app->response->getIsRedirection());
 
         $this->reset();
         Yii::$app->request->setUrl('accept-html-json');
         $_SERVER['HTTP_ACCEPT'] = 'text/json;q=1,application/xhtml+xml;q=0.1';
         $user->loginRequired();
-        $this->assertEquals('accept-html-json', $user->getReturnUrl());
+        $this->assertSame('accept-html-json', $user->getReturnUrl());
         $this->assertTrue(Yii::$app->response->getIsRedirection());
 
         $this->reset();
@@ -305,17 +291,18 @@ class UserTest extends TestCase
         Yii::$app->request->setUrl('set-return-url-on-get-request');
         Yii::$app->getSession()->set($user->returnUrlParam, null);
         $user->loginRequired();
-        $this->assertEquals('set-return-url-on-get-request', Yii::$app->getSession()->get($user->returnUrlParam));
+        $this->assertSame('set-return-url-on-get-request', Yii::$app->getSession()->get($user->returnUrlParam));
 
         // Confirm that returnUrl is not set.
         $this->reset();
         Yii::$app->request->setUrl('json-only');
         $_SERVER['HTTP_ACCEPT'] = 'text/json;q=0.1';
+
         try {
             $user->loginRequired();
         } catch (ForbiddenHttpException $e) {
         }
-        $this->assertNotEquals('json-only', $user->getReturnUrl());
+        $this->assertNotSame('json-only', $user->getReturnUrl());
 
         $this->reset();
         $_SERVER['HTTP_ACCEPT'] = 'text/json;q=0.1';
@@ -323,7 +310,7 @@ class UserTest extends TestCase
         $user->loginRequired();
     }
 
-    public function testLoginRequiredException1()
+    public function testLoginRequiredException1(): void
     {
         $appConfig = [
             'components' => [
@@ -346,14 +333,14 @@ class UserTest extends TestCase
         Yii::$app->user->loginRequired();
     }
 
-    public function testAccessChecker()
+    public function testAccessChecker(): void
     {
         $this->mockWebApplication([
             'components' => [
                 'user' => [
                     'identityClass' => UserIdentity::className(),
-                    'accessChecker' => AccessChecker::className()
-                ]
+                    'accessChecker' => AccessChecker::className(),
+                ],
             ],
         ]);
         $this->assertInstanceOf(AccessChecker::className(), Yii::$app->user->accessChecker);
@@ -378,13 +365,13 @@ class UserTest extends TestCase
                 ],
                 'accessChecker' => [
                     'class' => AccessChecker::className(),
-                ]
+                ],
             ],
         ]);
         $this->assertInstanceOf(AccessChecker::className(), Yii::$app->user->accessChecker);
     }
 
-    public function testGetIdentityException()
+    public function testGetIdentityException(): void
     {
         $session = $this->createMock('yii\web\Session');
         $session->method('getHasSessionId')->willReturn(true);
@@ -401,6 +388,7 @@ class UserTest extends TestCase
         $this->mockWebApplication($appConfig);
 
         $exceptionThrown = false;
+
         try {
             Yii::$app->getUser()->getIdentity();
         } catch (\Exception $e) {
@@ -413,7 +401,7 @@ class UserTest extends TestCase
         Yii::$app->getUser()->getIdentity();
     }
 
-    public function testSetIdentity()
+    public function testSetIdentity(): void
     {
         $appConfig = [
             'components' => [
@@ -452,7 +440,7 @@ class UserTest extends TestCase
         Yii::$app->user->setIdentity(new \stdClass());
     }
 
-    public function testSessionAuthWithNonExistingId()
+    public function testSessionAuthWithNonExistingId(): void
     {
         $appConfig = [
             'components' => [
@@ -469,7 +457,7 @@ class UserTest extends TestCase
         $this->assertNull(Yii::$app->user->getIdentity());
     }
 
-    public function testSessionAuthWithMissingKey()
+    public function testSessionAuthWithMissingKey(): void
     {
         $appConfig = [
             'components' => [
@@ -486,7 +474,7 @@ class UserTest extends TestCase
         $this->assertNotNull(Yii::$app->user->getIdentity());
     }
 
-    public function testSessionAuthWithInvalidKey()
+    public function testSessionAuthWithInvalidKey(): void
     {
         $appConfig = [
             'components' => [
@@ -501,11 +489,10 @@ class UserTest extends TestCase
         Yii::$app->session->set('__id', 'user1');
         Yii::$app->session->set('__authKey', 'invalid');
 
-
         $this->assertNull(Yii::$app->user->getIdentity());
     }
 
-    public function testSessionAuthWithValidKey()
+    public function testSessionAuthWithValidKey(): void
     {
         $appConfig = [
             'components' => [
@@ -521,6 +508,28 @@ class UserTest extends TestCase
         Yii::$app->session->set('__authKey', 'ABCD1234');
 
         $this->assertNotNull(Yii::$app->user->getIdentity());
+    }
+
+    /**
+     * Resets request, response and $_SERVER.
+     */
+    protected function reset(): void
+    {
+        static $server;
+
+        if (!isset($server)) {
+            $server = $_SERVER;
+        }
+
+        $_SERVER = $server;
+        Yii::$app->set('response', ['class' => 'yii\web\Response']);
+        Yii::$app->set('request', [
+            'class' => 'yii\web\Request',
+            'scriptFile' => __DIR__ . '/index.php',
+            'scriptUrl' => '/index.php',
+            'url' => '',
+        ]);
+        Yii::$app->user->setReturnUrl(null);
     }
 }
 
@@ -548,8 +557,7 @@ class MockResponse extends \yii\web\Response
 
 class AccessChecker extends BaseObject implements CheckAccessInterface
 {
-
-    public function checkAccess($userId, $permissionName, $params = [])
+    public function checkAccess($userId, $permissionName, $params = []): void
     {
         // Implement checkAccess() method.
     }
@@ -557,7 +565,7 @@ class AccessChecker extends BaseObject implements CheckAccessInterface
 
 class ExceptionIdentity extends \yiiunit\framework\filters\stubs\UserIdentity
 {
-    public static function findIdentity($id)
+    public static function findIdentity($id): void
     {
         throw new \Exception();
     }

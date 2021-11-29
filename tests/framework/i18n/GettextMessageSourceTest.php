@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,10 +14,13 @@ use yiiunit\TestCase;
 
 /**
  * @group i18n
+ *
+ * @internal
+ * @coversNothing
  */
-class GettextMessageSourceTest extends TestCase
+final class GettextMessageSourceTest extends TestCase
 {
-    public function testLoadMessages()
+    public function testLoadMessages(): void
     {
         $this->markTestIncomplete();
     }

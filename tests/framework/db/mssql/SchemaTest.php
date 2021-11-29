@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +10,7 @@
 
 namespace yiiunit\framework\db\mssql;
 
+use function in_array;
 use yii\db\DefaultValueConstraint;
 use yii\db\mssql\Schema;
 use yiiunit\framework\db\AnyValue;
@@ -14,8 +18,11 @@ use yiiunit\framework\db\AnyValue;
 /**
  * @group db
  * @group mssql
+ *
+ * @internal
+ * @coversNothing
  */
-class SchemaTest extends \yiiunit\framework\db\SchemaTest
+final class SchemaTest extends \yiiunit\framework\db\SchemaTest
 {
     public $driverName = 'sqlsrv';
 
@@ -41,15 +48,16 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
         $result['3: default'][2] = [];
 
         $result['4: default'][2] = [];
+
         return $result;
     }
 
-    public function testGetStringFieldsSize()
+    public function testGetStringFieldsSize(): void
     {
-        /* @var $db Connection */
+        /** @var Connection $db */
         $db = $this->getConnection();
 
-        /* @var $schema Schema */
+        /** @var Schema $schema */
         $schema = $db->schema;
 
         $columns = $schema->getTableSchema('type', false)->columns;
@@ -65,37 +73,42 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
                         $expectedType = 'char';
                         $expectedSize = 100;
                         $expectedDbType = 'char(100)';
+
                         break;
                     case 'char_col2':
                         $expectedType = 'string';
                         $expectedSize = 100;
-                        $expectedDbType = "varchar(100)";
+                        $expectedDbType = 'varchar(100)';
+
                         break;
                     case 'char_col3':
                         $expectedType = 'text';
                         $expectedSize = null;
                         $expectedDbType = 'text';
+
                         break;
                 }
 
-                $this->assertEquals($expectedType, $type);
-                $this->assertEquals($expectedSize, $size);
-                $this->assertEquals($expectedDbType, $dbType);
+                $this->assertSame($expectedType, $type);
+                $this->assertSame($expectedSize, $size);
+                $this->assertSame($expectedDbType, $dbType);
             }
         }
     }
 
     /**
      * @dataProvider quoteTableNameDataProvider
+     *
      * @param $name
      * @param $expectedName
+     *
      * @throws \yii\base\NotSupportedException
      */
-    public function testQuoteTableName($name, $expectedName)
+    public function testQuoteTableName($name, $expectedName): void
     {
         $schema = $this->getConnection()->getSchema();
         $quotedName = $schema->quoteTableName($name);
-        $this->assertEquals($expectedName, $quotedName);
+        $this->assertSame($expectedName, $quotedName);
     }
 
     public function quoteTableNameDataProvider()
@@ -114,15 +127,17 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
 
     /**
      * @dataProvider getTableSchemaDataProvider
+     *
      * @param $name
      * @param $expectedName
+     *
      * @throws \yii\base\NotSupportedException
      */
-    public function testGetTableSchema($name, $expectedName)
+    public function testGetTableSchema($name, $expectedName): void
     {
         $schema = $this->getConnection()->getSchema();
         $tableSchema = $schema->getTableSchema($name);
-        $this->assertEquals($expectedName, $tableSchema->name);
+        $this->assertSame($expectedName, $tableSchema->name);
     }
 
     public function getTableSchemaDataProvider()
@@ -138,10 +153,7 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
     public function getExpectedColumns()
     {
         $columns = parent::getExpectedColumns();
-        unset($columns['enum_col']);
-        unset($columns['ts_default']);
-        unset($columns['bit_col']);
-        unset($columns['json_col']);
+        unset($columns['enum_col'], $columns['ts_default'], $columns['bit_col'], $columns['json_col']);
 
         $columns['int_col']['dbType'] = 'int';
         $columns['int_col2']['dbType'] = 'int';
@@ -163,18 +175,18 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
         $columns['bool_col']['dbType'] = 'tinyint';
         $columns['bool_col2']['dbType'] = 'tinyint';
 
-        array_walk($columns, static function (&$item) {
+        array_walk($columns, static function (&$item): void {
             $item['enumValues'] = [];
         });
 
-        array_walk($columns, static function (&$item, $name) {
-            if (!in_array($name, ['char_col', 'char_col2', 'char_col3'])) {
+        array_walk($columns, static function (&$item, $name): void {
+            if (!in_array($name, ['char_col', 'char_col2', 'char_col3'], true)) {
                 $item['size'] = null;
             }
         });
 
-        array_walk($columns, static function (&$item, $name) {
-            if (!in_array($name, ['char_col', 'char_col2', 'char_col3'])) {
+        array_walk($columns, static function (&$item, $name): void {
+            if (!in_array($name, ['char_col', 'char_col2', 'char_col3'], true)) {
                 $item['precision'] = null;
             }
         });
@@ -182,7 +194,7 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
         return $columns;
     }
 
-    public function testGetPrimaryKey()
+    public function testGetPrimaryKey(): void
     {
         $db = $this->getConnection();
 
@@ -190,14 +202,11 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
             $db->createCommand()->dropTable('testPKTable')->execute();
         }
 
-        $db->createCommand()->createTable(
-            'testPKTable',
-            ['id' => Schema::TYPE_PK, 'bar' => Schema::TYPE_INTEGER]
-        )->execute();
+        $db->createCommand()->createTable('testPKTable', ['id' => Schema::TYPE_PK, 'bar' => Schema::TYPE_INTEGER])->execute();
 
         $insertResult = $db->getSchema()->insert('testPKTable', ['bar' => 1]);
         $selectResult = $db->createCommand('select [id] from [testPKTable] where [bar]=1')->queryOne();
 
-        $this->assertEquals($selectResult['id'], $insertResult['id']);
+        $this->assertSame($selectResult['id'], $insertResult['id']);
     }
 }

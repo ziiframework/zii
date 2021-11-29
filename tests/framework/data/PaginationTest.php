@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -13,8 +16,11 @@ use yiiunit\TestCase;
 
 /**
  * @group data
+ *
+ * @internal
+ * @coversNothing
  */
-class PaginationTest extends TestCase
+final class PaginationTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -30,6 +36,7 @@ class PaginationTest extends TestCase
 
     /**
      * Data provider for [[testCreateUrl()]].
+     *
      * @return array test data
      */
     public function dataProviderCreateUrl()
@@ -72,36 +79,36 @@ class PaginationTest extends TestCase
     /**
      * @dataProvider dataProviderCreateUrl
      *
-     * @param int $page
-     * @param int $pageSize
+     * @param int    $page
+     * @param int    $pageSize
      * @param string $expectedUrl
-     * @param array $params
-     * @param bool $absolute
+     * @param array  $params
+     * @param bool   $absolute
      */
-    public function testCreateUrl($page, $pageSize, $expectedUrl, $params, $absolute = false)
+    public function testCreateUrl($page, $pageSize, $expectedUrl, $params, $absolute = false): void
     {
         $pagination = new Pagination();
         $pagination->route = 'item/list';
         $pagination->params = $params;
-        $this->assertEquals($expectedUrl, $pagination->createUrl($page, $pageSize, $absolute));
+        $this->assertSame($expectedUrl, $pagination->createUrl($page, $pageSize, $absolute));
     }
 
     /**
      * @depends testCreateUrl
      */
-    public function testForcePageParam()
+    public function testForcePageParam(): void
     {
         $pagination = new Pagination();
         $pagination->route = 'item/list';
 
         $pagination->forcePageParam = true;
-        $this->assertEquals('/index.php?r=item%2Flist&page=1', $pagination->createUrl(0));
+        $this->assertSame('/index.php?r=item%2Flist&page=1', $pagination->createUrl(0));
 
         $pagination->forcePageParam = false;
-        $this->assertEquals('/index.php?r=item%2Flist', $pagination->createUrl(0));
+        $this->assertSame('/index.php?r=item%2Flist', $pagination->createUrl(0));
     }
 
-    public function testValidatePage()
+    public function testValidatePage(): void
     {
         $pagination = new Pagination();
         $pagination->validatePage = true;
@@ -109,10 +116,10 @@ class PaginationTest extends TestCase
         $pagination->totalCount = 100;
 
         $pagination->setPage(999, true);
-        $this->assertEquals(9, $pagination->getPage());
+        $this->assertSame(9, $pagination->getPage());
 
         $pagination->setPage(999, false);
-        $this->assertEquals(999, $pagination->getPage());
+        $this->assertSame(999, $pagination->getPage());
     }
 
     public function dataProviderPageCount()
@@ -138,18 +145,18 @@ class PaginationTest extends TestCase
      * @param int $totalCount
      * @param int $pageCount
      */
-    public function testPageCount($pageSize, $totalCount, $pageCount)
+    public function testPageCount($pageSize, $totalCount, $pageCount): void
     {
         $pagination = new Pagination();
         $pagination->setPageSize($pageSize);
         $pagination->totalCount = $totalCount;
 
-        $this->assertEquals($pageCount, $pagination->getPageCount());
+        $this->assertSame($pageCount, $pagination->getPageCount());
     }
 
-    public function testGetDefaultPage()
+    public function testGetDefaultPage(): void
     {
-        $this->assertEquals(0, (new Pagination())->getPage());
+        $this->assertSame(0, (new Pagination())->getPage());
     }
 
     public function dataProviderSetPage()
@@ -173,18 +180,18 @@ class PaginationTest extends TestCase
     /**
      * @dataProvider dataProviderSetPage
      *
-     * @param int|null $value
-     * @param bool $validate
-     * @param int $totalCount
-     * @param int $page
+     * @param null|int $value
+     * @param bool     $validate
+     * @param int      $totalCount
+     * @param int      $page
      */
-    public function testSetPage($value, $validate, $totalCount, $page)
+    public function testSetPage($value, $validate, $totalCount, $page): void
     {
         $pagination = new Pagination();
         $pagination->totalCount = $totalCount;
         $pagination->setPage($value, $validate);
 
-        $this->assertEquals($page, $pagination->getPage());
+        $this->assertSame($page, $pagination->getPage());
     }
 
     public function dataProviderGetPageSize()
@@ -204,14 +211,14 @@ class PaginationTest extends TestCase
      * @dataProvider dataProviderGetPageSize
      *
      * @param array|bool $pageSizeLimit
-     * @param int $pageSize
+     * @param int        $pageSize
      */
-    public function testGetPageSize($pageSizeLimit, $pageSize)
+    public function testGetPageSize($pageSizeLimit, $pageSize): void
     {
         $pagination = new Pagination();
         $pagination->pageSizeLimit = $pageSizeLimit;
 
-        $this->assertEquals($pageSize, $pagination->getPageSize());
+        $this->assertSame($pageSize, $pagination->getPageSize());
     }
 
     public function dataProviderSetPageSize()
@@ -235,18 +242,18 @@ class PaginationTest extends TestCase
     /**
      * @dataProvider dataProviderSetPageSize
      *
-     * @param int|null $value
-     * @param bool $validate
+     * @param null|int    $value
+     * @param bool        $validate
      * @param array|false $pageSizeLimit
-     * @param int $pageSize
+     * @param int         $pageSize
      */
-    public function testSetPageSize($value, $validate, $pageSizeLimit, $pageSize)
+    public function testSetPageSize($value, $validate, $pageSizeLimit, $pageSize): void
     {
         $pagination = new Pagination();
         $pagination->pageSizeLimit = $pageSizeLimit;
         $pagination->setPageSize($value, $validate);
 
-        $this->assertEquals($pageSize, $pagination->getPageSize());
+        $this->assertSame($pageSize, $pagination->getPageSize());
     }
 
     public function dataProviderGetOffset()
@@ -267,13 +274,13 @@ class PaginationTest extends TestCase
      * @param int $page
      * @param int $offset
      */
-    public function testGetOffset($pageSize, $page, $offset)
+    public function testGetOffset($pageSize, $page, $offset): void
     {
         $pagination = new Pagination();
         $pagination->setPageSize($pageSize);
         $pagination->setPage($page);
 
-        $this->assertEquals($offset, $pagination->getOffset());
+        $this->assertSame($offset, $pagination->getOffset());
     }
 
     public function dataProviderGetLimit()
@@ -291,12 +298,12 @@ class PaginationTest extends TestCase
      * @param int $pageSize
      * @param int $limit
      */
-    public function testGetLimit($pageSize, $limit)
+    public function testGetLimit($pageSize, $limit): void
     {
         $pagination = new Pagination();
         $pagination->setPageSize($pageSize);
 
-        $this->assertEquals($limit, $pagination->getLimit());
+        $this->assertSame($limit, $pagination->getLimit());
     }
 
     public function dataProviderGetLinks()
@@ -380,16 +387,16 @@ class PaginationTest extends TestCase
     /**
      * @dataProvider dataProviderGetLinks
      *
-     * @param int $page
-     * @param int $pageSize
-     * @param int $totalCount
-     * @param string $self
-     * @param string|null $first
-     * @param string|null $last
-     * @param string|null $prev
-     * @param string|null $next
+     * @param int         $page
+     * @param int         $pageSize
+     * @param int         $totalCount
+     * @param string      $self
+     * @param null|string $first
+     * @param null|string $last
+     * @param null|string $prev
+     * @param null|string $next
      */
-    public function testGetLinks($page, $pageSize, $totalCount, $self, $first, $last, $prev, $next)
+    public function testGetLinks($page, $pageSize, $totalCount, $self, $first, $last, $prev, $next): void
     {
         $pagination = new Pagination();
         $pagination->totalCount = $totalCount;
@@ -406,16 +413,19 @@ class PaginationTest extends TestCase
         } else {
             $this->assertArrayNotHasKey(Pagination::LINK_FIRST, $links);
         }
+
         if ($last) {
             $this->assertSame($last, $links[Pagination::LINK_LAST]);
         } else {
             $this->assertArrayNotHasKey(Pagination::LINK_LAST, $links);
         }
+
         if ($prev) {
             $this->assertSame($prev, $links[Pagination::LINK_PREV]);
         } else {
             $this->assertArrayNotHasKey(Pagination::LINK_PREV, $links);
         }
+
         if ($next) {
             $this->assertSame($next, $links[Pagination::LINK_NEXT]);
         } else {

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +10,7 @@
 
 namespace yiiunit\framework\db;
 
+use function count;
 use yii\base\Event;
 use yii\db\ActiveQuery;
 use yii\db\Connection;
@@ -22,40 +26,42 @@ use yiiunit\data\ar\Profile;
  */
 abstract class ActiveQueryTest extends DatabaseTestCase
 {
-    public function setUp(): void
+    use GetTablesAliasTestTrait;
+
+    protected function setUp(): void
     {
         parent::setUp();
         ActiveRecord::$db = $this->getConnection();
     }
 
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $config = [
             'on' => ['a' => 'b'],
             'joinWith' => ['dummy relation'],
         ];
         $query = new ActiveQuery(Customer::className(), $config);
-        $this->assertEquals($query->modelClass, Customer::className());
-        $this->assertEquals($query->on, $config['on']);
-        $this->assertEquals($query->joinWith, $config['joinWith']);
+        $this->assertSame($query->modelClass, Customer::className());
+        $this->assertSame($query->on, $config['on']);
+        $this->assertSame($query->joinWith, $config['joinWith']);
     }
 
-    public function testTriggerInitEvent()
+    public function testTriggerInitEvent(): void
     {
         $where = '1==1';
-        $callback = function (\yii\base\Event $event) use ($where) {
+        $callback = static function (Event $event) use ($where): void {
             $event->sender->where = $where;
         };
         Event::on(ActiveQuery::className(), ActiveQuery::EVENT_INIT, $callback);
         $result = new ActiveQuery(Customer::className());
-        $this->assertEquals($where, $result->where);
+        $this->assertSame($where, $result->where);
         Event::off(ActiveQuery::className(), ActiveQuery::EVENT_INIT, $callback);
     }
 
     /**
      * @todo tests for internal logic of prepare()
      */
-    public function testPrepare()
+    public function testPrepare(): void
     {
         $query = new ActiveQuery(Customer::className());
         $builder = new QueryBuilder(new Connection());
@@ -63,29 +69,29 @@ abstract class ActiveQueryTest extends DatabaseTestCase
         $this->assertInstanceOf('yii\db\Query', $result);
     }
 
-    public function testPopulate_EmptyRows()
+    public function testPopulateEmptyRows(): void
     {
         $query = new ActiveQuery(Customer::className());
         $rows = [];
         $result = $query->populate([]);
-        $this->assertEquals($rows, $result);
+        $this->assertSame($rows, $result);
     }
 
     /**
      * @todo tests for internal logic of populate()
      */
-    public function testPopulate_FilledRows()
+    public function testPopulateFilledRows(): void
     {
         $query = new ActiveQuery(Customer::className());
         $rows = $query->all();
         $result = $query->populate($rows);
-        $this->assertEquals($rows, $result);
+        $this->assertSame($rows, $result);
     }
 
     /**
      * @todo tests for internal logic of one()
      */
-    public function testOne()
+    public function testOne(): void
     {
         $query = new ActiveQuery(Customer::className());
         $result = $query->one();
@@ -95,7 +101,7 @@ abstract class ActiveQueryTest extends DatabaseTestCase
     /**
      * @todo test internal logic of createCommand()
      */
-    public function testCreateCommand()
+    public function testCreateCommand(): void
     {
         $query = new ActiveQuery(Customer::className());
         $result = $query->createCommand();
@@ -105,21 +111,21 @@ abstract class ActiveQueryTest extends DatabaseTestCase
     /**
      * @todo tests for internal logic of queryScalar()
      */
-    public function testQueryScalar()
+    public function testQueryScalar(): void
     {
         $query = new ActiveQuery(Customer::className());
         $result = $this->invokeMethod($query, 'queryScalar', ['name', null]);
-        $this->assertEquals('user1', $result);
+        $this->assertSame('user1', $result);
     }
 
     /**
      * @todo tests for internal logic of joinWith()
      */
-    public function testJoinWith()
+    public function testJoinWith(): void
     {
         $query = new ActiveQuery(Customer::className());
         $result = $query->joinWith('profile');
-        $this->assertEquals([
+        $this->assertSame([
             [['profile'], true, 'LEFT JOIN'],
         ], $result->joinWith);
     }
@@ -127,31 +133,32 @@ abstract class ActiveQueryTest extends DatabaseTestCase
     /**
      * @todo tests for internal logic of innerJoinWith()
      */
-    public function testInnerJoinWith()
+    public function testInnerJoinWith(): void
     {
         $query = new ActiveQuery(Customer::className());
         $result = $query->innerJoinWith('profile');
-        $this->assertEquals([
+        $this->assertSame([
             [['profile'], true, 'INNER JOIN'],
         ], $result->joinWith);
     }
 
-    public function testBuildJoinWithRemoveDuplicateJoinByTableName()
+    public function testBuildJoinWithRemoveDuplicateJoinByTableName(): void
     {
         $query = new ActiveQuery(Customer::className());
         $query->innerJoinWith('orders')
-            ->joinWith('orders.orderItems');
+            ->joinWith('orders.orderItems')
+        ;
         $this->invokeMethod($query, 'buildJoinWith');
-        $this->assertEquals([
+        $this->assertSame([
             [
                 'INNER JOIN',
                 'order',
-                '{{customer}}.[[id]] = {{order}}.[[customer_id]]'
+                '{{customer}}.[[id]] = {{order}}.[[customer_id]]',
             ],
             [
                 'LEFT JOIN',
                 'order_item',
-                '{{order}}.[[id]] = {{order_item}}.[[order_id]]'
+                '{{order}}.[[id]] = {{order_item}}.[[order_id]]',
             ],
         ], $query->join);
     }
@@ -159,42 +166,42 @@ abstract class ActiveQueryTest extends DatabaseTestCase
     /**
      * @todo tests for the regex inside getQueryTableName
      */
-    public function testGetQueryTableName_from_not_set()
+    public function testGetQueryTableNameFromNotSet(): void
     {
         $query = new ActiveQuery(Customer::className());
         $result = $this->invokeMethod($query, 'getTableNameAndAlias');
-        $this->assertEquals(['customer', 'customer'], $result);
+        $this->assertSame(['customer', 'customer'], $result);
     }
 
-    public function testGetQueryTableName_from_set()
+    public function testGetQueryTableNameFromSet(): void
     {
         $options = ['from' => ['alias' => 'customer']];
         $query = new ActiveQuery(Customer::className(), $options);
         $result = $this->invokeMethod($query, 'getTableNameAndAlias');
-        $this->assertEquals(['customer', 'alias'], $result);
+        $this->assertSame(['customer', 'alias'], $result);
     }
 
-    public function testOnCondition()
+    public function testOnCondition(): void
     {
         $query = new ActiveQuery(Customer::className());
         $on = ['active' => true];
         $params = ['a' => 'b'];
         $result = $query->onCondition($on, $params);
-        $this->assertEquals($on, $result->on);
-        $this->assertEquals($params, $result->params);
+        $this->assertSame($on, $result->on);
+        $this->assertSame($params, $result->params);
     }
 
-    public function testAndOnCondition_on_not_set()
+    public function testAndOnConditionOnNotSet(): void
     {
         $query = new ActiveQuery(Customer::className());
         $on = ['active' => true];
         $params = ['a' => 'b'];
         $result = $query->andOnCondition($on, $params);
-        $this->assertEquals($on, $result->on);
-        $this->assertEquals($params, $result->params);
+        $this->assertSame($on, $result->on);
+        $this->assertSame($params, $result->params);
     }
 
-    public function testAndOnCondition_on_set()
+    public function testAndOnConditionOnSet(): void
     {
         $onOld = ['active' => true];
         $query = new ActiveQuery(Customer::className());
@@ -203,21 +210,21 @@ abstract class ActiveQueryTest extends DatabaseTestCase
         $on = ['active' => true];
         $params = ['a' => 'b'];
         $result = $query->andOnCondition($on, $params);
-        $this->assertEquals(['and', $onOld, $on], $result->on);
-        $this->assertEquals($params, $result->params);
+        $this->assertSame(['and', $onOld, $on], $result->on);
+        $this->assertSame($params, $result->params);
     }
 
-    public function testOrOnCondition_on_not_set()
+    public function testOrOnConditionOnNotSet(): void
     {
         $query = new ActiveQuery(Customer::className());
         $on = ['active' => true];
         $params = ['a' => 'b'];
         $result = $query->orOnCondition($on, $params);
-        $this->assertEquals($on, $result->on);
-        $this->assertEquals($params, $result->params);
+        $this->assertSame($on, $result->on);
+        $this->assertSame($params, $result->params);
     }
 
-    public function testOrOnCondition_on_set()
+    public function testOrOnConditionOnSet(): void
     {
         $onOld = ['active' => true];
         $query = new ActiveQuery(Customer::className());
@@ -226,14 +233,14 @@ abstract class ActiveQueryTest extends DatabaseTestCase
         $on = ['active' => true];
         $params = ['a' => 'b'];
         $result = $query->orOnCondition($on, $params);
-        $this->assertEquals(['or', $onOld, $on], $result->on);
-        $this->assertEquals($params, $result->params);
+        $this->assertSame(['or', $onOld, $on], $result->on);
+        $this->assertSame($params, $result->params);
     }
 
     /**
      * @todo tests for internal logic of viaTable()
      */
-    public function testViaTable()
+    public function testViaTable(): void
     {
         $query = new ActiveQuery(Customer::className(), ['primaryModel' => new Order()]);
         $result = $query->viaTable(Profile::className(), ['id' => 'item_id']);
@@ -241,75 +248,74 @@ abstract class ActiveQueryTest extends DatabaseTestCase
         $this->assertInstanceOf('yii\db\ActiveQuery', $result->via);
     }
 
-    public function testAlias_not_set()
+    public function testAliasNotSet(): void
     {
         $query = new ActiveQuery(Customer::className());
         $result = $query->alias('alias');
         $this->assertInstanceOf('yii\db\ActiveQuery', $result);
-        $this->assertEquals(['alias' => 'customer'], $result->from);
+        $this->assertSame(['alias' => 'customer'], $result->from);
     }
 
-    public function testAlias_yet_set()
+    public function testAliasYetSet(): void
     {
         $aliasOld = ['old'];
         $query = new ActiveQuery(Customer::className());
         $query->from = $aliasOld;
         $result = $query->alias('alias');
         $this->assertInstanceOf('yii\db\ActiveQuery', $result);
-        $this->assertEquals(['alias' => 'old'], $result->from);
+        $this->assertSame(['alias' => 'old'], $result->from);
     }
 
-    use GetTablesAliasTestTrait;
-    protected function createQuery()
-    {
-        return new ActiveQuery(null);
-    }
-
-    public function testGetTableNames_notFilledFrom()
+    public function testGetTableNamesNotFilledFrom(): void
     {
         $query = new ActiveQuery(Profile::className());
 
         $tables = $query->getTablesUsedInFrom();
 
-        $this->assertEquals([
+        $this->assertSame([
             '{{' . Profile::tableName() . '}}' => '{{' . Profile::tableName() . '}}',
         ], $tables);
     }
 
-    public function testGetTableNames_wontFillFrom()
+    public function testGetTableNamesWontFillFrom(): void
     {
         $query = new ActiveQuery(Profile::className());
-        $this->assertEquals($query->from, null);
+        $this->assertSame($query->from, null);
         $query->getTablesUsedInFrom();
-        $this->assertEquals($query->from, null);
+        $this->assertSame($query->from, null);
     }
 
     /**
-     * https://github.com/yiisoft/yii2/issues/5341
+     * https://github.com/yiisoft/yii2/issues/5341.
      *
      * Issue:     Plan     1 -- * Account * -- * User
      * Our Tests: Category 1 -- * Item    * -- * Order
      */
-    public function testDeeplyNestedTableRelationWith()
+    public function testDeeplyNestedTableRelationWith(): void
     {
-        /* @var $category Category */
+        /** @var Category $category */
         $categories = Category::find()->with('orders')->indexBy('id')->all();
 
         $category = $categories[1];
         $this->assertNotNull($category);
         $orders = $category->orders;
-        $this->assertEquals(2, count($orders));
+        $this->assertSame(2, count($orders));
         $this->assertInstanceOf(Order::className(), $orders[0]);
         $this->assertInstanceOf(Order::className(), $orders[1]);
         $ids = [$orders[0]->id, $orders[1]->id];
         sort($ids);
-        $this->assertEquals([1, 3], $ids);
+        $this->assertSame([1, 3], $ids);
 
         $category = $categories[2];
         $this->assertNotNull($category);
         $orders = $category->orders;
-        $this->assertEquals(1, count($orders));
+        $this->assertSame(1, count($orders));
         $this->assertInstanceOf(Order::className(), $orders[0]);
-        $this->assertEquals(2, $orders[0]->id);
+        $this->assertSame(2, $orders[0]->id);
+    }
+
+    protected function createQuery()
+    {
+        return new ActiveQuery(null);
     }
 }

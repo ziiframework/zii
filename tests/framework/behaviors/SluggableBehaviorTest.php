@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +10,7 @@
 
 namespace yiiunit\framework\behaviors;
 
+use function extension_loaded;
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\db\ActiveRecord;
@@ -15,11 +19,15 @@ use yiiunit\TestCase;
 
 /**
  * Unit test for [[\yii\behaviors\SluggableBehavior]].
+ *
  * @see SluggableBehavior
  *
  * @group behaviors
+ *
+ * @internal
+ * @coversNothing
  */
-class SluggableBehaviorTest extends TestCase
+final class SluggableBehaviorTest extends TestCase
 {
     /**
      * @var Connection test db connection
@@ -33,7 +41,7 @@ class SluggableBehaviorTest extends TestCase
         }
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->mockApplication([
             'components' => [
@@ -60,7 +68,7 @@ class SluggableBehaviorTest extends TestCase
         Yii::$app->getDb()->createCommand()->createTable('test_slug_related', $columns)->execute();
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         Yii::$app->getDb()->close();
         parent::tearDown();
@@ -70,19 +78,19 @@ class SluggableBehaviorTest extends TestCase
 
     // Tests :
 
-    public function testSlug()
+    public function testSlug(): void
     {
         $model = new ActiveRecordSluggable();
         $model->name = 'test name';
         $model->validate();
 
-        $this->assertEquals('test-name', $model->slug);
+        $this->assertSame('test-name', $model->slug);
     }
 
     /**
      * @depends testSlug
      */
-    public function testSlugSeveralAttributes()
+    public function testSlugSeveralAttributes(): void
     {
         $model = new ActiveRecordSluggable();
         $model->getBehavior('sluggable')->attribute = ['name', 'category_id'];
@@ -91,13 +99,13 @@ class SluggableBehaviorTest extends TestCase
         $model->category_id = 10;
 
         $model->validate();
-        $this->assertEquals('test-10', $model->slug);
+        $this->assertSame('test-10', $model->slug);
     }
 
     /**
      * @depends testSlug
      */
-    public function testSlugRelatedAttribute()
+    public function testSlugRelatedAttribute(): void
     {
         $model = new ActiveRecordSluggable();
         $model->getBehavior('sluggable')->attribute = 'related.name';
@@ -110,13 +118,13 @@ class SluggableBehaviorTest extends TestCase
 
         $model->validate();
 
-        $this->assertEquals('i-am-an-value-inside-an-related-activerecord-model', $model->slug);
+        $this->assertSame('i-am-an-value-inside-an-related-activerecord-model', $model->slug);
     }
 
     /**
      * @depends testSlug
      */
-    public function testUniqueByIncrement()
+    public function testUniqueByIncrement(): void
     {
         $name = 'test name';
 
@@ -129,13 +137,13 @@ class SluggableBehaviorTest extends TestCase
         $model->name = $name;
         $model->save();
 
-        $this->assertEquals('test-name-2', $model->slug);
+        $this->assertSame('test-name-2', $model->slug);
     }
 
     /**
      * @depends testUniqueByIncrement
      */
-    public function testUniqueByCallback()
+    public function testUniqueByCallback(): void
     {
         $name = 'test name';
 
@@ -144,17 +152,17 @@ class SluggableBehaviorTest extends TestCase
         $model->save();
 
         $model = new ActiveRecordSluggableUnique();
-        $model->sluggable->uniqueSlugGenerator = function ($baseSlug, $iteration) {return $baseSlug . '-callback';};
+        $model->sluggable->uniqueSlugGenerator = static fn ($baseSlug, $iteration) => $baseSlug . '-callback';
         $model->name = $name;
         $model->save();
 
-        $this->assertEquals('test-name-callback', $model->slug);
+        $this->assertSame('test-name-callback', $model->slug);
     }
 
     /**
      * @depends testSlug
      */
-    public function testUpdateUnique()
+    public function testUpdateUnique(): void
     {
         $name = 'test name';
 
@@ -163,80 +171,77 @@ class SluggableBehaviorTest extends TestCase
         $model->save();
 
         $model->save();
-        $this->assertEquals('test-name', $model->slug);
+        $this->assertSame('test-name', $model->slug);
 
         $model = ActiveRecordSluggableUnique::find()->one();
         $model->save();
-        $this->assertEquals('test-name', $model->slug);
+        $this->assertSame('test-name', $model->slug);
 
         $model->name = 'test-name';
         $model->save();
-        $this->assertEquals('test-name', $model->slug);
+        $this->assertSame('test-name', $model->slug);
     }
 
-    public function testSkipOnEmpty()
+    public function testSkipOnEmpty(): void
     {
         $model = new SkipOnEmptySluggableActiveRecord();
         $model->name = 'test name';
         $model->save();
-        $this->assertEquals('test-name', $model->slug);
+        $this->assertSame('test-name', $model->slug);
 
         $model->name = null;
         $model->save();
-        $this->assertEquals('test-name', $model->slug);
+        $this->assertSame('test-name', $model->slug);
 
         $model->name = 'test name 2';
         $model->save();
-        $this->assertEquals('test-name-2', $model->slug);
+        $this->assertSame('test-name-2', $model->slug);
     }
 
     /**
      * @depends testSlug
      */
-    public function testImmutableByAttribute()
+    public function testImmutableByAttribute(): void
     {
         $model = new ActiveRecordSluggable();
         $model->getSluggable()->immutable = true;
 
         $model->name = 'test name';
         $model->validate();
-        $this->assertEquals('test-name', $model->slug);
+        $this->assertSame('test-name', $model->slug);
 
         $model->name = 'another name';
         $model->validate();
-        $this->assertEquals('test-name', $model->slug);
+        $this->assertSame('test-name', $model->slug);
     }
 
     /**
      * @depends testSlug
      */
-    public function testImmutableByCallback()
+    public function testImmutableByCallback(): void
     {
         $model = new ActiveRecordSluggable();
         $model->getSluggable()->immutable = true;
         $model->getSluggable()->attribute = null;
-        $model->getSluggable()->value = function () use ($model) {
-            return $model->name;
-        };
+        $model->getSluggable()->value = static fn () => $model->name;
 
         $model->name = 'test name';
         $model->validate();
-        $this->assertEquals('test name', $model->slug);
+        $this->assertSame('test name', $model->slug);
 
         $model->name = 'another name';
         $model->validate();
-        $this->assertEquals('test name', $model->slug);
+        $this->assertSame('test name', $model->slug);
     }
 }
 
 /**
  * Test Active Record class with [[SluggableBehavior]] behavior attached.
  *
- * @property int $id
- * @property string $name
- * @property string $slug
- * @property int $category_id
- *
+ * @property int               $id
+ * @property string            $name
+ * @property string            $slug
+ * @property int               $category_id
  * @property SluggableBehavior $sluggable
  */
 class ActiveRecordSluggable extends ActiveRecord

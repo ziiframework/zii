@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -12,7 +15,11 @@ use yii\db\ActiveRecord as DefaultActiveRecord;
 use yiiunit\data\ar\ActiveRecord;
 use yiiunit\TestCase;
 
-class ActiveQueryModelConnectionTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class ActiveQueryModelConnectionTest extends TestCase
 {
     private $globalConnection;
     private $modelConnection;
@@ -24,55 +31,55 @@ class ActiveQueryModelConnectionTest extends TestCase
 
         $this->mockApplication([
             'components' => [
-                'db' => $this->globalConnection
-            ]
+                'db' => $this->globalConnection,
+            ],
         ]);
 
         ActiveRecord::$db = $this->modelConnection;
     }
 
-    private function prepareConnectionMock($connection)
+    public function testEnsureModelConnectionForOne(): void
+    {
+        $this->globalConnection->expects($this->never())->method('getQueryBuilder');
+        $this->prepareConnectionMock($this->modelConnection);
+
+        $query = new ActiveQuery(ActiveRecord::className());
+        $query->one();
+    }
+
+    public function testEnsureGlobalConnectionForOne(): void
+    {
+        $this->modelConnection->expects($this->never())->method('getQueryBuilder');
+        $this->prepareConnectionMock($this->globalConnection);
+
+        $query = new ActiveQuery(DefaultActiveRecord::className());
+        $query->one();
+    }
+
+    public function testEnsureModelConnectionForAll(): void
+    {
+        $this->globalConnection->expects($this->never())->method('getQueryBuilder');
+        $this->prepareConnectionMock($this->modelConnection);
+
+        $query = new ActiveQuery(ActiveRecord::className());
+        $query->all();
+    }
+
+    public function testEnsureGlobalConnectionForAll(): void
+    {
+        $this->modelConnection->expects($this->never())->method('getQueryBuilder');
+        $this->prepareConnectionMock($this->globalConnection);
+
+        $query = new ActiveQuery(DefaultActiveRecord::className());
+        $query->all();
+    }
+
+    private function prepareConnectionMock($connection): void
     {
         $command = $this->getMockBuilder('yii\db\Command')->getMock();
         $command->method('queryOne')->willReturn(false);
         $connection->method('createCommand')->willReturn($command);
         $builder = $this->getMockBuilder('yii\db\QueryBuilder')->disableOriginalConstructor()->getMock();
         $connection->expects($this->once())->method('getQueryBuilder')->willReturn($builder);
-    }
-
-    public function testEnsureModelConnectionForOne()
-    {
-        $this->globalConnection->expects($this->never())->method('getQueryBuilder');
-        $this->prepareConnectionMock($this->modelConnection);
-
-        $query = new ActiveQuery(ActiveRecord::className());
-        $query->one();
-    }
-
-    public function testEnsureGlobalConnectionForOne()
-    {
-        $this->modelConnection->expects($this->never())->method('getQueryBuilder');
-        $this->prepareConnectionMock($this->globalConnection);
-
-        $query = new ActiveQuery(DefaultActiveRecord::className());
-        $query->one();
-    }
-
-    public function testEnsureModelConnectionForAll()
-    {
-        $this->globalConnection->expects($this->never())->method('getQueryBuilder');
-        $this->prepareConnectionMock($this->modelConnection);
-
-        $query = new ActiveQuery(ActiveRecord::className());
-        $query->all();
-    }
-
-    public function testEnsureGlobalConnectionForAll()
-    {
-        $this->modelConnection->expects($this->never())->method('getQueryBuilder');
-        $this->prepareConnectionMock($this->globalConnection);
-
-        $query = new ActiveQuery(DefaultActiveRecord::className());
-        $query->all();
     }
 }

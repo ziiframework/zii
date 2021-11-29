@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -14,8 +17,11 @@ use yiiunit\TestCase;
 
 /**
  * @group validators
+ *
+ * @internal
+ * @coversNothing
  */
-class BooleanValidatorTest extends TestCase
+final class BooleanValidatorTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -25,7 +31,7 @@ class BooleanValidatorTest extends TestCase
         $this->destroyApplication();
     }
 
-    public function testValidateValue()
+    public function testValidateValue(): void
     {
         $val = new BooleanValidator();
         $this->assertTrue($val->validate(true));
@@ -48,7 +54,7 @@ class BooleanValidatorTest extends TestCase
         $this->assertTrue($val->validate(false));
     }
 
-    public function testValidateAttributeAndError()
+    public function testValidateAttributeAndError(): void
     {
         $obj = new FakedValidationModel();
         $obj->attrA = true;
@@ -67,7 +73,7 @@ class BooleanValidatorTest extends TestCase
         $this->assertTrue($obj->hasErrors('attrD'));
     }
 
-    public function testErrorMessage()
+    public function testErrorMessage(): void
     {
         $validator = new BooleanValidator([
             'trueValue' => true,
@@ -76,7 +82,7 @@ class BooleanValidatorTest extends TestCase
         ]);
         $validator->validate('someIncorrectValue', $errorMessage);
 
-        $this->assertEquals('the input value must be either "true" or "false".', $errorMessage);
+        $this->assertSame('the input value must be either "true" or "false".', $errorMessage);
 
         $obj = new FakedValidationModel();
         $obj->attrA = true;
@@ -84,16 +90,13 @@ class BooleanValidatorTest extends TestCase
         $obj->attrC = '0';
         $obj->attrD = [];
 
-        $this->assertEquals(
-            'yii.validation.boolean(value, messages, {"trueValue":true,"falseValue":false,"message":"attrB must be either \"true\" or \"false\".","skipOnEmpty":1,"strict":1});',
-            $validator->clientValidateAttribute($obj, 'attrB', new ViewStub())
-        );
+        $this->assertSame('yii.validation.boolean(value, messages, {"trueValue":true,"falseValue":false,"message":"attrB must be either \"true\" or \"false\".","skipOnEmpty":1,"strict":1});', $validator->clientValidateAttribute($obj, 'attrB', new ViewStub()));
     }
 }
 
 class ViewStub extends View
 {
-    public function registerAssetBundle($name, $position = null)
+    public function registerAssetBundle($name, $position = null): void
     {
     }
 }

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -14,8 +17,11 @@ use yiiunit\data\base\TraversableObject;
 /**
  * @group db
  * @group mssql
+ *
+ * @internal
+ * @coversNothing
  */
-class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
+final class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
 {
     public $driverName = 'sqlsrv';
 
@@ -27,7 +33,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         '\\\\' => '[\\]',
     ];
 
-    public function testOffsetLimit()
+    public function testOffsetLimit(): void
     {
         $expectedQuerySql = 'SELECT [id] FROM [example] ORDER BY (SELECT NULL) OFFSET 5 ROWS FETCH NEXT 10 ROWS ONLY';
         $expectedQueryParams = [];
@@ -35,13 +41,13 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         $query = new Query();
         $query->select('id')->from('example')->limit(10)->offset(5);
 
-        list($actualQuerySql, $actualQueryParams) = $this->getQueryBuilder()->build($query);
+        [$actualQuerySql, $actualQueryParams] = $this->getQueryBuilder()->build($query);
 
-        $this->assertEquals($expectedQuerySql, $actualQuerySql);
-        $this->assertEquals($expectedQueryParams, $actualQueryParams);
+        $this->assertSame($expectedQuerySql, $actualQuerySql);
+        $this->assertSame($expectedQueryParams, $actualQueryParams);
     }
 
-    public function testLimit()
+    public function testLimit(): void
     {
         $expectedQuerySql = 'SELECT [id] FROM [example] ORDER BY (SELECT NULL) OFFSET 0 ROWS FETCH NEXT 10 ROWS ONLY';
         $expectedQueryParams = [];
@@ -49,13 +55,13 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         $query = new Query();
         $query->select('id')->from('example')->limit(10);
 
-        list($actualQuerySql, $actualQueryParams) = $this->getQueryBuilder()->build($query);
+        [$actualQuerySql, $actualQueryParams] = $this->getQueryBuilder()->build($query);
 
-        $this->assertEquals($expectedQuerySql, $actualQuerySql);
-        $this->assertEquals($expectedQueryParams, $actualQueryParams);
+        $this->assertSame($expectedQuerySql, $actualQuerySql);
+        $this->assertSame($expectedQueryParams, $actualQueryParams);
     }
 
-    public function testOffset()
+    public function testOffset(): void
     {
         $expectedQuerySql = 'SELECT [id] FROM [example] ORDER BY (SELECT NULL) OFFSET 10 ROWS';
         $expectedQueryParams = [];
@@ -63,77 +69,19 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         $query = new Query();
         $query->select('id')->from('example')->offset(10);
 
-        list($actualQuerySql, $actualQueryParams) = $this->getQueryBuilder()->build($query);
+        [$actualQuerySql, $actualQueryParams] = $this->getQueryBuilder()->build($query);
 
-        $this->assertEquals($expectedQuerySql, $actualQuerySql);
-        $this->assertEquals($expectedQueryParams, $actualQueryParams);
+        $this->assertSame($expectedQuerySql, $actualQuerySql);
+        $this->assertSame($expectedQueryParams, $actualQueryParams);
     }
 
-    protected function getCommmentsFromTable($table)
-    {
-        $db = $this->getConnection(false, false);
-        $sql = "SELECT *
-            FROM fn_listextendedproperty (
-                N'MS_description',
-                'SCHEMA', N'dbo',
-                'TABLE', N" . $db->quoteValue($table) . ",
-                DEFAULT, DEFAULT
-        )";
-        return $db->createCommand($sql)->queryAll();
-    }
-
-    protected function getCommentsFromColumn($table, $column)
-    {
-        $db = $this->getConnection(false, false);
-        $sql = "SELECT *
-            FROM fn_listextendedproperty (
-                N'MS_description',
-                'SCHEMA', N'dbo',
-                'TABLE', N" . $db->quoteValue($table) . ",
-                'COLUMN', N" . $db->quoteValue($column) . "
-        )";
-        return $db->createCommand($sql)->queryAll();
-    }
-
-    protected function runAddCommentOnTable($comment, $table)
-    {
-        $qb = $this->getQueryBuilder();
-        $db = $this->getConnection(false, false);
-        $sql = $qb->addCommentOnTable($table, $comment);
-        return $db->createCommand($sql)->execute();
-    }
-
-    protected function runAddCommentOnColumn($comment, $table, $column)
-    {
-        $qb = $this->getQueryBuilder();
-        $db = $this->getConnection(false, false);
-        $sql = $qb->addCommentOnColumn($table, $column, $comment);
-        return $db->createCommand($sql)->execute();
-    }
-
-    protected function runDropCommentFromTable($table)
-    {
-        $qb = $this->getQueryBuilder();
-        $db = $this->getConnection(false, false);
-        $sql = $qb->dropCommentFromTable($table);
-        return $db->createCommand($sql)->execute();
-    }
-
-    protected function runDropCommentFromColumn($table, $column)
-    {
-        $qb = $this->getQueryBuilder();
-        $db = $this->getConnection(false, false);
-        $sql = $qb->dropCommentFromColumn($table, $column);
-        return $db->createCommand($sql)->execute();
-    }
-
-    public function testCommentAdditionOnTableAndOnColumn()
+    public function testCommentAdditionOnTableAndOnColumn(): void
     {
         $table = 'profile';
         $tableComment = 'A comment for profile table.';
         $this->runAddCommentOnTable($tableComment, $table);
         $resultTable = $this->getCommmentsFromTable($table);
-        $this->assertEquals([
+        $this->assertSame([
             'objtype' => 'TABLE',
             'objname' => $table,
             'name' => 'MS_description',
@@ -144,7 +92,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         $columnComment = 'A comment for description column in profile table.';
         $this->runAddCommentOnColumn($columnComment, $table, $column);
         $resultColumn = $this->getCommentsFromColumn($table, $column);
-        $this->assertEquals([
+        $this->assertSame([
             'objtype' => 'COLUMN',
             'objname' => $column,
             'name' => 'MS_description',
@@ -155,7 +103,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         $tableComment2 = 'Another comment for profile table.';
         $this->runAddCommentOnTable($tableComment2, $table);
         $result = $this->getCommmentsFromTable($table);
-        $this->assertEquals([
+        $this->assertSame([
             'objtype' => 'TABLE',
             'objname' => $table,
             'name' => 'MS_description',
@@ -166,7 +114,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         $columnComment2 = 'Another comment for description column in profile table.';
         $this->runAddCommentOnColumn($columnComment2, $table, $column);
         $result = $this->getCommentsFromColumn($table, $column);
-        $this->assertEquals([
+        $this->assertSame([
             'objtype' => 'COLUMN',
             'objname' => $column,
             'name' => 'MS_description',
@@ -174,13 +122,13 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         ], $result[0]);
     }
 
-    public function testCommentAdditionOnQuotedTableOrColumn()
+    public function testCommentAdditionOnQuotedTableOrColumn(): void
     {
         $table = 'stranger \'table';
         $tableComment = 'A comment for stranger \'table.';
         $this->runAddCommentOnTable($tableComment, $table);
         $resultTable = $this->getCommmentsFromTable($table);
-        $this->assertEquals([
+        $this->assertSame([
             'objtype' => 'TABLE',
             'objname' => $table,
             'name' => 'MS_description',
@@ -191,7 +139,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         $columnComment = 'A comment for stranger \'field column in stranger \'table.';
         $this->runAddCommentOnColumn($columnComment, $table, $column);
         $resultColumn = $this->getCommentsFromColumn($table, $column);
-        $this->assertEquals([
+        $this->assertSame([
             'objtype' => 'COLUMN',
             'objname' => $column,
             'name' => 'MS_description',
@@ -199,48 +147,48 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         ], $resultColumn[0]);
     }
 
-    public function testCommentRemovalFromTableAndFromColumn()
+    public function testCommentRemovalFromTableAndFromColumn(): void
     {
         $table = 'profile';
         $tableComment = 'A comment for profile table.';
         $this->runAddCommentOnTable($tableComment, $table);
         $this->runDropCommentFromTable($table);
         $result = $this->getCommmentsFromTable($table);
-        $this->assertEquals([], $result);
+        $this->assertSame([], $result);
 
         $column = 'description';
         $columnComment = 'A comment for description column in profile table.';
         $this->runAddCommentOnColumn($columnComment, $table, $column);
         $this->runDropCommentFromColumn($table, $column);
         $result = $this->getCommentsFromColumn($table, $column);
-        $this->assertEquals([], $result);
+        $this->assertSame([], $result);
     }
 
-    public function testCommentRemovalFromQuotedTableOrColumn()
+    public function testCommentRemovalFromQuotedTableOrColumn(): void
     {
         $table = 'stranger \'table';
         $tableComment = 'A comment for stranger \'table.';
         $this->runAddCommentOnTable($tableComment, $table);
         $this->runDropCommentFromTable($table);
         $result = $this->getCommmentsFromTable($table);
-        $this->assertEquals([], $result);
+        $this->assertSame([], $result);
 
         $column = 'stranger \'field';
         $columnComment = 'A comment for stranger \'field in stranger \'table.';
         $this->runAddCommentOnColumn($columnComment, $table, $column);
         $this->runDropCommentFromColumn($table, $column);
         $result = $this->getCommentsFromColumn($table, $column);
-        $this->assertEquals([], $result);
+        $this->assertSame([], $result);
     }
 
-    public function testCommentColumn()
+    public function testCommentColumn(): void
     {
-        $this->markTestSkipped("Testing the behavior, not sql generation anymore.");
+        $this->markTestSkipped('Testing the behavior, not sql generation anymore.');
     }
 
-    public function testCommentTable()
+    public function testCommentTable(): void
     {
-        $this->markTestSkipped("Testing the behavior, not sql generation anymore.");
+        $this->markTestSkipped('Testing the behavior, not sql generation anymore.');
     }
 
     /**
@@ -360,17 +308,17 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         ];
     }
 
-    public function testResetSequence()
+    public function testResetSequence(): void
     {
         $qb = $this->getQueryBuilder();
 
         $expected = "DBCC CHECKIDENT ('[item]', RESEED, (SELECT COALESCE(MAX([id]),0) FROM [item])+1)";
         $sql = $qb->resetSequence('item');
-        $this->assertEquals($expected, $sql);
+        $this->assertSame($expected, $sql);
 
         $expected = "DBCC CHECKIDENT ('[item]', RESEED, 4)";
         $sql = $qb->resetSequence('item', 4);
-        $this->assertEquals($expected, $sql);
+        $this->assertSame($expected, $sql);
     }
 
     public function upsertProvider()
@@ -420,9 +368,11 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
             ],
         ];
         $newData = parent::upsertProvider();
+
         foreach ($concreteData as $testName => $data) {
             $newData[$testName] = array_replace($newData[$testName], $data);
         }
+
         return $newData;
     }
 
@@ -446,7 +396,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         return $data;
     }
 
-    public function testAlterColumn()
+    public function testAlterColumn(): void
     {
         $qb = $this->getQueryBuilder();
 
@@ -474,7 +424,7 @@ WHILE 1=1 BEGIN
     EXEC (N'ALTER TABLE ' + @tableName + ' DROP CONSTRAINT [' + @constraintName + ']')
 END";
         $sql = $qb->alterColumn('foo1', 'bar', 'varchar(255)');
-        $this->assertEquals($expected, $sql);
+        $this->assertSame($expected, $sql);
 
         $expected = "ALTER TABLE [foo1] ALTER COLUMN [bar] nvarchar(255) NOT NULL
 DECLARE @tableName VARCHAR(MAX) = '[foo1]'
@@ -500,7 +450,7 @@ WHILE 1=1 BEGIN
     EXEC (N'ALTER TABLE ' + @tableName + ' DROP CONSTRAINT [' + @constraintName + ']')
 END";
         $sql = $qb->alterColumn('foo1', 'bar', $this->string(255)->notNull());
-        $this->assertEquals($expected, $sql);
+        $this->assertSame($expected, $sql);
 
         $expected = "ALTER TABLE [foo1] ALTER COLUMN [bar] nvarchar(255)
 DECLARE @tableName VARCHAR(MAX) = '[foo1]'
@@ -527,7 +477,7 @@ WHILE 1=1 BEGIN
 END
 ALTER TABLE [foo1] ADD CONSTRAINT [CK_foo1_bar] CHECK (LEN(bar) > 5)";
         $sql = $qb->alterColumn('foo1', 'bar', $this->string(255)->check('LEN(bar) > 5'));
-        $this->assertEquals($expected, $sql);
+        $this->assertSame($expected, $sql);
 
         $expected = "ALTER TABLE [foo1] ALTER COLUMN [bar] nvarchar(255)
 DECLARE @tableName VARCHAR(MAX) = '[foo1]'
@@ -554,7 +504,7 @@ WHILE 1=1 BEGIN
 END
 ALTER TABLE [foo1] ADD CONSTRAINT [DF_foo1_bar] DEFAULT '' FOR [bar]";
         $sql = $qb->alterColumn('foo1', 'bar', $this->string(255)->defaultValue(''));
-        $this->assertEquals($expected, $sql);
+        $this->assertSame($expected, $sql);
 
         $expected = "ALTER TABLE [foo1] ALTER COLUMN [bar] nvarchar(255)
 DECLARE @tableName VARCHAR(MAX) = '[foo1]'
@@ -581,7 +531,7 @@ WHILE 1=1 BEGIN
 END
 ALTER TABLE [foo1] ADD CONSTRAINT [DF_foo1_bar] DEFAULT 'AbCdE' FOR [bar]";
         $sql = $qb->alterColumn('foo1', 'bar', $this->string(255)->defaultValue('AbCdE'));
-        $this->assertEquals($expected, $sql);
+        $this->assertSame($expected, $sql);
 
         $expected = "ALTER TABLE [foo1] ALTER COLUMN [bar] datetime
 DECLARE @tableName VARCHAR(MAX) = '[foo1]'
@@ -608,7 +558,7 @@ WHILE 1=1 BEGIN
 END
 ALTER TABLE [foo1] ADD CONSTRAINT [DF_foo1_bar] DEFAULT CURRENT_TIMESTAMP FOR [bar]";
         $sql = $qb->alterColumn('foo1', 'bar', $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP'));
-        $this->assertEquals($expected, $sql);
+        $this->assertSame($expected, $sql);
 
         $expected = "ALTER TABLE [foo1] ALTER COLUMN [bar] nvarchar(30)
 DECLARE @tableName VARCHAR(MAX) = '[foo1]'
@@ -635,10 +585,10 @@ WHILE 1=1 BEGIN
 END
 ALTER TABLE [foo1] ADD CONSTRAINT [UQ_foo1_bar] UNIQUE ([bar])";
         $sql = $qb->alterColumn('foo1', 'bar', $this->string(30)->unique());
-        $this->assertEquals($expected, $sql);
+        $this->assertSame($expected, $sql);
     }
 
-    public function testAlterColumnOnDb()
+    public function testAlterColumnOnDb(): void
     {
         $connection = $this->getConnection();
 
@@ -646,17 +596,17 @@ ALTER TABLE [foo1] ADD CONSTRAINT [UQ_foo1_bar] UNIQUE ([bar])";
         $connection->createCommand($sql)->execute();
         $schema = $connection->getTableSchema('[foo1]', true);
 
-        $this->assertEquals("varchar(255)", $schema->getColumn('bar')->dbType);
-        $this->assertEquals(true, $schema->getColumn('bar')->allowNull);
+        $this->assertSame('varchar(255)', $schema->getColumn('bar')->dbType);
+        $this->assertTrue($schema->getColumn('bar')->allowNull);
 
         $sql = $connection->getQueryBuilder()->alterColumn('foo1', 'bar', $this->string(128)->notNull());
         $connection->createCommand($sql)->execute();
         $schema = $connection->getTableSchema('[foo1]', true);
-        $this->assertEquals("nvarchar(128)", $schema->getColumn('bar')->dbType);
-        $this->assertEquals(false, $schema->getColumn('bar')->allowNull);
+        $this->assertSame('nvarchar(128)', $schema->getColumn('bar')->dbType);
+        $this->assertFalse($schema->getColumn('bar')->allowNull);
     }
 
-    public function testAlterColumnWithNull()
+    public function testAlterColumnWithNull(): void
     {
         $qb = $this->getQueryBuilder();
 
@@ -684,11 +634,11 @@ WHILE 1=1 BEGIN
     EXEC (N'ALTER TABLE ' + @tableName + ' DROP CONSTRAINT [' + @constraintName + ']')
 END
 ALTER TABLE [foo1] ADD CONSTRAINT [DF_foo1_bar] DEFAULT NULL FOR [bar]";
-        $sql = $qb->alterColumn('foo1', 'bar', $this->integer()->null()->defaultValue(NULL));
-        $this->assertEquals($expected, $sql);
+        $sql = $qb->alterColumn('foo1', 'bar', $this->integer()->null()->defaultValue(null));
+        $this->assertSame($expected, $sql);
     }
 
-    public function testAlterColumnWithExpression()
+    public function testAlterColumnWithExpression(): void
     {
         $qb = $this->getQueryBuilder();
 
@@ -717,24 +667,24 @@ WHILE 1=1 BEGIN
 END
 ALTER TABLE [foo1] ADD CONSTRAINT [DF_foo1_bar] DEFAULT CAST(GETDATE() AS INT) FOR [bar]";
         $sql = $qb->alterColumn('foo1', 'bar', $this->integer()->null()->defaultValue(new Expression('CAST(GETDATE() AS INT)')));
-        $this->assertEquals($expected, $sql);
+        $this->assertSame($expected, $sql);
     }
 
-    public function testAlterColumnWithCheckConstraintOnDb()
+    public function testAlterColumnWithCheckConstraintOnDb(): void
     {
         $connection = $this->getConnection();
 
         $sql = $connection->getQueryBuilder()->alterColumn('foo1', 'bar', $this->string(128)->null()->check('LEN(bar) > 5'));
         $connection->createCommand($sql)->execute();
         $schema = $connection->getTableSchema('[foo1]', true);
-        $this->assertEquals("nvarchar(128)", $schema->getColumn('bar')->dbType);
-        $this->assertEquals(true, $schema->getColumn('bar')->allowNull);
+        $this->assertSame('nvarchar(128)', $schema->getColumn('bar')->dbType);
+        $this->assertTrue($schema->getColumn('bar')->allowNull);
 
         $sql = "INSERT INTO [foo1]([bar]) values('abcdef')";
-        $this->assertEquals(1, $connection->createCommand($sql)->execute());
+        $this->assertSame(1, $connection->createCommand($sql)->execute());
     }
 
-    public function testAlterColumnWithCheckConstraintOnDbWithException()
+    public function testAlterColumnWithCheckConstraintOnDbWithException(): void
     {
         $connection = $this->getConnection();
 
@@ -743,10 +693,10 @@ ALTER TABLE [foo1] ADD CONSTRAINT [DF_foo1_bar] DEFAULT CAST(GETDATE() AS INT) F
 
         $sql = "INSERT INTO [foo1]([bar]) values('abcde')";
         $this->expectException('yii\db\IntegrityException');
-        $this->assertEquals(1, $connection->createCommand($sql)->execute());
+        $this->assertSame(1, $connection->createCommand($sql)->execute());
     }
 
-    public function testAlterColumnWithUniqueConstraintOnDbWithException()
+    public function testAlterColumnWithUniqueConstraintOnDbWithException(): void
     {
         $connection = $this->getConnection();
 
@@ -754,13 +704,13 @@ ALTER TABLE [foo1] ADD CONSTRAINT [DF_foo1_bar] DEFAULT CAST(GETDATE() AS INT) F
         $connection->createCommand($sql)->execute();
 
         $sql = "INSERT INTO [foo1]([bar]) values('abcdef')";
-        $this->assertEquals(1, $connection->createCommand($sql)->execute());
+        $this->assertSame(1, $connection->createCommand($sql)->execute());
 
         $this->expectException('yii\db\IntegrityException');
-        $this->assertEquals(1, $connection->createCommand($sql)->execute());
+        $this->assertSame(1, $connection->createCommand($sql)->execute());
     }
 
-    public function testDropColumn()
+    public function testDropColumn(): void
     {
         $qb = $this->getQueryBuilder();
 
@@ -788,21 +738,21 @@ WHILE 1=1 BEGIN
 END
 ALTER TABLE [foo1] DROP COLUMN [bar]";
         $sql = $qb->dropColumn('foo1', 'bar');
-        $this->assertEquals($expected, $sql);
+        $this->assertSame($expected, $sql);
     }
 
-    public function testDropColumnOnDb()
+    public function testDropColumnOnDb(): void
     {
         $connection = $this->getConnection();
 
-        $sql = $connection->getQueryBuilder()->alterColumn('foo1', 'bar', $this->string(64)->defaultValue("")->check('LEN(bar) < 5')->unique());
+        $sql = $connection->getQueryBuilder()->alterColumn('foo1', 'bar', $this->string(64)->defaultValue('')->check('LEN(bar) < 5')->unique());
         $connection->createCommand($sql)->execute();
 
         $sql = $connection->getQueryBuilder()->dropColumn('foo1', 'bar');
-        $this->assertEquals(0, $connection->createCommand($sql)->execute());
+        $this->assertSame(0, $connection->createCommand($sql)->execute());
 
         $schema = $connection->getTableSchema('[foo1]', true);
-        $this->assertEquals(NULL, $schema->getColumn('bar'));
+        $this->assertNull($schema->getColumn('bar'));
     }
 
     public function buildFromDataProvider()
@@ -816,5 +766,69 @@ ALTER TABLE [foo1] DROP COLUMN [bar]";
         $data[] = ['[table name with spaces]', '[[table name with spaces]]'];
 
         return $data;
+    }
+
+    protected function getCommmentsFromTable($table)
+    {
+        $db = $this->getConnection(false, false);
+        $sql = "SELECT *
+            FROM fn_listextendedproperty (
+                N'MS_description',
+                'SCHEMA', N'dbo',
+                'TABLE', N" . $db->quoteValue($table) . ',
+                DEFAULT, DEFAULT
+        )';
+
+        return $db->createCommand($sql)->queryAll();
+    }
+
+    protected function getCommentsFromColumn($table, $column)
+    {
+        $db = $this->getConnection(false, false);
+        $sql = "SELECT *
+            FROM fn_listextendedproperty (
+                N'MS_description',
+                'SCHEMA', N'dbo',
+                'TABLE', N" . $db->quoteValue($table) . ",
+                'COLUMN', N" . $db->quoteValue($column) . '
+        )';
+
+        return $db->createCommand($sql)->queryAll();
+    }
+
+    protected function runAddCommentOnTable($comment, $table)
+    {
+        $qb = $this->getQueryBuilder();
+        $db = $this->getConnection(false, false);
+        $sql = $qb->addCommentOnTable($table, $comment);
+
+        return $db->createCommand($sql)->execute();
+    }
+
+    protected function runAddCommentOnColumn($comment, $table, $column)
+    {
+        $qb = $this->getQueryBuilder();
+        $db = $this->getConnection(false, false);
+        $sql = $qb->addCommentOnColumn($table, $column, $comment);
+
+        return $db->createCommand($sql)->execute();
+    }
+
+    protected function runDropCommentFromTable($table)
+    {
+        $qb = $this->getQueryBuilder();
+        $db = $this->getConnection(false, false);
+        $sql = $qb->dropCommentFromTable($table);
+
+        return $db->createCommand($sql)->execute();
+    }
+
+    protected function runDropCommentFromColumn($table, $column)
+    {
+        $qb = $this->getQueryBuilder();
+        $db = $this->getConnection(false, false);
+        $sql = $qb->dropCommentFromColumn($table, $column);
+
+        return $db->createCommand($sql)->execute();
     }
 }

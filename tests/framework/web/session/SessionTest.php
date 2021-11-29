@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -12,15 +15,18 @@ use yiiunit\TestCase;
 
 /**
  * @group web
+ *
+ * @internal
+ * @coversNothing
  */
-class SessionTest extends TestCase
+final class SessionTest extends TestCase
 {
     use SessionTestTrait;
 
     /**
      * Test to prove that after Session::destroy session id set to old value.
      */
-    public function testDestroySessionId()
+    public function testDestroySessionId(): void
     {
         $session = new Session();
         $session->open();
@@ -32,14 +38,14 @@ class SessionTest extends TestCase
 
         $newSessionId = @session_id();
         $this->assertNotEmpty($newSessionId);
-        $this->assertEquals($oldSessionId, $newSessionId);
+        $this->assertSame($oldSessionId, $newSessionId);
     }
 
     /**
      * Test to prove that after Session::open changing session parameters will not throw exceptions
      * and its values will be changed as expected.
      */
-    public function testParamsAfterSessionStart()
+    public function testParamsAfterSessionStart(): void
     {
         $session = new Session();
         $session->open();
@@ -47,7 +53,7 @@ class SessionTest extends TestCase
         $oldUseTransparentSession = $session->getUseTransparentSessionID();
         $session->setUseTransparentSessionID(true);
         $newUseTransparentSession = $session->getUseTransparentSessionID();
-        $this->assertNotEquals($oldUseTransparentSession, $newUseTransparentSession);
+        $this->assertNotSame($oldUseTransparentSession, $newUseTransparentSession);
         $this->assertTrue($newUseTransparentSession);
         //without this line phpunit will complain about risky tests due to unclosed buffer
         $session->setUseTransparentSessionID(false);
@@ -55,49 +61,50 @@ class SessionTest extends TestCase
         $oldTimeout = $session->getTimeout();
         $session->setTimeout(600);
         $newTimeout = $session->getTimeout();
-        $this->assertNotEquals($oldTimeout, $newTimeout);
-        $this->assertEquals(600, $newTimeout);
+        $this->assertNotSame($oldTimeout, $newTimeout);
+        $this->assertSame(600, $newTimeout);
 
         $oldUseCookies = $session->getUseCookies();
         $session->setUseCookies(false);
         $newUseCookies = $session->getUseCookies();
+
         if (null !== $newUseCookies) {
-            $this->assertNotEquals($oldUseCookies, $newUseCookies);
+            $this->assertNotSame($oldUseCookies, $newUseCookies);
             $this->assertFalse($newUseCookies);
         }
 
         $oldGcProbability = $session->getGCProbability();
         $session->setGCProbability(100);
         $newGcProbability = $session->getGCProbability();
-        $this->assertNotEquals($oldGcProbability, $newGcProbability);
-        $this->assertEquals(100, $newGcProbability);
+        $this->assertNotSame($oldGcProbability, $newGcProbability);
+        $this->assertSame(100, $newGcProbability);
         $session->setGCProbability($oldGcProbability);
     }
 
     /**
-     * Test set name. Also check set name twice and after open
+     * Test set name. Also check set name twice and after open.
      */
-    public function testSetName()
+    public function testSetName(): void
     {
         $session = new Session();
         $session->setName('oldName');
 
-        $this->assertEquals('oldName', $session->getName());
+        $this->assertSame('oldName', $session->getName());
 
         $session->open();
         $session->setName('newName');
 
-        $this->assertEquals('newName', $session->getName());
+        $this->assertSame('newName', $session->getName());
 
         $session->destroy();
     }
 
-    public function testInitUseStrictMode()
+    public function testInitUseStrictMode(): void
     {
         $this->initStrictModeTest(Session::className());
     }
 
-    public function testUseStrictMode()
+    public function testUseStrictMode(): void
     {
         //Manual garbage collection since native storage module might not support removing data via Session::destroySession()
         $sessionSavePath = session_save_path() ?: sys_get_temp_dir();

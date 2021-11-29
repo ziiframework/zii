@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -12,19 +15,22 @@ use yii\db\Connection;
 /**
  * @group db
  * @group mysql
+ *
+ * @internal
+ * @coversNothing
  */
-class ConnectionTest extends \yiiunit\framework\db\ConnectionTest
+final class ConnectionTest extends \yiiunit\framework\db\ConnectionTest
 {
     protected $driverName = 'mysql';
 
     /**
      * @doesNotPerformAssertions
      */
-    public function testTransactionAutocommit()
+    public function testTransactionAutocommit(): void
     {
         /** @var Connection $connection */
         $connection = $this->getConnection(true);
-        $connection->transaction(function (Connection $db) {
+        $connection->transaction(static function (Connection $db): void {
             // create table will cause the transaction to be implicitly committed
             // (see https://dev.mysql.com/doc/refman/8.0/en/implicit-commit.html)
             $name = 'test_implicit_transaction_table';

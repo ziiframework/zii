@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,8 +14,11 @@ namespace yiiunit\framework\db\mysql;
  * @group db
  * @group mysql
  * @group validators
+ *
+ * @internal
+ * @coversNothing
  */
-class ExistValidatorTest extends \yiiunit\framework\validators\ExistValidatorTest
+final class ExistValidatorTest extends \yiiunit\framework\validators\ExistValidatorTest
 {
     public $driverName = 'mysql';
 }

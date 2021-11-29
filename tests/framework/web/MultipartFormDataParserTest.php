@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,15 +10,20 @@
 
 namespace yiiunit\framework\web;
 
+use function defined;
 use yii\web\MultipartFormDataParser;
 use yiiunit\TestCase;
 
-class MultipartFormDataParserTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class MultipartFormDataParserTest extends TestCase
 {
-    public function testParse()
+    public function testParse(): void
     {
         if (defined('HHVM_VERSION')) {
-            static::markTestSkipped('Can not test on HHVM because it does not support proper handling of the temporary files.');
+            $this->markTestSkipped('Can not test on HHVM because it does not support proper handling of the temporary files.');
         }
 
         $parser = new MultipartFormDataParser();
@@ -36,26 +44,26 @@ class MultipartFormDataParserTest extends TestCase
                 'name' => 'test-name',
             ],
         ];
-        $this->assertEquals($expectedBodyParams, $bodyParams);
+        $this->assertSame($expectedBodyParams, $bodyParams);
 
         $this->assertNotEmpty($_FILES['someFile']);
-        $this->assertEquals(UPLOAD_ERR_OK, $_FILES['someFile']['error']);
-        $this->assertEquals('some-file.txt', $_FILES['someFile']['name']);
-        $this->assertEquals('text/plain', $_FILES['someFile']['type']);
+        $this->assertSame(UPLOAD_ERR_OK, $_FILES['someFile']['error']);
+        $this->assertSame('some-file.txt', $_FILES['someFile']['name']);
+        $this->assertSame('text/plain', $_FILES['someFile']['type']);
         $this->assertStringEqualsFile($_FILES['someFile']['tmp_name'], 'some file content');
 
         $this->assertNotEmpty($_FILES['Item']);
         $this->assertNotEmpty($_FILES['Item']['name']['file']);
-        $this->assertEquals(UPLOAD_ERR_OK, $_FILES['Item']['error']['file']);
-        $this->assertEquals('item-file.txt', $_FILES['Item']['name']['file']);
-        $this->assertEquals('text/plain', $_FILES['Item']['type']['file']);
+        $this->assertSame(UPLOAD_ERR_OK, $_FILES['Item']['error']['file']);
+        $this->assertSame('item-file.txt', $_FILES['Item']['name']['file']);
+        $this->assertSame('text/plain', $_FILES['Item']['type']['file']);
         $this->assertStringEqualsFile($_FILES['Item']['tmp_name']['file'], 'item file content');
     }
 
-    public function testParseWithDoubleQuotes()
+    public function testParseWithDoubleQuotes(): void
     {
         if (defined('HHVM_VERSION')) {
-            static::markTestSkipped('Can not test on HHVM because it does not support proper handling of the temporary files.');
+            $this->markTestSkipped('Can not test on HHVM because it does not support proper handling of the temporary files.');
         }
 
         $parser = new MultipartFormDataParser();
@@ -76,25 +84,26 @@ class MultipartFormDataParserTest extends TestCase
                 'name' => 'test-name',
             ],
         ];
-        $this->assertEquals($expectedBodyParams, $bodyParams);
+        $this->assertSame($expectedBodyParams, $bodyParams);
 
         $this->assertNotEmpty($_FILES['someFile']);
-        $this->assertEquals(UPLOAD_ERR_OK, $_FILES['someFile']['error']);
-        $this->assertEquals('some-file.txt', $_FILES['someFile']['name']);
-        $this->assertEquals('text/plain', $_FILES['someFile']['type']);
+        $this->assertSame(UPLOAD_ERR_OK, $_FILES['someFile']['error']);
+        $this->assertSame('some-file.txt', $_FILES['someFile']['name']);
+        $this->assertSame('text/plain', $_FILES['someFile']['type']);
         $this->assertStringEqualsFile($_FILES['someFile']['tmp_name'], 'some file content');
 
         $this->assertNotEmpty($_FILES['Item']);
         $this->assertNotEmpty($_FILES['Item']['name']['file']);
-        $this->assertEquals(UPLOAD_ERR_OK, $_FILES['Item']['error']['file']);
-        $this->assertEquals('item-file.txt', $_FILES['Item']['name']['file']);
-        $this->assertEquals('text/plain', $_FILES['Item']['type']['file']);
+        $this->assertSame(UPLOAD_ERR_OK, $_FILES['Item']['error']['file']);
+        $this->assertSame('item-file.txt', $_FILES['Item']['name']['file']);
+        $this->assertSame('text/plain', $_FILES['Item']['type']['file']);
         $this->assertStringEqualsFile($_FILES['Item']['tmp_name']['file'], 'item file content');
     }
+
     /**
      * @depends testParse
      */
-    public function testNotEmptyPost()
+    public function testNotEmptyPost(): void
     {
         $parser = new MultipartFormDataParser();
 
@@ -103,14 +112,14 @@ class MultipartFormDataParserTest extends TestCase
         ];
 
         $bodyParams = $parser->parse('should not matter', 'multipart/form-data; boundary=---12345');
-        $this->assertEquals($_POST, $bodyParams);
-        $this->assertEquals([], $_FILES);
+        $this->assertSame($_POST, $bodyParams);
+        $this->assertSame([], $_FILES);
     }
 
     /**
      * @depends testParse
      */
-    public function testNotEmptyFiles()
+    public function testNotEmptyFiles(): void
     {
         $parser = new MultipartFormDataParser();
 
@@ -126,13 +135,13 @@ class MultipartFormDataParserTest extends TestCase
         $rawBody = "--{$boundary}\nContent-Disposition: form-data; name=\"title\"\r\ntest-title--{$boundary}--";
 
         $bodyParams = $parser->parse($rawBody, $contentType);
-        $this->assertEquals([], $bodyParams);
+        $this->assertSame([], $bodyParams);
     }
 
     /**
      * @depends testParse
      */
-    public function testUploadFileMaxCount()
+    public function testUploadFileMaxCount(): void
     {
         $parser = new MultipartFormDataParser();
         $parser->setUploadFileMaxCount(2);
@@ -151,7 +160,7 @@ class MultipartFormDataParserTest extends TestCase
     /**
      * @depends testParse
      */
-    public function testUploadFileMaxSize()
+    public function testUploadFileMaxSize(): void
     {
         $parser = new MultipartFormDataParser();
         $parser->setUploadFileMaxSize(20);
@@ -165,10 +174,11 @@ class MultipartFormDataParserTest extends TestCase
 
         $parser->parse($rawBody, $contentType);
         $this->assertCount(3, $_FILES);
-        $this->assertEquals(UPLOAD_ERR_INI_SIZE, $_FILES['thirdFile']['error']);
+        $this->assertSame(UPLOAD_ERR_INI_SIZE, $_FILES['thirdFile']['error']);
     }
 
-    public function testUploadFileAsArray(){
+    public function testUploadFileAsArray(): void
+    {
         $parser = new MultipartFormDataParser();
 
         $boundary = '---------------------------22472926011618';
@@ -179,9 +189,9 @@ class MultipartFormDataParserTest extends TestCase
         $parser->parse($rawBody, $contentType);
 
         $this->assertNotEmpty($_FILES['someFile']);
-        $this->assertEquals(UPLOAD_ERR_OK, $_FILES['someFile']['error'][0]);
-        $this->assertEquals('some-file.txt', $_FILES['someFile']['name'][0]);
-        $this->assertEquals('text/plain', $_FILES['someFile']['type'][0]);
+        $this->assertSame(UPLOAD_ERR_OK, $_FILES['someFile']['error'][0]);
+        $this->assertSame('some-file.txt', $_FILES['someFile']['name'][0]);
+        $this->assertSame('text/plain', $_FILES['someFile']['type'][0]);
         $this->assertStringEqualsFile($_FILES['someFile']['tmp_name'][0], 'some file content');
     }
 
@@ -189,7 +199,7 @@ class MultipartFormDataParserTest extends TestCase
      * @depends testNotEmptyPost
      * @depends testNotEmptyFiles
      */
-    public function testForce()
+    public function testForce(): void
     {
         $parser = new MultipartFormDataParser();
         $parser->force = true;
@@ -215,12 +225,12 @@ class MultipartFormDataParserTest extends TestCase
         $expectedBodyParams = [
             'title' => 'test-title',
         ];
-        $this->assertEquals($expectedBodyParams, $bodyParams);
+        $this->assertSame($expectedBodyParams, $bodyParams);
         $this->assertNotEmpty($_FILES['someFile']);
         $this->assertFalse(isset($_FILES['existingFile']));
     }
-    
-    public function testParseUnicodeInFileName()
+
+    public function testParseUnicodeInFileName(): void
     {
         $unicodeName = 'х.jpg'; // this is Russian "х"
 
@@ -228,7 +238,7 @@ class MultipartFormDataParserTest extends TestCase
 
         $boundary = '---------------------------703835582829016869506105';
         $contentType = 'multipart/form-data; boundary=' . $boundary;
-        $rawBody = "--{$boundary}\nContent-Disposition: form-data; name=\"someFile\"; filename=\"$unicodeName\";\nContent-Type: image/jpeg\r\n\r\nsome file content";
+        $rawBody = "--{$boundary}\nContent-Disposition: form-data; name=\"someFile\"; filename=\"{$unicodeName}\";\nContent-Type: image/jpeg\r\n\r\nsome file content";
         $rawBody .= "\r\n--{$boundary}--";
 
         $parser->parse($rawBody, $contentType);

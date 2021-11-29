@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -14,12 +17,15 @@ use yiiunit\TestCase;
 
 /**
  * @group base
+ *
+ * @internal
+ * @coversNothing
  */
-class ControllerTest extends TestCase
+final class ControllerTest extends TestCase
 {
     public static $actionRuns = [];
 
-    public function testRunAction()
+    public function testRunAction(): void
     {
         $this->mockApplication();
 
@@ -27,32 +33,33 @@ class ControllerTest extends TestCase
         $controller = new TestController('test-controller', Yii::$app);
         $this->assertNull($controller->action);
         $result = $controller->runAction('test1');
-        $this->assertEquals('test1', $result);
-        $this->assertEquals([
+        $this->assertSame('test1', $result);
+        $this->assertSame([
             'test-controller/test1',
         ], static::$actionRuns);
         $this->assertNotNull($controller->action);
-        $this->assertEquals('test1', $controller->action->id);
-        $this->assertEquals('test-controller/test1', $controller->action->uniqueId);
+        $this->assertSame('test1', $controller->action->id);
+        $this->assertSame('test-controller/test1', $controller->action->uniqueId);
 
         $result = $controller->runAction('test2');
-        $this->assertEquals('test2', $result);
-        $this->assertEquals([
+        $this->assertSame('test2', $result);
+        $this->assertSame([
             'test-controller/test1',
             'test-controller/test2',
         ], static::$actionRuns);
         $this->assertNotNull($controller->action);
-        $this->assertEquals('test1', $controller->action->id);
-        $this->assertEquals('test-controller/test1', $controller->action->uniqueId);
+        $this->assertSame('test1', $controller->action->id);
+        $this->assertSame('test-controller/test1', $controller->action->uniqueId);
     }
 
     /**
      * @dataProvider createInlineActionProvider
-     * @param string $controllerClass
-     * @param string $actionId
-     * @param string|null $expectedActionMethod
+     *
+     * @param string      $controllerClass
+     * @param string      $actionId
+     * @param null|string $expectedActionMethod
      */
-    public function testCreateInlineAction($controllerClass, $actionId, $expectedActionMethod)
+    public function testCreateInlineAction($controllerClass, $actionId, $expectedActionMethod): void
     {
         $this->mockApplication();
         /** @var Controller $controller */
@@ -62,7 +69,7 @@ class ControllerTest extends TestCase
         $action = $controller->createAction($actionId);
         $actionMethod = $action !== null ? $action->actionMethod : null;
 
-        $this->assertEquals($expectedActionMethod, $actionMethod);
+        $this->assertSame($expectedActionMethod, $actionMethod);
     }
 
     public function createInlineActionProvider()
@@ -83,7 +90,7 @@ class ControllerTest extends TestCase
      *
      * @dataProvider actionIdMethodProvider
      */
-    public function testActionIdMethod($input, $expected)
+    public function testActionIdMethod($input, $expected): void
     {
         $this->assertSame($expected, preg_match('/^(?:[a-z0-9_]+-)*[a-z0-9_]+$/', $input));
     }
@@ -107,51 +114,46 @@ class ControllerTest extends TestCase
     }
 }
 
-
 class TestController extends Controller
 {
     public function actionTest1()
     {
         ControllerTest::$actionRuns[] = $this->action->uniqueId;
+
         return 'test1';
     }
 
     public function actionTest2()
     {
         ControllerTest::$actionRuns[] = $this->action->uniqueId;
+
         return 'test2';
     }
 
-    public function actionTest3()
+    public function actionTest3(): void
     {
-
     }
 
-    public function actionTestTest()
+    public function actionTestTest(): void
     {
-
     }
 
-    public function actionTest_test()
+    public function actionTest_test(): void
     {
-
     }
 }
 
 class Test1Controller extends Controller
 {
-    public function actionTest_1()
+    public function actionTest_1(): void
     {
-
     }
 
-    public function actionTest_test()
+    public function actionTest_test(): void
     {
-
     }
 
-    public function actionTestTest_test_2()
+    public function actionTestTest_test_2(): void
     {
-
     }
 }
