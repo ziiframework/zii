@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,6 +14,7 @@ use yii\caching\ApcCache;
 
 /**
  * Class for testing APC cache backend.
+ *
  * @group apc
  * @group caching
  */
@@ -40,12 +44,12 @@ class ApcCacheTest extends CacheTestCase
         return $this->_cacheInstance;
     }
 
-    public function testExpire()
+    public function testExpire(): void
     {
         $this->markTestSkipped('APC keys are expiring only on the next request.');
     }
 
-    public function testExpireAdd()
+    public function testExpireAdd(): void
     {
         $this->markTestSkipped('APC keys are expiring only on the next request.');
     }

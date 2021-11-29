@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -17,6 +20,7 @@ use yiiunit\TestCase;
 
 /**
  * Unit test for [[\yii\console\controllers\MigrateController]].
+ *
  * @see MigrateController
  *
  * @group console
@@ -56,10 +60,11 @@ class MigrateControllerTest extends TestCase
     protected function getMigrationHistory()
     {
         $query = new Query();
+
         return $query->from('migration')->all();
     }
 
-    public function assertFileContent($expectedFile, $class, $table, $namespace = null)
+    public function assertFileContent($expectedFile, $class, $table, $namespace = null): void
     {
         if ($namespace) {
             $namespace = "namespace {$namespace};\n\n";
@@ -69,32 +74,28 @@ class MigrateControllerTest extends TestCase
         $this->assertEqualsWithoutLE($expected, $this->parseNameClassMigration($class));
     }
 
-    protected function assertCommandCreatedFile($expectedFile, $migrationName, $table, $params = [])
+    protected function assertCommandCreatedFile($expectedFile, $migrationName, $table, $params = []): void
     {
         $params[0] = $migrationName;
-        list($config, $namespace, $class) = $this->prepareMigrationNameData($migrationName);
+        [$config, $namespace, $class] = $this->prepareMigrationNameData($migrationName);
 
         $this->runMigrateControllerAction('create', $params, $config);
         $this->assertFileContent($expectedFile, $class, $table, $namespace);
     }
 
-    public function assertFileContentJunction($expectedFile, $class, $junctionTable, $firstTable, $secondTable, $namespace = null)
+    public function assertFileContentJunction($expectedFile, $class, $junctionTable, $firstTable, $secondTable, $namespace = null): void
     {
         if ($namespace) {
             $namespace = "namespace {$namespace};\n\n";
         }
         $expected = include Yii::getAlias("@yiiunit/data/console/migrate_create/$expectedFile.php");
-        $expected = str_replace(
-            ['{junctionTable}', '{firstTable}', '{secondTable}'],
-            [$junctionTable, $firstTable, $secondTable],
-            $expected
-        );
+        $expected = str_replace(['{junctionTable}', '{firstTable}', '{secondTable}'], [$junctionTable, $firstTable, $secondTable], $expected);
         $this->assertEqualsWithoutLE($expected, $this->parseNameClassMigration($class));
     }
 
-    protected function assertCommandCreatedJunctionFile($expectedFile, $migrationName, $junctionTable, $firstTable, $secondTable)
+    protected function assertCommandCreatedJunctionFile($expectedFile, $migrationName, $junctionTable, $firstTable, $secondTable): void
     {
-        list($config, $namespace, $class) = $this->prepareMigrationNameData($migrationName);
+        [$config, $namespace, $class] = $this->prepareMigrationNameData($migrationName);
 
         $this->runMigrateControllerAction('create', [$migrationName], $config);
         $this->assertSame(ExitCode::OK, $this->getExitCode());
@@ -107,6 +108,7 @@ class MigrateControllerTest extends TestCase
         $namespace = null;
 
         $lastSlashPosition = strrpos($migrationName, '\\');
+
         if ($lastSlashPosition !== false) {
             $config = [
                 'migrationPath' => null,
@@ -304,20 +306,15 @@ class MigrateControllerTest extends TestCase
      * @param string $expectedFile
      * @param string $migrationName
      * @param string $table
-     * @param array $params
+     * @param array  $params
      * @dataProvider generateMigrationDataProvider
      */
-    public function testGenerateMigration($expectedFile, $migrationName, $table, $params)
+    public function testGenerateMigration($expectedFile, $migrationName, $table, $params): void
     {
         $this->migrationNamespace = 'yiiunit\runtime\test_migrations';
 
         $this->assertCommandCreatedFile($expectedFile, $migrationName, $table, $params);
-        $this->assertCommandCreatedFile(
-            $expectedFile,
-            $this->migrationNamespace . '\\' . $migrationName,
-            $table,
-            $params
-        );
+        $this->assertCommandCreatedFile($expectedFile, $this->migrationNamespace . '\\' . $migrationName, $table, $params);
     }
 
     /**
@@ -351,27 +348,15 @@ class MigrateControllerTest extends TestCase
      * @param string $secondTable
      * @dataProvider generateJunctionMigrationDataProvider
      */
-    public function testGenerateJunctionMigration($migrationName, $junctionTable, $firstTable, $secondTable)
+    public function testGenerateJunctionMigration($migrationName, $junctionTable, $firstTable, $secondTable): void
     {
         $this->migrationNamespace = 'yiiunit\runtime\test_migrations';
 
-        $this->assertCommandCreatedJunctionFile(
-            'junction_test',
-            $migrationName,
-            $junctionTable,
-            $firstTable,
-            $secondTable
-        );
-        $this->assertCommandCreatedJunctionFile(
-            'junction_test',
-            $this->migrationNamespace . '\\' . $migrationName,
-            $junctionTable,
-            $firstTable,
-            $secondTable
-        );
+        $this->assertCommandCreatedJunctionFile('junction_test', $migrationName, $junctionTable, $firstTable, $secondTable);
+        $this->assertCommandCreatedJunctionFile('junction_test', $this->migrationNamespace . '\\' . $migrationName, $junctionTable, $firstTable, $secondTable);
     }
 
-    public function testUpdatingLongNamedMigration()
+    public function testUpdatingLongNamedMigration(): void
     {
         $this->createMigration(str_repeat('a', 180));
 
@@ -382,7 +367,7 @@ class MigrateControllerTest extends TestCase
         $this->assertStringContainsString('is too long. Its not possible to apply this migration.', $result);
     }
 
-    public function testNamedMigrationWithCustomLimit()
+    public function testNamedMigrationWithCustomLimit(): void
     {
         Yii::$app->db->createCommand()->createTable('migration', [
             'version' => 'varchar(255) NOT NULL PRIMARY KEY', // varchar(255) is longer than the default of 180
@@ -398,11 +383,9 @@ class MigrateControllerTest extends TestCase
         $this->assertStringContainsString('Migrated up successfully.', $result);
     }
 
-    public function testCreateLongNamedMigration()
+    public function testCreateLongNamedMigration(): void
     {
-        $this->setOutputCallback(function ($output) {
-            return null;
-        });
+        $this->setOutputCallback(static fn ($output) => null);
 
         $migrationName = str_repeat('a', 180);
 
@@ -416,11 +399,14 @@ class MigrateControllerTest extends TestCase
 
     /**
      * Test the migrate:fresh command.
+     *
      * @dataProvider refreshMigrationDataProvider
+     *
      * @param $db
+     *
      * @throws \yii\db\Exception
      */
-    public function testRefreshMigration($db)
+    public function testRefreshMigration($db): void
     {
         if ($db !== 'default') {
             $this->switchDbConnection($db);
@@ -455,7 +441,7 @@ class MigrateControllerTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/12980
      */
-    public function testGetMigrationHistory()
+    public function testGetMigrationHistory(): void
     {
         $controllerConfig = [
             'migrationPath' => null,
@@ -467,44 +453,34 @@ class MigrateControllerTest extends TestCase
         $controller->db = Yii::$app->db;
 
         Yii::$app->db->createCommand()
-            ->batchInsert(
-                'migration',
-                ['version', 'apply_time'],
-                [
+            ->batchInsert('migration', ['version', 'apply_time'], [
                     ['app\migrations\M140506102106One', 10],
                     ['app\migrations\M160909083544Two', 10],
                     ['app\modules\foo\migrations\M161018124749Three', 10],
                     ['app\migrations\M160930135248Four', 20],
                     ['app\modules\foo\migrations\M161025123028Five', 20],
                     ['app\migrations\M161110133341Six', 20],
-                ]
-            )
+                ])
             ->execute();
 
         $rows = $this->invokeMethod($controller, 'getMigrationHistory', [10]);
 
-        $this->assertSame(
-            [
+        $this->assertSame([
                 'app\migrations\M161110133341Six',
                 'app\modules\foo\migrations\M161025123028Five',
                 'app\migrations\M160930135248Four',
                 'app\modules\foo\migrations\M161018124749Three',
                 'app\migrations\M160909083544Two',
                 'app\migrations\M140506102106One',
-            ],
-            array_keys($rows)
-        );
+            ], array_keys($rows));
 
         $rows = $this->invokeMethod($controller, 'getMigrationHistory', [4]);
 
-        $this->assertSame(
-            [
+        $this->assertSame([
                 'app\migrations\M161110133341Six',
                 'app\modules\foo\migrations\M161025123028Five',
                 'app\migrations\M160930135248Four',
                 'app\modules\foo\migrations\M161018124749Three',
-            ],
-            array_keys($rows)
-        );
+            ], array_keys($rows));
     }
 }

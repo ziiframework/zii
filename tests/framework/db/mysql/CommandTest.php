@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -17,7 +20,7 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
 
     protected $upsertTestCharCast = 'CONVERT([[address]], CHAR)';
 
-    public function testAddDropCheck()
+    public function testAddDropCheck(): void
     {
         $this->markTestSkipped('MySQL does not support adding/dropping check constraints.');
     }

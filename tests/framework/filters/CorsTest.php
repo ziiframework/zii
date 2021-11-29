@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -19,8 +22,7 @@ use yiiunit\TestCase;
  */
 class CorsTest extends TestCase
 {
-
-    public function testPreflight()
+    public function testPreflight(): void
     {
         $this->mockWebApplication();
         $controller = new Controller('id', Yii::$app);
@@ -43,7 +45,7 @@ class CorsTest extends TestCase
         $this->assertTrue($cors->beforeAction($action));
     }
 
-    public function testWildcardOrigin()
+    public function testWildcardOrigin(): void
     {
         $this->mockWebApplication();
         $controller = new Controller('id', Yii::$app);
@@ -52,7 +54,7 @@ class CorsTest extends TestCase
 
         $cors = new Cors([
             'cors' => [
-                'Origin' => ['*',],
+                'Origin' => ['*'],
                 'Access-Control-Allow-Credentials' => false,
             ],
         ]);
@@ -64,15 +66,16 @@ class CorsTest extends TestCase
         $this->assertEquals('*', $cors->response->getHeaders()->get('access-control-allow-origin'));
     }
 
-    public function testAccessControlAllowHeadersPreflight() {
+    public function testAccessControlAllowHeadersPreflight(): void
+    {
         $this->mockWebApplication();
         $controller = new Controller('id', Yii::$app);
         $action = new Action('test', $controller);
         $request = new Request();
         $cors = new Cors([
             'cors' => [
-                'Origin' => ['*',],
-                'Access-Control-Allow-Headers' => ['authorization','X-Requested-With','content-type', 'custom_header']
+                'Origin' => ['*'],
+                'Access-Control-Allow-Headers' => ['authorization', 'X-Requested-With', 'content-type', 'custom_header'],
             ],
         ]);
         $cors->request = $request;
@@ -82,6 +85,4 @@ class CorsTest extends TestCase
         $this->assertTrue($cors->beforeAction($action));
         $this->assertEquals('authorization, X-Requested-With, content-type, custom_header', $cors->response->getHeaders()->get('Access-Control-Allow-Headers'));
     }
-
-
 }

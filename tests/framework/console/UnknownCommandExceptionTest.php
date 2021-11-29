@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -58,16 +61,17 @@ class UnknownCommandExceptionTest extends TestCase
 
     /**
      * @dataProvider suggestedCommandsProvider
+     *
      * @param string $command
-     * @param array $expectedSuggestion
+     * @param array  $expectedSuggestion
      */
-    public function testSuggestCommand($command, $expectedSuggestion)
+    public function testSuggestCommand($command, $expectedSuggestion): void
     {
         $exception = new UnknownCommandException($command, Yii::$app);
         $this->assertEquals($expectedSuggestion, $exception->getSuggestedAlternatives());
     }
 
-    public function testNameAndConstructor()
+    public function testNameAndConstructor(): void
     {
         $exception = new UnknownCommandException('test', Yii::$app);
         $this->assertEquals('Unknown command', $exception->getName());

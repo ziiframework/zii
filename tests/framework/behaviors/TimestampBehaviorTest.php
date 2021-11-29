@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -17,6 +20,7 @@ use yiiunit\TestCase;
 
 /**
  * Unit test for [[\yii\behaviors\TimestampBehavior]].
+ *
  * @see TimestampBehavior
  *
  * @group behaviors
@@ -71,7 +75,7 @@ class TimestampBehaviorTest extends TestCase
 
     // Tests :
 
-    public function testNewRecord()
+    public function testNewRecord(): void
     {
         $currentTime = time();
 
@@ -88,7 +92,7 @@ class TimestampBehaviorTest extends TestCase
     /**
      * @depends testNewRecord
      */
-    public function testUpdateRecord()
+    public function testUpdateRecord(): void
     {
         $currentTime = time();
 
@@ -111,7 +115,7 @@ class TimestampBehaviorTest extends TestCase
     /**
      * @depends testNewRecord
      */
-    public function testUpdateCleanRecord()
+    public function testUpdateCleanRecord(): void
     {
         ActiveRecordTimestamp::$behaviors = [
             TimestampBehavior::className(),
@@ -119,12 +123,9 @@ class TimestampBehaviorTest extends TestCase
         $model = new ActiveRecordTimestamp();
         $model->save(false);
 
-        $model->on(
-            ActiveRecordTimestamp::EVENT_AFTER_UPDATE,
-            function ($event) {
+        $model->on(ActiveRecordTimestamp::EVENT_AFTER_UPDATE, function ($event): void {
                 $this->assertEmpty($event->changedAttributes);
-            }
-        );
+            });
 
         $model->save(false);
     }
@@ -132,7 +133,7 @@ class TimestampBehaviorTest extends TestCase
     public function expressionProvider()
     {
         return [
-            [function () { return '2015-01-01'; }, '2015-01-01'],
+            [static fn () => '2015-01-01', '2015-01-01'],
             [new Expression("strftime('%Y')"), date('Y')],
             ['2015-10-20', '2015-10-20'],
             [time(), time()],
@@ -142,10 +143,11 @@ class TimestampBehaviorTest extends TestCase
 
     /**
      * @dataProvider expressionProvider
+     *
      * @param mixed $expression
      * @param mixed $expected
      */
-    public function testNewRecordExpression($expression, $expected)
+    public function testNewRecordExpression($expression, $expected): void
     {
         ActiveRecordTimestamp::$tableName = 'test_auto_timestamp_string';
         ActiveRecordTimestamp::$behaviors = [
@@ -156,6 +158,7 @@ class TimestampBehaviorTest extends TestCase
         ];
         $model = new ActiveRecordTimestamp();
         $model->save(false);
+
         if ($expression instanceof ExpressionInterface) {
             $this->assertInstanceOf('yii\db\ExpressionInterface', $model->created_at);
             $this->assertInstanceOf('yii\db\ExpressionInterface', $model->updated_at);
@@ -173,7 +176,7 @@ class TimestampBehaviorTest extends TestCase
     /**
      * @depends testNewRecord
      */
-    public function testUpdateRecordExpression()
+    public function testUpdateRecordExpression(): void
     {
         ActiveRecordTimestamp::$tableName = 'test_auto_timestamp_string';
         ActiveRecordTimestamp::$behaviors = [
@@ -197,7 +200,7 @@ class TimestampBehaviorTest extends TestCase
         $this->assertEquals(date('Y'), $model->updated_at);
     }
 
-    public function testTouchingNewRecordGeneratesException()
+    public function testTouchingNewRecordGeneratesException(): void
     {
         ActiveRecordTimestamp::$behaviors = [
             'timestamp' => [
@@ -212,7 +215,7 @@ class TimestampBehaviorTest extends TestCase
         $model->touch('created_at');
     }
 
-    public function testTouchingNotNewRecord()
+    public function testTouchingNotNewRecord(): void
     {
         ActiveRecordTimestamp::$behaviors = [
             'timestamp' => [

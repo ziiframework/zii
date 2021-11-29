@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,6 +14,7 @@ use yii\caching\MemCache;
 
 /**
  * Class for testing memcached cache backend.
+ *
  * @group memcached
  * @group caching
  */
@@ -39,7 +43,7 @@ class MemCachedTest extends CacheTestCase
         return $this->_cacheInstance;
     }
 
-    public function testExpire()
+    public function testExpire(): void
     {
         if (getenv('GITHUB_ACTIONS') == 'true') {
             $this->markTestSkipped('Can not reliably test memcached expiry on GitHub actions.');
@@ -47,7 +51,7 @@ class MemCachedTest extends CacheTestCase
         parent::testExpire();
     }
 
-    public function testExpireAdd()
+    public function testExpireAdd(): void
     {
         if (getenv('GITHUB_ACTIONS') == 'true') {
             $this->markTestSkipped('Can not reliably test memcached expiry on GitHub actions.');

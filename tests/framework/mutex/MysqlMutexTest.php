@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +10,7 @@
 
 namespace yiiunit\framework\mutex;
 
+use Yii;
 use yii\mutex\MysqlMutex;
 use yiiunit\framework\db\DatabaseTestCase;
 
@@ -25,11 +29,12 @@ class MysqlMutexTest extends DatabaseTestCase
 
     /**
      * @return MysqlMutex
+     *
      * @throws \yii\base\InvalidConfigException
      */
     protected function createMutex()
     {
-        return \Yii::createObject([
+        return Yii::createObject([
             'class' => MysqlMutex::className(),
             'db' => $this->getConnection(),
         ]);
