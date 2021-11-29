@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,7 +7,6 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\log;
 
-use function dirname;
 use Yii;
 use yii\helpers\FileHelper;
 use yii\log\Dispatcher;
@@ -20,9 +16,6 @@ use yiiunit\TestCase;
 
 /**
  * @group log
- *
- * @internal
- * @coversNothing
  */
 class FileTargetTest extends TestCase
 {
@@ -41,26 +34,27 @@ class FileTargetTest extends TestCase
     }
 
     /**
-     * Tests that log directory isn't created during init process.
-     *
+     * Tests that log directory isn't created during init process
      * @see https://github.com/yiisoft/yii2/issues/15662
      */
-    public function testInit(): void
+    public function testInit()
     {
         $logFile = Yii::getAlias('@yiiunit/runtime/log/filetargettest.log');
         FileHelper::removeDirectory(dirname($logFile));
         new FileTarget([
             'logFile' => Yii::getAlias('@yiiunit/runtime/log/filetargettest.log'),
         ]);
-        $this->assertFileDoesNotExist(dirname($logFile), 'Log directory should not be created during init process');
+        $this->assertFileDoesNotExist(
+            dirname($logFile),
+            'Log directory should not be created during init process'
+        );
     }
 
     /**
      * @dataProvider booleanDataProvider
-     *
      * @param bool $rotateByCopy
      */
-    public function testRotate($rotateByCopy): void
+    public function testRotate($rotateByCopy)
     {
         $logFile = Yii::getAlias('@yiiunit/runtime/log/filetargettest.log');
         FileHelper::removeDirectory(dirname($logFile));
@@ -96,7 +90,7 @@ class FileTargetTest extends TestCase
         $this->assertFileDoesNotExist($logFile . '.4');
 
         // exceed max size
-        for ($i = 0; $i < 1024; ++$i) {
+        for ($i = 0; $i < 1024; $i++) {
             $logger->log(str_repeat('x', 1024), Logger::LEVEL_WARNING);
         }
         $logger->flush(true);
@@ -116,7 +110,7 @@ class FileTargetTest extends TestCase
 
         // second rotate
 
-        for ($i = 0; $i < 1024; ++$i) {
+        for ($i = 0; $i < 1024; $i++) {
             $logger->log(str_repeat('x', 1024), Logger::LEVEL_WARNING);
         }
         $logger->flush(true);

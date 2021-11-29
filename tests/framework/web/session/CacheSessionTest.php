@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -16,9 +13,6 @@ use yii\web\CacheSession;
 
 /**
  * @group web
- *
- * @internal
- * @coversNothing
  */
 class CacheSessionTest extends \yiiunit\TestCase
 {
@@ -31,17 +25,17 @@ class CacheSessionTest extends \yiiunit\TestCase
         Yii::$app->set('cache', new FileCache());
     }
 
-    public function testCacheSession(): void
+    public function testCacheSession()
     {
         $session = new CacheSession();
 
         $session->writeSession('test', 'sessionData');
-        $this->assertSame('sessionData', $session->readSession('test'));
+        $this->assertEquals('sessionData', $session->readSession('test'));
         $session->destroySession('test');
-        $this->assertSame('', $session->readSession('test'));
+        $this->assertEquals('', $session->readSession('test'));
     }
 
-    public function testInvalidCache(): void
+    public function testInvalidCache()
     {
         $this->expectException('\Exception');
         new CacheSession(['cache' => 'invalid']);
@@ -50,22 +44,22 @@ class CacheSessionTest extends \yiiunit\TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/13537
      */
-    public function testNotWrittenSessionDestroying(): void
+    public function testNotWrittenSessionDestroying()
     {
         $session = new CacheSession();
 
         $session->set('foo', 'bar');
-        $this->assertSame('bar', $session->get('foo'));
+        $this->assertEquals('bar', $session->get('foo'));
 
         $this->assertTrue($session->destroySession($session->getId()));
     }
 
-    public function testInitUseStrictMode(): void
+    public function testInitUseStrictMode()
     {
         $this->initStrictModeTest(CacheSession::className());
     }
 
-    public function testUseStrictMode(): void
+    public function testUseStrictMode()
     {
         $this->useStrictModeTest(CacheSession::className());
     }

@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -19,13 +16,25 @@ use yiiunit\TestCase;
 
 /**
  * @group filters
- *
- * @internal
- * @coversNothing
  */
 class AjaxFilterTest extends TestCase
 {
-    public function testFilter(): void
+    /**
+     * @param bool $isAjax
+     * @return Request
+     */
+    protected function mockRequest($isAjax)
+    {
+        /** @var Request $request */
+        $request = $this->getMockBuilder('\yii\web\Request')
+            ->setMethods(['getIsAjax'])
+            ->getMock();
+        $request->method('getIsAjax')->willReturn($isAjax);
+
+        return $request;
+    }
+
+    public function testFilter()
     {
         $this->mockWebApplication();
         $controller = new Controller('id', Yii::$app);
@@ -38,22 +47,5 @@ class AjaxFilterTest extends TestCase
         $filter->request = $this->mockRequest(false);
         $this->expectException('yii\web\BadRequestHttpException');
         $filter->beforeAction($action);
-    }
-
-    /**
-     * @param bool $isAjax
-     *
-     * @return Request
-     */
-    protected function mockRequest($isAjax)
-    {
-        /** @var Request $request */
-        $request = $this->getMockBuilder('\yii\web\Request')
-            ->setMethods(['getIsAjax'])
-            ->getMock()
-        ;
-        $request->method('getIsAjax')->willReturn($isAjax);
-
-        return $request;
     }
 }

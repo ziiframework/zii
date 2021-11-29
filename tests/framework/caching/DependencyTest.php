@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,7 +7,6 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\caching;
 
-use function strlen;
 use yii\caching\Cache;
 use yii\caching\Dependency;
 use yiiunit\data\cache\MockDependency;
@@ -18,41 +14,35 @@ use yiiunit\TestCase;
 
 /**
  * Dependency (abstract) tests.
- *
  * @group caching
- *
  * @author Boudewijn Vahrmeijer <vahrmeijer@gmail.com>
- *
  * @since 2.0.11
- *
- * @internal
- * @coversNothing
  */
 class DependencyTest extends TestCase
 {
-    public function testResetReusableData(): void
+    public function testResetReusableData()
     {
         $value = ['dummy'];
         $dependency = new MockDependency();
         $this->setInaccessibleProperty($dependency, '_reusableData', $value, false);
-        $this->assertSame($value, $this->getInaccessibleProperty($dependency, '_reusableData'));
+        $this->assertEquals($value, $this->getInaccessibleProperty($dependency, '_reusableData'));
 
         $dependency->resetReusableData();
 
-        $this->assertSame([], $this->getInaccessibleProperty($dependency, '_reusableData'));
+        $this->assertEquals([], $this->getInaccessibleProperty($dependency, '_reusableData'));
     }
 
-    public function testGenerateReusableHash(): void
+    public function testGenerateReusableHash()
     {
         $dependency = $this->getMockForAbstractClass(Dependency::className());
         $dependency->data = 'dummy';
 
         $result = $this->invokeMethod($dependency, 'generateReusableHash');
-        $this->assertSame(5, strlen($dependency->data));
-        $this->assertSame(40, strlen($result));
+        $this->assertEquals(5, strlen($dependency->data));
+        $this->assertEquals(40, strlen($result));
     }
 
-    public function testIsChanged(): void
+    public function testIsChanged()
     {
         $dependency = $this->getMockForAbstractClass(Dependency::className());
         $cache = $this->getMockForAbstractClass(Cache::className());

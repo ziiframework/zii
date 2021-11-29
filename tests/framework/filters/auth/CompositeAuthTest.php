@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -82,9 +79,6 @@ class TestController extends Controller
 
 /**
  * @group filters
- *
- * @internal
- * @coversNothing
  */
 class CompositeAuthTest extends \yiiunit\TestCase
 {
@@ -109,42 +103,41 @@ class CompositeAuthTest extends \yiiunit\TestCase
         $this->mockWebApplication($appConfig);
     }
 
-    public function testCallingRunWithCompleteRoute(): void
+    public function testCallingRunWithCompleteRoute()
     {
         /** @var TestController $controller */
         $controller = Yii::$app->createController('test')[0];
-        $this->assertSame('success', $controller->run('test/d'));
+        $this->assertEquals('success', $controller->run('test/d'));
     }
 
     /**
      * @see https://github.com/yiisoft/yii2/issues/7409
      */
-    public function testRunAction(): void
+    public function testRunAction()
     {
         /** @var TestController $controller */
         $controller = Yii::$app->createController('test')[0];
-        $this->assertSame('success', $controller->run('b'));
+        $this->assertEquals('success', $controller->run('b'));
     }
 
-    public function testRunButWithActionIdOnly(): void
+    public function testRunButWithActionIdOnly()
     {
         /** @var TestController $controller */
         $controller = Yii::$app->createController('test')[0];
-        $this->assertSame('success', $controller->run('c'));
+        $this->assertEquals('success', $controller->run('c'));
     }
 
-    public function testCompositeAuth(): void
+    public function testCompositeAuth()
     {
-        Yii::$app->request->headers->set('Authorization', base64_encode('foo:bar'));
+        Yii::$app->request->headers->set('Authorization', base64_encode("foo:bar"));
         /** @var TestAuthController $controller */
         $controller = Yii::$app->createController('test')[0];
         $controller->authMethods = [
             HttpBearerAuth::className(),
             TestAuth::className(),
         ];
-
         try {
-            $this->assertSame('success', $controller->run('b'));
+            $this->assertEquals('success', $controller->run('b'));
         } catch (UnauthorizedHttpException $e) {
         }
     }

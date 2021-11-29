@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -19,14 +16,9 @@ use yiiunit\TestCase;
 
 /**
  * @group filters
- *
- * @internal
- * @coversNothing
  */
 class HostControlTest extends TestCase
 {
-    public $denyCallBackCalled = false;
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -38,7 +30,7 @@ class HostControlTest extends TestCase
     }
 
     /**
-     * @return array test data
+     * @return array test data.
      */
     public function hostInfoValidationDataProvider()
     {
@@ -74,12 +66,16 @@ class HostControlTest extends TestCase
                 false,
             ],
             [
-                static fn () => ['example.com'],
+                function () {
+                    return ['example.com'];
+                },
                 'example.com',
                 true,
             ],
             [
-                static fn () => ['example.com'],
+                function () {
+                    return ['example.com'];
+                },
                 'fake.com',
                 false,
             ],
@@ -89,11 +85,11 @@ class HostControlTest extends TestCase
     /**
      * @dataProvider hostInfoValidationDataProvider
      *
-     * @param mixed  $allowedHosts
+     * @param mixed $allowedHosts
      * @param string $host
-     * @param bool   $allowed
+     * @param bool $allowed
      */
-    public function testFilter($allowedHosts, $host, $allowed): void
+    public function testFilter($allowedHosts, $host, $allowed)
     {
         $_SERVER['HTTP_HOST'] = $host;
 
@@ -120,16 +116,18 @@ class HostControlTest extends TestCase
             ob_get_clean();
 
             $this->assertTrue($isExit);
-            $this->assertSame(404, Yii::$app->response->getStatusCode());
+            $this->assertEquals(404, Yii::$app->response->getStatusCode());
         }
     }
 
-    public function testDenyCallback(): void
+    public $denyCallBackCalled = false;
+
+    public function testDenyCallback()
     {
         $filter = new HostControl();
         $filter->allowedHosts = ['example.com'];
         $this->denyCallBackCalled = false;
-        $filter->denyCallback = function (): void {
+        $filter->denyCallback = function () {
             $this->denyCallBackCalled = true;
         };
 
@@ -139,12 +137,12 @@ class HostControlTest extends TestCase
         $this->assertTrue($this->denyCallBackCalled, 'denyCallback should have been called.');
     }
 
-    public function testDefaultHost(): void
+    public function testDefaultHost()
     {
         $filter = new HostControl();
         $filter->allowedHosts = ['example.com'];
         $filter->fallbackHostInfo = 'http://yiiframework.com';
-        $filter->denyCallback = static function (): void {};
+        $filter->denyCallback = function () {};
 
         $controller = new Controller('test', Yii::$app);
         $action = new Action('test', $controller);
@@ -153,7 +151,7 @@ class HostControlTest extends TestCase
         $this->assertSame('yiiframework.com', Yii::$app->getRequest()->getHostName());
     }
 
-    public function testErrorHandlerWithDefaultHost(): void
+    public function testErrorHandlerWithDefaultHost()
     {
         $this->expectException('yii\web\NotFoundHttpException');
         $this->expectExceptionMessage('Page not found.');

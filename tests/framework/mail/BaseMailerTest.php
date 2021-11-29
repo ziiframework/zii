@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,8 +7,6 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\mail;
 
-use const DIRECTORY_SEPARATOR;
-use function get_class;
 use Yii;
 use yii\base\View;
 use yii\helpers\FileHelper;
@@ -21,13 +16,10 @@ use yiiunit\TestCase;
 
 /**
  * @group mail
- *
- * @internal
- * @coversNothing
  */
 class BaseMailerTest extends TestCase
 {
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->mockApplication([
             'components' => [
@@ -35,30 +27,55 @@ class BaseMailerTest extends TestCase
             ],
         ]);
         $filePath = $this->getTestFilePath();
-
         if (!file_exists($filePath)) {
             FileHelper::createDirectory($filePath);
         }
     }
 
-    protected function tearDown(): void
+    public function tearDown(): void
     {
         $filePath = $this->getTestFilePath();
-
         if (file_exists($filePath)) {
             FileHelper::removeDirectory($filePath);
         }
     }
 
+    /**
+     * @return string test file path.
+     */
+    protected function getTestFilePath()
+    {
+        return Yii::getAlias('@yiiunit/runtime') . DIRECTORY_SEPARATOR . basename(str_replace('\\', DIRECTORY_SEPARATOR, get_class($this))) . '_' . getmypid();
+    }
+
+    /**
+     * @return Mailer test email component instance.
+     */
+    protected function createTestMailComponent()
+    {
+        $component = new Mailer();
+        $component->viewPath = $this->getTestFilePath();
+
+        return $component;
+    }
+
+    /**
+     * @return Mailer mailer instance
+     */
+    protected function getTestMailComponent()
+    {
+        return Yii::$app->get('mailer');
+    }
+
     // Tests :
 
-    public function testSetupView(): void
+    public function testSetupView()
     {
         $mailer = new Mailer();
 
         $view = new View();
         $mailer->setView($view);
-        $this->assertSame($view, $mailer->getView(), 'Unable to setup view!');
+        $this->assertEquals($view, $mailer->getView(), 'Unable to setup view!');
 
         $viewConfig = [
             'params' => [
@@ -69,31 +86,31 @@ class BaseMailerTest extends TestCase
         $mailer->setView($viewConfig);
         $view = $mailer->getView();
         $this->assertIsObject($view, 'Unable to setup view via config!');
-        $this->assertSame($viewConfig['params'], $view->params, 'Unable to configure view via config array!');
+        $this->assertEquals($viewConfig['params'], $view->params, 'Unable to configure view via config array!');
     }
 
     /**
      * @depends testSetupView
      */
-    public function testGetDefaultView(): void
+    public function testGetDefaultView()
     {
         $mailer = new Mailer();
         $view = $mailer->getView();
         $this->assertIsObject($view, 'Unable to get default view!');
     }
 
-    public function testCreateMessage(): void
+    public function testCreateMessage()
     {
         $mailer = new Mailer();
         $message = $mailer->compose();
         $this->assertIsObject($message, 'Unable to create message instance!');
-        $this->assertSame($mailer->messageClass, get_class($message), 'Invalid message class!');
+        $this->assertEquals($mailer->messageClass, get_class($message), 'Invalid message class!');
     }
 
     /**
      * @depends testCreateMessage
      */
-    public function testDefaultMessageConfig(): void
+    public function testDefaultMessageConfig()
     {
         $mailer = new Mailer();
 
@@ -117,18 +134,17 @@ class BaseMailerTest extends TestCase
         $message = $mailer->compose();
 
         foreach ($notPropertyConfig as $name => $value) {
-            $this->assertSame($value, $message->{'_' . $name});
+            $this->assertEquals($value, $message->{'_' . $name});
         }
-
         foreach ($propertyConfig as $name => $value) {
-            $this->assertSame($value, $message->{$name});
+            $this->assertEquals($value, $message->$name);
         }
     }
 
     /**
      * @depends testGetDefaultView
      */
-    public function testRender(): void
+    public function testRender()
     {
         $mailer = $this->getTestMailComponent();
 
@@ -141,13 +157,13 @@ class BaseMailerTest extends TestCase
             'testParam' => 'test output',
         ];
         $renderResult = $mailer->render($viewName, $params);
-        $this->assertSame($params['testParam'], $renderResult);
+        $this->assertEquals($params['testParam'], $renderResult);
     }
 
     /**
      * @depends testRender
      */
-    public function testRenderLayout(): void
+    public function testRenderLayout()
     {
         $mailer = $this->getTestMailComponent();
 
@@ -164,14 +180,14 @@ class BaseMailerTest extends TestCase
         file_put_contents($layoutFileName, $layoutFileContent);
 
         $renderResult = $mailer->render($viewName, [], $layoutName);
-        $this->assertSame('Begin Layout ' . $viewFileContent . ' End Layout', $renderResult);
+        $this->assertEquals('Begin Layout ' . $viewFileContent . ' End Layout', $renderResult);
     }
 
     /**
      * @depends testCreateMessage
      * @depends testRender
      */
-    public function testCompose(): void
+    public function testCompose()
     {
         $mailer = $this->getTestMailComponent();
         $mailer->htmlLayout = false;
@@ -191,12 +207,12 @@ class BaseMailerTest extends TestCase
             'html' => $htmlViewName,
             'text' => $textViewName,
         ]);
-        $this->assertSame($htmlViewFileContent, $message->_htmlBody, 'Unable to render html!');
-        $this->assertSame($textViewFileContent, $message->_textBody, 'Unable to render text!');
+        $this->assertEquals($htmlViewFileContent, $message->_htmlBody, 'Unable to render html!');
+        $this->assertEquals($textViewFileContent, $message->_textBody, 'Unable to render text!');
 
         $message = $mailer->compose($htmlViewName);
-        $this->assertSame($htmlViewFileContent, $message->_htmlBody, 'Unable to render html by direct view!');
-        $this->assertSame(strip_tags($htmlViewFileContent), $message->_textBody, 'Unable to render text by direct view!');
+        $this->assertEquals($htmlViewFileContent, $message->_htmlBody, 'Unable to render html by direct view!');
+        $this->assertEquals(strip_tags($htmlViewFileContent), $message->_textBody, 'Unable to render text by direct view!');
     }
 
     public function htmlAndPlainProvider()
@@ -223,7 +239,7 @@ class BaseMailerTest extends TestCase
 </body>
 </html>
 HTML
-                ,                <<<'TEXT'
+,                <<<'TEXT'
 First paragraph
 second line
 
@@ -237,12 +253,11 @@ TEXT
 
     /**
      * @dataProvider htmlAndPlainProvider
-     *
-     * @param int    $i
+     * @param int $i
      * @param string $htmlViewFileContent
      * @param string $expectedTextRendering
      */
-    public function testComposePlainTextFallback($i, $htmlViewFileContent, $expectedTextRendering): void
+    public function testComposePlainTextFallback($i, $htmlViewFileContent, $expectedTextRendering)
     {
         $mailer = $this->getTestMailComponent();
         $mailer->htmlLayout = false;
@@ -259,65 +274,38 @@ TEXT
         $this->assertEqualsWithoutLE($expectedTextRendering, $message->_textBody, 'Unable to render text!');
     }
 
-    public function testUseFileTransport(): void
+    public function testUseFileTransport()
     {
         $mailer = new Mailer();
         $this->assertFalse($mailer->useFileTransport);
-        $this->assertSame('@runtime/mail', $mailer->fileTransportPath);
+        $this->assertEquals('@runtime/mail', $mailer->fileTransportPath);
 
         $mailer->fileTransportPath = '@yiiunit/runtime/mail';
         $mailer->useFileTransport = true;
-        $mailer->fileTransportCallback = static fn () => 'message.txt';
+        $mailer->fileTransportCallback = function () {
+            return 'message.txt';
+        };
         $message = $mailer->compose()
             ->setTo('to@example.com')
             ->setFrom('from@example.com')
             ->setSubject('test subject')
-            ->setTextBody('text body' . microtime(true))
-        ;
+            ->setTextBody('text body' . microtime(true));
         $this->assertTrue($mailer->send($message));
         $file = Yii::getAlias($mailer->fileTransportPath) . '/message.txt';
         $this->assertTrue(is_file($file));
         $this->assertStringEqualsFile($file, $message->toString());
     }
 
-    public function testBeforeSendEvent(): void
+    public function testBeforeSendEvent()
     {
         $message = new Message();
 
         $mailerMock = $this->getMockBuilder('yiiunit\framework\mail\Mailer')
             ->setMethods(['beforeSend', 'afterSend'])
-            ->getMock()
-        ;
-        $mailerMock->expects($this->once())->method('beforeSend')->with($message)->willReturn(true);
+            ->getMock();
+        $mailerMock->expects($this->once())->method('beforeSend')->with($message)->will($this->returnValue(true));
         $mailerMock->expects($this->once())->method('afterSend')->with($message, true);
         $mailerMock->send($message);
-    }
-
-    /**
-     * @return string test file path
-     */
-    protected function getTestFilePath()
-    {
-        return Yii::getAlias('@yiiunit/runtime') . DIRECTORY_SEPARATOR . basename(str_replace('\\', DIRECTORY_SEPARATOR, static::class)) . '_' . getmypid();
-    }
-
-    /**
-     * @return Mailer test email component instance
-     */
-    protected function createTestMailComponent()
-    {
-        $component = new Mailer();
-        $component->viewPath = $this->getTestFilePath();
-
-        return $component;
-    }
-
-    /**
-     * @return Mailer mailer instance
-     */
-    protected function getTestMailComponent()
-    {
-        return Yii::$app->get('mailer');
     }
 }
 
@@ -452,19 +440,19 @@ class Message extends BaseMessage
         return $this;
     }
 
-    public function attachContent($content, array $options = []): void
+    public function attachContent($content, array $options = [])
     {
     }
 
-    public function attach($fileName, array $options = []): void
+    public function attach($fileName, array $options = [])
     {
     }
 
-    public function embed($fileName, array $options = []): void
+    public function embed($fileName, array $options = [])
     {
     }
 
-    public function embedContent($content, array $options = []): void
+    public function embedContent($content, array $options = [])
     {
     }
 
@@ -474,7 +462,6 @@ class Message extends BaseMessage
         $this->mailer = null;
         $s = var_export($this, true);
         $this->mailer = $mailer;
-
         return $s;
     }
 }

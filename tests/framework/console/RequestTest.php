@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -13,9 +10,6 @@ use yiiunit\TestCase;
 
 /**
  * @group console
- *
- * @internal
- * @coversNothing
  */
 class RequestTest extends TestCase
 {
@@ -186,12 +180,11 @@ class RequestTest extends TestCase
 
     /**
      * @dataProvider provider
-     *
-     * @param array      $params
-     * @param array      $expected
-     * @param null|array $expectedException
+     * @param array $params
+     * @param array $expected
+     * @param array|null $expectedException
      */
-    public function testResolve($params, $expected, $expectedException = null): void
+    public function testResolve($params, $expected, $expectedException = null)
     {
         if (isset($expectedException)) {
             $this->expectException($expectedException[0]);
@@ -201,8 +194,8 @@ class RequestTest extends TestCase
         $request = new Request();
 
         $request->setParams($params);
-        [$route, $params] = $request->resolve();
-        $this->assertSame($expected['route'], $route);
-        $this->assertSame($expected['params'], $params);
+        list($route, $params) = $request->resolve();
+        $this->assertEquals($expected['route'], $route);
+        $this->assertEquals($expected['params'], $params);
     }
 }

@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -14,18 +11,14 @@ use yii\data\ActiveDataProvider;
 use yii\db\Query;
 use yiiunit\TestCase;
 
-/**
- * @internal
- * @coversNothing
- */
 class ActiveDataProviderCloningTest extends TestCase
 {
-    public function testClone(): void
+    public function testClone()
     {
         $queryFirst = new Query();
 
         $dataProviderFirst = new ActiveDataProvider([
-            'query' => $queryFirst,
+            'query' => $queryFirst
         ]);
 
         $dataProviderSecond = clone $dataProviderFirst;

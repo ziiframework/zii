@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -16,9 +13,6 @@ use yiiunit\TestCase;
 
 /**
  * @group base
- *
- * @internal
- * @coversNothing
  */
 class ThemeTest extends TestCase
 {
@@ -28,25 +22,32 @@ class ThemeTest extends TestCase
         $this->mockWebApplication($config);
     }
 
-    public function testSetBaseUrl(): void
+    private function assertPathEquals($expected, $actual, $message = '', $delta = 0.0, $maxDepth = 10, $canonicalize = false, $ignoreCase = false)
+    {
+        $expected = str_replace('\\', '/', $expected);
+        $actual = str_replace('\\', '/', $actual);
+        $this->assertEquals($expected, $actual, $message, $delta, $maxDepth, $canonicalize, $ignoreCase);
+    }
+
+    public function testSetBaseUrl()
     {
         $theme = new Theme(['baseUrl' => '@web/themes/basic']);
         $expected = Yii::getAlias('@web/themes/basic');
 
-        $this->assertSame($expected, $theme->baseUrl);
+        $this->assertEquals($expected, $theme->baseUrl);
     }
 
-    public function testGetUrlFilledBaseUrl(): void
+    public function testGetUrlFilledBaseUrl()
     {
         $theme = new Theme(['baseUrl' => '@web/themes/basic']);
         $expected = Yii::getAlias('@web/themes/basic/js/test.js');
 
         $actual = $theme->getUrl('/js/test.js');
 
-        $this->assertSame($expected, $actual);
+        $this->assertEquals($expected, $actual);
     }
 
-    public function testGetUrlNotFilledBaseUrl(): void
+    public function testGetUrlNotFilledBaseUrl()
     {
         $theme = new Theme(['baseUrl' => null]);
 
@@ -55,15 +56,15 @@ class ThemeTest extends TestCase
         $theme->getUrl('/js/test.js');
     }
 
-    public function testSetBasePath(): void
+    public function testSetBasePath()
     {
         $theme = new Theme(['basePath' => '@app/framework/base/fixtures/themes/basic']);
         $expected = Yii::getAlias('@app/framework/base/fixtures/themes/basic');
 
-        $this->assertSame($expected, $theme->basePath);
+        $this->assertEquals($expected, $theme->basePath);
     }
 
-    public function testGetPathFilledBasePath(): void
+    public function testGetPathFilledBasePath()
     {
         $theme = new Theme(['basePath' => '@app/framework/base/fixtures/themes/basic']);
         $expected = Yii::getAlias('@app/framework/base/fixtures/themes/basic/img/logo.gif');
@@ -73,7 +74,7 @@ class ThemeTest extends TestCase
         $this->assertPathEquals($expected, $actual);
     }
 
-    public function testGetPathNotFilledBasePath(): void
+    public function testGetPathNotFilledBasePath()
     {
         $theme = new Theme(['baseUrl' => null]);
 
@@ -82,7 +83,7 @@ class ThemeTest extends TestCase
         $theme->getPath('/img/logo.gif');
     }
 
-    public function testApplyToEmptyBasePath(): void
+    public function testApplyToEmptyBasePath()
     {
         $theme = new Theme(['basePath' => null]);
 
@@ -91,7 +92,7 @@ class ThemeTest extends TestCase
         $theme->applyTo(null);
     }
 
-    public function testApplyToEmptyPathMap(): void
+    public function testApplyToEmptyPathMap()
     {
         $theme = new Theme(['basePath' => '@app/framework/base/fixtures/themes/basic']);
         $expected = Yii::getAlias('@app/framework/base/fixtures/themes/basic/views/site/index.php');
@@ -101,7 +102,7 @@ class ThemeTest extends TestCase
         $this->assertPathEquals($expected, $actual);
     }
 
-    public function testApplyToFilledPathMap(): void
+    public function testApplyToFilledPathMap()
     {
         $config = [
             'pathMap' => [
@@ -116,7 +117,7 @@ class ThemeTest extends TestCase
         $this->assertPathEquals($expected, $actual);
     }
 
-    public function testApplyToFilledPathMapNotExistsViewInFirstTheme(): void
+    public function testApplyToFilledPathMapNotExistsViewInFirstTheme()
     {
         $config = [
             'pathMap' => [
@@ -134,7 +135,7 @@ class ThemeTest extends TestCase
         $this->assertPathEquals($expected, $actual);
     }
 
-    public function testApplyToFilledPathMapAndInheritThemes(): void
+    public function testApplyToFilledPathMapAndInheritThemes()
     {
         $config = [
             'pathMap' => [
@@ -152,7 +153,7 @@ class ThemeTest extends TestCase
         $this->assertPathEquals($expected, $actual);
     }
 
-    public function testApplyToFilledPathMapAndFileNotExists(): void
+    public function testApplyToFilledPathMapAndFileNotExists()
     {
         $config = [
             'pathMap' => [
@@ -165,12 +166,5 @@ class ThemeTest extends TestCase
         $actual = $theme->applyTo($expected);
 
         $this->assertPathEquals($expected, $actual);
-    }
-
-    private function assertPathEquals($expected, $actual, $message = '', $delta = 0.0, $maxDepth = 10, $canonicalize = false, $ignoreCase = false): void
-    {
-        $expected = str_replace('\\', '/', $expected);
-        $actual = str_replace('\\', '/', $actual);
-        $this->assertEquals($expected, $actual, $message, $delta, $maxDepth, $canonicalize, $ignoreCase);
     }
 }

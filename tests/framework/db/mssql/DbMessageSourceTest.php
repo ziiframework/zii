@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -14,9 +11,6 @@ namespace yiiunit\framework\db\mssql;
  * @group i18n
  * @group db
  * @group mssql
- *
- * @internal
- * @coversNothing
  */
 class DbMessageSourceTest extends \yiiunit\framework\i18n\DbMessageSourceTest
 {

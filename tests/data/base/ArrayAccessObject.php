@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,33 +7,26 @@ declare(strict_types=1);
 
 namespace yiiunit\data\base;
 
-use ArrayAccess;
-
 /**
  * ArrayAccessObject
  * Object that extends [[TraversableObject]] and implements `\ArrayAccess`
  * Used for testing support for ArrayAccess object instead of arrays.
- *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
- *
  * @since 2.0.14.1
  */
-class ArrayAccessObject extends TraversableObject implements ArrayAccess
+class ArrayAccessObject extends TraversableObject implements \ArrayAccess
 {
     /**
-     * Whether a offset exists.
+     * Whether a offset exists
      *
      * @link https://www.php.net/manual/en/arrayaccess.offsetexists.php
-     *
      * @param mixed $offset <p>
-     *                      An offset to check for.
-     *                      </p>
-     *
-     * @return bool true on success or false on failure.
-     *              </p>
-     *              <p>
-     *              The return value will be casted to boolean if non-boolean was returned.
-     *
+     * An offset to check for.
+     * </p>
+     * @return boolean true on success or false on failure.
+     * </p>
+     * <p>
+     * The return value will be casted to boolean if non-boolean was returned.
      * @since 2.0.14.1
      */
     public function offsetExists($offset)
@@ -45,16 +35,13 @@ class ArrayAccessObject extends TraversableObject implements ArrayAccess
     }
 
     /**
-     * Offset to retrieve.
+     * Offset to retrieve
      *
      * @link https://www.php.net/manual/en/arrayaccess.offsetget.php
-     *
      * @param mixed $offset <p>
-     *                      The offset to retrieve.
-     *                      </p>
-     *
-     * @return mixed can return all value types
-     *
+     * The offset to retrieve.
+     * </p>
+     * @return mixed Can return all value types.
      * @since 2.0.14.1
      */
     public function offsetGet($offset)
@@ -63,36 +50,34 @@ class ArrayAccessObject extends TraversableObject implements ArrayAccess
     }
 
     /**
-     * Offset to set.
+     * Offset to set
      *
      * @link https://www.php.net/manual/en/arrayaccess.offsetset.php
-     *
      * @param mixed $offset <p>
-     *                      The offset to assign the value to.
-     *                      </p>
-     * @param mixed $value  <p>
-     *                      The value to set.
-     *                      </p>
-     *
+     * The offset to assign the value to.
+     * </p>
+     * @param mixed $value <p>
+     * The value to set.
+     * </p>
+     * @return void
      * @since 2.0.14.1
      */
-    public function offsetSet($offset, $value): void
+    public function offsetSet($offset, $value)
     {
         $this->data[$offset] = $value;
     }
 
     /**
-     * Offset to unset.
+     * Offset to unset
      *
      * @link https://www.php.net/manual/en/arrayaccess.offsetunset.php
-     *
      * @param mixed $offset <p>
-     *                      The offset to unset.
-     *                      </p>
-     *
+     * The offset to unset.
+     * </p>
+     * @return void
      * @since 2.0.14.1
      */
-    public function offsetUnset($offset): void
+    public function offsetUnset($offset)
     {
         unset($this->data[$offset]);
     }

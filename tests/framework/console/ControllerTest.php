@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,25 +7,19 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\console;
 
-use function func_get_args;
-use function get_class;
-use const PHP_VERSION_ID;
 use RuntimeException;
+use yii\console\Exception;
+use yiiunit\framework\console\stubs\DummyService;
 use Yii;
 use yii\base\InlineAction;
 use yii\base\Module;
 use yii\console\Application;
-use yii\console\Exception;
 use yii\console\Request;
 use yii\helpers\Console;
-use yiiunit\framework\console\stubs\DummyService;
 use yiiunit\TestCase;
 
 /**
  * @group console
- *
- * @internal
- * @coversNothing
  */
 class ControllerTest extends TestCase
 {
@@ -46,72 +37,72 @@ class ControllerTest extends TestCase
         ];
     }
 
-    public function testBindArrayToActionParams(): void
+    public function testBindArrayToActionParams()
     {
         $controller = new FakeController('fake', Yii::$app);
 
         $params = ['test' => []];
-        $this->assertSame([], $controller->runAction('aksi4', $params));
-        $this->assertSame([], $controller->runAction('aksi4', $params));
+        $this->assertEquals([], $controller->runAction('aksi4', $params));
+        $this->assertEquals([], $controller->runAction('aksi4', $params));
     }
 
-    public function testBindActionParams(): void
+    public function testBindActionParams()
     {
         $controller = new FakeController('fake', Yii::$app);
 
         $params = ['from params'];
-        [$fromParam, $other] = $controller->run('aksi1', $params);
-        $this->assertSame('from params', $fromParam);
-        $this->assertSame('default', $other);
+        list($fromParam, $other) = $controller->run('aksi1', $params);
+        $this->assertEquals('from params', $fromParam);
+        $this->assertEquals('default', $other);
 
         $params = ['from params', 'notdefault'];
-        [$fromParam, $other] = $controller->run('aksi1', $params);
-        $this->assertSame('from params', $fromParam);
-        $this->assertSame('notdefault', $other);
+        list($fromParam, $other) = $controller->run('aksi1', $params);
+        $this->assertEquals('from params', $fromParam);
+        $this->assertEquals('notdefault', $other);
 
         $params = ['d426,mdmunir', 'single'];
         $result = $controller->runAction('aksi2', $params);
-        $this->assertSame([['d426', 'mdmunir'], 'single'], $result);
+        $this->assertEquals([['d426', 'mdmunir'], 'single'], $result);
 
         $params = ['', 'single'];
         $result = $controller->runAction('aksi2', $params);
-        $this->assertSame([[], 'single'], $result);
+        $this->assertEquals([[], 'single'], $result);
 
         $params = ['_aliases' => ['t' => 'test']];
         $result = $controller->runAction('aksi4', $params);
-        $this->assertSame('test', $result);
+        $this->assertEquals('test', $result);
 
         $params = ['_aliases' => ['a' => 'testAlias']];
         $result = $controller->runAction('aksi5', $params);
-        $this->assertSame('testAlias', $result);
+        $this->assertEquals('testAlias', $result);
 
         $params = ['_aliases' => ['ta' => 'from params,notdefault']];
-        [$fromParam, $other] = $controller->runAction('aksi6', $params);
-        $this->assertSame('from params', $fromParam);
-        $this->assertSame('notdefault', $other);
+        list($fromParam, $other) = $controller->runAction('aksi6', $params);
+        $this->assertEquals('from params', $fromParam);
+        $this->assertEquals('notdefault', $other);
 
         $params = ['test-array' => 'from params,notdefault'];
-        [$fromParam, $other] = $controller->runAction('aksi6', $params);
-        $this->assertSame('from params', $fromParam);
-        $this->assertSame('notdefault', $other);
+        list($fromParam, $other) = $controller->runAction('aksi6', $params);
+        $this->assertEquals('from params', $fromParam);
+        $this->assertEquals('notdefault', $other);
 
         $params = ['from params', 'notdefault'];
-        [$fromParam, $other] = $controller->run('trimargs', $params);
-        $this->assertSame('from params', $fromParam);
-        $this->assertSame('notdefault', $other);
+        list($fromParam, $other) = $controller->run('trimargs', $params);
+        $this->assertEquals('from params', $fromParam);
+        $this->assertEquals('notdefault', $other);
 
         $params = ['avaliable'];
         $message = Yii::t('yii', 'Missing required arguments: {params}', ['params' => implode(', ', ['missing'])]);
         $this->expectException('yii\console\Exception');
         $this->expectExceptionMessage($message);
         $result = $controller->runAction('aksi3', $params);
+
     }
 
-    public function testNullableInjectedActionParams(): void
+    public function testNullableInjectedActionParams()
     {
         if (PHP_VERSION_ID < 70100) {
             $this->markTestSkipped('Can not be tested on PHP < 7.1');
-
             return;
         }
 
@@ -125,15 +116,14 @@ class ControllerTest extends TestCase
         $injectionAction = new InlineAction('injection', $this->controller, 'actionNullableInjection');
         $params = [];
         $args = $this->controller->bindActionParams($injectionAction, $params);
-        $this->assertSame(Yii::$app->request, $args[0]);
+        $this->assertEquals(\Yii::$app->request, $args[0]);
         $this->assertNull($args[1]);
     }
 
-    public function testInjectionContainerException(): void
+    public function testInjectionContainerException()
     {
         if (PHP_VERSION_ID < 70100) {
             $this->markTestSkipped('Can not be tested on PHP < 7.1');
-
             return;
         }
         // Use the PHP71 controller for this test
@@ -145,18 +135,17 @@ class ControllerTest extends TestCase
 
         $injectionAction = new InlineAction('injection', $this->controller, 'actionInjection');
         $params = ['between' => 'test', 'after' => 'another', 'before' => 'test'];
-        Yii::$container->set(DummyService::className(), static function (): void { throw new RuntimeException('uh oh'); });
+        \Yii::$container->set(DummyService::className(), function() { throw new \RuntimeException('uh oh'); });
 
         $this->expectException(get_class(new RuntimeException()));
         $this->expectExceptionMessage('uh oh');
         $this->controller->bindActionParams($injectionAction, $params);
     }
 
-    public function testUnknownInjection(): void
+    public function testUnknownInjection()
     {
         if (PHP_VERSION_ID < 70100) {
             $this->markTestSkipped('Can not be tested on PHP < 7.1');
-
             return;
         }
         // Use the PHP71 controller for this test
@@ -168,17 +157,16 @@ class ControllerTest extends TestCase
 
         $injectionAction = new InlineAction('injection', $this->controller, 'actionInjection');
         $params = ['between' => 'test', 'after' => 'another', 'before' => 'test'];
-        Yii::$container->clear(DummyService::className());
+        \Yii::$container->clear(DummyService::className());
         $this->expectException(get_class(new Exception()));
         $this->expectExceptionMessage('Could not load required service: dummyService');
         $this->controller->bindActionParams($injectionAction, $params);
     }
 
-    public function testInjectedActionParams(): void
+    public function testInjectedActionParams()
     {
         if (PHP_VERSION_ID < 70100) {
             $this->markTestSkipped('Can not be tested on PHP < 7.1');
-
             return;
         }
         // Use the PHP71 controller for this test
@@ -190,24 +178,23 @@ class ControllerTest extends TestCase
 
         $injectionAction = new InlineAction('injection', $this->controller, 'actionInjection');
         $params = ['between' => 'test', 'after' => 'another', 'before' => 'test'];
-        Yii::$container->set(DummyService::className(), DummyService::className());
+        \Yii::$container->set(DummyService::className(), DummyService::className());
         $args = $this->controller->bindActionParams($injectionAction, $params);
-        $this->assertSame($params['before'], $args[0]);
-        $this->assertSame(Yii::$app->request, $args[1]);
-        $this->assertSame('Component: yii\console\Request $request', Yii::$app->requestedParams['request']);
-        $this->assertSame($params['between'], $args[2]);
+        $this->assertEquals($params['before'], $args[0]);
+        $this->assertEquals(\Yii::$app->request, $args[1]);
+        $this->assertEquals('Component: yii\console\Request $request', \Yii::$app->requestedParams['request']);
+        $this->assertEquals($params['between'], $args[2]);
         $this->assertInstanceOf(DummyService::className(), $args[3]);
-        $this->assertSame('Container DI: yiiunit\framework\console\stubs\DummyService $dummyService', Yii::$app->requestedParams['dummyService']);
+        $this->assertEquals('Container DI: yiiunit\framework\console\stubs\DummyService $dummyService', \Yii::$app->requestedParams['dummyService']);
         $this->assertNull($args[4]);
-        $this->assertSame('Unavailable service: post', Yii::$app->requestedParams['post']);
-        $this->assertSame($params['after'], $args[5]);
+        $this->assertEquals('Unavailable service: post', \Yii::$app->requestedParams['post']);
+        $this->assertEquals($params['after'], $args[5]);
     }
 
-    public function testInjectedActionParamsFromModule(): void
+    public function testInjectedActionParamsFromModule()
     {
         if (PHP_VERSION_ID < 70100) {
             $this->markTestSkipped('Can not be tested on PHP < 7.1');
-
             return;
         }
         $module = new \yii\base\Module('fake', new Application([
@@ -224,10 +211,10 @@ class ControllerTest extends TestCase
         $injectionAction = new InlineAction('injection', $this->controller, 'actionModuleServiceInjection');
         $args = $this->controller->bindActionParams($injectionAction, []);
         $this->assertInstanceOf(\yii\data\ArrayDataProvider::className(), $args[0]);
-        $this->assertSame('Module yii\base\Module DI: yii\data\DataProviderInterface $dataProvider', Yii::$app->requestedParams['dataProvider']);
+        $this->assertEquals('Module yii\base\Module DI: yii\data\DataProviderInterface $dataProvider', \Yii::$app->requestedParams['dataProvider']);
     }
 
-    public function assertResponseStatus($status, $response): void
+    public function assertResponseStatus($status, $response)
     {
         $this->assertInstanceOf('yii\console\Response', $response);
         $this->assertSame($status, $response->exitStatus);
@@ -237,31 +224,30 @@ class ControllerTest extends TestCase
     {
         $request = new Request();
         $request->setParams(func_get_args());
-
         return Yii::$app->handleRequest($request);
     }
 
-    public function testResponse(): void
+    public function testResponse()
     {
         $status = 123;
 
         $response = $this->runRequest('fake/status');
         $this->assertResponseStatus(0, $response);
 
-        $response = $this->runRequest('fake/status', (string) $status);
+        $response = $this->runRequest('fake/status', (string)$status);
         $this->assertResponseStatus($status, $response);
 
         $response = $this->runRequest('fake/response');
         $this->assertResponseStatus(0, $response);
 
-        $response = $this->runRequest('fake/response', (string) $status);
+        $response = $this->runRequest('fake/response', (string)$status);
         $this->assertResponseStatus($status, $response);
     }
 
     /**
      * @see https://github.com/yiisoft/yii2/issues/12028
      */
-    public function testHelpOptionNotSet(): void
+    public function testHelpOptionNotSet()
     {
         $controller = new FakeController('posts', Yii::$app);
         $controller->runAction('index');
@@ -273,14 +259,14 @@ class ControllerTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/12028
      */
-    public function testHelpOption(): void
+    public function testHelpOption()
     {
         $controller = new FakeController('posts', Yii::$app);
         $controller->help = true;
         $controller->runAction('index');
 
         $this->assertFalse(FakeController::getWasActionIndexCalled());
-        $this->assertSame(FakeHelpController::getActionIndexLastCallParams(), ['posts/index']);
+        $this->assertEquals(FakeHelpController::getActionIndexLastCallParams(), ['posts/index']);
 
         $helpController = new FakeHelpControllerWithoutOutput('help', Yii::$app);
         $helpController->actionIndex('fake/aksi1');
@@ -290,22 +276,22 @@ class ControllerTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/13071
      */
-    public function testHelpOptionWithModule(): void
+    public function testHelpOptionWithModule()
     {
         $controller = new FakeController('posts', new Module('news'));
         $controller->help = true;
         $controller->runAction('index');
 
         $this->assertFalse(FakeController::getWasActionIndexCalled());
-        $this->assertSame(FakeHelpController::getActionIndexLastCallParams(), ['news/posts/index']);
+        $this->assertEquals(FakeHelpController::getActionIndexLastCallParams(), ['news/posts/index']);
     }
+
 
     /**
      * Tests if action help does not include (class) type hinted arguments.
-     *
      * @see #10372
      */
-    public function testHelpSkipsTypeHintedArguments(): void
+    public function testHelpSkipsTypeHintedArguments()
     {
         $controller = new FakeController('fake', Yii::$app);
         $help = $controller->getActionArgsHelp($controller->createAction('with-complex-type-hint'));
@@ -314,16 +300,16 @@ class ControllerTest extends TestCase
         $this->assertArrayHasKey('simpleArgument', $help);
     }
 
-    public function testGetActionHelpSummaryOnNull(): void
+    public function testGetActionHelpSummaryOnNull()
     {
         $controller = new FakeController('fake', Yii::$app);
 
         $controller->color = false;
         $helpSummary = $controller->getActionHelpSummary(null);
-        $this->assertSame('Action not found.', $helpSummary);
+        $this->assertEquals('Action not found.', $helpSummary);
 
         $controller->color = true;
         $helpSummary = $controller->getActionHelpSummary(null);
-        $this->assertSame($controller->ansiFormat('Action not found.', Console::FG_RED), $helpSummary);
+        $this->assertEquals($controller->ansiFormat('Action not found.', Console::FG_RED), $helpSummary);
     }
 }

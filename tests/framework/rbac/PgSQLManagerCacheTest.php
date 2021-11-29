@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -15,13 +12,9 @@ use yii\rbac\DbManager;
 
 /**
  * PgSQLManagerTest.
- *
  * @group db
  * @group rbac
  * @group pgsql
- *
- * @internal
- * @coversNothing
  */
 class PgSQLManagerCacheTest extends DbManagerTestCase
 {

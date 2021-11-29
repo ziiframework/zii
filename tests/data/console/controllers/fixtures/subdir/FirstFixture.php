@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -15,12 +12,12 @@ use yiiunit\data\console\controllers\fixtures\FixtureStorage;
 
 class FirstFixture extends Fixture
 {
-    public function load(): void
+    public function load()
     {
         FixtureStorage::$subdirFirstFixtureData[] = 'some data set for first fixture in subdir';
     }
 
-    public function unload(): void
+    public function unload()
     {
         FixtureStorage::$subdirFirstFixtureData = [];
     }

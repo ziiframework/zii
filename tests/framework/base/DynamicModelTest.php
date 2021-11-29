@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -15,9 +12,6 @@ use yiiunit\TestCase;
 
 /**
  * @group base
- *
- * @internal
- * @coversNothing
  */
 class DynamicModelTest extends TestCase
 {
@@ -27,7 +21,7 @@ class DynamicModelTest extends TestCase
         $this->mockApplication();
     }
 
-    public function testValidateData(): void
+    public function testValidateData()
     {
         $email = 'invalid';
         $name = 'long name';
@@ -43,19 +37,19 @@ class DynamicModelTest extends TestCase
         $this->assertTrue($model->hasErrors('age'));
     }
 
-    public function testAddRule(): void
+    public function testAddRule()
     {
         $model = new DynamicModel();
-        $this->assertSame(0, $model->getValidators()->count());
+        $this->assertEquals(0, $model->getValidators()->count());
         $model->addRule('name', 'string', ['min' => 12]);
-        $this->assertSame(1, $model->getValidators()->count());
+        $this->assertEquals(1, $model->getValidators()->count());
         $model->addRule('email', 'email');
-        $this->assertSame(2, $model->getValidators()->count());
+        $this->assertEquals(2, $model->getValidators()->count());
         $model->addRule(['name', 'email'], 'required');
-        $this->assertSame(3, $model->getValidators()->count());
+        $this->assertEquals(3, $model->getValidators()->count());
     }
 
-    public function testValidateWithAddRule(): void
+    public function testValidateWithAddRule()
     {
         $email = 'invalid';
         $name = 'long name';
@@ -64,21 +58,20 @@ class DynamicModelTest extends TestCase
         $model->addRule(['email', 'name', 'age'], 'required')
             ->addRule('email', 'email')
             ->addRule('name', 'string', ['max' => 3])
-            ->validate()
-        ;
+            ->validate();
         $this->assertTrue($model->hasErrors());
         $this->assertTrue($model->hasErrors('email'));
         $this->assertTrue($model->hasErrors('name'));
         $this->assertTrue($model->hasErrors('age'));
     }
 
-    public function testDynamicProperty(): void
+    public function testDynamicProperty()
     {
         $email = 'invalid';
         $name = 'long name';
         $model = new DynamicModel(compact('name', 'email'));
-        $this->assertSame($email, $model->email);
-        $this->assertSame($name, $model->name);
+        $this->assertEquals($email, $model->email);
+        $this->assertEquals($name, $model->name);
         $this->assertTrue($model->canGetProperty('email'));
         $this->assertTrue($model->canGetProperty('name'));
         $this->assertTrue($model->canSetProperty('email'));
@@ -87,7 +80,7 @@ class DynamicModelTest extends TestCase
         $age = $model->age;
     }
 
-    public function testLoad(): void
+    public function testLoad()
     {
         $dynamic = new DynamicModel();
         //define two attributes
@@ -107,7 +100,7 @@ class DynamicModelTest extends TestCase
         $this->assertTrue($dynamic->load($data));
 
         $this->assertTrue($dynamic->validate());
-        $this->assertSame($name, $dynamic->name);
-        $this->assertSame($mobile, $dynamic->mobile);
+        $this->assertEquals($name, $dynamic->name);
+        $this->assertEquals($mobile, $dynamic->mobile);
     }
 }

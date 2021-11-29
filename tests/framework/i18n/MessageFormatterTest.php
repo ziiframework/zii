@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,33 +7,27 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\i18n;
 
-use function defined;
-use function extension_loaded;
 use yii\i18n\MessageFormatter;
 use yiiunit\TestCase;
 
 /**
  * @author Alexander Makarov <sam@rmcreative.ru>
- *
  * @since 2.0
  * @group i18n
- *
- * @internal
- * @coversNothing
  */
 class MessageFormatterTest extends TestCase
 {
-    public const N = 'n';
-    public const N_VALUE = 42;
-    public const F = 'f';
-    public const F_VALUE = 2e+8;
-    public const F_VALUE_FORMATTED = '200,000,000';
-    public const D = 'd';
-    public const D_VALUE = 200000000.101;
-    public const D_VALUE_FORMATTED = '200,000,000.101';
-    public const D_VALUE_FORMATTED_INTEGER = '200,000,000';
-    public const SUBJECT = 'сабж';
-    public const SUBJECT_VALUE = 'Answer to the Ultimate Question of Life, the Universe, and Everything';
+    const N = 'n';
+    const N_VALUE = 42;
+    const F = 'f';
+    const F_VALUE = 2e+8;
+    const F_VALUE_FORMATTED = '200,000,000';
+    const D = 'd';
+    const D_VALUE = 200000000.101;
+    const D_VALUE_FORMATTED = '200,000,000.101';
+    const D_VALUE_FORMATTED_INTEGER = '200,000,000';
+    const SUBJECT = 'сабж';
+    const SUBJECT_VALUE = 'Answer to the Ultimate Question of Life, the Universe, and Everything';
 
     public function patterns()
     {
@@ -66,6 +57,7 @@ class MessageFormatterTest extends TestCase
                     self::F => self::F_VALUE,
                 ],
             ],
+
 
             [
                 'Here is a big number: {' . self::F . ', number, integer}', // pattern
@@ -140,7 +132,7 @@ _MSG_
                 [
                     'name' => 'Alexander',
                     'gender' => 'male',
-                    // following should not be replaced
+                     // following should not be replaced
                     'he' => 'wtf',
                     'she' => 'wtf',
                     'it' => 'wtf',
@@ -277,7 +269,7 @@ _MSG_
                 'Уважаемый Vadim,',
                 [
                     'gender' => null,
-                    'firstname' => 'Vadim',
+                    'firstname' => 'Vadim'
                 ],
             ],
         ];
@@ -358,32 +350,30 @@ _MSG_
 
     /**
      * @dataProvider patterns
-     *
      * @param string $pattern
      * @param string $expected
-     * @param array  $args
-     * @param bool   $skip
+     * @param array $args
+     * @param bool $skip
      * @param string $skipMessage
      */
-    public function testNamedArguments($pattern, $expected, $args, $skip = false, $skipMessage = ''): void
+    public function testNamedArguments($pattern, $expected, $args, $skip = false, $skipMessage = '')
     {
         if ($skip) {
             $this->markTestSkipped($skipMessage);
         }
         $formatter = new MessageFormatter();
         $result = $formatter->format($pattern, $args, 'en-US');
-        $this->assertSame($expected, $result, $formatter->getErrorMessage());
+        $this->assertEquals($expected, $result, $formatter->getErrorMessage());
     }
 
     /**
      * @dataProvider parsePatterns
-     *
      * @param string $pattern
      * @param string $expected
-     * @param array  $args
+     * @param array $args
      * @param string $locale
      */
-    public function testParseNamedArguments($pattern, $expected, $args, $locale = 'en-US'): void
+    public function testParseNamedArguments($pattern, $expected, $args, $locale = 'en-US')
     {
         if (!extension_loaded('intl')) {
             $this->markTestSkipped('intl not installed. Skipping.');
@@ -391,10 +381,10 @@ _MSG_
 
         $formatter = new MessageFormatter();
         $result = $formatter->parse($pattern, $expected, $locale);
-        $this->assertSame($args, $result, $formatter->getErrorMessage() . ' Pattern: ' . $pattern);
+        $this->assertEquals($args, $result, $formatter->getErrorMessage() . ' Pattern: ' . $pattern);
     }
 
-    public function testInsufficientArguments(): void
+    public function testInsufficientArguments()
     {
         $expected = '{' . self::SUBJECT . '} is ' . self::N_VALUE;
 
@@ -403,18 +393,18 @@ _MSG_
             self::N => self::N_VALUE,
         ], 'en-US');
 
-        $this->assertSame($expected, $result, $formatter->getErrorMessage());
+        $this->assertEquals($expected, $result, $formatter->getErrorMessage());
     }
 
-    public function testNoParams(): void
+    public function testNoParams()
     {
         $pattern = '{' . self::SUBJECT . '} is ' . self::N;
         $formatter = new MessageFormatter();
         $result = $formatter->format($pattern, [], 'en-US');
-        $this->assertSame($pattern, $result, $formatter->getErrorMessage());
+        $this->assertEquals($pattern, $result, $formatter->getErrorMessage());
     }
 
-    public function testMalformedFormatter(): void
+    public function testMalformedFormatter()
     {
         $formatter = new MessageFormatter();
         $result = $formatter->format('{word,umber}', ['word' => 'test'], 'en-US'); // typo is intentional, message pattern should be invalid

@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -18,12 +15,12 @@ class Fixture1 extends Fixture
 {
     public $depends = ['yiiunit\framework\test\Fixture2'];
 
-    public function load(): void
+    public function load()
     {
         MyTestCase::$load .= '1';
     }
 
-    public function unload(): void
+    public function unload()
     {
         MyTestCase::$unload .= '1';
     }
@@ -32,13 +29,12 @@ class Fixture1 extends Fixture
 class Fixture2 extends Fixture
 {
     public $depends = ['yiiunit\framework\test\Fixture3'];
-
-    public function load(): void
+    public function load()
     {
         MyTestCase::$load .= '2';
     }
 
-    public function unload(): void
+    public function unload()
     {
         MyTestCase::$unload .= '2';
     }
@@ -46,12 +42,12 @@ class Fixture2 extends Fixture
 
 class Fixture3 extends Fixture
 {
-    public function load(): void
+    public function load()
     {
         MyTestCase::$load .= '3';
     }
 
-    public function unload(): void
+    public function unload()
     {
         MyTestCase::$unload .= '3';
     }
@@ -60,13 +56,12 @@ class Fixture3 extends Fixture
 class Fixture4 extends Fixture
 {
     public $depends = ['yiiunit\framework\test\Fixture5'];
-
-    public function load(): void
+    public function load()
     {
         MyTestCase::$load .= '4';
     }
 
-    public function unload(): void
+    public function unload()
     {
         MyTestCase::$unload .= '4';
     }
@@ -75,22 +70,18 @@ class Fixture4 extends Fixture
 class Fixture5 extends Fixture
 {
     public $depends = ['yiiunit\framework\test\Fixture4'];
-
-    public function load(): void
+    public function load()
     {
         MyTestCase::$load .= '5';
     }
 
-    public function unload(): void
+    public function unload()
     {
         MyTestCase::$unload .= '5';
     }
 }
 
-/**
- * @internal
- * @coversNothing
- */
+
 class MyTestCase
 {
     use FixtureTrait;
@@ -99,12 +90,12 @@ class MyTestCase
     public static $load;
     public static $unload;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->loadFixtures();
     }
 
-    protected function tearDown(): void
+    public function tearDown(): void
     {
         $this->unloadFixtures();
     }
@@ -155,7 +146,6 @@ class MyTestCase
                 'fixture3a' => Fixture3::className(), // duplicate fixtures may occur two fixtures depend on the same fixture.
                 'fixture3b' => Fixture3::className(),
             ];
-
             default: return [];
         }
     }
@@ -163,26 +153,22 @@ class MyTestCase
 
 /**
  * @group fixture
- *
- * @internal
- * @coversNothing
  */
 class FixtureTest extends TestCase
 {
-    public function testDependencies(): void
+    public function testDependencies()
     {
         foreach ($this->getDependencyTests() as $scenario => $result) {
             $test = new MyTestCase();
             $test->scenario = $scenario;
             $test->setUp();
-
             foreach ($result as $name => $loaded) {
-                $this->assertSame($loaded, $test->fetchFixture($name) !== null, "Verifying scenario {$scenario} fixture {$name}");
+                $this->assertEquals($loaded, $test->fetchFixture($name) !== null, "Verifying scenario $scenario fixture $name");
             }
         }
     }
 
-    public function testLoadSequence(): void
+    public function testLoadSequence()
     {
         foreach ($this->getLoadSequenceTests() as $scenario => $result) {
             $test = new MyTestCase();
@@ -190,9 +176,9 @@ class FixtureTest extends TestCase
             MyTestCase::$load = '';
             MyTestCase::$unload = '';
             $test->setUp();
-            $this->assertSame($result[0], MyTestCase::$load, "Verifying scenario {$scenario} load sequence");
+            $this->assertEquals($result[0], MyTestCase::$load, "Verifying scenario $scenario load sequence");
             $test->tearDown();
-            $this->assertSame($result[1], MyTestCase::$unload, "Verifying scenario {$scenario} unload sequence");
+            $this->assertEquals($result[1], MyTestCase::$unload, "Verifying scenario $scenario unload sequence");
         }
     }
 

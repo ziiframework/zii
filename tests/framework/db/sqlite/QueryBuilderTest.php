@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,7 +7,6 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\db\sqlite;
 
-use PDO;
 use yii\db\Query;
 use yii\db\Schema;
 use yii\db\sqlite\QueryBuilder;
@@ -19,9 +15,6 @@ use yiiunit\data\base\TraversableObject;
 /**
  * @group db
  * @group sqlite
- *
- * @internal
- * @coversNothing
  */
 class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
 {
@@ -59,12 +52,12 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         ]);
     }
 
-    public function primaryKeysProvider(): void
+    public function primaryKeysProvider()
     {
         $this->markTestSkipped('Adding/dropping primary keys is not supported in SQLite.');
     }
 
-    public function foreignKeysProvider(): void
+    public function foreignKeysProvider()
     {
         $this->markTestSkipped('Adding/dropping foreign keys is not supported in SQLite.');
     }
@@ -79,34 +72,36 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         $tableName = 'mytable';
 
         $result['with schema'] = [
-            "CREATE INDEX {{{$schemaName}}}.[[{$indexName}]] ON {{{$tableName}}} ([[C_index_1]])",
-            static fn (QueryBuilder $qb) => $qb->createIndex($indexName, $schemaName . '.' . $tableName, 'C_index_1'),
+            "CREATE INDEX {{{$schemaName}}}.[[$indexName]] ON {{{$tableName}}} ([[C_index_1]])",
+            function (QueryBuilder $qb) use ($tableName, $indexName, $schemaName) {
+                return $qb->createIndex($indexName, $schemaName . '.' . $tableName, 'C_index_1');
+            },
         ];
 
         return $result;
     }
 
-    public function uniquesProvider(): void
+    public function uniquesProvider()
     {
         $this->markTestSkipped('Adding/dropping unique constraints is not supported in SQLite.');
     }
 
-    public function checksProvider(): void
+    public function checksProvider()
     {
         $this->markTestSkipped('Adding/dropping check constraints is not supported in SQLite.');
     }
 
-    public function defaultValuesProvider(): void
+    public function defaultValuesProvider()
     {
         $this->markTestSkipped('Adding/dropping default constraints is not supported in SQLite.');
     }
 
-    public function testCommentColumn(): void
+    public function testCommentColumn()
     {
         $this->markTestSkipped('Comments are not supported in SQLite');
     }
 
-    public function testCommentTable(): void
+    public function testCommentTable()
     {
         $this->markTestSkipped('Comments are not supported in SQLite');
     }
@@ -115,99 +110,94 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
     {
         $data = parent::batchInsertProvider();
         $data['escape-danger-chars']['expected'] = "INSERT INTO `customer` (`address`) VALUES ('SQL-danger chars are escaped: ''); --')";
-
         return $data;
     }
 
-    public function testBatchInsertOnOlderVersions(): void
+    public function testBatchInsertOnOlderVersions()
     {
         $db = $this->getConnection();
-
-        if (version_compare($db->pdo->getAttribute(PDO::ATTR_SERVER_VERSION), '3.7.11', '>=')) {
+        if (version_compare($db->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION), '3.7.11', '>=')) {
             $this->markTestSkipped('This test is only relevant for SQLite < 3.7.11');
         }
         $sql = $this->getQueryBuilder()->batchInsert('{{customer}} t', ['t.id', 't.name'], [[1, 'a'], [2, 'b']]);
-        $this->assertSame("INSERT INTO {{customer}} t (`t`.`id`, `t`.`name`) SELECT 1, 'a' UNION SELECT 2, 'b'", $sql);
+        $this->assertEquals("INSERT INTO {{customer}} t (`t`.`id`, `t`.`name`) SELECT 1, 'a' UNION SELECT 2, 'b'", $sql);
     }
 
-    public function testRenameTable(): void
+    public function testRenameTable()
     {
         $sql = $this->getQueryBuilder()->renameTable('table_from', 'table_to');
-        $this->assertSame('ALTER TABLE `table_from` RENAME TO `table_to`', $sql);
+        $this->assertEquals('ALTER TABLE `table_from` RENAME TO `table_to`', $sql);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function testBuildUnion(): void
+    public function testBuildUnion()
     {
-        $expectedQuerySql = $this->replaceQuotes('SELECT `id` FROM `TotalExample` `t1` WHERE (w > 0) AND (x < 2) UNION  SELECT `id` FROM `TotalTotalExample` `t2` WHERE w > 5 UNION ALL  SELECT `id` FROM `TotalTotalExample` `t3` WHERE w = 3');
+        $expectedQuerySql = $this->replaceQuotes(
+            'SELECT `id` FROM `TotalExample` `t1` WHERE (w > 0) AND (x < 2) UNION  SELECT `id` FROM `TotalTotalExample` `t2` WHERE w > 5 UNION ALL  SELECT `id` FROM `TotalTotalExample` `t3` WHERE w = 3'
+        );
         $query = new Query();
         $secondQuery = new Query();
         $secondQuery->select('id')
             ->from('TotalTotalExample t2')
-            ->where('w > 5')
-        ;
+            ->where('w > 5');
         $thirdQuery = new Query();
         $thirdQuery->select('id')
             ->from('TotalTotalExample t3')
-            ->where('w = 3')
-        ;
+            ->where('w = 3');
         $query->select('id')
             ->from('TotalExample t1')
             ->where(['and', 'w > 0', 'x < 2'])
             ->union($secondQuery)
-            ->union($thirdQuery, true)
-        ;
-        [$actualQuerySql, $queryParams] = $this->getQueryBuilder()->build($query);
-        $this->assertSame($expectedQuerySql, $actualQuerySql);
-        $this->assertSame([], $queryParams);
+            ->union($thirdQuery, true);
+        list($actualQuerySql, $queryParams) = $this->getQueryBuilder()->build($query);
+        $this->assertEquals($expectedQuerySql, $actualQuerySql);
+        $this->assertEquals([], $queryParams);
     }
 
-    public function testBuildWithQuery(): void
+    public function testBuildWithQuery()
     {
-        $expectedQuerySql = $this->replaceQuotes('WITH a1 AS (SELECT [[id]] FROM [[t1]] WHERE expr = 1), a2 AS (SELECT [[id]] FROM [[t2]] INNER JOIN [[a1]] ON t2.id = a1.id WHERE expr = 2 UNION  SELECT [[id]] FROM [[t3]] WHERE expr = 3) SELECT * FROM [[a2]]');
+        $expectedQuerySql = $this->replaceQuotes(
+            'WITH a1 AS (SELECT [[id]] FROM [[t1]] WHERE expr = 1), a2 AS (SELECT [[id]] FROM [[t2]] INNER JOIN [[a1]] ON t2.id = a1.id WHERE expr = 2 UNION  SELECT [[id]] FROM [[t3]] WHERE expr = 3) SELECT * FROM [[a2]]'
+        );
         $with1Query = (new Query())
             ->select('id')
             ->from('t1')
-            ->where('expr = 1')
-        ;
+            ->where('expr = 1');
 
         $with2Query = (new Query())
             ->select('id')
             ->from('t2')
             ->innerJoin('a1', 't2.id = a1.id')
-            ->where('expr = 2')
-        ;
+            ->where('expr = 2');
 
         $with3Query = (new Query())
             ->select('id')
             ->from('t3')
-            ->where('expr = 3')
-        ;
+            ->where('expr = 3');
 
         $query = (new Query())
             ->withQuery($with1Query, 'a1')
             ->withQuery($with2Query->union($with3Query), 'a2')
-            ->from('a2')
-        ;
+            ->from('a2');
 
-        [$actualQuerySql, $queryParams] = $this->getQueryBuilder()->build($query);
-        $this->assertSame($expectedQuerySql, $actualQuerySql);
-        $this->assertSame([], $queryParams);
+        list($actualQuerySql, $queryParams) = $this->getQueryBuilder()->build($query);
+        $this->assertEquals($expectedQuerySql, $actualQuerySql);
+        $this->assertEquals([], $queryParams);
     }
 
-    public function testResetSequence(): void
+    public function testResetSequence()
     {
         $qb = $this->getQueryBuilder(true, true);
 
         $expected = "UPDATE sqlite_sequence SET seq='5' WHERE name='item'";
         $sql = $qb->resetSequence('item');
-        $this->assertSame($expected, $sql);
+        $this->assertEquals($expected, $sql);
 
         $expected = "UPDATE sqlite_sequence SET seq='3' WHERE name='item'";
         $sql = $qb->resetSequence('item', 4);
-        $this->assertSame($expected, $sql);
+        $this->assertEquals($expected, $sql);
     }
 
     public function upsertProvider()
@@ -251,11 +241,9 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
             ],
         ];
         $newData = parent::upsertProvider();
-
         foreach ($concreteData as $testName => $data) {
             $newData[$testName] = array_replace($newData[$testName], $data);
         }
-
         return $newData;
     }
 }

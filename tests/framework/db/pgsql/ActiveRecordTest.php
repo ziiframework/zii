@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -24,19 +21,16 @@ use yiiunit\TestCase;
 /**
  * @group db
  * @group pgsql
- *
- * @internal
- * @coversNothing
  */
 class ActiveRecordTest extends \yiiunit\framework\db\ActiveRecordTest
 {
     protected $driverName = 'pgsql';
 
-    public function testBooleanAttribute(): void
+    public function testBooleanAttribute()
     {
-        /** @var ActiveRecordInterface $customerClass */
+        /* @var $customerClass ActiveRecordInterface */
         $customerClass = $this->getCustomerClass();
-        /** @var TestCase|ActiveRecordTestTrait $this */
+        /* @var $this TestCase|ActiveRecordTestTrait */
         $customer = new $customerClass();
         $customer->name = 'boolean customer';
         $customer->email = 'mail@example.com';
@@ -59,14 +53,14 @@ class ActiveRecordTest extends \yiiunit\framework\db\ActiveRecordTest
         $this->assertCount(1, $customers);
     }
 
-    public function testFindAsArray(): void
+    public function testFindAsArray()
     {
-        /** @var ActiveRecordInterface $customerClass */
+        /* @var $customerClass ActiveRecordInterface */
         $customerClass = $this->getCustomerClass();
 
         // asArray
         $customer = $customerClass::find()->where(['id' => 2])->asArray()->one();
-        $this->assertSame([
+        $this->assertEquals([
             'id' => 2,
             'email' => 'user2@example.com',
             'name' => 'user2',
@@ -99,25 +93,27 @@ class ActiveRecordTest extends \yiiunit\framework\db\ActiveRecordTest
         $this->assertArrayHasKey('bool_status', $customers[2]);
     }
 
-    public function testBooleanValues(): void
+    public function testBooleanValues()
     {
         $db = $this->getConnection();
         $command = $db->createCommand();
-        $command->batchInsert('bool_values', ['bool_col'], [
-            [true],
-            [false],
-        ])->execute();
+        $command->batchInsert('bool_values',
+            ['bool_col'], [
+                [true],
+                [false],
+            ]
+        )->execute();
 
-        $this->assertSame(1, BoolAR::find()->where('bool_col = TRUE')->count('*', $db));
-        $this->assertSame(1, BoolAR::find()->where('bool_col = FALSE')->count('*', $db));
-        $this->assertSame(2, BoolAR::find()->where('bool_col IN (TRUE, FALSE)')->count('*', $db));
+        $this->assertEquals(1, BoolAR::find()->where('bool_col = TRUE')->count('*', $db));
+        $this->assertEquals(1, BoolAR::find()->where('bool_col = FALSE')->count('*', $db));
+        $this->assertEquals(2, BoolAR::find()->where('bool_col IN (TRUE, FALSE)')->count('*', $db));
 
-        $this->assertSame(1, BoolAR::find()->where(['bool_col' => true])->count('*', $db));
-        $this->assertSame(1, BoolAR::find()->where(['bool_col' => false])->count('*', $db));
-        $this->assertSame(2, BoolAR::find()->where(['bool_col' => [true, false]])->count('*', $db));
+        $this->assertEquals(1, BoolAR::find()->where(['bool_col' => true])->count('*', $db));
+        $this->assertEquals(1, BoolAR::find()->where(['bool_col' => false])->count('*', $db));
+        $this->assertEquals(2, BoolAR::find()->where(['bool_col' => [true, false]])->count('*', $db));
 
-        $this->assertSame(1, BoolAR::find()->where('bool_col = :bool_col', ['bool_col' => true])->count('*', $db));
-        $this->assertSame(1, BoolAR::find()->where('bool_col = :bool_col', ['bool_col' => false])->count('*', $db));
+        $this->assertEquals(1, BoolAR::find()->where('bool_col = :bool_col', ['bool_col' => true])->count('*', $db));
+        $this->assertEquals(1, BoolAR::find()->where('bool_col = :bool_col', ['bool_col' => false])->count('*', $db));
 
         $this->assertTrue(BoolAR::find()->where(['bool_col' => true])->one($db)->bool_col);
         $this->assertFalse(BoolAR::find()->where(['bool_col' => false])->one($db)->bool_col);
@@ -126,7 +122,7 @@ class ActiveRecordTest extends \yiiunit\framework\db\ActiveRecordTest
     /**
      * @see https://github.com/yiisoft/yii2/issues/4672
      */
-    public function testBooleanValues2(): void
+    public function testBooleanValues2()
     {
         $db = $this->getConnection();
         $db->charset = 'utf8';
@@ -159,7 +155,7 @@ class ActiveRecordTest extends \yiiunit\framework\db\ActiveRecordTest
         $this->assertCount(1, UserAR::find()->where(['is_deleted' => [true, false]])->all($db));
     }
 
-    public function testBooleanDefaultValues(): void
+    public function testBooleanDefaultValues()
     {
         $model = new BoolAR();
         $this->assertNull($model->bool_col);
@@ -173,41 +169,36 @@ class ActiveRecordTest extends \yiiunit\framework\db\ActiveRecordTest
         $this->assertTrue($model->save(false));
     }
 
-    public function testPrimaryKeyAfterSave(): void
+    public function testPrimaryKeyAfterSave()
     {
         $record = new DefaultPk();
         $record->type = 'type';
         $record->save(false);
-        $this->assertSame(5, $record->primaryKey);
+        $this->assertEquals(5, $record->primaryKey);
     }
 
     /**
      * @dataProvider arrayValuesProvider $attributes
-     *
-     * @param mixed $attributes
      */
-    public function testArrayValues($attributes): void
+    public function testArrayValues($attributes)
     {
         $type = new ArrayAndJsonTypes();
-
         foreach ($attributes as $attribute => $expected) {
-            $type->{$attribute} = $expected[0];
+            $type->$attribute = $expected[0];
         }
         $type->save();
 
         $type = ArrayAndJsonTypes::find()->one();
-
         foreach ($attributes as $attribute => $expected) {
-            $expected = $expected[1] ?? $expected[0];
-            $value = $type->{$attribute};
+            $expected = isset($expected[1]) ? $expected[1] : $expected[0];
+            $value = $type->$attribute;
 
-            $this->assertSame($expected, $value, 'In column ' . $attribute);
+            $this->assertEquals($expected, $value, 'In column ' . $attribute);
 
             if ($value instanceof ArrayExpression) {
                 $this->assertInstanceOf('\ArrayAccess', $value);
                 $this->assertInstanceOf('\Traversable', $value);
-
-                foreach ($type->{$attribute} as $key => $v) { // testing arrayaccess
+                foreach ($type->$attribute as $key => $v) { // testing arrayaccess
                     $this->assertSame($expected[$key], $value[$key]);
                 }
             }
@@ -225,14 +216,14 @@ class ActiveRecordTest extends \yiiunit\framework\db\ActiveRecordTest
         return [
             'simple arrays values' => [[
                 'intarray_col' => [
-                    new ArrayExpression([1, -2, null, '42'], 'int4', 1),
-                    new ArrayExpression([1, -2, null, 42], 'int4', 1),
+                    new ArrayExpression([1,-2,null,'42'], 'int4', 1),
+                    new ArrayExpression([1,-2,null,42], 'int4', 1),
                 ],
                 'textarray2_col' => [
                     new ArrayExpression([['text'], [null], [1]], 'text', 2),
                     new ArrayExpression([['text'], [null], ['1']], 'text', 2),
                 ],
-                'json_col' => [['a' => 1, 'b' => null, 'c' => [1, 3, 5]]],
+                'json_col' => [['a' => 1, 'b' => null, 'c' => [1,3,5]]],
                 'jsonb_col' => [[null, 'a', 'b', '\"', '{"af"}']],
                 'jsonarray_col' => [new ArrayExpression([[',', 'null', true, 'false', 'f']], 'json')],
             ]],
@@ -245,10 +236,10 @@ class ActiveRecordTest extends \yiiunit\framework\db\ActiveRecordTest
                     new ArrayExpression([null, null], 'text', 2),
                 ],
                 'json_col' => [
-                    null,
+                    null
                 ],
                 'jsonarray_col' => [
-                    null,
+                    null
                 ],
             ]],
             'empty arrays values' => [[
@@ -259,54 +250,54 @@ class ActiveRecordTest extends \yiiunit\framework\db\ActiveRecordTest
             ]],
             'nested objects' => [[
                 'intarray_col' => [
-                    new ArrayExpression(new ArrayExpression([1, 2, 3]), 'int', 1),
-                    new ArrayExpression([1, 2, 3], 'int4', 1),
+                    new ArrayExpression(new ArrayExpression([1,2,3]), 'int', 1),
+                    new ArrayExpression([1,2,3], 'int4', 1),
                 ],
                 'textarray2_col' => [
                     new ArrayExpression([new ArrayExpression(['text']), [null], [1]], 'text', 2),
                     new ArrayExpression([['text'], [null], ['1']], 'text', 2),
                 ],
                 'json_col' => [
-                    new JsonExpression(new JsonExpression(new JsonExpression(['a' => 1, 'b' => null, 'c' => new JsonExpression([1, 3, 5])]))),
-                    ['a' => 1, 'b' => null, 'c' => [1, 3, 5]],
+                    new JsonExpression(new JsonExpression(new JsonExpression(['a' => 1, 'b' => null, 'c' => new JsonExpression([1,3,5])]))),
+                    ['a' => 1, 'b' => null, 'c' => [1,3,5]]
                 ],
                 'jsonb_col' => [
-                    new JsonExpression(new ArrayExpression([1, 2, 3])),
-                    [1, 2, 3],
+                    new JsonExpression(new ArrayExpression([1,2,3])),
+                    [1,2,3]
                 ],
                 'jsonarray_col' => [
-                    new ArrayExpression([new JsonExpression(['1', 2]), [3, 4, 5]], 'json'),
-                    new ArrayExpression([['1', 2], [3, 4, 5]], 'json'),
-                ],
+                    new ArrayExpression([new JsonExpression(['1', 2]), [3,4,5]], 'json'),
+                    new ArrayExpression([['1', 2], [3,4,5]], 'json')
+                ]
             ]],
             'arrays packed in classes' => [[
                 'intarray_col' => [
-                    new ArrayExpression([1, -2, null, '42'], 'int', 1),
-                    new ArrayExpression([1, -2, null, 42], 'int4', 1),
+                    new ArrayExpression([1,-2,null,'42'], 'int', 1),
+                    new ArrayExpression([1,-2,null,42], 'int4', 1),
                 ],
                 'textarray2_col' => [
                     new ArrayExpression([['text'], [null], [1]], 'text', 2),
                     new ArrayExpression([['text'], [null], ['1']], 'text', 2),
                 ],
                 'json_col' => [
-                    new JsonExpression(['a' => 1, 'b' => null, 'c' => [1, 3, 5]]),
-                    ['a' => 1, 'b' => null, 'c' => [1, 3, 5]],
+                    new JsonExpression(['a' => 1, 'b' => null, 'c' => [1,3,5]]),
+                    ['a' => 1, 'b' => null, 'c' => [1,3,5]]
                 ],
                 'jsonb_col' => [
                     new JsonExpression([null, 'a', 'b', '\"', '{"af"}']),
-                    [null, 'a', 'b', '\"', '{"af"}'],
+                    [null, 'a', 'b', '\"', '{"af"}']
                 ],
                 'jsonarray_col' => [
                     new Expression("array['[\",\",\"null\",true,\"false\",\"f\"]'::json]::json[]"),
                     new ArrayExpression([[',', 'null', true, 'false', 'f']], 'json'),
-                ],
+                ]
             ]],
             'scalars' => [[
                 'json_col' => [
                     '5.8',
                 ],
                 'jsonb_col' => [
-                    M_PI,
+                    pi()
                 ],
             ]],
         ];
@@ -323,9 +314,9 @@ class BoolAR extends ActiveRecord
 
 class UserAR extends ActiveRecord
 {
-    public const STATUS_DELETED = 0;
-    public const STATUS_ACTIVE = 10;
-    public const ROLE_USER = 10;
+    const STATUS_DELETED = 0;
+    const STATUS_ACTIVE = 10;
+    const ROLE_USER = 10;
 
     public static function tableName()
     {
@@ -342,7 +333,6 @@ class UserAR extends ActiveRecord
 
 /**
  * {@inheritdoc}
- *
  * @property array id
  * @property array intarray_col
  * @property array textarray2_col

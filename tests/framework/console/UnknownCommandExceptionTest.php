@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -16,13 +13,10 @@ use yiiunit\TestCase;
 
 /**
  * @group console
- *
- * @internal
- * @coversNothing
  */
 class UnknownCommandExceptionTest extends TestCase
 {
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->mockApplication([
             'enableCoreCommands' => false,
@@ -64,20 +58,19 @@ class UnknownCommandExceptionTest extends TestCase
 
     /**
      * @dataProvider suggestedCommandsProvider
-     *
      * @param string $command
-     * @param array  $expectedSuggestion
+     * @param array $expectedSuggestion
      */
-    public function testSuggestCommand($command, $expectedSuggestion): void
+    public function testSuggestCommand($command, $expectedSuggestion)
     {
         $exception = new UnknownCommandException($command, Yii::$app);
-        $this->assertSame($expectedSuggestion, $exception->getSuggestedAlternatives());
+        $this->assertEquals($expectedSuggestion, $exception->getSuggestedAlternatives());
     }
 
-    public function testNameAndConstructor(): void
+    public function testNameAndConstructor()
     {
         $exception = new UnknownCommandException('test', Yii::$app);
-        $this->assertSame('Unknown command', $exception->getName());
-        $this->assertSame('test', $exception->command);
+        $this->assertEquals('Unknown command', $exception->getName());
+        $this->assertEquals('test', $exception->command);
     }
 }

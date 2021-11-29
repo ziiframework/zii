@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -17,13 +14,10 @@ use yiiunit\TestCase;
 
 /**
  * @group mail
- *
- * @internal
- * @coversNothing
  */
 class BaseMessageTest extends TestCase
 {
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->mockApplication([
             'components' => [
@@ -32,37 +26,39 @@ class BaseMessageTest extends TestCase
         ]);
     }
 
-    // Tests :
-
-    public function testSend(): void
-    {
-        $mailer = $this->getMailer();
-        $message = $mailer->compose();
-        $message->send($mailer);
-        $this->assertSame($message, $mailer->sentMessages[0], 'Unable to send message!');
-    }
-
-    public function testToString(): void
-    {
-        $mailer = $this->getMailer();
-        $message = $mailer->compose();
-        $this->assertSame($message->toString(), '' . $message);
-    }
-
     /**
-     * @return Mailer test email component instance
+     * @return Mailer test email component instance.
      */
     protected function createTestEmailComponent()
     {
-        return new TestMailer();
+        $component = new TestMailer();
+
+        return $component;
     }
 
     /**
-     * @return TestMailer mailer instance
+     * @return TestMailer mailer instance.
      */
     protected function getMailer()
     {
         return Yii::$app->get('mailer');
+    }
+
+    // Tests :
+
+    public function testSend()
+    {
+        $mailer = $this->getMailer();
+        $message = $mailer->compose();
+        $message->send($mailer);
+        $this->assertEquals($message, $mailer->sentMessages[0], 'Unable to send message!');
+    }
+
+    public function testToString()
+    {
+        $mailer = $this->getMailer();
+        $message = $mailer->compose();
+        $this->assertEquals($message->toString(), '' . $message);
     }
 }
 
@@ -74,7 +70,7 @@ class TestMailer extends BaseMailer
     public $messageClass = 'yiiunit\framework\mail\TestMessage';
     public $sentMessages = [];
 
-    protected function sendMessage($message): void
+    protected function sendMessage($message)
     {
         $this->sentMessages[] = $message;
     }
@@ -93,7 +89,7 @@ class TestMessage extends BaseMessage
         return '';
     }
 
-    public function setCharset($charset): void
+    public function setCharset($charset)
     {
     }
 
@@ -102,7 +98,7 @@ class TestMessage extends BaseMessage
         return '';
     }
 
-    public function setFrom($from): void
+    public function setFrom($from)
     {
     }
 
@@ -111,7 +107,7 @@ class TestMessage extends BaseMessage
         return '';
     }
 
-    public function setReplyTo($replyTo): void
+    public function setReplyTo($replyTo)
     {
     }
 
@@ -120,7 +116,7 @@ class TestMessage extends BaseMessage
         return '';
     }
 
-    public function setTo($to): void
+    public function setTo($to)
     {
     }
 
@@ -129,7 +125,7 @@ class TestMessage extends BaseMessage
         return '';
     }
 
-    public function setCc($cc): void
+    public function setCc($cc)
     {
     }
 
@@ -138,7 +134,7 @@ class TestMessage extends BaseMessage
         return '';
     }
 
-    public function setBcc($bcc): void
+    public function setBcc($bcc)
     {
     }
 
@@ -147,38 +143,38 @@ class TestMessage extends BaseMessage
         return '';
     }
 
-    public function setSubject($subject): void
+    public function setSubject($subject)
     {
     }
 
-    public function setTextBody($text): void
+    public function setTextBody($text)
     {
         $this->text = $text;
     }
 
-    public function setHtmlBody($html): void
+    public function setHtmlBody($html)
     {
         $this->html = $html;
     }
 
-    public function attachContent($content, array $options = []): void
+    public function attachContent($content, array $options = [])
     {
     }
 
-    public function attach($fileName, array $options = []): void
+    public function attach($fileName, array $options = [])
     {
     }
 
-    public function embed($fileName, array $options = []): void
+    public function embed($fileName, array $options = [])
     {
     }
 
-    public function embedContent($content, array $options = []): void
+    public function embedContent($content, array $options = [])
     {
     }
 
     public function toString()
     {
-        return static::class;
+        return get_class($this);
     }
 }
