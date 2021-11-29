@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,8 +7,6 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\web\session\pgsql;
 
-use function defined;
-
 /**
  * Class DbSessionTest.
  *
@@ -19,11 +14,8 @@ use function defined;
  *
  * @group db
  * @group pgsql
- *
- * @internal
- * @coversNothing
  */
-final class DbSessionTest extends \yiiunit\framework\web\session\AbstractDbSessionTest
+class DbSessionTest extends \yiiunit\framework\web\session\AbstractDbSessionTest
 {
     protected function setUp(): void
     {

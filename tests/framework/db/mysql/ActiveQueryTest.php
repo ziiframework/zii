@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -13,11 +10,8 @@ namespace yiiunit\framework\db\mysql;
 /**
  * @group db
  * @group mysql
- *
- * @internal
- * @coversNothing
  */
-final class ActiveQueryTest extends \yiiunit\framework\db\ActiveQueryTest
+class ActiveQueryTest extends \yiiunit\framework\db\ActiveQueryTest
 {
     public $driverName = 'mysql';
 }

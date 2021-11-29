@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,20 +7,15 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\i18n;
 
-use function chr;
-use function in_array;
 use yii\i18n\GettextMoFile;
 use yiiunit\TestCase;
 
 /**
  * @group i18n
- *
- * @internal
- * @coversNothing
  */
-final class GettextMoFileTest extends TestCase
+class GettextMoFileTest extends TestCase
 {
-    public function testLoad(): void
+    public function testLoad()
     {
         $moFile = new GettextMoFile();
         $moFilePath = __DIR__ . '/../../data/i18n/test.mo';
@@ -44,16 +36,16 @@ final class GettextMoFileTest extends TestCase
         $this->assertArrayHasKey("test1\\ntest2\n\\\ntest3", $context2);
 
         // translated messages
-        $this->assertFalse(in_array('', $context1, true));
-        $this->assertTrue(in_array("Олицетворение однократно. Представленный лексико-семантический анализ является\nпсихолингвистическим в своей основе, но механизм сочленений полидисперсен. Впечатление\nоднократно. Различное расположение выбирает сюжетный механизм сочленений.", $context1, true));
-        $this->assertTrue(in_array('Строка номер два.', $context1, true));
-        $this->assertTrue(in_array('Короткий перевод.', $context1, true));
+        $this->assertFalse(in_array('', $context1));
+        $this->assertTrue(in_array("Олицетворение однократно. Представленный лексико-семантический анализ является\nпсихолингвистическим в своей основе, но механизм сочленений полидисперсен. Впечатление\nоднократно. Различное расположение выбирает сюжетный механизм сочленений.", $context1));
+        $this->assertTrue(in_array('Строка номер два.', $context1));
+        $this->assertTrue(in_array('Короткий перевод.', $context1));
 
-        $this->assertTrue(in_array("Другой\n\nконтекст.\n", $context2, true));
-        $this->assertTrue(in_array("тест1\\nтест2\n\\\nтест3", $context2, true));
+        $this->assertTrue(in_array("Другой\n\nконтекст.\n", $context2));
+        $this->assertTrue(in_array("тест1\\nтест2\n\\\nтест3", $context2));
     }
 
-    public function testSave(): void
+    public function testSave()
     {
         // initial data
         $s = chr(4);
@@ -70,11 +62,9 @@ final class GettextMoFileTest extends TestCase
 
         // create temporary directory and dump messages
         $poFileDirectory = __DIR__ . '/../../runtime/i18n';
-
         if (!is_dir($poFileDirectory)) {
             mkdir($poFileDirectory);
         }
-
         if (is_file($poFileDirectory . '/test.mo')) {
             unlink($poFileDirectory . '/test.mo');
         }
@@ -90,24 +80,24 @@ final class GettextMoFileTest extends TestCase
         $this->assertCount(2, $context1);
 
         $this->assertArrayHasKey('Hello?', $context1);
-        $this->assertTrue(in_array('Привет?', $context1, true));
+        $this->assertTrue(in_array('Привет?', $context1));
 
         $this->assertArrayHasKey('Hello!?!', $context1);
-        $this->assertTrue(in_array('', $context1, true));
+        $this->assertTrue(in_array('', $context1));
 
         // context2
         $this->assertCount(4, $context2);
 
         $this->assertArrayHasKey('"Quotes"', $context2);
-        $this->assertTrue(in_array('"Кавычки"', $context2, true));
+        $this->assertTrue(in_array('"Кавычки"', $context2));
 
         $this->assertArrayHasKey("\nNew lines\n", $context2);
-        $this->assertTrue(in_array("\nПереносы строк\n", $context2, true));
+        $this->assertTrue(in_array("\nПереносы строк\n", $context2));
 
         $this->assertArrayHasKey("\tTabs\t", $context2);
-        $this->assertTrue(in_array("\tТабы\t", $context2, true));
+        $this->assertTrue(in_array("\tТабы\t", $context2));
 
         $this->assertArrayHasKey("\rCarriage returns\r", $context2);
-        $this->assertTrue(in_array("\rВозвраты кареток\r", $context2, true));
+        $this->assertTrue(in_array("\rВозвраты кареток\r", $context2));
     }
 }

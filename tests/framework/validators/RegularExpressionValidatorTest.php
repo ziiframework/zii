@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -16,11 +13,8 @@ use yiiunit\TestCase;
 
 /**
  * @group validators
- *
- * @internal
- * @coversNothing
  */
-final class RegularExpressionValidatorTest extends TestCase
+class RegularExpressionValidatorTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -30,7 +24,7 @@ final class RegularExpressionValidatorTest extends TestCase
         $this->destroyApplication();
     }
 
-    public function testValidateValue(): void
+    public function testValidateValue()
     {
         $val = new RegularExpressionValidator(['pattern' => '/^[a-zA-Z0-9](\.)?([^\/]*)$/m']);
         $this->assertTrue($val->validate('b.4'));
@@ -42,7 +36,7 @@ final class RegularExpressionValidatorTest extends TestCase
         $this->assertFalse($val->validate(['a', 'b']));
     }
 
-    public function testValidateAttribute(): void
+    public function testValidateAttribute()
     {
         $val = new RegularExpressionValidator(['pattern' => '/^[a-zA-Z0-9](\.)?([^\/]*)$/m']);
         $m = FakedValidationModel::createWithAttributes(['attr_reg1' => 'b.4']);
@@ -53,13 +47,13 @@ final class RegularExpressionValidatorTest extends TestCase
         $this->assertTrue($m->hasErrors('attr_reg1'));
     }
 
-    public function testMessageSetOnInit(): void
+    public function testMessageSetOnInit()
     {
         $val = new RegularExpressionValidator(['pattern' => '/^[a-zA-Z0-9](\.)?([^\/]*)$/m']);
         $this->assertIsString($val->message);
     }
 
-    public function testInitException(): void
+    public function testInitException()
     {
         $this->expectException('yii\base\InvalidConfigException');
         $val = new RegularExpressionValidator();

@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,24 +7,19 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\console\controllers;
 
-use function chr;
-use function dirname;
 use Yii;
 use yii\helpers\FileHelper;
 use yii\i18n\GettextPoFile;
 
 /**
  * Tests that [[\yii\console\controllers\MessageController]] works as expected with PO message format.
- *
- * @internal
- * @coversNothing
  */
-final class POMessageControllerTest extends BaseMessageControllerTest
+class POMessageControllerTest extends BaseMessageControllerTest
 {
     protected $messagePath;
     protected $catalog = 'messages';
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -35,7 +27,7 @@ final class POMessageControllerTest extends BaseMessageControllerTest
         FileHelper::createDirectory($this->messagePath, 0777);
     }
 
-    protected function tearDown(): void
+    public function tearDown(): void
     {
         parent::tearDown();
         FileHelper::removeDirectory($this->messagePath);
@@ -66,14 +58,13 @@ final class POMessageControllerTest extends BaseMessageControllerTest
     /**
      * {@inheritdoc}
      */
-    protected function saveMessages($messages, $category): void
+    protected function saveMessages($messages, $category)
     {
         $messageFilePath = $this->getMessageFilePath();
         FileHelper::createDirectory(dirname($messageFilePath), 0777);
         $gettext = new GettextPoFile();
 
         $data = [];
-
         foreach ($messages as $message => $translation) {
             $data[$category . chr(4) . $message] = $translation;
         }
@@ -87,13 +78,11 @@ final class POMessageControllerTest extends BaseMessageControllerTest
     protected function loadMessages($category)
     {
         $messageFilePath = $this->getMessageFilePath();
-
         if (!file_exists($messageFilePath)) {
             return [];
         }
 
         $gettext = new GettextPoFile();
-
         return $gettext->load($messageFilePath, $category);
     }
 }

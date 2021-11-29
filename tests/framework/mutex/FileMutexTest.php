@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,7 +7,6 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\mutex;
 
-use Yii;
 use yii\base\InvalidConfigException;
 use yii\mutex\FileMutex;
 use yiiunit\TestCase;
@@ -19,22 +15,30 @@ use yiiunit\TestCase;
  * Class FileMutexTest.
  *
  * @group mutex
- *
- * @internal
- * @coversNothing
  */
-final class FileMutexTest extends TestCase
+class FileMutexTest extends TestCase
 {
     use MutexTestTrait;
+
+    /**
+     * @return FileMutex
+     * @throws InvalidConfigException
+     */
+    protected function createMutex()
+    {
+        return \Yii::createObject([
+            'class' => FileMutex::className(),
+            'mutexPath' => '@yiiunit/runtime/mutex',
+        ]);
+    }
 
     /**
      * @dataProvider mutexDataProvider()
      *
      * @param string $mutexName
-     *
      * @throws InvalidConfigException
      */
-    public function testDeleteLockFile($mutexName): void
+    public function testDeleteLockFile($mutexName)
     {
         $mutex = $this->createMutex();
         $fileName = $mutex->mutexPath . '/' . md5($mutexName) . '.lock';
@@ -44,18 +48,5 @@ final class FileMutexTest extends TestCase
 
         $mutex->release($mutexName);
         $this->assertFileDoesNotExist($fileName);
-    }
-
-    /**
-     * @throws InvalidConfigException
-     *
-     * @return FileMutex
-     */
-    protected function createMutex()
-    {
-        return Yii::createObject([
-            'class' => FileMutex::className(),
-            'mutexPath' => '@yiiunit/runtime/mutex',
-        ]);
     }
 }

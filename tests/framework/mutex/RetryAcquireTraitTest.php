@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,8 +7,6 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\mutex;
 
-use function count;
-use const DIRECTORY_SEPARATOR;
 use Yii;
 use yii\base\InvalidConfigException;
 use yiiunit\framework\mutex\mocks\DumbMutex;
@@ -23,26 +18,37 @@ use yiiunit\TestCase;
  * @group mutex
  *
  * @author Robert Korulczyk <robert@korulczyk.pl>
- *
- * @internal
- * @coversNothing
  */
-final class RetryAcquireTraitTest extends TestCase
+class RetryAcquireTraitTest extends TestCase
 {
     /**
      * @throws InvalidConfigException
      */
-    public function testRetryAcquire(): void
+    public function testRetryAcquire()
     {
         $mutexName = __FUNCTION__;
         $mutexOne = $this->createMutex();
         $mutexTwo = $this->createMutex();
 
-        $this->assertTrue($mutexOne->acquire($mutexName), 'Failed to acquire first mutex.');
-        $this->assertFalse($mutexTwo->acquire($mutexName, 1), 'Second mutex was acquired but should have timed out.');
+        $this->assertTrue(
+            $mutexOne->acquire($mutexName),
+            'Failed to acquire first mutex.'
+        );
+        $this->assertFalse(
+            $mutexTwo->acquire($mutexName, 1),
+            'Second mutex was acquired but should have timed out.'
+        );
 
-        $this->assertGreaterThanOrEqual(1, count($mutexTwo->attemptsTime), 'There should be at least one atttempt to acquire first mutex.');
-        $this->assertLessThanOrEqual(20, count($mutexTwo->attemptsTime), 'There could be no more than 20 attempts consideing 50ms delay and 1s timeout.');
+        $this->assertGreaterThanOrEqual(
+            1,
+            count($mutexTwo->attemptsTime),
+            'There should be at least one atttempt to acquire first mutex.'
+        );
+        $this->assertLessThanOrEqual(
+            20,
+            count($mutexTwo->attemptsTime),
+            'There could be no more than 20 attempts consideing 50ms delay and 1s timeout.'
+        );
 
         // https://docs.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-sleep
         // If dwMilliseconds is less than the resolution of the system clock, the thread may sleep for less
@@ -54,7 +60,15 @@ final class RetryAcquireTraitTest extends TestCase
                 }
 
                 $attemptInterval = ($mutexTwo->attemptsTime[$i] - $mutexTwo->attemptsTime[$i - 1]) * 1000;
-                $this->assertGreaterThanOrEqual($mutexTwo->retryDelay, $attemptInterval, sprintf('Retry delay of %s ms was not properly taken into account. Actual interval was %s ms.', $mutexTwo->retryDelay, $attemptInterval));
+                $this->assertGreaterThanOrEqual(
+                    $mutexTwo->retryDelay,
+                    $attemptInterval,
+                    sprintf(
+                        'Retry delay of %s ms was not properly taken into account. Actual interval was %s ms.',
+                        $mutexTwo->retryDelay,
+                        $attemptInterval
+                    )
+                );
             }
         }
     }
@@ -68,14 +82,15 @@ final class RetryAcquireTraitTest extends TestCase
     }
 
     /**
-     * @throws InvalidConfigException
-     *
      * @return DumbMutex
+     * @throws InvalidConfigException
      */
     private function createMutex()
     {
-        return Yii::createObject([
-            'class' => DumbMutex::className(),
-        ]);
+        return Yii::createObject(
+            [
+                'class' => DumbMutex::className(),
+            ]
+        );
     }
 }

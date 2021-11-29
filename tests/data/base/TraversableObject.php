@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,21 +7,14 @@ declare(strict_types=1);
 
 namespace yiiunit\data\base;
 
-use function array_key_exists;
-use Countable;
-use Exception;
-use Iterator;
-
 /**
  * TraversableObject
  * Object that implements `\Traversable` and `\Countable`, but counting throws an exception;
  * Used for testing support for traversable objects instead of arrays.
- *
  * @author Sam Mousa <sam@mousa.nl>
- *
  * @since 2.0.8
  */
-class TraversableObject implements Iterator, Countable
+class TraversableObject implements \Iterator, \Countable
 {
     protected $data;
     private $position = 0;
@@ -35,13 +25,12 @@ class TraversableObject implements Iterator, Countable
     }
 
     /**
-     * @throws Exception
-     *
+     * @throws \Exception
      * @since 5.1.0
      */
-    public function count(): void
+    public function count()
     {
-        throw new Exception('Count called on object that should only be traversed.');
+        throw new \Exception('Count called on object that should only be traversed.');
     }
 
     /**
@@ -55,9 +44,9 @@ class TraversableObject implements Iterator, Countable
     /**
      * {@inheritdoc}
      */
-    public function next(): void
+    public function next()
     {
-        ++$this->position;
+        $this->position++;
     }
 
     /**
@@ -79,7 +68,7 @@ class TraversableObject implements Iterator, Countable
     /**
      * {@inheritdoc}
      */
-    public function rewind(): void
+    public function rewind()
     {
         $this->position = 0;
     }

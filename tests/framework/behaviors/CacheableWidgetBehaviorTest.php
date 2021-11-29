@@ -1,16 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace yiiunit\framework\behaviors;
 
-use Exception;
 use PHPUnit_Framework_MockObject_MockObject;
 use yii\base\Widget;
 use yii\behaviors\CacheableWidgetBehavior;
@@ -21,23 +12,20 @@ use yiiunit\TestCase;
  *
  * @see CacheableWidgetBehavior
  * @group behaviors
- *
- * @internal
- * @coversNothing
  */
-final class CacheableWidgetBehaviorTest extends TestCase
+class CacheableWidgetBehaviorTest extends TestCase
 {
     /**
      * Default-initialized simple cacheable widget mock.
      *
-     * @var CacheableWidgetBehavior|PHPUnit_Framework_MockObject_MockObject|SimpleCacheableWidget
+     * @var PHPUnit_Framework_MockObject_MockObject|SimpleCacheableWidget|CacheableWidgetBehavior
      */
     private $simpleWidget;
 
     /**
      * Default-initialized dynamic cacheable widget mock.
      *
-     * @var CacheableWidgetBehavior|DynamicCacheableWidget|PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit_Framework_MockObject_MockObject|DynamicCacheableWidget|CacheableWidgetBehavior
      */
     private $dynamicWidget;
 
@@ -51,56 +39,54 @@ final class CacheableWidgetBehaviorTest extends TestCase
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
-    public function testWidgetIsRunWhenCacheIsEmpty(): void
+    public function testWidgetIsRunWhenCacheIsEmpty()
     {
         $this->simpleWidget
             ->expects($this->once())
-            ->method('run')
-        ;
+            ->method('run');
 
         $contents = $this->simpleWidget->test();
-        $this->assertSame('contents', $contents);
+        $this->assertEquals('contents', $contents);
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
-    public function testWidgetIsNotRunWhenCacheIsNotEmpty(): void
+    public function testWidgetIsNotRunWhenCacheIsNotEmpty()
     {
         $this->simpleWidget->cacheDuration = 0;
         $this->simpleWidget
             ->expects($this->once())
-            ->method('run')
-        ;
+            ->method('run');
 
-        for ($counter = 0; $counter <= 1; ++$counter) {
-            $this->assertSame('contents', $this->simpleWidget->test());
+        for ($counter = 0; $counter <= 1; $counter++) {
+            $this->assertEquals('contents', $this->simpleWidget->test());
         }
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
-    public function testDynamicContent(): void
+    public function testDynamicContent()
     {
         $this->dynamicWidget->cacheDuration = 0;
         $this->dynamicWidget
             ->expects($this->once())
-            ->method('run')
-        ;
+            ->method('run');
 
-        for ($counter = 0; $counter <= 1; ++$counter) {
+        for ($counter = 0; $counter <= 1; $counter++) {
             $expectedContents = sprintf('<div>dynamic contents: %d</div>', $counter);
-            $this->assertSame($expectedContents, $this->dynamicWidget->test());
+            $this->assertEquals($expectedContents, $this->dynamicWidget->test());
         }
     }
 
     /**
      * Initializes a mock application.
+     *
      */
-    private function initializeApplicationMock(): void
+    private function initializeApplicationMock()
     {
         $this->mockApplication([
             'components' => [
@@ -117,8 +103,9 @@ final class CacheableWidgetBehaviorTest extends TestCase
 
     /**
      * Initializes mock widgets.
+     *
      */
-    private function initializeWidgetMocks(): void
+    private function initializeWidgetMocks()
     {
         $this->simpleWidget = $this->getWidgetMock(SimpleCacheableWidget::className());
         $this->dynamicWidget = $this->getWidgetMock(DynamicCacheableWidget::className());
@@ -126,19 +113,18 @@ final class CacheableWidgetBehaviorTest extends TestCase
 
     /**
      * Returns a widget mock.
-     *
      * @param $widgetClass
-     *
      * @return PHPUnit_Framework_MockObject_MockObject
      */
     private function getWidgetMock($widgetClass)
     {
-        return $this->getMockBuilder($widgetClass)
+        $widgetMock = $this->getMockBuilder($widgetClass)
             ->setMethods(['run'])
             ->enableOriginalConstructor()
             ->enableProxyingToOriginalMethods()
-            ->getMock()
-        ;
+            ->getMock();
+
+        return $widgetMock;
     }
 }
 
@@ -151,19 +137,16 @@ class BaseCacheableWidget extends Widget
     {
         ob_start();
         ob_implicit_flush(false);
-
         try {
             $out = '';
-
             if ($this->beforeRun()) {
                 $result = $this->run();
                 $out = $this->afterRun($result);
             }
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             if (ob_get_level() > 0) {
                 ob_end_clean();
             }
-
             throw $exception;
         }
 
@@ -188,7 +171,9 @@ class SimpleCacheableWidget extends BaseCacheableWidget
      */
     public function run()
     {
-        return 'contents';
+        $content = 'contents';
+
+        return $content;
     }
 }
 
@@ -201,7 +186,8 @@ class DynamicCacheableWidget extends BaseCacheableWidget
     {
         $dynamicContentsExpression = 'return "dynamic contents: " . \Yii::$app->params["counter"]++;';
         $dynamicContents = $this->view->renderDynamic($dynamicContentsExpression);
+        $content = '<div>' . $dynamicContents . '</div>';
 
-        return '<div>' . $dynamicContents . '</div>';
+        return $content;
     }
 }

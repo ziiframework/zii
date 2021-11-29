@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -19,13 +16,11 @@ use yiiunit\TestCase;
 
 /**
  * @group filters
- *
- * @internal
- * @coversNothing
  */
-final class CorsTest extends TestCase
+class CorsTest extends TestCase
 {
-    public function testPreflight(): void
+
+    public function testPreflight()
     {
         $this->mockWebApplication();
         $controller = new Controller('id', Yii::$app);
@@ -38,7 +33,7 @@ final class CorsTest extends TestCase
         $_SERVER['REQUEST_METHOD'] = 'OPTIONS';
         $request->headers->set('Access-Control-Request-Method', 'GET');
         $this->assertFalse($cors->beforeAction($action));
-        $this->assertSame(200, $cors->response->getStatusCode());
+        $this->assertEquals(200, $cors->response->getStatusCode());
 
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $request->headers->set('Access-Control-Request-Method', 'GET');
@@ -48,7 +43,7 @@ final class CorsTest extends TestCase
         $this->assertTrue($cors->beforeAction($action));
     }
 
-    public function testWildcardOrigin(): void
+    public function testWildcardOrigin()
     {
         $this->mockWebApplication();
         $controller = new Controller('id', Yii::$app);
@@ -57,7 +52,7 @@ final class CorsTest extends TestCase
 
         $cors = new Cors([
             'cors' => [
-                'Origin' => ['*'],
+                'Origin' => ['*',],
                 'Access-Control-Allow-Credentials' => false,
             ],
         ]);
@@ -66,19 +61,18 @@ final class CorsTest extends TestCase
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['HTTP_ORIGIN'] = 'http://foo.com';
         $this->assertTrue($cors->beforeAction($action));
-        $this->assertSame('*', $cors->response->getHeaders()->get('access-control-allow-origin'));
+        $this->assertEquals('*', $cors->response->getHeaders()->get('access-control-allow-origin'));
     }
 
-    public function testAccessControlAllowHeadersPreflight(): void
-    {
+    public function testAccessControlAllowHeadersPreflight() {
         $this->mockWebApplication();
         $controller = new Controller('id', Yii::$app);
         $action = new Action('test', $controller);
         $request = new Request();
         $cors = new Cors([
             'cors' => [
-                'Origin' => ['*'],
-                'Access-Control-Allow-Headers' => ['authorization', 'X-Requested-With', 'content-type', 'custom_header'],
+                'Origin' => ['*',],
+                'Access-Control-Allow-Headers' => ['authorization','X-Requested-With','content-type', 'custom_header']
             ],
         ]);
         $cors->request = $request;
@@ -86,6 +80,8 @@ final class CorsTest extends TestCase
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['HTTP_ORIGIN'] = 'http://foo.com';
         $this->assertTrue($cors->beforeAction($action));
-        $this->assertSame('authorization, X-Requested-With, content-type, custom_header', $cors->response->getHeaders()->get('Access-Control-Allow-Headers'));
+        $this->assertEquals('authorization, X-Requested-With, content-type, custom_header', $cors->response->getHeaders()->get('Access-Control-Allow-Headers'));
     }
+
+
 }

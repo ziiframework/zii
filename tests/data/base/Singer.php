@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -35,7 +32,7 @@ class Singer extends Model
             [['lastName'], 'required'],
             [['lastName'], 'string', 'max' => 25],
             [['underscore_style'], 'yii\captcha\CaptchaValidator'],
-            [['test'], 'required', 'when' => static fn ($model) => $model->firstName === 'cebe'],
+            [['test'], 'required', 'when' => function ($model) { return $model->firstName === 'cebe'; }],
         ];
     }
 }

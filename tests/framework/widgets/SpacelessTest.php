@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -14,13 +11,10 @@ use yii\widgets\Spaceless;
 
 /**
  * @group widgets
- *
- * @internal
- * @coversNothing
  */
-final class SpacelessTest extends \yiiunit\TestCase
+class SpacelessTest extends \yiiunit\TestCase
 {
-    public function testWidget(): void
+    public function testWidget()
     {
         ob_start();
         ob_implicit_flush(false);
@@ -47,20 +41,22 @@ final class SpacelessTest extends \yiiunit\TestCase
 
         $expected = "<body>\n<div class='wrapper'><div class='left-column'><p>This is a left bar!</p>" .
             "</div><div class='right-column'><p>This is a right bar!</p></div></div>\t<p>Bye!</p>\n</body>\n";
-        $this->assertSame($expected, ob_get_clean());
+        $this->assertEquals($expected, ob_get_clean());
     }
 
     /**
      * @see https://github.com/yiisoft/yii2/issues/15536
      */
-    public function testShouldTriggerInitEvent(): void
+    public function testShouldTriggerInitEvent()
     {
         $initTriggered = false;
-        $spaceless = Spaceless::begin([
-            'on init' => static function () use (&$initTriggered): void {
-                $initTriggered = true;
-            },
-        ]);
+        $spaceless = Spaceless::begin(
+            [
+                'on init' => function () use (&$initTriggered) {
+                    $initTriggered = true;
+                }
+            ]
+        );
         Spaceless::end();
         $this->assertTrue($initTriggered);
     }

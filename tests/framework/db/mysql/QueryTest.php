@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,25 +7,21 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\db\mysql;
 
-use function is_int;
 use yii\db\Expression;
 use yii\db\Query;
 
 /**
  * @group db
  * @group mysql
- *
- * @internal
- * @coversNothing
  */
-final class QueryTest extends \yiiunit\framework\db\QueryTest
+class QueryTest extends \yiiunit\framework\db\QueryTest
 {
     protected $driverName = 'mysql';
 
     /**
      * Tests MySQL specific syntax for index hints.
      */
-    public function testQueryIndexHint(): void
+    public function testQueryIndexHint()
     {
         $db = $this->getConnection();
 
@@ -39,14 +32,13 @@ final class QueryTest extends \yiiunit\framework\db\QueryTest
         $this->assertArrayHasKey('email', $row);
     }
 
-    public function testLimitOffsetWithExpression(): void
+    public function testLimitOffsetWithExpression()
     {
         $query = (new Query())->from('customer')->select('id')->orderBy('id');
         // In MySQL limit and offset arguments must both be nonnegative integer constant
         $query
             ->limit(new Expression('2'))
-            ->offset(new Expression('1'))
-        ;
+            ->offset(new Expression('1'));
 
         $columnValues = $query->column($this->getConnection());
 
@@ -55,7 +47,7 @@ final class QueryTest extends \yiiunit\framework\db\QueryTest
         // make sure int => string for strict equals
         foreach ($columnValues as $i => $columnValue) {
             if (is_int($columnValue)) {
-                $columnValues[$i] = (string) $columnValue;
+                $columnValues[$i] = (string)$columnValue;
             }
         }
 

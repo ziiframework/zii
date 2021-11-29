@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,10 +7,6 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\di;
 
-use function defined;
-use Exception;
-use function get_class;
-use const PHP_VERSION_ID;
 use Yii;
 use yii\di\Container;
 use yii\di\Instance;
@@ -31,8 +24,8 @@ use yiiunit\framework\di\stubs\Foo;
 use yiiunit\framework\di\stubs\FooProperty;
 use yiiunit\framework\di\stubs\Kappa;
 use yiiunit\framework\di\stubs\Qux;
-use yiiunit\framework\di\stubs\QuxFactory;
 use yiiunit\framework\di\stubs\QuxInterface;
+use yiiunit\framework\di\stubs\QuxFactory;
 use yiiunit\framework\di\stubs\UnionTypeNotNull;
 use yiiunit\framework\di\stubs\UnionTypeNull;
 use yiiunit\framework\di\stubs\UnionTypeWithClass;
@@ -41,14 +34,10 @@ use yiiunit\TestCase;
 
 /**
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  * @group di
- *
- * @internal
- * @coversNothing
  */
-final class ContainerTest extends TestCase
+class ContainerTest extends TestCase
 {
     protected function tearDown(): void
     {
@@ -56,10 +45,10 @@ final class ContainerTest extends TestCase
         Yii::$container = new Container();
     }
 
-    public function testDefault(): void
+    public function testDefault()
     {
         $namespace = __NAMESPACE__ . '\stubs';
-        $QuxInterface = "{$namespace}\\QuxInterface";
+        $QuxInterface = "$namespace\\QuxInterface";
         $Foo = Foo::className();
         $Bar = Bar::className();
         $Qux = Qux::className();
@@ -87,10 +76,9 @@ final class ContainerTest extends TestCase
 
         // wiring by closure
         $container = new Container();
-        $container->set('foo', static function () {
+        $container->set('foo', function () {
             $qux = new Qux();
             $bar = new Bar($qux);
-
             return new Foo($bar);
         });
         $foo = $container->get('foo');
@@ -101,7 +89,9 @@ final class ContainerTest extends TestCase
         // wiring by closure which uses container
         $container = new Container();
         $container->set($QuxInterface, $Qux);
-        $container->set('foo', static fn (Container $c, $params, $config) => $c->get(Foo::className()));
+        $container->set('foo', function (Container $c, $params, $config) {
+            return $c->get(Foo::className());
+        });
         $foo = $container->get('foo');
         $this->assertInstanceOf($Foo, $foo);
         $this->assertInstanceOf($Bar, $foo->bar);
@@ -141,14 +131,14 @@ final class ContainerTest extends TestCase
         $container = new Container();
         $container->set('qux', $Qux);
         $qux = $container->get('qux', [], ['a' => 2]);
-        $this->assertSame(2, $qux->a);
+        $this->assertEquals(2, $qux->a);
         $qux = $container->get('qux', [3]);
-        $this->assertSame(3, $qux->a);
+        $this->assertEquals(3, $qux->a);
         $qux = $container->get('qux', [3, ['a' => 4]]);
-        $this->assertSame(4, $qux->a);
+        $this->assertEquals(4, $qux->a);
     }
 
-    public function testInvoke(): void
+    public function testInvoke()
     {
         $this->mockApplication([
             'components' => [
@@ -168,41 +158,53 @@ final class ContainerTest extends TestCase
         ]);
 
         // use component of application
-        $callback = static fn ($param, stubs\QuxInterface $qux, Bar $bar) => [$param, $qux instanceof Qux, $qux->a, $bar->qux->a];
+        $callback = function ($param, stubs\QuxInterface $qux, Bar $bar) {
+            return [$param, $qux instanceof Qux, $qux->a, $bar->qux->a];
+        };
         $result = Yii::$container->invoke($callback, ['D426']);
-        $this->assertSame(['D426', true, 'belongApp', 'independent'], $result);
+        $this->assertEquals(['D426', true, 'belongApp', 'independent'], $result);
 
         // another component of application
-        $callback = static fn ($param, stubs\QuxInterface $qux2, $other = 'default') => [$param, $qux2 instanceof Qux, $qux2->a, $other];
+        $callback = function ($param, stubs\QuxInterface $qux2, $other = 'default') {
+            return [$param, $qux2 instanceof Qux, $qux2->a, $other];
+        };
         $result = Yii::$container->invoke($callback, ['M2792684']);
-        $this->assertSame(['M2792684', true, 'belongAppQux2', 'default'], $result);
+        $this->assertEquals(['M2792684', true, 'belongAppQux2', 'default'], $result);
 
         // component not belong application
-        $callback = static fn ($param, stubs\QuxInterface $notBelongApp, $other) => [$param, $notBelongApp instanceof Qux, $notBelongApp->a, $other];
+        $callback = function ($param, stubs\QuxInterface $notBelongApp, $other) {
+            return [$param, $notBelongApp instanceof Qux, $notBelongApp->a, $other];
+        };
         $result = Yii::$container->invoke($callback, ['MDM', 'not_default']);
-        $this->assertSame(['MDM', true, 'independent', 'not_default'], $result);
+        $this->assertEquals(['MDM', true, 'independent', 'not_default'], $result);
 
-        $myFunc = static fn ($a, NumberValidator $b, $c = 'default') => [$a, get_class($b), $c];
+
+        $myFunc = function ($a, NumberValidator $b, $c = 'default') {
+            return [$a, \get_class($b), $c];
+        };
         $result = Yii::$container->invoke($myFunc, ['a']);
-        $this->assertSame(['a', 'yii\validators\NumberValidator', 'default'], $result);
+        $this->assertEquals(['a', 'yii\validators\NumberValidator', 'default'], $result);
 
         $result = Yii::$container->invoke($myFunc, ['ok', 'value_of_c']);
-        $this->assertSame(['ok', 'yii\validators\NumberValidator', 'value_of_c'], $result);
+        $this->assertEquals(['ok', 'yii\validators\NumberValidator', 'value_of_c'], $result);
 
         // use native php function
-        $this->assertSame(Yii::$container->invoke('trim', [' M2792684  ']), 'M2792684');
+        $this->assertEquals(Yii::$container->invoke('trim', [' M2792684  ']), 'M2792684');
 
         // use helper function
         $array = ['M36', 'D426', 'Y2684'];
         $this->assertFalse(Yii::$container->invoke(['yii\helpers\ArrayHelper', 'isAssociative'], [$array]));
 
-        $myFunc = static fn (\yii\console\Request $request, \yii\console\Response $response) => [$request, $response];
-        [$request, $response] = Yii::$container->invoke($myFunc);
-        $this->assertSame($request, Yii::$app->request);
-        $this->assertSame($response, Yii::$app->response);
+
+        $myFunc = function (\yii\console\Request $request, \yii\console\Response $response) {
+            return [$request, $response];
+        };
+        list($request, $response) = Yii::$container->invoke($myFunc);
+        $this->assertEquals($request, Yii::$app->request);
+        $this->assertEquals($response, Yii::$app->response);
     }
 
-    public function testAssociativeInvoke(): void
+    public function testAssociativeInvoke()
     {
         $this->mockApplication([
             'components' => [
@@ -216,12 +218,14 @@ final class ContainerTest extends TestCase
                 ],
             ],
         ]);
-        $closure = static fn ($a, $b, $x = 5) => $a > $b;
+        $closure = function ($a, $b, $x = 5) {
+            return $a > $b;
+        };
         $this->assertFalse(Yii::$container->invoke($closure, ['b' => 5, 'a' => 1]));
         $this->assertTrue(Yii::$container->invoke($closure, ['b' => 1, 'a' => 5]));
     }
 
-    public function testResolveCallableDependencies(): void
+    public function testResolveCallableDependencies()
     {
         $this->mockApplication([
             'components' => [
@@ -235,21 +239,25 @@ final class ContainerTest extends TestCase
                 ],
             ],
         ]);
-        $closure = static fn ($a, $b) => $a > $b;
-        $this->assertSame([1, 5], Yii::$container->resolveCallableDependencies($closure, ['b' => 5, 'a' => 1]));
-        $this->assertSame([1, 5], Yii::$container->resolveCallableDependencies($closure, ['a' => 1, 'b' => 5]));
-        $this->assertSame([1, 5], Yii::$container->resolveCallableDependencies($closure, [1, 5]));
+        $closure = function ($a, $b) {
+            return $a > $b;
+        };
+        $this->assertEquals([1, 5], Yii::$container->resolveCallableDependencies($closure, ['b' => 5, 'a' => 1]));
+        $this->assertEquals([1, 5], Yii::$container->resolveCallableDependencies($closure, ['a' => 1, 'b' => 5]));
+        $this->assertEquals([1, 5], Yii::$container->resolveCallableDependencies($closure, [1, 5]));
     }
 
-    public function testOptionalDependencies(): void
+    public function testOptionalDependencies()
     {
         $container = new Container();
         // Test optional unresolvable dependency.
-        $closure = static fn (QuxInterface $test = null) => $test;
+        $closure = function (QuxInterface $test = null) {
+            return $test;
+        };
         $this->assertNull($container->invoke($closure));
     }
 
-    public function testSetDependencies(): void
+    public function testSetDependencies()
     {
         $container = new Container();
         $container->setDefinitions([
@@ -259,9 +267,11 @@ final class ContainerTest extends TestCase
                 ['class' => 'yiiunit\data\base\TraversableObject'],
                 [['item1', 'item2']],
             ],
-            'qux.using.closure' => static fn () => new Qux(),
+            'qux.using.closure' => function () {
+                return new Qux();
+            },
             'rollbar',
-            'baibaratsky\yii\rollbar\Rollbar',
+            'baibaratsky\yii\rollbar\Rollbar'
         ]);
         $container->setDefinitions([]);
 
@@ -270,19 +280,19 @@ final class ContainerTest extends TestCase
 
         $traversable = $container->get('test\TraversableInterface');
         $this->assertInstanceOf('yiiunit\data\base\TraversableObject', $traversable);
-        $this->assertSame('item1', $traversable->current());
+        $this->assertEquals('item1', $traversable->current());
 
         $this->assertInstanceOf('yiiunit\framework\di\stubs\Qux', $container->get('qux.using.closure'));
 
         try {
             $container->get('rollbar');
             $this->fail('InvalidConfigException was not thrown');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->assertInstanceOf('yii\base\InvalidConfigException', $e);
         }
     }
 
-    public function testStaticCall(): void
+    public function testStaticCall()
     {
         $container = new Container();
         $container->setDefinitions([
@@ -294,7 +304,7 @@ final class ContainerTest extends TestCase
         $this->assertSame(42, $qux->a);
     }
 
-    public function testObject(): void
+    public function testObject()
     {
         $container = new Container();
         $container->setDefinitions([
@@ -306,7 +316,7 @@ final class ContainerTest extends TestCase
         $this->assertSame(42, $qux->a);
     }
 
-    public function testDi3Compatibility(): void
+    public function testDi3Compatibility()
     {
         $container = new Container();
         $container->setDefinitions([
@@ -326,10 +336,10 @@ final class ContainerTest extends TestCase
 
         $traversable = $container->get('test\TraversableInterface');
         $this->assertInstanceOf('yiiunit\data\base\TraversableObject', $traversable);
-        $this->assertSame('item1', $traversable->current());
+        $this->assertEquals('item1', $traversable->current());
     }
 
-    public function testInstanceOf(): void
+    public function testInstanceOf()
     {
         $container = new Container();
         $container->setDefinitions([
@@ -340,7 +350,7 @@ final class ContainerTest extends TestCase
             'bar' => [
                 '__class' => Bar::className(),
                 '__construct()' => [
-                    Instance::of('qux'),
+                    Instance::of('qux')
                 ],
             ],
         ]);
@@ -351,7 +361,7 @@ final class ContainerTest extends TestCase
         $this->assertSame(42, $qux->a);
     }
 
-    public function testReferencesInArrayInDependencies(): void
+    public function testReferencesInArrayInDependencies()
     {
         $quxInterface = 'yiiunit\framework\di\stubs\QuxInterface';
         $container = new Container();
@@ -389,7 +399,7 @@ final class ContainerTest extends TestCase
         $this->assertSame(33, $q33->a);
     }
 
-    public function testGetByInstance(): void
+    public function testGetByInstance()
     {
         $container = new Container();
         $container->setSingletons([
@@ -404,7 +414,7 @@ final class ContainerTest extends TestCase
         $this->assertSame($one, $container->get('two'));
     }
 
-    public function testWithoutDefinition(): void
+    public function testWithoutDefinition()
     {
         $container = new Container();
 
@@ -417,7 +427,7 @@ final class ContainerTest extends TestCase
         $this->assertNotSame($one, $two);
     }
 
-    public function testGetByClassIndirectly(): void
+    public function testGetByClassIndirectly()
     {
         $container = new Container();
         $container->setSingletons([
@@ -432,14 +442,14 @@ final class ContainerTest extends TestCase
         $this->assertSame(42, $qux->a);
     }
 
-    public function testThrowingNotFoundException(): void
+    public function testThrowingNotFoundException()
     {
         $this->expectException('\yii\base\InvalidConfigException');
         $container = new Container();
         $container->get('non_existing');
     }
 
-    public function testContainerSingletons(): void
+    public function testContainerSingletons()
     {
         $container = new Container();
         $container->setSingletons([
@@ -448,7 +458,9 @@ final class ContainerTest extends TestCase
                 ['class' => 'yiiunit\data\base\TraversableObject'],
                 [['item1', 'item2']],
             ],
-            'qux.using.closure' => static fn () => new Qux(),
+            'qux.using.closure' => function () {
+                return new Qux();
+            },
         ]);
         $container->setSingletons([]);
 
@@ -468,10 +480,10 @@ final class ContainerTest extends TestCase
     /**
      * @requires PHP 5.6
      */
-    public function testVariadicConstructor(): void
+    public function testVariadicConstructor()
     {
-        if (defined('HHVM_VERSION')) {
-            $this->markTestSkipped('Can not test on HHVM because it does not support variadics.');
+        if (\defined('HHVM_VERSION')) {
+            static::markTestSkipped('Can not test on HHVM because it does not support variadics.');
         }
 
         $container = new Container();
@@ -481,10 +493,10 @@ final class ContainerTest extends TestCase
     /**
      * @requires PHP 5.6
      */
-    public function testVariadicCallable(): void
+    public function testVariadicCallable()
     {
-        if (defined('HHVM_VERSION')) {
-            $this->markTestSkipped('Can not test on HHVM because it does not support variadics.');
+        if (\defined('HHVM_VERSION')) {
+            static::markTestSkipped('Can not test on HHVM because it does not support variadics.');
         }
 
         require __DIR__ . '/testContainerWithVariadicCallable.php';
@@ -493,7 +505,7 @@ final class ContainerTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/18245
      */
-    public function testDelayedInitializationOfSubArray(): void
+    public function testDelayedInitializationOfSubArray()
     {
         $definitions = [
             'test' => [
@@ -510,7 +522,7 @@ final class ContainerTest extends TestCase
             'id' => 'test',
             'components' => [
                 'request' => [
-                    'baseUrl' => '123',
+                    'baseUrl' => '123'
                 ],
             ],
             'container' => [
@@ -525,7 +537,7 @@ final class ContainerTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/18304
      */
-    public function testNulledConstructorParameters(): void
+    public function testNulledConstructorParameters()
     {
         $alpha = (new Container())->get(Alpha::className());
         $this->assertInstanceOf(Beta::className(), $alpha->beta);
@@ -549,7 +561,7 @@ final class ContainerTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/18284
      */
-    public function testNamedConstructorParameters(): void
+    public function testNamedConstructorParameters()
     {
         $test = (new Container())->get(Car::className(), [
             'name' => 'Hello',
@@ -562,7 +574,7 @@ final class ContainerTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/18284
      */
-    public function testInvalidConstructorParameters(): void
+    public function testInvalidConstructorParameters()
     {
         $this->expectException('yii\base\InvalidConfigException');
         $this->expectExceptionMessage('Dependencies indexed by name and by position in the same array are not allowed.');
@@ -587,17 +599,16 @@ final class ContainerTest extends TestCase
      *
      * @param string $class
      */
-    public function testNotInstantiableException($class): void
+    public function testNotInstantiableException($class)
     {
         $this->expectException('yii\di\NotInstantiableException');
         (new Container())->get($class);
     }
 
-    public function testNullTypeConstructorParameters(): void
+    public function testNullTypeConstructorParameters()
     {
         if (PHP_VERSION_ID < 70100) {
             $this->markTestSkipped('Can not be tested on PHP < 7.1');
-
             return;
         }
 
@@ -612,11 +623,10 @@ final class ContainerTest extends TestCase
         $this->assertNull($zeta->unknownNull);
     }
 
-    public function testUnionTypeWithNullConstructorParameters(): void
+    public function testUnionTypeWithNullConstructorParameters()
     {
         if (PHP_VERSION_ID < 80000) {
             $this->markTestSkipped('Can not be tested on PHP < 8.0');
-
             return;
         }
 
@@ -624,11 +634,10 @@ final class ContainerTest extends TestCase
         $this->assertInstanceOf(UnionTypeNull::className(), $unionType);
     }
 
-    public function testUnionTypeWithoutNullConstructorParameters(): void
+    public function testUnionTypeWithoutNullConstructorParameters()
     {
         if (PHP_VERSION_ID < 80000) {
             $this->markTestSkipped('Can not be tested on PHP < 8.0');
-
             return;
         }
 
@@ -648,11 +657,10 @@ final class ContainerTest extends TestCase
         (new Container())->get(UnionTypeNotNull::className());
     }
 
-    public function testUnionTypeWithClassConstructorParameters(): void
+    public function testUnionTypeWithClassConstructorParameters()
     {
         if (PHP_VERSION_ID < 80000) {
             $this->markTestSkipped('Can not be tested on PHP < 8.0');
-
             return;
         }
 

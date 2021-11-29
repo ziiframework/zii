@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -22,7 +19,6 @@ use yiiunit\framework\db\UnqueryableQueryMock;
 
 /**
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  *
  * @group data
@@ -36,7 +32,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         ActiveRecord::$db = $this->getConnection();
     }
 
-    public function testActiveQuery(): void
+    public function testActiveQuery()
     {
         $provider = new ActiveDataProvider([
             'query' => Order::find()->orderBy('id'),
@@ -46,7 +42,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertInstanceOf(Order::className(), $orders[0]);
         $this->assertInstanceOf(Order::className(), $orders[1]);
         $this->assertInstanceOf(Order::className(), $orders[2]);
-        $this->assertSame([1, 2, 3], $provider->getKeys());
+        $this->assertEquals([1, 2, 3], $provider->getKeys());
 
         $provider = new ActiveDataProvider([
             'query' => Order::find(),
@@ -58,9 +54,9 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertCount(2, $orders);
     }
 
-    public function testActiveRelation(): void
+    public function testActiveRelation()
     {
-        /** @var Customer $customer */
+        /* @var $customer Customer */
         $customer = Customer::findOne(2);
         $provider = new ActiveDataProvider([
             'query' => $customer->getOrders(),
@@ -69,7 +65,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertCount(2, $orders);
         $this->assertInstanceOf(Order::className(), $orders[0]);
         $this->assertInstanceOf(Order::className(), $orders[1]);
-        $this->assertSame([2, 3], $provider->getKeys());
+        $this->assertEquals([2, 3], $provider->getKeys());
 
         $provider = new ActiveDataProvider([
             'query' => $customer->getOrders(),
@@ -81,9 +77,9 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertCount(1, $orders);
     }
 
-    public function testActiveRelationVia(): void
+    public function testActiveRelationVia()
     {
-        /** @var Order $order */
+        /* @var $order Order */
         $order = Order::findOne(2);
         $provider = new ActiveDataProvider([
             'query' => $order->getItems(),
@@ -93,7 +89,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertInstanceOf(Item::className(), $items[0]);
         $this->assertInstanceOf(item::className(), $items[1]);
         $this->assertInstanceOf(Item::className(), $items[2]);
-        $this->assertSame([3, 4, 5], $provider->getKeys());
+        $this->assertEquals([3, 4, 5], $provider->getKeys());
 
         $provider = new ActiveDataProvider([
             'query' => $order->getItems(),
@@ -105,9 +101,9 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertCount(2, $items);
     }
 
-    public function testActiveRelationViaTable(): void
+    public function testActiveRelationViaTable()
     {
-        /** @var Order $order */
+        /* @var $order Order */
         $order = Order::findOne(1);
         $provider = new ActiveDataProvider([
             'query' => $order->getBooks(),
@@ -127,7 +123,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertCount(1, $items);
     }
 
-    public function testQuery(): void
+    public function testQuery()
     {
         $query = new Query();
         $provider = new ActiveDataProvider([
@@ -137,7 +133,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $orders = $provider->getModels();
         $this->assertCount(3, $orders);
         $this->assertIsArray($orders[0]);
-        $this->assertSame([0, 1, 2], $provider->getKeys());
+        $this->assertEquals([0, 1, 2], $provider->getKeys());
 
         $query = new Query();
         $provider = new ActiveDataProvider([
@@ -151,7 +147,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertCount(2, $orders);
     }
 
-    public function testRefresh(): void
+    public function testRefresh()
     {
         $query = new Query();
         $provider = new ActiveDataProvider([
@@ -166,7 +162,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertCount(2, $provider->getModels());
     }
 
-    public function testPaginationBeforeModels(): void
+    public function testPaginationBeforeModels()
     {
         $query = new Query();
         $provider = new ActiveDataProvider([
@@ -174,9 +170,9 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
             'query' => $query->from('order')->orderBy('id'),
         ]);
         $pagination = $provider->getPagination();
-        $this->assertSame(0, $pagination->getPageCount());
+        $this->assertEquals(0, $pagination->getPageCount());
         $this->assertCount(3, $provider->getModels());
-        $this->assertSame(1, $pagination->getPageCount());
+        $this->assertEquals(1, $pagination->getPageCount());
 
         $provider->getPagination()->pageSize = 2;
         $this->assertCount(3, $provider->getModels());
@@ -184,7 +180,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertCount(2, $provider->getModels());
     }
 
-    public function testDoesNotPerformQueryWhenHasNoModels(): void
+    public function testDoesNotPerformQueryWhenHasNoModels()
     {
         $query = new UnqueryableQueryMock();
         $provider = new ActiveDataProvider([
@@ -192,7 +188,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
             'query' => $query->from('order')->where('0=1'),
         ]);
         $pagination = $provider->getPagination();
-        $this->assertSame(0, $pagination->getPageCount());
+        $this->assertEquals(0, $pagination->getPageCount());
 
         try {
             $this->assertCount(0, $provider->getModels());
@@ -200,6 +196,6 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
             $this->fail('An excessive models query was executed.');
         }
 
-        $this->assertSame(0, $pagination->getPageCount());
+        $this->assertEquals(0, $pagination->getPageCount());
     }
 }

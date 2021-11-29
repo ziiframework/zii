@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,27 +7,22 @@ declare(strict_types=1);
 
 namespace yiiunit\framework;
 
-use function gettype;
 use Yii;
 use yii\BaseYii;
 use yii\di\Container;
 use yii\log\Logger;
-use yiiunit\data\base\CallableClass;
 use yiiunit\data\base\Singer;
+use yiiunit\TestCase;
+use yiiunit\data\base\CallableClass;
 use yiiunit\framework\di\stubs\FooBaz;
 use yiiunit\framework\di\stubs\FooDependentSubclass;
 use yiiunit\framework\di\stubs\Qux;
-use yiiunit\TestCase;
 
 /**
  * BaseYiiTest.
- *
  * @group base
- *
- * @internal
- * @coversNothing
  */
-final class BaseYiiTest extends TestCase
+class BaseYiiTest extends TestCase
 {
     public $aliases;
 
@@ -46,44 +38,44 @@ final class BaseYiiTest extends TestCase
         Yii::$aliases = $this->aliases;
     }
 
-    public function testAlias(): void
+    public function testAlias()
     {
-        $this->assertSame(YII2_PATH, Yii::getAlias('@yii'));
+        $this->assertEquals(YII2_PATH, Yii::getAlias('@yii'));
 
         Yii::$aliases = [];
         $this->assertFalse(Yii::getAlias('@yii', false));
 
         Yii::setAlias('@yii', '/yii/framework');
-        $this->assertSame('/yii/framework', Yii::getAlias('@yii'));
-        $this->assertSame('/yii/framework/test/file', Yii::getAlias('@yii/test/file'));
+        $this->assertEquals('/yii/framework', Yii::getAlias('@yii'));
+        $this->assertEquals('/yii/framework/test/file', Yii::getAlias('@yii/test/file'));
         Yii::setAlias('@yii/gii', '/yii/gii');
-        $this->assertSame('/yii/framework', Yii::getAlias('@yii'));
-        $this->assertSame('/yii/framework/test/file', Yii::getAlias('@yii/test/file'));
-        $this->assertSame('/yii/gii', Yii::getAlias('@yii/gii'));
-        $this->assertSame('/yii/gii/file', Yii::getAlias('@yii/gii/file'));
+        $this->assertEquals('/yii/framework', Yii::getAlias('@yii'));
+        $this->assertEquals('/yii/framework/test/file', Yii::getAlias('@yii/test/file'));
+        $this->assertEquals('/yii/gii', Yii::getAlias('@yii/gii'));
+        $this->assertEquals('/yii/gii/file', Yii::getAlias('@yii/gii/file'));
 
         Yii::setAlias('@tii', '@yii/test');
-        $this->assertSame('/yii/framework/test', Yii::getAlias('@tii'));
+        $this->assertEquals('/yii/framework/test', Yii::getAlias('@tii'));
 
         Yii::setAlias('@yii', null);
         $this->assertFalse(Yii::getAlias('@yii', false));
-        $this->assertSame('/yii/gii/file', Yii::getAlias('@yii/gii/file'));
+        $this->assertEquals('/yii/gii/file', Yii::getAlias('@yii/gii/file'));
 
         Yii::setAlias('@some/alias', '/www');
-        $this->assertSame('/www', Yii::getAlias('@some/alias'));
+        $this->assertEquals('/www', Yii::getAlias('@some/alias'));
     }
 
-    public function testGetVersion(): void
+    public function testGetVersion()
     {
-        $this->assertTrue((bool) preg_match('~\d+\.\d+(?:\.\d+)?(?:-\w+)?~', Yii::getVersion()));
+        $this->assertTrue((bool) preg_match('~\d+\.\d+(?:\.\d+)?(?:-\w+)?~', \Yii::getVersion()));
     }
 
-    public function testPowered(): void
+    public function testPowered()
     {
         $this->assertIsString(Yii::powered());
     }
 
-    public function testCreateObjectArray(): void
+    public function testCreateObjectArray()
     {
         Yii::$container = new Container();
 
@@ -96,23 +88,31 @@ final class BaseYiiTest extends TestCase
         $this->assertSame(42, $qux->a);
     }
 
-    public function testCreateObjectCallable(): void
+    public function testCreateObjectCallable()
     {
         Yii::$container = new Container();
 
         // Test passing in of normal params combined with DI params.
-        $this->assertTrue(Yii::createObject(static fn (Singer $singer, $a) => $a === 'a', ['a']));
+        $this->assertTrue(Yii::createObject(function (Singer $singer, $a) {
+            return $a === 'a';
+        }, ['a']));
+
 
         $singer = new Singer();
         $singer->firstName = 'Bob';
-        $this->assertTrue(Yii::createObject(static fn (Singer $singer, $a) => $singer->firstName === 'Bob', [$singer, 'a']));
+        $this->assertTrue(Yii::createObject(function (Singer $singer, $a) {
+            return $singer->firstName === 'Bob';
+        }, [$singer, 'a']));
 
-        $this->assertTrue(Yii::createObject(static fn (Singer $singer, $a = 3) => true));
+
+        $this->assertTrue(Yii::createObject(function (Singer $singer, $a = 3) {
+            return true;
+        }));
 
         $this->assertTrue(Yii::createObject(new CallableClass()));
     }
 
-    public function testCreateObjectEmptyArrayException(): void
+    public function testCreateObjectEmptyArrayException()
     {
         $this->expectException('yii\base\InvalidConfigException');
         $this->expectExceptionMessage('Object configuration must be an array containing a "class" or "__class" element.');
@@ -120,7 +120,7 @@ final class BaseYiiTest extends TestCase
         Yii::createObject([]);
     }
 
-    public function testCreateObjectInvalidConfigException(): void
+    public function testCreateObjectInvalidConfigException()
     {
         $this->expectException('yii\base\InvalidConfigException');
         $this->expectExceptionMessage('Unsupported configuration type: ' . gettype(null));
@@ -128,7 +128,7 @@ final class BaseYiiTest extends TestCase
         Yii::createObject(null);
     }
 
-    public function testDi3CompatibilityCreateDependentObject(): void
+    public function testDi3CompatibilityCreateDependentObject()
     {
         $object = Yii::createObject([
             '__class' => FooBaz::className(),
@@ -140,10 +140,10 @@ final class BaseYiiTest extends TestCase
     }
 
     /**
-     * @covers \yii\BaseYii::getLogger()
      * @covers \yii\BaseYii::setLogger()
+     * @covers \yii\BaseYii::getLogger()
      */
-    public function testSetupLogger(): void
+    public function testSetupLogger()
     {
         $logger = new Logger();
         BaseYii::setLogger($logger);
@@ -156,37 +156,42 @@ final class BaseYiiTest extends TestCase
     }
 
     /**
-     * @covers \yii\BaseYii::beginProfile()
-     * @covers \yii\BaseYii::debug()
-     * @covers \yii\BaseYii::endProfile()
-     * @covers \yii\BaseYii::error()
      * @covers \yii\BaseYii::info()
      * @covers \yii\BaseYii::warning()
+     * @covers \yii\BaseYii::debug()
+     * @covers \yii\BaseYii::error()
+     * @covers \yii\BaseYii::beginProfile()
+     * @covers \yii\BaseYii::endProfile()
      */
-    public function testLog(): void
+    public function testLog()
     {
         $logger = $this->getMockBuilder('yii\\log\\Logger')
             ->setMethods(['log'])
-            ->getMock()
-        ;
+            ->getMock();
         BaseYii::setLogger($logger);
 
         $logger->expects($this->exactly(6))
             ->method('log')
-            ->withConsecutive([$this->equalTo('info message'), $this->equalTo(Logger::LEVEL_INFO), $this->equalTo('info category')], [
-                $this->equalTo('warning message'),
-                $this->equalTo(Logger::LEVEL_WARNING),
-                $this->equalTo('warning category'),
-            ], [$this->equalTo('trace message'), $this->equalTo(Logger::LEVEL_TRACE), $this->equalTo('trace category')], [$this->equalTo('error message'), $this->equalTo(Logger::LEVEL_ERROR), $this->equalTo('error category')], [
-                $this->equalTo('beginProfile message'),
-                $this->equalTo(Logger::LEVEL_PROFILE_BEGIN),
-                $this->equalTo('beginProfile category'),
-            ], [
-                $this->equalTo('endProfile message'),
-                $this->equalTo(Logger::LEVEL_PROFILE_END),
-                $this->equalTo('endProfile category'),
-            ])
-        ;
+            ->withConsecutive(
+                [$this->equalTo('info message'), $this->equalTo(Logger::LEVEL_INFO), $this->equalTo('info category')],
+                [
+                    $this->equalTo('warning message'),
+                    $this->equalTo(Logger::LEVEL_WARNING),
+                    $this->equalTo('warning category'),
+                ],
+                [$this->equalTo('trace message'), $this->equalTo(Logger::LEVEL_TRACE), $this->equalTo('trace category')],
+                [$this->equalTo('error message'), $this->equalTo(Logger::LEVEL_ERROR), $this->equalTo('error category')],
+                [
+                    $this->equalTo('beginProfile message'),
+                    $this->equalTo(Logger::LEVEL_PROFILE_BEGIN),
+                    $this->equalTo('beginProfile category'),
+                ],
+                [
+                    $this->equalTo('endProfile message'),
+                    $this->equalTo(Logger::LEVEL_PROFILE_END),
+                    $this->equalTo('endProfile category'),
+                ]
+            );
 
         BaseYii::info('info message', 'info category');
         BaseYii::warning('warning message', 'warning category');

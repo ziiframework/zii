@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -34,21 +31,17 @@ class TestSubclass extends TestClass
 
 /**
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  * @group di
- *
- * @internal
- * @coversNothing
  */
-final class ServiceLocatorTest extends TestCase
+class ServiceLocatorTest extends TestCase
 {
-    public function testCallable(): void
+    public function testCallable()
     {
         // anonymous function
         $container = new ServiceLocator();
         $className = TestClass::className();
-        $container->set($className, static function () {
+        $container->set($className, function () {
             return new TestClass([
                 'prop1' => 100,
                 'prop2' => 200,
@@ -56,8 +49,8 @@ final class ServiceLocatorTest extends TestCase
         });
         $object = $container->get($className);
         $this->assertInstanceOf($className, $object);
-        $this->assertSame(100, $object->prop1);
-        $this->assertSame(200, $object->prop2);
+        $this->assertEquals(100, $object->prop1);
+        $this->assertEquals(200, $object->prop2);
 
         // static method
         $container = new ServiceLocator();
@@ -65,11 +58,11 @@ final class ServiceLocatorTest extends TestCase
         $container->set($className, [__NAMESPACE__ . '\\Creator', 'create']);
         $object = $container->get($className);
         $this->assertInstanceOf($className, $object);
-        $this->assertSame(1, $object->prop1);
+        $this->assertEquals(1, $object->prop1);
         $this->assertNull($object->prop2);
     }
 
-    public function testObject(): void
+    public function testObject()
     {
         $object = new TestClass();
         $className = TestClass::className();
@@ -78,7 +71,7 @@ final class ServiceLocatorTest extends TestCase
         $this->assertSame($container->get($className), $object);
     }
 
-    public function testDi3Compatibility(): void
+    public function testDi3Compatibility()
     {
         $config = [
             'components' => [
@@ -95,7 +88,8 @@ final class ServiceLocatorTest extends TestCase
         $this->assertInstanceOf(TestSubclass::className(), $app->get('test'));
     }
 
-    public function testShared(): void
+
+    public function testShared()
     {
         // with configuration: shared
         $container = new ServiceLocator();
@@ -106,8 +100,8 @@ final class ServiceLocatorTest extends TestCase
             'prop2' => 20,
         ]);
         $object = $container->get($className);
-        $this->assertSame(10, $object->prop1);
-        $this->assertSame(20, $object->prop2);
+        $this->assertEquals(10, $object->prop1);
+        $this->assertEquals(20, $object->prop2);
         $this->assertInstanceOf($className, $object);
         // check shared
         $object2 = $container->get($className);
@@ -118,7 +112,7 @@ final class ServiceLocatorTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/11771
      */
-    public function testModulePropertyIsset(): void
+    public function testModulePropertyIsset()
     {
         $config = [
             'components' => [
@@ -134,7 +128,7 @@ final class ServiceLocatorTest extends TestCase
         $this->assertTrue(isset($app->inputWidget->name));
         $this->assertNotEmpty($app->inputWidget->name);
 
-        $this->assertSame('foo bar', $app->inputWidget->name);
+        $this->assertEquals('foo bar', $app->inputWidget->name);
 
         $this->assertTrue(isset($app->inputWidget->name));
         $this->assertNotEmpty($app->inputWidget->name);
