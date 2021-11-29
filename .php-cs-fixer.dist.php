@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+$header_comment_block = <<<'EOF'
+/**
+ * @link http://www.yiiframework.com/
+ *
+ * @copyright Copyright (c) 2008 Yii Software LLC
+ * @license http://www.yiiframework.com/license/
+ */
+EOF;
+
 return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
     ->setRules([
@@ -13,6 +22,7 @@ return (new PhpCsFixer\Config())
         '@PhpCsFixer:risky' => true,
         'yoda_style' => false,
         'concat_space' => ['spacing' => 'one'],
+        'header_comment' => ['header' => $header_comment_block, 'separate' => 'none'],
         'heredoc_indentation' => false,
         'method_argument_space' => [
             'on_multiline' => 'ensure_single_line',
@@ -28,6 +38,39 @@ return (new PhpCsFixer\Config())
 //            ],
 //        ],
         'phpdoc_no_alias_tag' => false,
+        'static_lambda' => true,
+        'global_namespace_import' => [
+            'import_classes' => true,
+            'import_constants' => true,
+            'import_functions' => true,
+        ],
+        'strict_comparison' => false, // TODO remove
+        'echo_tag_syntax' => ['format' => 'short'],
+        'blank_line_after_namespace' => true,
+        'blank_line_before_statement' => [
+            'statements' => [
+                'break',
+                'continue',
+                'declare',
+                'default',
+                'do',
+                'exit',
+                'for',
+                'foreach',
+                'goto',
+                'if',
+                'include',
+                'include_once',
+                'require',
+                'require_once',
+                'return',
+                'switch',
+                'throw',
+                'try',
+                'while',
+                'yield',
+            ],
+        ],
     ])
     ->setFinder(
         PhpCsFixer\Finder::create()
@@ -35,4 +78,7 @@ return (new PhpCsFixer\Config())
             ->name('*.php')
             ->in(__DIR__ . '/tests')
             ->exclude('framework/di/stubs')
+            ->exclude('data/console/migrate_create')
+            ->exclude('data/views')
+            ->notName('add_columns_fk.php')
     );
