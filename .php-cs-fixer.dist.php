@@ -18,6 +18,16 @@ return (new PhpCsFixer\Config())
             'on_multiline' => 'ensure_single_line',
         ],
         'phpdoc_annotation_without_dot' => true,
+        'single_line_comment_style' => false,
+//        'phpdoc_no_alias_tag' => [
+//            'replacements' => [
+//                'property-read' => 'property',
+//                'property-write' => 'property',
+//                'type' => 'var',
+//                'link' => 'see',
+//            ],
+//        ],
+        'phpdoc_no_alias_tag' => false,
     ])
     ->setFinder(
         PhpCsFixer\Finder::create()
