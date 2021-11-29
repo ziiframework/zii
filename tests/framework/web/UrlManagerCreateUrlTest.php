@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -48,27 +51,12 @@ use yiiunit\TestCase;
  * NOTE: if a test is added here, you probably also need to add one in UrlManagerParseUrlTest.
  *
  * @group web
+ *
+ * @internal
+ * @coversNothing
  */
 class UrlManagerCreateUrlTest extends TestCase
 {
-    protected function getUrlManager($config = [], $showScriptName = true)
-    {
-        // in this test class, all tests have enablePrettyUrl enabled.
-        $config['enablePrettyUrl'] = true;
-
-        // set default values if they are not set
-        $config = array_merge([
-            'baseUrl' => '',
-            'scriptUrl' => '/index.php',
-            'hostInfo' => 'http://www.example.com',
-            'cache' => null,
-            'showScriptName' => $showScriptName,
-        ], $config);
-
-        return new UrlManager($config);
-    }
-
-
     public function variationsProvider()
     {
         $baseUrlConfig = [
@@ -97,32 +85,33 @@ class UrlManagerCreateUrlTest extends TestCase
      * without rules.
      *
      * @dataProvider variationsProvider
+     *
      * @param string $method
-     * @param bool $showScriptName
+     * @param bool   $showScriptName
      * @param string $prefix
-     * @param array $config
+     * @param array  $config
      */
-    public function testWithoutRules($method, $showScriptName, $prefix, $config)
+    public function testWithoutRules($method, $showScriptName, $prefix, $config): void
     {
         $manager = $this->getUrlManager($config, $showScriptName);
 
-        $url = $manager->$method('post/view');
-        $this->assertEquals("$prefix/post/view", $url);
-        $url = $manager->$method(['post/view']);
-        $this->assertEquals("$prefix/post/view", $url);
+        $url = $manager->{$method}('post/view');
+        $this->assertSame("{$prefix}/post/view", $url);
+        $url = $manager->{$method}(['post/view']);
+        $this->assertSame("{$prefix}/post/view", $url);
 
-        $url = $manager->$method(['post/view', 'id' => 1, 'title' => 'sample post']);
-        $this->assertEquals("$prefix/post/view?id=1&title=sample+post", $url);
+        $url = $manager->{$method}(['post/view', 'id' => 1, 'title' => 'sample post']);
+        $this->assertSame("{$prefix}/post/view?id=1&title=sample+post", $url);
 
-        $url = $manager->$method(['post/view', '#' => 'testhash']);
-        $this->assertEquals("$prefix/post/view#testhash", $url);
+        $url = $manager->{$method}(['post/view', '#' => 'testhash']);
+        $this->assertSame("{$prefix}/post/view#testhash", $url);
 
-        $url = $manager->$method(['post/view', 'id' => 1, 'title' => 'sample post', '#' => 'testhash']);
-        $this->assertEquals("$prefix/post/view?id=1&title=sample+post#testhash", $url);
+        $url = $manager->{$method}(['post/view', 'id' => 1, 'title' => 'sample post', '#' => 'testhash']);
+        $this->assertSame("{$prefix}/post/view?id=1&title=sample+post#testhash", $url);
 
         // with defaultAction
-        $url = $manager->$method(['/post', 'page' => 1]);
-        $this->assertEquals("$prefix/post?page=1", $url);
+        $url = $manager->{$method}(['/post', 'page' => 1]);
+        $this->assertSame("{$prefix}/post?page=1", $url);
     }
 
     /**
@@ -133,56 +122,56 @@ class UrlManagerCreateUrlTest extends TestCase
      * - with UrlManager::$suffix.
      *
      * @dataProvider variationsProvider
+     *
      * @param string $method
-     * @param bool $showScriptName
+     * @param bool   $showScriptName
      * @param string $prefix
-     * @param array $config
+     * @param array  $config
      */
-    public function testWithoutRulesWithSuffix($method, $showScriptName, $prefix, $config)
+    public function testWithoutRulesWithSuffix($method, $showScriptName, $prefix, $config): void
     {
         $config['suffix'] = '.html';
         $manager = $this->getUrlManager($config, $showScriptName);
 
-        $url = $manager->$method('post/view');
-        $this->assertEquals("$prefix/post/view.html", $url);
-        $url = $manager->$method(['post/view']);
-        $this->assertEquals("$prefix/post/view.html", $url);
+        $url = $manager->{$method}('post/view');
+        $this->assertSame("{$prefix}/post/view.html", $url);
+        $url = $manager->{$method}(['post/view']);
+        $this->assertSame("{$prefix}/post/view.html", $url);
 
-        $url = $manager->$method(['post/view', 'id' => 1, 'title' => 'sample post']);
-        $this->assertEquals("$prefix/post/view.html?id=1&title=sample+post", $url);
+        $url = $manager->{$method}(['post/view', 'id' => 1, 'title' => 'sample post']);
+        $this->assertSame("{$prefix}/post/view.html?id=1&title=sample+post", $url);
 
-        $url = $manager->$method(['post/view', '#' => 'testhash']);
-        $this->assertEquals("$prefix/post/view.html#testhash", $url);
+        $url = $manager->{$method}(['post/view', '#' => 'testhash']);
+        $this->assertSame("{$prefix}/post/view.html#testhash", $url);
 
-        $url = $manager->$method(['post/view', 'id' => 1, 'title' => 'sample post', '#' => 'testhash']);
-        $this->assertEquals("$prefix/post/view.html?id=1&title=sample+post#testhash", $url);
+        $url = $manager->{$method}(['post/view', 'id' => 1, 'title' => 'sample post', '#' => 'testhash']);
+        $this->assertSame("{$prefix}/post/view.html?id=1&title=sample+post#testhash", $url);
 
         // with defaultAction
-        $url = $manager->$method(['/post', 'page' => 1]);
-        $this->assertEquals("$prefix/post.html?page=1", $url);
-
+        $url = $manager->{$method}(['/post', 'page' => 1]);
+        $this->assertSame("{$prefix}/post.html?page=1", $url);
 
         // test suffix '/' as it may be trimmed
         $config['suffix'] = '/';
         $manager = $this->getUrlManager($config, $showScriptName);
 
-        $url = $manager->$method('post/view');
-        $this->assertEquals("$prefix/post/view/", $url);
-        $url = $manager->$method(['post/view']);
-        $this->assertEquals("$prefix/post/view/", $url);
+        $url = $manager->{$method}('post/view');
+        $this->assertSame("{$prefix}/post/view/", $url);
+        $url = $manager->{$method}(['post/view']);
+        $this->assertSame("{$prefix}/post/view/", $url);
 
-        $url = $manager->$method(['post/view', 'id' => 1, 'title' => 'sample post']);
-        $this->assertEquals("$prefix/post/view/?id=1&title=sample+post", $url);
+        $url = $manager->{$method}(['post/view', 'id' => 1, 'title' => 'sample post']);
+        $this->assertSame("{$prefix}/post/view/?id=1&title=sample+post", $url);
 
-        $url = $manager->$method(['post/view', '#' => 'testhash']);
-        $this->assertEquals("$prefix/post/view/#testhash", $url);
+        $url = $manager->{$method}(['post/view', '#' => 'testhash']);
+        $this->assertSame("{$prefix}/post/view/#testhash", $url);
 
-        $url = $manager->$method(['post/view', 'id' => 1, 'title' => 'sample post', '#' => 'testhash']);
-        $this->assertEquals("$prefix/post/view/?id=1&title=sample+post#testhash", $url);
+        $url = $manager->{$method}(['post/view', 'id' => 1, 'title' => 'sample post', '#' => 'testhash']);
+        $this->assertSame("{$prefix}/post/view/?id=1&title=sample+post#testhash", $url);
 
         // with defaultAction
-        $url = $manager->$method(['/post', 'page' => 1]);
-        $this->assertEquals("$prefix/post/?page=1", $url);
+        $url = $manager->{$method}(['/post', 'page' => 1]);
+        $this->assertSame("{$prefix}/post/?page=1", $url);
     }
 
     /**
@@ -191,12 +180,13 @@ class UrlManagerCreateUrlTest extends TestCase
      * with simple rules.
      *
      * @dataProvider variationsProvider
+     *
      * @param string $method
-     * @param bool $showScriptName
+     * @param bool   $showScriptName
      * @param string $prefix
-     * @param array $config
+     * @param array  $config
      */
-    public function testSimpleRules($method, $showScriptName, $prefix, $config)
+    public function testSimpleRules($method, $showScriptName, $prefix, $config): void
     {
         $config['rules'] = [
             'post/<id:\d+>' => 'post/view',
@@ -207,39 +197,39 @@ class UrlManagerCreateUrlTest extends TestCase
         $manager = $this->getUrlManager($config, $showScriptName);
 
         // does not match any rule
-        $url = $manager->$method(['post/view']);
-        $this->assertEquals("$prefix/post/view", $url);
+        $url = $manager->{$method}(['post/view']);
+        $this->assertSame("{$prefix}/post/view", $url);
 
         // with defaultAction also does not match any rule
-        $url = $manager->$method(['/post', 'page' => 1]);
-        $this->assertEquals("$prefix/post?page=1", $url);
+        $url = $manager->{$method}(['/post', 'page' => 1]);
+        $this->assertSame("{$prefix}/post?page=1", $url);
 
         // match first rule
-        $url = $manager->$method(['post/view', 'id' => 1]);
-        $this->assertEquals("$prefix/post/1", $url);
+        $url = $manager->{$method}(['post/view', 'id' => 1]);
+        $this->assertSame("{$prefix}/post/1", $url);
 
         // match first rule with additional param
-        $url = $manager->$method(['post/view', 'id' => 1, 'title' => 'sample post']);
-        $this->assertEquals("$prefix/post/1?title=sample+post", $url);
+        $url = $manager->{$method}(['post/view', 'id' => 1, 'title' => 'sample post']);
+        $this->assertSame("{$prefix}/post/1?title=sample+post", $url);
         // match first rule with hash
-        $url = $manager->$method(['post/view', 'id' => 1, '#' => 'testhash']);
-        $this->assertEquals("$prefix/post/1#testhash", $url);
+        $url = $manager->{$method}(['post/view', 'id' => 1, '#' => 'testhash']);
+        $this->assertSame("{$prefix}/post/1#testhash", $url);
 
         // match second rule
-        $url = $manager->$method(['post/index']);
-        $this->assertEquals("$prefix/posts", $url);
+        $url = $manager->{$method}(['post/index']);
+        $this->assertSame("{$prefix}/posts", $url);
 
         // match second rule with additional param
-        $url = $manager->$method(['post/index', 'category' => 'test']);
-        $this->assertEquals("$prefix/posts?category=test", $url);
+        $url = $manager->{$method}(['post/index', 'category' => 'test']);
+        $this->assertSame("{$prefix}/posts?category=test", $url);
 
         // match third rule, ensure encoding of params
-        $url = $manager->$method(['book/view', 'id' => 1, 'title' => 'sample post']);
-        $this->assertEquals("$prefix/book/1/sample+post", $url);
+        $url = $manager->{$method}(['book/view', 'id' => 1, 'title' => 'sample post']);
+        $this->assertSame("{$prefix}/book/1/sample+post", $url);
 
         // match fourth rule, since 2.0.41 non-GET verbs are allowed
-        $url = $manager->$method(['post/create']);
-        $this->assertEquals("$prefix/posts", $url);
+        $url = $manager->{$method}(['post/create']);
+        $this->assertSame("{$prefix}/posts", $url);
     }
 
     /**
@@ -250,12 +240,13 @@ class UrlManagerCreateUrlTest extends TestCase
      * - with UrlManager::$suffix.
      *
      * @dataProvider variationsProvider
+     *
      * @param string $method
-     * @param bool $showScriptName
+     * @param bool   $showScriptName
      * @param string $prefix
-     * @param array $config
+     * @param array  $config
      */
-    public function testSimpleRulesWithSuffix($method, $showScriptName, $prefix, $config)
+    public function testSimpleRulesWithSuffix($method, $showScriptName, $prefix, $config): void
     {
         $config['rules'] = [
             'post/<id:\d+>' => 'post/view',
@@ -266,35 +257,35 @@ class UrlManagerCreateUrlTest extends TestCase
         $manager = $this->getUrlManager($config, $showScriptName);
 
         // does not match any rule
-        $url = $manager->$method(['post/view']);
-        $this->assertEquals("$prefix/post/view/", $url);
+        $url = $manager->{$method}(['post/view']);
+        $this->assertSame("{$prefix}/post/view/", $url);
 
         // with defaultAction also does not match any rule
-        $url = $manager->$method(['/post', 'page' => 1]);
-        $this->assertEquals("$prefix/post/?page=1", $url);
+        $url = $manager->{$method}(['/post', 'page' => 1]);
+        $this->assertSame("{$prefix}/post/?page=1", $url);
 
         // match first rule
-        $url = $manager->$method(['post/view', 'id' => 1]);
-        $this->assertEquals("$prefix/post/1/", $url);
+        $url = $manager->{$method}(['post/view', 'id' => 1]);
+        $this->assertSame("{$prefix}/post/1/", $url);
 
         // match first rule with additional param
-        $url = $manager->$method(['post/view', 'id' => 1, 'title' => 'sample post']);
-        $this->assertEquals("$prefix/post/1/?title=sample+post", $url);
+        $url = $manager->{$method}(['post/view', 'id' => 1, 'title' => 'sample post']);
+        $this->assertSame("{$prefix}/post/1/?title=sample+post", $url);
         // match first rule with hash
-        $url = $manager->$method(['post/view', 'id' => 1, '#' => 'testhash']);
-        $this->assertEquals("$prefix/post/1/#testhash", $url);
+        $url = $manager->{$method}(['post/view', 'id' => 1, '#' => 'testhash']);
+        $this->assertSame("{$prefix}/post/1/#testhash", $url);
 
         // match second rule
-        $url = $manager->$method(['post/index']);
-        $this->assertEquals("$prefix/posts/", $url);
+        $url = $manager->{$method}(['post/index']);
+        $this->assertSame("{$prefix}/posts/", $url);
 
         // match second rule with additional param
-        $url = $manager->$method(['post/index', 'category' => 'test']);
-        $this->assertEquals("$prefix/posts/?category=test", $url);
+        $url = $manager->{$method}(['post/index', 'category' => 'test']);
+        $this->assertSame("{$prefix}/posts/?category=test", $url);
 
         // match third rule, ensure encoding of params
-        $url = $manager->$method(['book/view', 'id' => 1, 'title' => 'sample post']);
-        $this->assertEquals("$prefix/book/1/sample+post/", $url);
+        $url = $manager->{$method}(['book/view', 'id' => 1, 'title' => 'sample post']);
+        $this->assertSame("{$prefix}/book/1/sample+post/", $url);
     }
 
     /**
@@ -303,12 +294,13 @@ class UrlManagerCreateUrlTest extends TestCase
      * with rules that have varadic controller/actions.
      *
      * @dataProvider variationsProvider
+     *
      * @param string $method
-     * @param bool $showScriptName
+     * @param bool   $showScriptName
      * @param string $prefix
-     * @param array $config
+     * @param array  $config
      */
-    public function testControllerActionParams($method, $showScriptName, $prefix, $config)
+    public function testControllerActionParams($method, $showScriptName, $prefix, $config): void
     {
         $config['rules'] = [
             '<controller>/<id:\d+>' => '<controller>/view',
@@ -319,33 +311,33 @@ class UrlManagerCreateUrlTest extends TestCase
         $manager = $this->getUrlManager($config, $showScriptName);
 
         // match last rule
-        $url = $manager->$method(['post/view']);
-        $this->assertEquals("$prefix/post/test/view", $url);
+        $url = $manager->{$method}(['post/view']);
+        $this->assertSame("{$prefix}/post/test/view", $url);
 
         // defaultAction should match third rule
-        $url = $manager->$method(['/post/']);
-        $this->assertEquals("$prefix/post/default", $url);
-        $url = $manager->$method(['/post']);
-        $this->assertEquals("$prefix/post/default", $url);
+        $url = $manager->{$method}(['/post/']);
+        $this->assertSame("{$prefix}/post/default", $url);
+        $url = $manager->{$method}(['/post']);
+        $this->assertSame("{$prefix}/post/default", $url);
 
         // match first rule
-        $url = $manager->$method(['post/view', 'id' => 1]);
-        $this->assertEquals("$prefix/post/1", $url);
+        $url = $manager->{$method}(['post/view', 'id' => 1]);
+        $this->assertSame("{$prefix}/post/1", $url);
 
         // match first rule with additional param
-        $url = $manager->$method(['post/view', 'id' => 1, 'title' => 'sample post']);
-        $this->assertEquals("$prefix/post/1?title=sample+post", $url);
+        $url = $manager->{$method}(['post/view', 'id' => 1, 'title' => 'sample post']);
+        $this->assertSame("{$prefix}/post/1?title=sample+post", $url);
         // match first rule with hash
-        $url = $manager->$method(['post/view', 'id' => 1, '#' => 'testhash']);
-        $this->assertEquals("$prefix/post/1#testhash", $url);
+        $url = $manager->{$method}(['post/view', 'id' => 1, '#' => 'testhash']);
+        $this->assertSame("{$prefix}/post/1#testhash", $url);
 
         // match second rule
-        $url = $manager->$method(['post/index']);
-        $this->assertEquals("$prefix/posts", $url);
+        $url = $manager->{$method}(['post/index']);
+        $this->assertSame("{$prefix}/posts", $url);
 
         // match second rule with additional param
-        $url = $manager->$method(['post/index', 'category' => 'test']);
-        $this->assertEquals("$prefix/posts?category=test", $url);
+        $url = $manager->{$method}(['post/index', 'category' => 'test']);
+        $this->assertSame("{$prefix}/posts?category=test", $url);
     }
 
     /**
@@ -354,12 +346,13 @@ class UrlManagerCreateUrlTest extends TestCase
      * with rules that have default values for parameters.
      *
      * @dataProvider variationsProvider
+     *
      * @param string $method
-     * @param bool $showScriptName
+     * @param bool   $showScriptName
      * @param string $prefix
-     * @param array $config
+     * @param array  $config
      */
-    public function testRulesWithDefaultParams($method, $showScriptName, $prefix, $config)
+    public function testRulesWithDefaultParams($method, $showScriptName, $prefix, $config): void
     {
         $config['rules'] = [
             [
@@ -379,50 +372,50 @@ class UrlManagerCreateUrlTest extends TestCase
         $manager = $this->getUrlManager($config, $showScriptName);
 
         // match first rule
-        $url = $manager->$method(['frontend/page/view', 'slug' => 'index']);
-        $this->assertEquals("$prefix/", $url);
+        $url = $manager->{$method}(['frontend/page/view', 'slug' => 'index']);
+        $this->assertSame("{$prefix}/", $url);
 
         // match first rule with additional param
-        $url = $manager->$method(['frontend/page/view', 'slug' => 'index', 'sort' => 'name']);
-        $this->assertEquals("$prefix/?sort=name", $url);
+        $url = $manager->{$method}(['frontend/page/view', 'slug' => 'index', 'sort' => 'name']);
+        $this->assertSame("{$prefix}/?sort=name", $url);
 
         // match first rule with hash
-        $url = $manager->$method(['frontend/page/view', 'slug' => 'index', '#' => 'testhash']);
-        $this->assertEquals("$prefix/#testhash", $url);
+        $url = $manager->{$method}(['frontend/page/view', 'slug' => 'index', '#' => 'testhash']);
+        $this->assertSame("{$prefix}/#testhash", $url);
 
         // match second rule
-        $url = $manager->$method(['frontend/page/view', 'slug' => 'services']);
-        $this->assertEquals("$prefix/page/services", $url);
+        $url = $manager->{$method}(['frontend/page/view', 'slug' => 'services']);
+        $this->assertSame("{$prefix}/page/services", $url);
 
         // match second rule with additional param
-        $url = $manager->$method(['frontend/page/view', 'slug' => 'services', 'sort' => 'name']);
-        $this->assertEquals("$prefix/page/services?sort=name", $url);
+        $url = $manager->{$method}(['frontend/page/view', 'slug' => 'services', 'sort' => 'name']);
+        $this->assertSame("{$prefix}/page/services?sort=name", $url);
 
         // match second rule with hash
-        $url = $manager->$method(['frontend/page/view', 'slug' => 'services', '#' => 'testhash']);
-        $this->assertEquals("$prefix/page/services#testhash", $url);
+        $url = $manager->{$method}(['frontend/page/view', 'slug' => 'services', '#' => 'testhash']);
+        $this->assertSame("{$prefix}/page/services#testhash", $url);
 
         // match third rule
-        $url = $manager->$method(['site/index', 'language' => 'en']);
-        $this->assertEquals("$prefix/", $url);
-        $url = $manager->$method(['site/index', 'language' => 'de']);
-        $this->assertEquals("$prefix/de", $url);
+        $url = $manager->{$method}(['site/index', 'language' => 'en']);
+        $this->assertSame("{$prefix}/", $url);
+        $url = $manager->{$method}(['site/index', 'language' => 'de']);
+        $this->assertSame("{$prefix}/de", $url);
 
         // match third rule with additional param
-        $url = $manager->$method(['site/index', 'language' => 'en', 'sort' => 'name']);
-        $this->assertEquals("$prefix/?sort=name", $url);
-        $url = $manager->$method(['site/index', 'language' => 'de', 'sort' => 'name']);
-        $this->assertEquals("$prefix/de?sort=name", $url);
+        $url = $manager->{$method}(['site/index', 'language' => 'en', 'sort' => 'name']);
+        $this->assertSame("{$prefix}/?sort=name", $url);
+        $url = $manager->{$method}(['site/index', 'language' => 'de', 'sort' => 'name']);
+        $this->assertSame("{$prefix}/de?sort=name", $url);
 
         // match first rule with hash
-        $url = $manager->$method(['site/index', 'language' => 'en', '#' => 'testhash']);
-        $this->assertEquals("$prefix/#testhash", $url);
-        $url = $manager->$method(['site/index', 'language' => 'de', '#' => 'testhash']);
-        $this->assertEquals("$prefix/de#testhash", $url);
+        $url = $manager->{$method}(['site/index', 'language' => 'en', '#' => 'testhash']);
+        $this->assertSame("{$prefix}/#testhash", $url);
+        $url = $manager->{$method}(['site/index', 'language' => 'de', '#' => 'testhash']);
+        $this->assertSame("{$prefix}/de#testhash", $url);
 
         // matches none of the rules
-        $url = $manager->$method(['frontend/page/view']);
-        $this->assertEquals("$prefix/frontend/page/view", $url);
+        $url = $manager->{$method}(['frontend/page/view']);
+        $this->assertSame("{$prefix}/frontend/page/view", $url);
     }
 
     /**
@@ -431,13 +424,15 @@ class UrlManagerCreateUrlTest extends TestCase
      * with empty or null parameters.
      *
      * @dataProvider variationsProvider
+     *
      * @see https://github.com/yiisoft/yii2/issues/10935
+     *
      * @param string $method
-     * @param bool $showScriptName
+     * @param bool   $showScriptName
      * @param string $prefix
-     * @param array $config
+     * @param array  $config
      */
-    public function testWithNullParams($method, $showScriptName, $prefix, $config)
+    public function testWithNullParams($method, $showScriptName, $prefix, $config): void
     {
         $config['rules'] = [
             '<param1>/<param2>' => 'site/index',
@@ -446,24 +441,23 @@ class UrlManagerCreateUrlTest extends TestCase
         $manager = $this->getUrlManager($config, $showScriptName);
 
         // match first rule
-        $url = $manager->$method(['site/index', 'param1' => 111, 'param2' => 222]);
-        $this->assertEquals("$prefix/111/222", $url);
-        $url = $manager->$method(['site/index', 'param1' => 112, 'param2' => 222]);
-        $this->assertEquals("$prefix/112/222", $url);
+        $url = $manager->{$method}(['site/index', 'param1' => 111, 'param2' => 222]);
+        $this->assertSame("{$prefix}/111/222", $url);
+        $url = $manager->{$method}(['site/index', 'param1' => 112, 'param2' => 222]);
+        $this->assertSame("{$prefix}/112/222", $url);
 
         // match second rule
-        $url = $manager->$method(['site/index', 'param1' => 111, 'param2' => null]);
-        $this->assertEquals("$prefix/111", $url);
-        $url = $manager->$method(['site/index', 'param1' => 123, 'param2' => null]);
-        $this->assertEquals("$prefix/123", $url);
+        $url = $manager->{$method}(['site/index', 'param1' => 111, 'param2' => null]);
+        $this->assertSame("{$prefix}/111", $url);
+        $url = $manager->{$method}(['site/index', 'param1' => 123, 'param2' => null]);
+        $this->assertSame("{$prefix}/123", $url);
 
         // match none of the rules
-        $url = $manager->$method(['site/index', 'param1' => null, 'param2' => 111]);
-        $this->assertEquals("$prefix/site/index?param2=111", $url);
-        $url = $manager->$method(['site/index', 'param1' => null, 'param2' => 123]);
-        $this->assertEquals("$prefix/site/index?param2=123", $url);
+        $url = $manager->{$method}(['site/index', 'param1' => null, 'param2' => 111]);
+        $this->assertSame("{$prefix}/site/index?param2=111", $url);
+        $url = $manager->{$method}(['site/index', 'param1' => null, 'param2' => 123]);
+        $this->assertSame("{$prefix}/site/index?param2=123", $url);
     }
-
 
     /**
      * Test createUrl() and createAbsoluteUrl()
@@ -471,32 +465,34 @@ class UrlManagerCreateUrlTest extends TestCase
      * with empty pattern.
      *
      * @dataProvider variationsProvider
+     *
      * @see https://github.com/yiisoft/yii2/issues/6717
+     *
      * @param string $method
-     * @param bool $showScriptName
+     * @param bool   $showScriptName
      * @param string $prefix
-     * @param array $config
+     * @param array  $config
      */
-    public function testWithEmptyPattern($method, $showScriptName, $prefix, $config)
+    public function testWithEmptyPattern($method, $showScriptName, $prefix, $config): void
     {
-        $assertations = function ($manager) use ($method, $prefix) {
+        $assertations = function ($manager) use ($method, $prefix): void {
             // match first rule
-            $url = $manager->$method(['front/site/index']);
-            $this->assertEquals("$prefix/", $url);
-            $url = $manager->$method(['/front/site/index']);
-            $this->assertEquals("$prefix/", $url);
+            $url = $manager->{$method}(['front/site/index']);
+            $this->assertSame("{$prefix}/", $url);
+            $url = $manager->{$method}(['/front/site/index']);
+            $this->assertSame("{$prefix}/", $url);
 
             // match first rule with additional parameter
-            $url = $manager->$method(['front/site/index', 'page' => 1]);
-            $this->assertEquals("$prefix/?page=1", $url);
-            $url = $manager->$method(['/front/site/index', 'page' => 1]);
-            $this->assertEquals("$prefix/?page=1", $url);
+            $url = $manager->{$method}(['front/site/index', 'page' => 1]);
+            $this->assertSame("{$prefix}/?page=1", $url);
+            $url = $manager->{$method}(['/front/site/index', 'page' => 1]);
+            $this->assertSame("{$prefix}/?page=1", $url);
 
             // no match
-            $url = $manager->$method(['']);
-            $this->assertEquals("$prefix/", $url);
-            $url = $manager->$method(['/']);
-            $this->assertEquals("$prefix/", $url);
+            $url = $manager->{$method}(['']);
+            $this->assertSame("{$prefix}/", $url);
+            $url = $manager->{$method}(['/']);
+            $this->assertSame("{$prefix}/", $url);
         };
 
         // normal rule
@@ -522,7 +518,6 @@ class UrlManagerCreateUrlTest extends TestCase
         $assertations($manager);
     }
 
-
     public function absolutePatternsVariations()
     {
         $baseUrlConfig = [
@@ -543,12 +538,14 @@ class UrlManagerCreateUrlTest extends TestCase
 
     /**
      * Test rules that have host info in the patterns.
+     *
      * @dataProvider absolutePatternsVariations
-     * @param bool $showScriptName
+     *
+     * @param bool   $showScriptName
      * @param string $prefix
-     * @param array $config
+     * @param array  $config
      */
-    public function testAbsolutePatterns($showScriptName, $prefix, $config)
+    public function testAbsolutePatterns($showScriptName, $prefix, $config): void
     {
         $config['rules'] = [
             [
@@ -562,54 +559,57 @@ class UrlManagerCreateUrlTest extends TestCase
         $manager = $this->getUrlManager($config, $showScriptName);
         // first rule matches
         $urlParams = ['post/view', 'id' => 1, 'title' => 'sample post', 'lang' => 'en'];
-        $expected = "http://en.example.com$prefix/post/1/sample+post";
-        $this->assertEquals($expected, $manager->createUrl($urlParams));
-        $this->assertEquals($expected, $manager->createAbsoluteUrl($urlParams));
-        $this->assertEquals($expected, $manager->createAbsoluteUrl($urlParams, true));
-        $this->assertEquals($expected, $manager->createAbsoluteUrl($urlParams, 'http'));
-        $this->assertEquals('https' . substr($expected, 4), $manager->createAbsoluteUrl($urlParams, 'https'));
-        $this->assertEquals(substr($expected, 5), $manager->createAbsoluteUrl($urlParams, '')); // protocol relative Url
+        $expected = "http://en.example.com{$prefix}/post/1/sample+post";
+        $this->assertSame($expected, $manager->createUrl($urlParams));
+        $this->assertSame($expected, $manager->createAbsoluteUrl($urlParams));
+        $this->assertSame($expected, $manager->createAbsoluteUrl($urlParams, true));
+        $this->assertSame($expected, $manager->createAbsoluteUrl($urlParams, 'http'));
+        $this->assertSame('https' . substr($expected, 4), $manager->createAbsoluteUrl($urlParams, 'https'));
+        $this->assertSame(substr($expected, 5), $manager->createAbsoluteUrl($urlParams, '')); // protocol relative Url
 
         $urlParams = ['post/view', 'id' => 1, 'title' => 'sample post', 'lang' => 'en', '#' => 'testhash'];
-        $expected = "http://en.example.com$prefix/post/1/sample+post#testhash";
-        $this->assertEquals($expected, $manager->createUrl($urlParams));
-        $this->assertEquals($expected, $manager->createAbsoluteUrl($urlParams));
+        $expected = "http://en.example.com{$prefix}/post/1/sample+post#testhash";
+        $this->assertSame($expected, $manager->createUrl($urlParams));
+        $this->assertSame($expected, $manager->createAbsoluteUrl($urlParams));
 
         // second rule matches
         $urlParams = ['site/login'];
-        $expected = "http://www.example.com$prefix/login";
-        $this->assertEquals($expected, $manager->createUrl($urlParams));
-        $this->assertEquals($expected, $manager->createAbsoluteUrl($urlParams));
-        $this->assertEquals($expected, $manager->createAbsoluteUrl($urlParams, true));
-        $this->assertEquals($expected, $manager->createAbsoluteUrl($urlParams, 'http'));
-        $this->assertEquals('https' . substr($expected, 4), $manager->createAbsoluteUrl($urlParams, 'https'));
-        $this->assertEquals(substr($expected, 5), $manager->createAbsoluteUrl($urlParams, '')); // protocol relative Url
+        $expected = "http://www.example.com{$prefix}/login";
+        $this->assertSame($expected, $manager->createUrl($urlParams));
+        $this->assertSame($expected, $manager->createAbsoluteUrl($urlParams));
+        $this->assertSame($expected, $manager->createAbsoluteUrl($urlParams, true));
+        $this->assertSame($expected, $manager->createAbsoluteUrl($urlParams, 'http'));
+        $this->assertSame('https' . substr($expected, 4), $manager->createAbsoluteUrl($urlParams, 'https'));
+        $this->assertSame(substr($expected, 5), $manager->createAbsoluteUrl($urlParams, '')); // protocol relative Url
 
         // none of the rules matches
         $urlParams = ['post/index', 'page' => 1];
-        $this->assertEquals("$prefix/post/index?page=1", $manager->createUrl($urlParams));
-        $expected = "http://www.example.com$prefix/post/index?page=1";
-        $this->assertEquals($expected, $manager->createAbsoluteUrl($urlParams));
-        $this->assertEquals($expected, $manager->createAbsoluteUrl($urlParams, true));
-        $this->assertEquals($expected, $manager->createAbsoluteUrl($urlParams, 'http'));
-        $this->assertEquals('https' . substr($expected, 4), $manager->createAbsoluteUrl($urlParams, 'https'));
-        $this->assertEquals(substr($expected, 5), $manager->createAbsoluteUrl($urlParams, '')); // protocol relative Url
+        $this->assertSame("{$prefix}/post/index?page=1", $manager->createUrl($urlParams));
+        $expected = "http://www.example.com{$prefix}/post/index?page=1";
+        $this->assertSame($expected, $manager->createAbsoluteUrl($urlParams));
+        $this->assertSame($expected, $manager->createAbsoluteUrl($urlParams, true));
+        $this->assertSame($expected, $manager->createAbsoluteUrl($urlParams, 'http'));
+        $this->assertSame('https' . substr($expected, 4), $manager->createAbsoluteUrl($urlParams, 'https'));
+        $this->assertSame(substr($expected, 5), $manager->createAbsoluteUrl($urlParams, '')); // protocol relative Url
 
         $urlParams = ['post/index', 'page' => 1, '#' => 'testhash'];
-        $this->assertEquals("$prefix/post/index?page=1#testhash", $manager->createUrl($urlParams));
-        $expected = "http://www.example.com$prefix/post/index?page=1#testhash";
-        $this->assertEquals($expected, $manager->createAbsoluteUrl($urlParams));
+        $this->assertSame("{$prefix}/post/index?page=1#testhash", $manager->createUrl($urlParams));
+        $expected = "http://www.example.com{$prefix}/post/index?page=1#testhash";
+        $this->assertSame($expected, $manager->createAbsoluteUrl($urlParams));
     }
 
     /**
      * Test rules that have host info in the patterns, that are protocol relative.
+     *
      * @dataProvider absolutePatternsVariations
+     *
      * @see https://github.com/yiisoft/yii2/issues/12691
-     * @param bool $showScriptName
+     *
+     * @param bool   $showScriptName
      * @param string $prefix
-     * @param array $config
+     * @param array  $config
      */
-    public function testProtocolRelativeAbsolutePattern($showScriptName, $prefix, $config)
+    public function testProtocolRelativeAbsolutePattern($showScriptName, $prefix, $config): void
     {
         $config['rules'] = [
             [
@@ -625,63 +625,63 @@ class UrlManagerCreateUrlTest extends TestCase
         $manager = $this->getUrlManager($config, $showScriptName);
         // first rule matches
         $urlParams = ['post/view', 'id' => 1, 'title' => 'sample post', 'lang' => 'en'];
-        $expected = "//en.example.com$prefix/post/1/sample+post";
-        $this->assertEquals($expected, $manager->createUrl($urlParams));
-        $this->assertEquals("http:$expected", $manager->createAbsoluteUrl($urlParams));
-        $this->assertEquals("http:$expected", $manager->createAbsoluteUrl($urlParams, true));
-        $this->assertEquals("http:$expected", $manager->createAbsoluteUrl($urlParams, 'http'));
-        $this->assertEquals("https:$expected", $manager->createAbsoluteUrl($urlParams, 'https'));
-        $this->assertEquals($expected, $manager->createAbsoluteUrl($urlParams, '')); // protocol relative Url
+        $expected = "//en.example.com{$prefix}/post/1/sample+post";
+        $this->assertSame($expected, $manager->createUrl($urlParams));
+        $this->assertSame("http:{$expected}", $manager->createAbsoluteUrl($urlParams));
+        $this->assertSame("http:{$expected}", $manager->createAbsoluteUrl($urlParams, true));
+        $this->assertSame("http:{$expected}", $manager->createAbsoluteUrl($urlParams, 'http'));
+        $this->assertSame("https:{$expected}", $manager->createAbsoluteUrl($urlParams, 'https'));
+        $this->assertSame($expected, $manager->createAbsoluteUrl($urlParams, '')); // protocol relative Url
 
         $urlParams = ['post/view', 'id' => 1, 'title' => 'sample post', 'lang' => 'en', '#' => 'testhash'];
-        $expected = "//en.example.com$prefix/post/1/sample+post#testhash";
-        $this->assertEquals($expected, $manager->createUrl($urlParams));
-        $this->assertEquals("http:$expected", $manager->createAbsoluteUrl($urlParams));
+        $expected = "//en.example.com{$prefix}/post/1/sample+post#testhash";
+        $this->assertSame($expected, $manager->createUrl($urlParams));
+        $this->assertSame("http:{$expected}", $manager->createAbsoluteUrl($urlParams));
 
         // second rule matches
         $urlParams = ['site/login'];
-        $expected = "//www.example.com$prefix/login";
-        $this->assertEquals($expected, $manager->createUrl($urlParams));
-        $this->assertEquals("http:$expected", $manager->createAbsoluteUrl($urlParams));
-        $this->assertEquals("http:$expected", $manager->createAbsoluteUrl($urlParams, true));
-        $this->assertEquals("http:$expected", $manager->createAbsoluteUrl($urlParams, 'http'));
-        $this->assertEquals("https:$expected", $manager->createAbsoluteUrl($urlParams, 'https'));
-        $this->assertEquals($expected, $manager->createAbsoluteUrl($urlParams, '')); // protocol relative Url
+        $expected = "//www.example.com{$prefix}/login";
+        $this->assertSame($expected, $manager->createUrl($urlParams));
+        $this->assertSame("http:{$expected}", $manager->createAbsoluteUrl($urlParams));
+        $this->assertSame("http:{$expected}", $manager->createAbsoluteUrl($urlParams, true));
+        $this->assertSame("http:{$expected}", $manager->createAbsoluteUrl($urlParams, 'http'));
+        $this->assertSame("https:{$expected}", $manager->createAbsoluteUrl($urlParams, 'https'));
+        $this->assertSame($expected, $manager->createAbsoluteUrl($urlParams, '')); // protocol relative Url
 
         // third rule matches
         $urlParams = ['app/index'];
-        $expected = "//app.example.com$prefix";
-        $this->assertEquals($expected, $manager->createUrl($urlParams));
-        $this->assertEquals("http:$expected", $manager->createAbsoluteUrl($urlParams));
-        $this->assertEquals("http:$expected", $manager->createAbsoluteUrl($urlParams, true));
-        $this->assertEquals("http:$expected", $manager->createAbsoluteUrl($urlParams, 'http'));
-        $this->assertEquals("https:$expected", $manager->createAbsoluteUrl($urlParams, 'https'));
-        $this->assertEquals($expected, $manager->createAbsoluteUrl($urlParams, '')); // protocol relative Url
+        $expected = "//app.example.com{$prefix}";
+        $this->assertSame($expected, $manager->createUrl($urlParams));
+        $this->assertSame("http:{$expected}", $manager->createAbsoluteUrl($urlParams));
+        $this->assertSame("http:{$expected}", $manager->createAbsoluteUrl($urlParams, true));
+        $this->assertSame("http:{$expected}", $manager->createAbsoluteUrl($urlParams, 'http'));
+        $this->assertSame("https:{$expected}", $manager->createAbsoluteUrl($urlParams, 'https'));
+        $this->assertSame($expected, $manager->createAbsoluteUrl($urlParams, '')); // protocol relative Url
 
         // fourth rule matches
         $urlParams = ['app2/index'];
-        $expected = "//app2.example.com$prefix";
-        $this->assertEquals($expected, $manager->createUrl($urlParams));
-        $this->assertEquals("http:$expected", $manager->createAbsoluteUrl($urlParams));
-        $this->assertEquals("http:$expected", $manager->createAbsoluteUrl($urlParams, true));
-        $this->assertEquals("http:$expected", $manager->createAbsoluteUrl($urlParams, 'http'));
-        $this->assertEquals("https:$expected", $manager->createAbsoluteUrl($urlParams, 'https'));
-        $this->assertEquals($expected, $manager->createAbsoluteUrl($urlParams, '')); // protocol relative Url
+        $expected = "//app2.example.com{$prefix}";
+        $this->assertSame($expected, $manager->createUrl($urlParams));
+        $this->assertSame("http:{$expected}", $manager->createAbsoluteUrl($urlParams));
+        $this->assertSame("http:{$expected}", $manager->createAbsoluteUrl($urlParams, true));
+        $this->assertSame("http:{$expected}", $manager->createAbsoluteUrl($urlParams, 'http'));
+        $this->assertSame("https:{$expected}", $manager->createAbsoluteUrl($urlParams, 'https'));
+        $this->assertSame($expected, $manager->createAbsoluteUrl($urlParams, '')); // protocol relative Url
 
         // none of the rules matches
         $urlParams = ['post/index', 'page' => 1];
-        $this->assertEquals("$prefix/post/index?page=1", $manager->createUrl($urlParams));
-        $expected = "//www.example.com$prefix/post/index?page=1";
-        $this->assertEquals("http:$expected", $manager->createAbsoluteUrl($urlParams));
-        $this->assertEquals("http:$expected", $manager->createAbsoluteUrl($urlParams, true));
-        $this->assertEquals("http:$expected", $manager->createAbsoluteUrl($urlParams, 'http'));
-        $this->assertEquals("https:$expected", $manager->createAbsoluteUrl($urlParams, 'https'));
-        $this->assertEquals($expected, $manager->createAbsoluteUrl($urlParams, '')); // protocol relative Url
+        $this->assertSame("{$prefix}/post/index?page=1", $manager->createUrl($urlParams));
+        $expected = "//www.example.com{$prefix}/post/index?page=1";
+        $this->assertSame("http:{$expected}", $manager->createAbsoluteUrl($urlParams));
+        $this->assertSame("http:{$expected}", $manager->createAbsoluteUrl($urlParams, true));
+        $this->assertSame("http:{$expected}", $manager->createAbsoluteUrl($urlParams, 'http'));
+        $this->assertSame("https:{$expected}", $manager->createAbsoluteUrl($urlParams, 'https'));
+        $this->assertSame($expected, $manager->createAbsoluteUrl($urlParams, '')); // protocol relative Url
 
         $urlParams = ['post/index', 'page' => 1, '#' => 'testhash'];
-        $this->assertEquals("$prefix/post/index?page=1#testhash", $manager->createUrl($urlParams));
-        $expected = "http://www.example.com$prefix/post/index?page=1#testhash";
-        $this->assertEquals($expected, $manager->createAbsoluteUrl($urlParams));
+        $this->assertSame("{$prefix}/post/index?page=1#testhash", $manager->createUrl($urlParams));
+        $expected = "http://www.example.com{$prefix}/post/index?page=1#testhash";
+        $this->assertSame($expected, $manager->createAbsoluteUrl($urlParams));
     }
 
     public function multipleHostsRulesDataProvider()
@@ -698,10 +698,12 @@ class UrlManagerCreateUrlTest extends TestCase
      * Test matching of Url rules dependent on the current host info.
      *
      * @dataProvider multipleHostsRulesDataProvider
+     *
      * @see https://github.com/yiisoft/yii2/issues/7948
+     *
      * @param string $host
      */
-    public function testMultipleHostsRules($host)
+    public function testMultipleHostsRules($host): void
     {
         $manager = new UrlManager([
             'enablePrettyUrl' => true,
@@ -715,22 +717,22 @@ class UrlManagerCreateUrlTest extends TestCase
             'scriptUrl' => '',
         ]);
         $url = $manager->createAbsoluteUrl(['products/search', 'lang' => 'en', 'slug' => 'search'], 'https');
-        $this->assertEquals('https://example.com/search', $url);
+        $this->assertSame('https://example.com/search', $url);
         $url = $manager->createUrl(['products/search', 'lang' => 'en', 'slug' => 'search']);
-        $this->assertEquals('http://example.com/search', $url);
+        $this->assertSame('http://example.com/search', $url);
         $url = $manager->createUrl(['products/search', 'lang' => 'en', 'slug' => 'search', 'param1' => 'value1']);
-        $this->assertEquals('http://example.com/search?param1=value1', $url);
+        $this->assertSame('http://example.com/search?param1=value1', $url);
         $url = $manager->createAbsoluteUrl(['products/search', 'lang' => 'fr', 'slug' => 'search'], 'https');
-        $this->assertEquals('https://example.fr/search', $url);
+        $this->assertSame('https://example.fr/search', $url);
         $url = $manager->createUrl(['products/search', 'lang' => 'fr', 'slug' => 'search']);
-        $this->assertEquals('http://example.fr/search', $url);
+        $this->assertSame('http://example.fr/search', $url);
         $url = $manager->createUrl(['products/search', 'lang' => 'fr', 'slug' => 'search', 'param1' => 'value1']);
-        $this->assertEquals('http://example.fr/search?param1=value1', $url);
+        $this->assertSame('http://example.fr/search?param1=value1', $url);
     }
 
-    public function testCreateUrlCache()
+    public function testCreateUrlCache(): void
     {
-        /* @var $rules CachedUrlRule[] */
+        /** @var CachedUrlRule[] $rules */
         $rules = [
             Yii::createObject([
                 'class' => CachedUrlRule::className(),
@@ -747,37 +749,37 @@ class UrlManagerCreateUrlTest extends TestCase
             'rules' => $rules,
         ], false);
 
-        $this->assertEquals('/user/rob006', $manager->createUrl(['user/show', 'name' => 'rob006']));
-        $this->assertEquals(UrlRule::CREATE_STATUS_SUCCESS, $rules[0]->getCreateUrlStatus());
-        $this->assertEquals(1, $rules[0]->createCounter);
-        $this->assertEquals(0, $rules[1]->createCounter);
+        $this->assertSame('/user/rob006', $manager->createUrl(['user/show', 'name' => 'rob006']));
+        $this->assertSame(UrlRule::CREATE_STATUS_SUCCESS, $rules[0]->getCreateUrlStatus());
+        $this->assertSame(1, $rules[0]->createCounter);
+        $this->assertSame(0, $rules[1]->createCounter);
 
-        $this->assertEquals('/user/show?name=John+Doe', $manager->createUrl(['user/show', 'name' => 'John Doe']));
-        $this->assertEquals(UrlRule::CREATE_STATUS_PARAMS_MISMATCH, $rules[0]->getCreateUrlStatus());
-        $this->assertEquals(UrlRule::CREATE_STATUS_SUCCESS, $rules[1]->getCreateUrlStatus());
-        $this->assertEquals(2, $rules[0]->createCounter);
-        $this->assertEquals(1, $rules[1]->createCounter);
+        $this->assertSame('/user/show?name=John+Doe', $manager->createUrl(['user/show', 'name' => 'John Doe']));
+        $this->assertSame(UrlRule::CREATE_STATUS_PARAMS_MISMATCH, $rules[0]->getCreateUrlStatus());
+        $this->assertSame(UrlRule::CREATE_STATUS_SUCCESS, $rules[1]->getCreateUrlStatus());
+        $this->assertSame(2, $rules[0]->createCounter);
+        $this->assertSame(1, $rules[1]->createCounter);
 
-        $this->assertEquals('/user/profile?name=rob006', $manager->createUrl(['user/profile', 'name' => 'rob006']));
-        $this->assertEquals(UrlRule::CREATE_STATUS_ROUTE_MISMATCH, $rules[0]->getCreateUrlStatus());
-        $this->assertEquals(UrlRule::CREATE_STATUS_SUCCESS, $rules[1]->getCreateUrlStatus());
-        $this->assertEquals(3, $rules[0]->createCounter);
-        $this->assertEquals(2, $rules[1]->createCounter);
+        $this->assertSame('/user/profile?name=rob006', $manager->createUrl(['user/profile', 'name' => 'rob006']));
+        $this->assertSame(UrlRule::CREATE_STATUS_ROUTE_MISMATCH, $rules[0]->getCreateUrlStatus());
+        $this->assertSame(UrlRule::CREATE_STATUS_SUCCESS, $rules[1]->getCreateUrlStatus());
+        $this->assertSame(3, $rules[0]->createCounter);
+        $this->assertSame(2, $rules[1]->createCounter);
 
-        $this->assertEquals('/user/profile?name=John+Doe', $manager->createUrl(['user/profile', 'name' => 'John Doe']));
-        $this->assertEquals(UrlRule::CREATE_STATUS_ROUTE_MISMATCH, $rules[0]->getCreateUrlStatus());
-        $this->assertEquals(UrlRule::CREATE_STATUS_SUCCESS, $rules[1]->getCreateUrlStatus());
+        $this->assertSame('/user/profile?name=John+Doe', $manager->createUrl(['user/profile', 'name' => 'John Doe']));
+        $this->assertSame(UrlRule::CREATE_STATUS_ROUTE_MISMATCH, $rules[0]->getCreateUrlStatus());
+        $this->assertSame(UrlRule::CREATE_STATUS_SUCCESS, $rules[1]->getCreateUrlStatus());
         // fist rule is skipped - cached rule has precedence
-        $this->assertEquals(3, $rules[0]->createCounter);
-        $this->assertEquals(3, $rules[1]->createCounter);
+        $this->assertSame(3, $rules[0]->createCounter);
+        $this->assertSame(3, $rules[1]->createCounter);
     }
 
     /**
      * @see https://github.com/yiisoft/yii2/pull/1335
      */
-    public function testUrlCreateCacheWithParameterMismatch()
+    public function testUrlCreateCacheWithParameterMismatch(): void
     {
-        /* @var $rules CachedUrlRule[] */
+        /** @var CachedUrlRule[] $rules */
         $rules = [
             Yii::createObject([
                 'class' => CachedUrlRule::className(),
@@ -794,22 +796,22 @@ class UrlManagerCreateUrlTest extends TestCase
             'rules' => $rules,
         ], false);
 
-        $this->assertEquals('/user/show?name=John+Doe', $manager->createUrl(['user/show', 'name' => 'John Doe']));
-        $this->assertEquals(UrlRule::CREATE_STATUS_PARAMS_MISMATCH, $rules[0]->getCreateUrlStatus());
-        $this->assertEquals(UrlRule::CREATE_STATUS_SUCCESS, $rules[1]->getCreateUrlStatus());
-        $this->assertEquals(1, $rules[0]->createCounter);
-        $this->assertEquals(1, $rules[1]->createCounter);
+        $this->assertSame('/user/show?name=John+Doe', $manager->createUrl(['user/show', 'name' => 'John Doe']));
+        $this->assertSame(UrlRule::CREATE_STATUS_PARAMS_MISMATCH, $rules[0]->getCreateUrlStatus());
+        $this->assertSame(UrlRule::CREATE_STATUS_SUCCESS, $rules[1]->getCreateUrlStatus());
+        $this->assertSame(1, $rules[0]->createCounter);
+        $this->assertSame(1, $rules[1]->createCounter);
 
-        $this->assertEquals('/user/rob006', $manager->createUrl(['user/show', 'name' => 'rob006']));
-        $this->assertEquals(UrlRule::CREATE_STATUS_SUCCESS, $rules[0]->getCreateUrlStatus());
-        $this->assertEquals(2, $rules[0]->createCounter);
-        $this->assertEquals(1, $rules[1]->createCounter);
+        $this->assertSame('/user/rob006', $manager->createUrl(['user/show', 'name' => 'rob006']));
+        $this->assertSame(UrlRule::CREATE_STATUS_SUCCESS, $rules[0]->getCreateUrlStatus());
+        $this->assertSame(2, $rules[0]->createCounter);
+        $this->assertSame(1, $rules[1]->createCounter);
     }
 
     /**
      * @see https://github.com/yiisoft/yii2/issues/14406
      */
-    public function testCreatingRulesWithDifferentRuleConfigAndEnabledCache()
+    public function testCreatingRulesWithDifferentRuleConfigAndEnabledCache(): void
     {
         $this->mockWebApplication([
             'components' => [
@@ -833,12 +835,12 @@ class UrlManagerCreateUrlTest extends TestCase
             ],
         ]);
 
-        $this->assertNotEquals($urlManager->rules, $cachedUrlManager->rules);
+        $this->assertNotSame($urlManager->rules, $cachedUrlManager->rules);
         $this->assertInstanceOf(UrlRule::className(), $urlManager->rules[0]);
         $this->assertInstanceOf(CachedUrlRule::className(), $cachedUrlManager->rules[0]);
     }
 
-    public function testNotEnsuringCacheForEmptyRuleset()
+    public function testNotEnsuringCacheForEmptyRuleset(): void
     {
         $this->mockWebApplication([
             'components' => [
@@ -857,5 +859,22 @@ class UrlManagerCreateUrlTest extends TestCase
             'rules' => ['/' => 'site/index'],
         ]);
         $this->assertInstanceOf(ArrayCache::className(), $urlManager->cache);
+    }
+
+    protected function getUrlManager($config = [], $showScriptName = true)
+    {
+        // in this test class, all tests have enablePrettyUrl enabled.
+        $config['enablePrettyUrl'] = true;
+
+        // set default values if they are not set
+        $config = array_merge([
+            'baseUrl' => '',
+            'scriptUrl' => '/index.php',
+            'hostInfo' => 'http://www.example.com',
+            'cache' => null,
+            'showScriptName' => $showScriptName,
+        ], $config);
+
+        return new UrlManager($config);
     }
 }

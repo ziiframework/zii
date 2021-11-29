@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,10 +11,11 @@
 namespace yiiunit\data\ar;
 
 /**
- * Class Storage
+ * Class Storage.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
- * @property int $id
+ *
+ * @property int   $id
  * @property array $data
  */
 class Storage extends ActiveRecord

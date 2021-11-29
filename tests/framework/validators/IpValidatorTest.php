@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -13,6 +16,9 @@ use yiiunit\TestCase;
 
 /**
  * @group validators
+ *
+ * @internal
+ * @coversNothing
  */
 class IpValidatorTest extends TestCase
 {
@@ -23,7 +29,7 @@ class IpValidatorTest extends TestCase
         $this->destroyApplication();
     }
 
-    public function testInitException()
+    public function testInitException(): void
     {
         $this->expectException('yii\base\InvalidConfigException');
         $this->expectExceptionMessage('Both IPv4 and IPv6 checks can not be disabled at the same time');
@@ -42,17 +48,17 @@ class IpValidatorTest extends TestCase
 
     /**
      * @dataProvider provideRangesForSubstitution
+     *
      * @param array $range
      * @param array $expectedRange
      */
-    public function testRangesSubstitution($range, $expectedRange)
+    public function testRangesSubstitution($range, $expectedRange): void
     {
         $validator = new IpValidator(['ranges' => $range]);
-        $this->assertEquals($expectedRange, $validator->ranges);
+        $this->assertSame($expectedRange, $validator->ranges);
     }
 
-
-    public function testValidateOrder()
+    public function testValidateOrder(): void
     {
         $validator = new IpValidator([
             'ranges' => ['10.0.0.1', '!10.0.0.0/8', '!babe::/8', 'any'],
@@ -72,9 +78,10 @@ class IpValidatorTest extends TestCase
 
     /**
      * @dataProvider provideBadIps
+     *
      * @param mixed $badIp
      */
-    public function testValidateValueNotAnIP($badIp)
+    public function testValidateValueNotAnIP($badIp): void
     {
         $validator = new IpValidator();
 
@@ -83,37 +90,36 @@ class IpValidatorTest extends TestCase
 
     /**
      * @dataProvider provideBadIps
+     *
      * @param mixed $badIp
      */
-    public function testValidateModelAttributeNotAnIP($badIp)
+    public function testValidateModelAttributeNotAnIP($badIp): void
     {
         $validator = new IpValidator();
         $model = new FakedValidationModel();
 
         $model->attr_ip = $badIp;
         $validator->validateAttribute($model, 'attr_ip');
-        $this->assertEquals('attr_ip must be a valid IP address.', $model->getFirstError('attr_ip'));
+        $this->assertSame('attr_ip must be a valid IP address.', $model->getFirstError('attr_ip'));
         $model->clearErrors();
-
 
         $validator->ipv4 = false;
 
         $model->attr_ip = $badIp;
         $validator->validateAttribute($model, 'attr_ip');
-        $this->assertEquals('attr_ip must be a valid IP address.', $model->getFirstError('attr_ip'));
+        $this->assertSame('attr_ip must be a valid IP address.', $model->getFirstError('attr_ip'));
         $model->clearErrors();
-
 
         $validator->ipv4 = true;
         $validator->ipv6 = false;
 
         $model->attr_ip = $badIp;
         $validator->validateAttribute($model, 'attr_ip');
-        $this->assertEquals('attr_ip must be a valid IP address.', $model->getFirstError('attr_ip'));
+        $this->assertSame('attr_ip must be a valid IP address.', $model->getFirstError('attr_ip'));
         $model->clearErrors();
     }
 
-    public function testValidateValueIPv4()
+    public function testValidateValueIPv4(): void
     {
         $validator = new IpValidator();
 
@@ -147,8 +153,7 @@ class IpValidatorTest extends TestCase
         $this->assertFalse($validator->validate('!!192.168.5.32/32'));
     }
 
-
-    public function testValidateValueIPv6()
+    public function testValidateValueIPv6(): void
     {
         $validator = new IpValidator();
 
@@ -183,7 +188,7 @@ class IpValidatorTest extends TestCase
         $this->assertFalse($validator->validate('!!2008:fa::0:1/64'));
     }
 
-    public function testValidateValueIPvBoth()
+    public function testValidateValueIPvBoth(): void
     {
         $validator = new IpValidator();
 
@@ -239,7 +244,7 @@ class IpValidatorTest extends TestCase
         $this->assertFalse($validator->validate('!!2008:fa::0:1/64'));
     }
 
-    public function testValidateRangeIPv4()
+    public function testValidateRangeIPv4(): void
     {
         $validator = new IpValidator([
             'ranges' => ['10.0.1.0/24'],
@@ -264,7 +269,7 @@ class IpValidatorTest extends TestCase
         $this->assertFalse($validator->validate('10.0.1.1/22'));
     }
 
-    public function testValidateRangeIPv6()
+    public function testValidateRangeIPv6(): void
     {
         $validator = new IpValidator([
             'ranges' => '2001:db0:1:1::/64',
@@ -283,7 +288,7 @@ class IpValidatorTest extends TestCase
         $this->assertTrue($validator->validate('2001:db0:1:2::7'));
     }
 
-    public function testValidateRangeIPvBoth()
+    public function testValidateRangeIPvBoth(): void
     {
         $validator = new IpValidator([
             'ranges' => '10.0.1.0/24',
@@ -312,7 +317,7 @@ class IpValidatorTest extends TestCase
         $this->assertFalse($validator->validate('10.0.1.1/22'));
     }
 
-    public function testValidateAttributeIPv4()
+    public function testValidateAttributeIPv4(): void
     {
         $validator = new IpValidator();
         $model = new FakedValidationModel();
@@ -322,19 +327,19 @@ class IpValidatorTest extends TestCase
         $model->attr_ip = '8.8.8.8';
         $validator->validateAttribute($model, 'attr_ip');
         $this->assertFalse($model->hasErrors('attr_ip'));
-        $this->assertEquals('8.8.8.8', $model->attr_ip);
+        $this->assertSame('8.8.8.8', $model->attr_ip);
 
         $validator->subnet = false;
 
         $model->attr_ip = '8.8.8.8';
         $validator->validateAttribute($model, 'attr_ip');
         $this->assertFalse($model->hasErrors('attr_ip'));
-        $this->assertEquals('8.8.8.8', $model->attr_ip);
+        $this->assertSame('8.8.8.8', $model->attr_ip);
 
         $model->attr_ip = '8.8.8.8/24';
         $validator->validateAttribute($model, 'attr_ip');
         $this->assertTrue($model->hasErrors('attr_ip'));
-        $this->assertEquals('attr_ip must not be a subnet.', $model->getFirstError('attr_ip'));
+        $this->assertSame('attr_ip must not be a subnet.', $model->getFirstError('attr_ip'));
         $model->clearErrors();
 
         $validator->subnet = null;
@@ -343,11 +348,10 @@ class IpValidatorTest extends TestCase
         $model->attr_ip = '8.8.8.8';
         $validator->validateAttribute($model, 'attr_ip');
         $this->assertFalse($model->hasErrors('attr_ip'));
-        $this->assertEquals('8.8.8.8/32', $model->attr_ip);
+        $this->assertSame('8.8.8.8/32', $model->attr_ip);
     }
 
-
-    public function testValidateAttributeIPv6()
+    public function testValidateAttributeIPv6(): void
     {
         $validator = new IpValidator();
         $model = new FakedValidationModel();
@@ -357,19 +361,19 @@ class IpValidatorTest extends TestCase
         $model->attr_ip = '2001:db0:1:2::1';
         $validator->validateAttribute($model, 'attr_ip');
         $this->assertFalse($model->hasErrors('attr_ip'));
-        $this->assertEquals('2001:db0:1:2::1', $model->attr_ip);
+        $this->assertSame('2001:db0:1:2::1', $model->attr_ip);
 
         $validator->subnet = false;
 
         $model->attr_ip = '2001:db0:1:2::7';
         $validator->validateAttribute($model, 'attr_ip');
         $this->assertFalse($model->hasErrors('attr_ip'));
-        $this->assertEquals('2001:db0:1:2::7', $model->attr_ip);
+        $this->assertSame('2001:db0:1:2::7', $model->attr_ip);
 
         $model->attr_ip = '2001:db0:1:2::7/64';
         $validator->validateAttribute($model, 'attr_ip');
         $this->assertTrue($model->hasErrors('attr_ip'));
-        $this->assertEquals('attr_ip must not be a subnet.', $model->getFirstError('attr_ip'));
+        $this->assertSame('attr_ip must not be a subnet.', $model->getFirstError('attr_ip'));
         $model->clearErrors();
 
         $validator->subnet = null;
@@ -378,24 +382,24 @@ class IpValidatorTest extends TestCase
         $model->attr_ip = 'fa01::1';
         $validator->validateAttribute($model, 'attr_ip');
         $this->assertFalse($model->hasErrors('attr_ip'));
-        $this->assertEquals('fa01::1/128', $model->attr_ip);
+        $this->assertSame('fa01::1/128', $model->attr_ip);
 
         $model->attr_ip = 'fa01::1/64';
         $validator->validateAttribute($model, 'attr_ip');
         $this->assertFalse($model->hasErrors('attr_ip'));
-        $this->assertEquals('fa01::1/64', $model->attr_ip);
+        $this->assertSame('fa01::1/64', $model->attr_ip);
 
         $validator->expandIPv6 = true;
 
         $model->attr_ip = 'fa01::1/64';
         $validator->validateAttribute($model, 'attr_ip');
         $this->assertFalse($model->hasErrors('attr_ip'));
-        $this->assertEquals('fa01:0000:0000:0000:0000:0000:0000:0001/64', $model->attr_ip);
+        $this->assertSame('fa01:0000:0000:0000:0000:0000:0000:0001/64', $model->attr_ip);
 
         $model->attr_ip = 'fa01::2/614';
         $validator->validateAttribute($model, 'attr_ip');
         $this->assertTrue($model->hasErrors('attr_ip'));
-        $this->assertEquals('fa01::2/614', $model->attr_ip);
-        $this->assertEquals('attr_ip contains wrong subnet mask.', $model->getFirstError('attr_ip'));
+        $this->assertSame('fa01::2/614', $model->attr_ip);
+        $this->assertSame('attr_ip contains wrong subnet mask.', $model->getFirstError('attr_ip'));
     }
 }

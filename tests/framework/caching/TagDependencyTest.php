@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -13,10 +16,13 @@ use yiiunit\TestCase;
 
 /**
  * @group caching
+ *
+ * @internal
+ * @coversNothing
  */
 class TagDependencyTest extends TestCase
 {
-    public function testInvalidate()
+    public function testInvalidate(): void
     {
         $cache = new FileCache(['cachePath' => '@yiiunit/runtime/cache']);
 
@@ -26,16 +32,16 @@ class TagDependencyTest extends TestCase
         $cache->set('b1', 21, 0, new TagDependency(['tags' => 't2']));
         $cache->set('b2', 22, 0, new TagDependency(['tags' => 't2']));
 
-        $this->assertEquals(11, $cache->get('a1'));
-        $this->assertEquals(12, $cache->get('a2'));
-        $this->assertEquals(21, $cache->get('b1'));
-        $this->assertEquals(22, $cache->get('b2'));
+        $this->assertSame(11, $cache->get('a1'));
+        $this->assertSame(12, $cache->get('a2'));
+        $this->assertSame(21, $cache->get('b1'));
+        $this->assertSame(22, $cache->get('b2'));
 
         TagDependency::invalidate($cache, 't1');
         $this->assertFalse($cache->get('a1'));
         $this->assertFalse($cache->get('a2'));
-        $this->assertEquals(21, $cache->get('b1'));
-        $this->assertEquals(22, $cache->get('b2'));
+        $this->assertSame(21, $cache->get('b1'));
+        $this->assertSame(22, $cache->get('b2'));
 
         TagDependency::invalidate($cache, 't2');
         $this->assertFalse($cache->get('a1'));
@@ -49,16 +55,16 @@ class TagDependencyTest extends TestCase
         $cache->set('b1', 21, 0, new TagDependency(['tags' => ['t1', 't2']]));
         $cache->set('b2', 22, 0, new TagDependency(['tags' => 't2']));
 
-        $this->assertEquals(11, $cache->get('a1'));
-        $this->assertEquals(12, $cache->get('a2'));
-        $this->assertEquals(21, $cache->get('b1'));
-        $this->assertEquals(22, $cache->get('b2'));
+        $this->assertSame(11, $cache->get('a1'));
+        $this->assertSame(12, $cache->get('a2'));
+        $this->assertSame(21, $cache->get('b1'));
+        $this->assertSame(22, $cache->get('b2'));
 
         TagDependency::invalidate($cache, 't1');
         $this->assertFalse($cache->get('a1'));
         $this->assertFalse($cache->get('a2'));
         $this->assertFalse($cache->get('b1'));
-        $this->assertEquals(22, $cache->get('b2'));
+        $this->assertSame(22, $cache->get('b2'));
 
         TagDependency::invalidate($cache, 't2');
         $this->assertFalse($cache->get('a1'));
@@ -71,10 +77,10 @@ class TagDependencyTest extends TestCase
         $cache->set('b1', 21, 0, new TagDependency(['tags' => ['t1', 't2']]));
         $cache->set('b2', 22, 0, new TagDependency(['tags' => 't2']));
 
-        $this->assertEquals(11, $cache->get('a1'));
-        $this->assertEquals(12, $cache->get('a2'));
-        $this->assertEquals(21, $cache->get('b1'));
-        $this->assertEquals(22, $cache->get('b2'));
+        $this->assertSame(11, $cache->get('a1'));
+        $this->assertSame(12, $cache->get('a2'));
+        $this->assertSame(21, $cache->get('b1'));
+        $this->assertSame(22, $cache->get('b2'));
 
         TagDependency::invalidate($cache, ['t1', 't2']);
         $this->assertFalse($cache->get('a1'));

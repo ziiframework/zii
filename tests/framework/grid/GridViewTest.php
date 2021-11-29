@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +10,8 @@
 
 namespace yiiunit\framework\grid;
 
+use function count;
+use Exception;
 use yii\data\ArrayDataProvider;
 use yii\grid\DataColumn;
 use yii\grid\GridView;
@@ -15,6 +20,9 @@ use yii\web\View;
 /**
  * @author Evgeniy Tkachenko <et.coder@gmail.com>
  * @group grid
+ *
+ * @internal
+ * @coversNothing
  */
 class GridViewTest extends \yiiunit\TestCase
 {
@@ -48,11 +56,13 @@ class GridViewTest extends \yiiunit\TestCase
 
     /**
      * @dataProvider emptyDataProvider
-     * @param mixed $emptyText
+     *
+     * @param mixed  $emptyText
      * @param string $expectedText
-     * @throws \Exception
+     *
+     * @throws Exception
      */
-    public function testEmpty($emptyText, $expectedText)
+    public function testEmpty($emptyText, $expectedText): void
     {
         $html = GridView::widget([
             'id' => 'grid',
@@ -73,21 +83,19 @@ class GridViewTest extends \yiiunit\TestCase
         }
         $expectedHtml = "<div id=\"grid\"><table><tbody>{$emptyRowHtml}</tbody></table></div>";
 
-        $this->assertEquals($expectedHtml, $html);
+        $this->assertSame($expectedHtml, $html);
     }
 
-    public function testGuessColumns()
+    public function testGuessColumns(): void
     {
         $row = ['id' => 1, 'name' => 'Name1', 'value' => 'Value1', 'description' => 'Description1'];
 
         $grid = new GridView([
-            'dataProvider' => new ArrayDataProvider(
-                [
-                    'allModels' => [
-                        $row,
-                    ],
-                ]
-            ),
+            'dataProvider' => new ArrayDataProvider([
+                'allModels' => [
+                    $row,
+                ],
+            ]),
         ]);
 
         $columns = $grid->columns;
@@ -102,13 +110,11 @@ class GridViewTest extends \yiiunit\TestCase
         $row = array_merge($row, ['otherRelation' => (object) $row['relation']]);
 
         $grid = new GridView([
-            'dataProvider' => new ArrayDataProvider(
-                [
-                    'allModels' => [
-                        $row,
-                    ],
-                ]
-            ),
+            'dataProvider' => new ArrayDataProvider([
+                'allModels' => [
+                    $row,
+                ],
+            ]),
         ]);
 
         $columns = $grid->columns;
@@ -117,37 +123,38 @@ class GridViewTest extends \yiiunit\TestCase
         foreach ($columns as $index => $column) {
             $this->assertInstanceOf(DataColumn::className(), $column);
             $this->assertArrayHasKey($column->attribute, $row);
-            $this->assertNotEquals('relation', $column->attribute);
-            $this->assertNotEquals('otherRelation', $column->attribute);
+            $this->assertNotSame('relation', $column->attribute);
+            $this->assertNotSame('otherRelation', $column->attribute);
         }
     }
 
-	/**
-	 * @throws \Exception
-	 */
-	public function testFooter() {
-		$config = [
-			'id'           => 'grid',
-			'dataProvider' => new ArrayDataProvider(['allModels' => []]),
-			'showHeader'   => false,
-			'showFooter'   => true,
-			'options'      => [],
-			'tableOptions' => [],
-			'view'         => new View(),
-			'filterUrl'    => '/',
-		];
+    /**
+     * @throws Exception
+     */
+    public function testFooter(): void
+    {
+        $config = [
+            'id' => 'grid',
+            'dataProvider' => new ArrayDataProvider(['allModels' => []]),
+            'showHeader' => false,
+            'showFooter' => true,
+            'options' => [],
+            'tableOptions' => [],
+            'view' => new View(),
+            'filterUrl' => '/',
+        ];
 
-		$html = GridView::widget($config);
-		$html = preg_replace("/\r|\n/", '', $html);
+        $html = GridView::widget($config);
+        $html = preg_replace("/\r|\n/", '', $html);
 
-		$this->assertTrue(preg_match("/<\/tfoot><tbody>/", $html) === 1);
+        $this->assertTrue(preg_match('/<\\/tfoot><tbody>/', $html) === 1);
 
-		// Place footer after body
-		$config['placeFooterAfterBody'] = true;
+        // Place footer after body
+        $config['placeFooterAfterBody'] = true;
 
-		$html = GridView::widget($config);
-		$html = preg_replace("/\r|\n/", '', $html);
+        $html = GridView::widget($config);
+        $html = preg_replace("/\r|\n/", '', $html);
 
-		$this->assertTrue(preg_match("/<\/tbody><tfoot>/", $html) === 1);
-	}
+        $this->assertTrue(preg_match('/<\\/tbody><tfoot>/', $html) === 1);
+    }
 }

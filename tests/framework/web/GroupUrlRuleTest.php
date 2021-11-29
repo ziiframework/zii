@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -15,6 +18,9 @@ use yiiunit\TestCase;
 
 /**
  * @group web
+ *
+ * @internal
+ * @coversNothing
  */
 class GroupUrlRuleTest extends TestCase
 {
@@ -24,50 +30,55 @@ class GroupUrlRuleTest extends TestCase
         $this->mockApplication();
     }
 
-    public function testCreateUrl()
+    public function testCreateUrl(): void
     {
         $manager = new UrlManager(['cache' => null]);
         $suites = $this->getTestsForCreateUrl();
+
         foreach ($suites as $i => $suite) {
-            list($name, $config, $tests) = $suite;
+            [$name, $config, $tests] = $suite;
             $rule = new GroupUrlRule($config);
+
             foreach ($tests as $j => $test) {
-                list($route, $params, $expected, $status) = $test;
+                [$route, $params, $expected, $status] = $test;
                 $url = $rule->createUrl($manager, $route, $params);
-                $this->assertEquals($expected, $url, "Test#$i-$j: $name");
-                $this->assertSame($status, $rule->getCreateUrlStatus(), "Test#$i-$j: $name");
+                $this->assertSame($expected, $url, "Test#{$i}-{$j}: {$name}");
+                $this->assertSame($status, $rule->getCreateUrlStatus(), "Test#{$i}-{$j}: {$name}");
             }
         }
     }
 
-    public function testParseRequest()
+    public function testParseRequest(): void
     {
         $manager = new UrlManager(['cache' => null]);
         $request = new Request(['hostInfo' => 'http://en.example.com']);
         $suites = $this->getTestsForParseRequest();
+
         foreach ($suites as $i => $suite) {
-            list($name, $config, $tests) = $suite;
+            [$name, $config, $tests] = $suite;
             $rule = new GroupUrlRule($config);
+
             foreach ($tests as $j => $test) {
                 $request->pathInfo = $test[0];
                 $route = $test[1];
-                $params = isset($test[2]) ? $test[2] : [];
+                $params = $test[2] ?? [];
                 $result = $rule->parseRequest($manager, $request);
+
                 if ($route === false) {
-                    $this->assertFalse($result, "Test#$i-$j: $name");
+                    $this->assertFalse($result, "Test#{$i}-{$j}: {$name}");
                 } else {
-                    $this->assertEquals([$route, $params], $result, "Test#$i-$j: $name");
+                    $this->assertSame([$route, $params], $result, "Test#{$i}-{$j}: {$name}");
                 }
             }
         }
     }
 
-    public function testParseVerb()
+    public function testParseVerb(): void
     {
         $config = [
             'prefix' => 'admin',
             'rules' => [
-                'login' => 'user/login'
+                'login' => 'user/login',
             ],
         ];
         $rules = new GroupUrlRule($config);
@@ -82,30 +93,30 @@ class GroupUrlRuleTest extends TestCase
         $rules = new GroupUrlRule($config);
         $this->assertCount(1, $rules->rules[0]->verb);
         $this->assertContains('POST', $rules->rules[0]->verb);
-        $this->assertEquals('admin/user/login', $rules->rules[0]->route);
+        $this->assertSame('admin/user/login', $rules->rules[0]->route);
 
         $config = [
             'prefix' => 'admin',
             'rules' => [
-                'POST login' => 'user/login'
+                'POST login' => 'user/login',
             ],
         ];
         $rules = new GroupUrlRule($config);
         $this->assertCount(1, $rules->rules[0]->verb);
         $this->assertContains('POST', $rules->rules[0]->verb);
-        $this->assertEquals('admin/user/login', $rules->rules[0]->route);
+        $this->assertSame('admin/user/login', $rules->rules[0]->route);
 
         $config = [
             'prefix' => 'admin',
             'rules' => [
-                'POST,GET login' => 'user/login'
+                'POST,GET login' => 'user/login',
             ],
         ];
         $rules = new GroupUrlRule($config);
         $this->assertCount(2, $rules->rules[0]->verb);
         $this->assertContains('POST', $rules->rules[0]->verb);
         $this->assertContains('GET', $rules->rules[0]->verb);
-        $this->assertEquals('admin/user/login', $rules->rules[0]->route);
+        $this->assertSame('admin/user/login', $rules->rules[0]->route);
     }
 
     protected function getTestsForCreateUrl()

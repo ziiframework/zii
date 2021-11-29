@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -14,11 +17,11 @@ namespace yiiunit\framework\console\controllers;
 trait StdOutBufferControllerTrait
 {
     /**
-     * @var string output buffer.
+     * @var string output buffer
      */
     private $stdOutBuffer = '';
 
-    public function stdout($string)
+    public function stdout($string): void
     {
         $this->stdOutBuffer .= $string;
     }
@@ -27,6 +30,7 @@ trait StdOutBufferControllerTrait
     {
         $result = $this->stdOutBuffer;
         $this->stdOutBuffer = '';
+
         return $result;
     }
 }

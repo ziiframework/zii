@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,7 +10,7 @@
 
 namespace yiiunit\framework\db\pgsql;
 
-use yii\db\conditions\ExistsConditionBuilder;
+use PDO;
 use yii\db\Expression;
 use yiiunit\data\ar\ActiveRecord;
 use yiiunit\data\ar\EnumTypeInCustomSchema;
@@ -16,6 +19,9 @@ use yiiunit\data\ar\Type;
 /**
  * @group db
  * @group pgsql
+ *
+ * @internal
+ * @coversNothing
  */
 class SchemaTest extends \yiiunit\framework\db\SchemaTest
 {
@@ -76,6 +82,7 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
         $columns['bool_col2']['precision'] = null;
         $columns['bool_col2']['scale'] = null;
         $columns['bool_col2']['defaultValue'] = true;
+
         if (version_compare($this->getConnection(false)->getServerVersion(), '10', '<')) {
             $columns['ts_default']['defaultValue'] = new Expression('now()');
         }
@@ -105,7 +112,7 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
             'precision' => null,
             'scale' => null,
             'defaultValue' => null,
-            'dimension' => 1
+            'dimension' => 1,
         ];
         $columns['textarray2_col'] = [
             'type' => 'text',
@@ -118,7 +125,7 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
             'precision' => null,
             'scale' => null,
             'defaultValue' => null,
-            'dimension' => 2
+            'dimension' => 2,
         ];
         $columns['json_col'] = [
             'type' => 'json',
@@ -130,8 +137,8 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
             'size' => null,
             'precision' => null,
             'scale' => null,
-            'defaultValue' => ["a" => 1],
-            'dimension' => 0
+            'defaultValue' => ['a' => 1],
+            'dimension' => 0,
         ];
         $columns['jsonb_col'] = [
             'type' => 'json',
@@ -144,7 +151,7 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
             'precision' => null,
             'scale' => null,
             'defaultValue' => null,
-            'dimension' => 0
+            'dimension' => 0,
         ];
         $columns['jsonarray_col'] = [
             'type' => 'json',
@@ -157,13 +164,13 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
             'precision' => null,
             'scale' => null,
             'defaultValue' => null,
-            'dimension' => 1
+            'dimension' => 1,
         ];
 
         return $columns;
     }
 
-    public function testCompositeFk()
+    public function testCompositeFk(): void
     {
         $schema = $this->getConnection()->schema;
 
@@ -171,34 +178,34 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
 
         $this->assertCount(1, $table->foreignKeys);
         $this->assertTrue(isset($table->foreignKeys['fk_composite_fk_order_item']));
-        $this->assertEquals('order_item', $table->foreignKeys['fk_composite_fk_order_item'][0]);
-        $this->assertEquals('order_id', $table->foreignKeys['fk_composite_fk_order_item']['order_id']);
-        $this->assertEquals('item_id', $table->foreignKeys['fk_composite_fk_order_item']['item_id']);
+        $this->assertSame('order_item', $table->foreignKeys['fk_composite_fk_order_item'][0]);
+        $this->assertSame('order_id', $table->foreignKeys['fk_composite_fk_order_item']['order_id']);
+        $this->assertSame('item_id', $table->foreignKeys['fk_composite_fk_order_item']['item_id']);
     }
 
-    public function testGetPDOType()
+    public function testGetPDOType(): void
     {
         $values = [
-            [null, \PDO::PARAM_NULL],
-            ['', \PDO::PARAM_STR],
-            ['hello', \PDO::PARAM_STR],
-            [0, \PDO::PARAM_INT],
-            [1, \PDO::PARAM_INT],
-            [1337, \PDO::PARAM_INT],
-            [true, \PDO::PARAM_BOOL],
-            [false, \PDO::PARAM_BOOL],
-            [$fp = fopen(__FILE__, 'rb'), \PDO::PARAM_LOB],
+            [null, PDO::PARAM_NULL],
+            ['', PDO::PARAM_STR],
+            ['hello', PDO::PARAM_STR],
+            [0, PDO::PARAM_INT],
+            [1, PDO::PARAM_INT],
+            [1337, PDO::PARAM_INT],
+            [true, PDO::PARAM_BOOL],
+            [false, PDO::PARAM_BOOL],
+            [$fp = fopen(__FILE__, 'r'), PDO::PARAM_LOB],
         ];
 
         $schema = $this->getConnection()->schema;
 
         foreach ($values as $value) {
-            $this->assertEquals($value[1], $schema->getPdoType($value[0]));
+            $this->assertSame($value[1], $schema->getPdoType($value[0]));
         }
         fclose($fp);
     }
 
-    public function testBooleanDefaultValues()
+    public function testBooleanDefaultValues(): void
     {
         $schema = $this->getConnection()->schema;
 
@@ -207,7 +214,7 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
         $this->assertFalse($table->getColumn('default_false')->defaultValue);
     }
 
-    public function testSequenceName()
+    public function testSequenceName(): void
     {
         $connection = $this->getConnection();
 
@@ -216,14 +223,14 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
         $connection->createCommand('ALTER TABLE "item" ALTER COLUMN "id" SET DEFAULT nextval(\'item_id_seq_2\')')->execute();
 
         $connection->schema->refreshTableSchema('item');
-        $this->assertEquals('item_id_seq_2', $connection->schema->getTableSchema('item')->sequenceName);
+        $this->assertSame('item_id_seq_2', $connection->schema->getTableSchema('item')->sequenceName);
 
-        $connection->createCommand('ALTER TABLE "item" ALTER COLUMN "id" SET DEFAULT nextval(\'' .  $sequenceName . '\')')->execute();
+        $connection->createCommand('ALTER TABLE "item" ALTER COLUMN "id" SET DEFAULT nextval(\'' . $sequenceName . '\')')->execute();
         $connection->schema->refreshTableSchema('item');
-        $this->assertEquals($sequenceName, $connection->schema->getTableSchema('item')->sequenceName);
+        $this->assertSame($sequenceName, $connection->schema->getTableSchema('item')->sequenceName);
     }
 
-    public function testGeneratedValues()
+    public function testGeneratedValues(): void
     {
         if (version_compare($this->getConnection(false)->getServerVersion(), '12.0', '<')) {
             $this->markTestSkipped('PostgreSQL < 12.0 does not support GENERATED AS IDENTITY columns.');
@@ -231,7 +238,7 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
 
         $config = $this->database;
         unset($config['fixture']);
-        $this->prepareDatabase($config, realpath(__DIR__.'/../../../data') . '/postgres12.sql');
+        $this->prepareDatabase($config, realpath(__DIR__ . '/../../../data') . '/postgres12.sql');
 
         $table = $this->getConnection(false)->schema->getTableSchema('generated');
         $this->assertTrue($table->getColumn('id_always')->autoIncrement);
@@ -240,7 +247,7 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
         $this->assertTrue($table->getColumn('id_default')->autoIncrement);
     }
 
-    public function testPartitionedTable()
+    public function testPartitionedTable(): void
     {
         if (version_compare($this->getConnection(false)->getServerVersion(), '10.0', '<')) {
             $this->markTestSkipped('PostgreSQL < 10.0 does not support PARTITION BY clause.');
@@ -248,12 +255,12 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
 
         $config = $this->database;
         unset($config['fixture']);
-        $this->prepareDatabase($config, realpath(__DIR__.'/../../../data') . '/postgres10.sql');
+        $this->prepareDatabase($config, realpath(__DIR__ . '/../../../data') . '/postgres10.sql');
 
         $this->assertNotNull($this->getConnection(false)->schema->getTableSchema('partitioned'));
     }
 
-    public function testFindSchemaNames()
+    public function testFindSchemaNames(): void
     {
         $schema = $this->getConnection()->schema;
 
@@ -275,9 +282,10 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
 
     /**
      * @dataProvider bigintValueProvider
+     *
      * @param int $bigint
      */
-    public function testBigintValue($bigint)
+    public function testBigintValue($bigint): void
     {
         $this->mockApplication();
         ActiveRecord::$db = $this->getConnection();
@@ -293,15 +301,16 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
         $type->save(false);
 
         $actual = Type::find()->one();
-        $this->assertEquals($bigint, $actual->bigint_col);
+        $this->assertSame($bigint, $actual->bigint_col);
     }
 
     /**
      * @see https://github.com/yiisoft/yii2/issues/12483
      */
-    public function testParenthesisDefaultValue()
+    public function testParenthesisDefaultValue(): void
     {
         $db = $this->getConnection(false);
+
         if ($db->schema->getTableSchema('test_default_parenthesis') !== null) {
             $db->createCommand()->dropTable('test_default_parenthesis')->execute();
         }
@@ -317,16 +326,17 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
         $column = $tableSchema->getColumn('user_timezone');
         $this->assertNotNull($column);
         $this->assertFalse($column->allowNull);
-        $this->assertEquals('numeric', $column->dbType);
-        $this->assertEquals(0, $column->defaultValue);
+        $this->assertSame('numeric', $column->dbType);
+        $this->assertSame(0, $column->defaultValue);
     }
 
     /**
      * @see https://github.com/yiisoft/yii2/issues/14192
      */
-    public function testTimestampNullDefaultValue()
+    public function testTimestampNullDefaultValue(): void
     {
         $db = $this->getConnection(false);
+
         if ($db->schema->getTableSchema('test_timestamp_default_null') !== null) {
             $db->createCommand()->dropTable('test_timestamp_default_null')->execute();
         }
@@ -348,10 +358,11 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
 
         $result['3: foreign key'][2][0]->foreignSchemaName = 'public';
         $result['3: index'][2] = [];
+
         return $result;
     }
 
-    public function testCustomTypeInNonDefaultSchema()
+    public function testCustomTypeInNonDefaultSchema(): void
     {
         $connection = $this->getConnection();
         ActiveRecord::$db = $this->getConnection();

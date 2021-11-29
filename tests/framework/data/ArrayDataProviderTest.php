@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -12,6 +15,9 @@ use yiiunit\TestCase;
 
 /**
  * @group data
+ *
+ * @internal
+ * @coversNothing
  */
 class ArrayDataProviderTest extends TestCase
 {
@@ -21,73 +27,69 @@ class ArrayDataProviderTest extends TestCase
         $this->mockApplication();
     }
 
-    public function testGetModels()
+    public function testGetModels(): void
     {
         $simpleArray = [
             ['name' => 'zero'],
             ['name' => 'one'],
         ];
         $dataProvider = new ArrayDataProvider(['allModels' => $simpleArray]);
-        $this->assertEquals($simpleArray, $dataProvider->getModels());
+        $this->assertSame($simpleArray, $dataProvider->getModels());
     }
 
-    public function testGetSortedData()
+    public function testGetSortedData(): void
     {
         $simpleArray = [['sortField' => 1], ['sortField' => 0]];
-        $dataProvider = new ArrayDataProvider(
-            [
-                'allModels' => $simpleArray,
-                'sort' => [
-                    'attributes' => [
-                        'sort' => [
-                            'asc' => ['sortField' => SORT_ASC],
-                            'desc' => ['sortField' => SORT_DESC],
-                            'label' => 'Sorting',
-                            'default' => 'asc',
-                        ],
-                    ],
-                    'defaultOrder' => [
-                        'sort' => SORT_ASC,
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $simpleArray,
+            'sort' => [
+                'attributes' => [
+                    'sort' => [
+                        'asc' => ['sortField' => SORT_ASC],
+                        'desc' => ['sortField' => SORT_DESC],
+                        'label' => 'Sorting',
+                        'default' => 'asc',
                     ],
                 ],
-            ]
-        );
+                'defaultOrder' => [
+                    'sort' => SORT_ASC,
+                ],
+            ],
+        ]);
         $sortedArray = [['sortField' => 0], ['sortField' => 1]];
-        $this->assertEquals($sortedArray, $dataProvider->getModels());
+        $this->assertSame($sortedArray, $dataProvider->getModels());
     }
 
-    public function testGetSortedDataByInnerArrayField()
+    public function testGetSortedDataByInnerArrayField(): void
     {
         $simpleArray = [
             ['innerArray' => ['sortField' => 1]],
             ['innerArray' => ['sortField' => 0]],
         ];
-        $dataProvider = new ArrayDataProvider(
-            [
-                'allModels' => $simpleArray,
-                'sort' => [
-                    'attributes' => [
-                        'sort' => [
-                            'asc' => ['innerArray.sortField' => SORT_ASC],
-                            'desc' => ['innerArray.sortField' => SORT_DESC],
-                            'label' => 'Sorting',
-                            'default' => 'asc',
-                        ],
-                    ],
-                    'defaultOrder' => [
-                        'sort' => SORT_ASC,
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $simpleArray,
+            'sort' => [
+                'attributes' => [
+                    'sort' => [
+                        'asc' => ['innerArray.sortField' => SORT_ASC],
+                        'desc' => ['innerArray.sortField' => SORT_DESC],
+                        'label' => 'Sorting',
+                        'default' => 'asc',
                     ],
                 ],
-            ]
-        );
+                'defaultOrder' => [
+                    'sort' => SORT_ASC,
+                ],
+            ],
+        ]);
         $sortedArray = [
             ['innerArray' => ['sortField' => 0]],
             ['innerArray' => ['sortField' => 1]],
         ];
-        $this->assertEquals($sortedArray, $dataProvider->getModels());
+        $this->assertSame($sortedArray, $dataProvider->getModels());
     }
 
-    public function testCaseSensitiveSort()
+    public function testCaseSensitiveSort(): void
     {
         // source data
         $unsortedProjects = [
@@ -131,32 +133,30 @@ class ArrayDataProviderTest extends TestCase
             ['title' => 'zend framework', 'license' => 'BSD'],
         ];
 
-        $dataProvider = new ArrayDataProvider(
-            [
-                'allModels' => $unsortedProjects,
-                'sort' => [
-                    'attributes' => [
-                        'sort' => [
-                            'asc' => ['title' => SORT_ASC],
-                            'desc' => ['title' => SORT_DESC],
-                            'label' => 'Title',
-                            'default' => 'desc',
-                        ],
-                    ],
-                    'defaultOrder' => [
-                        'sort' => SORT_ASC,
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $unsortedProjects,
+            'sort' => [
+                'attributes' => [
+                    'sort' => [
+                        'asc' => ['title' => SORT_ASC],
+                        'desc' => ['title' => SORT_DESC],
+                        'label' => 'Title',
+                        'default' => 'desc',
                     ],
                 ],
-                'pagination' => [
-                    'pageSize' => 100500,
+                'defaultOrder' => [
+                    'sort' => SORT_ASC,
                 ],
-            ]
-        );
+            ],
+            'pagination' => [
+                'pageSize' => 100500,
+            ],
+        ]);
 
-        $this->assertEquals($sortedProjects, $dataProvider->getModels());
+        $this->assertSame($sortedProjects, $dataProvider->getModels());
     }
 
-    public function testGetKeys()
+    public function testGetKeys(): void
     {
         $pagination = ['pageSize' => 2];
 
@@ -166,7 +166,7 @@ class ArrayDataProviderTest extends TestCase
             ['name' => 'tow'],
         ];
         $dataProvider = new ArrayDataProvider(['allModels' => $simpleArray, 'pagination' => $pagination]);
-        $this->assertEquals([0, 1], $dataProvider->getKeys());
+        $this->assertSame([0, 1], $dataProvider->getKeys());
 
         $namedArray = [
             'key1' => ['name' => 'zero'],
@@ -174,7 +174,7 @@ class ArrayDataProviderTest extends TestCase
             'key3' => ['name' => 'two'],
         ];
         $dataProvider = new ArrayDataProvider(['allModels' => $namedArray, 'pagination' => $pagination]);
-        $this->assertEquals(['key1', 'key2'], $dataProvider->getKeys());
+        $this->assertSame(['key1', 'key2'], $dataProvider->getKeys());
 
         $mixedArray = [
             'key1' => ['name' => 'zero'],
@@ -182,32 +182,30 @@ class ArrayDataProviderTest extends TestCase
             'key3' => ['name' => 'two'],
         ];
         $dataProvider = new ArrayDataProvider(['allModels' => $mixedArray, 'pagination' => $pagination]);
-        $this->assertEquals(['key1', 9], $dataProvider->getKeys());
+        $this->assertSame(['key1', 9], $dataProvider->getKeys());
     }
 
-    public function testSortFlags()
+    public function testSortFlags(): void
     {
         $simpleArray = [['sortField' => 1], ['sortField' => 2], ['sortField' => 11]];
-        $dataProvider = new ArrayDataProvider(
-            [
-                'allModels' => $simpleArray,
-                'sort' => [
-                    'sortFlags' => SORT_STRING,
-                    'attributes' => [
-                        'sort' => [
-                            'asc' => ['sortField' => SORT_ASC],
-                            'desc' => ['sortField' => SORT_DESC],
-                            'label' => 'Sorting',
-                            'default' => 'asc',
-                        ],
-                    ],
-                    'defaultOrder' => [
-                        'sort' => SORT_ASC,
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $simpleArray,
+            'sort' => [
+                'sortFlags' => SORT_STRING,
+                'attributes' => [
+                    'sort' => [
+                        'asc' => ['sortField' => SORT_ASC],
+                        'desc' => ['sortField' => SORT_DESC],
+                        'label' => 'Sorting',
+                        'default' => 'asc',
                     ],
                 ],
-            ]
-        );
+                'defaultOrder' => [
+                    'sort' => SORT_ASC,
+                ],
+            ],
+        ]);
         $sortedArray = [['sortField' => 1], ['sortField' => 11], ['sortField' => 2]];
-        $this->assertEquals($sortedArray, $dataProvider->getModels());
+        $this->assertSame($sortedArray, $dataProvider->getModels());
     }
 }

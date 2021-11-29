@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,36 +10,23 @@
 
 namespace yiiunit\framework\web;
 
+use SplStack;
 use yii\web\XmlResponseFormatter;
 use yiiunit\framework\web\stubs\ModelStub;
 
 /**
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  *
  * @group web
+ *
+ * @internal
+ * @coversNothing
  */
 class XmlResponseFormatterTest extends FormatterTest
 {
-    /**
-     * @param array $options
-     * @return XmlResponseFormatter
-     */
-    protected function getFormatterInstance($options = [])
-    {
-        return new XmlResponseFormatter($options);
-    }
-
     private $xmlHead = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-
-    private function addXmlHead(array $data)
-    {
-        foreach ($data as &$item) {
-            $item[1] = $this->xmlHead . $item[1];
-        }
-
-        return $data;
-    }
 
     public function formatScalarDataProvider()
     {
@@ -61,7 +51,7 @@ class XmlResponseFormatterTest extends FormatterTest
             ], "<response><a>1</a><b>abc</b></response>\n"],
             [
                 ['image:loc' => 'url'],
-                "<response><image:loc>url</image:loc></response>\n"
+                "<response><image:loc>url</image:loc></response>\n",
             ],
             [[
                 1,
@@ -92,7 +82,7 @@ class XmlResponseFormatterTest extends FormatterTest
     {
         $expectedXmlForStack = '';
 
-        $postsStack = new \SplStack();
+        $postsStack = new SplStack();
 
         $postsStack->push(new Post(915, 'record1'));
         $expectedXmlForStack = '<Post><id>915</id><title>record1</title></Post>' .
@@ -103,7 +93,7 @@ class XmlResponseFormatterTest extends FormatterTest
           $expectedXmlForStack;
 
         $data = [
-            [$postsStack, "<response>$expectedXmlForStack</response>\n"],
+            [$postsStack, "<response>{$expectedXmlForStack}</response>\n"],
         ];
 
         return $this->addXmlHead($data);
@@ -134,7 +124,7 @@ class XmlResponseFormatterTest extends FormatterTest
         ]);
     }
 
-    public function testCustomRootTag()
+    public function testCustomRootTag(): void
     {
         $rootTag = 'custom';
         $formatter = $this->getFormatterInstance([
@@ -143,10 +133,10 @@ class XmlResponseFormatterTest extends FormatterTest
 
         $this->response->data = 1;
         $formatter->format($this->response);
-        $this->assertEquals($this->xmlHead . "<$rootTag>1</$rootTag>\n", $this->response->content);
+        $this->assertSame($this->xmlHead . "<{$rootTag}>1</{$rootTag}>\n", $this->response->content);
     }
 
-    public function testRootTagRemoval()
+    public function testRootTagRemoval(): void
     {
         $formatter = $this->getFormatterInstance([
             'rootTag' => null,
@@ -154,10 +144,10 @@ class XmlResponseFormatterTest extends FormatterTest
 
         $this->response->data = 1;
         $formatter->format($this->response);
-        $this->assertEquals($this->xmlHead . "1\n", $this->response->content);
+        $this->assertSame($this->xmlHead . "1\n", $this->response->content);
     }
 
-    public function testNoObjectTags()
+    public function testNoObjectTags(): void
     {
         $formatter = $this->getFormatterInstance([
             'useObjectTags' => false,
@@ -165,15 +155,34 @@ class XmlResponseFormatterTest extends FormatterTest
 
         $this->response->data = new Post(123, 'abc');
         $formatter->format($this->response);
-        $this->assertEquals($this->xmlHead . "<response><id>123</id><title>abc</title></response>\n", $this->response->content);
+        $this->assertSame($this->xmlHead . "<response><id>123</id><title>abc</title></response>\n", $this->response->content);
     }
 
-    public function testObjectTagToLowercase()
+    public function testObjectTagToLowercase(): void
     {
         $formatter = $this->getFormatterInstance(['objectTagToLowercase' => true]);
 
         $this->response->data = new Post(123, 'abc');
         $formatter->format($this->response);
-        $this->assertEquals($this->xmlHead . "<response><post><id>123</id><title>abc</title></post></response>\n", $this->response->content);
+        $this->assertSame($this->xmlHead . "<response><post><id>123</id><title>abc</title></post></response>\n", $this->response->content);
+    }
+
+    /**
+     * @param array $options
+     *
+     * @return XmlResponseFormatter
+     */
+    protected function getFormatterInstance($options = [])
+    {
+        return new XmlResponseFormatter($options);
+    }
+
+    private function addXmlHead(array $data)
+    {
+        foreach ($data as &$item) {
+            $item[1] = $this->xmlHead . $item[1];
+        }
+
+        return $data;
     }
 }

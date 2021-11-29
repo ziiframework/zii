@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,11 +10,15 @@
 
 namespace yiiunit\framework\web;
 
+use Yii;
 use yii\helpers\FileHelper;
 use yii\web\AssetConverter;
 
 /**
  * @group web
+ *
+ * @internal
+ * @coversNothing
  */
 class AssetConverterTest extends \yiiunit\TestCase
 {
@@ -24,7 +31,8 @@ class AssetConverterTest extends \yiiunit\TestCase
     {
         parent::setUp();
         $this->mockApplication();
-        $this->tmpPath = \Yii::$app->runtimePath . '/assetConverterTest_' . getmypid();
+        $this->tmpPath = Yii::$app->runtimePath . '/assetConverterTest_' . getmypid();
+
         if (!is_dir($this->tmpPath)) {
             mkdir($this->tmpPath, 0777, true);
         }
@@ -40,7 +48,7 @@ class AssetConverterTest extends \yiiunit\TestCase
 
     // Tests :
 
-    public function testConvert()
+    public function testConvert(): void
     {
         $tmpPath = $this->tmpPath;
         file_put_contents($tmpPath . '/test.php', <<<EOF
@@ -48,12 +56,11 @@ class AssetConverterTest extends \yiiunit\TestCase
 
 echo "Hello World!\n";
 echo "Hello Yii!";
-EOF
-        );
+EOF);
 
         $converter = new AssetConverter();
         $converter->commands['php'] = ['txt', 'php {from} > {to}'];
-        $this->assertEquals('test.txt', $converter->convert('test.php', $tmpPath));
+        $this->assertSame('test.txt', $converter->convert('test.php', $tmpPath));
 
         $this->assertFileExists($tmpPath . '/test.txt', 'Failed asserting that asset output file exists.');
         $this->assertStringEqualsFile($tmpPath . '/test.txt', "Hello World!\nHello Yii!");
@@ -62,15 +69,14 @@ EOF
     /**
      * @depends testConvert
      */
-    public function testForceConvert()
+    public function testForceConvert(): void
     {
         $tmpPath = $this->tmpPath;
         file_put_contents($tmpPath . '/test.php', <<<'EOF'
 <?php
 
 echo microtime();
-EOF
-        );
+EOF);
 
         $converter = new AssetConverter();
         $converter->commands['php'] = ['txt', 'php {from} > {to}'];
@@ -84,6 +90,6 @@ EOF
 
         $converter->forceConvert = true;
         $converter->convert('test.php', $tmpPath);
-        $this->assertNotEquals($initialConvertTime, file_get_contents($tmpPath . '/test.txt'));
+        $this->assertNotSame($initialConvertTime, file_get_contents($tmpPath . '/test.txt'));
     }
 }

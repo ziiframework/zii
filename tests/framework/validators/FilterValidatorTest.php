@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -13,6 +16,9 @@ use yiiunit\TestCase;
 
 /**
  * @group validators
+ *
+ * @internal
+ * @coversNothing
  */
 class FilterValidatorTest extends TestCase
 {
@@ -23,28 +29,26 @@ class FilterValidatorTest extends TestCase
         $this->destroyApplication();
     }
 
-    public function testAssureExceptionOnInit()
+    public function testAssureExceptionOnInit(): void
     {
         $this->expectException('yii\base\InvalidConfigException');
         new FilterValidator();
     }
 
-    public function testValidateAttribute()
+    public function testValidateAttribute(): void
     {
         $m = FakedValidationModel::createWithAttributes([
-                'attr_one' => '  to be trimmed  ',
-                'attr_two' => 'set this to null',
-                'attr_empty1' => '',
-                'attr_empty2' => null,
-                'attr_array' => ['Maria', 'Anna', 'Elizabeth'],
-                'attr_array_skipped' => ['John', 'Bill'],
+            'attr_one' => '  to be trimmed  ',
+            'attr_two' => 'set this to null',
+            'attr_empty1' => '',
+            'attr_empty2' => null,
+            'attr_array' => ['Maria', 'Anna', 'Elizabeth'],
+            'attr_array_skipped' => ['John', 'Bill'],
         ]);
         $val = new FilterValidator(['filter' => 'trim']);
         $val->validateAttribute($m, 'attr_one');
         $this->assertSame('to be trimmed', $m->attr_one);
-        $val->filter = function ($value) {
-            return null;
-        };
+        $val->filter = static fn ($value) => null;
         $val->validateAttribute($m, 'attr_two');
         $this->assertNull($m->attr_two);
         $val->filter = [$this, 'notToBeNull'];
@@ -53,9 +57,7 @@ class FilterValidatorTest extends TestCase
         $val->skipOnEmpty = true;
         $val->validateAttribute($m, 'attr_empty2');
         $this->assertNotNull($m->attr_empty2);
-        $val->filter = function ($value) {
-            return implode(',', $value);
-        };
+        $val->filter = static fn ($value) => implode(',', $value);
         $val->skipOnArray = false;
         $val->validateAttribute($m, 'attr_array');
         $this->assertSame('Maria,Anna,Elizabeth', $m->attr_array);

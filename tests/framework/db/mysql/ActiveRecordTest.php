@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -12,23 +15,27 @@ use yiiunit\data\ar\Storage;
 /**
  * @group db
  * @group mysql
+ *
+ * @internal
+ * @coversNothing
  */
 class ActiveRecordTest extends \yiiunit\framework\db\ActiveRecordTest
 {
     public $driverName = 'mysql';
 
-    public function testJsonColumn()
+    public function testJsonColumn(): void
     {
         if (version_compare($this->getConnection()->getSchema()->getServerVersion(), '5.7', '<')) {
             $this->markTestSkipped('JSON columns are not supported in MySQL < 5.7');
         }
+
         if (version_compare(PHP_VERSION, '5.6', '<')) {
             $this->markTestSkipped('JSON columns are not supported in PDO for PHP < 5.6');
         }
 
         $data = [
             'obj' => ['a' => ['b' => ['c' => 2.7418]]],
-            'array' => [1,2,null,3],
+            'array' => [1, 2, null, 3],
             'null_field' => null,
             'boolean_field' => true,
             'last_update_time' => '2018-02-21',

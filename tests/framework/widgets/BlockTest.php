@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,6 +14,9 @@ use yii\widgets\Block;
 
 /**
  * @group widgets
+ *
+ * @internal
+ * @coversNothing
  */
 class BlockTest extends \yiiunit\TestCase
 {
@@ -24,17 +30,15 @@ class BlockTest extends \yiiunit\TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/15536
      */
-    public function testShouldTriggerInitEvent()
+    public function testShouldTriggerInitEvent(): void
     {
         $initTriggered = false;
 
-        $block = new Block(
-            [
-                'on init' => function () use (&$initTriggered) {
-                    $initTriggered = true;
-                }
-            ]
-        );
+        $block = new Block([
+            'on init' => static function () use (&$initTriggered): void {
+                $initTriggered = true;
+            },
+        ]);
 
         ob_get_clean();
 

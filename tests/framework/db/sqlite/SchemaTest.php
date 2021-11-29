@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -13,12 +16,15 @@ use yiiunit\framework\db\AnyValue;
 /**
  * @group db
  * @group sqlite
+ *
+ * @internal
+ * @coversNothing
  */
 class SchemaTest extends \yiiunit\framework\db\SchemaTest
 {
     protected $driverName = 'sqlite';
 
-    public function testGetSchemaNames()
+    public function testGetSchemaNames(): void
     {
         $this->markTestSkipped('Schemas are not supported in SQLite.');
     }
@@ -26,9 +32,8 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
     public function getExpectedColumns()
     {
         $columns = parent::getExpectedColumns();
-        unset($columns['enum_col']);
-        unset($columns['bit_col']);
-        unset($columns['json_col']);
+        unset($columns['enum_col'], $columns['bit_col'], $columns['json_col']);
+
         $columns['int_col']['dbType'] = 'integer';
         $columns['int_col']['size'] = null;
         $columns['int_col']['precision'] = null;
@@ -40,10 +45,11 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
         $columns['bool_col2']['type'] = 'boolean';
         $columns['bool_col2']['phpType'] = 'boolean';
         $columns['bool_col2']['defaultValue'] = true;
+
         return $columns;
     }
 
-    public function testCompositeFk()
+    public function testCompositeFk(): void
     {
         $schema = $this->getConnection()->schema;
 
@@ -51,9 +57,9 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
 
         $this->assertCount(1, $table->foreignKeys);
         $this->assertTrue(isset($table->foreignKeys[0]));
-        $this->assertEquals('order_item', $table->foreignKeys[0][0]);
-        $this->assertEquals('order_id', $table->foreignKeys[0]['order_id']);
-        $this->assertEquals('item_id', $table->foreignKeys[0]['item_id']);
+        $this->assertSame('order_item', $table->foreignKeys[0][0]);
+        $this->assertSame('order_id', $table->foreignKeys[0]['order_id']);
+        $this->assertSame('item_id', $table->foreignKeys[0]['item_id']);
     }
 
     public function constraintsProvider()
@@ -85,15 +91,17 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
 
     /**
      * @dataProvider quoteTableNameDataProvider
+     *
      * @param $name
      * @param $expectedName
+     *
      * @throws \yii\base\NotSupportedException
      */
-    public function testQuoteTableName($name, $expectedName)
+    public function testQuoteTableName($name, $expectedName): void
     {
         $schema = $this->getConnection()->getSchema();
         $quotedName = $schema->quoteTableName($name);
-        $this->assertEquals($expectedName, $quotedName);
+        $this->assertSame($expectedName, $quotedName);
     }
 
     public function quoteTableNameDataProvider()

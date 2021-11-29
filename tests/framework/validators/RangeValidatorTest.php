@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,12 +10,16 @@
 
 namespace yiiunit\framework\validators;
 
+use ArrayObject;
 use yii\validators\RangeValidator;
 use yiiunit\data\validators\models\FakedValidationModel;
 use yiiunit\TestCase;
 
 /**
  * @group validators
+ *
+ * @internal
+ * @coversNothing
  */
 class RangeValidatorTest extends TestCase
 {
@@ -24,20 +31,20 @@ class RangeValidatorTest extends TestCase
         $this->destroyApplication();
     }
 
-    public function testInitException()
+    public function testInitException(): void
     {
         $this->expectException('yii\base\InvalidConfigException');
         $this->expectExceptionMessage('The "range" property must be set.');
         new RangeValidator(['range' => 'not an array']);
     }
 
-    public function testAssureMessageSetOnInit()
+    public function testAssureMessageSetOnInit(): void
     {
         $val = new RangeValidator(['range' => []]);
         $this->assertIsString($val->message);
     }
 
-    public function testValidateValue()
+    public function testValidateValue(): void
     {
         $val = new RangeValidator(['range' => range(1, 10, 1)]);
         $this->assertTrue($val->validate(1));
@@ -49,7 +56,7 @@ class RangeValidatorTest extends TestCase
         $this->assertTrue($val->validate('5'));
     }
 
-    public function testValidateValueEmpty()
+    public function testValidateValueEmpty(): void
     {
         $val = new RangeValidator(['range' => range(10, 20, 1), 'skipOnEmpty' => false]);
         $this->assertFalse($val->validate(null)); //row RangeValidatorTest.php:101
@@ -60,7 +67,7 @@ class RangeValidatorTest extends TestCase
         $this->assertTrue($val->validate([]));
     }
 
-    public function testValidateArrayValue()
+    public function testValidateArrayValue(): void
     {
         $val = new RangeValidator(['range' => range(1, 10, 1)]);
         $val->allowArray = true;
@@ -71,7 +78,7 @@ class RangeValidatorTest extends TestCase
         $this->assertTrue($val->validate(['1', '2', '3', 4, 5, 6]));
     }
 
-    public function testValidateValueStrict()
+    public function testValidateValueStrict(): void
     {
         $val = new RangeValidator(['range' => range(1, 10, 1), 'strict' => true]);
         $this->assertTrue($val->validate(1));
@@ -82,7 +89,7 @@ class RangeValidatorTest extends TestCase
         $this->assertFalse($val->validate('5.5'));
     }
 
-    public function testValidateArrayValueStrict()
+    public function testValidateArrayValueStrict(): void
     {
         $val = new RangeValidator(['range' => range(1, 10, 1), 'strict' => true]);
         $val->allowArray = true;
@@ -90,7 +97,7 @@ class RangeValidatorTest extends TestCase
         $this->assertFalse($val->validate(['1', '2', '3', 4, 5, 6]));
     }
 
-    public function testValidateValueNot()
+    public function testValidateValueNot(): void
     {
         $val = new RangeValidator(['range' => range(1, 10, 1), 'not' => true]);
         $this->assertFalse($val->validate(1));
@@ -102,7 +109,7 @@ class RangeValidatorTest extends TestCase
         $this->assertFalse($val->validate('5'));
     }
 
-    public function testValidateAttribute()
+    public function testValidateAttribute(): void
     {
         $val = new RangeValidator(['range' => range(1, 10, 1)]);
         $m = FakedValidationModel::createWithAttributes(['attr_r1' => 5, 'attr_r2' => 999]);
@@ -114,7 +121,7 @@ class RangeValidatorTest extends TestCase
         $this->assertNotFalse(stripos($err[0], 'attr_r2'));
     }
 
-    public function testValidateSubsetArrayable()
+    public function testValidateSubsetArrayable(): void
     {
         // Test in array, values are arrays. IE: ['a'] in [['a'], ['b']]
         $val = new RangeValidator([
@@ -135,12 +142,11 @@ class RangeValidatorTest extends TestCase
             'range' => ['a', 'b', 'c'],
             'allowArray' => true,
         ]);
-        $this->assertTrue($val->validate(new \ArrayObject(['a', 'b'])));
-
+        $this->assertTrue($val->validate(new ArrayObject(['a', 'b'])));
 
         // Test range as ArrayObject.
         $val = new RangeValidator([
-            'range' => new \ArrayObject(['a', 'b']),
+            'range' => new ArrayObject(['a', 'b']),
             'allowArray' => false,
         ]);
         $this->assertTrue($val->validate('a'));

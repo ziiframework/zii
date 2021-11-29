@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,11 +10,13 @@
 
 namespace yiiunit\framework\console;
 
+use function func_get_args;
 use yii\console\Controller;
 use yii\console\Response;
 
 /**
  * @author Misbahul D Munir <misbahuldmunir@gmail.com>
+ *
  * @since 2.0
  */
 class FakeController extends Controller
@@ -50,14 +55,14 @@ class FakeController extends Controller
         ];
     }
 
-    public function actionIndex()
+    public function actionIndex(): void
     {
         self::$_wasActionIndexCalled = true;
     }
 
     public function actionAksi1($fromParam, $other = 'default')
     {
-        return[$fromParam, $other];
+        return [$fromParam, $other];
     }
 
     public function actionAksi2(array $values, $value)
@@ -65,7 +70,7 @@ class FakeController extends Controller
         return [$values, $value];
     }
 
-    public function actionAksi3($available, $missing)
+    public function actionAksi3($available, $missing): void
     {
     }
 
@@ -103,6 +108,7 @@ class FakeController extends Controller
     {
         $response = new Response();
         $response->exitStatus = (int) $status;
+
         return $response;
     }
 }
