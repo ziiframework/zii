@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,16 +7,12 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\data;
 
-use function count;
-use const SORT_ASC;
-use const SORT_DESC;
 use yii\data\Sort;
 use yii\web\UrlManager;
 use yiiunit\TestCase;
 
 /**
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  *
  * @group data
@@ -32,7 +25,7 @@ class SortTest extends TestCase
         $this->mockApplication();
     }
 
-    public function testGetOrders(): void
+    public function testGetOrders()
     {
         $sort = new Sort([
             'attributes' => [
@@ -63,7 +56,7 @@ class SortTest extends TestCase
     /**
      * @depends testGetOrders
      */
-    public function testGetAttributeOrders(): void
+    public function testGetAttributeOrders()
     {
         $sort = new Sort([
             'attributes' => [
@@ -93,7 +86,7 @@ class SortTest extends TestCase
     /**
      * @depends testGetAttributeOrders
      */
-    public function testGetAttributeOrder(): void
+    public function testGetAttributeOrder()
     {
         $sort = new Sort([
             'attributes' => [
@@ -117,7 +110,7 @@ class SortTest extends TestCase
     /**
      * @depends testGetAttributeOrders
      */
-    public function testSetAttributeOrders(): void
+    public function testSetAttributeOrders()
     {
         $sort = new Sort([
             'attributes' => [
@@ -153,7 +146,7 @@ class SortTest extends TestCase
         $this->assertEquals($orders, $sort->getAttributeOrders());
     }
 
-    public function testCreateSortParam(): void
+    public function testCreateSortParam()
     {
         $sort = new Sort([
             'attributes' => [
@@ -196,7 +189,7 @@ class SortTest extends TestCase
         $this->assertEquals('age', $sort->createSortParam('name'));
     }
 
-    public function testCreateUrl(): void
+    public function testCreateUrl()
     {
         $manager = new UrlManager([
             'baseUrl' => '/',
@@ -227,7 +220,7 @@ class SortTest extends TestCase
     /**
      * @depends testCreateUrl
      */
-    public function testLink(): void
+    public function testLink()
     {
         $this->mockApplication();
         $manager = new UrlManager([
@@ -255,7 +248,7 @@ class SortTest extends TestCase
         $this->assertEquals('<a class="asc" href="/index.php?r=site%2Findex&amp;sort=-age%2C-name" data-sort="-age,-name">Age</a>', $sort->link('age'));
     }
 
-    public function testParseSortParam(): void
+    public function testParseSortParam()
     {
         $sort = new CustomSort([
             'attributes' => [
@@ -280,7 +273,7 @@ class SortTest extends TestCase
      *
      * @see https://github.com/yiisoft/yii2/pull/13260
      */
-    public function testGetExpressionOrders(): void
+    public function testGetExpressionOrders()
     {
         $sort = new Sort([
             'attributes' => [
@@ -308,7 +301,6 @@ class CustomSort extends Sort
     protected function parseSortParam($params)
     {
         $attributes = [];
-
         foreach ($params as $item) {
             $attributes[] = ($item['dir'] == 'desc') ? '-' . $item['field'] : $item['field'];
         }

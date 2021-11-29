@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -12,24 +9,21 @@ namespace yii\rbac;
 
 /**
  * Mock for the filemtime() function for rbac classes. Avoid random test fails.
- *
  * @param string $file
- *
  * @return int
  */
 function filemtime($file)
 {
-    return \yiiunit\framework\rbac\PhpManagerTest::$filemtime ?: filemtime($file);
+    return \yiiunit\framework\rbac\PhpManagerTest::$filemtime ?: \filemtime($file);
 }
 
 /**
  * Mock for the time() function for rbac classes. Avoid random test fails.
- *
  * @return int
  */
 function time()
 {
-    return \yiiunit\framework\rbac\PhpManagerTest::$time ?: time();
+    return \yiiunit\framework\rbac\PhpManagerTest::$time ?: \time();
 }
 
 namespace yiiunit\framework\rbac;
@@ -38,7 +32,6 @@ use Yii;
 
 /**
  * @group rbac
- *
  * @property ExposedPhpManager $auth
  */
 class PhpManagerTest extends ManagerTestCase
@@ -61,7 +54,7 @@ class PhpManagerTest extends ManagerTestCase
         return Yii::$app->getRuntimePath() . '/rbac-rules.php';
     }
 
-    protected function removeDataFiles(): void
+    protected function removeDataFiles()
     {
         @unlink($this->getItemFile());
         @unlink($this->getAssignmentFile());
@@ -87,7 +80,7 @@ class PhpManagerTest extends ManagerTestCase
         static::$time = null;
         parent::setUp();
 
-        if (\defined('HHVM_VERSION')) {
+        if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('PhpManager is not compatible with HHVM.');
         }
 
@@ -104,9 +97,9 @@ class PhpManagerTest extends ManagerTestCase
         parent::tearDown();
     }
 
-    public function testSaveLoad(): void
+    public function testSaveLoad()
     {
-        static::$time = static::$filemtime = time();
+        static::$time = static::$filemtime = \time();
 
         $this->prepareData();
         $items = $this->auth->items;
@@ -124,7 +117,7 @@ class PhpManagerTest extends ManagerTestCase
         $this->assertEquals($rules, $this->auth->rules);
     }
 
-    public function testUpdateItemName(): void
+    public function testUpdateItemName()
     {
         $this->prepareData();
 
@@ -134,7 +127,7 @@ class PhpManagerTest extends ManagerTestCase
         $this->assertTrue($this->auth->update($name, $permission), 'You should be able to update name.');
     }
 
-    public function testUpdateDescription(): void
+    public function testUpdateDescription()
     {
         $this->prepareData();
         $name = 'readPost';
@@ -143,7 +136,7 @@ class PhpManagerTest extends ManagerTestCase
         $this->assertTrue($this->auth->update($name, $permission), 'You should be able to save w/o changing name.');
     }
 
-    public function testOverwriteName(): void
+    public function testOverwriteName()
     {
         $this->expectException('\yii\base\InvalidArgumentException');
 
@@ -154,7 +147,7 @@ class PhpManagerTest extends ManagerTestCase
         $this->auth->update($name, $permission);
     }
 
-    public function testSaveAssignments(): void
+    public function testSaveAssignments()
     {
         $this->auth->removeAll();
         $role = $this->auth->createRole('Admin');

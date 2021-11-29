@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,7 +7,6 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\models;
 
-use JsonSerializable;
 use yii\base\DynamicModel;
 
 /**
@@ -18,7 +14,7 @@ use yii\base\DynamicModel;
  *
  * {@inheritdoc}
  */
-class JsonModel extends DynamicModel implements JsonSerializable
+class JsonModel extends DynamicModel implements \JsonSerializable
 {
     /**
      * @var array
@@ -34,21 +30,21 @@ class JsonModel extends DynamicModel implements JsonSerializable
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function init(): void
+    public function init()
     {
-        $this->defineAttribute('name');
+       $this->defineAttribute('name');
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function rules()
     {
         return [
             ['name', 'required'],
-            ['name', 'string', 'max' => 100],
+            ['name', 'string', 'max' => 100]
         ];
     }
 }

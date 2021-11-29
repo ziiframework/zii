@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,13 +7,10 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\caching;
 
-use function extension_loaded;
-use const PHP_SAPI;
 use yii\caching\ApcCache;
 
 /**
  * Class for testing APC cache backend.
- *
  * @group apc
  * @group caching
  */
@@ -46,12 +40,12 @@ class ApcCacheTest extends CacheTestCase
         return $this->_cacheInstance;
     }
 
-    public function testExpire(): void
+    public function testExpire()
     {
         $this->markTestSkipped('APC keys are expiring only on the next request.');
     }
 
-    public function testExpireAdd(): void
+    public function testExpireAdd()
     {
         $this->markTestSkipped('APC keys are expiring only on the next request.');
     }

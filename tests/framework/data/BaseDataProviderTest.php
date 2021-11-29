@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,7 +7,6 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\data;
 
-use ReflectionClass;
 use yii\data\BaseDataProvider;
 use yiiunit\TestCase;
 
@@ -19,9 +15,9 @@ use yiiunit\TestCase;
  */
 class BaseDataProviderTest extends TestCase
 {
-    public function testGenerateId(): void
+    public function testGenerateId()
     {
-        $rc = new ReflectionClass(BaseDataProvider::className());
+        $rc = new \ReflectionClass(BaseDataProvider::className());
         $rp = $rc->getProperty('counter');
         $rp->setAccessible(true);
         $rp->setValue(null);

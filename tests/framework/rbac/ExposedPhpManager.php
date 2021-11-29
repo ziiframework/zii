@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -34,12 +31,12 @@ class ExposedPhpManager extends PhpManager
      */
     public $rules = []; // ruleName => rule
 
-    public function load(): void
+    public function load()
     {
         parent::load();
     }
 
-    public function save(): void
+    public function save()
     {
         parent::save();
     }

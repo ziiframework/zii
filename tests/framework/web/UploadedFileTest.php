@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,8 +7,9 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\web;
 
-use const PHP_INT_MAX;
+use Yii;
 use yii\web\UploadedFile;
+use yiiunit\framework\web\mocks\UploadedFileMock;
 use yiiunit\framework\web\stubs\ModelStub;
 use yiiunit\framework\web\stubs\VendorImage;
 use yiiunit\TestCase;
@@ -50,7 +48,7 @@ class UploadedFileTest extends TestCase
         ];
     }
 
-    private function generateFakeFiles(): void
+    private function generateFakeFiles()
     {
         $_FILES['ModelStub[prod_image]'] = $this->generateFakeFileData();
         $_FILES['ModelStub[prod_images][]'] = $this->generateFakeFileData();
@@ -67,7 +65,7 @@ class UploadedFileTest extends TestCase
 
     // Tests :
 
-    public function testGetInstance(): void
+    public function testGetInstance()
     {
         $productImage = UploadedFile::getInstance(new ModelStub(), 'prod_image');
         $vendorImage = VendorImage::getInstance(new ModelStub(), 'vendor_image');
@@ -76,7 +74,7 @@ class UploadedFileTest extends TestCase
         $this->assertInstanceOf(VendorImage::className(), $vendorImage);
     }
 
-    public function testGetInstances(): void
+    public function testGetInstances()
     {
         $productImages = UploadedFile::getInstances(new ModelStub(), 'prod_images');
         $vendorImages = VendorImage::getInstances(new ModelStub(), 'vendor_images');
@@ -90,25 +88,25 @@ class UploadedFileTest extends TestCase
         }
     }
 
-    public function testSaveAs(): void
+    public function testSaveAs()
     {
         $tmpImage = UploadedFile::getInstance(new ModelStub(), 'temp_image');
         $targetFile = '@runtime/test_saved_uploaded_file_' . time();
 
-        $this->assertTrue($tmpImage->saveAs($targetFile, $deleteTempFile = false));
+        $this->assertEquals(true, $tmpImage->saveAs($targetFile, $deleteTempFile = false));
         $this->markTestIncomplete("`$deleteTempFile` flag simply uses php's move_uploaded_file() method, so this not work in test");
 
         @unlink($targetFile);
     }
 
-    public function testSaveFileFromMultipartFormDataParser(): void
+    public function testSaveFileFromMultipartFormDataParser()
     {
         $_FILES = [];
         UploadedFile::reset();
         $model = new ModelStub();
         $targetFile = '@runtime/test_saved_uploaded_file_' . time();
 
-        (new MultipartFormDataParserTest())->testParse();
+        (new MultipartFormDataParserTest)->testParse();
         $_FILES['ModelStub'] = $_FILES['Item']; // $_FILES[Item] here from testParse() above
         $tmpFile = UploadedFile::getInstance($model, 'file');
 

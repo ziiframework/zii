@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -20,7 +17,7 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
 {
     protected $driverName = 'sqlsrv';
 
-    public function testAutoQuoting(): void
+    public function testAutoQuoting()
     {
         $db = $this->getConnection(false);
 
@@ -29,12 +26,12 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
         $this->assertEquals('SELECT [id], [t].[name] FROM [customer] t', $command->sql);
     }
 
-    public function testPrepareCancel(): void
+    public function testPrepareCancel()
     {
         $this->markTestSkipped('MSSQL driver does not support this feature.');
     }
 
-    public function testBindParamValue(): void
+    public function testBindParamValue()
     {
         $db = $this->getConnection();
 
@@ -92,14 +89,14 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
 
     public function paramsNonWhereProvider()
     {
-        return [
+        return[
             ['SELECT SUBSTRING(name, :len, 6) AS name FROM {{customer}} WHERE [[email]] = :email GROUP BY name'],
             ['SELECT SUBSTRING(name, :len, 6) as name FROM {{customer}} WHERE [[email]] = :email ORDER BY name'],
             ['SELECT SUBSTRING(name, :len, 6) FROM {{customer}} WHERE [[email]] = :email'],
         ];
     }
 
-    public function testAddDropDefaultValue(): void
+    public function testAddDropDefaultValue()
     {
         $db = $this->getConnection(false);
         $tableName = 'test_def';
@@ -133,7 +130,7 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
         return $data;
     }
 
-    public function testUpsertVarbinary(): void
+    public function testUpsertVarbinary()
     {
         $db = $this->getConnection();
 
@@ -141,7 +138,7 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
         $params = [];
 
         $qb = $db->getQueryBuilder();
-        $sql = $qb->upsert('T_upsert_varbinary', ['id' => 1, 'blob_col' => $testData], ['blob_col' => $testData], $params);
+        $sql = $qb->upsert('T_upsert_varbinary', ['id' => 1, 'blob_col' => $testData] , ['blob_col' => $testData], $params);
 
         $result = $db->createCommand($sql, $params)->execute();
 

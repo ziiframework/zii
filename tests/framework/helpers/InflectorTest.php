@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,7 +7,6 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\helpers;
 
-use function extension_loaded;
 use yii\helpers\Inflector;
 use yiiunit\TestCase;
 
@@ -27,7 +23,7 @@ class InflectorTest extends TestCase
         $this->destroyApplication();
     }
 
-    public function testPluralize(): void
+    public function testPluralize()
     {
         $testData = [
             'move' => 'moves',
@@ -58,7 +54,7 @@ class InflectorTest extends TestCase
         }
     }
 
-    public function testSingularize(): void
+    public function testSingularize()
     {
         $testData = [
             'moves' => 'move',
@@ -82,34 +78,33 @@ class InflectorTest extends TestCase
             'software' => 'software',
             'hardware' => 'hardware',
         ];
-
         foreach ($testData as $testIn => $testOut) {
             $this->assertEquals($testOut, Inflector::singularize($testIn));
             $this->assertEquals(ucfirst($testOut), ucfirst(Inflector::singularize($testIn)));
         }
     }
 
-    public function testTitleize(): void
+    public function testTitleize()
     {
         $this->assertEquals('Me my self and i', Inflector::titleize('MeMySelfAndI'));
         $this->assertEquals('Me My Self And I', Inflector::titleize('MeMySelfAndI', true));
         $this->assertEquals('Треба Більше Тестів!', Inflector::titleize('ТребаБільшеТестів!', true));
     }
 
-    public function testCamelize(): void
+    public function testCamelize()
     {
         $this->assertEquals('MeMySelfAndI', Inflector::camelize('me my_self-andI'));
         $this->assertEquals('QweQweEwq', Inflector::camelize('qwe qwe^ewq'));
         $this->assertEquals('ВідомоЩоТестиЗберігатьНашіНЕРВИ', Inflector::camelize('Відомо, що тести зберігать наші НЕРВИ! 🙃'));
     }
 
-    public function testUnderscore(): void
+    public function testUnderscore()
     {
         $this->assertEquals('me_my_self_and_i', Inflector::underscore('MeMySelfAndI'));
         $this->assertEquals('кожний_тест_особливий', Inflector::underscore('КожнийТестОсобливий'));
     }
 
-    public function testCamel2words(): void
+    public function testCamel2words()
     {
         $this->assertEquals('Camel Case', Inflector::camel2words('camelCase'));
         $this->assertEquals('Camel Case', Inflector::camel2words('CamelCase'));
@@ -128,7 +123,7 @@ class InflectorTest extends TestCase
         $this->assertEquals('Foo Bar', Inflector::camel2words('FOO BAR'));
     }
 
-    public function testCamel2id(): void
+    public function testCamel2id()
     {
         $this->assertEquals('post-tag', Inflector::camel2id('PostTag'));
         $this->assertEquals('post_tag', Inflector::camel2id('PostTag', '_'));
@@ -148,7 +143,7 @@ class InflectorTest extends TestCase
         $this->assertEquals('невже_і_це_працює', Inflector::camel2id('НевжеІЦеПрацює', '_', true));
     }
 
-    public function testId2camel(): void
+    public function testId2camel()
     {
         $this->assertEquals('PostTag', Inflector::id2camel('post-tag'));
         $this->assertEquals('PostTag', Inflector::id2camel('post_tag', '_'));
@@ -164,25 +159,25 @@ class InflectorTest extends TestCase
         $this->assertEquals('FooYBar', Inflector::id2camel('foo_y_bar', '_'));
     }
 
-    public function testHumanize(): void
+    public function testHumanize()
     {
         $this->assertEquals('Me my self and i', Inflector::humanize('me_my_self_and_i'));
         $this->assertEquals('Me My Self And I', Inflector::humanize('me_my_self_and_i', true));
         $this->assertEquals('Але й веселі ці ваші тести', Inflector::humanize('але_й_веселі_ці_ваші_тести'));
     }
 
-    public function testVariablize(): void
+    public function testVariablize()
     {
         $this->assertEquals('customerTable', Inflector::variablize('customer_table'));
         $this->assertEquals('ひらがなHepimiz', Inflector::variablize('ひらがな_hepimiz'));
     }
 
-    public function testTableize(): void
+    public function testTableize()
     {
         $this->assertEquals('customer_tables', Inflector::tableize('customerTable'));
     }
 
-    public function testSlugCommons(): void
+    public function testSlugCommons()
     {
         $data = [
             '' => '',
@@ -203,7 +198,7 @@ class InflectorTest extends TestCase
         }
     }
 
-    public function testSlugReplacements(): void
+    public function testSlugReplacements()
     {
         $this->assertEquals('dont_replace_replacement', Inflector::slug('dont replace_replacement', '_'));
         $this->assertEquals('remove_trailing_replacements', Inflector::slug('_remove trailing replacements_', '_'));
@@ -213,7 +208,7 @@ class InflectorTest extends TestCase
         $this->assertEquals('testtext', Inflector::slug('test text', ''));
     }
 
-    public function testSlugIntl(): void
+    public function testSlugIntl()
     {
         if (!extension_loaded('intl')) {
             $this->markTestSkipped('intl extension is required.');
@@ -248,7 +243,7 @@ class InflectorTest extends TestCase
         }
     }
 
-    public function testTransliterateStrict(): void
+    public function testTransliterateStrict()
     {
         if (!extension_loaded('intl')) {
             $this->markTestSkipped('intl extension is required.');
@@ -291,7 +286,7 @@ class InflectorTest extends TestCase
         }
     }
 
-    public function testTransliterateMedium(): void
+    public function testTransliterateMedium()
     {
         if (!extension_loaded('intl')) {
             $this->markTestSkipped('intl extension is required.');
@@ -334,7 +329,7 @@ class InflectorTest extends TestCase
         }
     }
 
-    public function testTransliterateLoose(): void
+    public function testTransliterateLoose()
     {
         if (!extension_loaded('intl')) {
             $this->markTestSkipped('intl extension is required.');
@@ -377,7 +372,7 @@ class InflectorTest extends TestCase
         }
     }
 
-    public function testSlugPhp(): void
+    public function testSlugPhp()
     {
         $data = [
             'we have недвижимость' => 'we-have',
@@ -388,12 +383,12 @@ class InflectorTest extends TestCase
         }
     }
 
-    public function testClassify(): void
+    public function testClassify()
     {
         $this->assertEquals('CustomerTable', Inflector::classify('customer_tables'));
     }
 
-    public function testOrdinalize(): void
+    public function testOrdinalize()
     {
         $this->assertEquals('21st', Inflector::ordinalize('21'));
         $this->assertEquals('22nd', Inflector::ordinalize('22'));
@@ -404,7 +399,7 @@ class InflectorTest extends TestCase
         $this->assertEquals('113th', Inflector::ordinalize('113'));
     }
 
-    public function testSentence(): void
+    public function testSentence()
     {
         $array = [];
         $this->assertEquals('', Inflector::sentence($array));

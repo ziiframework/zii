@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,8 +7,6 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\web;
 
-use const DIRECTORY_SEPARATOR;
-use InvalidArgumentException;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\base\UserException;
@@ -34,7 +29,6 @@ class ErrorActionTest extends TestCase
      * Creates a controller instance.
      *
      * @param array $actionConfig
-     *
      * @return TestController
      */
     public function getController($actionConfig = [])
@@ -42,7 +36,7 @@ class ErrorActionTest extends TestCase
         return new TestController('test', Yii::$app, ['layout' => false, 'actionConfig' => $actionConfig]);
     }
 
-    public function testYiiException(): void
+    public function testYiiException()
     {
         Yii::$app->getErrorHandler()->exception = new InvalidConfigException('This message will not be shown to the user');
 
@@ -52,7 +46,7 @@ Message: An internal server error occurred.
 Exception: yii\base\InvalidConfigException', $this->getController()->runAction('error'));
     }
 
-    public function testUserException(): void
+    public function testUserException()
     {
         Yii::$app->getErrorHandler()->exception = new UserException('User can see this error message');
 
@@ -62,16 +56,16 @@ Message: User can see this error message
 Exception: yii\base\UserException', $this->getController()->runAction('error'));
     }
 
-    public function testAjaxRequest(): void
+    public function testAjaxRequest()
     {
         $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
 
         $this->assertEquals('Not Found (#404): Page not found.', $this->getController()->runAction('error'));
     }
 
-    public function testGenericException(): void
+    public function testGenericException()
     {
-        Yii::$app->getErrorHandler()->exception = new InvalidArgumentException('This message will not be shown to the user');
+        Yii::$app->getErrorHandler()->exception = new \InvalidArgumentException('This message will not be shown to the user');
 
         $this->assertEqualsWithoutLE('Name: Error
 Code: 500
@@ -79,9 +73,9 @@ Message: An internal server error occurred.
 Exception: InvalidArgumentException', $this->getController()->runAction('error'));
     }
 
-    public function testGenericExceptionCustomNameAndMessage(): void
+    public function testGenericExceptionCustomNameAndMessage()
     {
-        Yii::$app->getErrorHandler()->exception = new InvalidArgumentException('This message will not be shown to the user');
+        Yii::$app->getErrorHandler()->exception = new \InvalidArgumentException('This message will not be shown to the user');
 
         $controller = $this->getController([
             'defaultName' => 'Oops...',
@@ -94,7 +88,7 @@ Message: The system is drunk
 Exception: InvalidArgumentException', $controller->runAction('error'));
     }
 
-    public function testNoExceptionInHandler(): void
+    public function testNoExceptionInHandler()
     {
         $this->assertEqualsWithoutLE('Name: Not Found (#404)
 Code: 404
@@ -102,7 +96,7 @@ Message: Page not found.
 Exception: yii\web\NotFoundHttpException', $this->getController()->runAction('error'));
     }
 
-    public function testDefaultView(): void
+    public function testDefaultView()
     {
         /** @var ErrorAction $action */
         $action = $this->getController()->createAction('error');
@@ -115,7 +109,7 @@ Exception: yii\web\NotFoundHttpException', $this->getController()->runAction('er
         $this->invokeMethod($action, 'renderHtmlResponse');
     }
 
-    public function testLayout(): void
+    public function testLayout()
     {
         $this->expectException('yii\base\ViewNotFoundException');
 

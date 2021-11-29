@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,7 +7,6 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\validators;
 
-use Exception;
 use Yii;
 use yii\validators\UniqueValidator;
 use yiiunit\data\ar\ActiveRecord;
@@ -35,13 +31,13 @@ abstract class UniqueValidatorTest extends DatabaseTestCase
         $this->destroyApplication();
     }
 
-    public function testAssureMessageSetOnInit(): void
+    public function testAssureMessageSetOnInit()
     {
         $val = new UniqueValidator();
         $this->assertIsString($val->message);
     }
 
-    public function testCustomMessage(): void
+    public function testCustomMessage()
     {
         // single attribute
         $customError = 'Custom message for Id with value "1"';
@@ -77,7 +73,7 @@ abstract class UniqueValidatorTest extends DatabaseTestCase
         $this->assertEquals($customError, $model->getFirstError('order_id'));
     }
 
-    public function testValidateInvalidAttribute(): void
+    public function testValidateInvalidAttribute()
     {
         $validator = new UniqueValidator();
         $messageError = Yii::t('yii', '{attribute} is invalid.', ['attribute' => 'Name']);
@@ -97,7 +93,7 @@ abstract class UniqueValidatorTest extends DatabaseTestCase
         $this->assertEquals($messageError, $customerModel->getFirstError('name'));
     }
 
-    public function testValidateAttributeDefault(): void
+    public function testValidateAttributeDefault()
     {
         $val = new UniqueValidator();
         $m = ValidatorTestMainModel::find()->one();
@@ -125,7 +121,7 @@ abstract class UniqueValidatorTest extends DatabaseTestCase
         $this->assertTrue($m->hasErrors('attr_arr'));
     }
 
-    public function testValidateAttributeOfNonARModel(): void
+    public function testValidateAttributeOfNonARModel()
     {
         $val = new UniqueValidator(['targetClass' => ValidatorTestRefModel::className(), 'targetAttribute' => 'ref']);
         $m = FakedValidationModel::createWithAttributes(['attr_1' => 5, 'attr_2' => 1313]);
@@ -135,7 +131,7 @@ abstract class UniqueValidatorTest extends DatabaseTestCase
         $this->assertFalse($m->hasErrors('attr_2'));
     }
 
-    public function testValidateNonDatabaseAttribute(): void
+    public function testValidateNonDatabaseAttribute()
     {
         $val = new UniqueValidator(['targetClass' => ValidatorTestRefModel::className(), 'targetAttribute' => 'ref']);
         /** @var ValidatorTestMainModel $m */
@@ -148,7 +144,7 @@ abstract class UniqueValidatorTest extends DatabaseTestCase
         $this->assertTrue($m->hasErrors('testMainVal'));
     }
 
-    public function testValidateAttributeAttributeNotInTableException(): void
+    public function testValidateAttributeAttributeNotInTableException()
     {
         $this->expectException('yii\db\Exception');
         $val = new UniqueValidator();
@@ -156,7 +152,7 @@ abstract class UniqueValidatorTest extends DatabaseTestCase
         $val->validateAttribute($m, 'testMainVal');
     }
 
-    public function testValidateCompositeKeys(): void
+    public function testValidateCompositeKeys()
     {
         $val = new UniqueValidator([
             'targetClass' => OrderItem::className(),
@@ -210,7 +206,7 @@ abstract class UniqueValidatorTest extends DatabaseTestCase
         $this->assertFalse($m->hasErrors('id'));
     }
 
-    public function testValidateTargetClass(): void
+    public function testValidateTargetClass()
     {
         // Check whether "Description" and "name" aren't equal
         $val = new UniqueValidator([
@@ -239,7 +235,7 @@ abstract class UniqueValidatorTest extends DatabaseTestCase
         $this->assertTrue($m->hasErrors('description'));
     }
 
-    public function testValidateScopeNamespaceTargetClassForNewClass(): void
+    public function testValidateScopeNamespaceTargetClassForNewClass()
     {
         $validator = new UniqueValidator();
 
@@ -259,7 +255,7 @@ abstract class UniqueValidatorTest extends DatabaseTestCase
         $this->assertTrue($profileModel->hasErrors('description'));
     }
 
-    public function testValidateScopeNamespaceTargetClass(): void
+    public function testValidateScopeNamespaceTargetClass()
     {
         $validator = new UniqueValidator();
 
@@ -279,7 +275,7 @@ abstract class UniqueValidatorTest extends DatabaseTestCase
         $this->assertFalse($profileModel->hasErrors('description'));
     }
 
-    public function testValidateEmptyAttributeInStringField(): void
+    public function testValidateEmptyAttributeInStringField()
     {
         ValidatorTestMainModel::deleteAll();
 
@@ -295,7 +291,7 @@ abstract class UniqueValidatorTest extends DatabaseTestCase
         $this->assertTrue($m->hasErrors('field1'));
     }
 
-    public function testValidateEmptyAttributeInIntField(): void
+    public function testValidateEmptyAttributeInIntField()
     {
         ValidatorTestRefModel::deleteAll();
 
@@ -311,7 +307,7 @@ abstract class UniqueValidatorTest extends DatabaseTestCase
         $this->assertTrue($m->hasErrors('ref'));
     }
 
-    public function testPrepareParams(): void
+    public function testPrepareParams()
     {
         $model = new FakedValidationModel();
         $model->val_attr_a = 'test value a';
@@ -348,7 +344,7 @@ abstract class UniqueValidatorTest extends DatabaseTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testGetTargetClassWithFilledTargetClassProperty(): void
+    public function testGetTargetClassWithFilledTargetClassProperty()
     {
         $validator = new UniqueValidator(['targetClass' => Profile::className()]);
         $model = new FakedValidationModel();
@@ -357,7 +353,7 @@ abstract class UniqueValidatorTest extends DatabaseTestCase
         $this->assertEquals(Profile::className(), $actualTargetClass);
     }
 
-    public function testGetTargetClassWithNotFilledTargetClassProperty(): void
+    public function testGetTargetClassWithNotFilledTargetClassProperty()
     {
         $validator = new UniqueValidator();
         $model = new FakedValidationModel();
@@ -366,7 +362,7 @@ abstract class UniqueValidatorTest extends DatabaseTestCase
         $this->assertEquals(FakedValidationModel::className(), $actualTargetClass);
     }
 
-    public function testPrepareQuery(): void
+    public function testPrepareQuery()
     {
         $schema = $this->getConnection()->schema;
 
@@ -386,7 +382,7 @@ abstract class UniqueValidatorTest extends DatabaseTestCase
         $this->assertEquals($expected, $query->createCommand()->getSql());
 
         $params = ['val_attr_b' => 'test value b'];
-        $query = $this->invokeMethod(new UniqueValidator(['filter' => static function ($query): void {
+        $query = $this->invokeMethod(new UniqueValidator(['filter' => function ($query) {
             $query->orWhere('val_attr_a > 0');
         }]), 'prepareQuery', [$model, $params]);
         $expected = "SELECT * FROM {$schema->quoteTableName('validator_main')} WHERE ({$schema->quoteColumnName('val_attr_b')}=:qp0) OR (val_attr_a > 0)";
@@ -395,13 +391,12 @@ abstract class UniqueValidatorTest extends DatabaseTestCase
 
     /**
      * Test ambiguous column name in select clause.
-     *
      * @see https://github.com/yiisoft/yii2/issues/14042
      */
-    public function testAmbiguousColumnName(): void
+    public function testAmbiguousColumnName()
     {
         $validator = new UniqueValidator([
-            'filter' => static function ($query): void {
+            'filter' => function ($query) {
                 $query->joinWith('items', false);
             },
         ]);
@@ -415,10 +410,9 @@ abstract class UniqueValidatorTest extends DatabaseTestCase
 
     /**
      * Test expression in targetAttribute.
-     *
      * @see https://github.com/yiisoft/yii2/issues/14304
      */
-    public function testExpressionInAttributeColumnName(): void
+    public function testExpressionInAttributeColumnName()
     {
         $validator = new UniqueValidator([
             'targetAttribute' => [
@@ -435,65 +429,61 @@ abstract class UniqueValidatorTest extends DatabaseTestCase
     }
 
     /**
-     * Test validating a class with default scope.
-     *
+     * Test validating a class with default scope
      * @see https://github.com/yiisoft/yii2/issues/14484
-     */
-    public function testFindModelWith(): void
+    */
+    public function testFindModelWith()
     {
         $validator = new UniqueValidator([
-            'targetAttribute' => ['status', 'profile_id'],
+            'targetAttribute' => ['status', 'profile_id']
         ]);
         $model = WithCustomer::find()->one();
-
         try {
             $validator->validateAttribute($model, 'email');
             $this->assertTrue(true);
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             $this->fail('Query is crashed because "with" relation cannot be loaded');
         }
     }
 
     /**
-     * Test join with doesn't attempt to eager load joinWith relations.
-     *
+     * Test join with doesn't attempt to eager load joinWith relations
      * @see https://github.com/yiisoft/yii2/issues/17389
      */
-    public function testFindModelJoinWith(): void
+    public function testFindModelJoinWith()
     {
         $validator = new UniqueValidator([
             'targetAttribute' => ['status', 'profile_id'],
         ]);
         $model = JoinWithCustomer::find()->one();
-
         try {
             $validator->validateAttribute($model, 'email');
             $this->assertTrue(true);
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             $this->fail('Query is crashed because "joinWith" relation cannot be loaded');
         }
     }
 
-    public function testForceMaster(): void
+    public function testForceMaster()
     {
         $connection = $this->getConnectionWithInvalidSlave();
         ActiveRecord::$db = $connection;
 
         $model = null;
-        $connection->useMaster(static function () use (&$model): void {
+        $connection->useMaster(function() use (&$model) {
             $model = WithCustomer::find()->one();
         });
 
         $validator = new UniqueValidator([
             'forceMasterDb' => true,
-            'targetAttribute' => ['status', 'profile_id'],
+            'targetAttribute' => ['status', 'profile_id']
         ]);
         $validator->validateAttribute($model, 'email');
 
         $this->expectException('\yii\base\InvalidConfigException');
         $validator = new UniqueValidator([
             'forceMasterDb' => false,
-            'targetAttribute' => ['status', 'profile_id'],
+            'targetAttribute' => ['status', 'profile_id']
         ]);
         $validator->validateAttribute($model, 'email');
 
@@ -501,10 +491,8 @@ abstract class UniqueValidatorTest extends DatabaseTestCase
     }
 }
 
-class WithCustomer extends Customer
-{
-    public static function find()
-    {
+class WithCustomer extends Customer {
+    public static function find() {
         $res = parent::find();
 
         $res->with('profile');
@@ -513,10 +501,8 @@ class WithCustomer extends Customer
     }
 }
 
-class JoinWithCustomer extends Customer
-{
-    public static function find()
-    {
+class JoinWithCustomer extends Customer {
+    public static function find() {
         $res = parent::find();
 
         $res->joinWith('profile');
