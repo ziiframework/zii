@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +10,7 @@
 
 namespace yiiunit\framework\i18n;
 
+use function extension_loaded;
 use NumberFormatter;
 use Yii;
 use yii\i18n\Formatter;
@@ -77,19 +81,19 @@ class FormatterNumberTest extends TestCase
         ];
     }
 
-
     /**
      * @dataProvider differentConfigProvider
+     *
      * @param array $config
      */
-    public function testIntlAsInteger($config)
+    public function testIntlAsInteger($config): void
     {
         // configure formatter with different configs that should not affect integer format
         Yii::configure($this->formatter, $config);
         $this->testAsInteger();
     }
 
-    public function testAsInteger()
+    public function testAsInteger(): void
     {
         $this->assertSame('123', $this->formatter->asInteger(123));
         $this->assertSame('123', $this->formatter->asInteger(123.00));
@@ -120,10 +124,10 @@ class FormatterNumberTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/16900
      */
-    public function testIntlAsIntegerOptions()
+    public function testIntlAsIntegerOptions(): void
     {
         $this->formatter->numberFormatterTextOptions = [
-            \NumberFormatter::POSITIVE_PREFIX => '+',
+            NumberFormatter::POSITIVE_PREFIX => '+',
         ];
         $this->assertSame('+2', $this->formatter->asInteger(2));
         $this->assertSame('+10', $this->formatter->asInteger(10));
@@ -140,19 +144,19 @@ class FormatterNumberTest extends TestCase
         $this->assertSame('+123,456', $this->formatter->asInteger(123456.789));
     }
 
-    public function testAsIntegerException()
+    public function testAsIntegerException(): void
     {
         $this->expectException('\yii\base\InvalidParamException');
         $this->formatter->asInteger('a');
     }
 
-    public function testAsIntegerException2()
+    public function testAsIntegerException2(): void
     {
         $this->expectException('\yii\base\InvalidParamException');
         $this->formatter->asInteger('-123abc');
     }
 
-    public function testIntlAsDecimal()
+    public function testIntlAsDecimal(): void
     {
         $value = 123.12;
         $this->assertSame('123.12', $this->formatter->asDecimal($value, 2));
@@ -178,7 +182,7 @@ class FormatterNumberTest extends TestCase
         $this->formatter->thousandSeparator = '';
         $this->assertSame('123123,1', $this->formatter->asDecimal($value, 1));
         $this->formatter->thousandSeparator = ' ';
-        $this->assertSame('12 31 23,1', $this->formatter->asDecimal($value, 1, [\NumberFormatter::GROUPING_SIZE => 2]));
+        $this->assertSame('12 31 23,1', $this->formatter->asDecimal($value, 1, [NumberFormatter::GROUPING_SIZE => 2]));
 
         $value = 123123.123;
         $this->formatter->decimalSeparator = ',';
@@ -208,7 +212,7 @@ class FormatterNumberTest extends TestCase
         $this->assertSame('95 836 208 451 783 051,86', $this->formatter->asDecimal('95836208451783051.864'));
     }
 
-    public function testAsDecimal()
+    public function testAsDecimal(): void
     {
         $value = 123.12;
         $this->assertSame('123.12', $this->formatter->asDecimal($value));
@@ -272,12 +276,12 @@ class FormatterNumberTest extends TestCase
         $this->assertSame('95 836 208 451 783 051,86', $this->formatter->asDecimal('95836208451783051.864'));
     }
 
-    public function testIntlAsPercent()
+    public function testIntlAsPercent(): void
     {
         $this->testAsPercent();
     }
 
-    public function testAsPercent()
+    public function testAsPercent(): void
     {
         $this->assertSame('12,300%', $this->formatter->asPercent(123));
         $this->assertSame('12,300%', $this->formatter->asPercent('123'));
@@ -304,7 +308,7 @@ class FormatterNumberTest extends TestCase
         $this->assertSame('9 583 620 845 178 305 186,40%', $this->formatter->asPercent('95836208451783051.864', 2));
     }
 
-    public function testIntlAsCurrency()
+    public function testIntlAsCurrency(): void
     {
         $this->formatter->locale = 'en-US';
         $this->assertSame('$123.00', $this->formatter->asCurrency('123'));
@@ -391,7 +395,7 @@ class FormatterNumberTest extends TestCase
 
         // decimal formatting
         $this->formatter->locale = 'de-DE';
-        $this->assertSame("100\xc2\xa0$", \Yii::$app->formatter->asCurrency(100, 'USD', [
+        $this->assertSame("100\xc2\xa0$", Yii::$app->formatter->asCurrency(100, 'USD', [
             NumberFormatter::MAX_FRACTION_DIGITS => 0,
         ]));
         $this->assertSame("100,00\xc2\xa0$", $this->formatter->asCurrency(100, 'USD', [
@@ -418,7 +422,7 @@ class FormatterNumberTest extends TestCase
         $this->assertIsOneOf($this->formatter->asCurrency('123'), ["123.00\xc2\xa0₽", "123.00\xc2\xa0руб."]);
     }
 
-    public function testAsCurrencyStringFallbackException()
+    public function testAsCurrencyStringFallbackException(): void
     {
         $this->expectException('\yii\base\InvalidConfigException');
         $this->formatter->asCurrency('87654321098765436');
@@ -427,7 +431,7 @@ class FormatterNumberTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/12345
      */
-    public function testIntlCurrencyFraction()
+    public function testIntlCurrencyFraction(): void
     {
         $this->formatter->numberFormatterOptions = [
             NumberFormatter::MIN_FRACTION_DIGITS => 0,
@@ -464,19 +468,19 @@ class FormatterNumberTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/pull/5261
      */
-    public function testIntlIssue5261()
+    public function testIntlIssue5261(): void
     {
         $this->formatter->locale = 'en-US';
         $this->formatter->numberFormatterOptions = [
-            \NumberFormatter::FRACTION_DIGITS => 0,
+            NumberFormatter::FRACTION_DIGITS => 0,
         ];
         $this->formatter->numberFormatterTextOptions = [
-            \NumberFormatter::CURRENCY_CODE => 'EUR',
+            NumberFormatter::CURRENCY_CODE => 'EUR',
         ];
         $this->assertSame('€100', $this->formatter->asCurrency(100, 'EUR'));
     }
 
-    public function testAsCurrency()
+    public function testAsCurrency(): void
     {
         $this->formatter->currencyCode = 'USD';
         $this->assertSame('USD 123.00', $this->formatter->asCurrency('123'));
@@ -514,7 +518,7 @@ class FormatterNumberTest extends TestCase
         $this->assertSame('USD 95 836 208 451 783 051,86', $this->formatter->asCurrency('95836208451783051.864', 'USD'));
     }
 
-    public function testIntlAsScientific()
+    public function testIntlAsScientific(): void
     {
         // see https://github.com/yiisoft/yii2/issues/17708
         $this->markTestSkipped('The test is unreliable since output depends on ICU version');
@@ -533,7 +537,7 @@ class FormatterNumberTest extends TestCase
         $this->assertSame('8.76543210987654E16', $this->formatter->asScientific('87654321098765436'));
     }
 
-    public function testAsScientific()
+    public function testAsScientific(): void
     {
         $this->assertSame('1.23E+2', $this->formatter->asScientific('123', 2));
         $this->assertSame('1.234560E+5', $this->formatter->asScientific('123456'));
@@ -549,14 +553,14 @@ class FormatterNumberTest extends TestCase
         $this->assertSame('8.765432E+16', $this->formatter->asScientific('87654321098765436'));
     }
 
-    public function testAsSpellout()
+    public function testAsSpellout(): void
     {
         $this->expectException('\yii\base\InvalidConfigException');
         $this->expectExceptionMessage('Format as Spellout is only supported when PHP intl extension is installed.');
         $this->formatter->asSpellout(123);
     }
 
-    public function testIntlAsSpellout()
+    public function testIntlAsSpellout(): void
     {
         $this->assertSame('one hundred twenty-three', $this->formatter->asSpellout(123));
 
@@ -567,7 +571,7 @@ class FormatterNumberTest extends TestCase
         $this->assertSame($this->formatter->nullDisplay, $this->formatter->asSpellout(null));
     }
 
-    public function testIntlAsOrdinal()
+    public function testIntlAsOrdinal(): void
     {
         $this->assertSame('0th', $this->formatter->asOrdinal(0));
         $this->assertSame('1st', $this->formatter->asOrdinal(1));
@@ -589,7 +593,7 @@ class FormatterNumberTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/14278
      */
-    public function testIntlAsOrdinalDate()
+    public function testIntlAsOrdinalDate(): void
     {
         $f = $this->formatter;
         $this->assertSame('15th', $f->asOrdinal($f->asDate('2017-05-15', 'php:j')));
@@ -600,11 +604,11 @@ class FormatterNumberTest extends TestCase
         $this->assertSame('1.', $f->asOrdinal($f->asDate('2017-05-01', 'php:j')));
     }
 
-    public function testIntlAsShortSize()
+    public function testIntlAsShortSize(): void
     {
         $this->formatter->numberFormatterOptions = [
-            \NumberFormatter::MIN_FRACTION_DIGITS => 0,
-            \NumberFormatter::MAX_FRACTION_DIGITS => 2,
+            NumberFormatter::MIN_FRACTION_DIGITS => 0,
+            NumberFormatter::MAX_FRACTION_DIGITS => 2,
         ];
 
         // tests for base 1000
@@ -645,7 +649,7 @@ class FormatterNumberTest extends TestCase
         $this->assertSame($this->formatter->nullDisplay, $this->formatter->asShortSize(null));
     }
 
-    public function testAsShortSize()
+    public function testAsShortSize(): void
     {
         // tests for base 1000
         $this->formatter->sizeFormatBase = 1000;
@@ -685,11 +689,11 @@ class FormatterNumberTest extends TestCase
         $this->assertSame($this->formatter->nullDisplay, $this->formatter->asShortSize(null));
     }
 
-    public function testIntlAsSize()
+    public function testIntlAsSize(): void
     {
         $this->formatter->numberFormatterOptions = [
-            \NumberFormatter::MIN_FRACTION_DIGITS => 0,
-            \NumberFormatter::MAX_FRACTION_DIGITS => 2,
+            NumberFormatter::MIN_FRACTION_DIGITS => 0,
+            NumberFormatter::MAX_FRACTION_DIGITS => 2,
         ];
 
         // tests for base 1000
@@ -719,11 +723,11 @@ class FormatterNumberTest extends TestCase
         $this->assertSame($this->formatter->nullDisplay, $this->formatter->asSize(null));
     }
 
-    public function testIntlAsSizeNegative()
+    public function testIntlAsSizeNegative(): void
     {
         $this->formatter->numberFormatterOptions = [
-            \NumberFormatter::MIN_FRACTION_DIGITS => 0,
-            \NumberFormatter::MAX_FRACTION_DIGITS => 2,
+            NumberFormatter::MIN_FRACTION_DIGITS => 0,
+            NumberFormatter::MAX_FRACTION_DIGITS => 2,
         ];
 
         // tests for base 1000
@@ -748,7 +752,7 @@ class FormatterNumberTest extends TestCase
         $this->assertSame('-1,001 kibibytes', $this->formatter->asSize(-1025, 3));
     }
 
-    public function testAsSize()
+    public function testAsSize(): void
     {
         // tests for base 1000
         $this->formatter->sizeFormatBase = 1000;
@@ -778,7 +782,7 @@ class FormatterNumberTest extends TestCase
         $this->assertSame($this->formatter->nullDisplay, $this->formatter->asSize(null));
     }
 
-    public function testAsSizeNegative()
+    public function testAsSizeNegative(): void
     {
         // tests for base 1000
         $this->formatter->sizeFormatBase = 1000;
@@ -803,7 +807,7 @@ class FormatterNumberTest extends TestCase
         $this->assertSame('-1,001 kibibytes', $this->formatter->asSize(-1025, 3));
     }
 
-    public function testIntlAsSizeConfiguration()
+    public function testIntlAsSizeConfiguration(): void
     {
         $this->assertSame('1023 bytes', $this->formatter->asSize(1023));
         $this->assertSame('1023 B', $this->formatter->asShortSize(1023));
@@ -815,7 +819,7 @@ class FormatterNumberTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/4960
      */
-    public function testAsSizeConfiguration()
+    public function testAsSizeConfiguration(): void
     {
         $this->assertSame('1023 bytes', $this->formatter->asSize(1023));
         $this->assertSame('1023 B', $this->formatter->asShortSize(1023));
@@ -830,32 +834,32 @@ class FormatterNumberTest extends TestCase
             'not-int key for int options' => [
                 ['a' => 1],
                 [],
-                'The $options array keys must be integers recognizable by NumberFormatter::setAttribute(). "string" provided instead.'
+                'The $options array keys must be integers recognizable by NumberFormatter::setAttribute(). "string" provided instead.',
             ],
             'string value for int options' => [
                 [1 => 'a'],
                 [],
-                'The $options array values must be integers. Did you mean to use $textOptions?'
+                'The $options array values must be integers. Did you mean to use $textOptions?',
             ],
             'non-string-int value for int options' => [
                 [1 => 1.1],
                 [],
-                'The $options array values must be integers. "double" provided instead.'
+                'The $options array values must be integers. "double" provided instead.',
             ],
             'not-int key for text options' => [
                 [],
                 ['a' => 1],
-                'The $textOptions array keys must be integers recognizable by NumberFormatter::setTextAttribute(). "string" provided instead.'
+                'The $textOptions array keys must be integers recognizable by NumberFormatter::setTextAttribute(). "string" provided instead.',
             ],
             'int value for text options' => [
                 [],
                 [1 => 1],
-                'The $textOptions array values must be strings. Did you mean to use $options?'
+                'The $textOptions array values must be strings. Did you mean to use $options?',
             ],
             'non-string-int value for text options' => [
                 [],
                 [1 => 1.1],
-                'The $textOptions array values must be strings. "double" provided instead.'
+                'The $textOptions array values must be strings. "double" provided instead.',
             ],
         ];
     }
@@ -863,7 +867,7 @@ class FormatterNumberTest extends TestCase
     /**
      * @dataProvider providerForDirectWrongTypeAttributes
      */
-    public function testIntlAsIntegerDirectWrongTypeAttributes($intOptions, $textOptions, $message)
+    public function testIntlAsIntegerDirectWrongTypeAttributes($intOptions, $textOptions, $message): void
     {
         $this->expectException('yii\base\InvalidArgumentException');
         $this->expectExceptionMessage($message);
@@ -877,49 +881,49 @@ class FormatterNumberTest extends TestCase
                 ['a' => 1],
                 [],
                 [],
-                'The numberFormatterOptions array keys must be integers recognizable by NumberFormatter::setAttribute(). "string" provided instead.'
+                'The numberFormatterOptions array keys must be integers recognizable by NumberFormatter::setAttribute(). "string" provided instead.',
             ],
             'string value for int options' => [
                 [1 => 'a'],
                 [],
                 [],
-                'The numberFormatterOptions array values must be integers. Did you mean to use numberFormatterTextOptions?'
+                'The numberFormatterOptions array values must be integers. Did you mean to use numberFormatterTextOptions?',
             ],
             'non-string-int value for int options' => [
                 [1 => 1.1],
                 [],
                 [],
-                'The numberFormatterOptions array values must be integers. "double" provided instead.'
+                'The numberFormatterOptions array values must be integers. "double" provided instead.',
             ],
             'not-int key for text options' => [
                 [],
                 ['a' => 1],
                 [],
-                'The numberFormatterTextOptions array keys must be integers recognizable by NumberFormatter::setTextAttribute(). "string" provided instead.'
+                'The numberFormatterTextOptions array keys must be integers recognizable by NumberFormatter::setTextAttribute(). "string" provided instead.',
             ],
             'int value for text options' => [
                 [],
                 [1 => 1],
                 [],
-                'The numberFormatterTextOptions array values must be strings. Did you mean to use numberFormatterOptions?'
+                'The numberFormatterTextOptions array values must be strings. Did you mean to use numberFormatterOptions?',
             ],
             'non-string-int value for text options' => [
                 [],
                 [1 => 1.1],
                 [],
-                'The numberFormatterTextOptions array values must be strings. "double" provided instead.'
+                'The numberFormatterTextOptions array values must be strings. "double" provided instead.',
             ],
             'non-int key for symbol' => [
                 [],
                 [],
                 ['a' => 2],
-                'The numberFormatterSymbols array keys must be integers recognizable by NumberFormatter::setSymbol(). "string" provided instead.'
+                'The numberFormatterSymbols array keys must be integers recognizable by NumberFormatter::setSymbol(). "string" provided instead.',
             ],
             'non-string value for symbol' => [
                 [],
                 [],
                 [1 => 3],
-                'The numberFormatterSymbols array values must be strings. "integer" provided instead.'
+                'The numberFormatterSymbols array values must be strings. "integer" provided instead.',
             ],
         ];
     }
@@ -927,7 +931,7 @@ class FormatterNumberTest extends TestCase
     /**
      * @dataProvider providerForConfiguredWrongTypeAttributes
      */
-    public function testIntlAsIntegerConfiguredWrongTypeAttributes($intOptions, $textOptions, $symbols, $message)
+    public function testIntlAsIntegerConfiguredWrongTypeAttributes($intOptions, $textOptions, $symbols, $message): void
     {
         $this->expectException('yii\base\InvalidArgumentException');
         $this->expectExceptionMessage($message);

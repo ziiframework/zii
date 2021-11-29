@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,8 +10,21 @@
 
 namespace yiiunit\framework\helpers;
 
+use function array_key_exists;
 use ArrayAccess;
+use ArrayObject;
+use DateTime;
+use DateTimeZone;
 use Iterator;
+use const PHP_VERSION_ID;
+use const SORT_ASC;
+use const SORT_DESC;
+use const SORT_FLAG_CASE;
+use const SORT_NATURAL;
+use const SORT_REGULAR;
+use const SORT_STRING;
+use stdClass;
+use function strlen;
 use yii\base\BaseObject;
 use yii\base\Model;
 use yii\data\Sort;
@@ -28,7 +44,7 @@ class ArrayHelperTest extends TestCase
         $this->destroyApplication();
     }
 
-    public function testToArray()
+    public function testToArray(): void
     {
         $dataArrayable = $this->getMockBuilder('yii\\base\\Arrayable')->getMock();
         $dataArrayable->method('toArray')->willReturn([]);
@@ -59,9 +75,7 @@ class ArrayHelperTest extends TestCase
             $object::className() => [
                 'id', 'secret',
                 '_content' => 'content',
-                'length' => function ($post) {
-                    return strlen($post->content);
-                },
+                'length' => static fn ($post) => strlen($post->content),
             ],
         ]));
 
@@ -87,15 +101,11 @@ class ArrayHelperTest extends TestCase
         ], ArrayHelper::toArray($object, [
             $object::className() => [
                 'id', 'subObject',
-                'id_plus_1' => function ($post) {
-                    return $post->id + 1;
-                },
+                'id_plus_1' => static fn ($post) => $post->id + 1,
             ],
             $subObject::className() => [
                 'id',
-                'id_plus_1' => function ($post) {
-                    return $post->id + 1;
-                },
+                'id_plus_1' => static fn ($post) => $post->id + 1,
             ],
         ]));
 
@@ -109,9 +119,7 @@ class ArrayHelperTest extends TestCase
         ], ArrayHelper::toArray($object, [
             $subObject::className() => [
                 'id',
-                'id_plus_1' => function ($post) {
-                    return $post->id + 1;
-                },
+                'id_plus_1' => static fn ($post) => $post->id + 1,
             ],
         ]));
 
@@ -120,10 +128,10 @@ class ArrayHelperTest extends TestCase
             'date' => '2021-09-13 15:16:17.000000',
             'timezone_type' => 3,
             'timezone' => 'UTC',
-        ], ArrayHelper::toArray(new \DateTime('2021-09-13 15:16:17', new \DateTimeZone('UTC'))));
+        ], ArrayHelper::toArray(new DateTime('2021-09-13 15:16:17', new DateTimeZone('UTC'))));
     }
 
-    public function testRemove()
+    public function testRemove(): void
     {
         $array = ['name' => 'b', 'age' => 3];
         $name = ArrayHelper::remove($array, 'name');
@@ -135,7 +143,7 @@ class ArrayHelperTest extends TestCase
         $this->assertEquals('defaultValue', $default);
     }
 
-    public function testRemoveValueMultiple()
+    public function testRemoveValueMultiple(): void
     {
         $array = [
             'Bob' => 'Dylan',
@@ -156,7 +164,7 @@ class ArrayHelperTest extends TestCase
         ], $removed);
     }
 
-    public function testRemoveValueNotExisting()
+    public function testRemoveValueNotExisting(): void
     {
         $array = [
             'Bob' => 'Dylan',
@@ -176,7 +184,7 @@ class ArrayHelperTest extends TestCase
         $this->assertEquals([], $removed);
     }
 
-    public function testMultisort()
+    public function testMultisort(): void
     {
         // empty key
         $dataEmpty = [];
@@ -226,17 +234,17 @@ class ArrayHelperTest extends TestCase
         $this->assertEquals(['name' => 'B', 'age' => 4], $array[3]);
     }
 
-    public function testMultisortNestedObjects()
+    public function testMultisortNestedObjects(): void
     {
-        $obj1 = new \stdClass();
+        $obj1 = new stdClass();
         $obj1->type = 'def';
         $obj1->owner = $obj1;
 
-        $obj2 = new \stdClass();
+        $obj2 = new stdClass();
         $obj2->type = 'abc';
         $obj2->owner = $obj2;
 
-        $obj3 = new \stdClass();
+        $obj3 = new stdClass();
         $obj3->type = 'abc';
         $obj3->owner = $obj3;
 
@@ -259,7 +267,7 @@ class ArrayHelperTest extends TestCase
         $this->assertEquals($obj3, $models[2]);
     }
 
-    public function testMultisortUseSort()
+    public function testMultisortUseSort(): void
     {
         // single key
         $sort = new Sort([
@@ -298,7 +306,7 @@ class ArrayHelperTest extends TestCase
         $this->assertEquals(['name' => 'b', 'age' => 3], $array[2]);
     }
 
-    public function testMultisortClosure()
+    public function testMultisortClosure(): void
     {
         $changelog = [
             '- Enh #123: test1',
@@ -308,9 +316,10 @@ class ArrayHelperTest extends TestCase
             '- Bug: test4',
         ];
         $i = 0;
-        ArrayHelper::multisort($changelog, function ($line) use (&$i) {
+        ArrayHelper::multisort($changelog, static function ($line) use (&$i) {
             if (preg_match('/^- (Enh|Bug)( #\d+)?: .+$/', $line, $m)) {
                 $o = ['Bug' => 'C', 'Enh' => 'D'];
+
                 return $o[$m[1]] . ' ' . (!empty($m[2]) ? $m[2] : 'AAAA' . $i++);
             }
 
@@ -325,21 +334,21 @@ class ArrayHelperTest extends TestCase
         ], $changelog);
     }
 
-    public function testMultisortInvalidParamExceptionDirection()
+    public function testMultisortInvalidParamExceptionDirection(): void
     {
         $this->expectException('\yii\base\InvalidParamException');
         $data = ['foo' => 'bar'];
         ArrayHelper::multisort($data, ['foo'], []);
     }
 
-    public function testMultisortInvalidParamExceptionSortFlag()
+    public function testMultisortInvalidParamExceptionSortFlag(): void
     {
         $this->expectException('\yii\base\InvalidParamException');
         $data = ['foo' => 'bar'];
         ArrayHelper::multisort($data, ['foo'], ['foo'], []);
     }
 
-    public function testMerge()
+    public function testMerge(): void
     {
         $a = [
             'name' => 'Yii',
@@ -391,7 +400,7 @@ class ArrayHelperTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testMergeWithNumericKeys()
+    public function testMergeWithNumericKeys(): void
     {
         $a = [10 => [1]];
         $b = [10 => [2]];
@@ -402,7 +411,7 @@ class ArrayHelperTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testMergeWithUnset()
+    public function testMergeWithUnset(): void
     {
         $a = [
             'name' => 'Yii',
@@ -436,7 +445,7 @@ class ArrayHelperTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testMergeWithReplace()
+    public function testMergeWithReplace(): void
     {
         $a = [
             'name' => 'Yii',
@@ -475,7 +484,7 @@ class ArrayHelperTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testMergeWithNullValues()
+    public function testMergeWithNullValues(): void
     {
         $a = [
             'firstValue',
@@ -497,7 +506,7 @@ class ArrayHelperTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testMergeEmpty()
+    public function testMergeEmpty(): void
     {
         $this->assertEquals([], ArrayHelper::merge([], []));
         $this->assertEquals([], ArrayHelper::merge([], [], []));
@@ -506,7 +515,7 @@ class ArrayHelperTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/pull/11549
      */
-    public function test()
+    public function test(): void
     {
         $array = [];
         $array[1.0] = 'some value';
@@ -516,7 +525,7 @@ class ArrayHelperTest extends TestCase
         $this->assertEquals('some value', $result);
     }
 
-    public function testIndex()
+    public function testIndex(): void
     {
         $array = [
             ['id' => '123', 'data' => 'abc'],
@@ -529,9 +538,7 @@ class ArrayHelperTest extends TestCase
             '345' => ['id' => '345', 'data' => 'ghi'],
         ], $result);
 
-        $result = ArrayHelper::index($array, function ($element) {
-            return $element['data'];
-        });
+        $result = ArrayHelper::index($array, static fn ($element) => $element['data']);
         $this->assertEquals([
             'abc' => ['id' => '123', 'data' => 'abc'],
             'def' => ['id' => '345', 'data' => 'def'],
@@ -541,20 +548,16 @@ class ArrayHelperTest extends TestCase
         $result = ArrayHelper::index($array, null);
         $this->assertEquals([], $result);
 
-        $result = ArrayHelper::index($array, function ($element) {
-            return null;
-        });
+        $result = ArrayHelper::index($array, static fn ($element) => null);
         $this->assertEquals([], $result);
 
-        $result = ArrayHelper::index($array, function ($element) {
-            return $element['id'] == '345' ? null : $element['id'];
-        });
+        $result = ArrayHelper::index($array, static fn ($element) => $element['id'] == '345' ? null : $element['id']);
         $this->assertEquals([
             '123' => ['id' => '123', 'data' => 'abc'],
         ], $result);
     }
 
-    public function testIndexGroupBy()
+    public function testIndexGroupBy(): void
     {
         $array = [
             ['id' => '123', 'data' => 'abc'],
@@ -606,9 +609,7 @@ class ArrayHelperTest extends TestCase
         $this->assertEquals($expected, $result);
         $result = ArrayHelper::index($array, 'data', 'id');
         $this->assertEquals($expected, $result);
-        $result = ArrayHelper::index($array, function ($element) {
-            return $element['data'];
-        }, 'id');
+        $result = ArrayHelper::index($array, static fn ($element) => $element['data'], 'id');
         $this->assertEquals($expected, $result);
 
         $expected = [
@@ -628,16 +629,14 @@ class ArrayHelperTest extends TestCase
         ];
         $result = ArrayHelper::index($array, 'data', ['id', 'data']);
         $this->assertEquals($expected, $result);
-        $result = ArrayHelper::index($array, function ($element) {
-            return $element['data'];
-        }, ['id', 'data']);
+        $result = ArrayHelper::index($array, static fn ($element) => $element['data'], ['id', 'data']);
         $this->assertEquals($expected, $result);
     }
 
     /**
      * @see https://github.com/yiisoft/yii2/issues/11739
      */
-    public function testIndexFloat()
+    public function testIndexFloat(): void
     {
         $array = [
             ['id' => 1e6],
@@ -658,7 +657,7 @@ class ArrayHelperTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testGetColumn()
+    public function testGetColumn(): void
     {
         $array = [
             'a' => ['id' => '123', 'data' => 'abc'],
@@ -669,17 +668,13 @@ class ArrayHelperTest extends TestCase
         $result = ArrayHelper::getColumn($array, 'id', false);
         $this->assertEquals(['123', '345'], $result);
 
-        $result = ArrayHelper::getColumn($array, function ($element) {
-            return $element['data'];
-        });
+        $result = ArrayHelper::getColumn($array, static fn ($element) => $element['data']);
         $this->assertEquals(['a' => 'abc', 'b' => 'def'], $result);
-        $result = ArrayHelper::getColumn($array, function ($element) {
-            return $element['data'];
-        }, false);
+        $result = ArrayHelper::getColumn($array, static fn ($element) => $element['data'], false);
         $this->assertEquals(['abc', 'def'], $result);
     }
 
-    public function testMap()
+    public function testMap(): void
     {
         $array = [
             ['id' => '123', 'name' => 'aaa', 'class' => 'x'],
@@ -706,7 +701,7 @@ class ArrayHelperTest extends TestCase
         ], $result);
     }
 
-    public function testKeyExists()
+    public function testKeyExists(): void
     {
         $array = [
             'a' => 1,
@@ -723,7 +718,7 @@ class ArrayHelperTest extends TestCase
         $this->assertFalse(ArrayHelper::keyExists('c', $array, false));
     }
 
-    public function testKeyExistsArrayAccess()
+    public function testKeyExistsArrayAccess(): void
     {
         $array = new TraversableArrayAccessibleObject([
             'a' => 1,
@@ -736,7 +731,7 @@ class ArrayHelperTest extends TestCase
         $this->assertFalse(ArrayHelper::keyExists('c', $array));
     }
 
-    public function testKeyExistsArrayAccessCaseInsensitiveThrowsError()
+    public function testKeyExistsArrayAccessCaseInsensitiveThrowsError(): void
     {
         $this->expectException('\yii\base\InvalidArgumentException');
         $this->expectExceptionMessage('Second parameter($array) cannot be ArrayAccess in case insensitive mode');
@@ -766,9 +761,7 @@ class ArrayHelperTest extends TestCase
             ['admin.firstname', 'Qiang', 'test'],
             ['admin.lastname', 'Xue'],
             [
-                function ($array, $defaultValue) {
-                    return $array['date'] . $defaultValue;
-                },
+                static fn ($array, $defaultValue) => $array['date'] . $defaultValue,
                 '31-12-2113test',
                 'test',
             ],
@@ -784,7 +777,7 @@ class ArrayHelperTest extends TestCase
      * @param $expected
      * @param null $default
      */
-    public function testGetValue($key, $expected, $default = null)
+    public function testGetValue($key, $expected, $default = null): void
     {
         $array = [
             'name' => 'test',
@@ -813,16 +806,16 @@ class ArrayHelperTest extends TestCase
         $this->assertEquals($expected, ArrayHelper::getValue($array, $key, $default));
     }
 
-    public function testGetValueObjects()
+    public function testGetValueObjects(): void
     {
-        $arrayObject = new \ArrayObject(['id' => 23], \ArrayObject::ARRAY_AS_PROPS);
+        $arrayObject = new ArrayObject(['id' => 23], ArrayObject::ARRAY_AS_PROPS);
         $this->assertEquals(23, ArrayHelper::getValue($arrayObject, 'id'));
 
         $object = new Post1();
         $this->assertEquals(23, ArrayHelper::getValue($object, 'id'));
     }
 
-    public function testGetValueNonexistingProperties1()
+    public function testGetValueNonexistingProperties1(): void
     {
         if (PHP_VERSION_ID >= 80000) {
             $this->expectWarning();
@@ -834,53 +827,54 @@ class ArrayHelperTest extends TestCase
         ArrayHelper::getValue($object, 'nonExisting');
     }
 
-    public function testGetValueNonexistingPropertiesForArrayObject()
+    public function testGetValueNonexistingPropertiesForArrayObject(): void
     {
-        $arrayObject = new \ArrayObject(['id' => 23], \ArrayObject::ARRAY_AS_PROPS);
+        $arrayObject = new ArrayObject(['id' => 23], ArrayObject::ARRAY_AS_PROPS);
         $this->assertNull(ArrayHelper::getValue($arrayObject, 'nonExisting'));
     }
 
-    public function testGetValueFromArrayAccess()
+    public function testGetValueFromArrayAccess(): void
     {
         $arrayAccessibleObject = new ArrayAccessibleObject([
-            'one'   => 1,
-            'two'   => 2,
+            'one' => 1,
+            'two' => 2,
             'three' => 3,
             'key.with.dot' => 'dot',
-            'null'  => null,
+            'null' => null,
         ]);
 
         $this->assertEquals(1, ArrayHelper::getValue($arrayAccessibleObject, 'one'));
     }
 
-    public function testGetValueWithDotsFromArrayAccess()
+    public function testGetValueWithDotsFromArrayAccess(): void
     {
         $arrayAccessibleObject = new ArrayAccessibleObject([
-            'one'   => 1,
-            'two'   => 2,
+            'one' => 1,
+            'two' => 2,
             'three' => 3,
             'key.with.dot' => 'dot',
-            'null'  => null,
+            'null' => null,
         ]);
 
         $this->assertEquals('dot', ArrayHelper::getValue($arrayAccessibleObject, 'key.with.dot'));
     }
 
-    public function testGetValueNonexistingArrayAccess()
+    public function testGetValueNonexistingArrayAccess(): void
     {
         $arrayAccessibleObject = new ArrayAccessibleObject([
-            'one'   => 1,
-            'two'   => 2,
+            'one' => 1,
+            'two' => 2,
             'three' => 3,
             'key.with.dot' => 'dot',
-            'null'  => null,
+            'null' => null,
         ]);
 
-        $this->assertEquals(null, ArrayHelper::getValue($arrayAccessibleObject, 'four'));
+        $this->assertNull(ArrayHelper::getValue($arrayAccessibleObject, 'four'));
     }
 
     /**
      * Data provider for [[testSetValue()]].
+     *
      * @return array test data
      */
     public function dataProviderSetValue()
@@ -1108,18 +1102,18 @@ class ArrayHelperTest extends TestCase
     /**
      * @dataProvider dataProviderSetValue
      *
-     * @param array $array_input
+     * @param array             $array_input
      * @param string|array|null $key
-     * @param mixed $value
-     * @param mixed $expected
+     * @param mixed             $value
+     * @param mixed             $expected
      */
-    public function testSetValue($array_input, $key, $value, $expected)
+    public function testSetValue($array_input, $key, $value, $expected): void
     {
         ArrayHelper::setValue($array_input, $key, $value);
         $this->assertEquals($expected, $array_input);
     }
 
-    public function testIsAssociative()
+    public function testIsAssociative(): void
     {
         $this->assertFalse(ArrayHelper::isAssociative('test'));
         $this->assertFalse(ArrayHelper::isAssociative([]));
@@ -1130,7 +1124,7 @@ class ArrayHelperTest extends TestCase
         $this->assertTrue(ArrayHelper::isAssociative(['name' => 1, 'value' => 'test', 3], false));
     }
 
-    public function testIsIndexed()
+    public function testIsIndexed(): void
     {
         $this->assertFalse(ArrayHelper::isIndexed('test'));
         $this->assertTrue(ArrayHelper::isIndexed([]));
@@ -1140,7 +1134,7 @@ class ArrayHelperTest extends TestCase
         $this->assertFalse(ArrayHelper::isIndexed(['a' => 'b'], false));
     }
 
-    public function testHtmlEncode()
+    public function testHtmlEncode(): void
     {
         $array = [
             'abc' => '123',
@@ -1177,7 +1171,7 @@ class ArrayHelperTest extends TestCase
         ], ArrayHelper::htmlEncode($array, false));
     }
 
-    public function testHtmlDecode()
+    public function testHtmlDecode(): void
     {
         $array = [
             'abc' => '123',
@@ -1211,70 +1205,70 @@ class ArrayHelperTest extends TestCase
         ], ArrayHelper::htmlDecode($array, false));
     }
 
-    public function testIsIn()
+    public function testIsIn(): void
     {
-        $this->assertTrue(ArrayHelper::isIn('a', new \ArrayObject(['a', 'b'])));
+        $this->assertTrue(ArrayHelper::isIn('a', new ArrayObject(['a', 'b'])));
         $this->assertTrue(ArrayHelper::isIn('a', ['a', 'b']));
 
-        $this->assertTrue(ArrayHelper::isIn('1', new \ArrayObject([1, 'b'])));
+        $this->assertTrue(ArrayHelper::isIn('1', new ArrayObject([1, 'b'])));
         $this->assertTrue(ArrayHelper::isIn('1', [1, 'b']));
 
-        $this->assertFalse(ArrayHelper::isIn('1', new \ArrayObject([1, 'b']), true));
+        $this->assertFalse(ArrayHelper::isIn('1', new ArrayObject([1, 'b']), true));
         $this->assertFalse(ArrayHelper::isIn('1', [1, 'b'], true));
 
-        $this->assertTrue(ArrayHelper::isIn(['a'], new \ArrayObject([['a'], 'b'])));
-        $this->assertFalse(ArrayHelper::isIn('a', new \ArrayObject([['a'], 'b'])));
+        $this->assertTrue(ArrayHelper::isIn(['a'], new ArrayObject([['a'], 'b'])));
+        $this->assertFalse(ArrayHelper::isIn('a', new ArrayObject([['a'], 'b'])));
         $this->assertFalse(ArrayHelper::isIn('a', [['a'], 'b']));
     }
 
-    public function testIsInStrict()
+    public function testIsInStrict(): void
     {
         // strict comparison
-        $this->assertTrue(ArrayHelper::isIn(1, new \ArrayObject([1, 'a']), true));
+        $this->assertTrue(ArrayHelper::isIn(1, new ArrayObject([1, 'a']), true));
         $this->assertTrue(ArrayHelper::isIn(1, [1, 'a'], true));
 
-        $this->assertFalse(ArrayHelper::isIn('1', new \ArrayObject([1, 'a']), true));
+        $this->assertFalse(ArrayHelper::isIn('1', new ArrayObject([1, 'a']), true));
         $this->assertFalse(ArrayHelper::isIn('1', [1, 'a'], true));
     }
 
-    public function testInException()
+    public function testInException(): void
     {
         $this->expectException('\yii\base\InvalidParamException');
         $this->expectExceptionMessage('Argument $haystack must be an array or implement Traversable');
         ArrayHelper::isIn('value', null);
     }
 
-    public function testIsSubset()
+    public function testIsSubset(): void
     {
-        $this->assertTrue(ArrayHelper::isSubset(['a'], new \ArrayObject(['a', 'b'])));
-        $this->assertTrue(ArrayHelper::isSubset(new \ArrayObject(['a']), ['a', 'b']));
+        $this->assertTrue(ArrayHelper::isSubset(['a'], new ArrayObject(['a', 'b'])));
+        $this->assertTrue(ArrayHelper::isSubset(new ArrayObject(['a']), ['a', 'b']));
 
-        $this->assertTrue(ArrayHelper::isSubset([1], new \ArrayObject(['1', 'b'])));
-        $this->assertTrue(ArrayHelper::isSubset(new \ArrayObject([1]), ['1', 'b']));
+        $this->assertTrue(ArrayHelper::isSubset([1], new ArrayObject(['1', 'b'])));
+        $this->assertTrue(ArrayHelper::isSubset(new ArrayObject([1]), ['1', 'b']));
 
-        $this->assertFalse(ArrayHelper::isSubset([1], new \ArrayObject(['1', 'b']), true));
-        $this->assertFalse(ArrayHelper::isSubset(new \ArrayObject([1]), ['1', 'b'], true));
+        $this->assertFalse(ArrayHelper::isSubset([1], new ArrayObject(['1', 'b']), true));
+        $this->assertFalse(ArrayHelper::isSubset(new ArrayObject([1]), ['1', 'b'], true));
     }
 
-    public function testIsSubsetException()
+    public function testIsSubsetException(): void
     {
         $this->expectException('\yii\base\InvalidParamException');
         $this->expectExceptionMessage('Argument $needles must be an array or implement Traversable');
-        ArrayHelper::isSubset('a', new \ArrayObject(['a', 'b']));
+        ArrayHelper::isSubset('a', new ArrayObject(['a', 'b']));
     }
 
-    public function testIsArray()
+    public function testIsArray(): void
     {
         $this->assertTrue(ArrayHelper::isTraversable(['a']));
-        $this->assertTrue(ArrayHelper::isTraversable(new \ArrayObject(['1'])));
-        $this->assertFalse(ArrayHelper::isTraversable(new \stdClass()));
+        $this->assertTrue(ArrayHelper::isTraversable(new ArrayObject(['1'])));
+        $this->assertFalse(ArrayHelper::isTraversable(new stdClass()));
         $this->assertFalse(ArrayHelper::isTraversable('A,B,C'));
         $this->assertFalse(ArrayHelper::isTraversable(12));
         $this->assertFalse(ArrayHelper::isTraversable(false));
         $this->assertFalse(ArrayHelper::isTraversable(null));
     }
 
-    public function testFilter()
+    public function testFilter(): void
     {
         $array = [
             'A' => [
@@ -1374,7 +1368,7 @@ class ArrayHelperTest extends TestCase
             ],
         ], ArrayHelper::filter($array, ['A', '!A.D']));
         $this->assertEquals([
-            'G' => 1
+            'G' => 1,
         ], ArrayHelper::filter($array, ['G', '!Z', '!X.A']));
 
         //Non existing keys tests
@@ -1398,7 +1392,7 @@ class ArrayHelperTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/18395
      */
-    public function testFilterForIntegerKeys()
+    public function testFilterForIntegerKeys(): void
     {
         $array = ['a', 'b', ['c', 'd']];
 
@@ -1408,18 +1402,18 @@ class ArrayHelperTest extends TestCase
         $this->assertEquals([2 => [1 => 'd']], ArrayHelper::filter($array, [2, '!2.0']));
     }
 
-    public function testFilterWithInvalidValues()
+    public function testFilterWithInvalidValues(): void
     {
         $array = ['a' => 'b'];
 
-        $this->assertEquals([], ArrayHelper::filter($array, [new \stdClass()]));
+        $this->assertEquals([], ArrayHelper::filter($array, [new stdClass()]));
         $this->assertEquals([], ArrayHelper::filter($array, [['a']]));
     }
 
     /**
      * @see https://github.com/yiisoft/yii2/issues/18086
      */
-    public function testArrayAccessWithPublicProperty()
+    public function testArrayAccessWithPublicProperty(): void
     {
         $data = new ArrayAccessibleObject(['value' => 123]);
 
@@ -1431,7 +1425,7 @@ class ArrayHelperTest extends TestCase
      * https://github.com/yiisoft/yii2/commit/35fb9c624893855317e5fe52e6a21f6518a9a31c changed the way
      * ArrayHelper works with existing object properties in case of ArrayAccess.
      */
-    public function testArrayAccessWithMagicProperty()
+    public function testArrayAccessWithMagicProperty(): void
     {
         $model = new MagicModel();
         $this->assertEquals(42, ArrayHelper::getValue($model, 'magic'));
@@ -1450,6 +1444,7 @@ class Post2 extends BaseObject
     public $id = 123;
     public $content = 'test';
     private $secret = 's';
+
     public function getSecret()
     {
         return $this->secret;
@@ -1462,7 +1457,7 @@ class Post3 extends BaseObject
     /** @var BaseObject */
     public $subObject;
 
-    public function init()
+    public function init(): void
     {
         $this->subObject = new Post2();
     }
@@ -1478,9 +1473,9 @@ class ArrayAccessibleObject implements ArrayAccess
         $this->container = $container;
     }
 
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
-        if (is_null($offset)) {
+        if (null === $offset) {
             $this->container[] = $value;
         } else {
             $this->container[$offset] = $value;
@@ -1492,7 +1487,7 @@ class ArrayAccessibleObject implements ArrayAccess
         return array_key_exists($offset, $this->container);
     }
 
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->container[$offset]);
     }
@@ -1517,10 +1512,11 @@ class TraversableArrayAccessibleObject extends ArrayAccessibleObject implements 
     protected function getContainerKey($keyIndex)
     {
         $keys = array_keys($this->container);
+
         return array_key_exists($keyIndex, $keys) ? $keys[$keyIndex] : false;
     }
 
-    public function rewind()
+    public function rewind(): void
     {
         $this->position = 0;
     }
@@ -1535,7 +1531,7 @@ class TraversableArrayAccessibleObject extends ArrayAccessibleObject implements 
         return $this->getContainerKey($this->position);
     }
 
-    public function next()
+    public function next(): void
     {
         ++$this->position;
     }
@@ -1543,6 +1539,7 @@ class TraversableArrayAccessibleObject extends ArrayAccessibleObject implements 
     public function valid()
     {
         $key = $this->getContainerKey($this->position);
+
         return !(!$key || !$this->offsetExists($key));
     }
 }

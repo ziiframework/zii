@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -16,6 +19,7 @@ use yiiunit\TestCase;
 
 /**
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  * @group di
  */
@@ -27,7 +31,7 @@ class InstanceTest extends TestCase
         Yii::$container = new Container();
     }
 
-    public function testOf()
+    public function testOf(): void
     {
         $container = new Container();
         $className = Component::className();
@@ -39,7 +43,7 @@ class InstanceTest extends TestCase
         $this->assertNotSame($instance->get($container), Instance::ensure($instance, $className, $container));
     }
 
-    public function testEnsure()
+    public function testEnsure(): void
     {
         $container = new Container();
         $container->set('db', [
@@ -55,7 +59,7 @@ class InstanceTest extends TestCase
     /**
      * ensure an InvalidConfigException is thrown when a component does not exist.
      */
-    public function testEnsure_NonExistingComponentException()
+    public function testEnsureNonExistingComponentException(): void
     {
         $container = new Container();
         $this->expectException('yii\base\InvalidConfigException');
@@ -66,7 +70,7 @@ class InstanceTest extends TestCase
     /**
      * ensure an InvalidConfigException is thrown when a class does not exist.
      */
-    public function testEnsure_NonExistingClassException()
+    public function testEnsureNonExistingClassException(): void
     {
         $container = new Container();
         $this->expectException('yii\base\InvalidConfigException');
@@ -74,7 +78,7 @@ class InstanceTest extends TestCase
         Instance::ensure('yii\cache\DoesNotExist', 'yii\cache\Cache', $container);
     }
 
-    public function testEnsure_WithoutType()
+    public function testEnsureWithoutType(): void
     {
         $container = new Container();
         $container->set('db', [
@@ -87,7 +91,7 @@ class InstanceTest extends TestCase
         $this->assertInstanceOf('\\yii\\db\\Connection', Instance::ensure(['class' => 'yii\db\Connection', 'dsn' => 'test'], null, $container));
     }
 
-    public function testEnsure_MinimalSettings()
+    public function testEnsureMinimalSettings(): void
     {
         Yii::$container->set('db', [
             'class' => 'yii\db\Connection',
@@ -100,7 +104,7 @@ class InstanceTest extends TestCase
         Yii::$container = new Container();
     }
 
-    public function testExceptionRefersTo()
+    public function testExceptionRefersTo(): void
     {
         $container = new Container();
         $container->set('db', [
@@ -114,21 +118,21 @@ class InstanceTest extends TestCase
         Instance::ensure('db', 'yii\base\Widget', $container);
     }
 
-    public function testExceptionInvalidDataType()
+    public function testExceptionInvalidDataType(): void
     {
         $this->expectException('yii\base\InvalidConfigException');
         $this->expectExceptionMessage('Invalid data type: yii\db\Connection. yii\base\Widget is expected.');
         Instance::ensure(new Connection(), 'yii\base\Widget');
     }
 
-    public function testExceptionComponentIsNotSpecified()
+    public function testExceptionComponentIsNotSpecified(): void
     {
         $this->expectException('yii\base\InvalidConfigException');
         $this->expectExceptionMessage('The required component is not specified.');
         Instance::ensure('');
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $this->mockApplication([
             'components' => [
@@ -149,7 +153,7 @@ class InstanceTest extends TestCase
     /**
      * This tests the usage example given in yii\di\Instance class PHPDoc.
      */
-    public function testLazyInitializationExample()
+    public function testLazyInitializationExample(): void
     {
         Yii::$container = new Container();
         Yii::$container->set('cache', [
@@ -166,7 +170,7 @@ class InstanceTest extends TestCase
         $this->assertEquals('sqlite:path/to/file.db', $db->dsn);
     }
 
-    public function testRestoreAfterVarExport()
+    public function testRestoreAfterVarExport(): void
     {
         $instance = Instance::of('something');
         $export = var_export($instance, true);
@@ -178,7 +182,7 @@ class InstanceTest extends TestCase
         ]));
     }
 
-    public function testRestoreAfterVarExportRequiresId()
+    public function testRestoreAfterVarExportRequiresId(): void
     {
         $this->expectException('yii\base\InvalidConfigException');
         $this->expectExceptionMessage('Failed to instantiate class "Instance". Required parameter "id" is missing');
@@ -186,7 +190,7 @@ class InstanceTest extends TestCase
         Instance::__set_state([]);
     }
 
-    public function testExceptionInvalidDataTypeInArray()
+    public function testExceptionInvalidDataTypeInArray(): void
     {
         $this->expectException('yii\base\InvalidConfigException');
         $this->expectExceptionMessage('Invalid data type: yii\db\Connection. yii\base\Widget is expected.');

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,10 +10,15 @@
 
 namespace yiiunit\framework\helpers;
 
+use DateTime;
+use DateTimeZone;
+use const PHP_VERSION_ID;
+use SplStack;
+use stdClass;
 use yii\helpers\Json;
 use yii\web\JsExpression;
-use yiiunit\framework\web\Post;
 use yiiunit\framework\models\JsonModel;
+use yiiunit\framework\web\Post;
 use yiiunit\TestCase;
 
 /**
@@ -27,7 +35,7 @@ class JsonTest extends TestCase
         $this->destroyApplication();
     }
 
-    public function testEncode()
+    public function testEncode(): void
     {
         // Arrayable data encoding
         $dataArrayable = $this->getMockBuilder('\yii\base\Arrayable')->getMock();
@@ -52,7 +60,7 @@ class JsonTest extends TestCase
         // simple object with zero indexed keys encoding
         $data = (object) [
             0 => 1,
-            1 => 2
+            1 => 2,
         ];
         $default = Json::$keepObjectType;
         Json::$keepObjectType = true;
@@ -64,7 +72,7 @@ class JsonTest extends TestCase
         // empty data encoding
         $data = [];
         $this->assertSame('[]', Json::encode($data));
-        $data = new \stdClass();
+        $data = new stdClass();
         $this->assertSame('{}', Json::encode($data));
 
         // expression encoding
@@ -97,7 +105,7 @@ class JsonTest extends TestCase
         $this->assertSame('{}', Json::encode($data));
     }
 
-    public function testHtmlEncode()
+    public function testHtmlEncode(): void
     {
         // HTML escaped chars
         $data = '&<>"\'/';
@@ -163,14 +171,14 @@ class JsonTest extends TestCase
         $document = simplexml_load_string($xml);
         $this->assertSame('{"child1":{},"child2":{"subElement":"sub"}}', Json::encode($document));
 
-        $postsStack = new \SplStack();
+        $postsStack = new SplStack();
         $postsStack->push(new Post(915, 'record1'));
         $postsStack->push(new Post(456, 'record2'));
 
         $this->assertSame('{"1":{"id":456,"title":"record2"},"0":{"id":915,"title":"record1"}}', Json::encode($postsStack));
     }
 
-    public function testDecode()
+    public function testDecode(): void
     {
         // empty value
         $json = '';
@@ -194,7 +202,7 @@ class JsonTest extends TestCase
     /**
      * @covers ::decode
      */
-    public function testDecodeInvalidParamException()
+    public function testDecodeInvalidParamException(): void
     {
         $this->expectException('\yii\base\InvalidArgumentException');
         $this->expectExceptionMessage('Invalid JSON data.');
@@ -204,7 +212,7 @@ class JsonTest extends TestCase
     /**
      * @covers ::decode
      */
-    public function testHandleJsonError()
+    public function testHandleJsonError(): void
     {
         // basic syntax error
         try {
@@ -229,7 +237,7 @@ class JsonTest extends TestCase
         }
     }
 
-    public function testErrorSummary()
+    public function testErrorSummary(): void
     {
         $model = new JsonModel();
         $model->name = 'not_an_integer';
@@ -245,9 +253,9 @@ class JsonTest extends TestCase
      * @see https://github.com/yiisoft/yii2/issues/17760
      * @covers ::encode
      */
-    public function testEncodeDateTime()
+    public function testEncodeDateTime(): void
     {
-        $input = new \DateTime('October 12, 2014', new \DateTimeZone('UTC'));
+        $input = new DateTime('October 12, 2014', new DateTimeZone('UTC'));
         $output = Json::encode($input);
         $this->assertEquals('{"date":"2014-10-12 00:00:00.000000","timezone_type":3,"timezone":"UTC"}', $output);
     }
@@ -255,7 +263,7 @@ class JsonTest extends TestCase
     /**
      * @covers ::encode
      */
-    public function testPrettyPrint()
+    public function testPrettyPrint(): void
     {
         $defaultValue = Json::$prettyPrint;
         $input = ['a' => 1, 'b' => 2];

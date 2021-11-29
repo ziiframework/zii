@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -24,14 +27,14 @@ class ActiveQueryModelConnectionTest extends TestCase
 
         $this->mockApplication([
             'components' => [
-                'db' => $this->globalConnection
-            ]
+                'db' => $this->globalConnection,
+            ],
         ]);
 
         ActiveRecord::$db = $this->modelConnection;
     }
 
-    private function prepareConnectionMock($connection)
+    private function prepareConnectionMock($connection): void
     {
         $command = $this->getMockBuilder('yii\db\Command')->getMock();
         $command->method('queryOne')->willReturn(false);
@@ -40,7 +43,7 @@ class ActiveQueryModelConnectionTest extends TestCase
         $connection->expects($this->once())->method('getQueryBuilder')->willReturn($builder);
     }
 
-    public function testEnsureModelConnectionForOne()
+    public function testEnsureModelConnectionForOne(): void
     {
         $this->globalConnection->expects($this->never())->method('getQueryBuilder');
         $this->prepareConnectionMock($this->modelConnection);
@@ -49,7 +52,7 @@ class ActiveQueryModelConnectionTest extends TestCase
         $query->one();
     }
 
-    public function testEnsureGlobalConnectionForOne()
+    public function testEnsureGlobalConnectionForOne(): void
     {
         $this->modelConnection->expects($this->never())->method('getQueryBuilder');
         $this->prepareConnectionMock($this->globalConnection);
@@ -58,7 +61,7 @@ class ActiveQueryModelConnectionTest extends TestCase
         $query->one();
     }
 
-    public function testEnsureModelConnectionForAll()
+    public function testEnsureModelConnectionForAll(): void
     {
         $this->globalConnection->expects($this->never())->method('getQueryBuilder');
         $this->prepareConnectionMock($this->modelConnection);
@@ -67,7 +70,7 @@ class ActiveQueryModelConnectionTest extends TestCase
         $query->all();
     }
 
-    public function testEnsureGlobalConnectionForAll()
+    public function testEnsureGlobalConnectionForAll(): void
     {
         $this->modelConnection->expects($this->never())->method('getQueryBuilder');
         $this->prepareConnectionMock($this->globalConnection);

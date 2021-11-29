@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +10,7 @@
 
 namespace yiiunit\framework\db;
 
+use stdClass;
 use yii\db\ActiveQuery;
 use yii\db\Query;
 
@@ -17,7 +21,7 @@ trait GetTablesAliasTestTrait
      */
     abstract protected function createQuery();
 
-    public function testGetTableNames_isFromArrayWithAlias()
+    public function testGetTableNames_isFromArrayWithAlias(): void
     {
         $query = $this->createQuery();
         $query->from = [
@@ -37,12 +41,12 @@ trait GetTablesAliasTestTrait
         ], $tables);
     }
 
-    public function testGetTableNames_isFromArrayWithoutAlias()
+    public function testGetTableNames_isFromArrayWithoutAlias(): void
     {
         $query = $this->createQuery();
         $query->from = [
             '{{profile}}',
-            'user'
+            'user',
         ];
 
         $tables = $query->getTablesUsedInFrom();
@@ -53,7 +57,7 @@ trait GetTablesAliasTestTrait
         ], $tables);
     }
 
-    public function testGetTableNames_isFromString()
+    public function testGetTableNames_isFromString(): void
     {
         $query = $this->createQuery();
         $query->from = 'profile AS \'prf\', user "usr", `order`, "customer", "a b" as "c d"';
@@ -69,17 +73,17 @@ trait GetTablesAliasTestTrait
         ], $tables);
     }
 
-    public function testGetTableNames_isFromObject_generateException()
+    public function testGetTableNames_isFromObject_generateException(): void
     {
         $query = $this->createQuery();
-        $query->from = new \stdClass();
+        $query->from = new stdClass();
 
         $this->expectException('\yii\base\InvalidConfigException');
 
         $query->getTablesUsedInFrom();
     }
 
-    public function testGetTablesAlias_isFromString()
+    public function testGetTablesAlias_isFromString(): void
     {
         $query = $this->createQuery();
         $query->from = 'profile AS \'prf\', user "usr", service srv, order, [a b] [c d], {{something}} AS myalias';
@@ -99,7 +103,7 @@ trait GetTablesAliasTestTrait
     /**
      * @see https://github.com/yiisoft/yii2/issues/14150
      */
-    public function testGetTableNames_isFromPrefixedTableName()
+    public function testGetTableNames_isFromPrefixedTableName(): void
     {
         $query = $this->createQuery();
         $query->from = '{{%order_item}}';
@@ -114,7 +118,7 @@ trait GetTablesAliasTestTrait
     /**
      * @see https://github.com/yiisoft/yii2/issues/14211
      */
-    public function testGetTableNames_isFromTableNameWithDatabase()
+    public function testGetTableNames_isFromTableNameWithDatabase(): void
     {
         $query = $this->createQuery();
         $query->from = 'tickets.workflows';
@@ -126,7 +130,7 @@ trait GetTablesAliasTestTrait
         ], $tables);
     }
 
-    public function testGetTableNames_isFromAliasedExpression()
+    public function testGetTableNames_isFromAliasedExpression(): void
     {
         $query = $this->createQuery();
         $expression = new \yii\db\Expression('(SELECT id FROM user)');
@@ -139,7 +143,7 @@ trait GetTablesAliasTestTrait
         $this->assertEquals(['{{x}}' => $expression], $tables);
     }
 
-    public function testGetTableNames_isFromAliasedArrayWithExpression()
+    public function testGetTableNames_isFromAliasedArrayWithExpression(): void
     {
         $query = $this->createQuery();
         $query->from = ['x' => new \yii\db\Expression('(SELECT id FROM user)')];
@@ -151,7 +155,7 @@ trait GetTablesAliasTestTrait
         ], $tables);
     }
 
-    public function testGetTableNames_isFromAliasedSubquery()
+    public function testGetTableNames_isFromAliasedSubquery(): void
     {
         $query = $this->createQuery();
         $subQuery = $this->createQuery();

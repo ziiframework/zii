@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +10,7 @@
 
 namespace yiiunit\framework\validators;
 
+use function function_exists;
 use yii\validators\UrlValidator;
 use yiiunit\data\validators\models\FakedValidationModel;
 use yiiunit\TestCase;
@@ -24,7 +28,7 @@ class UrlValidatorTest extends TestCase
         $this->destroyApplication();
     }
 
-    public function testValidateValue()
+    public function testValidateValue(): void
     {
         $val = new UrlValidator();
         $this->assertFalse($val->validate('google.de'));
@@ -55,20 +59,20 @@ class UrlValidatorTest extends TestCase
         $this->assertFalse($val->validate('http://äüö?=!"§$%&/()=}][{³²€.edu'));
     }
 
-    public function testValidateValueWithDefaultScheme()
+    public function testValidateValueWithDefaultScheme(): void
     {
         $val = new UrlValidator(['defaultScheme' => 'https']);
         $this->assertTrue($val->validate('yiiframework.com'));
         $this->assertTrue($val->validate('http://yiiframework.com'));
     }
 
-    public function testValidateValueWithoutScheme()
+    public function testValidateValueWithoutScheme(): void
     {
         $val = new UrlValidator(['pattern' => '/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i']);
         $this->assertTrue($val->validate('yiiframework.com'));
     }
 
-    public function testValidateWithCustomScheme()
+    public function testValidateWithCustomScheme(): void
     {
         $val = new UrlValidator([
             'validSchemes' => ['http', 'https', 'ftp', 'ftps'],
@@ -83,7 +87,7 @@ class UrlValidatorTest extends TestCase
         $this->assertFalse($val->validate('//yiiframework.com'));
     }
 
-    public function testValidateWithIdn()
+    public function testValidateWithIdn(): void
     {
         if (!function_exists('idn_to_ascii')) {
             $this->markTestSkipped('intl package required');
@@ -98,14 +102,14 @@ class UrlValidatorTest extends TestCase
         $this->assertTrue($val->validate('http://xn--zcack7ayc9a.de'));
     }
 
-    public function testValidateLength()
+    public function testValidateLength(): void
     {
         $url = 'http://' . str_pad('base', 2000, 'url') . '.de';
         $val = new UrlValidator();
         $this->assertFalse($val->validate($url));
     }
 
-    public function testValidateAttributeAndError()
+    public function testValidateAttributeAndError(): void
     {
         $obj = new FakedValidationModel();
         $obj->attr_url = 'http://google.de';
