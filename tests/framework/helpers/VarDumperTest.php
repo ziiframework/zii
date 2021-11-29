@@ -149,10 +149,7 @@ RESULT;
         $expectedResult = "unserialize('" . serialize($var) . "')";
         $data[]         = [$var, $expectedResult];
 
-        $var = static function ()
-        {
-            return 2;
-        };
+        $var = function () {return 2;};
         $expectedResult = 'function () {return 2;}';
         $data[]         = [$var, $expectedResult];
 
