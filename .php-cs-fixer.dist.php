@@ -3,12 +3,9 @@
 declare(strict_types=1);
 
 $header_comment_block = <<<'EOF'
-/**
- * @link http://www.yiiframework.com/
- *
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
+@link http://www.yiiframework.com/
+@copyright Copyright (c) 2008 Yii Software LLC
+@license http://www.yiiframework.com/license/
 EOF;
 
 return (new PhpCsFixer\Config())
@@ -22,7 +19,7 @@ return (new PhpCsFixer\Config())
         '@PhpCsFixer:risky' => true,
         'yoda_style' => false,
         'concat_space' => ['spacing' => 'one'],
-        'header_comment' => ['header' => $header_comment_block, 'separate' => 'none'],
+        'header_comment' => ['header' => $header_comment_block, 'comment_type' => 'PHPDoc'], // TODO change to: comment_type => comment
         'heredoc_indentation' => false,
         'method_argument_space' => [
             'on_multiline' => 'ensure_single_line',
