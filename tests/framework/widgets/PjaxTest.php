@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -15,19 +12,9 @@ use yii\widgets\ListView;
 use yii\widgets\Pjax;
 use yiiunit\TestCase;
 
-/**
- * @internal
- * @coversNothing
- */
-final class PjaxTest extends TestCase
+class PjaxTest extends TestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->mockWebApplication();
-    }
-
-    public function testGeneratedIdByPjaxWidget(): void
+    public function testGeneratedIdByPjaxWidget()
     {
         ListView::$counter = 0;
         Pjax::$counter = 0;
@@ -40,24 +27,32 @@ final class PjaxTest extends TestCase
         $pjax2 = new Pjax();
         ob_end_clean();
 
-        $this->assertSame('w0', $nonPjaxWidget1->options['id']);
-        $this->assertSame('w1', $nonPjaxWidget2->options['id']);
-        $this->assertSame('p0', $pjax1->options['id']);
-        $this->assertSame('p1', $pjax2->options['id']);
+        $this->assertEquals('w0', $nonPjaxWidget1->options['id']);
+        $this->assertEquals('w1', $nonPjaxWidget2->options['id']);
+        $this->assertEquals('p0', $pjax1->options['id']);
+        $this->assertEquals('p1', $pjax2->options['id']);
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->mockWebApplication();
     }
 
     /**
      * @see https://github.com/yiisoft/yii2/issues/15536
      */
-    public function testShouldTriggerInitEvent(): void
+    public function testShouldTriggerInitEvent()
     {
         $initTriggered = false;
         ob_start();
-        $pjax = new Pjax([
-            'on init' => static function () use (&$initTriggered): void {
-                $initTriggered = true;
-            },
-        ]);
+        $pjax = new Pjax(
+            [
+                'on init' => function () use (&$initTriggered) {
+                    $initTriggered = true;
+                }
+            ]
+        );
         ob_end_clean();
         $this->assertTrue($initTriggered);
     }

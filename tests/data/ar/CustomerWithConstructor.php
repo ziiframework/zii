@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,31 +7,30 @@ declare(strict_types=1);
 
 namespace yiiunit\data\ar;
 
-use ReflectionClass;
-
 /**
  * CustomerWithConstructor.
  *
- * @property int                    $id
- * @property string                 $name
- * @property string                 $email
- * @property string                 $address
- * @property int                    $status
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property string $address
+ * @property int $status
+ *
  * @property ProfileWithConstructor $profile
  */
 class CustomerWithConstructor extends ActiveRecord
 {
+    public static function tableName()
+    {
+        return 'customer';
+    }
+
     public function __construct($name, $email, $address)
     {
         $this->name = $name;
         $this->email = $email;
         $this->address = $address;
         parent::__construct();
-    }
-
-    public static function tableName()
-    {
-        return 'customer';
     }
 
     public static function instance($refresh = false)
@@ -44,7 +40,7 @@ class CustomerWithConstructor extends ActiveRecord
 
     public static function instantiate($row)
     {
-        return (new ReflectionClass(static::className()))->newInstanceWithoutConstructor();
+        return (new \ReflectionClass(static::className()))->newInstanceWithoutConstructor();
     }
 
     public function getProfile()

@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -23,12 +20,10 @@ class Speaker extends Model
     public $customLabel;
     public $underscore_style;
 
-    public static $formName = 'Speaker';
-
     protected $protectedProperty;
     private $_privateProperty;
 
-    private $_checkedValues = [];
+    public static $formName = 'Speaker';
 
     public function formName()
     {
@@ -55,7 +50,9 @@ class Speaker extends Model
         ];
     }
 
-    public function customValidatingMethod($attribute, $params, $validator, $current): void
+    private $_checkedValues = [];
+
+    public function customValidatingMethod($attribute, $params, $validator, $current)
     {
         $this->_checkedValues[] = $current;
         $this->addError($attribute, 'Custom method error');

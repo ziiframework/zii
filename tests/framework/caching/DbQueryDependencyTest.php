@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -15,16 +12,13 @@ use yii\caching\DbQueryDependency;
 use yii\db\Query;
 use yiiunit\framework\db\DatabaseTestCase;
 
-/**
- * @internal
- * @coversNothing
- */
-final class DbQueryDependencyTest extends DatabaseTestCase
+class DbQueryDependencyTest extends DatabaseTestCase
 {
     /**
      * {@inheritdoc}
      */
     protected $driverName = 'sqlite';
+
 
     /**
      * {@inheritdoc}
@@ -43,7 +37,7 @@ final class DbQueryDependencyTest extends DatabaseTestCase
         $db->createCommand()->insert('dependency_item', ['value' => 'initial'])->execute();
     }
 
-    public function testIsChanged(): void
+    public function testIsChanged()
     {
         $db = $this->getConnection(false);
         $cache = new ArrayCache();
@@ -54,8 +48,7 @@ final class DbQueryDependencyTest extends DatabaseTestCase
             ->select(['id'])
             ->from('dependency_item')
             ->orderBy(['id' => SORT_DESC])
-            ->limit(1)
-        ;
+            ->limit(1);
         $dependency->reusable = false;
 
         $dependency->evaluateDependency($cache);
@@ -69,7 +62,7 @@ final class DbQueryDependencyTest extends DatabaseTestCase
     /**
      * @depends testIsChanged
      */
-    public function testCustomMethod(): void
+    public function testCustomMethod()
     {
         $db = $this->getConnection(false);
         $cache = new ArrayCache();
@@ -78,8 +71,7 @@ final class DbQueryDependencyTest extends DatabaseTestCase
         $dependency->db = $db;
         $dependency->query = (new Query())
             ->from('dependency_item')
-            ->andWhere(['value' => 'active'])
-        ;
+            ->andWhere(['value' => 'active']);
         $dependency->reusable = false;
         $dependency->method = 'exists';
 
@@ -94,7 +86,7 @@ final class DbQueryDependencyTest extends DatabaseTestCase
     /**
      * @depends testCustomMethod
      */
-    public function testCustomMethodCallback(): void
+    public function testCustomMethodCallback()
     {
         $db = $this->getConnection(false);
         $cache = new ArrayCache();
@@ -103,10 +95,11 @@ final class DbQueryDependencyTest extends DatabaseTestCase
         $dependency->db = $db;
         $dependency->query = (new Query())
             ->from('dependency_item')
-            ->andWhere(['value' => 'not exist'])
-        ;
+            ->andWhere(['value' => 'not exist']);
         $dependency->reusable = false;
-        $dependency->method = static fn (Query $query, $db) => $query->orWhere(['value' => 'initial'])->exists($db);
+        $dependency->method = function (Query $query, $db) {
+            return $query->orWhere(['value' => 'initial'])->exists($db);
+        };
 
         $dependency->evaluateDependency($cache);
         $this->assertFalse($dependency->isChanged($cache));

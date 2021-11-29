@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -15,7 +12,6 @@ use yii\console\Response;
 
 /**
  * @author Misbahul D Munir <misbahuldmunir@gmail.com>
- *
  * @since 2.0
  */
 class FakeController extends Controller
@@ -54,14 +50,14 @@ class FakeController extends Controller
         ];
     }
 
-    public function actionIndex(): void
+    public function actionIndex()
     {
         self::$_wasActionIndexCalled = true;
     }
 
     public function actionAksi1($fromParam, $other = 'default')
     {
-        return [$fromParam, $other];
+        return[$fromParam, $other];
     }
 
     public function actionAksi2(array $values, $value)
@@ -69,7 +65,7 @@ class FakeController extends Controller
         return [$values, $value];
     }
 
-    public function actionAksi3($available, $missing): void
+    public function actionAksi3($available, $missing)
     {
     }
 
@@ -107,7 +103,6 @@ class FakeController extends Controller
     {
         $response = new Response();
         $response->exitStatus = (int) $status;
-
         return $response;
     }
 }

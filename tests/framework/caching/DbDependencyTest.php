@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -16,16 +13,14 @@ use yiiunit\framework\db\DatabaseTestCase;
 
 /**
  * @group caching
- *
- * @internal
- * @coversNothing
  */
-final class DbDependencyTest extends DatabaseTestCase
+class DbDependencyTest extends DatabaseTestCase
 {
     /**
      * {@inheritdoc}
      */
     protected $driverName = 'sqlite';
+
 
     /**
      * {@inheritdoc}
@@ -44,7 +39,7 @@ final class DbDependencyTest extends DatabaseTestCase
         $db->createCommand()->insert('dependency_item', ['value' => 'initial'])->execute();
     }
 
-    public function testIsChanged(): void
+    public function testIsChanged()
     {
         $db = $this->getConnection(false);
         $cache = new ArrayCache();
