@@ -22,7 +22,7 @@ use yii\caching\DbCache;
  * @internal
  * @coversNothing
  */
-class DbCacheTest extends CacheTestCase
+final class DbCacheTest extends CacheTestCase
 {
     private $_cacheInstance;
     private $_connection;
