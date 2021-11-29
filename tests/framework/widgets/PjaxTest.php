@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -17,7 +14,7 @@ use yiiunit\TestCase;
 
 class PjaxTest extends TestCase
 {
-    public function testGeneratedIdByPjaxWidget(): void
+    public function testGeneratedIdByPjaxWidget()
     {
         ListView::$counter = 0;
         Pjax::$counter = 0;
@@ -45,15 +42,17 @@ class PjaxTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/15536
      */
-    public function testShouldTriggerInitEvent(): void
+    public function testShouldTriggerInitEvent()
     {
         $initTriggered = false;
         ob_start();
-        $pjax = new Pjax([
-                'on init' => static function () use (&$initTriggered): void {
+        $pjax = new Pjax(
+            [
+                'on init' => function () use (&$initTriggered) {
                     $initTriggered = true;
-                },
-            ]);
+                }
+            ]
+        );
         ob_end_clean();
         $this->assertTrue($initTriggered);
     }

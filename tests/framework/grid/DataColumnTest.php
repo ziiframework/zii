@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,7 +7,6 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\grid;
 
-use ReflectionMethod;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
@@ -30,7 +26,7 @@ class DataColumnTest extends \yiiunit\TestCase
     /**
      * @see DataColumn::getHeaderCellLabel()
      */
-    public function testColumnLabelsOnEmptyArrayProvider(): void
+    public function testColumnLabels_OnEmpty_ArrayProvider()
     {
         $this->mockApplication();
         $grid = new GridView([
@@ -42,9 +38,8 @@ class DataColumnTest extends \yiiunit\TestCase
             'columns' => ['customer_id', 'total'],
         ]);
         $labels = [];
-
         foreach ($grid->columns as $column) {
-            $method = new ReflectionMethod($column, 'getHeaderCellLabel');
+            $method = new \ReflectionMethod($column, 'getHeaderCellLabel');
             $method->setAccessible(true);
             $labels[] = $method->invoke($column);
         }
@@ -54,7 +49,7 @@ class DataColumnTest extends \yiiunit\TestCase
     /**
      * @see DataColumn::getHeaderCellLabel()
      */
-    public function testColumnLabelsOnEmptyArrayProviderWithFilterModel(): void
+    public function testColumnLabels_OnEmpty_ArrayProvider_WithFilterModel()
     {
         $this->mockApplication();
         $grid = new GridView([
@@ -66,9 +61,8 @@ class DataColumnTest extends \yiiunit\TestCase
             'filterModel' => new Order(),
         ]);
         $labels = [];
-
         foreach ($grid->columns as $column) {
-            $method = new ReflectionMethod($column, 'getHeaderCellLabel');
+            $method = new \ReflectionMethod($column, 'getHeaderCellLabel');
             $method->setAccessible(true);
             $labels[] = $method->invoke($column);
         }
@@ -79,7 +73,7 @@ class DataColumnTest extends \yiiunit\TestCase
      * @see DataColumn::$filter
      * @see DataColumn::renderFilterCellContent()
      */
-    public function testFilterInputString(): void
+    public function testFilterInput_String()
     {
         $this->mockApplication();
         $filterInput = '<input type="text"/>';
@@ -97,7 +91,7 @@ class DataColumnTest extends \yiiunit\TestCase
         ]);
         //print_r($grid->columns);exit();
         $dataColumn = $grid->columns[0];
-        $method = new ReflectionMethod($dataColumn, 'renderFilterCellContent');
+        $method = new \ReflectionMethod($dataColumn, 'renderFilterCellContent');
         $method->setAccessible(true);
         $result = $method->invoke($dataColumn);
         $this->assertEquals($result, $filterInput);
@@ -107,7 +101,7 @@ class DataColumnTest extends \yiiunit\TestCase
      * @see DataColumn::$filter
      * @see DataColumn::renderFilterCellContent()
      */
-    public function testFilterHasMaxLengthWhenIsAnActiveTextInput(): void
+    public function testFilterHasMaxLengthWhenIsAnActiveTextInput()
     {
         $this->mockApplication([
             'components' => [
@@ -121,7 +115,7 @@ class DataColumnTest extends \yiiunit\TestCase
         ActiveRecord::$db = Yii::$app->getDb();
         Yii::$app->getDb()->createCommand()->createTable(Singer::tableName(), [
             'firstName' => 'string',
-            'lastName' => 'string',
+            'lastName' => 'string'
         ])->execute();
 
         $filterInput = '<input type="text" class="form-control" name="Singer[lastName]" maxlength="25">';
@@ -129,22 +123,23 @@ class DataColumnTest extends \yiiunit\TestCase
             'dataProvider' => new ActiveDataProvider(),
             'filterModel' => new Singer(),
             'columns' => [
-                0 => 'lastName',
+                0 => 'lastName'
             ],
         ]);
 
         $dataColumn = $grid->columns[0];
-        $method = new ReflectionMethod($dataColumn, 'renderFilterCellContent');
+        $method = new \ReflectionMethod($dataColumn, 'renderFilterCellContent');
         $method->setAccessible(true);
         $result = $method->invoke($dataColumn);
         $this->assertEquals($result, $filterInput);
     }
 
+
     /**
      * @see DataColumn::$filter
      * @see DataColumn::renderFilterCellContent()
      */
-    public function testFilterInputArray(): void
+    public function testFilterInput_Array()
     {
         $this->mockApplication([
             'components' => [
@@ -177,7 +172,7 @@ class DataColumnTest extends \yiiunit\TestCase
         ]);
 
         $dataColumn = $grid->columns[0];
-        $method = new ReflectionMethod($dataColumn, 'renderFilterCellContent');
+        $method = new \ReflectionMethod($dataColumn, 'renderFilterCellContent');
         $method->setAccessible(true);
         $result = $method->invoke($dataColumn);
 
@@ -195,7 +190,7 @@ HTML
      * @see DataColumn::$filter
      * @see DataColumn::renderFilterCellContent()
      */
-    public function testFilterInputFormatBoolean(): void
+    public function testFilterInput_FormatBoolean()
     {
         $this->mockApplication([
             'components' => [
@@ -227,7 +222,7 @@ HTML
         ]);
 
         $dataColumn = $grid->columns[0];
-        $method = new ReflectionMethod($dataColumn, 'renderFilterCellContent');
+        $method = new \ReflectionMethod($dataColumn, 'renderFilterCellContent');
         $method->setAccessible(true);
         $result = $method->invoke($dataColumn);
 
@@ -245,7 +240,7 @@ HTML
      * @see DataColumn::$filterAttribute
      * @see DataColumn::renderFilterCellContent()
      */
-    public function testFilterInputWithFilterAttribute(): void
+    public function testFilterInputWithFilterAttribute()
     {
         $this->mockApplication();
 
@@ -263,7 +258,7 @@ HTML
         ]);
 
         $dataColumn = $grid->columns[0];
-        $method = new ReflectionMethod($dataColumn, 'renderFilterCellContent');
+        $method = new \ReflectionMethod($dataColumn, 'renderFilterCellContent');
         $method->setAccessible(true);
         $result = $method->invoke($dataColumn);
 
