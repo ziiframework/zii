@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -21,16 +18,13 @@ namespace yiiunit\framework\i18n {
          * Emulate disabled intl extension.
          *
          * Enable it only for tests prefixed with testIntl.
-         *
          * @param Testcase $test
          */
-        public static function setIntlStatus($test): void
+        public static function setIntlStatus($test)
         {
             static::$enableIntl = null;
-
             if (strncmp($test->getName(false), 'testIntl', 8) === 0) {
                 static::$enableIntl = true;
-
                 if (!extension_loaded('intl')) {
                     $test->markTestSkipped('intl extension is not installed.');
                 }
@@ -39,7 +33,7 @@ namespace yiiunit\framework\i18n {
             }
         }
 
-        public static function resetIntlStatus(): void
+        public static function resetIntlStatus()
         {
             static::$enableIntl = null;
         }

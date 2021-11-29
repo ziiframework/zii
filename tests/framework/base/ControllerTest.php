@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -22,7 +19,7 @@ class ControllerTest extends TestCase
 {
     public static $actionRuns = [];
 
-    public function testRunAction(): void
+    public function testRunAction()
     {
         $this->mockApplication();
 
@@ -51,12 +48,11 @@ class ControllerTest extends TestCase
 
     /**
      * @dataProvider createInlineActionProvider
-     *
-     * @param string      $controllerClass
-     * @param string      $actionId
+     * @param string $controllerClass
+     * @param string $actionId
      * @param string|null $expectedActionMethod
      */
-    public function testCreateInlineAction($controllerClass, $actionId, $expectedActionMethod): void
+    public function testCreateInlineAction($controllerClass, $actionId, $expectedActionMethod)
     {
         $this->mockApplication();
         /** @var Controller $controller */
@@ -87,7 +83,7 @@ class ControllerTest extends TestCase
      *
      * @dataProvider actionIdMethodProvider
      */
-    public function testActionIdMethod($input, $expected): void
+    public function testActionIdMethod($input, $expected)
     {
         $this->assertSame($expected, preg_match('/^(?:[a-z0-9_]+-)*[a-z0-9_]+$/', $input));
     }
@@ -111,46 +107,51 @@ class ControllerTest extends TestCase
     }
 }
 
+
 class TestController extends Controller
 {
     public function actionTest1()
     {
         ControllerTest::$actionRuns[] = $this->action->uniqueId;
-
         return 'test1';
     }
 
     public function actionTest2()
     {
         ControllerTest::$actionRuns[] = $this->action->uniqueId;
-
         return 'test2';
     }
 
-    public function actionTest3(): void
+    public function actionTest3()
     {
+
     }
 
-    public function actionTestTest(): void
+    public function actionTestTest()
     {
+
     }
 
-    public function actionTest_test(): void
+    public function actionTest_test()
     {
+
     }
 }
 
 class Test1Controller extends Controller
 {
-    public function actionTest_1(): void
+    public function actionTest_1()
     {
+
     }
 
-    public function actionTest_test(): void
+    public function actionTest_test()
     {
+
     }
 
-    public function actionTestTest_test_2(): void
+    public function actionTestTest_test_2()
     {
+
     }
 }

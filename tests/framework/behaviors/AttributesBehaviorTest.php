@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -18,7 +15,6 @@ use yiiunit\TestCase;
 
 /**
  * Unit test for [[\yii\behaviors\AttributesBehavior]].
- *
  * @see AttributesBehavior
  *
  * @group behaviors
@@ -99,13 +95,17 @@ class AttributesBehaviorTest extends TestCase
 
     /**
      * @dataProvider preserveNonEmptyValuesDataProvider
-     *
-     * @param string      $aliasExpected
-     * @param bool        $preserveNonEmptyValues
-     * @param string      $name
+     * @param string $aliasExpected
+     * @param bool $preserveNonEmptyValues
+     * @param string $name
      * @param string|null $alias
      */
-    public function testPreserveNonEmptyValues($aliasExpected, $preserveNonEmptyValues, $name, $alias): void {
+    public function testPreserveNonEmptyValues(
+        $aliasExpected,
+        $preserveNonEmptyValues,
+        $name,
+        $alias
+    ) {
         $model = new ActiveRecordWithAttributesBehavior();
         $model->attributesBehavior->preserveNonEmptyValues = $preserveNonEmptyValues;
         $model->name = $name;
@@ -140,13 +140,17 @@ class AttributesBehaviorTest extends TestCase
 
     /**
      * @dataProvider orderProvider
-     *
      * @param string $aliasExpected
-     * @param array  $order
+     * @param array $order
      * @param string $name
      * @param string $alias
      */
-    public function testOrder($aliasExpected, $order, $name, $alias): void {
+    public function testOrder(
+        $aliasExpected,
+        $order,
+        $name,
+        $alias
+    ) {
         $model = new ActiveRecordWithAttributesBehavior();
         $model->attributesBehavior->order = $order;
         $model->name = $name;
@@ -160,9 +164,10 @@ class AttributesBehaviorTest extends TestCase
 /**
  * Test Active Record class with [[AttributesBehavior]] behavior attached.
  *
- * @property int                $id
- * @property string             $name
- * @property string             $alias
+ * @property int $id
+ * @property string $name
+ * @property string $alias
+ *
  * @property AttributesBehavior $attributesBehavior
  */
 class ActiveRecordWithAttributesBehavior extends ActiveRecord
@@ -177,10 +182,14 @@ class ActiveRecordWithAttributesBehavior extends ActiveRecord
                 'class' => AttributesBehavior::className(),
                 'attributes' => [
                     'alias' => [
-                        self::EVENT_BEFORE_VALIDATE => static fn ($event) => $event->sender->name,
+                        self::EVENT_BEFORE_VALIDATE => function ($event) {
+                            return $event->sender->name;
+                        },
                     ],
                     'name' => [
-                        self::EVENT_BEFORE_VALIDATE => static fn ($event, $attribute) => $attribute . ': ' . $event->sender->alias,
+                        self::EVENT_BEFORE_VALIDATE => function ($event, $attribute) {
+                            return $attribute . ': ' . $event->sender->alias;
+                        },
                     ],
                 ],
             ],

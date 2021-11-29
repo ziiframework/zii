@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -38,7 +35,6 @@ class AccessRuleTest extends \yiiunit\TestCase
 
     /**
      * @param string $method
-     *
      * @return Request
      */
     protected function mockRequest($method = 'GET')
@@ -54,7 +50,6 @@ class AccessRuleTest extends \yiiunit\TestCase
 
     /**
      * @param string $userid optional user id
-     *
      * @return User
      */
     protected function mockUser($userid = null)
@@ -63,7 +58,6 @@ class AccessRuleTest extends \yiiunit\TestCase
             'identityClass' => UserIdentity::className(),
             'enableAutoLogin' => false,
         ]);
-
         if ($userid !== null) {
             $user->setIdentity(UserIdentity::findIdentity($userid));
         }
@@ -77,7 +71,6 @@ class AccessRuleTest extends \yiiunit\TestCase
     protected function mockAction()
     {
         $controller = new Controller('site', Yii::$app);
-
         return new Action('test', $controller);
     }
 
@@ -127,7 +120,7 @@ class AccessRuleTest extends \yiiunit\TestCase
         return $auth;
     }
 
-    public function testMatchAction(): void
+    public function testMatchAction()
     {
         $action = $this->mockAction();
         $user = false;
@@ -155,7 +148,7 @@ class AccessRuleTest extends \yiiunit\TestCase
         $this->assertNull($rule->allows($action, $user, $request));
     }
 
-    public function testMatchController(): void
+    public function testMatchController()
     {
         $action = $this->mockAction();
         $user = false;
@@ -187,7 +180,7 @@ class AccessRuleTest extends \yiiunit\TestCase
     /**
      * @depends testMatchController
      */
-    public function testMatchControllerWildcard(): void
+    public function testMatchControllerWildcard()
     {
         $action = $this->mockAction();
         $user = false;
@@ -219,10 +212,10 @@ class AccessRuleTest extends \yiiunit\TestCase
      * Data provider for testMatchRole.
      *
      * @return array or arrays
-     *               the id of the action
-     *               should the action allow (true) or disallow (false)
-     *               test user id
-     *               expected match result (true, false, null)
+     *           the id of the action
+     *           should the action allow (true) or disallow (false)
+     *           test user id
+     *           expected match result (true, false, null)
      */
     public function matchRoleProvider()
     {
@@ -247,14 +240,14 @@ class AccessRuleTest extends \yiiunit\TestCase
             ['update', true,  'unknown', ['authorID' => 'user2'], null],
 
             // user2 is author, can only edit own posts
-            ['update', true,  'user2',   static fn () => ['authorID' => 'user2'], true],
-            ['update', true,  'user2',   static fn () => ['authorID' => 'user1'], null],
+            ['update', true,  'user2',   function () { return ['authorID' => 'user2']; }, true],
+            ['update', true,  'user2',   function () { return ['authorID' => 'user1']; }, null],
             // user1 is admin, can update all posts
-            ['update', true,  'user1',   static fn () => ['authorID' => 'user1'], true],
-            ['update', true,  'user1',   static fn () => ['authorID' => 'user2'], true],
+            ['update', true,  'user1',   function () { return ['authorID' => 'user1']; }, true],
+            ['update', true,  'user1',   function () { return ['authorID' => 'user2']; }, true],
             // unknown user can not edit anything
-            ['update', true,  'unknown', static fn () => ['authorID' => 'user1'], null],
-            ['update', true,  'unknown', static fn () => ['authorID' => 'user2'], null],
+            ['update', true,  'unknown', function () { return ['authorID' => 'user1']; }, null],
+            ['update', true,  'unknown', function () { return ['authorID' => 'user2']; }, null],
         ];
     }
 
@@ -262,14 +255,13 @@ class AccessRuleTest extends \yiiunit\TestCase
      * Test that a user matches certain roles.
      *
      * @dataProvider matchRoleProvider
-     *
-     * @param string        $actionid   the action id
-     * @param bool          $allow      whether the rule should allow access
-     * @param string        $userid     the userid to check
+     * @param string $actionid the action id
+     * @param bool $allow whether the rule should allow access
+     * @param string $userid the userid to check
      * @param array|Closure $roleParams params for $roleParams
-     * @param bool          $expected   the expected result or null
+     * @param bool $expected the expected result or null
      */
-    public function testMatchRole($actionid, $allow, $userid, $roleParams, $expected): void
+    public function testMatchRole($actionid, $allow, $userid, $roleParams, $expected)
     {
         $action = $this->mockAction();
         $auth = $this->mockAuthManager();
@@ -294,7 +286,7 @@ class AccessRuleTest extends \yiiunit\TestCase
      *
      * @see https://github.com/yiisoft/yii2/issues/4793
      */
-    public function testMatchRoleWithoutUser(): void
+    public function testMatchRoleWithoutUser()
     {
         $action = $this->mockAction();
         $request = $this->mockRequest();
@@ -308,7 +300,7 @@ class AccessRuleTest extends \yiiunit\TestCase
         $rule->allows($action, false, $request);
     }
 
-    public function testMatchRoleSpecial(): void
+    public function testMatchRoleSpecial()
     {
         $action = $this->mockAction();
         $request = $this->mockRequest();
@@ -317,7 +309,7 @@ class AccessRuleTest extends \yiiunit\TestCase
 
         $rule = new AccessRule();
         $rule->allow = true;
-        $rule->roleParams = function (): void {
+        $rule->roleParams = function () {
             $this->assertTrue(false, 'Should not be executed');
         };
 
@@ -334,7 +326,7 @@ class AccessRuleTest extends \yiiunit\TestCase
         $this->assertTrue($rule->allows($action, $guest, $request));
     }
 
-    public function testMatchRolesAndPermissions(): void
+    public function testMatchRolesAndPermissions()
     {
         $action = $this->mockAction();
         $user = $this->getMockBuilder('\yii\web\User')->getMock();
@@ -372,9 +364,9 @@ class AccessRuleTest extends \yiiunit\TestCase
     }
 
     /**
-     * Test that callable object can be used as roleParams values.
+     * Test that callable object can be used as roleParams values
      */
-    public function testMatchRoleWithRoleParamsCallable(): void
+    public function testMatchRoleWithRoleParamsCallable()
     {
         $action = $this->mockAction();
         $action->id = 'update';
@@ -392,10 +384,10 @@ class AccessRuleTest extends \yiiunit\TestCase
         $user = $this->mockUser('user2');
         $user->accessChecker = $auth;
 
-        $this->assertTrue($rule->allows($action, $user, $request));
+        $this->assertEquals(true, $rule->allows($action, $user, $request));
     }
 
-    public function testMatchVerb(): void
+    public function testMatchVerb()
     {
         $action = $this->mockAction();
         $user = false;
@@ -426,7 +418,7 @@ class AccessRuleTest extends \yiiunit\TestCase
 
     // TODO test match custom callback
 
-    public function testMatchIP(): void
+    public function testMatchIP()
     {
         $action = $this->mockAction();
         $user = false;
@@ -516,7 +508,7 @@ class AccessRuleTest extends \yiiunit\TestCase
         $this->assertNull($rule->allows($action, $user, $request));
     }
 
-    public function testMatchIPWildcard(): void
+    public function testMatchIPWildcard()
     {
         $action = $this->mockAction();
         $user = false;
@@ -557,7 +549,7 @@ class AccessRuleTest extends \yiiunit\TestCase
         $this->assertNull($rule->allows($action, $user, $request));
     }
 
-    public function testMatchIPMask(): void
+    public function testMatchIPMask()
     {
         $action = $this->mockAction();
         $user = false;

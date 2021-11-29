@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -17,9 +14,10 @@ use yiiunit\TestCase;
  */
 class MimeTest extends TestCase
 {
-    public function testMimeAliases(): void
+    public function testMimeAliases()
     {
-        $this->assertSame([
+        $this->assertSame(
+            [
                 'text/xml' => 'application/xml',
                 'image/svg' => 'image/svg+xml',
                 'image/x-bmp' => 'image/bmp',
@@ -32,12 +30,15 @@ class MimeTest extends TestCase
                 'application/bmp' => 'image/bmp',
                 'application/x-bmp' => 'image/bmp',
                 'application/x-win-bitmap' => 'image/bmp',
-            ], require __DIR__ . '/../../../src/helpers/mimeAliases.php');
+            ],
+            require __DIR__ . '/../../../src/helpers/mimeAliases.php'
+        );
     }
 
-    public function testMimeTypes(): void
+    public function testMimeTypes()
     {
-        $this->assertSame([
+        $this->assertSame(
+            [
                 '3dml' => 'text/vnd.in3d.3dml',
                 '3ds' => 'image/x-3ds',
                 '3g2' => 'video/3gpp2',
@@ -1023,6 +1024,8 @@ class MimeTest extends TestCase
                 'zir' => 'application/vnd.zul',
                 'zirz' => 'application/vnd.zul',
                 'zmm' => 'application/vnd.handheld-entertainment+xml',
-            ], require __DIR__ . '/../../../src/helpers/mimeTypes.php');
+            ],
+            require __DIR__ . '/../../../src/helpers/mimeTypes.php'
+        );
     }
 }

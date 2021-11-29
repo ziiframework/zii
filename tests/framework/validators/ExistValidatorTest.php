@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -30,7 +27,7 @@ abstract class ExistValidatorTest extends DatabaseTestCase
         ActiveRecord::$db = $this->getConnection();
     }
 
-    public function testValidateValueExpectedException(): void
+    public function testValidateValueExpectedException()
     {
         try {
             $val = new ExistValidator();
@@ -51,7 +48,7 @@ abstract class ExistValidatorTest extends DatabaseTestCase
         }
     }
 
-    public function testValidateValue(): void
+    public function testValidateValue()
     {
         $val = new ExistValidator(['targetClass' => ValidatorTestRefModel::className(), 'targetAttribute' => 'id']);
         $this->assertTrue($val->validate(2));
@@ -60,7 +57,7 @@ abstract class ExistValidatorTest extends DatabaseTestCase
         $this->assertFalse($val->validate(['1']));
     }
 
-    public function testValidateAttribute(): void
+    public function testValidateAttribute()
     {
         // existing value on different table
         $val = new ExistValidator(['targetClass' => ValidatorTestMainModel::className(), 'targetAttribute' => 'id']);
@@ -137,7 +134,7 @@ abstract class ExistValidatorTest extends DatabaseTestCase
         $this->assertTrue($m->hasErrors('test_val'));
     }
 
-    public function testValidateCompositeKeys(): void
+    public function testValidateCompositeKeys()
     {
         $val = new ExistValidator([
             'targetClass' => OrderItem::className(),
@@ -183,7 +180,7 @@ abstract class ExistValidatorTest extends DatabaseTestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/14150
      */
-    public function testTargetTableWithAlias(): void
+    public function testTargetTableWithAlias()
     {
         $oldTableName = OrderItem::$tableName;
         OrderItem::$tableName = '{{%order_item}}';
@@ -202,10 +199,9 @@ abstract class ExistValidatorTest extends DatabaseTestCase
 
     /**
      * Test expresssion in targetAttribute.
-     *
      * @see https://github.com/yiisoft/yii2/issues/14304
      */
-    public function testExpresionInAttributeColumnName(): void
+    public function testExpresionInAttributeColumnName()
     {
         $val = new ExistValidator([
            'targetClass' => OrderItem::className(),
@@ -217,7 +213,7 @@ abstract class ExistValidatorTest extends DatabaseTestCase
         $this->assertFalse($m->hasErrors('id'));
     }
 
-    public function testTargetRelation(): void
+    public function testTargetRelation()
     {
         $val = new ExistValidator(['targetRelation' => 'references']);
 
@@ -230,16 +226,16 @@ abstract class ExistValidatorTest extends DatabaseTestCase
         $this->assertTrue($m->hasErrors('id'));
     }
 
-    public function testTargetRelationWithFilter(): void
+    public function testTargetRelationWithFilter()
     {
-        $val = new ExistValidator(['targetRelation' => 'references', 'filter' => static function ($query): void {
+        $val = new ExistValidator(['targetRelation' => 'references', 'filter' => function ($query) {
             $query->andWhere(['a_field' => 'ref_to_2']);
         }]);
         $m = ValidatorTestMainModel::findOne(2);
         $val->validateAttribute($m, 'id');
         $this->assertFalse($m->hasErrors('id'));
 
-        $val = new ExistValidator(['targetRelation' => 'references', 'filter' => static function ($query): void {
+        $val = new ExistValidator(['targetRelation' => 'references', 'filter' => function ($query) {
             $query->andWhere(['a_field' => 'ref_to_3']);
         }]);
         $m = ValidatorTestMainModel::findOne(2);
@@ -247,13 +243,13 @@ abstract class ExistValidatorTest extends DatabaseTestCase
         $this->assertTrue($m->hasErrors('id'));
     }
 
-    public function testForceMaster(): void
+    public function testForceMaster()
     {
         $connection = $this->getConnectionWithInvalidSlave();
         ActiveRecord::$db = $connection;
 
         $model = null;
-        $connection->useMaster(static function () use (&$model): void {
+        $connection->useMaster(function() use (&$model) {
             $model = ValidatorTestMainModel::findOne(2);
         });
 

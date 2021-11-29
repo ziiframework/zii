@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -24,7 +21,7 @@ class GettextPoFileTest extends TestCase
         $this->mockApplication();
     }
 
-    public function testLoad(): void
+    public function testLoad()
     {
         $poFile = new GettextPoFile();
         $poFilePath = __DIR__ . '/../../data/i18n/test.po';
@@ -54,7 +51,7 @@ class GettextPoFileTest extends TestCase
         $this->assertTrue(in_array("тест1\\\nтест2\n\\\\\nтест3", $context2));
     }
 
-    public function testSave(): void
+    public function testSave()
     {
         // initial data
         $s = chr(4);
@@ -71,11 +68,9 @@ class GettextPoFileTest extends TestCase
 
         // create temporary directory and dump messages
         $poFileDirectory = __DIR__ . '/../../runtime/i18n';
-
         if (!is_dir($poFileDirectory)) {
             mkdir($poFileDirectory);
         }
-
         if (is_file($poFileDirectory . '/test.po')) {
             unlink($poFileDirectory . '/test.po');
         }

@@ -1,12 +1,6 @@
 <?php
 
-declare(strict_types=1);
+return new class() extends \yii\base\Model
+{
 
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
-return new class() extends \yii\base\Model {
 };
