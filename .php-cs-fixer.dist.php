@@ -49,6 +49,7 @@ return (new PhpCsFixer\Config())
         'single_line_after_imports' => true,
         'strict_comparison' => false, // TODO remove
         'echo_tag_syntax' => ['format' => 'short'],
+        'no_unneeded_curly_braces' => true,
         'blank_line_after_namespace' => true,
         'blank_line_before_statement' => [
             'statements' => [
