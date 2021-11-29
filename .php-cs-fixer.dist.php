@@ -12,6 +12,7 @@ return (new PhpCsFixer\Config())
     '@PhpCsFixer' => true,
     '@PhpCsFixer:risky' => true,
     'yoda_style' => false,
+    'concat_space' => ['spacing' => 'one'],
     'heredoc_indentation' => false,
     'method_argument_space' => [
         'on_multiline' => 'ensure_single_line',
