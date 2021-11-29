@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,9 +11,9 @@
 namespace yiiunit\data\ar;
 
 /**
- * @property int $id
+ * @property int    $id
  * @property string $alpha_string_identifier
- * @property Alpha $alpha
+ * @property Alpha  $alpha
  */
 class Beta extends ActiveRecord
 {

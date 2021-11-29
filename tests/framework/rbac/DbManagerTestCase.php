@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -24,6 +27,7 @@ use yiiunit\framework\log\ArrayTarget;
 
 /**
  * DbManagerTestCase.
+ *
  * @group db
  * @group rbac
  */
@@ -37,7 +41,7 @@ abstract class DbManagerTestCase extends ManagerTestCase
      */
     protected $db;
 
-    protected static function runConsoleAction($route, $params = [])
+    protected static function runConsoleAction($route, $params = []): void
     {
         if (Yii::$app === null) {
             new Application([
@@ -61,6 +65,7 @@ abstract class DbManagerTestCase extends ManagerTestCase
         ob_start();
         $result = Yii::$app->runAction($route, $params);
         echo 'Result is ' . $result;
+
         if ($result !== ExitCode::OK) {
             ob_end_flush();
         } else {
@@ -91,7 +96,7 @@ abstract class DbManagerTestCase extends ManagerTestCase
     protected function setUp(): void
     {
         if (defined('HHVM_VERSION') && static::$driverName === 'pgsql') {
-            static::markTestSkipped('HHVM PDO for pgsql does not work with binary columns, which are essential for rbac schema. See https://github.com/yiisoft/yii2/issues/14244');
+            $this->markTestSkipped('HHVM PDO for pgsql does not work with binary columns, which are essential for rbac schema. See https://github.com/yiisoft/yii2/issues/14244');
         }
         parent::setUp();
         $this->auth = $this->createManager();
@@ -101,6 +106,7 @@ abstract class DbManagerTestCase extends ManagerTestCase
     {
         parent::tearDown();
         $this->auth->removeAll();
+
         if ($this->db && static::$driverName !== 'sqlite') {
             $this->db->close();
         }
@@ -111,6 +117,7 @@ abstract class DbManagerTestCase extends ManagerTestCase
      * @throws \yii\base\InvalidParamException
      * @throws \yii\db\Exception
      * @throws \yii\base\InvalidConfigException
+     *
      * @return \yii\db\Connection
      */
     public function getConnection()
@@ -126,13 +133,16 @@ abstract class DbManagerTestCase extends ManagerTestCase
     {
         $db = new Connection();
         $db->dsn = static::$database['dsn'];
+
         if (isset(static::$database['username'])) {
             $db->username = static::$database['username'];
             $db->password = static::$database['password'];
         }
+
         if (isset(static::$database['attributes'])) {
             $db->attributes = static::$database['attributes'];
         }
+
         if (!$db->isActive) {
             $db->open();
         }
@@ -148,7 +158,7 @@ abstract class DbManagerTestCase extends ManagerTestCase
         return new DbManager(['db' => $this->getConnection(), 'defaultRoles' => ['myDefaultRole']]);
     }
 
-    private function prepareRoles($userId)
+    private function prepareRoles($userId): void
     {
         $this->auth->removeAll();
 
@@ -176,11 +186,12 @@ abstract class DbManagerTestCase extends ManagerTestCase
 
     /**
      * @dataProvider emptyValuesProvider
+     *
      * @param mixed $userId
      * @param mixed $searchUserId
      * @param mixed $isValid
      */
-    public function testGetPermissionsByUserWithEmptyValue($userId, $searchUserId, $isValid)
+    public function testGetPermissionsByUserWithEmptyValue($userId, $searchUserId, $isValid): void
     {
         $this->prepareRoles($userId);
 
@@ -196,11 +207,12 @@ abstract class DbManagerTestCase extends ManagerTestCase
 
     /**
      * @dataProvider emptyValuesProvider
+     *
      * @param mixed $userId
      * @param mixed $searchUserId
      * @param mixed $isValid
      */
-    public function testGetRolesByUserWithEmptyValue($userId, $searchUserId, $isValid)
+    public function testGetRolesByUserWithEmptyValue($userId, $searchUserId, $isValid): void
     {
         $this->prepareRoles($userId);
 
@@ -216,11 +228,12 @@ abstract class DbManagerTestCase extends ManagerTestCase
 
     /**
      * @dataProvider emptyValuesProvider
+     *
      * @param mixed $userId
      * @param mixed $searchUserId
      * @param mixed $isValid
      */
-    public function testGetAssignmentWithEmptyValue($userId, $searchUserId, $isValid)
+    public function testGetAssignmentWithEmptyValue($userId, $searchUserId, $isValid): void
     {
         $this->prepareRoles($userId);
 
@@ -236,11 +249,12 @@ abstract class DbManagerTestCase extends ManagerTestCase
 
     /**
      * @dataProvider emptyValuesProvider
+     *
      * @param mixed $userId
      * @param mixed $searchUserId
      * @param mixed $isValid
      */
-    public function testGetAssignmentsWithEmptyValue($userId, $searchUserId, $isValid)
+    public function testGetAssignmentsWithEmptyValue($userId, $searchUserId, $isValid): void
     {
         $this->prepareRoles($userId);
 
@@ -257,11 +271,12 @@ abstract class DbManagerTestCase extends ManagerTestCase
 
     /**
      * @dataProvider emptyValuesProvider
+     *
      * @param mixed $userId
      * @param mixed $searchUserId
      * @param mixed $isValid
      */
-    public function testRevokeWithEmptyValue($userId, $searchUserId, $isValid)
+    public function testRevokeWithEmptyValue($userId, $searchUserId, $isValid): void
     {
         $this->prepareRoles($userId);
         $role = $this->auth->getRole('Author');
@@ -277,11 +292,12 @@ abstract class DbManagerTestCase extends ManagerTestCase
 
     /**
      * @dataProvider emptyValuesProvider
+     *
      * @param mixed $userId
      * @param mixed $searchUserId
      * @param mixed $isValid
      */
-    public function testRevokeAllWithEmptyValue($userId, $searchUserId, $isValid)
+    public function testRevokeAllWithEmptyValue($userId, $searchUserId, $isValid): void
     {
         $this->prepareRoles($userId);
 
@@ -297,7 +313,7 @@ abstract class DbManagerTestCase extends ManagerTestCase
     /**
      * Ensure assignments are read from DB only once on subsequent tests.
      */
-    public function testCheckAccessCache()
+    public function testCheckAccessCache(): void
     {
         $this->mockApplication();
         $this->prepareData();
@@ -324,6 +340,7 @@ abstract class DbManagerTestCase extends ManagerTestCase
 
         // verify cache is flushed on assign (createPost is now true)
         $this->auth->assign($this->auth->getRole('admin'), 'reader A');
+
         foreach (['readPost' => true, 'createPost' => true] as $permission => $result) {
             $this->assertEquals($result, $this->auth->checkAccess('reader A', $permission), "Checking $permission");
         }
@@ -331,6 +348,7 @@ abstract class DbManagerTestCase extends ManagerTestCase
 
         // verify cache is flushed on unassign (createPost is now false again)
         $this->auth->revoke($this->auth->getRole('admin'), 'reader A');
+
         foreach (['readPost' => true, 'createPost' => false] as $permission => $result) {
             $this->assertEquals($result, $this->auth->checkAccess('reader A', $permission), "Checking $permission");
         }
@@ -338,6 +356,7 @@ abstract class DbManagerTestCase extends ManagerTestCase
 
         // verify cache is flushed on revokeall
         $this->auth->revokeAll('reader A');
+
         foreach (['readPost' => false, 'createPost' => false] as $permission => $result) {
             $this->assertEquals($result, $this->auth->checkAccess('reader A', $permission), "Checking $permission");
         }
@@ -345,18 +364,20 @@ abstract class DbManagerTestCase extends ManagerTestCase
 
         // verify cache is flushed on removeAllAssignments
         $this->auth->assign($this->auth->getRole('admin'), 'reader A');
+
         foreach (['readPost' => true, 'createPost' => true] as $permission => $result) {
             $this->assertEquals($result, $this->auth->checkAccess('reader A', $permission), "Checking $permission");
         }
         $this->assertSingleQueryToAssignmentsTable($logTarget);
         $this->auth->removeAllAssignments();
+
         foreach (['readPost' => false, 'createPost' => false] as $permission => $result) {
             $this->assertEquals($result, $this->auth->checkAccess('reader A', $permission), "Checking $permission");
         }
         $this->assertSingleQueryToAssignmentsTable($logTarget);
     }
 
-    private function assertSingleQueryToAssignmentsTable($logTarget)
+    private function assertSingleQueryToAssignmentsTable($logTarget): void
     {
         $this->assertCount(1, $logTarget->messages, 'Only one query should have been performed, but there are the following logs: ' . print_r($logTarget->messages, true));
         $this->assertStringContainsString('auth_assignment', $logTarget->messages[0][0], 'Log message should be a query to auth_assignment table');

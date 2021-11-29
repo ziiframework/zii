@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -19,7 +22,7 @@ class POMessageControllerTest extends BaseMessageControllerTest
     protected $messagePath;
     protected $catalog = 'messages';
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -27,7 +30,7 @@ class POMessageControllerTest extends BaseMessageControllerTest
         FileHelper::createDirectory($this->messagePath, 0777);
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
         FileHelper::removeDirectory($this->messagePath);
@@ -58,13 +61,14 @@ class POMessageControllerTest extends BaseMessageControllerTest
     /**
      * {@inheritdoc}
      */
-    protected function saveMessages($messages, $category)
+    protected function saveMessages($messages, $category): void
     {
         $messageFilePath = $this->getMessageFilePath();
         FileHelper::createDirectory(dirname($messageFilePath), 0777);
         $gettext = new GettextPoFile();
 
         $data = [];
+
         foreach ($messages as $message => $translation) {
             $data[$category . chr(4) . $message] = $translation;
         }
@@ -78,11 +82,13 @@ class POMessageControllerTest extends BaseMessageControllerTest
     protected function loadMessages($category)
     {
         $messageFilePath = $this->getMessageFilePath();
+
         if (!file_exists($messageFilePath)) {
             return [];
         }
 
         $gettext = new GettextPoFile();
+
         return $gettext->load($messageFilePath, $category);
     }
 }

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -14,13 +17,16 @@ use yiiunit\TestCase;
 
 /**
  * Dependency (abstract) tests.
+ *
  * @group caching
+ *
  * @author Boudewijn Vahrmeijer <vahrmeijer@gmail.com>
+ *
  * @since 2.0.11
  */
 class DependencyTest extends TestCase
 {
-    public function testResetReusableData()
+    public function testResetReusableData(): void
     {
         $value = ['dummy'];
         $dependency = new MockDependency();
@@ -32,7 +38,7 @@ class DependencyTest extends TestCase
         $this->assertEquals([], $this->getInaccessibleProperty($dependency, '_reusableData'));
     }
 
-    public function testGenerateReusableHash()
+    public function testGenerateReusableHash(): void
     {
         $dependency = $this->getMockForAbstractClass(Dependency::className());
         $dependency->data = 'dummy';
@@ -42,7 +48,7 @@ class DependencyTest extends TestCase
         $this->assertEquals(40, strlen($result));
     }
 
-    public function testIsChanged()
+    public function testIsChanged(): void
     {
         $dependency = $this->getMockForAbstractClass(Dependency::className());
         $cache = $this->getMockForAbstractClass(Cache::className());

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -15,7 +18,7 @@ class UnqueryableQueryMock extends Query
     /**
      * {@inheritdoc}
      */
-    public function one($db = null)
+    public function one($db = null): void
     {
         throw new InvalidCallException();
     }
@@ -23,7 +26,7 @@ class UnqueryableQueryMock extends Query
     /**
      * {@inheritdoc}
      */
-    public function all($db = null)
+    public function all($db = null): void
     {
         throw new InvalidCallException();
     }

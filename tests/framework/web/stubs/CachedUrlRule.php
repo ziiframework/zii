@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -15,7 +18,8 @@ class CachedUrlRule extends UrlRule
 
     public function createUrl($manager, $route, $params)
     {
-        $this->createCounter++;
+        ++$this->createCounter;
+
         return parent::createUrl($manager, $route, $params);
     }
 }
