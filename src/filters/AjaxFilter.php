@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -28,6 +29,7 @@ use yii\web\Request;
  * ```
  *
  * @author Dmitry Dorogin <dmirogin@ya.ru>
+ *
  * @since 2.0.13
  */
 class AjaxFilter extends ActionFilter
@@ -40,7 +42,6 @@ class AjaxFilter extends ActionFilter
      * @var Request the current request. If not set, the `request` application component will be used.
      */
     public $request;
-
 
     /**
      * {@inheritdoc}

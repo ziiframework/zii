@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -13,6 +14,7 @@ use yii\db\ColumnSchemaBuilder as AbstractColumnSchemaBuilder;
  * ColumnSchemaBuilder is the schema builder for MySQL databases.
  *
  * @author Chris Harris <chris@buckshotsoftware.com>
+ *
  * @since 2.0.8
  */
 class ColumnSchemaBuilder extends AbstractColumnSchemaBuilder
@@ -59,10 +61,13 @@ class ColumnSchemaBuilder extends AbstractColumnSchemaBuilder
         switch ($this->getTypeCategory()) {
             case self::CATEGORY_PK:
                 $format = '{type}{length}{comment}{check}{append}{pos}';
+
                 break;
             case self::CATEGORY_NUMERIC:
                 $format = '{type}{length}{unsigned}{notnull}{default}{unique}{comment}{append}{pos}{check}';
+
                 break;
+
             default:
                 $format = '{type}{length}{notnull}{default}{unique}{comment}{append}{pos}{check}';
         }

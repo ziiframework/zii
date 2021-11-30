@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -13,9 +14,10 @@ use yii\db\ExpressionBuilderTrait;
 use yii\db\ExpressionInterface;
 
 /**
- * Class LikeConditionBuilder builds objects of [[LikeCondition]]
+ * Class LikeConditionBuilder builds objects of [[LikeCondition]].
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ *
  * @since 2.0.14
  */
 class LikeConditionBuilder implements ExpressionBuilderInterface
@@ -24,7 +26,7 @@ class LikeConditionBuilder implements ExpressionBuilderInterface
 
     /**
      * @var array map of chars to their replacements in LIKE conditions.
-     * By default it's configured to escape `%`, `_` and `\` with `\`.
+     *            By default it's configured to escape `%`, `_` and `\` with `\`.
      */
     protected $escapingReplacements = [
         '%' => '\%',
@@ -33,10 +35,9 @@ class LikeConditionBuilder implements ExpressionBuilderInterface
     ];
     /**
      * @var string|null character used to escape special characters in LIKE conditions.
-     * By default it's assumed to be `\`.
+     *                  By default it's assumed to be `\`.
      */
     protected $escapeCharacter;
-
 
     /**
      * Method builds the raw SQL from the $expression that will not be additionally
@@ -44,6 +45,7 @@ class LikeConditionBuilder implements ExpressionBuilderInterface
      *
      * @param ExpressionInterface|LikeCondition $expression the expression to be built.
      * @param array $params the binding parameters.
+     *
      * @return string the raw SQL that will not be additionally escaped or quoted.
      */
     public function build(ExpressionInterface $expression, array &$params = [])
@@ -52,11 +54,12 @@ class LikeConditionBuilder implements ExpressionBuilderInterface
         $column = $expression->getColumn();
         $values = $expression->getValue();
         $escape = $expression->getEscapingReplacements();
+
         if ($escape === null || $escape === []) {
             $escape = $this->escapingReplacements;
         }
 
-        list($andor, $not, $operator) = $this->parseOperator($operator);
+        [$andor, $not, $operator] = $this->parseOperator($operator);
 
         if (!is_array($values)) {
             $values = [$values];
@@ -74,6 +77,7 @@ class LikeConditionBuilder implements ExpressionBuilderInterface
 
         $escapeSql = $this->getEscapeSql();
         $parts = [];
+
         foreach ($values as $value) {
             if ($value instanceof ExpressionInterface) {
                 $phName = $this->queryBuilder->buildExpression($value, $params);
@@ -100,6 +104,7 @@ class LikeConditionBuilder implements ExpressionBuilderInterface
 
     /**
      * @param string $operator
+     *
      * @return array
      */
     protected function parseOperator($operator)

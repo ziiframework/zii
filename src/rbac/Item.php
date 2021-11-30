@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -13,12 +14,13 @@ use yii\base\BaseObject;
  * For more details and usage information on Item, see the [guide article on security authorization](guide:security-authorization).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class Item extends BaseObject
 {
-    const TYPE_ROLE = 1;
-    const TYPE_PERMISSION = 2;
+    public const TYPE_ROLE = 1;
+    public const TYPE_PERMISSION = 2;
 
     /**
      * @var int the type of the item. This should be either [[TYPE_ROLE]] or [[TYPE_PERMISSION]].

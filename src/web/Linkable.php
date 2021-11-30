@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,6 +12,7 @@ namespace yii\web;
  * Linkable is the interface that should be implemented by classes that typically represent locatable resources.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 interface Linkable

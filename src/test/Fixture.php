@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -27,16 +28,16 @@ use yii\base\Component;
  * For more details and usage information on Fixture, see the [guide article on fixtures](guide:test-fixtures).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class Fixture extends Component
 {
     /**
      * @var array the fixtures that this fixture depends on. This must be a list of the dependent
-     * fixture class names.
+     *            fixture class names.
      */
     public $depends = [];
-
 
     /**
      * Loads the fixture.

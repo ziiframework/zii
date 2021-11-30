@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -29,6 +30,7 @@ namespace yii\filters\auth;
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @author Benoît Boure <benoit.boure@gmail.com>
+ *
  * @since 2.0.14
  */
 class HttpHeaderAuth extends AuthMethod
@@ -41,7 +43,6 @@ class HttpHeaderAuth extends AuthMethod
      * @var string a pattern to use to extract the HTTP authentication value
      */
     public $pattern;
-
 
     /**
      * {@inheritdoc}
@@ -60,6 +61,7 @@ class HttpHeaderAuth extends AuthMethod
             }
 
             $identity = $user->loginByAccessToken($authHeader, get_class($this));
+
             if ($identity === null) {
                 $this->challenge($response);
                 $this->handleFailure($response);
