@@ -84,15 +84,17 @@ return (new PhpCsFixer\Config())
         'native_function_casing' => false,
         'native_function_invocation' => false,
         'native_function_type_declaration_casing' => true,
+        'fopen_flags' => ['b_mode' => true],
     ])
     ->setFinder(
         PhpCsFixer\Finder::create()
             ->files()
             ->name('*.php')
-            ->in(__DIR__ . '/tests')
-            ->exclude('framework/di/stubs')
-            ->exclude('data/console/migrate_create')
-            ->exclude('data/views')
+            ->in(__DIR__)
+            ->exclude('vendor')
+            ->exclude('tests/framework/di/stubs')
+            ->exclude('tests/data/console/migrate_create')
+            ->exclude('tests/data/views')
             ->notName('add_columns_fk.php')
             ->notName('DetailViewTest.php')
     );
