@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -35,6 +36,7 @@ use yii\web\ForbiddenHttpException;
  * For more details and usage information on ActiveController, see the [guide article on rest controllers](guide:rest-controllers).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class ActiveController extends Controller
@@ -44,16 +46,17 @@ class ActiveController extends Controller
      */
     public $modelClass;
     /**
-     * @var string the scenario used for updating a model.
+     * @var string the scenario used for updating a model
+     *
      * @see \yii\base\Model::scenarios()
      */
     public $updateScenario = Model::SCENARIO_DEFAULT;
     /**
-     * @var string the scenario used for creating a model.
+     * @var string the scenario used for creating a model
+     *
      * @see \yii\base\Model::scenarios()
      */
     public $createScenario = Model::SCENARIO_DEFAULT;
-
 
     /**
      * {@inheritdoc}
@@ -61,6 +64,7 @@ class ActiveController extends Controller
     public function init()
     {
         parent::init();
+
         if ($this->modelClass === null) {
             throw new InvalidConfigException('The "modelClass" property must be set.');
         }
@@ -129,6 +133,7 @@ class ActiveController extends Controller
      * @param string $action the ID of the action to be executed
      * @param object $model the model to be accessed. If null, it means no specific model is being accessed.
      * @param array $params additional parameters
+     *
      * @throws ForbiddenHttpException if the user does not have access
      */
     public function checkAccess($action, $model = null, $params = [])

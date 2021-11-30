@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,8 @@
 
 namespace yii\web;
 
+use ReflectionMethod;
+use ReflectionNamedType;
 use Yii;
 use yii\base\Exception;
 use yii\base\InlineAction;
@@ -21,20 +24,20 @@ use yii\helpers\Url;
  * @property Response $response
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class Controller extends \yii\base\Controller
 {
     /**
      * @var bool whether to enable CSRF validation for the actions in this controller.
-     * CSRF validation is enabled only when both this property and [[\yii\web\Request::enableCsrfValidation]] are true.
+     *           CSRF validation is enabled only when both this property and [[\yii\web\Request::enableCsrfValidation]] are true.
      */
     public $enableCsrfValidation = true;
     /**
-     * @var array the parameters bound to the current action.
+     * @var array the parameters bound to the current action
      */
     public $actionParams = [];
-
 
     /**
      * Renders a view in response to an AJAX request.
@@ -45,8 +48,9 @@ class Controller extends \yii\base\Controller
      * a view to respond to an AJAX request.
      *
      * @param string $view the view name. Please refer to [[render()]] on how to specify a view name.
-     * @param array $params the parameters (name-value pairs) that should be made available in the view.
-     * @return string the rendering result.
+     * @param array $params the parameters (name-value pairs) that should be made available in the view
+     *
+     * @return string the rendering result
      */
     public function renderAjax($view, $params = [])
     {
@@ -65,8 +69,10 @@ class Controller extends \yii\base\Controller
      * return $this->asJson($data);
      * ```
      *
-     * @param mixed $data the data that should be formatted.
-     * @return Response a response that is configured to send `$data` formatted as JSON.
+     * @param mixed $data the data that should be formatted
+     *
+     * @return Response a response that is configured to send `$data` formatted as JSON
+     *
      * @since 2.0.11
      * @see Response::$format
      * @see Response::FORMAT_JSON
@@ -76,6 +82,7 @@ class Controller extends \yii\base\Controller
     {
         $this->response->format = Response::FORMAT_JSON;
         $this->response->data = $data;
+
         return $this->response;
     }
 
@@ -91,8 +98,10 @@ class Controller extends \yii\base\Controller
      * return $this->asXml($data);
      * ```
      *
-     * @param mixed $data the data that should be formatted.
-     * @return Response a response that is configured to send `$data` formatted as XML.
+     * @param mixed $data the data that should be formatted
+     *
+     * @return Response a response that is configured to send `$data` formatted as XML
+     *
      * @since 2.0.11
      * @see Response::$format
      * @see Response::FORMAT_XML
@@ -102,6 +111,7 @@ class Controller extends \yii\base\Controller
     {
         $this->response->format = Response::FORMAT_XML;
         $this->response->data = $data;
+
         return $this->response;
     }
 
@@ -111,34 +121,41 @@ class Controller extends \yii\base\Controller
      * This method will check the parameter names that the action requires and return
      * the provided parameters according to the requirement. If there is any missing parameter,
      * an exception will be thrown.
+     *
      * @param \yii\base\Action $action the action to be bound with parameters
      * @param array $params the parameters to be bound to the action
-     * @return array the valid parameters that the action can run with.
-     * @throws BadRequestHttpException if there are missing or invalid parameters.
+     *
+     * @return array the valid parameters that the action can run with
+     *
+     * @throws BadRequestHttpException if there are missing or invalid parameters
      */
     public function bindActionParams($action, $params)
     {
         if ($action instanceof InlineAction) {
-            $method = new \ReflectionMethod($this, $action->actionMethod);
+            $method = new ReflectionMethod($this, $action->actionMethod);
         } else {
-            $method = new \ReflectionMethod($action, 'run');
+            $method = new ReflectionMethod($action, 'run');
         }
 
         $args = [];
         $missing = [];
         $actionParams = [];
         $requestedParams = [];
+
         foreach ($method->getParameters() as $param) {
             $name = $param->getName();
+
             if (array_key_exists($name, $params)) {
                 $isValid = true;
+
                 if (PHP_VERSION_ID >= 80000) {
-                    $isArray = ($type = $param->getType()) instanceof \ReflectionNamedType && $type->getName() === 'array';
+                    $isArray = ($type = $param->getType()) instanceof ReflectionNamedType && $type->getName() === 'array';
                 } else {
                     $isArray = $param->isArray();
                 }
+
                 if ($isArray) {
-                    $params[$name] = (array)$params[$name];
+                    $params[$name] = (array) $params[$name];
                 } elseif (is_array($params[$name])) {
                     $isValid = false;
                 } elseif (
@@ -147,7 +164,7 @@ class Controller extends \yii\base\Controller
                     && $type->isBuiltin()
                     && ($params[$name] !== null || !$type->allowsNull())
                 ) {
-                    $typeName = PHP_VERSION_ID >= 70100 ? $type->getName() : (string)$type;
+                    $typeName = PHP_VERSION_ID >= 70100 ? $type->getName() : (string) $type;
 
                     if ($params[$name] === '' && $type->allowsNull()) {
                         if ($typeName !== 'string') { // for old string behavior compatibility
@@ -157,30 +174,33 @@ class Controller extends \yii\base\Controller
                         switch ($typeName) {
                             case 'int':
                                 $params[$name] = filter_var($params[$name], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
+
                                 break;
                             case 'float':
                                 $params[$name] = filter_var($params[$name], FILTER_VALIDATE_FLOAT, FILTER_NULL_ON_FAILURE);
+
                                 break;
                             case 'bool':
                                 $params[$name] = filter_var($params[$name], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+
                                 break;
                         }
+
                         if ($params[$name] === null) {
                             $isValid = false;
                         }
                     }
                 }
+
                 if (!$isValid) {
-                    throw new BadRequestHttpException(
-                        Yii::t('yii', 'Invalid data received for parameter "{param}".', ['param' => $name])
-                    );
+                    throw new BadRequestHttpException(Yii::t('yii', 'Invalid data received for parameter "{param}".', ['param' => $name]));
                 }
                 $args[] = $actionParams[$name] = $params[$name];
                 unset($params[$name]);
             } elseif (
                 PHP_VERSION_ID >= 70100
                 && ($type = $param->getType()) !== null
-                && $type instanceof \ReflectionNamedType
+                && $type instanceof ReflectionNamedType
                 && !$type->isBuiltin()
             ) {
                 try {
@@ -198,9 +218,7 @@ class Controller extends \yii\base\Controller
         }
 
         if (!empty($missing)) {
-            throw new BadRequestHttpException(
-                Yii::t('yii', 'Missing required parameters: {params}', ['params' => implode(', ', $missing)])
-            );
+            throw new BadRequestHttpException(Yii::t('yii', 'Missing required parameters: {params}', ['params' => implode(', ', $missing)]));
         }
 
         $this->actionParams = $actionParams;
@@ -249,10 +267,10 @@ class Controller extends \yii\base\Controller
      *
      * Any relative URL that starts with a single forward slash "/" will be converted
      * into an absolute one by prepending it with the host info of the current request.
-     *
      * @param int $statusCode the HTTP status code. Defaults to 302.
-     * See <https://tools.ietf.org/html/rfc2616#section-10>
-     * for details about HTTP status code
+     *                        See <https://tools.ietf.org/html/rfc2616#section-10>
+     *                        for details about HTTP status code
+     *
      * @return Response the current response object
      */
     public function redirect($url, $statusCode = 302)
@@ -291,9 +309,11 @@ class Controller extends \yii\base\Controller
      * For this function to work you have to [[User::setReturnUrl()|set the return URL]] in appropriate places before.
      *
      * @param string|array $defaultUrl the default return URL in case it was not set previously.
-     * If this is null and the return URL was not set previously, [[Application::homeUrl]] will be redirected to.
-     * Please refer to [[User::setReturnUrl()]] on accepted format of the URL.
+     *                                 If this is null and the return URL was not set previously, [[Application::homeUrl]] will be redirected to.
+     *                                 Please refer to [[User::setReturnUrl()]] on accepted format of the URL.
+     *
      * @return Response the current response object
+     *
      * @see User::getReturnUrl()
      */
     public function goBack($defaultUrl = null)
@@ -313,7 +333,8 @@ class Controller extends \yii\base\Controller
      * ```
      *
      * @param string $anchor the anchor that should be appended to the redirection URL.
-     * Defaults to empty. Make sure the anchor starts with '#' if you want to specify it.
+     *                       Defaults to empty. Make sure the anchor starts with '#' if you want to specify it.
+     *
      * @return Response the response object itself
      */
     public function refresh($anchor = '')

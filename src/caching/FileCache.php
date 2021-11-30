@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -22,21 +23,22 @@ use yii\helpers\FileHelper;
  * For more details and usage information on Cache, see the [guide article on caching](guide:caching-overview).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class FileCache extends Cache
 {
     /**
      * @var string a string prefixed to every cache key. This is needed when you store
-     * cache data under the same [[cachePath]] for different applications to avoid
-     * conflict.
+     *             cache data under the same [[cachePath]] for different applications to avoid
+     *             conflict.
      *
      * To ensure interoperability, only alphanumeric characters should be used.
      */
     public $keyPrefix = '';
     /**
      * @var string the directory to store cache files. You may use [path alias](guide:concept-aliases) here.
-     * If not set, it will use the "cache" subdirectory under the application runtime path.
+     *             If not set, it will use the "cache" subdirectory under the application runtime path.
      */
     public $cachePath = '@runtime/cache';
     /**
@@ -45,31 +47,30 @@ class FileCache extends Cache
     public $cacheFileSuffix = '.bin';
     /**
      * @var int the level of sub-directories to store cache files. Defaults to 1.
-     * If the system has huge number of cache files (e.g. one million), you may use a bigger value
-     * (usually no bigger than 3). Using sub-directories is mainly to ensure the file system
-     * is not over burdened with a single directory having too many files.
+     *          If the system has huge number of cache files (e.g. one million), you may use a bigger value
+     *          (usually no bigger than 3). Using sub-directories is mainly to ensure the file system
+     *          is not over burdened with a single directory having too many files.
      */
     public $directoryLevel = 1;
     /**
      * @var int the probability (parts per million) that garbage collection (GC) should be performed
-     * when storing a piece of data in the cache. Defaults to 10, meaning 0.001% chance.
-     * This number should be between 0 and 1000000. A value 0 means no GC will be performed at all.
+     *          when storing a piece of data in the cache. Defaults to 10, meaning 0.001% chance.
+     *          This number should be between 0 and 1000000. A value 0 means no GC will be performed at all.
      */
     public $gcProbability = 10;
     /**
      * @var int the permission to be set for newly created cache files.
-     * This value will be used by PHP chmod() function. No umask will be applied.
-     * If not set, the permission will be determined by the current environment.
+     *          This value will be used by PHP chmod() function. No umask will be applied.
+     *          If not set, the permission will be determined by the current environment.
      */
     public $fileMode;
     /**
      * @var int the permission to be set for newly created directories.
-     * This value will be used by PHP chmod() function. No umask will be applied.
-     * Defaults to 0775, meaning the directory is read-writable by owner and group,
-     * but read-only for other users.
+     *          This value will be used by PHP chmod() function. No umask will be applied.
+     *          Defaults to 0775, meaning the directory is read-writable by owner and group,
+     *          but read-only for other users.
      */
     public $dirMode = 0775;
-
 
     /**
      * Initializes this component by ensuring the existence of the cache path.
@@ -78,6 +79,7 @@ class FileCache extends Cache
     {
         parent::init();
         $this->cachePath = Yii::getAlias($this->cachePath);
+
         if (!is_dir($this->cachePath)) {
             FileHelper::createDirectory($this->cachePath, $this->dirMode, true);
         }
@@ -89,9 +91,11 @@ class FileCache extends Cache
      * Note that this method does not check whether the dependency associated
      * with the cached data, if there is any, has changed. So a call to [[get]]
      * may return false while exists returns true.
+     *
      * @param mixed $key a key identifying the cached value. This can be a simple string or
-     * a complex data structure consisting of factors representing the key.
-     * @return bool true if a value exists in cache, false if the value is not in the cache or expired.
+     *                   a complex data structure consisting of factors representing the key.
+     *
+     * @return bool true if a value exists in cache, false if the value is not in the cache or expired
      */
     public function exists($key)
     {
@@ -103,20 +107,24 @@ class FileCache extends Cache
     /**
      * Retrieves a value from cache with a specified key.
      * This is the implementation of the method declared in the parent class.
+     *
      * @param string $key a unique key identifying the cached value
-     * @return string|false the value stored in cache, false if the value is not in the cache or expired.
+     *
+     * @return string|false the value stored in cache, false if the value is not in the cache or expired
      */
     protected function getValue($key)
     {
         $cacheFile = $this->getCacheFile($key);
 
         if (@filemtime($cacheFile) > time()) {
-            $fp = @fopen($cacheFile, 'r');
+            $fp = @fopen($cacheFile, 'rb');
+
             if ($fp !== false) {
                 @flock($fp, LOCK_SH);
                 $cacheValue = @stream_get_contents($fp);
                 @flock($fp, LOCK_UN);
                 @fclose($fp);
+
                 return $cacheValue;
             }
         }
@@ -130,14 +138,16 @@ class FileCache extends Cache
      *
      * @param string $key the key identifying the value to be cached
      * @param string $value the value to be cached. Other types (If you have disabled [[serializer]]) unable to get is
-     * correct in [[getValue()]].
+     *                      correct in [[getValue()]].
      * @param int $duration the number of seconds in which the cached value will expire. 0 means never expire.
+     *
      * @return bool true if the value is successfully stored into cache, false otherwise
      */
     protected function setValue($key, $value, $duration)
     {
         $this->gc();
         $cacheFile = $this->getCacheFile($key);
+
         if ($this->directoryLevel > 0) {
             @FileHelper::createDirectory(dirname($cacheFile), $this->dirMode, true);
         }
@@ -147,10 +157,12 @@ class FileCache extends Cache
         if (is_file($cacheFile) && function_exists('posix_geteuid') && fileowner($cacheFile) !== posix_geteuid()) {
             @unlink($cacheFile);
         }
+
         if (@file_put_contents($cacheFile, $value, LOCK_EX) !== false) {
             if ($this->fileMode !== null) {
                 @chmod($cacheFile, $this->fileMode);
             }
+
             if ($duration <= 0) {
                 $duration = 31536000; // 1 year
             }
@@ -160,6 +172,7 @@ class FileCache extends Cache
 
         $error = error_get_last();
         Yii::warning("Unable to write cache file '{$cacheFile}': {$error['message']}", __METHOD__);
+
         return false;
     }
 
@@ -169,13 +182,15 @@ class FileCache extends Cache
      *
      * @param string $key the key identifying the value to be cached
      * @param string $value the value to be cached. Other types (if you have disabled [[serializer]]) unable to get is
-     * correct in [[getValue()]].
+     *                      correct in [[getValue()]].
      * @param int $duration the number of seconds in which the cached value will expire. 0 means never expire.
+     *
      * @return bool true if the value is successfully stored into cache, false otherwise
      */
     protected function addValue($key, $value, $duration)
     {
         $cacheFile = $this->getCacheFile($key);
+
         if (@filemtime($cacheFile) > time()) {
             return false;
         }
@@ -186,7 +201,9 @@ class FileCache extends Cache
     /**
      * Deletes a value with the specified key from cache
      * This is the implementation of the method declared in the parent class.
+     *
      * @param string $key the key of the value to be deleted
+     *
      * @return bool if no error happens during deletion
      */
     protected function deleteValue($key)
@@ -198,7 +215,9 @@ class FileCache extends Cache
 
     /**
      * Returns the cache file path given the normalized cache key.
+     *
      * @param string $normalizedKey normalized cache key by [[buildKey]] method
+     *
      * @return string the cache file path
      */
     protected function getCacheFile($normalizedKey)
@@ -227,7 +246,8 @@ class FileCache extends Cache
     /**
      * Deletes all values from cache.
      * This is the implementation of the method declared in the parent class.
-     * @return bool whether the flush operation was successful.
+     *
+     * @return bool whether the flush operation was successful
      */
     protected function flushValues()
     {
@@ -238,10 +258,11 @@ class FileCache extends Cache
 
     /**
      * Removes expired cache files.
+     *
      * @param bool $force whether to enforce the garbage collection regardless of [[gcProbability]].
-     * Defaults to false, meaning the actual deletion happens with the probability as specified by [[gcProbability]].
+     *                    Defaults to false, meaning the actual deletion happens with the probability as specified by [[gcProbability]].
      * @param bool $expiredOnly whether to removed expired cache files only.
-     * If false, all cache files under [[cachePath]] will be removed.
+     *                          If false, all cache files under [[cachePath]] will be removed.
      */
     public function gc($force = false, $expiredOnly = true)
     {
@@ -253,9 +274,10 @@ class FileCache extends Cache
     /**
      * Recursively removing expired cache files under a directory.
      * This method is mainly used by [[gc()]].
-     * @param string $path the directory under which expired cache files are removed.
+     *
+     * @param string $path the directory under which expired cache files are removed
      * @param bool $expiredOnly whether to only remove expired cache files. If false, all files
-     * under `$path` will be removed.
+     *                          under `$path` will be removed.
      */
     protected function gcRecursive($path, $expiredOnly)
     {
@@ -265,8 +287,10 @@ class FileCache extends Cache
                     continue;
                 }
                 $fullPath = $path . DIRECTORY_SEPARATOR . $file;
+
                 if (is_dir($fullPath)) {
                     $this->gcRecursive($fullPath, $expiredOnly);
+
                     if (!$expiredOnly) {
                         if (!@rmdir($fullPath)) {
                             $error = error_get_last();

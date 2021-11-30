@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @link http://www.yiiframework.com/
+ * @copyright Copyright (c) 2008 Yii Software LLC
+ * @license http://www.yiiframework.com/license/
+ */
+
 return [
     // string, required, root directory of all source files
     'sourcePath' => __DIR__ . DIRECTORY_SEPARATOR . '..',

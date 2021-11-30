@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,15 +12,15 @@ namespace yii\db\conditions;
  * Condition based on column-value pairs.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ *
  * @since 2.0.14
  */
 class HashCondition implements ConditionInterface
 {
     /**
-     * @var array|null the condition specification.
+     * @var array|null the condition specification
      */
     private $hash;
-
 
     /**
      * HashCondition constructor.

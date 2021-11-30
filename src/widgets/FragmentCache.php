@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -22,6 +23,7 @@ use yii\di\Instance;
  * found in the cache. This property is read-only.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class FragmentCache extends Widget implements DynamicContentAwareInterface
@@ -30,20 +32,20 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
 
     /**
      * @var CacheInterface|array|string the cache object or the application component ID of the cache object.
-     * After the FragmentCache object is created, if you want to change this property,
-     * you should only assign it with a cache object.
-     * Starting from version 2.0.2, this can also be a configuration array for creating the object.
+     *                                  After the FragmentCache object is created, if you want to change this property,
+     *                                  you should only assign it with a cache object.
+     *                                  Starting from version 2.0.2, this can also be a configuration array for creating the object.
      */
     public $cache = 'cache';
     /**
      * @var int number of seconds that the data can remain valid in cache.
-     * Use 0 to indicate that the cached data will never expire.
+     *          Use 0 to indicate that the cached data will never expire.
      */
     public $duration = 60;
     /**
      * @var array|Dependency the dependency that the cached content depends on.
-     * This can be either a [[Dependency]] object or a configuration array for creating the dependency object.
-     * For example,
+     *                       This can be either a [[Dependency]] object or a configuration array for creating the dependency object.
+     *                       For example,
      *
      * ```php
      * [
@@ -58,9 +60,9 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
     public $dependency;
     /**
      * @var string[]|string list of factors that would cause the variation of the content being cached.
-     * Each factor is a string representing a variation (e.g. the language, a GET parameter).
-     * The following variation setting will cause the content to be cached in different versions
-     * according to the current application language:
+     *                      Each factor is a string representing a variation (e.g. the language, a GET parameter).
+     *                      The following variation setting will cause the content to be cached in different versions
+     *                      according to the current application language:
      *
      * ```php
      * [
@@ -71,10 +73,9 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
     public $variations;
     /**
      * @var bool whether to enable the fragment cache. You may use this property to turn on and off
-     * the fragment cache according to specific setting (e.g. enable fragment cache only for GET requests).
+     *           the fragment cache according to specific setting (e.g. enable fragment cache only for GET requests).
      */
     public $enabled = true;
-
 
     /**
      * Initializes the FragmentCache object.
@@ -106,9 +107,11 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
             $this->getView()->popDynamicContent();
 
             $content = ob_get_clean();
+
             if ($content === false || $content === '') {
                 return;
             }
+
             if (is_array($this->dependency)) {
                 $this->dependency = Yii::createObject($this->dependency);
             }
@@ -125,6 +128,7 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
 
     /**
      * Returns the cached content if available.
+     *
      * @return string|false the cached content. False is returned if valid content is not found in the cache.
      */
     public function getCachedContent()
@@ -141,26 +145,30 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
 
         $key = $this->calculateKey();
         $data = $this->cache->get($key);
+
         if (!is_array($data) || count($data) !== 2) {
             return $this->_content;
         }
 
-        list($this->_content, $placeholders) = $data;
+        [$this->_content, $placeholders] = $data;
+
         if (!is_array($placeholders) || count($placeholders) === 0) {
             return $this->_content;
         }
 
         $this->_content = $this->updateDynamicContent($this->_content, $placeholders, true);
+
         return $this->_content;
     }
 
     /**
      * Generates a unique key used for storing the content in cache.
      * The key generated depends on both [[id]] and [[variations]].
+     *
      * @return mixed a valid cache key
      */
     protected function calculateKey()
     {
-        return array_merge([__CLASS__, $this->getId()], (array)$this->variations);
+        return array_merge([__CLASS__, $this->getId()], (array) $this->variations);
     }
 }

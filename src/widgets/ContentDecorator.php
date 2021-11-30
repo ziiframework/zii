@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -38,20 +39,20 @@ use yii\base\Widget;
  * ```
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class ContentDecorator extends Widget
 {
     /**
      * @var string the view file that will be used to decorate the content enclosed by this widget.
-     * This can be specified as either the view file path or [path alias](guide:concept-aliases).
+     *             This can be specified as either the view file path or [path alias](guide:concept-aliases).
      */
     public $viewFile;
     /**
-     * @var array the parameters (name => value) to be extracted and made available in the decorative view.
+     * @var array the parameters (name => value) to be extracted and made available in the decorative view
      */
     public $params = [];
-
 
     /**
      * Starts recording a clip.

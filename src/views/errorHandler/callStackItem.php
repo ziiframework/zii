@@ -16,34 +16,34 @@ IDE
 </svg>
 HTML;
 ?>
-<li class="<?= ($index === 1 || !$handler->isCoreFile($file)) ? 'application' : '' ?> call-stack-item"
-    data-line="<?= (int) ($line - $begin) ?>">
+<li class="<?= ($index === 1 || !$handler->isCoreFile($file)) ? 'application' : ''; ?> call-stack-item"
+    data-line="<?= (int) ($line - $begin); ?>">
     <div class="element-wrap">
         <div class="element">
-            <span class="item-number"><?= (int) $index ?>.</span>
-            <span class="text"><?= $file !== null ? 'in ' . $handler->htmlEncode($file) : '' ?></span>
-            <?php if ($handler->traceLine !== '{html}'): ?>
+            <span class="item-number"><?= (int) $index; ?>.</span>
+            <span class="text"><?= $file !== null ? 'in ' . $handler->htmlEncode($file) : ''; ?></span>
+            <?php if ($handler->traceLine !== '{html}') { ?>
                 <span> &ndash; </span>
-                <?= strtr($handler->traceLine, ['{file}' => $file, '{line}' => $line + 1, '{html}' => $html]) ?>
-            <?php endif; ?>
+                <?= strtr($handler->traceLine, ['{file}' => $file, '{line}' => $line + 1, '{html}' => $html]); ?>
+            <?php } ?>
             <span class="at">
-                <?= $line !== null ? 'at line' : '' ?>
-                <span class="line"><?= $line !== null ? $line + 1 : '' ?></span>
+                <?= $line !== null ? 'at line' : ''; ?>
+                <span class="line"><?= $line !== null ? $line + 1 : ''; ?></span>
             </span>
-            <?php if ($method !== null): ?>
+            <?php if ($method !== null) { ?>
                 <span class="call">
-                    <?= $file !== null ? '&ndash;' : '' ?>
-                    <?= ($class !== null ? $handler->addTypeLinks("$class::$method") : $handler->htmlEncode($method)) . '(' . $handler->argumentsToString($args) . ')' ?>
+                    <?= $file !== null ? '&ndash;' : ''; ?>
+                    <?= ($class !== null ? $handler->addTypeLinks("$class::$method") : $handler->htmlEncode($method)) . '(' . $handler->argumentsToString($args) . ')'; ?>
                 </span>
-            <?php endif; ?>
+            <?php } ?>
         </div>
     </div>
-    <?php if (!empty($lines)): ?>
+    <?php if (!empty($lines)) { ?>
         <div class="code-wrap">
             <div class="error-line"></div>
-            <?php for ($i = $begin; $i <= $end; ++$i): ?><div class="hover-line"></div><?php endfor; ?>
+            <?php for ($i = $begin; $i <= $end; ++$i) { ?><div class="hover-line"></div><?php } ?>
             <div class="code">
-                <?php for ($i = $begin; $i <= $end; ++$i): ?><span class="lines-item"><?= (int) ($i + 1) ?></span><?php endfor; ?>
+                <?php for ($i = $begin; $i <= $end; ++$i) { ?><span class="lines-item"><?= (int) ($i + 1); ?></span><?php } ?>
                 <pre><?php
                     // fill empty lines with a whitespace to avoid rendering problems in opera
                     for ($i = $begin; $i <= $end; ++$i) {
@@ -52,5 +52,5 @@ HTML;
                     ?></pre>
             </div>
         </div>
-    <?php endif; ?>
+    <?php } ?>
 </li>

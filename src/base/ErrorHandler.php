@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,9 @@
 
 namespace yii\base;
 
+use Error;
+use ReflectionProperty;
+use Throwable;
 use Yii;
 use yii\helpers\VarDumper;
 use yii\web\HttpException;
@@ -22,6 +26,7 @@ use yii\web\HttpException;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @author Alexander Makarov <sam@rmcreative.ru>
  * @author Carsten Brandt <mail@cebe.cc>
+ *
  * @since 2.0
  */
 abstract class ErrorHandler extends Component
@@ -32,24 +37,25 @@ abstract class ErrorHandler extends Component
     public $discardExistingOutput = true;
     /**
      * @var int the size of the reserved memory. A portion of memory is pre-allocated so that
-     * when an out-of-memory issue occurs, the error handler is able to handle the error with
-     * the help of this reserved memory. If you set this value to be 0, no memory will be reserved.
-     * Defaults to 256KB.
+     *          when an out-of-memory issue occurs, the error handler is able to handle the error with
+     *          the help of this reserved memory. If you set this value to be 0, no memory will be reserved.
+     *          Defaults to 256KB.
      */
     public $memoryReserveSize = 262144;
     /**
-     * @var \Exception|null the exception that is being handled currently.
+     * @var \Exception|null the exception that is being handled currently
      */
     public $exception;
     /**
      * @var bool if true - `handleException()` will finish script with `ExitCode::OK`.
-     * false - `ExitCode::UNSPECIFIED_ERROR`.
+     *           false - `ExitCode::UNSPECIFIED_ERROR`.
+     *
      * @since 2.0.36
      */
     public $silentExitOnException;
 
     /**
-     * @var string Used to reserve memory for fatal error handler.
+     * @var string used to reserve memory for fatal error handler
      */
     private $_memoryReserve;
     /**
@@ -61,7 +67,6 @@ abstract class ErrorHandler extends Component
      */
     private $_registered = false;
 
-
     public function init()
     {
         $this->silentExitOnException = $this->silentExitOnException !== null ? $this->silentExitOnException : YII_ENV_TEST;
@@ -70,6 +75,7 @@ abstract class ErrorHandler extends Component
 
     /**
      * Register this error handler.
+     *
      * @since 2.0.32 this will not do anything if the error handler was already registered
      */
     public function register()
@@ -77,11 +83,13 @@ abstract class ErrorHandler extends Component
         if (!$this->_registered) {
             ini_set('display_errors', false);
             set_exception_handler([$this, 'handleException']);
+
             if (defined('HHVM_VERSION')) {
                 set_error_handler([$this, 'handleHhvmError']);
             } else {
                 set_error_handler([$this, 'handleError']);
             }
+
             if ($this->memoryReserveSize > 0) {
                 $this->_memoryReserve = str_repeat('x', $this->memoryReserveSize);
             }
@@ -92,6 +100,7 @@ abstract class ErrorHandler extends Component
 
     /**
      * Unregisters this error handler by restoring the PHP error and exception handlers.
+     *
      * @since 2.0.32 this will not do anything if the error handler was not registered
      */
     public function unregister()
@@ -129,21 +138,25 @@ abstract class ErrorHandler extends Component
 
         try {
             $this->logException($exception);
+
             if ($this->discardExistingOutput) {
                 $this->clearOutput();
             }
             $this->renderException($exception);
+
             if (!$this->silentExitOnException) {
-                \Yii::getLogger()->flush(true);
+                Yii::getLogger()->flush(true);
+
                 if (defined('HHVM_VERSION')) {
                     flush();
                 }
+
                 exit(1);
             }
         } catch (\Exception $e) {
             // an other exception could be thrown while displaying the exception
             $this->handleFallbackExceptionMessage($e, $exception);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             // additional check for \Throwable introduced in PHP 7
             $this->handleFallbackExceptionMessage($e, $exception);
         }
@@ -153,8 +166,10 @@ abstract class ErrorHandler extends Component
 
     /**
      * Handles exception thrown during exception processing in [[handleException()]].
-     * @param \Exception|\Throwable $exception Exception that was thrown during main exception processing.
-     * @param \Exception $previousException Main exception processed in [[handleException()]].
+     *
+     * @param \Exception|Throwable $exception exception that was thrown during main exception processing
+     * @param \Exception $previousException main exception processed in [[handleException()]]
+     *
      * @since 2.0.11
      */
     protected function handleFallbackExceptionMessage($exception, $previousException)
@@ -163,6 +178,7 @@ abstract class ErrorHandler extends Component
         $msg .= (string) $exception;
         $msg .= "\nPrevious exception:\n";
         $msg .= (string) $previousException;
+
         if (YII_DEBUG) {
             if (PHP_SAPI === 'cli') {
                 echo $msg . "\n";
@@ -174,9 +190,11 @@ abstract class ErrorHandler extends Component
             echo 'An internal server error occurred.';
         }
         error_log($msg);
+
         if (defined('HHVM_VERSION')) {
             flush();
         }
+
         exit(1);
     }
 
@@ -186,15 +204,17 @@ abstract class ErrorHandler extends Component
      * This method is used as a HHVM error handler. It will store exception that will
      * be used in fatal error handler
      *
-     * @param int $code the level of the error raised.
-     * @param string $message the error message.
-     * @param string $file the filename that the error was raised in.
-     * @param int $line the line number the error was raised at.
+     * @param int $code the level of the error raised
+     * @param string $message the error message
+     * @param string $file the filename that the error was raised in
+     * @param int $line the line number the error was raised at
      * @param mixed $context
      * @param mixed $backtrace trace of error
-     * @return bool whether the normal error handler continues.
+     *
+     * @return bool whether the normal error handler continues
      *
      * @throws ErrorException
+     *
      * @since 2.0.6
      */
     public function handleHhvmError($code, $message, $file, $line, $context, $backtrace)
@@ -202,9 +222,10 @@ abstract class ErrorHandler extends Component
         if ($this->handleError($code, $message, $file, $line)) {
             return true;
         }
+
         if (E_ERROR & $code) {
             $exception = new ErrorException($message, $code, $code, $file, $line);
-            $ref = new \ReflectionProperty('\Exception', 'trace');
+            $ref = new ReflectionProperty('\Exception', 'trace');
             $ref->setAccessible(true);
             $ref->setValue($exception, $backtrace);
             $this->_hhvmException = $exception;
@@ -218,11 +239,12 @@ abstract class ErrorHandler extends Component
      *
      * This method is used as a PHP error handler. It will simply raise an [[ErrorException]].
      *
-     * @param int $code the level of the error raised.
-     * @param string $message the error message.
-     * @param string $file the filename that the error was raised in.
-     * @param int $line the line number the error was raised at.
-     * @return bool whether the normal error handler continues.
+     * @param int $code the level of the error raised
+     * @param string $message the error message
+     * @param string $file the filename that the error was raised in
+     * @param int $line the line number the error was raised at
+     *
+     * @return bool whether the normal error handler continues
      *
      * @throws ErrorException
      */
@@ -240,12 +262,15 @@ abstract class ErrorHandler extends Component
                 // prior to PHP 7.4 we can't throw exceptions inside of __toString() - it will result a fatal error
                 $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
                 array_shift($trace);
+
                 foreach ($trace as $frame) {
                     if ($frame['function'] === '__toString') {
                         $this->handleException($exception);
+
                         if (defined('HHVM_VERSION')) {
                             flush();
                         }
+
                         exit(1);
                     }
                 }
@@ -289,27 +314,33 @@ abstract class ErrorHandler extends Component
 
             // need to explicitly flush logs because exit() next will terminate the app immediately
             Yii::getLogger()->flush(true);
+
             if (defined('HHVM_VERSION')) {
                 flush();
             }
+
             exit(1);
         }
     }
 
     /**
      * Renders the exception.
-     * @param \Exception|\Error|\Throwable $exception the exception to be rendered.
+     *
+     * @param \Exception|Error|Throwable $exception the exception to be rendered
      */
     abstract protected function renderException($exception);
 
     /**
      * Logs the given exception.
+     *
      * @param \Exception $exception the exception to be logged
+     *
      * @since 2.0.3 this method is now public.
      */
     public function logException($exception)
     {
         $category = get_class($exception);
+
         if ($exception instanceof HttpException) {
             $category = 'yii\\web\\HttpException:' . $exception->statusCode;
         } elseif ($exception instanceof \ErrorException) {
@@ -336,7 +367,8 @@ abstract class ErrorHandler extends Component
      *
      * This method can be used to convert exceptions inside of methods like `__toString()`
      * to PHP errors because exceptions cannot be thrown inside of them.
-     * @param \Exception|\Throwable $exception the exception to convert to a PHP error.
+     *
+     * @param \Exception|Throwable $exception the exception to convert to a PHP error
      */
     public static function convertExceptionToError($exception)
     {
@@ -345,8 +377,10 @@ abstract class ErrorHandler extends Component
 
     /**
      * Converts an exception into a simple string.
-     * @param \Exception|\Error|\Throwable $exception the exception being converted
-     * @return string the string representation of the exception.
+     *
+     * @param \Exception|Error|Throwable $exception the exception being converted
+     *
+     * @return string the string representation of the exception
      */
     public static function convertExceptionToString($exception)
     {
@@ -363,8 +397,10 @@ abstract class ErrorHandler extends Component
 
     /**
      * Converts an exception into a string that has verbose information about the exception and its trace.
-     * @param \Exception|\Error|\Throwable $exception the exception being converted
-     * @return string the string representation of the exception.
+     *
+     * @param \Exception|Error|Throwable $exception the exception being converted
+     *
+     * @return string the string representation of the exception
      *
      * @since 2.0.14
      */
@@ -373,7 +409,7 @@ abstract class ErrorHandler extends Component
         if ($exception instanceof Exception) {
             $message = "Exception ({$exception->getName()})";
         } elseif ($exception instanceof ErrorException) {
-            $message = (string)$exception->getName();
+            $message = (string) $exception->getName();
         } else {
             $message = 'Exception';
         }

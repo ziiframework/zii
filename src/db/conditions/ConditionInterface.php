@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -15,6 +16,7 @@ use yii\db\ExpressionInterface;
  * in DBAL of framework.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ *
  * @since 2.0.14
  */
 interface ConditionInterface extends ExpressionInterface
@@ -23,10 +25,11 @@ interface ConditionInterface extends ExpressionInterface
      * Creates object by array-definition as described in
      * [Query Builder – Operator format](guide:db-query-builder#operator-format) guide article.
      *
-     * @param string $operator operator in uppercase.
+     * @param string $operator operator in uppercase
      * @param array $operands array of corresponding operands
      *
      * @return $this
+     *
      * @throws InvalidParamException if input parameters are not suitable for this condition
      */
     public static function fromArrayDefinition($operator, $operands);
