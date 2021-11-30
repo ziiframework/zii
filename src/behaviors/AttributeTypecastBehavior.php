@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -107,14 +108,15 @@ use yii\validators\StringValidator;
  * ```
  *
  * @author Paul Klimov <klimov.paul@gmail.com>
+ *
  * @since 2.0.10
  */
 class AttributeTypecastBehavior extends Behavior
 {
-    const TYPE_INTEGER = 'integer';
-    const TYPE_FLOAT = 'float';
-    const TYPE_BOOLEAN = 'boolean';
-    const TYPE_STRING = 'string';
+    public const TYPE_INTEGER = 'integer';
+    public const TYPE_FLOAT = 'float';
+    public const TYPE_BOOLEAN = 'boolean';
+    public const TYPE_STRING = 'string';
 
     /**
      * @var Model|BaseActiveRecord the owner of this behavior.
@@ -167,6 +169,7 @@ class AttributeTypecastBehavior extends Behavior
      * For example, in case of [[\yii\db\ActiveRecord]] usage, typecasting after save
      * will grant no benefit an thus can be disabled.
      * Note that changing this option value will have no effect after this behavior has been attached to the model.
+     *
      * @since 2.0.14
      */
     public $typecastAfterSave = false;
@@ -186,7 +189,6 @@ class AttributeTypecastBehavior extends Behavior
      */
     private static $autoDetectedAttributeTypes = [];
 
-
     /**
      * Clears internal static cache of auto detected [[attributeTypes]] values
      * over all affected owner classes.
@@ -205,6 +207,7 @@ class AttributeTypecastBehavior extends Behavior
 
         if ($this->attributeTypes === null) {
             $ownerClass = get_class($this->owner);
+
             if (!isset(self::$autoDetectedAttributeTypes[$ownerClass])) {
                 self::$autoDetectedAttributeTypes[$ownerClass] = $this->detectAttributeTypes();
             }
@@ -214,6 +217,7 @@ class AttributeTypecastBehavior extends Behavior
 
     /**
      * Typecast owner attributes according to [[attributeTypes]].
+     *
      * @param array $attributeNames list of attribute names that should be type-casted.
      * If this parameter is empty, it means any attribute listed in the [[attributeTypes]]
      * should be type-casted.
@@ -235,6 +239,7 @@ class AttributeTypecastBehavior extends Behavior
 
         foreach ($attributeTypes as $attribute => $type) {
             $value = $this->owner->{$attribute};
+
             if ($this->skipOnNull && $value === null) {
                 continue;
             }
@@ -244,8 +249,10 @@ class AttributeTypecastBehavior extends Behavior
 
     /**
      * Casts the given value to the specified type.
+     *
      * @param mixed $value value to be type-casted.
      * @param string|callable $type type name or typecast callable.
+     *
      * @return mixed typecast result.
      */
     protected function typecastValue($value, $type)
@@ -266,7 +273,9 @@ class AttributeTypecastBehavior extends Behavior
                     if (is_float($value)) {
                         return StringHelper::floatToString($value);
                     }
+
                     return (string) $value;
+
                 default:
                     throw new InvalidArgumentException("Unsupported type '{$type}'");
             }
@@ -277,13 +286,16 @@ class AttributeTypecastBehavior extends Behavior
 
     /**
      * Composes default value for [[attributeTypes]] from the owner validation rules.
+     *
      * @return array attribute type map.
      */
     protected function detectAttributeTypes()
     {
         $attributeTypes = [];
+
         foreach ($this->owner->getValidators() as $validator) {
             $type = null;
+
             if ($validator instanceof BooleanValidator) {
                 $type = self::TYPE_BOOLEAN;
             } elseif ($validator instanceof NumberValidator) {
@@ -312,14 +324,17 @@ class AttributeTypecastBehavior extends Behavior
         if ($this->typecastAfterValidate) {
             $events[Model::EVENT_AFTER_VALIDATE] = 'afterValidate';
         }
+
         if ($this->typecastBeforeSave) {
             $events[BaseActiveRecord::EVENT_BEFORE_INSERT] = 'beforeSave';
             $events[BaseActiveRecord::EVENT_BEFORE_UPDATE] = 'beforeSave';
         }
+
         if ($this->typecastAfterSave) {
             $events[BaseActiveRecord::EVENT_AFTER_INSERT] = 'afterSave';
             $events[BaseActiveRecord::EVENT_AFTER_UPDATE] = 'afterSave';
         }
+
         if ($this->typecastAfterFind) {
             $events[BaseActiveRecord::EVENT_AFTER_FIND] = 'afterFind';
         }
@@ -329,6 +344,7 @@ class AttributeTypecastBehavior extends Behavior
 
     /**
      * Handles owner 'afterValidate' event, ensuring attribute typecasting.
+     *
      * @param \yii\base\Event $event event instance.
      */
     public function afterValidate($event)
@@ -340,6 +356,7 @@ class AttributeTypecastBehavior extends Behavior
 
     /**
      * Handles owner 'beforeInsert' and 'beforeUpdate' events, ensuring attribute typecasting.
+     *
      * @param \yii\base\Event $event event instance.
      */
     public function beforeSave($event)
@@ -349,7 +366,9 @@ class AttributeTypecastBehavior extends Behavior
 
     /**
      * Handles owner 'afterInsert' and 'afterUpdate' events, ensuring attribute typecasting.
+     *
      * @param \yii\base\Event $event event instance.
+     *
      * @since 2.0.14
      */
     public function afterSave($event)
@@ -359,6 +378,7 @@ class AttributeTypecastBehavior extends Behavior
 
     /**
      * Handles owner 'afterFind' event, ensuring attribute typecasting.
+     *
      * @param \yii\base\Event $event event instance.
      */
     public function afterFind($event)

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -48,6 +49,7 @@ use yii\helpers\ArrayHelper;
  * For more details and usage information on ArrayDataProvider, see the [guide article on data providers](guide:output-data-providers).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class ArrayDataProvider extends BaseDataProvider
@@ -56,6 +58,7 @@ class ArrayDataProvider extends BaseDataProvider
      * @var string|callable the column that is used as the key of the data models.
      * This can be either a column name, or a callable that returns the key value of a given data model.
      * If this is not set, the index of the [[models]] array will be used.
+     *
      * @see getKeys()
      */
     public $key;
@@ -68,10 +71,10 @@ class ArrayDataProvider extends BaseDataProvider
     /**
      * @var string the name of the [[\yii\base\Model|Model]] class that will be represented.
      * This property is used to get columns' names.
+     *
      * @since 2.0.9
      */
     public $modelClass;
-
 
     /**
      * {@inheritdoc}
@@ -104,6 +107,7 @@ class ArrayDataProvider extends BaseDataProvider
     {
         if ($this->key !== null) {
             $keys = [];
+
             foreach ($models as $model) {
                 if (is_string($this->key)) {
                     $keys[] = $model[$this->key];
@@ -128,13 +132,16 @@ class ArrayDataProvider extends BaseDataProvider
 
     /**
      * Sorts the data models according to the given sort definition.
+     *
      * @param array $models the models to be sorted
      * @param Sort $sort the sort definition
+     *
      * @return array the sorted data models
      */
     protected function sortModels($models, $sort)
     {
         $orders = $sort->getOrders();
+
         if (!empty($orders)) {
             ArrayHelper::multisort($models, array_keys($orders), array_values($orders), $sort->sortFlags);
         }

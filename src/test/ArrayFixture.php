@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,9 @@
 
 namespace yii\test;
 
+use ArrayAccess;
+use Countable;
+use IteratorAggregate;
 use yii\base\ArrayAccessTrait;
 use yii\base\InvalidConfigException;
 
@@ -16,9 +20,10 @@ use yii\base\InvalidConfigException;
  * For more details and usage information on ArrayFixture, see the [guide article on fixtures](guide:test-fixtures).
  *
  * @author Mark Jebri <mark.github@yandex.ru>
+ *
  * @since 2.0
  */
-class ArrayFixture extends Fixture implements \IteratorAggregate, \ArrayAccess, \Countable
+class ArrayFixture extends Fixture implements IteratorAggregate, ArrayAccess, Countable
 {
     use ArrayAccessTrait;
     use FileFixtureTrait;
@@ -27,7 +32,6 @@ class ArrayFixture extends Fixture implements \IteratorAggregate, \ArrayAccess, 
      * @var array the data rows. Each array element represents one row of data (column name => column value).
      */
     public $data = [];
-
 
     /**
      * Loads the fixture.
@@ -47,6 +51,7 @@ class ArrayFixture extends Fixture implements \IteratorAggregate, \ArrayAccess, 
      * The file should return the data array that will be stored in [[data]] after inserting into the database.
      *
      * @return array the data to be put into the database
+     *
      * @throws InvalidConfigException if the specified data file does not exist.
      */
     protected function getData()

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -42,6 +43,7 @@ use yii\di\Instance;
  * ```
  *
  * @author Nikolay Oleynikov <oleynikovny@mail.ru>
+ *
  * @since 2.0.14
  */
 class CacheableWidgetBehavior extends Behavior
@@ -100,7 +102,6 @@ class CacheableWidgetBehavior extends Behavior
      */
     public $cacheEnabled = true;
 
-
     /**
      * {@inheritdoc}
      */
@@ -153,11 +154,13 @@ class CacheableWidgetBehavior extends Behavior
      * Returns the cache instance.
      *
      * @return CacheInterface cache instance.
+     *
      * @throws InvalidConfigException if cache instance instantiation fails.
      */
     private function getCacheInstance()
     {
         $cacheInterface = 'yii\caching\CacheInterface';
+
         return Instance::ensure($this->cache, $cacheInterface);
     }
 
@@ -169,10 +172,7 @@ class CacheableWidgetBehavior extends Behavior
     private function getCacheKey()
     {
         // `$cacheKeyVariations` may be a `string` and needs to be cast to an `array`.
-        $cacheKey = array_merge(
-            (array)get_class($this->owner),
-            (array)$this->cacheKeyVariations
-        );
+        $cacheKey = array_merge((array) get_class($this->owner), (array) $this->cacheKeyVariations);
 
         return $cacheKey;
     }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -51,10 +52,10 @@ class ColumnSchema extends \yii\db\ColumnSchema
     public $deserializeArrayColumnToArrayExpression = true;
     /**
      * @var string name of associated sequence if column is auto-incremental
+     *
      * @since 2.0.29
      */
     public $sequenceName;
-
 
     /**
      * {@inheritdoc}
@@ -74,6 +75,7 @@ class ColumnSchema extends \yii\db\ColumnSchema
                 ? (string) $value
                 : new ArrayExpression($value, $this->dbType, $this->dimension);
         }
+
         if (!$this->disableJsonSupport && in_array($this->dbType, [Schema::TYPE_JSON, Schema::TYPE_JSONB], true)) {
             return new JsonExpression($value, $this->dbType);
         }
@@ -90,9 +92,11 @@ class ColumnSchema extends \yii\db\ColumnSchema
             if ($this->disableArraySupport) {
                 return $value;
             }
+
             if (!is_array($value)) {
                 $value = $this->getArrayParser()->parse($value);
             }
+
             if (is_array($value)) {
                 array_walk_recursive($value, function (&$val, $key) {
                     $val = $this->phpTypecastValue($val);
@@ -113,6 +117,7 @@ class ColumnSchema extends \yii\db\ColumnSchema
      * Casts $value after retrieving from the DBMS to PHP representation.
      *
      * @param string|null $value
+     *
      * @return bool|mixed|null
      */
     protected function phpTypecastValue($value)
@@ -131,6 +136,7 @@ class ColumnSchema extends \yii\db\ColumnSchema
                     case 'false':
                         return false;
                 }
+
                 return (bool) $value;
             case Schema::TYPE_JSON:
                 return $this->disableJsonSupport ? $value : json_decode($value, true);
@@ -140,7 +146,7 @@ class ColumnSchema extends \yii\db\ColumnSchema
     }
 
     /**
-     * Creates instance of ArrayParser
+     * Creates instance of ArrayParser.
      *
      * @return ArrayParser
      */

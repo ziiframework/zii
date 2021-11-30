@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,7 +8,6 @@
 
 namespace yii\widgets;
 
-use Yii;
 use yii\base\InvalidConfigException;
 use yii\base\Widget;
 use yii\data\Pagination;
@@ -27,6 +27,7 @@ use yii\helpers\Html;
  * For more details and usage information on LinkPager, see the [guide article on pagination](guide:output-pagination).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class LinkPager extends Widget
@@ -38,21 +39,25 @@ class LinkPager extends Widget
     public $pagination;
     /**
      * @var array HTML attributes for the pager container tag.
+     *
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $options = ['class' => 'pagination'];
     /**
      * @var array HTML attributes which will be applied to all link containers
+     *
      * @since 2.0.13
      */
     public $linkContainerOptions = [];
     /**
      * @var array HTML attributes for the link in a pager container tag.
+     *
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $linkOptions = [];
     /**
      * @var string the CSS class for the each page button.
+     *
      * @since 2.0.7
      */
     public $pageCssClass;
@@ -87,6 +92,7 @@ class LinkPager extends Widget
      * ```php
      * $disabledListItemSubTagOptions = ['tag' => 'div', 'class' => 'disabled-div'];
      * ```
+     *
      * @since 2.0.11
      */
     public $disabledListItemSubTagOptions = [];
@@ -119,6 +125,7 @@ class LinkPager extends Widget
     /**
      * @var bool whether to register link tags in the HTML header for prev, next, first and last page.
      * Defaults to `false` to avoid conflicts when multiple pagers are used on one page.
+     *
      * @see http://www.w3.org/TR/html401/struct/links.html#h-12.1.2
      * @see registerLinkTags()
      */
@@ -129,10 +136,10 @@ class LinkPager extends Widget
     public $hideOnSinglePage = true;
     /**
      * @var bool whether to render current page button as disabled.
+     *
      * @since 2.0.12
      */
     public $disableCurrentPageButton = false;
-
 
     /**
      * Initializes the pager.
@@ -161,11 +168,13 @@ class LinkPager extends Widget
     /**
      * Registers relational link tags in the html header for prev, next, first and last page.
      * These links are generated using [[\yii\data\Pagination::getLinks()]].
+     *
      * @see http://www.w3.org/TR/html401/struct/links.html#h-12.1.2
      */
     protected function registerLinkTags()
     {
         $view = $this->getView();
+
         foreach ($this->pagination->getLinks() as $rel => $href) {
             $view->registerLinkTag(['rel' => $rel, 'href' => $href], $rel);
         }
@@ -173,11 +182,13 @@ class LinkPager extends Widget
 
     /**
      * Renders the page buttons.
+     *
      * @return string the rendering result
      */
     protected function renderPageButtons()
     {
         $pageCount = $this->pagination->getPageCount();
+
         if ($pageCount < 2 && $this->hideOnSinglePage) {
             return '';
         }
@@ -187,6 +198,7 @@ class LinkPager extends Widget
 
         // first page
         $firstPageLabel = $this->firstPageLabel === true ? '1' : $this->firstPageLabel;
+
         if ($firstPageLabel !== false) {
             $buttons[] = $this->renderPageButton($firstPageLabel, 0, $this->firstPageCssClass, $currentPage <= 0, false);
         }
@@ -200,7 +212,8 @@ class LinkPager extends Widget
         }
 
         // internal pages
-        list($beginPage, $endPage) = $this->getPageRange();
+        [$beginPage, $endPage] = $this->getPageRange();
+
         for ($i = $beginPage; $i <= $endPage; ++$i) {
             $buttons[] = $this->renderPageButton($i + 1, $i, null, $this->disableCurrentPageButton && $i == $currentPage, $i == $currentPage);
         }
@@ -215,23 +228,27 @@ class LinkPager extends Widget
 
         // last page
         $lastPageLabel = $this->lastPageLabel === true ? $pageCount : $this->lastPageLabel;
+
         if ($lastPageLabel !== false) {
             $buttons[] = $this->renderPageButton($lastPageLabel, $pageCount - 1, $this->lastPageCssClass, $currentPage >= $pageCount - 1, false);
         }
 
         $options = $this->options;
         $tag = ArrayHelper::remove($options, 'tag', 'ul');
+
         return Html::tag($tag, implode("\n", $buttons), $options);
     }
 
     /**
      * Renders a page button.
      * You may override this method to customize the generation of page buttons.
+     *
      * @param string $label the text label for the button
      * @param int $page the page number
      * @param string $class the CSS class for the page button.
      * @param bool $disabled whether this page button is disabled
      * @param bool $active whether this page button is active
+     *
      * @return string the rendering result
      */
     protected function renderPageButton($label, $page, $class, $disabled, $active)
@@ -243,6 +260,7 @@ class LinkPager extends Widget
         if ($active) {
             Html::addCssClass($options, $this->activePageCssClass);
         }
+
         if ($disabled) {
             Html::addCssClass($options, $this->disabledPageCssClass);
             $disabledItemOptions = $this->disabledListItemSubTagOptions;
@@ -265,6 +283,7 @@ class LinkPager extends Widget
         $pageCount = $this->pagination->getPageCount();
 
         $beginPage = max(0, $currentPage - (int) ($this->maxButtonCount / 2));
+
         if (($endPage = $beginPage + $this->maxButtonCount - 1) >= $pageCount) {
             $endPage = $pageCount - 1;
             $beginPage = max(0, $endPage - $this->maxButtonCount + 1);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -12,6 +13,7 @@ namespace yii\db;
  * objects that implement [[ExpressionInterface]].
  *
  * @author Dmitry Naumenko <d.naumenko.a@gmail.com>
+ *
  * @since 2.0.14
  */
 interface ExpressionBuilderInterface
@@ -22,6 +24,7 @@ interface ExpressionBuilderInterface
      *
      * @param ExpressionInterface $expression the expression to be built.
      * @param array $params the binding parameters.
+     *
      * @return string the raw SQL that will not be additionally escaped or quoted.
      */
     public function build(ExpressionInterface $expression, array &$params = []);

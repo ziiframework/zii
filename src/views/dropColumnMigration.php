@@ -10,6 +10,7 @@
 /* @var $fields array the fields */
 
 echo "<?php\n";
+
 if (!empty($namespace)) {
     echo "\nnamespace {$namespace};\n";
 }
@@ -18,12 +19,12 @@ if (!empty($namespace)) {
 use yii\db\Migration;
 
 /**
- * Handles dropping columns from table `<?= $table ?>`.
+ * Handles dropping columns from table `<?= $table; ?>`.
 <?= $this->render('_foreignTables', [
     'foreignKeys' => $foreignKeys,
-]) ?>
+]); ?>
  */
-class <?= $className ?> extends Migration
+class <?= $className; ?> extends Migration
 {
     /**
      * {@inheritdoc}
@@ -34,7 +35,7 @@ class <?= $className ?> extends Migration
     'table' => $table,
     'fields' => $fields,
     'foreignKeys' => $foreignKeys,
-])
+]);
 ?>
     }
 
@@ -47,7 +48,7 @@ class <?= $className ?> extends Migration
     'table' => $table,
     'fields' => $fields,
     'foreignKeys' => $foreignKeys,
-])
+]);
 ?>
     }
 }

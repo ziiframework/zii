@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -13,6 +14,7 @@ namespace yii\base;
  * By setting the [[isValid]] property, one may control whether to continue running the action.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class ActionEvent extends Event
@@ -32,9 +34,9 @@ class ActionEvent extends Event
      */
     public $isValid = true;
 
-
     /**
      * Constructor.
+     *
      * @param Action $action the action associated with this action event.
      * @param array $config name-value pairs that will be used to initialize the object properties
      */

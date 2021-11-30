@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -16,15 +17,16 @@ namespace yii\console;
  * @property array $params The command line arguments. It does not include the entry script name.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class Request extends \yii\base\Request
 {
     private $_params;
 
-
     /**
      * Returns the command line arguments.
+     *
      * @return array the command line arguments. It does not include the entry script name.
      */
     public function getParams()
@@ -43,6 +45,7 @@ class Request extends \yii\base\Request
 
     /**
      * Sets the command line arguments.
+     *
      * @param array $params the command line arguments
      */
     public function setParams($params)
@@ -52,13 +55,16 @@ class Request extends \yii\base\Request
 
     /**
      * Resolves the current request into a route and the associated parameters.
+     *
      * @return array the first element is the route, and the second is the associated parameters.
+     *
      * @throws Exception when parameter is wrong and can not be resolved
      */
     public function resolve()
     {
         $rawParams = $this->getParams();
         $endOfOptionsFound = false;
+
         if (isset($rawParams[0])) {
             $route = array_shift($rawParams);
 
@@ -72,6 +78,7 @@ class Request extends \yii\base\Request
 
         $params = [];
         $prevOption = null;
+
         foreach ($rawParams as $param) {
             if ($endOfOptionsFound) {
                 $params[] = $param;
@@ -79,20 +86,22 @@ class Request extends \yii\base\Request
                 $endOfOptionsFound = true;
             } elseif (preg_match('/^--([\w-]+)(?:=(.*))?$/', $param, $matches)) {
                 $name = $matches[1];
+
                 if (is_numeric(substr($name, 0, 1))) {
                     throw new Exception('Parameter "' . $name . '" is not valid');
                 }
 
                 if ($name !== Application::OPTION_APPCONFIG) {
-                    $params[$name] = isset($matches[2]) ? $matches[2] : true;
+                    $params[$name] = $matches[2] ?? true;
                     $prevOption = &$params[$name];
                 }
             } elseif (preg_match('/^-([\w-]+)(?:=(.*))?$/', $param, $matches)) {
                 $name = $matches[1];
+
                 if (is_numeric($name)) {
                     $params[] = $param;
                 } else {
-                    $params['_aliases'][$name] = isset($matches[2]) ? $matches[2] : true;
+                    $params['_aliases'][$name] = $matches[2] ?? true;
                     $prevOption = &$params['_aliases'][$name];
                 }
             } elseif ($prevOption === true) {

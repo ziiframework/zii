@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -24,6 +25,7 @@ use Yii;
  * For more details and usage information on InitDbFixture, see the [guide article on fixtures](guide:test-fixtures).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class InitDbFixture extends DbFixture
@@ -41,7 +43,6 @@ class InitDbFixture extends DbFixture
      * so that fixture data can be populated into the database without causing problem.
      */
     public $schemas = [''];
-
 
     /**
      * {@inheritdoc}
@@ -65,6 +66,7 @@ class InitDbFixture extends DbFixture
     public function load()
     {
         $file = Yii::getAlias($this->initScript);
+
         if (is_file($file)) {
             require $file;
         }
@@ -88,6 +90,7 @@ class InitDbFixture extends DbFixture
 
     /**
      * Toggles the DB integrity check.
+     *
      * @param bool $check whether to turn on or off the integrity check.
      */
     public function checkIntegrity($check)
@@ -95,6 +98,7 @@ class InitDbFixture extends DbFixture
         if (!$this->db instanceof \yii\db\Connection) {
             return;
         }
+
         foreach ($this->schemas as $schema) {
             $this->db->createCommand()->checkIntegrity($check, $schema)->execute();
         }

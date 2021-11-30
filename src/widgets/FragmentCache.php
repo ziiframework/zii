@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -22,6 +23,7 @@ use yii\di\Instance;
  * found in the cache. This property is read-only.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class FragmentCache extends Widget implements DynamicContentAwareInterface
@@ -75,7 +77,6 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
      */
     public $enabled = true;
 
-
     /**
      * Initializes the FragmentCache object.
      */
@@ -106,9 +107,11 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
             $this->getView()->popDynamicContent();
 
             $content = ob_get_clean();
+
             if ($content === false || $content === '') {
                 return;
             }
+
             if (is_array($this->dependency)) {
                 $this->dependency = Yii::createObject($this->dependency);
             }
@@ -125,6 +128,7 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
 
     /**
      * Returns the cached content if available.
+     *
      * @return string|false the cached content. False is returned if valid content is not found in the cache.
      */
     public function getCachedContent()
@@ -141,26 +145,30 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
 
         $key = $this->calculateKey();
         $data = $this->cache->get($key);
+
         if (!is_array($data) || count($data) !== 2) {
             return $this->_content;
         }
 
-        list($this->_content, $placeholders) = $data;
+        [$this->_content, $placeholders] = $data;
+
         if (!is_array($placeholders) || count($placeholders) === 0) {
             return $this->_content;
         }
 
         $this->_content = $this->updateDynamicContent($this->_content, $placeholders, true);
+
         return $this->_content;
     }
 
     /**
      * Generates a unique key used for storing the content in cache.
      * The key generated depends on both [[id]] and [[variations]].
+     *
      * @return mixed a valid cache key
      */
     protected function calculateKey()
     {
-        return array_merge([__CLASS__, $this->getId()], (array)$this->variations);
+        return array_merge([__CLASS__, $this->getId()], (array) $this->variations);
     }
 }

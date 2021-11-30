@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -38,6 +39,7 @@ use yii\base\Widget;
  * ```
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class ContentDecorator extends Widget
@@ -51,7 +53,6 @@ class ContentDecorator extends Widget
      * @var array the parameters (name => value) to be extracted and made available in the decorative view.
      */
     public $params = [];
-
 
     /**
      * Starts recording a clip.

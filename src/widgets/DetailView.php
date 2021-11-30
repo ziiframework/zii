@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,7 @@
 
 namespace yii\widgets;
 
+use Closure;
 use Yii;
 use yii\base\Arrayable;
 use yii\base\InvalidConfigException;
@@ -47,6 +49,7 @@ use yii\i18n\Formatter;
  * For more details and usage information on DetailView, see the [guide article on data widgets](guide:output-data-widgets).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class DetailView extends Widget
@@ -110,6 +113,7 @@ class DetailView extends Widget
     /**
      * @var array the HTML attributes for the container tag of this widget. The `tag` option specifies
      * what container tag should be used. It defaults to `table` if not set.
+     *
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $options = ['class' => 'table table-striped table-bordered detail-view'];
@@ -119,7 +123,6 @@ class DetailView extends Widget
      * instance. If this property is not set, the `formatter` application component will be used.
      */
     public $formatter;
-
 
     /**
      * Initializes the detail view.
@@ -132,11 +135,13 @@ class DetailView extends Widget
         if ($this->model === null) {
             throw new InvalidConfigException('Please specify the "model" property.');
         }
+
         if ($this->formatter === null) {
             $this->formatter = Yii::$app->getFormatter();
         } elseif (is_array($this->formatter)) {
             $this->formatter = Yii::createObject($this->formatter);
         }
+
         if (!$this->formatter instanceof Formatter) {
             throw new InvalidConfigException('The "formatter" property must be either a Format object or a configuration array.');
         }
@@ -155,6 +160,7 @@ class DetailView extends Widget
     {
         $rows = [];
         $i = 0;
+
         foreach ($this->attributes as $attribute) {
             $rows[] = $this->renderAttribute($attribute, $i++);
         }
@@ -166,8 +172,10 @@ class DetailView extends Widget
 
     /**
      * Renders a single attribute.
+     *
      * @param array $attribute the specification of the attribute to be rendered.
      * @param int $index the zero-based index of the attribute in the [[attributes]] array
+     *
      * @return string the rendering result
      */
     protected function renderAttribute($attribute, $index)
@@ -175,6 +183,7 @@ class DetailView extends Widget
         if (is_string($this->template)) {
             $captionOptions = Html::renderTagAttributes(ArrayHelper::getValue($attribute, 'captionOptions', []));
             $contentOptions = Html::renderTagAttributes(ArrayHelper::getValue($attribute, 'contentOptions', []));
+
             return strtr($this->template, [
                 '{label}' => $attribute['label'],
                 '{value}' => $this->formatter->format($attribute['value'], $attribute['format']),
@@ -188,6 +197,7 @@ class DetailView extends Widget
 
     /**
      * Normalizes the attribute specifications.
+     *
      * @throws InvalidConfigException
      */
     protected function normalizeAttributes()
@@ -212,8 +222,8 @@ class DetailView extends Widget
                 }
                 $attribute = [
                     'attribute' => $matches[1],
-                    'format' => isset($matches[3]) ? $matches[3] : 'text',
-                    'label' => isset($matches[5]) ? $matches[5] : null,
+                    'format' => $matches[3] ?? 'text',
+                    'label' => $matches[5] ?? null,
                 ];
             }
 
@@ -223,17 +233,21 @@ class DetailView extends Widget
 
             if (isset($attribute['visible']) && !$attribute['visible']) {
                 unset($this->attributes[$i]);
+
                 continue;
             }
 
             if (!isset($attribute['format'])) {
                 $attribute['format'] = 'text';
             }
+
             if (isset($attribute['attribute'])) {
                 $attributeName = $attribute['attribute'];
+
                 if (!isset($attribute['label'])) {
                     $attribute['label'] = $this->model instanceof Model ? $this->model->getAttributeLabel($attributeName) : Inflector::camel2words($attributeName, true);
                 }
+
                 if (!array_key_exists('value', $attribute)) {
                     $attribute['value'] = ArrayHelper::getValue($this->model, $attributeName);
                 }
@@ -241,7 +255,7 @@ class DetailView extends Widget
                 throw new InvalidConfigException('The attribute configuration requires the "attribute" element to determine the value and display label.');
             }
 
-            if ($attribute['value'] instanceof \Closure) {
+            if ($attribute['value'] instanceof Closure) {
                 $attribute['value'] = call_user_func($attribute['value'], $this->model, $this);
             }
 

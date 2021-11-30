@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -51,13 +52,16 @@ namespace yii\web;
  * except [[yii\web\IdentityInterface::findIdentityByAccessToken()|findIdentityByAccessToken()]].
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 interface IdentityInterface
 {
     /**
      * Finds an identity by the given ID.
+     *
      * @param string|int $id the ID to be looked for
+     *
      * @return IdentityInterface|null the identity object that matches the given ID.
      * Null should be returned if such an identity cannot be found
      * or the identity is not in an active state (disabled, deleted, etc.)
@@ -66,9 +70,11 @@ interface IdentityInterface
 
     /**
      * Finds an identity by the given token.
+     *
      * @param mixed $token the token to be looked for
      * @param mixed $type the type of the token. The value of this parameter depends on the implementation.
      * For example, [[\yii\filters\auth\HttpBearerAuth]] will set this parameter to be `yii\filters\auth\HttpBearerAuth`.
+     *
      * @return IdentityInterface|null the identity object that matches the given token.
      * Null should be returned if such an identity cannot be found
      * or the identity is not in an active state (disabled, deleted, etc.)
@@ -77,6 +83,7 @@ interface IdentityInterface
 
     /**
      * Returns an ID that can uniquely identify a user identity.
+     *
      * @return string|int an ID that uniquely identifies a user identity.
      */
     public function getId();
@@ -95,6 +102,7 @@ interface IdentityInterface
      * other scenarios, that require forceful access revocation for old sessions.
      *
      * @return string|null a key that is used to check the validity of a given identity ID.
+     *
      * @see validateAuthKey()
      */
     public function getAuthKey();
@@ -103,7 +111,9 @@ interface IdentityInterface
      * Validates the given auth key.
      *
      * @param string $authKey the given auth key
+     *
      * @return bool|null whether the given auth key is valid.
+     *
      * @see getAuthKey()
      */
     public function validateAuthKey($authKey);

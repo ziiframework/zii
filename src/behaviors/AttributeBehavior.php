@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -46,6 +47,7 @@ use yii\db\ActiveRecord;
  *
  * @author Luciano Baraglia <luciano.baraglia@gmail.com>
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class AttributeBehavior extends Behavior
@@ -82,29 +84,28 @@ class AttributeBehavior extends Behavior
     /**
      * @var bool whether to skip this behavior when the `$owner` has not been
      * modified
+     *
      * @since 2.0.8
      */
     public $skipUpdateOnClean = true;
     /**
      * @var bool whether to preserve non-empty attribute values.
+     *
      * @since 2.0.13
      */
     public $preserveNonEmptyValues = false;
-
 
     /**
      * {@inheritdoc}
      */
     public function events()
     {
-        return array_fill_keys(
-            array_keys($this->attributes),
-            'evaluateAttributes'
-        );
+        return array_fill_keys(array_keys($this->attributes), 'evaluateAttributes');
     }
 
     /**
      * Evaluates the attribute value and assigns it to the current attributes.
+     *
      * @param Event $event
      */
     public function evaluateAttributes($event)
@@ -119,6 +120,7 @@ class AttributeBehavior extends Behavior
         if (!empty($this->attributes[$event->name])) {
             $attributes = (array) $this->attributes[$event->name];
             $value = $this->getValue($event);
+
             foreach ($attributes as $attribute) {
                 // ignore attribute names which are not string (e.g. when set by TimestampBehavior::updatedAtAttribute)
                 if (is_string($attribute)) {
@@ -135,7 +137,9 @@ class AttributeBehavior extends Behavior
      * Returns the value for the current attributes.
      * This method is called by [[evaluateAttributes()]]. Its return value will be assigned
      * to the attributes corresponding to the triggering event.
+     *
      * @param Event $event the event that triggers the current attribute updating.
+     *
      * @return mixed the attribute value
      */
     protected function getValue($event)

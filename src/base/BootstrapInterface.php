@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -50,12 +51,14 @@ namespace yii\base;
  * For more details and usage information on BootstrapInterface, see the [guide article on bootstrapping applications](guide:structure-applications).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 interface BootstrapInterface
 {
     /**
      * Bootstrap method to be called during application bootstrap stage.
+     *
      * @param Application $app the application currently running
      */
     public function bootstrap($app);

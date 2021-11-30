@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -17,6 +18,7 @@ use yii\di\Instance;
  * @see Mutex
  *
  * @author resurtm <resurtm@gmail.com>
+ *
  * @since 2.0
  */
 abstract class DbMutex extends Mutex
@@ -29,9 +31,9 @@ abstract class DbMutex extends Mutex
      */
     public $db = 'db';
 
-
     /**
      * Initializes generic database table based mutex implementation.
+     *
      * @throws InvalidConfigException if [[db]] is invalid.
      */
     public function init()

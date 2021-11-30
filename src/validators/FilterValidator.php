@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -29,6 +30,7 @@ use yii\base\InvalidConfigException;
  * To specify the filter, set [[filter]] property to be the callback.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class FilterValidator extends Validator
@@ -56,13 +58,13 @@ class FilterValidator extends Validator
      */
     public $skipOnEmpty = false;
 
-
     /**
      * {@inheritdoc}
      */
     public function init()
     {
         parent::init();
+
         if ($this->filter === null) {
             throw new InvalidConfigException('The "filter" property must be set.');
         }
@@ -74,6 +76,7 @@ class FilterValidator extends Validator
     public function validateAttribute($model, $attribute)
     {
         $value = $model->$attribute;
+
         if (!$this->skipOnArray || !is_array($value)) {
             $model->$attribute = call_user_func($this->filter, $value);
         }
@@ -100,6 +103,7 @@ class FilterValidator extends Validator
     public function getClientOptions($model, $attribute)
     {
         $options = [];
+
         if ($this->skipOnEmpty) {
             $options['skipOnEmpty'] = 1;
         }

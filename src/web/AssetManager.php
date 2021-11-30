@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,7 @@
 
 namespace yii\web;
 
+use Exception;
 use Yii;
 use yii\base\Component;
 use yii\base\InvalidArgumentException;
@@ -37,6 +39,7 @@ use yii\helpers\Url;
  * differs in getter and setter. See [[getConverter()]] and [[setConverter()]] for details.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class AssetManager extends Component
@@ -136,7 +139,7 @@ class AssetManager extends Component
      */
     public $dirMode = 0775;
     /**
-     * @var callback a PHP callback that is called before copying each sub-directory or file.
+     * @var callable a PHP callback that is called before copying each sub-directory or file.
      * This option is used only when publishing a directory. If the callback returns false, the copy
      * operation for the sub-directory or file will be cancelled.
      *
@@ -147,7 +150,7 @@ class AssetManager extends Component
      */
     public $beforeCopy;
     /**
-     * @var callback a PHP callback that is called after a sub-directory or file is successfully copied.
+     * @var callable a PHP callback that is called after a sub-directory or file is successfully copied.
      * This option is used only when publishing a directory. The signature of the callback is the same as
      * for [[beforeCopy]].
      * This is passed as a parameter `afterCopy` to [[\yii\helpers\FileHelper::copyDirectory()]].
@@ -167,6 +170,7 @@ class AssetManager extends Component
      * last modification time of the published asset file.
      * You normally would want to set this property to true when you have enabled HTTP caching for assets,
      * because it allows you to bust caching when the assets are updated.
+     *
      * @since 2.0.3
      */
     public $appendTimestamp = false;
@@ -200,9 +204,9 @@ class AssetManager extends Component
 
     private $_dummyBundles = [];
 
-
     /**
      * Initializes the component.
+     *
      * @throws InvalidConfigException if [[basePath]] does not exist.
      */
     public function init()
@@ -248,7 +252,9 @@ class AssetManager extends Component
      * @param string $name the class name of the asset bundle (without the leading backslash)
      * @param bool $publish whether to publish the asset files in the asset bundle before it is returned.
      * If you set this false, you must manually call `AssetBundle::publish()` to publish the asset files.
+     *
      * @return AssetBundle the asset bundle instance
+     *
      * @throws InvalidConfigException if $name does not refer to a valid asset bundle
      */
     public function getBundle($name, $publish = true)
@@ -274,7 +280,9 @@ class AssetManager extends Component
      * @param string $name bundle name
      * @param array $config bundle object configuration
      * @param bool $publish if bundle should be published
+     *
      * @return AssetBundle
+     *
      * @throws InvalidConfigException if configuration isn't valid
      */
     protected function loadBundle($name, $config = [], $publish = true)
@@ -284,6 +292,7 @@ class AssetManager extends Component
         }
         /* @var $bundle AssetBundle */
         $bundle = Yii::createObject($config);
+
         if ($publish) {
             $bundle->publish($this);
         }
@@ -295,6 +304,7 @@ class AssetManager extends Component
      * Loads dummy bundle by name.
      *
      * @param string $name
+     *
      * @return AssetBundle
      */
     protected function loadDummyBundle($name)
@@ -314,9 +324,11 @@ class AssetManager extends Component
     /**
      * Returns the actual URL for the specified asset.
      * The actual URL is obtained by prepending either [[AssetBundle::$baseUrl]] or [[AssetManager::$baseUrl]] to the given asset path.
+     *
      * @param AssetBundle $bundle the asset bundle which the asset file belongs to
      * @param string $asset the asset path. This should be one of the assets listed in [[AssetBundle::$js]] or [[AssetBundle::$css]].
      * @param bool|null $appendTimestamp Whether to append timestamp to the URL.
+     *
      * @return string the actual URL for the specified asset.
      */
     public function getAssetUrl($bundle, $asset, $appendTimestamp = null)
@@ -325,6 +337,7 @@ class AssetManager extends Component
         $assetPath = $this->getAssetPath($bundle, $asset);
 
         $withTimestamp = $this->appendTimestamp;
+
         if ($appendTimestamp !== null) {
             $withTimestamp = $appendTimestamp;
         }
@@ -338,8 +351,10 @@ class AssetManager extends Component
 
     /**
      * Returns the actual file path for the specified asset.
+     *
      * @param AssetBundle $bundle the asset bundle which the asset file belongs to
      * @param string $asset the asset path. This should be one of the assets listed in [[AssetBundle::$js]] or [[AssetBundle::$css]].
+     *
      * @return string|false the actual file path, or `false` if the asset is specified as an absolute URL
      */
     public function getAssetPath($bundle, $asset)
@@ -354,6 +369,7 @@ class AssetManager extends Component
     /**
      * @param AssetBundle $bundle
      * @param string $asset
+     *
      * @return string|bool
      */
     protected function resolveAsset($bundle, $asset)
@@ -361,13 +377,16 @@ class AssetManager extends Component
         if (isset($this->assetMap[$asset])) {
             return $this->assetMap[$asset];
         }
+
         if ($bundle->sourcePath !== null && Url::isRelative($asset)) {
             $asset = $bundle->sourcePath . '/' . $asset;
         }
 
         $n = mb_strlen($asset, Yii::$app->charset);
+
         foreach ($this->assetMap as $from => $to) {
             $n2 = mb_strlen($from, Yii::$app->charset);
+
             if ($n2 <= $n && substr_compare($asset, $from, $n - $n2, $n2) === 0) {
                 return $to;
             }
@@ -380,6 +399,7 @@ class AssetManager extends Component
 
     /**
      * Returns the asset converter.
+     *
      * @return AssetConverterInterface the asset converter.
      */
     public function getConverter()
@@ -398,6 +418,7 @@ class AssetManager extends Component
 
     /**
      * Sets the asset converter.
+     *
      * @param array|AssetConverterInterface $value the asset converter. This can be either
      * an object implementing the [[AssetConverterInterface]], or a configuration
      * array that can be used to create the asset converter object.
@@ -452,6 +473,7 @@ class AssetManager extends Component
      *   This overrides [[forceCopy]] if set.
      *
      * @return array the path (directory or file path) and the URL that the asset is published as.
+     *
      * @throws InvalidArgumentException if the asset to be published does not exist.
      * @throws InvalidConfigException if the target directory [[basePath]] is not writeable.
      */
@@ -476,8 +498,11 @@ class AssetManager extends Component
 
     /**
      * Publishes a file.
+     *
      * @param string $src the asset file to be published
+     *
      * @return string[] the path and the URL that the asset is published as.
+     *
      * @throws InvalidArgumentException if the asset to be published does not exist.
      */
     protected function publishFile($src)
@@ -497,7 +522,7 @@ class AssetManager extends Component
             if (!is_file($dstFile)) {
                 try { // fix #6226 symlinking multi threaded
                     symlink($src, $dstFile);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     if (!is_file($dstFile)) {
                         throw $e;
                     }
@@ -505,6 +530,7 @@ class AssetManager extends Component
             }
         } elseif (@filemtime($dstFile) < @filemtime($src)) {
             copy($src, $dstFile);
+
             if ($this->fileMode !== null) {
                 @chmod($dstFile, $this->fileMode);
             }
@@ -519,6 +545,7 @@ class AssetManager extends Component
 
     /**
      * Publishes a directory.
+     *
      * @param string $src the asset directory to be published
      * @param array $options the options to be applied when publishing a directory.
      * The following options are supported:
@@ -535,6 +562,7 @@ class AssetManager extends Component
      *   This overrides [[forceCopy]] if set.
      *
      * @return string[] the path directory and the URL that the asset is published as.
+     *
      * @throws InvalidArgumentException if the asset to be published does not exist.
      */
     protected function publishDirectory($src, $options)
@@ -543,35 +571,36 @@ class AssetManager extends Component
 
         $dir = $this->hash($src);
         $dstDir = $this->basePath . DIRECTORY_SEPARATOR . $dir;
+
         if ($this->linkAssets) {
             if (!is_dir($dstDir)) {
                 FileHelper::createDirectory(dirname($dstDir), $this->dirMode, true);
+
                 try { // fix #6226 symlinking multi threaded
                     symlink($src, $dstDir);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     if (!is_dir($dstDir)) {
                         throw $e;
                     }
                 }
             }
         } elseif (!empty($options['forceCopy']) || ($this->forceCopy && !isset($options['forceCopy'])) || !is_dir($dstDir)) {
-            $opts = array_merge(
-                $options,
-                [
+            $opts = array_merge($options, [
                     'dirMode' => $this->dirMode,
                     'fileMode' => $this->fileMode,
                     'copyEmptyDirectories' => false,
-                ]
-            );
+                ]);
+
             if (!isset($opts['beforeCopy'])) {
                 if ($this->beforeCopy !== null) {
                     $opts['beforeCopy'] = $this->beforeCopy;
                 } else {
-                    $opts['beforeCopy'] = function ($from, $to) {
+                    $opts['beforeCopy'] = static function ($from, $to) {
                         return strncmp(basename($from), '.', 1) !== 0;
                     };
                 }
             }
+
             if (!isset($opts['afterCopy']) && $this->afterCopy !== null) {
                 $opts['afterCopy'] = $this->afterCopy;
             }
@@ -585,7 +614,9 @@ class AssetManager extends Component
      * Returns the published path of a file path.
      * This method does not perform any publishing. It merely tells you
      * if the file or directory is published, where it will go.
+     *
      * @param string $path directory or file path being published
+     *
      * @return string|false string the published file path. False if the file or directory does not exist
      */
     public function getPublishedPath($path)
@@ -595,6 +626,7 @@ class AssetManager extends Component
         if (isset($this->_published[$path])) {
             return $this->_published[$path][0];
         }
+
         if (is_string($path) && ($path = realpath($path)) !== false) {
             return $this->basePath . DIRECTORY_SEPARATOR . $this->hash($path) . (is_file($path) ? DIRECTORY_SEPARATOR . basename($path) : '');
         }
@@ -606,7 +638,9 @@ class AssetManager extends Component
      * Returns the URL of a published file path.
      * This method does not perform any publishing. It merely tells you
      * if the file path is published, what the URL will be to access it.
+     *
      * @param string $path directory or file path being published
+     *
      * @return string|false string the published URL for the file or directory. False if the file or directory does not exist.
      */
     public function getPublishedUrl($path)
@@ -616,6 +650,7 @@ class AssetManager extends Component
         if (isset($this->_published[$path])) {
             return $this->_published[$path][1];
         }
+
         if (is_string($path) && ($path = realpath($path)) !== false) {
             return $this->baseUrl . '/' . $this->hash($path) . (is_file($path) ? '/' . basename($path) : '');
         }
@@ -626,7 +661,9 @@ class AssetManager extends Component
     /**
      * Generate a CRC32 hash for the directory path. Collisions are higher
      * than MD5 but generates a much smaller hash string.
+     *
      * @param string $path string to be hashed.
+     *
      * @return string hashed string.
      */
     protected function hash($path)
@@ -635,15 +672,19 @@ class AssetManager extends Component
             return call_user_func($this->hashCallback, $path);
         }
         $path = (is_file($path) ? dirname($path) : $path) . filemtime($path);
+
         return sprintf('%x', crc32($path . Yii::getVersion() . '|' . $this->linkAssets));
     }
 
     /**
      * Returns the actual URL for the specified asset. Without parameters.
      * The actual URL is obtained by prepending either [[AssetBundle::$baseUrl]] or [[AssetManager::$baseUrl]] to the given asset path.
+     *
      * @param AssetBundle $bundle the asset bundle which the asset file belongs to
      * @param string $asset the asset path. This should be one of the assets listed in [[AssetBundle::$js]] or [[AssetBundle::$css]].
+     *
      * @return string the actual URL for the specified asset.
+     *
      * @since 2.0.39
      */
     public function getActualAssetUrl($bundle, $asset)

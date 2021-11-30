@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,7 @@
 
 namespace yii\filters;
 
+use function count;
 use Yii;
 use yii\base\ActionFilter;
 use yii\base\BootstrapInterface;
@@ -81,6 +83,7 @@ use yii\web\Response;
  * ```
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class ContentNegotiator extends ActionFilter implements BootstrapInterface
@@ -90,6 +93,7 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
      * Note that if the specified format does not exist in [[formats]], a [[NotAcceptableHttpException]]
      * exception will be thrown.  If the parameter value is empty or if this property is null,
      * the response format will be determined based on the `Accept` HTTP header only.
+     *
      * @see formats
      */
     public $formatParam = '_format';
@@ -98,6 +102,7 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
      * Note that if the specified language does not match any of [[languages]], the first language in [[languages]]
      * will be used. If the parameter value is empty or if this property is null,
      * the application language will be determined based on the `Accept-Language` HTTP header only.
+     *
      * @see languages
      */
     public $languageParam = '_lang';
@@ -128,7 +133,6 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
      */
     public $response;
 
-
     /**
      * {@inheritdoc}
      */
@@ -143,6 +147,7 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
     public function beforeAction($action)
     {
         $this->negotiate();
+
         return true;
     }
 
@@ -153,14 +158,16 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
     {
         $request = $this->request ?: Yii::$app->getRequest();
         $response = $this->response ?: Yii::$app->getResponse();
+
         if (!empty($this->formats)) {
-            if (\count($this->formats) > 1) {
+            if (count($this->formats) > 1) {
                 $response->getHeaders()->add('Vary', 'Accept');
             }
             $this->negotiateContentType($request, $response);
         }
+
         if (!empty($this->languages)) {
-            if (\count($this->languages) > 1) {
+            if (count($this->languages) > 1) {
                 $response->getHeaders()->add('Vary', 'Accept-Language');
             }
             Yii::$app->language = $this->negotiateLanguage($request);
@@ -169,8 +176,10 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
 
     /**
      * Negotiates the response format.
+     *
      * @param Request $request
      * @param Response $response
+     *
      * @throws BadRequestHttpException if an array received for GET parameter [[formatParam]].
      * @throws NotAcceptableHttpException if none of the requested content types is accepted.
      */
@@ -185,6 +194,7 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
                 $response->format = $format;
                 $response->acceptMimeType = null;
                 $response->acceptParams = [];
+
                 return;
             }
 
@@ -192,6 +202,7 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
         }
 
         $types = $request->getAcceptableContentTypes();
+
         if (empty($types)) {
             $types['*/*'] = [];
         }
@@ -201,6 +212,7 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
                 $response->format = $this->formats[$type];
                 $response->acceptMimeType = $type;
                 $response->acceptParams = $params;
+
                 return;
             }
         }
@@ -209,6 +221,7 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
             $response->format = $format;
             $response->acceptMimeType = $type;
             $response->acceptParams = [];
+
             break;
         }
 
@@ -221,7 +234,9 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
 
     /**
      * Negotiates the application language.
+     *
      * @param Request $request
+     *
      * @return string the chosen language
      */
     protected function negotiateLanguage($request)
@@ -231,9 +246,11 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
                 // If an array received, then skip it and use the first of supported languages
                 return reset($this->languages);
             }
+
             if (isset($this->languages[$language])) {
                 return $this->languages[$language];
             }
+
             foreach ($this->languages as $key => $supported) {
                 if (is_int($key) && $this->isLanguageSupported($language, $supported)) {
                     return $supported;
@@ -247,6 +264,7 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
             if (isset($this->languages[$language])) {
                 return $this->languages[$language];
             }
+
             foreach ($this->languages as $key => $supported) {
                 if (is_int($key) && $this->isLanguageSupported($language, $supported)) {
                     return $supported;
@@ -259,14 +277,17 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
 
     /**
      * Returns a value indicating whether the requested language matches the supported language.
+     *
      * @param string $requested the requested language code
      * @param string $supported the supported language code
+     *
      * @return bool whether the requested language is supported
      */
     protected function isLanguageSupported($requested, $supported)
     {
         $supported = str_replace('_', '-', strtolower($supported));
         $requested = str_replace('_', '-', strtolower($requested));
+
         return strpos($requested . '-', $supported . '-') === 0;
     }
 }

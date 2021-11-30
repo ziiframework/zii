@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,7 +8,6 @@
 
 namespace yii\db;
 
-use Yii;
 use yii\base\BaseObject;
 use yii\helpers\StringHelper;
 
@@ -19,6 +19,7 @@ use yii\helpers\StringHelper;
  * @property array $categoryMap Mapping of abstract column types (keys) to type categories (values).
  *
  * @author Vasenin Matvey <vaseninm@gmail.com>
+ *
  * @since 2.0.6
  */
 class ColumnSchemaBuilder extends BaseObject
@@ -26,11 +27,11 @@ class ColumnSchemaBuilder extends BaseObject
     // Internally used constants representing categories that abstract column types fall under.
     // See [[$categoryMap]] for mappings of abstract column types to category.
     // @since 2.0.8
-    const CATEGORY_PK = 'pk';
-    const CATEGORY_STRING = 'string';
-    const CATEGORY_NUMERIC = 'numeric';
-    const CATEGORY_TIME = 'time';
-    const CATEGORY_OTHER = 'other';
+    public const CATEGORY_PK = 'pk';
+    public const CATEGORY_STRING = 'string';
+    public const CATEGORY_NUMERIC = 'numeric';
+    public const CATEGORY_TIME = 'time';
+    public const CATEGORY_OTHER = 'other';
 
     /**
      * @var string the column type definition such as INTEGER, VARCHAR, DATETIME, etc.
@@ -61,28 +62,32 @@ class ColumnSchemaBuilder extends BaseObject
     protected $default;
     /**
      * @var mixed SQL string to be appended to column schema definition.
+     *
      * @since 2.0.9
      */
     protected $append;
     /**
      * @var bool whether the column values should be unsigned. If this is `true`, an `UNSIGNED` keyword will be added.
+     *
      * @since 2.0.7
      */
     protected $isUnsigned = false;
     /**
      * @var string the column after which this column will be added.
+     *
      * @since 2.0.8
      */
     protected $after;
     /**
      * @var bool whether this column is to be inserted at the beginning of the table.
+     *
      * @since 2.0.8
      */
     protected $isFirst;
 
-
     /**
      * @var array mapping of abstract column types (keys) to type categories (values).
+     *
      * @since 2.0.43
      */
     public static $typeCategoryMap = [
@@ -111,11 +116,13 @@ class ColumnSchemaBuilder extends BaseObject
     /**
      * @var \yii\db\Connection the current database connection. It is used mainly to escape strings
      * safely when building the final column schema string.
+     *
      * @since 2.0.8
      */
     public $db;
     /**
      * @var string comment value of the column.
+     *
      * @since 2.0.8
      */
     public $comment;
@@ -138,49 +145,61 @@ class ColumnSchemaBuilder extends BaseObject
 
     /**
      * Adds a `NOT NULL` constraint to the column.
+     *
      * @return $this
      */
     public function notNull()
     {
         $this->isNotNull = true;
+
         return $this;
     }
 
     /**
      * Adds a `NULL` constraint to the column.
+     *
      * @return $this
+     *
      * @since 2.0.9
      */
     public function null()
     {
         $this->isNotNull = false;
+
         return $this;
     }
 
     /**
      * Adds a `UNIQUE` constraint to the column.
+     *
      * @return $this
      */
     public function unique()
     {
         $this->isUnique = true;
+
         return $this;
     }
 
     /**
      * Sets a `CHECK` constraint for the column.
+     *
      * @param string $check the SQL of the `CHECK` constraint to be added.
+     *
      * @return $this
      */
     public function check($check)
     {
         $this->check = $check;
+
         return $this;
     }
 
     /**
      * Specify the default value for the column.
+     *
      * @param mixed $default the default value.
+     *
      * @return $this
      */
     public function defaultValue($default)
@@ -190,24 +209,31 @@ class ColumnSchemaBuilder extends BaseObject
         }
 
         $this->default = $default;
+
         return $this;
     }
 
     /**
      * Specifies the comment for column.
+     *
      * @param string $comment the comment
+     *
      * @return $this
+     *
      * @since 2.0.8
      */
     public function comment($comment)
     {
         $this->comment = $comment;
+
         return $this;
     }
 
     /**
      * Marks column as unsigned.
+     *
      * @return $this
+     *
      * @since 2.0.7
      */
     public function unsigned()
@@ -215,67 +241,86 @@ class ColumnSchemaBuilder extends BaseObject
         switch ($this->type) {
             case Schema::TYPE_PK:
                 $this->type = Schema::TYPE_UPK;
+
                 break;
             case Schema::TYPE_BIGPK:
                 $this->type = Schema::TYPE_UBIGPK;
+
                 break;
         }
         $this->isUnsigned = true;
+
         return $this;
     }
 
     /**
      * Adds an `AFTER` constraint to the column.
      * Note: MySQL, Oracle and Cubrid support only.
+     *
      * @param string $after the column after which $this column will be added.
+     *
      * @return $this
+     *
      * @since 2.0.8
      */
     public function after($after)
     {
         $this->after = $after;
+
         return $this;
     }
 
     /**
      * Adds an `FIRST` constraint to the column.
      * Note: MySQL, Oracle and Cubrid support only.
+     *
      * @return $this
+     *
      * @since 2.0.8
      */
     public function first()
     {
         $this->isFirst = true;
+
         return $this;
     }
 
     /**
      * Specify the default SQL expression for the column.
+     *
      * @param string $default the default value expression.
+     *
      * @return $this
+     *
      * @since 2.0.7
      */
     public function defaultExpression($default)
     {
         $this->default = new Expression($default);
+
         return $this;
     }
 
     /**
      * Specify additional SQL to be appended to column definition.
      * Position modifiers will be appended after column definition in databases that support them.
+     *
      * @param string $sql the SQL string to be appended.
+     *
      * @return $this
+     *
      * @since 2.0.9
      */
     public function append($sql)
     {
         $this->append = $sql;
+
         return $this;
     }
 
     /**
      * Builds the full string for the column's schema.
+     *
      * @return string
      */
     public function __toString()
@@ -283,7 +328,9 @@ class ColumnSchemaBuilder extends BaseObject
         switch ($this->getTypeCategory()) {
             case self::CATEGORY_PK:
                 $format = '{type}{check}{comment}{append}';
+
                 break;
+
             default:
                 $format = '{type}{length}{notnull}{unique}{default}{check}{comment}{append}';
         }
@@ -293,6 +340,7 @@ class ColumnSchemaBuilder extends BaseObject
 
     /**
      * @return array mapping of abstract column types (keys) to type categories (values).
+     *
      * @since 2.0.43
      */
     public function getCategoryMap()
@@ -302,6 +350,7 @@ class ColumnSchemaBuilder extends BaseObject
 
     /**
      * @param array $categoryMap mapping of abstract column types (keys) to type categories (values).
+     *
      * @since 2.0.43
      */
     public function setCategoryMap($categoryMap)
@@ -311,6 +360,7 @@ class ColumnSchemaBuilder extends BaseObject
 
     /**
      * Builds the length/precision part of the column.
+     *
      * @return string
      */
     protected function buildLengthString()
@@ -318,6 +368,7 @@ class ColumnSchemaBuilder extends BaseObject
         if ($this->length === null || $this->length === []) {
             return '';
         }
+
         if (is_array($this->length)) {
             $this->length = implode(',', $this->length);
         }
@@ -327,6 +378,7 @@ class ColumnSchemaBuilder extends BaseObject
 
     /**
      * Builds the not null constraint for the column.
+     *
      * @return string returns 'NOT NULL' if [[isNotNull]] is true,
      * 'NULL' if [[isNotNull]] is false or an empty string otherwise.
      */
@@ -343,6 +395,7 @@ class ColumnSchemaBuilder extends BaseObject
 
     /**
      * Builds the unique constraint for the column.
+     *
      * @return string returns string 'UNIQUE' if [[isUnique]] is true, otherwise it returns an empty string.
      */
     protected function buildUniqueString()
@@ -352,6 +405,7 @@ class ColumnSchemaBuilder extends BaseObject
 
     /**
      * Return the default value for the column.
+     *
      * @return string|null string with default value of column.
      */
     protected function buildDefaultValue()
@@ -364,14 +418,18 @@ class ColumnSchemaBuilder extends BaseObject
             case 'double':
                 // ensure type cast always has . as decimal separator in all locales
                 $defaultValue = StringHelper::floatToString($this->default);
+
                 break;
             case 'boolean':
                 $defaultValue = $this->default ? 'TRUE' : 'FALSE';
+
                 break;
             case 'integer':
             case 'object':
                 $defaultValue = (string) $this->default;
+
                 break;
+
             default:
                 $defaultValue = "'{$this->default}'";
         }
@@ -381,11 +439,13 @@ class ColumnSchemaBuilder extends BaseObject
 
     /**
      * Builds the default value specification for the column.
+     *
      * @return string string with default value of column.
      */
     protected function buildDefaultString()
     {
         $defaultValue = $this->buildDefaultValue();
+
         if ($defaultValue === null) {
             return '';
         }
@@ -395,6 +455,7 @@ class ColumnSchemaBuilder extends BaseObject
 
     /**
      * Builds the check constraint for the column.
+     *
      * @return string a string containing the CHECK constraint.
      */
     protected function buildCheckString()
@@ -404,7 +465,9 @@ class ColumnSchemaBuilder extends BaseObject
 
     /**
      * Builds the unsigned string for column. Defaults to unsupported.
+     *
      * @return string a string containing UNSIGNED keyword.
+     *
      * @since 2.0.7
      */
     protected function buildUnsignedString()
@@ -414,7 +477,9 @@ class ColumnSchemaBuilder extends BaseObject
 
     /**
      * Builds the after constraint for the column. Defaults to unsupported.
+     *
      * @return string a string containing the AFTER constraint.
+     *
      * @since 2.0.8
      */
     protected function buildAfterString()
@@ -424,7 +489,9 @@ class ColumnSchemaBuilder extends BaseObject
 
     /**
      * Builds the first constraint for the column. Defaults to unsupported.
+     *
      * @return string a string containing the FIRST constraint.
+     *
      * @since 2.0.8
      */
     protected function buildFirstString()
@@ -434,7 +501,9 @@ class ColumnSchemaBuilder extends BaseObject
 
     /**
      * Builds the custom string that's appended to column definition.
+     *
      * @return string custom string to append.
+     *
      * @since 2.0.9
      */
     protected function buildAppendString()
@@ -444,17 +513,21 @@ class ColumnSchemaBuilder extends BaseObject
 
     /**
      * Returns the category of the column type.
+     *
      * @return string a string containing the column type category name.
+     *
      * @since 2.0.8
      */
     protected function getTypeCategory()
     {
-        return isset($this->categoryMap[$this->type]) ? $this->categoryMap[$this->type] : null;
+        return $this->categoryMap[$this->type] ?? null;
     }
 
     /**
      * Builds the comment specification for the column.
+     *
      * @return string a string containing the COMMENT keyword and the comment itself
+     *
      * @since 2.0.8
      */
     protected function buildCommentString()
@@ -464,8 +537,11 @@ class ColumnSchemaBuilder extends BaseObject
 
     /**
      * Returns the complete column definition from input format.
+     *
      * @param string $format the format of the definition.
+     *
      * @return string a string containing the complete column definition.
+     *
      * @since 2.0.8
      */
     protected function buildCompleteString($format)
@@ -482,6 +558,7 @@ class ColumnSchemaBuilder extends BaseObject
             '{pos}' => $this->isFirst ? $this->buildFirstString() : $this->buildAfterString(),
             '{append}' => $this->buildAppendString(),
         ];
+
         return strtr($format, $placeholderValues);
     }
 }

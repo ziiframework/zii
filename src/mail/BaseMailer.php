@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -28,6 +29,7 @@ use yii\web\View;
  * to '@app/mail'.
  *
  * @author Paul Klimov <klimov.paul@gmail.com>
+ *
  * @since 2.0
  */
 abstract class BaseMailer extends Component implements MailerInterface, ViewContextInterface
@@ -36,11 +38,11 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
      * @event MailEvent an event raised right before send.
      * You may set [[MailEvent::isValid]] to be false to cancel the send.
      */
-    const EVENT_BEFORE_SEND = 'beforeSend';
+    public const EVENT_BEFORE_SEND = 'beforeSend';
     /**
      * @event MailEvent an event raised right after send.
      */
-    const EVENT_AFTER_SEND = 'afterSend';
+    public const EVENT_AFTER_SEND = 'afterSend';
 
     /**
      * @var string|bool HTML layout view name. This is the layout used to render HTML mail body.
@@ -79,6 +81,7 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
     /**
      * @var bool whether to save email messages as files under [[fileTransportPath]] instead of sending them
      * to the actual recipients. This is usually used during development for debugging purpose.
+     *
      * @see fileTransportPath
      */
     public $useFileTransport = false;
@@ -108,10 +111,10 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
      */
     private $_viewPath;
 
-
     /**
      * @param array|View $view view instance or its array configuration that will be used to
      * render message bodies.
+     *
      * @throws InvalidConfigException on invalid argument.
      */
     public function setView($view)
@@ -136,7 +139,9 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
 
     /**
      * Creates view instance from given configuration.
+     *
      * @param array $config view configuration.
+     *
      * @return View view instance.
      */
     protected function createView(array $config)
@@ -166,13 +171,14 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
      *
      * - path alias (e.g. "@app/mail/contact");
      * - a relative view name (e.g. "contact") located under [[viewPath]].
-     *
      * @param array $params the parameters (name-value pairs) that will be extracted and made available in the view file.
+     *
      * @return MessageInterface message instance.
      */
     public function compose($view = null, array $params = [])
     {
         $message = $this->createMessage();
+
         if ($view === null) {
             return $message;
         }
@@ -187,6 +193,7 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
             if (isset($view['html'])) {
                 $html = $this->render($view['html'], $params, $this->htmlLayout);
             }
+
             if (isset($view['text'])) {
                 $text = $this->render($view['text'], $params, $this->textLayout);
             }
@@ -194,12 +201,12 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
             $html = $this->render($view, $params, $this->htmlLayout);
         }
 
-
         $this->_message = null;
 
         if (isset($html)) {
             $message->setHtmlBody($html);
         }
+
         if (isset($text)) {
             $message->setTextBody($text);
         } elseif (isset($html)) {
@@ -224,15 +231,18 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
      * The newly created instance will be initialized with the configuration specified by [[messageConfig]].
      * If the configuration does not specify a 'class', the [[messageClass]] will be used as the class
      * of the new message instance.
+     *
      * @return MessageInterface message instance.
      */
     protected function createMessage()
     {
         $config = $this->messageConfig;
+
         if (!array_key_exists('class', $config)) {
             $config['class'] = $this->messageClass;
         }
         $config['mailer'] = $this;
+
         return Yii::createObject($config);
     }
 
@@ -242,7 +252,9 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
      * If [[useFileTransport]] is true, it will save the email as a file under [[fileTransportPath]].
      * Otherwise, it will call [[sendMessage()]] to send the email to its recipient(s).
      * Child classes should implement [[sendMessage()]] with the actual email sending logic.
+     *
      * @param MessageInterface $message email message instance to be sent
+     *
      * @return bool whether the message has been sent successfully
      */
     public function send($message)
@@ -252,6 +264,7 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
         }
 
         $address = $message->getTo();
+
         if (is_array($address)) {
             $address = implode(', ', array_keys($address));
         }
@@ -275,14 +288,16 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
      * sending multiple messages.
      *
      * @param array $messages list of email messages, which should be sent.
+     *
      * @return int number of messages that are successfully sent.
      */
     public function sendMultiple(array $messages)
     {
         $successCount = 0;
+
         foreach ($messages as $message) {
             if ($this->send($message)) {
-                $successCount++;
+                ++$successCount;
             }
         }
 
@@ -292,14 +307,17 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
     /**
      * Renders the specified view with optional parameters and layout.
      * The view will be rendered using the [[view]] component.
+     *
      * @param string $view the view name or the [path alias](guide:concept-aliases) of the view file.
      * @param array $params the parameters (name-value pairs) that will be extracted and made available in the view file.
      * @param string|bool $layout layout view name or [path alias](guide:concept-aliases). If false, no layout will be applied.
+     *
      * @return string the rendering result.
      */
     public function render($view, $params = [], $layout = false)
     {
         $output = $this->getView()->render($view, $params, $this);
+
         if ($layout !== false) {
             return $this->getView()->render($layout, ['content' => $output, 'message' => $this->_message], $this);
         }
@@ -310,22 +328,28 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
     /**
      * Sends the specified message.
      * This method should be implemented by child classes with the actual email sending logic.
+     *
      * @param MessageInterface $message the message to be sent
+     *
      * @return bool whether the message is sent successfully
      */
     abstract protected function sendMessage($message);
 
     /**
      * Saves the message as a file under [[fileTransportPath]].
+     *
      * @param MessageInterface $message
+     *
      * @return bool whether the message is saved successfully
      */
     protected function saveMessage($message)
     {
         $path = Yii::getAlias($this->fileTransportPath);
+
         if (!is_dir($path)) {
             mkdir($path, 0777, true);
         }
+
         if ($this->fileTransportCallback !== null) {
             $file = $path . '/' . call_user_func($this->fileTransportCallback, $this, $message);
         } else {
@@ -372,7 +396,9 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
      * This method is invoked right before mail send.
      * You may override this method to do last-minute preparation for the message.
      * If you override this method, please make sure you call the parent implementation first.
+     *
      * @param MessageInterface $message
+     *
      * @return bool whether to continue sending an email.
      */
     public function beforeSend($message)
@@ -387,6 +413,7 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
      * This method is invoked right after mail was send.
      * You may override this method to do some postprocessing or logging based on mail send status.
      * If you override this method, please make sure you call the parent implementation first.
+     *
      * @param MessageInterface $message
      * @param bool $isSuccessful
      */

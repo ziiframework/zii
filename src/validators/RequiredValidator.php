@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -13,6 +14,7 @@ use Yii;
  * RequiredValidator validates that the specified attribute does not have null or empty value.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class RequiredValidator extends Validator
@@ -27,6 +29,7 @@ class RequiredValidator extends Validator
      * If this is set as a value that is not null, the validator will validate that
      * the attribute has a value that is the same as this property value.
      * Defaults to null.
+     *
      * @see strict
      */
     public $requiredValue;
@@ -51,13 +54,13 @@ class RequiredValidator extends Validator
      */
     public $message;
 
-
     /**
      * {@inheritdoc}
      */
     public function init()
     {
         parent::init();
+
         if ($this->message === null) {
             $this->message = $this->requiredValue === null ? Yii::t('yii', '{attribute} cannot be blank.')
                 : Yii::t('yii', '{attribute} must be "{requiredValue}".');
@@ -76,6 +79,7 @@ class RequiredValidator extends Validator
         } elseif (!$this->strict && $value == $this->requiredValue || $this->strict && $value === $this->requiredValue) {
             return null;
         }
+
         if ($this->requiredValue === null) {
             return [$this->message, []];
         }
@@ -102,6 +106,7 @@ class RequiredValidator extends Validator
     public function getClientOptions($model, $attribute)
     {
         $options = [];
+
         if ($this->requiredValue !== null) {
             $options['message'] = $this->formatMessage($this->message, [
                 'requiredValue' => $this->requiredValue,
@@ -110,6 +115,7 @@ class RequiredValidator extends Validator
         } else {
             $options['message'] = $this->message;
         }
+
         if ($this->strict) {
             $options['strict'] = 1;
         }

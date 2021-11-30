@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -62,6 +63,7 @@ use yii\di\Instance;
  * For more details and usage information on SqlDataProvider, see the [guide article on data providers](guide:output-data-providers).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class SqlDataProvider extends BaseDataProvider
@@ -87,16 +89,17 @@ class SqlDataProvider extends BaseDataProvider
      */
     public $key;
 
-
     /**
      * Initializes the DB connection component.
      * This method will initialize the [[db]] property to make sure it refers to a valid DB connection.
+     *
      * @throws InvalidConfigException if [[db]] is invalid.
      */
     public function init()
     {
         parent::init();
         $this->db = Instance::ensure($this->db, Connection::className());
+
         if ($this->sql === null) {
             throw new InvalidConfigException('The "sql" property must be set.');
         }
@@ -109,6 +112,7 @@ class SqlDataProvider extends BaseDataProvider
     {
         $sort = $this->getSort();
         $pagination = $this->getPagination();
+
         if ($pagination === false && $sort === false) {
             return $this->db->createCommand($this->sql, $this->params)->queryAll();
         }
@@ -120,6 +124,7 @@ class SqlDataProvider extends BaseDataProvider
         if ($sort !== false) {
             $orders = $sort->getOrders();
             $pattern = '/\s+order\s+by\s+([\w\s,\."`\[\]]+)$/i';
+
             if (preg_match($pattern, $sql, $matches)) {
                 array_unshift($orders, new Expression($matches[1]));
                 $sql = preg_replace($pattern, '', $sql);
@@ -143,6 +148,7 @@ class SqlDataProvider extends BaseDataProvider
     protected function prepareKeys($models)
     {
         $keys = [];
+
         if ($this->key !== null) {
             foreach ($models as $model) {
                 if (is_string($this->key)) {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -22,6 +23,7 @@ use yii\helpers\Html;
  * For more details and usage information on BaseListView, see the [guide article on data widgets](guide:output-data-widgets).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 abstract class BaseListView extends Widget
@@ -29,6 +31,7 @@ abstract class BaseListView extends Widget
     /**
      * @var array the HTML attributes for the container tag of the list view.
      * The "tag" element specifies the tag name of the container element and defaults to "div".
+     *
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $options = [];
@@ -67,6 +70,7 @@ abstract class BaseListView extends Widget
     /**
      * @var array the HTML attributes for the summary of the list view.
      * The "tag" element specifies the tag name of the summary element and defaults to "div".
+     *
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $summaryOptions = ['class' => 'summary'];
@@ -80,6 +84,7 @@ abstract class BaseListView extends Widget
      * @var string|false the HTML content to be displayed when [[dataProvider]] does not have any data.
      * When this is set to `false` no extra HTML content will be generated.
      * The default value is the text "No results found." which will be translated to the current application language.
+     *
      * @see showOnEmpty
      * @see emptyTextOptions
      */
@@ -87,6 +92,7 @@ abstract class BaseListView extends Widget
     /**
      * @var array the HTML attributes for the emptyText of the list view.
      * The "tag" element specifies the tag name of the emptyText element and defaults to "div".
+     *
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $emptyTextOptions = ['class' => 'empty'];
@@ -101,9 +107,9 @@ abstract class BaseListView extends Widget
      */
     public $layout = "{summary}\n{items}\n{pager}";
 
-
     /**
      * Renders the data models.
+     *
      * @return string the rendering result.
      */
     abstract public function renderItems();
@@ -114,12 +120,15 @@ abstract class BaseListView extends Widget
     public function init()
     {
         parent::init();
+
         if ($this->dataProvider === null) {
             throw new InvalidConfigException('The "dataProvider" property must be set.');
         }
+
         if ($this->emptyText === null) {
             $this->emptyText = Yii::t('yii', 'No results found.');
         }
+
         if (!isset($this->options['id'])) {
             $this->options['id'] = $this->getId();
         }
@@ -148,7 +157,9 @@ abstract class BaseListView extends Widget
     /**
      * Renders a section of the specified name.
      * If the named section is not supported, false will be returned.
+     *
      * @param string $name the section name, e.g., `{summary}`, `{items}`.
+     *
      * @return string|bool the rendering result of the section, or false if the named section is not supported.
      */
     public function renderSection($name)
@@ -162,6 +173,7 @@ abstract class BaseListView extends Widget
                 return $this->renderPager();
             case '{sorter}':
                 return $this->renderSorter();
+
             default:
                 return false;
         }
@@ -169,7 +181,9 @@ abstract class BaseListView extends Widget
 
     /**
      * Renders the HTML content indicating that the list view has no data.
+     *
      * @return string the rendering result
+     *
      * @see emptyText
      */
     public function renderEmpty()
@@ -179,6 +193,7 @@ abstract class BaseListView extends Widget
         }
         $options = $this->emptyTextOptions;
         $tag = ArrayHelper::remove($options, 'tag', 'div');
+
         return Html::tag($tag, $this->emptyText, $options);
     }
 
@@ -188,20 +203,24 @@ abstract class BaseListView extends Widget
     public function renderSummary()
     {
         $count = $this->dataProvider->getCount();
+
         if ($count <= 0) {
             return '';
         }
         $summaryOptions = $this->summaryOptions;
         $tag = ArrayHelper::remove($summaryOptions, 'tag', 'div');
+
         if (($pagination = $this->dataProvider->getPagination()) !== false) {
             $totalCount = $this->dataProvider->getTotalCount();
             $begin = $pagination->getPage() * $pagination->pageSize + 1;
             $end = $begin + $count - 1;
+
             if ($begin > $end) {
                 $begin = $end;
             }
             $page = $pagination->getPage() + 1;
             $pageCount = $pagination->pageCount;
+
             if (($summaryContent = $this->summary) === null) {
                 return Html::tag($tag, Yii::t('yii', 'Showing <b>{begin, number}-{end, number}</b> of <b>{totalCount, number}</b> {totalCount, plural, one{item} other{items}}.', [
                         'begin' => $begin,
@@ -215,6 +234,7 @@ abstract class BaseListView extends Widget
         } else {
             $begin = $page = $pageCount = 1;
             $end = $totalCount = $count;
+
             if (($summaryContent = $this->summary) === null) {
                 return Html::tag($tag, Yii::t('yii', 'Total <b>{count, number}</b> {count, plural, one{item} other{items}}.', [
                     'begin' => $begin,
@@ -243,11 +263,13 @@ abstract class BaseListView extends Widget
 
     /**
      * Renders the pager.
+     *
      * @return string the rendering result
      */
     public function renderPager()
     {
         $pagination = $this->dataProvider->getPagination();
+
         if ($pagination === false || $this->dataProvider->getCount() <= 0) {
             return '';
         }
@@ -262,11 +284,13 @@ abstract class BaseListView extends Widget
 
     /**
      * Renders the sorter.
+     *
      * @return string the rendering result
      */
     public function renderSorter()
     {
         $sort = $this->dataProvider->getSort();
+
         if ($sort === false || empty($sort->attributes) || $this->dataProvider->getCount() <= 0) {
             return '';
         }

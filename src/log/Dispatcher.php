@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,8 @@
 
 namespace yii\log;
 
+use Exception;
+use Throwable;
 use Yii;
 use yii\base\Component;
 use yii\base\ErrorHandler;
@@ -58,6 +61,7 @@ use yii\base\ErrorHandler;
  * This method returns the value of [[Logger::traceLevel]]. Defaults to 0.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class Dispatcher extends Component
@@ -72,7 +76,6 @@ class Dispatcher extends Component
      * @var Logger the logger.
      */
     private $_logger;
-
 
     /**
      * {@inheritdoc}
@@ -107,7 +110,9 @@ class Dispatcher extends Component
     /**
      * Gets the connected logger.
      * If not set, [[Yii::getLogger()]] will be used.
+     *
      * @property Logger the logger. If not set, [[Yii::getLogger()]] will be used.
+     *
      * @return Logger the logger.
      */
     public function getLogger()
@@ -121,9 +126,10 @@ class Dispatcher extends Component
 
     /**
      * Sets the connected logger.
+     *
      * @param Logger|string|array $value the logger to be used. This can either be a logger instance
      * or a configuration that will be used to create one using [[Yii::createObject()]].
-     * If you are providing custom logger configuration and would like it to be used for the whole application 
+     * If you are providing custom logger configuration and would like it to be used for the whole application
      * and not just for the dispatcher you should use [[Yii::setLogger()]] instead.
      */
     public function setLogger($value)
@@ -180,22 +186,25 @@ class Dispatcher extends Component
 
     /**
      * Dispatches the logged messages to [[targets]].
+     *
      * @param array $messages the logged messages
      * @param bool $final whether this method is called at the end of the current application
      */
     public function dispatch($messages, $final)
     {
         $targetErrors = [];
+
         foreach ($this->targets as $target) {
             if (!$target->enabled) {
                 continue;
             }
+
             try {
                 $target->collect($messages, $final);
-            } catch (\Throwable $t) {
+            } catch (Throwable $t) {
                 $target->enabled = false;
                 $targetErrors[] = $this->generateTargetFailErrorMessage($target, $t, __METHOD__);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $target->enabled = false;
                 $targetErrors[] = $this->generateTargetFailErrorMessage($target, $e, __METHOD__);
             }
@@ -207,12 +216,14 @@ class Dispatcher extends Component
     }
 
     /**
-     * Generate target error message
+     * Generate target error message.
      *
      * @param Target $target log target object
-     * @param \Throwable|\Exception $throwable catched exception
+     * @param Throwable|Exception $throwable catched exception
      * @param string $method full method path
+     *
      * @return array generated error message data
+     *
      * @since 2.0.32
      */
     protected function generateTargetFailErrorMessage($target, $throwable, $method)

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -13,6 +14,7 @@ namespace yii\base;
  * By setting the [[isValid]] property, one may control whether to continue running the widget.
  *
  * @author Petra Barus <petra.barus@gmail.com>
+ *
  * @since 2.0.11
  */
 class WidgetEvent extends Event

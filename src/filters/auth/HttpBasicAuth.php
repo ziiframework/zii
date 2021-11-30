@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -55,6 +56,7 @@ namespace yii\filters\auth;
  * ```
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class HttpBasicAuth extends AuthMethod
@@ -86,13 +88,12 @@ class HttpBasicAuth extends AuthMethod
      */
     public $auth;
 
-
     /**
      * {@inheritdoc}
      */
     public function authenticate($user, $request, $response)
     {
-        list($username, $password) = $request->getAuthCredentials();
+        [$username, $password] = $request->getAuthCredentials();
 
         if ($this->auth) {
             if ($username !== null || $password !== null) {
@@ -108,6 +109,7 @@ class HttpBasicAuth extends AuthMethod
             }
         } elseif ($username !== null) {
             $identity = $user->loginByAccessToken($username, get_class($this));
+
             if ($identity === null) {
                 $this->handleFailure($response);
             }

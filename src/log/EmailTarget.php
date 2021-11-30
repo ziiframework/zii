@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -40,6 +41,7 @@ use yii\mail\MailerInterface;
  * In the above `mailer` is ID of the component that sends email and should be already configured.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class EmailTarget extends Target
@@ -57,13 +59,13 @@ class EmailTarget extends Target
      */
     public $mailer = 'mailer';
 
-
     /**
      * {@inheritdoc}
      */
     public function init()
     {
         parent::init();
+
         if (empty($this->message['to'])) {
             throw new InvalidConfigException('The "to" option must be set for EmailTarget::message.');
         }
@@ -73,6 +75,7 @@ class EmailTarget extends Target
     /**
      * Sends log messages to specified email addresses.
      * Starting from version 2.0.14, this method throws LogRuntimeException in case the log can not be exported.
+     *
      * @throws LogRuntimeException
      */
     public function export()
@@ -85,6 +88,7 @@ class EmailTarget extends Target
         $messages = array_map([$this, 'formatMessage'], $this->messages);
         $body = wordwrap(implode("\n", $messages), 70);
         $message = $this->composeMessage($body);
+
         if (!$message->send($this->mailer)) {
             throw new LogRuntimeException('Unable to export log through email!');
         }
@@ -92,7 +96,9 @@ class EmailTarget extends Target
 
     /**
      * Composes a mail message with the given body content.
+     *
      * @param string $body the body content
+     *
      * @return \yii\mail\MessageInterface $message
      */
     protected function composeMessage($body)

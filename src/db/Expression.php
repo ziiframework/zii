@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -26,6 +27,7 @@ namespace yii\db;
  * An expression can also be bound with parameters specified via [[params]].
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class Expression extends \yii\base\BaseObject implements ExpressionInterface
@@ -41,9 +43,9 @@ class Expression extends \yii\base\BaseObject implements ExpressionInterface
      */
     public $params = [];
 
-
     /**
      * Constructor.
+     *
      * @param string $expression the DB expression
      * @param array $params parameters
      * @param array $config name-value pairs that will be used to initialize the object properties
@@ -57,6 +59,7 @@ class Expression extends \yii\base\BaseObject implements ExpressionInterface
 
     /**
      * String magic method.
+     *
      * @return string the DB expression.
      */
     public function __toString()
