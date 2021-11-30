@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -25,7 +27,7 @@ class GroupUrlRuleTest extends TestCase
         $this->mockApplication();
     }
 
-    public function testCreateUrl()
+    public function testCreateUrl(): void
     {
         $manager = new UrlManager(['cache' => null]);
         $suites = $this->getTestsForCreateUrl();
@@ -43,7 +45,7 @@ class GroupUrlRuleTest extends TestCase
         }
     }
 
-    public function testParseRequest()
+    public function testParseRequest(): void
     {
         $manager = new UrlManager(['cache' => null]);
         $request = new Request(['hostInfo' => 'http://en.example.com']);
@@ -68,7 +70,7 @@ class GroupUrlRuleTest extends TestCase
         }
     }
 
-    public function testParseVerb()
+    public function testParseVerb(): void
     {
         $config = [
             'prefix' => 'admin',

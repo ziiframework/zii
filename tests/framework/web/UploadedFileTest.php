@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -28,8 +30,8 @@ class UploadedFileTest extends TestCase
     private function generateFakeFileData()
     {
         return [
-            'name' => md5(random_int(0, PHP_INT_MAX)),
-            'tmp_name' => md5(random_int(0, PHP_INT_MAX)),
+            'name' => md5((string) random_int(0, PHP_INT_MAX)),
+            'tmp_name' => md5((string) random_int(0, PHP_INT_MAX)),
             'type' => 'image/jpeg',
             'size' => random_int(1000, 10000),
             'error' => '0',
@@ -39,7 +41,7 @@ class UploadedFileTest extends TestCase
     private function generateTempFileData()
     {
         return [
-            'name' => md5(random_int(0, PHP_INT_MAX)),
+            'name' => md5((string) random_int(0, PHP_INT_MAX)),
             'tmp_name' => tempnam(sys_get_temp_dir(), ''),
             'type' => 'image/jpeg',
             'size' => random_int(1000, 10000),
@@ -47,7 +49,7 @@ class UploadedFileTest extends TestCase
         ];
     }
 
-    private function generateFakeFiles()
+    private function generateFakeFiles(): void
     {
         $_FILES['ModelStub[prod_image]'] = $this->generateFakeFileData();
         $_FILES['ModelStub[prod_images][]'] = $this->generateFakeFileData();
@@ -64,7 +66,7 @@ class UploadedFileTest extends TestCase
 
     // Tests :
 
-    public function testGetInstance()
+    public function testGetInstance(): void
     {
         $productImage = UploadedFile::getInstance(new ModelStub(), 'prod_image');
         $vendorImage = VendorImage::getInstance(new ModelStub(), 'vendor_image');
@@ -73,7 +75,7 @@ class UploadedFileTest extends TestCase
         $this->assertInstanceOf(VendorImage::className(), $vendorImage);
     }
 
-    public function testGetInstances()
+    public function testGetInstances(): void
     {
         $productImages = UploadedFile::getInstances(new ModelStub(), 'prod_images');
         $vendorImages = VendorImage::getInstances(new ModelStub(), 'vendor_images');
@@ -87,7 +89,7 @@ class UploadedFileTest extends TestCase
         }
     }
 
-    public function testSaveAs()
+    public function testSaveAs(): void
     {
         $tmpImage = UploadedFile::getInstance(new ModelStub(), 'temp_image');
         $targetFile = '@runtime/test_saved_uploaded_file_' . time();
@@ -98,7 +100,7 @@ class UploadedFileTest extends TestCase
         @unlink($targetFile);
     }
 
-    public function testSaveFileFromMultipartFormDataParser()
+    public function testSaveFileFromMultipartFormDataParser(): void
     {
         $_FILES = [];
         UploadedFile::reset();

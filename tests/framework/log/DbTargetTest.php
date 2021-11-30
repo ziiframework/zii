@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -31,7 +33,7 @@ abstract class DbTargetTest extends TestCase
 
     protected static $logTable = '{{%log}}';
 
-    protected static function runConsoleAction($route, $params = [])
+    protected static function runConsoleAction($route, $params = []): void
     {
         if (Yii::$app === null) {
             new \yii\console\Application([
@@ -127,7 +129,7 @@ abstract class DbTargetTest extends TestCase
      *
      * @see https://github.com/yiisoft/yii2/issues/7384
      */
-    public function testTimestamp()
+    public function testTimestamp(): void
     {
         $logger = Yii::getLogger();
 
@@ -150,7 +152,7 @@ abstract class DbTargetTest extends TestCase
         $this->assertEquals($time, $loggedTime);
     }
 
-    public function testTransactionRollBack()
+    public function testTransactionRollBack(): void
     {
         $db = self::getConnection();
         $logger = Yii::getLogger();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -32,7 +34,7 @@ class SecurityTest extends TestCase
 
     // Tests :
 
-    public function testHashData()
+    public function testHashData(): void
     {
         $data = 'known data';
         $key = 'secret';
@@ -43,7 +45,7 @@ class SecurityTest extends TestCase
         $this->assertFalse($this->security->validateData($hashedData, $key));
     }
 
-    public function testPasswordHash()
+    public function testPasswordHash(): void
     {
         $this->security->passwordHashCost = 4;  // minimum blowfish's value is enough for tests
 
@@ -53,7 +55,7 @@ class SecurityTest extends TestCase
         $this->assertFalse($this->security->validatePassword('test', $hash));
     }
 
-    public function testEncryptByPassword()
+    public function testEncryptByPassword(): void
     {
         $data = 'known data';
         $key = 'secret';
@@ -69,7 +71,7 @@ class SecurityTest extends TestCase
         $this->assertFalse($decryptedData);
     }
 
-    public function testEncryptByKey()
+    public function testEncryptByKey(): void
     {
         $data = 'known data';
         $key = $this->security->generateRandomKey(80);
@@ -98,7 +100,7 @@ class SecurityTest extends TestCase
      * The output can then be used for testing compatibility of data encrypted in one
      * version of Yii and decrypted in another.
      */
-    public function notestGenerateVectors()
+    public function notestGenerateVectors(): void
     {
         $bin1024 =
             'badec0c7d9ca734e161a1df6ca4daa8cdbf6b3bbb60ec404b47a23226ec266b1
@@ -481,7 +483,7 @@ TEXT;
      * @param string $data      plaintext hex string
      * @param string $encrypted ciphertext hex string
      */
-    public function testEncryptByKeyCompat($key, $data, $encrypted)
+    public function testEncryptByKeyCompat($key, $data, $encrypted): void
     {
         $key = hex2bin(preg_replace('{\s+}', '', $key));
         $data = hex2bin(preg_replace('{\s+}', '', $data));
@@ -792,7 +794,7 @@ TEXT;
      * @param string $data      plaintext hex string
      * @param string $encrypted ciphertext hex string
      */
-    public function testEncryptByPasswordCompat($password, $data, $encrypted)
+    public function testEncryptByPasswordCompat($password, $data, $encrypted): void
     {
         $data = hex2bin(preg_replace('{\s+}', '', $data));
         $encrypted = hex2bin(preg_replace('{\s+}', '', $encrypted));
@@ -816,13 +818,13 @@ TEXT;
      *
      * @param mixed $input
      */
-    public function testRandomKeyInvalidInput($input)
+    public function testRandomKeyInvalidInput($input): void
     {
         $this->expectException('\yii\base\InvalidParamException');
         $key1 = $this->security->generateRandomKey($input);
     }
 
-    public function testGenerateRandomKey()
+    public function testGenerateRandomKey(): void
     {
         // test various string lengths
         for ($length = 1; $length < 64; ++$length) {
@@ -849,7 +851,7 @@ TEXT;
         $this->assertNotEquals($key1, $key2);
     }
 
-    protected function randTime(Security $security, $count, $length, $message)
+    protected function randTime(Security $security, $count, $length, $message): void
     {
         $t = microtime(true);
 
@@ -863,7 +865,7 @@ TEXT;
         fwrite(STDERR, "$message: $count x $length B = $nbytes B in $milisec ms => $rate MB/s\n");
     }
 
-    public function testGenerateRandomString()
+    public function testGenerateRandomString(): void
     {
         $length = 21;
         $key = $this->security->generateRandomString($length);
@@ -959,7 +961,7 @@ TEXT;
      * @param int    $length
      * @param string $okm
      */
-    public function testPbkdf2($hash, $password, $salt, $iterations, $length, $okm)
+    public function testPbkdf2($hash, $password, $salt, $iterations, $length, $okm): void
     {
         $this->security->derivationIterations = $iterations;
         $DK = $this->security->pbkdf2($hash, $password, $salt, $iterations, $length);
@@ -1027,7 +1029,7 @@ TEXT;
             [
                 'Hash' => 'sha1',
                 'IKM' => '0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c',
-                'salt' => null,
+                'salt' => '',
                 'info' => '',
                 'L' => 42,
                 'PRK' => '2adccada18779e7c2077ad2eb19d3f3e731385dd',
@@ -1047,7 +1049,7 @@ TEXT;
      * @param string $prk
      * @param string $okm
      */
-    public function testHkdf($hash, $ikm, $salt, $info, $l, $prk, $okm)
+    public function testHkdf($hash, $ikm, $salt, $info, $l, $prk, $okm): void
     {
         $dk = $this->security->hkdf($hash, hex2bin($ikm), hex2bin($salt), hex2bin($info), $l);
         $this->assertEquals($okm, bin2hex($dk));
@@ -1079,7 +1081,7 @@ TEXT;
      * @param $expected
      * @param $actual
      */
-    public function testCompareStrings($expected, $actual)
+    public function testCompareStrings($expected, $actual): void
     {
         $this->assertEquals(strcmp($expected, $actual) === 0, $this->security->compareString($expected, $actual));
     }
@@ -1089,20 +1091,20 @@ TEXT;
      *
      * @param mixed $unmaskedToken
      */
-    public function testMasking($unmaskedToken)
+    public function testMasking($unmaskedToken): void
     {
         $maskedToken = $this->security->maskToken($unmaskedToken);
         $this->assertGreaterThan(mb_strlen($unmaskedToken, '8bit') * 2, mb_strlen($maskedToken, '8bit'));
         $this->assertEquals($unmaskedToken, $this->security->unmaskToken($maskedToken));
     }
 
-    public function testUnMaskingInvalidStrings()
+    public function testUnMaskingInvalidStrings(): void
     {
         $this->assertEquals('', $this->security->unmaskToken(''));
         $this->assertEquals('', $this->security->unmaskToken('1'));
     }
 
-    public function testMaskingInvalidStrings()
+    public function testMaskingInvalidStrings(): void
     {
         $this->expectException('\yii\base\InvalidParamException');
         $this->security->maskToken('');

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -85,7 +87,7 @@ abstract class CacheTestCase extends TestCase
         return $cache;
     }
 
-    public function testSet()
+    public function testSet(): void
     {
         $cache = $this->getCacheInstance();
 
@@ -94,7 +96,7 @@ abstract class CacheTestCase extends TestCase
         $this->assertTrue($cache->set('array_test', ['array_test' => 'array_test']));
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $cache = $this->prepare();
 
@@ -120,7 +122,7 @@ abstract class CacheTestCase extends TestCase
      *
      * @param int $expiry
      */
-    public function testMultiset($expiry)
+    public function testMultiset($expiry): void
     {
         $cache = $this->getCacheInstance();
         $cache->flush();
@@ -140,7 +142,7 @@ abstract class CacheTestCase extends TestCase
         $this->assertEquals('array_test', $array['array_test']);
     }
 
-    public function testExists()
+    public function testExists(): void
     {
         $cache = $this->prepare();
 
@@ -152,7 +154,7 @@ abstract class CacheTestCase extends TestCase
         $this->assertFalse($cache->exists('not_exists'));
     }
 
-    public function testArrayAccess()
+    public function testArrayAccess(): void
     {
         $cache = $this->getCacheInstance();
 
@@ -160,14 +162,14 @@ abstract class CacheTestCase extends TestCase
         $this->assertInstanceOf('stdClass', $cache['arrayaccess_test']);
     }
 
-    public function testGetNonExistent()
+    public function testGetNonExistent(): void
     {
         $cache = $this->getCacheInstance();
 
         $this->assertFalse($cache->get('non_existent_key'));
     }
 
-    public function testStoreSpecialValues()
+    public function testStoreSpecialValues(): void
     {
         $cache = $this->getCacheInstance();
 
@@ -178,7 +180,7 @@ abstract class CacheTestCase extends TestCase
         $this->assertTrue($cache->get('bool_value'));
     }
 
-    public function testMultiGet()
+    public function testMultiGet(): void
     {
         $cache = $this->prepare();
 
@@ -188,14 +190,14 @@ abstract class CacheTestCase extends TestCase
         $this->assertSame(['number_test' => 42, 'non_existent_key' => false], $cache->multiGet(['number_test', 'non_existent_key']));
     }
 
-    public function testDefaultTtl()
+    public function testDefaultTtl(): void
     {
         $cache = $this->getCacheInstance();
 
         $this->assertSame(0, $cache->defaultDuration);
     }
 
-    public function testExpire()
+    public function testExpire(): void
     {
         $cache = $this->getCacheInstance();
 
@@ -206,7 +208,7 @@ abstract class CacheTestCase extends TestCase
         $this->assertFalse($cache->get('expire_test'));
     }
 
-    public function testExpireAdd()
+    public function testExpireAdd(): void
     {
         $cache = $this->getCacheInstance();
 
@@ -217,7 +219,7 @@ abstract class CacheTestCase extends TestCase
         $this->assertFalse($cache->get('expire_testa'));
     }
 
-    public function testAdd()
+    public function testAdd(): void
     {
         $cache = $this->prepare();
 
@@ -231,7 +233,7 @@ abstract class CacheTestCase extends TestCase
         $this->assertEquals(13, $cache->get('add_test'));
     }
 
-    public function testMultiAdd()
+    public function testMultiAdd(): void
     {
         $cache = $this->prepare();
 
@@ -246,7 +248,7 @@ abstract class CacheTestCase extends TestCase
         $this->assertEquals(13, $cache->get('add_test'));
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $cache = $this->prepare();
 
@@ -255,14 +257,14 @@ abstract class CacheTestCase extends TestCase
         $this->assertFalse($cache->get('number_test'));
     }
 
-    public function testFlush()
+    public function testFlush(): void
     {
         $cache = $this->prepare();
         $this->assertTrue($cache->flush());
         $this->assertFalse($cache->get('number_test'));
     }
 
-    public function testGetOrSet()
+    public function testGetOrSet(): void
     {
         $cache = $this->prepare();
 
@@ -279,7 +281,7 @@ abstract class CacheTestCase extends TestCase
         return get_class($cache);
     }
 
-    public function testGetOrSetWithDependencies()
+    public function testGetOrSetWithDependencies(): void
     {
         $cache = $this->prepare();
         $dependency = new TagDependency(['tags' => 'test']);

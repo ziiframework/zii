@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -15,10 +17,10 @@ use yii\widgets\Spaceless;
  */
 class SpacelessTest extends \yiiunit\TestCase
 {
-    public function testWidget()
+    public function testWidget(): void
     {
         ob_start();
-        ob_implicit_flush(false);
+        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
 
         echo "<body>\n";
 
@@ -48,11 +50,11 @@ class SpacelessTest extends \yiiunit\TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/15536
      */
-    public function testShouldTriggerInitEvent()
+    public function testShouldTriggerInitEvent(): void
     {
         $initTriggered = false;
         $spaceless = Spaceless::begin([
-                'on init' => static function () use (&$initTriggered) {
+                'on init' => static function () use (&$initTriggered): void {
                     $initTriggered = true;
                 },
             ]);

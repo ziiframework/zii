@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -27,16 +29,16 @@ class WidgetTest extends TestCase
         Widget::$stack = [];
     }
 
-    public function testWidget()
+    public function testWidget(): void
     {
         $output = TestWidget::widget(['id' => 'test']);
         $this->assertSame('<run-test>', $output);
     }
 
-    public function testBeginEnd()
+    public function testBeginEnd(): void
     {
         ob_start();
-        ob_implicit_flush(false);
+        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
 
         $widget = TestWidget::begin(['id' => 'test']);
         $this->assertTrue($widget instanceof TestWidget);
@@ -50,7 +52,7 @@ class WidgetTest extends TestCase
     /**
      * @depends testBeginEnd
      */
-    public function testStackTracking()
+    public function testStackTracking(): void
     {
         $this->expectException('yii\base\InvalidCallException');
         TestWidget::end();
@@ -59,7 +61,7 @@ class WidgetTest extends TestCase
     /**
      * @depends testBeginEnd
      */
-    public function testStackTrackingDisorder()
+    public function testStackTrackingDisorder(): void
     {
         $this->expectException('yii\base\InvalidCallException');
         TestWidgetA::begin();
@@ -71,17 +73,17 @@ class WidgetTest extends TestCase
     /**
      * @depends testWidget
      */
-    public function testEvents()
+    public function testEvents(): void
     {
         $output = TestWidget::widget([
             'id' => 'test',
-            'on init' => static function ($event) {
+            'on init' => static function ($event): void {
                 echo '<init>';
             },
-            'on beforeRun' => static function (WidgetEvent $event) {
+            'on beforeRun' => static function (WidgetEvent $event): void {
                 echo '<before-run>';
             },
-            'on afterRun' => static function (WidgetEvent $event) {
+            'on afterRun' => static function (WidgetEvent $event): void {
                 $event->result .= '<after-run>';
             },
         ]);
@@ -91,11 +93,11 @@ class WidgetTest extends TestCase
     /**
      * @depends testEvents
      */
-    public function testPreventRun()
+    public function testPreventRun(): void
     {
         $output = TestWidget::widget([
             'id' => 'test',
-            'on beforeRun' => static function (WidgetEvent $event) {
+            'on beforeRun' => static function (WidgetEvent $event): void {
                 $event->isValid = false;
             },
         ]);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -185,14 +187,14 @@ _MSG_
      * @param string $expected
      * @param array  $args
      */
-    public function testNamedArguments($pattern, $expected, $args)
+    public function testNamedArguments($pattern, $expected, $args): void
     {
         $formatter = new FallbackMessageFormatter();
         $result = $formatter->fallbackFormat($pattern, $args, 'en-US');
         $this->assertEquals($expected, $result, $formatter->getErrorMessage());
     }
 
-    public function testInsufficientArguments()
+    public function testInsufficientArguments(): void
     {
         $expected = '{' . self::SUBJECT . '} is ' . self::N_VALUE;
 
@@ -204,7 +206,7 @@ _MSG_
         $this->assertEquals($expected, $result);
     }
 
-    public function testNoParams()
+    public function testNoParams(): void
     {
         $pattern = '{' . self::SUBJECT . '} is ' . self::N;
 
@@ -213,7 +215,7 @@ _MSG_
         $this->assertEquals($pattern, $result, $formatter->getErrorMessage());
     }
 
-    public function testGridViewMessage()
+    public function testGridViewMessage(): void
     {
         $pattern = 'Showing <b>{begin, number}-{end, number}</b> of <b>{totalCount, number}</b> {totalCount, plural, one{item} other{items}}.';
         $formatter = new FallbackMessageFormatter();
@@ -221,7 +223,7 @@ _MSG_
         $this->assertEquals('Showing <b>1-5</b> of <b>10</b> items.', $result);
     }
 
-    public function testUnsupportedPercentException()
+    public function testUnsupportedPercentException(): void
     {
         $pattern = 'Number {' . self::N . ', number, percent}';
         $formatter = new FallbackMessageFormatter();
@@ -229,7 +231,7 @@ _MSG_
         $formatter->fallbackFormat($pattern, [self::N => self::N_VALUE], 'en-US');
     }
 
-    public function testUnsupportedCurrencyException()
+    public function testUnsupportedCurrencyException(): void
     {
         $pattern = 'Number {' . self::N . ', number, currency}';
         $formatter = new FallbackMessageFormatter();

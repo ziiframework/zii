@@ -88,7 +88,7 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
         if ($this->cache instanceof CacheInterface && $this->getCachedContent() === false) {
             $this->getView()->pushDynamicContent($this);
             ob_start();
-            ob_implicit_flush(false);
+            ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
         }
     }
 

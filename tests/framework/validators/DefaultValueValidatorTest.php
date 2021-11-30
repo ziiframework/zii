@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -25,7 +27,7 @@ class DefaultValueValidatorTest extends TestCase
         $this->destroyApplication();
     }
 
-    public function testValidateAttribute()
+    public function testValidateAttribute(): void
     {
         $val = new DefaultValueValidator();
         $val->value = 'test_value';

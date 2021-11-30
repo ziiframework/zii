@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -43,7 +45,7 @@ class AssetConverterTest extends \yiiunit\TestCase
 
     // Tests :
 
-    public function testConvert()
+    public function testConvert(): void
     {
         $tmpPath = $this->tmpPath;
         file_put_contents($tmpPath . '/test.php', <<<EOF
@@ -64,7 +66,7 @@ EOF);
     /**
      * @depends testConvert
      */
-    public function testForceConvert()
+    public function testForceConvert(): void
     {
         $tmpPath = $this->tmpPath;
         file_put_contents($tmpPath . '/test.php', <<<'EOF'

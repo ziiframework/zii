@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -59,7 +61,7 @@ class POMessageControllerTest extends BaseMessageControllerTest
     /**
      * {@inheritdoc}
      */
-    protected function saveMessages($messages, $category)
+    protected function saveMessages($messages, $category): void
     {
         $messageFilePath = $this->getMessageFilePath();
         FileHelper::createDirectory(dirname($messageFilePath), 0777);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -32,15 +34,15 @@ class EventTest extends TestCase
         Event::offAll();
     }
 
-    public function testOn()
+    public function testOn(): void
     {
-        Event::on(Post::className(), 'save', function ($event) {
+        Event::on(Post::className(), 'save', function ($event): void {
             ++$this->counter;
         });
-        Event::on(ActiveRecord::className(), 'save', function ($event) {
+        Event::on(ActiveRecord::className(), 'save', function ($event): void {
             $this->counter += 3;
         });
-        Event::on('yiiunit\framework\base\SomeInterface', SomeInterface::EVENT_SUPER_EVENT, function ($event) {
+        Event::on('yiiunit\framework\base\SomeInterface', SomeInterface::EVENT_SUPER_EVENT, function ($event): void {
             $this->counter += 5;
         });
         $this->assertEquals(0, $this->counter);
@@ -58,9 +60,9 @@ class EventTest extends TestCase
         $this->assertEquals(17, $this->counter);
     }
 
-    public function testOff()
+    public function testOff(): void
     {
-        $handler = function ($event) {
+        $handler = function ($event): void {
             ++$this->counter;
         };
         $this->assertFalse(Event::hasHandlers(Post::className(), 'save'));
@@ -70,22 +72,22 @@ class EventTest extends TestCase
         $this->assertFalse(Event::hasHandlers(Post::className(), 'save'));
     }
 
-    public function testHasHandlers()
+    public function testHasHandlers(): void
     {
         $this->assertFalse(Event::hasHandlers(Post::className(), 'save'));
         $this->assertFalse(Event::hasHandlers(ActiveRecord::className(), 'save'));
         $this->assertFalse(Event::hasHandlers('yiiunit\framework\base\SomeInterface', SomeInterface::EVENT_SUPER_EVENT));
-        Event::on(Post::className(), 'save', function ($event) {
+        Event::on(Post::className(), 'save', function ($event): void {
             ++$this->counter;
         });
-        Event::on('yiiunit\framework\base\SomeInterface', SomeInterface::EVENT_SUPER_EVENT, function ($event) {
+        Event::on('yiiunit\framework\base\SomeInterface', SomeInterface::EVENT_SUPER_EVENT, function ($event): void {
             ++$this->counter;
         });
         $this->assertTrue(Event::hasHandlers(Post::className(), 'save'));
         $this->assertFalse(Event::hasHandlers(ActiveRecord::className(), 'save'));
 
         $this->assertFalse(Event::hasHandlers(User::className(), 'save'));
-        Event::on(ActiveRecord::className(), 'save', function ($event) {
+        Event::on(ActiveRecord::className(), 'save', function ($event): void {
             ++$this->counter;
         });
         $this->assertTrue(Event::hasHandlers(User::className(), 'save'));
@@ -96,9 +98,9 @@ class EventTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/17336
      */
-    public function testHasHandlersWithWildcard()
+    public function testHasHandlersWithWildcard(): void
     {
-        Event::on('\yiiunit\framework\base\*', 'save.*', static function ($event) {
+        Event::on('\yiiunit\framework\base\*', 'save.*', static function ($event): void {
             // do nothing
         });
 
@@ -108,11 +110,11 @@ class EventTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/17300
      */
-    public function testRunHandlersWithWildcard()
+    public function testRunHandlersWithWildcard(): void
     {
         $triggered = false;
 
-        Event::on('\yiiunit\framework\base\*', 'super*', static function ($event) use (&$triggered) {
+        Event::on('\yiiunit\framework\base\*', 'super*', static function ($event) use (&$triggered): void {
             $triggered = true;
         });
 
@@ -134,7 +136,7 @@ class EventTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/17377
      */
-    public function testNoFalsePositivesWithHasHandlers()
+    public function testNoFalsePositivesWithHasHandlers(): void
     {
         $this->assertFalse(Event::hasHandlers(new stdClass(), 'foobar'));
 
@@ -142,7 +144,7 @@ class EventTest extends TestCase
         $this->assertFalse($component->hasEventHandlers('foobar'));
     }
 
-    public function testOffUnmatchedHandler()
+    public function testOffUnmatchedHandler(): void
     {
         $this->assertFalse(Event::hasHandlers(Post::className(), 'afterSave'));
         Event::on(Post::className(), 'afterSave', [$this, 'bla-bla']);
@@ -154,12 +156,12 @@ class EventTest extends TestCase
      * @depends testOn
      * @depends testHasHandlers
      */
-    public function testOnWildcard()
+    public function testOnWildcard(): void
     {
-        Event::on(Post::className(), '*', function ($event) {
+        Event::on(Post::className(), '*', function ($event): void {
             ++$this->counter;
         });
-        Event::on('*\Post', 'save', function ($event) {
+        Event::on('*\Post', 'save', function ($event): void {
             $this->counter += 3;
         });
 
@@ -174,9 +176,9 @@ class EventTest extends TestCase
      * @depends testOnWildcard
      * @depends testOff
      */
-    public function testOffWildcard()
+    public function testOffWildcard(): void
     {
-        $handler = function ($event) {
+        $handler = function ($event): void {
             ++$this->counter;
         };
         $this->assertFalse(Event::hasHandlers(Post::className(), 'save'));
@@ -189,7 +191,7 @@ class EventTest extends TestCase
 
 class ActiveRecord extends Component
 {
-    public function save()
+    public function save(): void
     {
         $this->trigger('save');
     }
@@ -210,7 +212,7 @@ interface SomeInterface
 
 class SomeClass extends Component implements SomeInterface
 {
-    public function emitEvent()
+    public function emitEvent(): void
     {
         $this->trigger(self::EVENT_SUPER_EVENT);
     }
@@ -218,7 +220,7 @@ class SomeClass extends Component implements SomeInterface
 
 class SomeSubclass extends SomeClass
 {
-    public function emitEventInSubclass()
+    public function emitEventInSubclass(): void
     {
         $this->trigger(self::EVENT_SUPER_EVENT);
     }

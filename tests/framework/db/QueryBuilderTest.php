@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -919,7 +921,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
         return array_values($items);
     }
 
-    public function testGetColumnType()
+    public function testGetColumnType(): void
     {
         $qb = $this->getQueryBuilder();
 
@@ -941,7 +943,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
         }
     }
 
-    public function testCreateTableColumnTypes()
+    public function testCreateTableColumnTypes(): void
     {
         $qb = $this->getQueryBuilder();
 
@@ -1183,7 +1185,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
      *
      * @throws Exception
      */
-    public function testBuildFrom($table, $expected)
+    public function testBuildFrom($table, $expected): void
     {
         $params = [];
         $sql = $this->getQueryBuilder()->buildFrom([$table], $params);
@@ -1209,7 +1211,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
      *
      * @throws Exception
      */
-    public function testBuildCondition($condition, $expected, $expectedParams)
+    public function testBuildCondition($condition, $expected, $expectedParams): void
     {
         $query = (new Query())->where($condition);
         [$sql, $params] = $this->getQueryBuilder()->build($query);
@@ -1224,7 +1226,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
      * @param string $expected
      * @param array  $expectedParams
      */
-    public function testBuildFilterCondition($condition, $expected, $expectedParams)
+    public function testBuildFilterCondition($condition, $expected, $expectedParams): void
     {
         $query = (new Query())->filterWhere($condition);
         [$sql, $params] = $this->getQueryBuilder()->build($query);
@@ -1240,21 +1242,15 @@ abstract class QueryBuilderTest extends DatabaseTestCase
         return [
             'drop' => [
                 "ALTER TABLE {{{$tableName}}} DROP CONSTRAINT [[$name]]",
-                static function (QueryBuilder $qb) use ($tableName, $name) {
-                    return $qb->dropPrimaryKey($name, $tableName);
-                },
+                static fn (QueryBuilder $qb) => $qb->dropPrimaryKey($name, $tableName),
             ],
             'add' => [
                 "ALTER TABLE {{{$tableName}}} ADD CONSTRAINT [[$name]] PRIMARY KEY ([[C_id_1]])",
-                static function (QueryBuilder $qb) use ($tableName, $name) {
-                    return $qb->addPrimaryKey($name, $tableName, 'C_id_1');
-                },
+                static fn (QueryBuilder $qb) => $qb->addPrimaryKey($name, $tableName, 'C_id_1'),
             ],
             'add (2 columns)' => [
                 "ALTER TABLE {{{$tableName}}} ADD CONSTRAINT [[$name]] PRIMARY KEY ([[C_id_1]], [[C_id_2]])",
-                static function (QueryBuilder $qb) use ($tableName, $name) {
-                    return $qb->addPrimaryKey($name, $tableName, 'C_id_1, C_id_2');
-                },
+                static fn (QueryBuilder $qb) => $qb->addPrimaryKey($name, $tableName, 'C_id_1, C_id_2'),
             ],
         ];
     }
@@ -1264,7 +1260,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
      *
      * @param string $sql
      */
-    public function testAddDropPrimaryKey($sql, Closure $builder)
+    public function testAddDropPrimaryKey($sql, Closure $builder): void
     {
         $this->assertSame($this->getConnection(false)->quoteSql($sql), $builder($this->getQueryBuilder(false)));
     }
@@ -1278,21 +1274,15 @@ abstract class QueryBuilderTest extends DatabaseTestCase
         return [
             'drop' => [
                 "ALTER TABLE {{{$tableName}}} DROP CONSTRAINT [[$name]]",
-                static function (QueryBuilder $qb) use ($tableName, $name) {
-                    return $qb->dropForeignKey($name, $tableName);
-                },
+                static fn (QueryBuilder $qb) => $qb->dropForeignKey($name, $tableName),
             ],
             'add' => [
                 "ALTER TABLE {{{$tableName}}} ADD CONSTRAINT [[$name]] FOREIGN KEY ([[C_fk_id_1]]) REFERENCES {{{$pkTableName}}} ([[C_id_1]]) ON DELETE CASCADE ON UPDATE CASCADE",
-                static function (QueryBuilder $qb) use ($tableName, $name, $pkTableName) {
-                    return $qb->addForeignKey($name, $tableName, 'C_fk_id_1', $pkTableName, 'C_id_1', 'CASCADE', 'CASCADE');
-                },
+                static fn (QueryBuilder $qb) => $qb->addForeignKey($name, $tableName, 'C_fk_id_1', $pkTableName, 'C_id_1', 'CASCADE', 'CASCADE'),
             ],
             'add (2 columns)' => [
                 "ALTER TABLE {{{$tableName}}} ADD CONSTRAINT [[$name]] FOREIGN KEY ([[C_fk_id_1]], [[C_fk_id_2]]) REFERENCES {{{$pkTableName}}} ([[C_id_1]], [[C_id_2]]) ON DELETE CASCADE ON UPDATE CASCADE",
-                static function (QueryBuilder $qb) use ($tableName, $name, $pkTableName) {
-                    return $qb->addForeignKey($name, $tableName, 'C_fk_id_1, C_fk_id_2', $pkTableName, 'C_id_1, C_id_2', 'CASCADE', 'CASCADE');
-                },
+                static fn (QueryBuilder $qb) => $qb->addForeignKey($name, $tableName, 'C_fk_id_1, C_fk_id_2', $pkTableName, 'C_id_1, C_id_2', 'CASCADE', 'CASCADE'),
             ],
         ];
     }
@@ -1302,7 +1292,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
      *
      * @param string $sql
      */
-    public function testAddDropForeignKey($sql, Closure $builder)
+    public function testAddDropForeignKey($sql, Closure $builder): void
     {
         $this->assertSame($this->getConnection(false)->quoteSql($sql), $builder($this->getQueryBuilder(false)));
     }
@@ -1316,33 +1306,23 @@ abstract class QueryBuilderTest extends DatabaseTestCase
         return [
             'drop' => [
                 "DROP INDEX [[$name1]] ON {{{$tableName}}}",
-                static function (QueryBuilder $qb) use ($tableName, $name1) {
-                    return $qb->dropIndex($name1, $tableName);
-                },
+                static fn (QueryBuilder $qb) => $qb->dropIndex($name1, $tableName),
             ],
             'create' => [
                 "CREATE INDEX [[$name1]] ON {{{$tableName}}} ([[C_index_1]])",
-                static function (QueryBuilder $qb) use ($tableName, $name1) {
-                    return $qb->createIndex($name1, $tableName, 'C_index_1');
-                },
+                static fn (QueryBuilder $qb) => $qb->createIndex($name1, $tableName, 'C_index_1'),
             ],
             'create (2 columns)' => [
                 "CREATE INDEX [[$name2]] ON {{{$tableName}}} ([[C_index_2_1]], [[C_index_2_2]])",
-                static function (QueryBuilder $qb) use ($tableName, $name2) {
-                    return $qb->createIndex($name2, $tableName, 'C_index_2_1, C_index_2_2');
-                },
+                static fn (QueryBuilder $qb) => $qb->createIndex($name2, $tableName, 'C_index_2_1, C_index_2_2'),
             ],
             'create unique' => [
                 "CREATE UNIQUE INDEX [[$name1]] ON {{{$tableName}}} ([[C_index_1]])",
-                static function (QueryBuilder $qb) use ($tableName, $name1) {
-                    return $qb->createIndex($name1, $tableName, 'C_index_1', true);
-                },
+                static fn (QueryBuilder $qb) => $qb->createIndex($name1, $tableName, 'C_index_1', true),
             ],
             'create unique (2 columns)' => [
                 "CREATE UNIQUE INDEX [[$name2]] ON {{{$tableName}}} ([[C_index_2_1]], [[C_index_2_2]])",
-                static function (QueryBuilder $qb) use ($tableName, $name2) {
-                    return $qb->createIndex($name2, $tableName, 'C_index_2_1, C_index_2_2', true);
-                },
+                static fn (QueryBuilder $qb) => $qb->createIndex($name2, $tableName, 'C_index_2_1, C_index_2_2', true),
             ],
         ];
     }
@@ -1352,7 +1332,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
      *
      * @param string $sql
      */
-    public function testCreateDropIndex($sql, Closure $builder)
+    public function testCreateDropIndex($sql, Closure $builder): void
     {
         $this->assertSame($this->getConnection(false)->quoteSql($sql), $builder($this->getQueryBuilder(false)));
     }
@@ -1367,21 +1347,15 @@ abstract class QueryBuilderTest extends DatabaseTestCase
         return [
             'drop' => [
                 "ALTER TABLE {{{$tableName1}}} DROP CONSTRAINT [[$name1]]",
-                static function (QueryBuilder $qb) use ($tableName1, $name1) {
-                    return $qb->dropUnique($name1, $tableName1);
-                },
+                static fn (QueryBuilder $qb) => $qb->dropUnique($name1, $tableName1),
             ],
             'add' => [
                 "ALTER TABLE {{{$tableName1}}} ADD CONSTRAINT [[$name1]] UNIQUE ([[C_unique]])",
-                static function (QueryBuilder $qb) use ($tableName1, $name1) {
-                    return $qb->addUnique($name1, $tableName1, 'C_unique');
-                },
+                static fn (QueryBuilder $qb) => $qb->addUnique($name1, $tableName1, 'C_unique'),
             ],
             'add (2 columns)' => [
                 "ALTER TABLE {{{$tableName2}}} ADD CONSTRAINT [[$name2]] UNIQUE ([[C_index_2_1]], [[C_index_2_2]])",
-                static function (QueryBuilder $qb) use ($tableName2, $name2) {
-                    return $qb->addUnique($name2, $tableName2, 'C_index_2_1, C_index_2_2');
-                },
+                static fn (QueryBuilder $qb) => $qb->addUnique($name2, $tableName2, 'C_index_2_1, C_index_2_2'),
             ],
         ];
     }
@@ -1391,7 +1365,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
      *
      * @param string $sql
      */
-    public function testAddDropUnique($sql, Closure $builder)
+    public function testAddDropUnique($sql, Closure $builder): void
     {
         $this->assertSame($this->getConnection(false)->quoteSql($sql), $builder($this->getQueryBuilder(false)));
     }
@@ -1404,15 +1378,11 @@ abstract class QueryBuilderTest extends DatabaseTestCase
         return [
             'drop' => [
                 "ALTER TABLE {{{$tableName}}} DROP CONSTRAINT [[$name]]",
-                static function (QueryBuilder $qb) use ($tableName, $name) {
-                    return $qb->dropCheck($name, $tableName);
-                },
+                static fn (QueryBuilder $qb) => $qb->dropCheck($name, $tableName),
             ],
             'add' => [
                 "ALTER TABLE {{{$tableName}}} ADD CONSTRAINT [[$name]] CHECK ([[C_not_null]] > 100)",
-                static function (QueryBuilder $qb) use ($tableName, $name) {
-                    return $qb->addCheck($name, $tableName, '[[C_not_null]] > 100');
-                },
+                static fn (QueryBuilder $qb) => $qb->addCheck($name, $tableName, '[[C_not_null]] > 100'),
             ],
         ];
     }
@@ -1422,7 +1392,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
      *
      * @param string $sql
      */
-    public function testAddDropCheck($sql, Closure $builder)
+    public function testAddDropCheck($sql, Closure $builder): void
     {
         $this->assertSame($this->getConnection(false)->quoteSql($sql), $builder($this->getQueryBuilder(false)));
     }
@@ -1435,15 +1405,11 @@ abstract class QueryBuilderTest extends DatabaseTestCase
         return [
             'drop' => [
                 "ALTER TABLE {{{$tableName}}} DROP CONSTRAINT [[$name]]",
-                static function (QueryBuilder $qb) use ($tableName, $name) {
-                    return $qb->dropDefaultValue($name, $tableName);
-                },
+                static fn (QueryBuilder $qb) => $qb->dropDefaultValue($name, $tableName),
             ],
             'add' => [
                 "ALTER TABLE {{{$tableName}}} ADD CONSTRAINT [[$name]] DEFAULT 0 FOR [[C_default]]",
-                static function (QueryBuilder $qb) use ($tableName, $name) {
-                    return $qb->addDefaultValue($name, $tableName, 'C_default', 0);
-                },
+                static fn (QueryBuilder $qb) => $qb->addDefaultValue($name, $tableName, 'C_default', 0),
             ],
         ];
     }
@@ -1453,7 +1419,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
      *
      * @param string $sql
      */
-    public function testAddDropDefaultValue($sql, Closure $builder)
+    public function testAddDropDefaultValue($sql, Closure $builder): void
     {
         $this->assertSame($this->getConnection(false)->quoteSql($sql), $builder($this->getQueryBuilder(false)));
     }
@@ -1472,7 +1438,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
      * @param string $cond
      * @param string $expectedQuerySql
      */
-    public function testBuildWhereExists($cond, $expectedQuerySql)
+    public function testBuildWhereExists($cond, $expectedQuerySql): void
     {
         $expectedQueryParams = [];
 
@@ -1490,7 +1456,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
         $this->assertEquals($expectedQueryParams, $actualQueryParams);
     }
 
-    public function testBuildWhereExistsWithParameters()
+    public function testBuildWhereExistsWithParameters(): void
     {
         $expectedQuerySql = $this->replaceQuotes('SELECT [[id]] FROM [[TotalExample]] [[t]] WHERE (EXISTS (SELECT [[1]] FROM [[Website]] [[w]] WHERE (w.id = t.website_id) AND (w.merchant_id = :merchant_id))) AND (t.some_column = :some_value)');
         $expectedQueryParams = [':some_value' => 'asd', ':merchant_id' => 6];
@@ -1512,7 +1478,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
         $this->assertEquals($expectedQueryParams, $queryParams);
     }
 
-    public function testBuildWhereExistsWithArrayParameters()
+    public function testBuildWhereExistsWithArrayParameters(): void
     {
         $expectedQuerySql = $this->replaceQuotes('SELECT [[id]] FROM [[TotalExample]] [[t]] WHERE (EXISTS (SELECT [[1]] FROM [[Website]] [[w]] WHERE (w.id = t.website_id) AND (([[w]].[[merchant_id]]=:qp0) AND ([[w]].[[user_id]]=:qp1)))) AND ([[t]].[[some_column]]=:qp2)');
         $expectedQueryParams = [':qp0' => 6, ':qp1' => 210, ':qp2' => 'asd'];
@@ -1538,7 +1504,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
      * This test contains three select queries connected with UNION and UNION ALL constructions.
      * It could be useful to use "phpunit --group=db --filter testBuildUnion" command for run it.
      */
-    public function testBuildUnion()
+    public function testBuildUnion(): void
     {
         $expectedQuerySql = $this->replaceQuotes('(SELECT [[id]] FROM [[TotalExample]] [[t1]] WHERE (w > 0) AND (x < 2)) UNION ( SELECT [[id]] FROM [[TotalTotalExample]] [[t2]] WHERE w > 5 ) UNION ALL ( SELECT [[id]] FROM [[TotalTotalExample]] [[t3]] WHERE w = 3 )');
         $query = new Query();
@@ -1560,7 +1526,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
         $this->assertEquals([], $queryParams);
     }
 
-    public function testBuildWithQuery()
+    public function testBuildWithQuery(): void
     {
         $expectedQuerySql = $this->replaceQuotes('WITH a1 AS (SELECT [[id]] FROM [[t1]] WHERE expr = 1), a2 AS ((SELECT [[id]] FROM [[t2]] INNER JOIN [[a1]] ON t2.id = a1.id WHERE expr = 2) UNION ( SELECT [[id]] FROM [[t3]] WHERE expr = 3 )) SELECT * FROM [[a2]]');
         $with1Query = (new Query())
@@ -1589,7 +1555,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
         $this->assertEquals([], $queryParams);
     }
 
-    public function testBuildWithQueryRecursive()
+    public function testBuildWithQueryRecursive(): void
     {
         $expectedQuerySql = $this->replaceQuotes('WITH RECURSIVE a1 AS (SELECT [[id]] FROM [[t1]] WHERE expr = 1) SELECT * FROM [[a1]]');
         $with1Query = (new Query())
@@ -1606,7 +1572,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
         $this->assertEquals([], $queryParams);
     }
 
-    public function testSelectSubquery()
+    public function testSelectSubquery(): void
     {
         $subquery = (new Query())
             ->select('COUNT(*)')
@@ -1622,7 +1588,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
         $this->assertEmpty($params);
     }
 
-    public function testComplexSelect()
+    public function testComplexSelect(): void
     {
         $query = (new Query())
             ->select([
@@ -1641,7 +1607,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
         $this->assertEmpty($params);
     }
 
-    public function testSelectExpression()
+    public function testSelectExpression(): void
     {
         $query = (new Query())
             ->select(new Expression('1 AS ab'))
@@ -1673,7 +1639,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/10869
      */
-    public function testFromIndexHint()
+    public function testFromIndexHint(): void
     {
         $query = (new Query())->from([new Expression('{{%user}} USE INDEX (primary)')]);
         [$sql, $params] = $this->getQueryBuilder()->build($query);
@@ -1690,7 +1656,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
         $this->assertEmpty($params);
     }
 
-    public function testFromSubquery()
+    public function testFromSubquery(): void
     {
         // query subquery
         $subquery = (new Query())->from('user')->where('account_id = accounts.id');
@@ -1723,7 +1689,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
         $this->assertEmpty($params);
     }
 
-    public function testOrderBy()
+    public function testOrderBy(): void
     {
         // simple string
         $query = (new Query())
@@ -1767,7 +1733,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
         $this->assertEquals([':to' => 4], $params);
     }
 
-    public function testGroupBy()
+    public function testGroupBy(): void
     {
         // simple string
         $query = (new Query())
@@ -1909,7 +1875,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
      * @param string $expectedSQL
      * @param array  $expectedParams
      */
-    public function testInsert($table, $columns, $params, $expectedSQL, $expectedParams)
+    public function testInsert($table, $columns, $params, $expectedSQL, $expectedParams): void
     {
         $actualParams = $params;
         $actualSQL = $this->getQueryBuilder()->insert($table, $columns, $actualParams);
@@ -1920,7 +1886,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
     /**
      * Dummy test to speed up QB's tests which rely on DB schema.
      */
-    public function testInitFixtures()
+    public function testInitFixtures(): void
     {
         $this->assertInstanceOf('yii\db\QueryBuilder', $this->getQueryBuilder(true, true));
     }
@@ -2138,7 +2104,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
      * @throws \yii\base\NotSupportedException
      * @throws Exception
      */
-    public function testUpsert($table, $insertColumns, $updateColumns, $expectedSQL, $expectedParams)
+    public function testUpsert($table, $insertColumns, $updateColumns, $expectedSQL, $expectedParams): void
     {
         $actualParams = [];
         $actualSQL = $this->getQueryBuilder(true, $this->driverName === 'sqlite')->upsert($table, $insertColumns, $updateColumns, $actualParams);
@@ -2214,7 +2180,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
      *
      * @throws Exception
      */
-    public function testBatchInsert($table, $columns, $value, $expected)
+    public function testBatchInsert($table, $columns, $value, $expected): void
     {
         $queryBuilder = $this->getQueryBuilder();
 
@@ -2252,7 +2218,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
      * @param string       $expectedSQL
      * @param array        $expectedParams
      */
-    public function testUpdate($table, $columns, $condition, $expectedSQL, $expectedParams)
+    public function testUpdate($table, $columns, $condition, $expectedSQL, $expectedParams): void
     {
         $actualParams = [];
         $actualSQL = $this->getQueryBuilder()->update($table, $columns, $condition, $actualParams);
@@ -2285,7 +2251,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
      * @param string       $expectedSQL
      * @param array        $expectedParams
      */
-    public function testDelete($table, $condition, $expectedSQL, $expectedParams)
+    public function testDelete($table, $condition, $expectedSQL, $expectedParams): void
     {
         $actualParams = [];
         $actualSQL = $this->getQueryBuilder()->delete($table, $condition, $actualParams);
@@ -2293,7 +2259,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
         $this->assertSame($expectedParams, $actualParams);
     }
 
-    public function testCommentColumn()
+    public function testCommentColumn(): void
     {
         $qb = $this->getQueryBuilder();
 
@@ -2310,7 +2276,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
         $this->assertEquals($this->replaceQuotes($expected), $sql);
     }
 
-    public function testCommentTable()
+    public function testCommentTable(): void
     {
         $qb = $this->getQueryBuilder();
 
@@ -2395,7 +2361,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
      * @param string $expected
      * @param array  $expectedParams
      */
-    public function testBuildLikeCondition($condition, $expected, $expectedParams)
+    public function testBuildLikeCondition($condition, $expected, $expectedParams): void
     {
         $query = (new Query())->where($condition);
         [$sql, $params] = $this->getQueryBuilder()->build($query);
@@ -2406,7 +2372,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/15653
      */
-    public function testIssue15653()
+    public function testIssue15653(): void
     {
         $query = (new Query())
             ->from('admin_user')

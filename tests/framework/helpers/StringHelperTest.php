@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -26,13 +28,13 @@ class StringHelperTest extends TestCase
         $this->destroyApplication();
     }
 
-    public function testStrlen()
+    public function testStrlen(): void
     {
         $this->assertEquals(4, StringHelper::byteLength('this'));
         $this->assertEquals(6, StringHelper::byteLength('это'));
     }
 
-    public function testSubstr()
+    public function testSubstr(): void
     {
         $this->assertEquals('th', StringHelper::byteSubstr('this', 0, 2));
         $this->assertEquals('э', StringHelper::byteSubstr('это', 0, 2));
@@ -66,7 +68,7 @@ class StringHelperTest extends TestCase
         $this->assertEquals('', StringHelper::byteSubstr('это', -4, 0));
     }
 
-    public function testBasename()
+    public function testBasename(): void
     {
         $this->assertEquals('', StringHelper::basename(''));
 
@@ -110,7 +112,7 @@ class StringHelperTest extends TestCase
         $this->assertEquals('foo', StringHelper::basename('\\bar\\foo\\'));
     }
 
-    public function testTruncate()
+    public function testTruncate(): void
     {
         $this->assertEquals('привет, я multibyte...', StringHelper::truncate('привет, я multibyte строка!', 20));
         $this->assertEquals('Не трогаем строку', StringHelper::truncate('Не трогаем строку', 20));
@@ -131,7 +133,7 @@ class StringHelperTest extends TestCase
         $this->assertEquals('<div><ul><li>bullet1</li><li><div>b</div></li></ul></div>...', StringHelper::truncate('<div><ul><li>bullet1</li><li><div>bullet2</div></li></ul><br></div>', 8, '...', null, true));
     }
 
-    public function testTruncateWords()
+    public function testTruncateWords(): void
     {
         $this->assertEquals('это тестовая multibyte строка', StringHelper::truncateWords('это тестовая multibyte строка', 5));
         $this->assertEquals('это тестовая multibyte...', StringHelper::truncateWords('это тестовая multibyte строка', 3));
@@ -158,7 +160,7 @@ class StringHelperTest extends TestCase
      * @param string      $string
      * @param string|null $with
      */
-    public function testStartsWith($result, $string, $with)
+    public function testStartsWith($result, $string, $with): void
     {
         // case sensitive version check
         $this->assertSame($result, StringHelper::startsWith($string, $with));
@@ -194,13 +196,13 @@ class StringHelperTest extends TestCase
         ];
     }
 
-    public function testStartsWithCaseSensitive()
+    public function testStartsWithCaseSensitive(): void
     {
         $this->assertFalse(StringHelper::startsWith('Abc', 'a'));
         $this->assertFalse(StringHelper::startsWith('üЯ multibyte', 'Üя multibyte'));
     }
 
-    public function testStartsWithCaseInsensitive()
+    public function testStartsWithCaseInsensitive(): void
     {
         $this->assertTrue(StringHelper::startsWith('sTrInG', 'StRiNg', false));
         $this->assertTrue(StringHelper::startsWith('CaSe', 'cAs', false));
@@ -215,7 +217,7 @@ class StringHelperTest extends TestCase
      * @param string      $string
      * @param string|null $with
      */
-    public function testEndsWith($result, $string, $with)
+    public function testEndsWith($result, $string, $with): void
     {
         // case sensitive version check
         $this->assertSame($result, StringHelper::endsWith($string, $with));
@@ -251,20 +253,20 @@ class StringHelperTest extends TestCase
         ];
     }
 
-    public function testEndsWithCaseSensitive()
+    public function testEndsWithCaseSensitive(): void
     {
         $this->assertFalse(StringHelper::endsWith('string', 'G'));
         $this->assertFalse(StringHelper::endsWith('multibyte строка', 'А'));
     }
 
-    public function testEndsWithCaseInsensitive()
+    public function testEndsWithCaseInsensitive(): void
     {
         $this->assertTrue(StringHelper::endsWith('sTrInG', 'StRiNg', false));
         $this->assertTrue(StringHelper::endsWith('string', 'nG', false));
         $this->assertTrue(StringHelper::endsWith('BüЯйΨ', 'ÜяЙΨ', false));
     }
 
-    public function testExplode()
+    public function testExplode(): void
     {
         $this->assertEquals(['It', 'is', 'a first', 'test'], StringHelper::explode('It, is, a first, test'));
         $this->assertEquals(['It', 'is', 'a test with trimmed digits', '0', '1', '2'], StringHelper::explode('It, is, a test with trimmed digits, 0, 1, 2', ',', true, true));
@@ -274,10 +276,10 @@ class StringHelperTest extends TestCase
         $this->assertEquals(['Здесь', 'multibyte', 'строка'], StringHelper::explode('Здесь我 multibyte我 строка', '我'));
         $this->assertEquals(['Disable', '  trim  ', 'here but ignore empty'], StringHelper::explode('Disable,  trim  ,,,here but ignore empty', ',', false, true));
         $this->assertEquals(['It/', ' is?', ' a', ' test with rtrim'], StringHelper::explode('It/, is?, a , test with rtrim', ',', 'rtrim'));
-        $this->assertEquals(['It', ' is', ' a ', ' test with closure'], StringHelper::explode('It/, is?, a , test with closure', ',', static function ($value) { return trim($value, '/?'); }));
+        $this->assertEquals(['It', ' is', ' a ', ' test with closure'], StringHelper::explode('It/, is?, a , test with closure', ',', static fn ($value) => trim($value, '/?')));
     }
 
-    public function testWordCount()
+    public function testWordCount(): void
     {
         $this->assertEquals(3, StringHelper::countWords('china 中国 ㄍㄐㄋㄎㄌ'));
         $this->assertEquals(4, StringHelper::countWords('и много тут слов?'));
@@ -292,7 +294,7 @@ class StringHelperTest extends TestCase
      * @param $input
      * @param $base64UrlEncoded
      */
-    public function testBase64UrlEncode($input, $base64UrlEncoded)
+    public function testBase64UrlEncode($input, $base64UrlEncoded): void
     {
         $encoded = StringHelper::base64UrlEncode($input);
         $this->assertEquals($base64UrlEncoded, $encoded);
@@ -304,7 +306,7 @@ class StringHelperTest extends TestCase
      * @param $output
      * @param $base64UrlEncoded
      */
-    public function testBase64UrlDecode($output, $base64UrlEncoded)
+    public function testBase64UrlDecode($output, $base64UrlEncoded): void
     {
         $decoded = StringHelper::base64UrlDecode($base64UrlEncoded);
         $this->assertEquals($output, $decoded);
@@ -403,7 +405,7 @@ class StringHelperTest extends TestCase
      * @param bool   $expectedResult
      * @param array  $options
      */
-    public function testMatchWildcard($pattern, $string, $expectedResult, $options = [])
+    public function testMatchWildcard($pattern, $string, $expectedResult, $options = []): void
     {
         $this->assertSame($expectedResult, StringHelper::matchWildcard($pattern, $string, $options));
     }
@@ -425,7 +427,7 @@ class StringHelperTest extends TestCase
      * @param string $expectedResult
      * @dataProvider dataProviderMb_ucfirst
      */
-    public function testMbUcfirst($string, $expectedResult)
+    public function testMbUcfirst($string, $expectedResult): void
     {
         $this->assertSame($expectedResult, StringHelper::mb_ucfirst($string));
     }
@@ -454,7 +456,7 @@ class StringHelperTest extends TestCase
      * @param string $expectedResult
      * @dataProvider dataProviderMb_ucwords
      */
-    public function testMbUcwords($string, $expectedResult)
+    public function testMbUcwords($string, $expectedResult): void
     {
         $this->assertSame($expectedResult, StringHelper::mb_ucwords($string));
     }
@@ -464,7 +466,7 @@ class StringHelperTest extends TestCase
      * @param string $expectedResult
      * @dataProvider dataProviderDirname
      */
-    public function testDirname($string, $expectedResult)
+    public function testDirname($string, $expectedResult): void
     {
         $this->assertSame($expectedResult, StringHelper::dirname($string));
     }

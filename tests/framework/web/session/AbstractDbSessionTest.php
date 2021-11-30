@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -83,12 +85,12 @@ abstract class AbstractDbSessionTest extends TestCase
         return $result;
     }
 
-    protected function createTableSession()
+    protected function createTableSession(): void
     {
         $this->runMigrate('up');
     }
 
-    protected function dropTableSession()
+    protected function dropTableSession(): void
     {
         try {
             $this->runMigrate('down', ['all']);
@@ -100,7 +102,7 @@ abstract class AbstractDbSessionTest extends TestCase
 
     // Tests :
 
-    public function testReadWrite()
+    public function testReadWrite(): void
     {
         $session = new DbSession();
 
@@ -110,7 +112,7 @@ abstract class AbstractDbSessionTest extends TestCase
         $this->assertEquals('', $session->readSession('test'));
     }
 
-    public function testInitializeWithConfig()
+    public function testInitializeWithConfig(): void
     {
         // should produce no exceptions
         $session = new DbSession([
@@ -126,7 +128,7 @@ abstract class AbstractDbSessionTest extends TestCase
     /**
      * @depends testReadWrite
      */
-    public function testGarbageCollection()
+    public function testGarbageCollection(): void
     {
         $session = new DbSession();
 
@@ -145,13 +147,11 @@ abstract class AbstractDbSessionTest extends TestCase
     /**
      * @depends testReadWrite
      */
-    public function testWriteCustomField()
+    public function testWriteCustomField(): void
     {
         $session = new DbSession();
 
-        $session->writeCallback = static function ($session) {
-            return ['data' => 'changed by callback data'];
-        };
+        $session->writeCallback = static fn ($session) => ['data' => 'changed by callback data'];
 
         $session->writeSession('test', 'session data');
 
@@ -162,7 +162,7 @@ abstract class AbstractDbSessionTest extends TestCase
     /**
      * @depends testReadWrite
      */
-    public function testWriteCustomFieldWithUserId()
+    public function testWriteCustomFieldWithUserId(): void
     {
         $session = new DbSession();
         $session->open();
@@ -173,9 +173,7 @@ abstract class AbstractDbSessionTest extends TestCase
         $migration->compact = true;
         $migration->addColumn($session->sessionTable, 'user_id', $migration->integer());
 
-        $session->writeCallback = static function ($session) {
-            return ['user_id' => $session['user_id']];
-        };
+        $session->writeCallback = static fn ($session) => ['user_id' => $session['user_id']];
 
         // here used to be error, fixed issue #9438
         $session->close();
@@ -205,7 +203,7 @@ abstract class AbstractDbSessionTest extends TestCase
         return $object;
     }
 
-    public function testSerializedObjectSaving()
+    public function testSerializedObjectSaving(): void
     {
         $session = new DbSession();
 
@@ -228,16 +226,14 @@ abstract class AbstractDbSessionTest extends TestCase
         ]);
 
         ob_start();
-        ob_implicit_flush(false);
+        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
         $migrate->run($action, $params);
         ob_get_clean();
 
-        return array_map(static function ($version) {
-            return substr($version, 15);
-        }, (new Query())->select(['version'])->from('migration')->column());
+        return array_map(static fn ($version) => substr($version, 15), (new Query())->select(['version'])->from('migration')->column());
     }
 
-    public function testMigration()
+    public function testMigration(): void
     {
         $this->dropTableSession();
         $this->mockWebApplication([
@@ -257,7 +253,7 @@ abstract class AbstractDbSessionTest extends TestCase
         $this->createTableSession();
     }
 
-    public function testInstantiate()
+    public function testInstantiate(): void
     {
         $oldTimeout = ini_get('session.gc_maxlifetime');
         // unset Yii::$app->db to make sure that all queries are made against sessionDb
@@ -278,12 +274,12 @@ abstract class AbstractDbSessionTest extends TestCase
         ini_set('session.gc_maxlifetime', $oldTimeout);
     }
 
-    public function testInitUseStrictMode()
+    public function testInitUseStrictMode(): void
     {
         $this->initStrictModeTest(DbSession::className());
     }
 
-    public function testUseStrictMode()
+    public function testUseStrictMode(): void
     {
         $this->useStrictModeTest(DbSession::className());
     }

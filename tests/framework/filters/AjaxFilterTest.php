@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -36,7 +38,7 @@ class AjaxFilterTest extends TestCase
         return $request;
     }
 
-    public function testFilter()
+    public function testFilter(): void
     {
         $this->mockWebApplication();
         $controller = new Controller('id', Yii::$app);

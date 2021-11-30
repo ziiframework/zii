@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -56,7 +58,7 @@ class GridViewTest extends \yiiunit\TestCase
      *
      * @throws Exception
      */
-    public function testEmpty($emptyText, $expectedText)
+    public function testEmpty($emptyText, $expectedText): void
     {
         $html = GridView::widget([
             'id' => 'grid',
@@ -80,7 +82,7 @@ class GridViewTest extends \yiiunit\TestCase
         $this->assertEquals($expectedHtml, $html);
     }
 
-    public function testGuessColumns()
+    public function testGuessColumns(): void
     {
         $row = ['id' => 1, 'name' => 'Name1', 'value' => 'Value1', 'description' => 'Description1'];
 
@@ -125,7 +127,7 @@ class GridViewTest extends \yiiunit\TestCase
     /**
      * @throws Exception
      */
-    public function testFooter()
+    public function testFooter(): void
     {
         $config = [
             'id' => 'grid',

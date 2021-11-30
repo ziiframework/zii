@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -69,7 +71,7 @@ class BlameableBehaviorTest extends TestCase
         return Yii::$app->get('user');
     }
 
-    public function testInsertUserIsGuest()
+    public function testInsertUserIsGuest(): void
     {
         $this->getUser()->logout();
 
@@ -81,7 +83,7 @@ class BlameableBehaviorTest extends TestCase
         $this->assertNull($model->updated_by);
     }
 
-    public function testInsertUserIsNotGuest()
+    public function testInsertUserIsNotGuest(): void
     {
         $model = new ActiveRecordBlameable();
         $model->name = __METHOD__;
@@ -91,7 +93,7 @@ class BlameableBehaviorTest extends TestCase
         $this->assertEquals(10, $model->updated_by);
     }
 
-    public function testUpdateUserIsNotGuest()
+    public function testUpdateUserIsNotGuest(): void
     {
         $model = new ActiveRecordBlameable();
         $model->name = __METHOD__;
@@ -106,7 +108,7 @@ class BlameableBehaviorTest extends TestCase
         $this->assertEquals(20, $model->updated_by);
     }
 
-    public function testInsertCustomValue()
+    public function testInsertCustomValue(): void
     {
         $model = new ActiveRecordBlameable();
         $model->name = __METHOD__;
@@ -117,7 +119,7 @@ class BlameableBehaviorTest extends TestCase
         $this->assertEquals(42, $model->updated_by);
     }
 
-    public function testInsertClosure()
+    public function testInsertClosure(): void
     {
         $model = new ActiveRecordBlameable();
         $model->name = __METHOD__;
@@ -130,7 +132,7 @@ class BlameableBehaviorTest extends TestCase
         $this->assertEquals(strlen($model->name), $model->updated_by);
     }
 
-    public function testCustomAttributesAndEvents()
+    public function testCustomAttributesAndEvents(): void
     {
         $model = new ActiveRecordBlameable([
             'as blameable' => [
@@ -156,7 +158,7 @@ class BlameableBehaviorTest extends TestCase
         $this->assertEquals(20, $model->updated_by);
     }
 
-    public function testDefaultValue()
+    public function testDefaultValue(): void
     {
         $this->getUser()->logout();
 
@@ -174,7 +176,7 @@ class BlameableBehaviorTest extends TestCase
         $this->assertEquals(2, $model->updated_by);
     }
 
-    public function testDefaultValueWithClosure()
+    public function testDefaultValueWithClosure(): void
     {
         $model = new ActiveRecordBlameableWithDefaultValueClosure();
         $model->name = __METHOD__;
@@ -195,9 +197,7 @@ class ActiveRecordBlameableWithDefaultValueClosure extends ActiveRecordBlameable
         return [
             'blameable' => [
                 'class' => BlameableBehavior::className(),
-                'defaultValue' => function () {
-                    return $this->created_by + 1;
-                },
+                'defaultValue' => fn () => $this->created_by + 1,
             ],
         ];
     }
@@ -247,13 +247,13 @@ class UserMock extends BaseObject
 
     public $isGuest = true;
 
-    public function login($id)
+    public function login($id): void
     {
         $this->isGuest = false;
         $this->id = $id;
     }
 
-    public function logout()
+    public function logout(): void
     {
         $this->isGuest = true;
         $this->id = null;

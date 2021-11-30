@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -50,7 +52,7 @@ class FormatterTest extends TestCase
         $this->formatter = null;
     }
 
-    public function testFormat()
+    public function testFormat(): void
     {
         $value = time();
         $this->assertSame(date('M j, Y', $value), $this->formatter->format($value, 'date'));
@@ -58,7 +60,7 @@ class FormatterTest extends TestCase
         $this->assertSame(date('Y/m/d', $value), $this->formatter->format($value, ['date', 'php:Y/m/d']));
     }
 
-    public function testInvalidFormat()
+    public function testInvalidFormat(): void
     {
         $value = time();
         $this->expectException('\yii\base\InvalidParamException');
@@ -66,7 +68,7 @@ class FormatterTest extends TestCase
         $this->assertSame(date('Y-m-d', $value), $this->formatter->format($value, 'data'));
     }
 
-    public function testInvalidFormatArray()
+    public function testInvalidFormatArray(): void
     {
         $value = time();
         $this->expectException('\yii\base\InvalidParamException');
@@ -74,7 +76,7 @@ class FormatterTest extends TestCase
         $this->assertSame(date('Y-m-d', $value), $this->formatter->format($value, ['data']));
     }
 
-    public function testFormatArrayInvalidStructure()
+    public function testFormatArrayInvalidStructure(): void
     {
         $value = time();
         $this->expectException('\yii\base\InvalidParamException');
@@ -82,19 +84,17 @@ class FormatterTest extends TestCase
         $this->assertSame(date('Y-m-d', $value), $this->formatter->format($value, []));
     }
 
-    public function testClosureFormat()
+    public function testClosureFormat(): void
     {
         $value = time();
-        $this->assertSame(date('Y-m-d', $value), $this->formatter->format($value, static function ($value) {
-            return date('Y-m-d', $value);
-        }));
+        $this->assertSame(date('Y-m-d', $value), $this->formatter->format($value, static fn ($value) => date('Y-m-d', $value)));
         $this->assertSame('from: ' . date('Y-m-d', $value), $this->formatter->format($value, static function ($value, $formatter) {
             /* @var $formatter Formatter */
             return 'from: ' . $formatter->asDate($value, 'php:Y-m-d');
         }));
     }
 
-    public function testLocale()
+    public function testLocale(): void
     {
         // locale is configured explicitly
         $f = new Formatter(['locale' => 'en-US']);
@@ -105,7 +105,7 @@ class FormatterTest extends TestCase
         $this->assertEquals('ru-RU', $f->locale);
     }
 
-    public function testLanguage()
+    public function testLanguage(): void
     {
         // language is configured explicitly
         $f = new Formatter(['language' => 'en-US']);
@@ -120,7 +120,7 @@ class FormatterTest extends TestCase
         $this->assertEquals('ru-RU', $f->language);
     }
 
-    public function testAsRaw()
+    public function testAsRaw(): void
     {
         $value = '123';
         $this->assertSame($value, $this->formatter->asRaw($value));
@@ -133,7 +133,7 @@ class FormatterTest extends TestCase
         $this->assertSame($this->formatter->nullDisplay, $this->formatter->asRaw(null));
     }
 
-    public function testAsText()
+    public function testAsText(): void
     {
         $value = '123';
         $this->assertSame($value, $this->formatter->asText($value));
@@ -146,7 +146,7 @@ class FormatterTest extends TestCase
         $this->assertSame($this->formatter->nullDisplay, $this->formatter->asText(null));
     }
 
-    public function testAsNtext()
+    public function testAsNtext(): void
     {
         $value = '123';
         $this->assertSame($value, $this->formatter->asNtext($value));
@@ -161,7 +161,7 @@ class FormatterTest extends TestCase
         $this->assertSame($this->formatter->nullDisplay, $this->formatter->asNtext(null));
     }
 
-    public function testAsParagraphs()
+    public function testAsParagraphs(): void
     {
         $value = '123';
         $this->assertSame("<p>$value</p>", $this->formatter->asParagraphs($value));
@@ -192,7 +192,7 @@ class FormatterTest extends TestCase
         $this->assertSame($this->formatter->nullDisplay, $this->formatter->asParagraphs(null));
     }
 
-    public function testAsHtml()
+    public function testAsHtml(): void
     {
         $value = 'no HTML tags';
         $this->assertSame($value, $this->formatter->asHtml($value));
@@ -203,7 +203,7 @@ class FormatterTest extends TestCase
         $this->assertSame('<p>w1 w2</p>', $this->formatter->asHtml('<p>w1 <b>w2</b><br></p>', ['HTML.Allowed' => 'p']));
     }
 
-    public function testAsEmail()
+    public function testAsEmail(): void
     {
         $value = 'test@sample.com';
         $this->assertSame("<a href=\"mailto:$value\">$value</a>", $this->formatter->asEmail($value));
@@ -214,7 +214,7 @@ class FormatterTest extends TestCase
         $this->assertSame($this->formatter->nullDisplay, $this->formatter->asEmail(null));
     }
 
-    public function testAsUrl()
+    public function testAsUrl(): void
     {
         $value = 'http://www.yiiframework.com/';
         $this->assertSame("<a href=\"$value\">$value</a>", $this->formatter->asUrl($value));
@@ -270,7 +270,7 @@ class FormatterTest extends TestCase
         $this->assertSame($this->formatter->nullDisplay, $this->formatter->asUrl(null));
     }
 
-    public function testAsImage()
+    public function testAsImage(): void
     {
         $value = 'http://sample.com/img.jpg';
         $this->assertSame("<img src=\"$value\" alt=\"\">", $this->formatter->asImage($value));
@@ -282,7 +282,7 @@ class FormatterTest extends TestCase
         $this->assertSame($this->formatter->nullDisplay, $this->formatter->asImage(null));
     }
 
-    public function testAsBoolean()
+    public function testAsBoolean(): void
     {
         $this->assertSame('Yes', $this->formatter->asBoolean(true));
         $this->assertSame('No', $this->formatter->asBoolean(false));
@@ -294,7 +294,7 @@ class FormatterTest extends TestCase
         $this->assertSame($this->formatter->nullDisplay, $this->formatter->asBoolean(null));
     }
 
-    public function testAsTimestamp()
+    public function testAsTimestamp(): void
     {
         $this->assertSame('1451606400', $this->formatter->asTimestamp(1451606400));
         $this->assertSame('1451606400', $this->formatter->asTimestamp(1451606400.1234));
@@ -385,7 +385,7 @@ class FormatterTest extends TestCase
      * @param mixed $_shortLength
      * @param mixed $expectedException
      */
-    public function testIntlAsLength($message, $arguments, $expected, $_shortLength, $expectedException = [])
+    public function testIntlAsLength($message, $arguments, $expected, $_shortLength, $expectedException = []): void
     {
         $this->ensureIntlUnitDataIsAvailable();
 
@@ -405,7 +405,7 @@ class FormatterTest extends TestCase
      * @param mixed $expected
      * @param mixed $expectedException
      */
-    public function testIntlAsShortLength($message, $arguments, $_length, $expected, $expectedException = [])
+    public function testIntlAsShortLength($message, $arguments, $_length, $expected, $expectedException = []): void
     {
         $this->ensureIntlUnitDataIsAvailable();
 
@@ -488,7 +488,7 @@ class FormatterTest extends TestCase
      * @param mixed $_shortWeight
      * @param mixed $expectedException
      */
-    public function testIntlAsWeight($message, $arguments, $expected, $_shortWeight, $expectedException = [])
+    public function testIntlAsWeight($message, $arguments, $expected, $_shortWeight, $expectedException = []): void
     {
         $this->ensureIntlUnitDataIsAvailable();
 
@@ -508,7 +508,7 @@ class FormatterTest extends TestCase
      * @param mixed $expected
      * @param mixed $expectedException
      */
-    public function testIntlAsShortWeight($message, $arguments, $_weight, $expected, $expectedException = [])
+    public function testIntlAsShortWeight($message, $arguments, $_weight, $expected, $expectedException = []): void
     {
         $this->ensureIntlUnitDataIsAvailable();
 
@@ -519,14 +519,14 @@ class FormatterTest extends TestCase
         $this->assertSame($expected, call_user_func_array([$this->formatter, 'asShortWeight'], $arguments), 'Failed asserting that ' . $message);
     }
 
-    public function testAsWeight()
+    public function testAsWeight(): void
     {
         $this->expectException('\yii\base\InvalidConfigException');
         $this->expectExceptionMessage('Format of mass is only supported when PHP intl extension is installed.');
         $this->formatter->asWeight(10);
     }
 
-    public function testAsLength()
+    public function testAsLength(): void
     {
         $this->expectException('\yii\base\InvalidConfigException');
         $this->expectExceptionMessage('Format of length is only supported when PHP intl extension is installed.');
@@ -535,7 +535,7 @@ class FormatterTest extends TestCase
 
     protected function ensureIntlUnitDataIsAvailable()
     {
-        $skip = function () {
+        $skip = function (): void {
             $this->markTestSkipped('ICU data does not contain measure units information.');
         };
 

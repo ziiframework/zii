@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -18,7 +20,7 @@ use yiiunit\TestCase;
  */
 class YiiRequirementCheckerTest extends TestCase
 {
-    public function testCheck()
+    public function testCheck(): void
     {
         $requirementsChecker = new YiiRequirementChecker();
 
@@ -68,7 +70,7 @@ class YiiRequirementCheckerTest extends TestCase
     /**
      * @depends testCheck
      */
-    public function testCheckEval()
+    public function testCheckEval(): void
     {
         $requirementsChecker = new YiiRequirementChecker();
 
@@ -102,7 +104,7 @@ class YiiRequirementCheckerTest extends TestCase
     /**
      * @depends testCheck
      */
-    public function testCheckChained()
+    public function testCheckChained(): void
     {
         $requirementsChecker = new YiiRequirementChecker();
 
@@ -135,7 +137,7 @@ class YiiRequirementCheckerTest extends TestCase
         }
     }
 
-    public function testCheckPhpExtensionVersion()
+    public function testCheckPhpExtensionVersion(): void
     {
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('Can not test this on HHVM.');
@@ -171,7 +173,7 @@ class YiiRequirementCheckerTest extends TestCase
      * @param string $verboseValue     verbose value
      * @param int    $expectedByteSize expected byte size
      */
-    public function testGetByteSize($verboseValue, $expectedByteSize)
+    public function testGetByteSize($verboseValue, $expectedByteSize): void
     {
         $requirementsChecker = new YiiRequirementChecker();
 
@@ -203,7 +205,7 @@ class YiiRequirementCheckerTest extends TestCase
      * @param string $compare                  comparison
      * @param bool   $expectedComparisonResult expected comparison result
      */
-    public function testCompareByteSize($a, $b, $compare, $expectedComparisonResult)
+    public function testCompareByteSize($a, $b, $compare, $expectedComparisonResult): void
     {
         $requirementsChecker = new YiiRequirementChecker();
         $this->assertEquals($expectedComparisonResult, $requirementsChecker->compareByteSize($a, $b, $compare), "Wrong compare '{$a}{$compare}{$b}'");

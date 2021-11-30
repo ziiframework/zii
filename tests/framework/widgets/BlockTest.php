@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -25,12 +27,12 @@ class BlockTest extends \yiiunit\TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/15536
      */
-    public function testShouldTriggerInitEvent()
+    public function testShouldTriggerInitEvent(): void
     {
         $initTriggered = false;
 
         $block = new Block([
-                'on init' => static function () use (&$initTriggered) {
+                'on init' => static function () use (&$initTriggered): void {
                     $initTriggered = true;
                 },
             ]);
