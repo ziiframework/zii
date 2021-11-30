@@ -106,7 +106,7 @@ class HostControlTest extends TestCase
             $this->assertTrue($filter->beforeAction($action));
         } else {
             ob_start();
-            ob_implicit_flush(false);
+            ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
 
             $isExit = false;
 

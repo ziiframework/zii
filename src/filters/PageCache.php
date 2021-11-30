@@ -170,7 +170,7 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
         if (!is_array($data) || !isset($data['cacheVersion']) || $data['cacheVersion'] !== static::PAGE_CACHE_VERSION) {
             $this->view->pushDynamicContent($this);
             ob_start();
-            ob_implicit_flush(false);
+            ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
             $response->on(Response::EVENT_AFTER_SEND, [$this, 'cacheResponse']);
             Yii::debug('Valid page content is not found in the cache.', __METHOD__);
             return true;

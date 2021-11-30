@@ -131,7 +131,7 @@ class Widget extends Component implements ViewContextInterface
     public static function widget($config = [])
     {
         ob_start();
-        ob_implicit_flush(false);
+        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
         try {
             /* @var $widget Widget */
             $config['class'] = get_called_class();

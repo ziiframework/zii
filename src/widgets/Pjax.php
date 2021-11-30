@@ -120,7 +120,7 @@ class Pjax extends Widget
 
         if ($this->requiresPjax()) {
             ob_start();
-            ob_implicit_flush(false);
+            ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
             $view = $this->getView();
             $view->clear();
             $view->beginPage();
