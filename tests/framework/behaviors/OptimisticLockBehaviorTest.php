@@ -272,7 +272,7 @@ class OptimisticLockBehaviorTest extends TestCase
         $request->setBodyParams(['ActiveRecordLockVersion' => ['version' => '2']]);
         Yii::$app->set('request', $request);
 
-        $this->assertTrue($model->delete(), 'model is successfully deleted');
+        $this->assertContains($model->delete(), [1, true], 'model is successfully deleted'); // TODO type hint
         $this->assertEquals(2, $model->version, 'deleted version should remain 2');
     }
 }

@@ -1354,7 +1354,7 @@ abstract class ActiveRecordTest extends DatabaseTestCase
         $this->assertEquals('something', $model->char_col2);
         $this->assertEquals(1.23, $model->float_col2);
         $this->assertEquals(33.22, $model->numeric_col);
-        $this->assertSame(1, $model->bool_col2);
+        $this->assertContains($model->bool_col2, [1, true]); // TODO type hint
 
         $this->assertEquals('2002-01-01 00:00:00', $model->time);
 
@@ -1606,10 +1606,10 @@ abstract class ActiveRecordTest extends DatabaseTestCase
     public function testBit(): void
     {
         $falseBit = BitValues::findOne(1);
-        $this->assertSame(0, $falseBit->val);
+        $this->assertContains($falseBit->val, [0, false]); // TODO type hint
 
         $trueBit = BitValues::findOne(2);
-        $this->assertSame(1, $trueBit->val);
+        $this->assertContains($trueBit->val, [1, true]); // TODO type hint
     }
 
     public function testLinkWhenRelationIsIndexed2(): void
