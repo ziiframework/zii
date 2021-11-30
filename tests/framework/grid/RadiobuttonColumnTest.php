@@ -66,16 +66,12 @@ class RadiobuttonColumnTest extends TestCase
     public function testContent(): void
     {
         $column = new RadioButtonColumn([
-            'content' => static function ($model, $key, $index, $column) {
-                return null;
-            },
+            'content' => static fn ($model, $key, $index, $column) => null,
         ]);
         $this->assertStringContainsString('<td></td>', $column->renderDataCell([], 1, 0));
 
         $column = new RadioButtonColumn([
-            'content' => static function ($model, $key, $index, $column) {
-                return Html::radio('radioButtonInput', false);
-            },
+            'content' => static fn ($model, $key, $index, $column) => Html::radio('radioButtonInput', false),
         ]);
         $this->assertStringContainsString(Html::radio('radioButtonInput', false), $column->renderDataCell([], 1, 0));
     }

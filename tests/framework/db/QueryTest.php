@@ -412,9 +412,7 @@ abstract class QueryTest extends DatabaseTestCase
         $result = (new Query())->from('customer')
             ->select(['name', 'id'])
             ->orderBy(['id' => SORT_DESC])
-            ->indexBy(static function ($row) {
-                return $row['id'] * 2;
-            })
+            ->indexBy(static fn ($row) => $row['id'] * 2)
             ->column($db);
         $this->assertEquals([6 => 'user3', 4 => 'user2', 2 => 'user1'], $result);
 

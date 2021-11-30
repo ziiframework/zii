@@ -191,9 +191,7 @@ class TargetTest extends TestCase
         $target->enabled = false;
         $this->assertFalse($target->enabled);
 
-        $target->enabled = static function ($target) {
-            return empty($target->messages);
-        };
+        $target->enabled = static fn ($target) => empty($target->messages);
         $this->assertTrue($target->enabled);
     }
 
@@ -270,9 +268,7 @@ class TargetTest extends TestCase
             ->setMethods(['dispatch'])
             ->getMock();
         $dispatcher->expects($this->exactly(2))->method('dispatch')->withConsecutive([
-                $this->callback(static function ($messages) {
-                    return count($messages) === 1 && $messages[0][0] === 'info';
-                }),
+                $this->callback(static fn ($messages) => count($messages) === 1 && $messages[0][0] === 'info'),
                 false,
             ], [
                 $this->callback(static function ($messages) {

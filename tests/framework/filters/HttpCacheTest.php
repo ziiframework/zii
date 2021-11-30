@@ -40,9 +40,7 @@ class HttpCacheTest extends \yiiunit\TestCase
     public function testEmptyPragma(): void
     {
         $httpCache = new HttpCache();
-        $httpCache->etagSeed = static function ($action, $params) {
-            return '';
-        };
+        $httpCache->etagSeed = static fn ($action, $params) => '';
         $httpCache->beforeAction(null);
         $response = Yii::$app->getResponse();
         $this->assertFalse($response->getHeaders()->offsetExists('Pragma'));
@@ -90,16 +88,12 @@ class HttpCacheTest extends \yiiunit\TestCase
         $httpCache = new HttpCache();
         $httpCache->weakEtag = false;
 
-        $httpCache->etagSeed = static function ($action, $params) {
-            return null;
-        };
+        $httpCache->etagSeed = static fn ($action, $params) => null;
         $httpCache->beforeAction(null);
         $response = Yii::$app->getResponse();
         $this->assertFalse($response->getHeaders()->offsetExists('ETag'));
 
-        $httpCache->etagSeed = static function ($action, $params) {
-            return '';
-        };
+        $httpCache->etagSeed = static fn ($action, $params) => '';
         $httpCache->beforeAction(null);
         $response = Yii::$app->getResponse();
 

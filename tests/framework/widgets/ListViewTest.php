@@ -138,9 +138,7 @@ HTML
 </div>',
             ],
             [
-                static function ($model, $key, $index, $widget) {
-                    return "Item #{$index}: {$model['login']} - Widget: " . $widget->className();
-                },
+                static fn ($model, $key, $index, $widget) => "Item #{$index}: {$model['login']} - Widget: " . $widget->className(),
                 '<div id="w0" class="list-view"><div class="summary">Showing <b>1-3</b> of <b>3</b> items.</div>
 <div data-key="0">Item #0: silverfire - Widget: yii\widgets\ListView</div>
 <div data-key="1">Item #1: samdark - Widget: yii\widgets\ListView</div>

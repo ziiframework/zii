@@ -385,9 +385,7 @@ class MigrateControllerTest extends TestCase
 
     public function testCreateLongNamedMigration(): void
     {
-        $this->setOutputCallback(static function ($output) {
-            return null;
-        });
+        $this->setOutputCallback(static fn ($output) => null);
 
         $migrationName = str_repeat('a', 180);
 

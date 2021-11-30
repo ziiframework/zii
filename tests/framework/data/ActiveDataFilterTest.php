@@ -197,12 +197,8 @@ class ActiveDataFilterTest extends TestCase
 
         $builder->setSearchModel($searchModel);
 
-        $builder->conditionBuilders['OR'] = static function ($operator, $condition) {
-            return ['CALLBACK-OR', $condition];
-        };
-        $builder->conditionBuilders['LIKE'] = static function ($operator, $condition, $attribute) {
-            return ['CALLBACK-LIKE', $operator, $condition, $attribute];
-        };
+        $builder->conditionBuilders['OR'] = static fn ($operator, $condition) => ['CALLBACK-OR', $condition];
+        $builder->conditionBuilders['LIKE'] = static fn ($operator, $condition, $attribute) => ['CALLBACK-LIKE', $operator, $condition, $attribute];
 
         $builder->filter = [
             'or' => [

@@ -68,9 +68,7 @@ class Order extends ActiveRecord
     public function getOrderItems3()
     {
         return $this->hasMany(OrderItem::className(), ['order_id' => 'id'])
-            ->indexBy(static function ($row) {
-                return $row['order_id'] . '_' . $row['item_id'];
-            });
+            ->indexBy(static fn ($row) => $row['order_id'] . '_' . $row['item_id']);
     }
 
     public function getOrderItemsWithNullFK()

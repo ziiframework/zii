@@ -69,16 +69,12 @@ class HostControlTest extends TestCase
                 false,
             ],
             [
-                static function () {
-                    return ['example.com'];
-                },
+                static fn () => ['example.com'],
                 'example.com',
                 true,
             ],
             [
-                static function () {
-                    return ['example.com'];
-                },
+                static fn () => ['example.com'],
                 'fake.com',
                 false,
             ],

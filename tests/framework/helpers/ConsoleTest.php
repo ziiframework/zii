@@ -333,9 +333,7 @@ class TestConsoleModel extends DynamicModel
 
         // testing custom callable check ("validator" param)
         $this->sendInput('cat', '15');
-        $result = ConsoleStub::prompt('SmthNumeric', ['validator' => static function ($value, &$error) {
-            return is_numeric($value);
-        }]);
+        $result = ConsoleStub::prompt('SmthNumeric', ['validator' => static fn ($value, &$error) => is_numeric($value)]);
         $this->assertEquals('SmthNumeric Invalid input.' . PHP_EOL . 'SmthNumeric ', $this->readOutput());
         $this->assertEquals('15', $result);
         $this->truncateStreams();
@@ -362,9 +360,7 @@ class TestConsoleModel extends DynamicModel
             'required' => true,
             'default' => 'kraken',
             'pattern' => '/^\d+$/',
-            'validator' => static function ($value, &$error) {
-                return $value == 15;
-            },
+            'validator' => static fn ($value, &$error) => $value == 15,
             'error' => 'CustomError',
         ]);
         $this->assertEquals('Combined [kraken] CustomError' . PHP_EOL . 'Combined [kraken] ', $this->readOutput());

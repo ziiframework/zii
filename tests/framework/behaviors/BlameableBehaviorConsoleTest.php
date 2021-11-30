@@ -90,9 +90,7 @@ class ActiveRecordBlameableConsoleWithDefaultValueClosure extends ActiveRecordBl
         return [
             'blameable' => [
                 'class' => BlameableBehavior::className(),
-                'defaultValue' => static function () {
-                    return 10 + 1;
-                },
+                'defaultValue' => static fn () => 10 + 1,
             ],
         ];
     }

@@ -77,9 +77,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
 
         $result['with schema'] = [
             "CREATE INDEX {{{$schemaName}}}.[[$indexName]] ON {{{$tableName}}} ([[C_index_1]])",
-            static function (QueryBuilder $qb) use ($tableName, $indexName, $schemaName) {
-                return $qb->createIndex($indexName, $schemaName . '.' . $tableName, 'C_index_1');
-            },
+            static fn (QueryBuilder $qb) => $qb->createIndex($indexName, $schemaName . '.' . $tableName, 'C_index_1'),
         ];
 
         return $result;

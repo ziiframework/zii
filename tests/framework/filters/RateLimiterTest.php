@@ -160,9 +160,7 @@ class RateLimiterTest extends TestCase
     public function testUserWithClosureFunction(): void
     {
         $rateLimiter = new RateLimiter();
-        $rateLimiter->user = static function ($action) {
-            return new User(['identityClass' => RateLimit::className()]);
-        };
+        $rateLimiter->user = static fn ($action) => new User(['identityClass' => RateLimit::className()]);
         $rateLimiter->beforeAction('test');
 
         // testing the evaluation of user closure, which in this case returns not the expect object and therefore

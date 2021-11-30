@@ -531,9 +531,7 @@ class FileHelperTest extends TestCase
         $dirName = $basePath . DIRECTORY_SEPARATOR . $dirName;
 
         $options = [
-            'filter' => static function ($path) use ($passedFileName) {
-                return $passedFileName == basename($path);
-            },
+            'filter' => static fn ($path) => $passedFileName == basename($path),
         ];
         $foundFiles = FileHelper::findFiles($dirName, $options);
         $this->assertEquals([$dirName . DIRECTORY_SEPARATOR . $passedFileName], $foundFiles);
@@ -598,9 +596,7 @@ class FileHelperTest extends TestCase
     {
         $basePath = $this->testFilePath . DIRECTORY_SEPARATOR;
         $dirs = ['', 'one', 'one' . DIRECTORY_SEPARATOR . 'two', 'three'];
-        $files = array_fill_keys(array_map(static function ($n) {
-            return "a.$n";
-        }, range(1, 8)), 'file contents');
+        $files = array_fill_keys(array_map(static fn ($n) => "a.$n", range(1, 8)), 'file contents');
 
         $tree = $files;
         $root = $files;
@@ -630,25 +626,19 @@ class FileHelperTest extends TestCase
         // range
         $foundFiles = FileHelper::findFiles($basePath, ['except' => ['a.[2-8]']]);
         sort($foundFiles);
-        $expect = array_values(array_filter($flat, static function ($p) {
-            return substr($p, -3) === 'a.1';
-        }));
+        $expect = array_values(array_filter($flat, static fn ($p) => substr($p, -3) === 'a.1'));
         $this->assertEquals($expect, $foundFiles);
 
         // suffix
         $foundFiles = FileHelper::findFiles($basePath, ['except' => ['*.1']]);
         sort($foundFiles);
-        $expect = array_values(array_filter($flat, static function ($p) {
-            return substr($p, -3) !== 'a.1';
-        }));
+        $expect = array_values(array_filter($flat, static fn ($p) => substr($p, -3) !== 'a.1'));
         $this->assertEquals($expect, $foundFiles);
 
         // dir
         $foundFiles = FileHelper::findFiles($basePath, ['except' => ['/one']]);
         sort($foundFiles);
-        $expect = array_values(array_filter($flat, static function ($p) {
-            return strpos($p, DIRECTORY_SEPARATOR . 'one') === false;
-        }));
+        $expect = array_values(array_filter($flat, static fn ($p) => strpos($p, DIRECTORY_SEPARATOR . 'one') === false));
         $this->assertEquals($expect, $foundFiles);
 
         // dir contents
@@ -920,9 +910,7 @@ class FileHelperTest extends TestCase
             $dirName . DIRECTORY_SEPARATOR . 'second_sub_dir',
         ];
         $options = [
-            'filter' => static function ($path) {
-                return 'second_sub_dir' === basename($path);
-            },
+            'filter' => static fn ($path) => 'second_sub_dir' === basename($path),
         ];
         $foundFiles = FileHelper::findDirectories($dirName, $options);
         sort($expectedFiles);

@@ -289,9 +289,7 @@ TEXT
 
         $mailer->fileTransportPath = '@yiiunit/runtime/mail';
         $mailer->useFileTransport = true;
-        $mailer->fileTransportCallback = static function () {
-            return 'message.txt';
-        };
+        $mailer->fileTransportCallback = static fn () => 'message.txt';
         $message = $mailer->compose()
             ->setTo('to@example.com')
             ->setFrom('from@example.com')

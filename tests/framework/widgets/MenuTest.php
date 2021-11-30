@@ -178,9 +178,7 @@ HTML;
                     'label' => 'item1',
                     'url' => '#',
                     'template' => 'label: {label}; url: {url}',
-                    'active' => static function ($item, $hasActiveChild, $isItemActive, $widget) {
-                        return isset($item, $hasActiveChild, $isItemActive, $widget);
-                    },
+                    'active' => static fn ($item, $hasActiveChild, $isItemActive, $widget) => isset($item, $hasActiveChild, $isItemActive, $widget),
                 ],
                 [
                     'label' => 'item2',

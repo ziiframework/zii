@@ -148,7 +148,7 @@ class SluggableBehaviorTest extends TestCase
         $model->save();
 
         $model = new ActiveRecordSluggableUnique();
-        $model->sluggable->uniqueSlugGenerator = static function ($baseSlug, $iteration) {return $baseSlug . '-callback'; };
+        $model->sluggable->uniqueSlugGenerator = static fn ($baseSlug, $iteration) => $baseSlug . '-callback';
         $model->name = $name;
         $model->save();
 
@@ -219,9 +219,7 @@ class SluggableBehaviorTest extends TestCase
         $model = new ActiveRecordSluggable();
         $model->getSluggable()->immutable = true;
         $model->getSluggable()->attribute = null;
-        $model->getSluggable()->value = static function () use ($model) {
-            return $model->name;
-        };
+        $model->getSluggable()->value = static fn () => $model->name;
 
         $model->name = 'test name';
         $model->validate();

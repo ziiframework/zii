@@ -635,9 +635,7 @@ abstract class ManagerTestCase extends TestCase
     {
         $this->expectException('yii\base\InvalidValueException');
         $this->expectExceptionMessage('Default roles closure must return an array');
-        $this->auth->defaultRoles = static function () {
-            return 'test';
-        };
+        $this->auth->defaultRoles = static fn () => 'test';
     }
 
     public function testDefaultRolesWithNonArrayValue(): void

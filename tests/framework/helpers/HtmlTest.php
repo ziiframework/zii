@@ -726,9 +726,7 @@ EOD;
 1<label>text2 <input type="checkbox" name="test[]" value="value2" checked></label></div>
 EOD;
         $this->assertEqualsWithoutLE($expected, Html::checkboxList('test', ['value2'], $this->getDataItems(), [
-            'item' => static function ($index, $label, $name, $checked, $value) {
-                return $index . Html::label($label . ' ' . Html::checkbox($name, $checked, ['value' => $value]));
-            },
+            'item' => static fn ($index, $label, $name, $checked, $value) => $index . Html::label($label . ' ' . Html::checkbox($name, $checked, ['value' => $value])),
         ]));
 
         $expected = <<<'EOD'
@@ -736,16 +734,12 @@ EOD;
 1<label>text2 <input type="checkbox" name="test[]" value="value2" checked></label>
 EOD;
         $this->assertEqualsWithoutLE($expected, Html::checkboxList('test', ['value2'], $this->getDataItems(), [
-            'item' => static function ($index, $label, $name, $checked, $value) {
-                return $index . Html::label($label . ' ' . Html::checkbox($name, $checked, ['value' => $value]));
-            },
+            'item' => static fn ($index, $label, $name, $checked, $value) => $index . Html::label($label . ' ' . Html::checkbox($name, $checked, ['value' => $value])),
             'tag' => false,
         ]));
 
         $this->assertEqualsWithoutLE($expected, Html::checkboxList('test', new ArrayObject(['value2']), $this->getDataItems(), [
-            'item' => static function ($index, $label, $name, $checked, $value) {
-                return $index . Html::label($label . ' ' . Html::checkbox($name, $checked, ['value' => $value]));
-            },
+            'item' => static fn ($index, $label, $name, $checked, $value) => $index . Html::label($label . ' ' . Html::checkbox($name, $checked, ['value' => $value])),
             'tag' => false,
         ]));
 
@@ -863,9 +857,7 @@ EOD;
 1<label>text2 <input type="radio" name="test" value="value2" checked></label></div>
 EOD;
         $this->assertEqualsWithoutLE($expected, Html::radioList('test', ['value2'], $this->getDataItems(), [
-            'item' => static function ($index, $label, $name, $checked, $value) {
-                return $index . Html::label($label . ' ' . Html::radio($name, $checked, ['value' => $value]));
-            },
+            'item' => static fn ($index, $label, $name, $checked, $value) => $index . Html::label($label . ' ' . Html::radio($name, $checked, ['value' => $value])),
         ]));
 
         $expected = <<<'EOD'
@@ -873,16 +865,12 @@ EOD;
 1<label>text2 <input type="radio" name="test" value="value2" checked></label>
 EOD;
         $this->assertEqualsWithoutLE($expected, Html::radioList('test', ['value2'], $this->getDataItems(), [
-            'item' => static function ($index, $label, $name, $checked, $value) {
-                return $index . Html::label($label . ' ' . Html::radio($name, $checked, ['value' => $value]));
-            },
+            'item' => static fn ($index, $label, $name, $checked, $value) => $index . Html::label($label . ' ' . Html::radio($name, $checked, ['value' => $value])),
             'tag' => false,
         ]));
 
         $this->assertEqualsWithoutLE($expected, Html::radioList('test', new ArrayObject(['value2']), $this->getDataItems(), [
-            'item' => static function ($index, $label, $name, $checked, $value) {
-                return $index . Html::label($label . ' ' . Html::radio($name, $checked, ['value' => $value]));
-            },
+            'item' => static fn ($index, $label, $name, $checked, $value) => $index . Html::label($label . ' ' . Html::radio($name, $checked, ['value' => $value])),
             'tag' => false,
         ]));
 
@@ -943,9 +931,7 @@ EOD;
 EOD;
         $this->assertEqualsWithoutLE($expected, Html::ul($data, [
             'class' => 'test',
-            'item' => static function ($item, $index) {
-                return "<li class=\"item-$index\">$item</li>";
-            },
+            'item' => static fn ($item, $index) => "<li class=\"item-$index\">$item</li>",
         ]));
 
         $this->assertEquals('<ul class="test"></ul>', Html::ul([], ['class' => 'test']));
@@ -977,9 +963,7 @@ EOD;
 EOD;
         $this->assertEqualsWithoutLE($expected, Html::ol($data, [
             'class' => 'test',
-            'item' => static function ($item, $index) {
-                return "<li class=\"item-$index\">$item</li>";
-            },
+            'item' => static fn ($item, $index) => "<li class=\"item-$index\">$item</li>",
         ]));
 
         $this->assertEquals('<ol class="test"></ol>', Html::ol([], ['class' => 'test']));
@@ -1571,9 +1555,7 @@ EOD;
         $this->assertEquals('<div>Name cannot be blank.</div>', Html::error($model, 'name'), 'Default error message after calling $model->getFirstError()');
 
         $this->assertEquals('<div>this is custom error message</div>', Html::error($model, 'name', ['errorSource' => [$model, 'customError']]), 'Custom error message generated by callback');
-        $this->assertEquals('<div>Error in yiiunit\framework\helpers\HtmlTestModel - name</div>', Html::error($model, 'name', ['errorSource' => static function ($model, $attribute) {
-            return 'Error in ' . get_class($model) . ' - ' . $attribute;
-        }]), 'Custom error message generated by closure');
+        $this->assertEquals('<div>Error in yiiunit\framework\helpers\HtmlTestModel - name</div>', Html::error($model, 'name', ['errorSource' => static fn ($model, $attribute) => 'Error in ' . get_class($model) . ' - ' . $attribute]), 'Custom error message generated by closure');
     }
 
     /**

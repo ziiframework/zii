@@ -87,9 +87,7 @@ EOD;
     {
         // field will be the html of the model's attribute wrapped with the return string below.
         $field = $this->attributeName;
-        $content = static function ($field) {
-            return "<div class=\"custom-container\"> $field </div>";
-        };
+        $content = static fn ($field) => "<div class=\"custom-container\"> $field </div>";
 
         $expectedValue = <<<EOD
 <div class="form-group field-activefieldtestmodel-attributename">
@@ -794,6 +792,6 @@ class TestMaskedInput extends MaskedInput
 
     public function run()
     {
-        return 'Options: ' . implode(', ', array_map(static function ($v, $k) { return sprintf('%s="%s"', $k, $v); }, $this->options, array_keys($this->options)));
+        return 'Options: ' . implode(', ', array_map(static fn ($v, $k) => sprintf('%s="%s"', $k, $v), $this->options, array_keys($this->options)));
     }
 }

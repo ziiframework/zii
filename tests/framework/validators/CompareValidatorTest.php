@@ -46,9 +46,7 @@ class CompareValidatorTest extends TestCase
         $this->assertFalse($val->validate($value + 1));
 
         // Using a closure for compareValue
-        $val = new CompareValidator(['compareValue' => static function () use ($value) {
-            return $value;
-        }]);
+        $val = new CompareValidator(['compareValue' => static fn () => $value]);
         $this->assertTrue($val->validate($value));
         $this->assertTrue($val->validate((string) $value));
         $this->assertFalse($val->validate($value + 1));

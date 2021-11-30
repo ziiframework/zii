@@ -138,9 +138,7 @@ class ActiveRecordWithAttributeBehavior extends ActiveRecord
                 'attributes' => [
                     self::EVENT_BEFORE_VALIDATE => 'alias',
                 ],
-                'value' => static function ($event) {
-                    return $event->sender->name;
-                },
+                'value' => static fn ($event) => $event->sender->name,
             ],
         ];
     }

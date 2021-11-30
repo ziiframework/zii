@@ -12,7 +12,5 @@ use yii\di\Container;
 use yiiunit\framework\di\stubs\QuxInterface;
 
 $container = new Container();
-$func = static function (QuxInterface ...$quxes) {
-    return "That's a whole lot of quxes!";
-};
+$func = static fn (QuxInterface ...$quxes) => "That's a whole lot of quxes!";
 $container->invoke($func);

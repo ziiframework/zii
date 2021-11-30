@@ -77,9 +77,7 @@ abstract class SchemaTest extends DatabaseTestCase
         $tables = $schema->getTableNames();
 
         if ($this->driverName === 'sqlsrv') {
-            $tables = array_map(static function ($item) {
-                return trim($item, '[]');
-            }, $tables);
+            $tables = array_map(static fn ($item) => trim($item, '[]'), $tables);
         }
         $this->assertContains('customer', $tables);
         $this->assertContains('category', $tables);

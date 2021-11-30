@@ -197,9 +197,7 @@ class ActiveRecordBlameableWithDefaultValueClosure extends ActiveRecordBlameable
         return [
             'blameable' => [
                 'class' => BlameableBehavior::className(),
-                'defaultValue' => function () {
-                    return $this->created_by + 1;
-                },
+                'defaultValue' => fn () => $this->created_by + 1,
             ],
         ];
     }

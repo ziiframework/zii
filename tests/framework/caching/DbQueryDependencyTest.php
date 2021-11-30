@@ -99,9 +99,7 @@ class DbQueryDependencyTest extends DatabaseTestCase
             ->from('dependency_item')
             ->andWhere(['value' => 'not exist']);
         $dependency->reusable = false;
-        $dependency->method = static function (Query $query, $db) {
-            return $query->orWhere(['value' => 'initial'])->exists($db);
-        };
+        $dependency->method = static fn (Query $query, $db) => $query->orWhere(['value' => 'initial'])->exists($db);
 
         $dependency->evaluateDependency($cache);
         $this->assertFalse($dependency->isChanged($cache));

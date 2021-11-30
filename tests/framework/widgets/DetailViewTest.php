@@ -54,9 +54,7 @@ class DetailViewTest extends \yiiunit\TestCase
                 ],
                 [
                     'attribute' => 'id',
-                    'value' => static function ($model) {
-                        return $model->getDisplayedId();
-                    },
+                    'value' => static fn ($model) => $model->getDisplayedId(),
                 ],
             ],
         ]);
@@ -116,22 +114,16 @@ class DetailViewTest extends \yiiunit\TestCase
                 ],
                 [
                     'attribute' => 'id',
-                    'value' => static function ($model) {
-                        return $model->getDisplayedId();
-                    },
+                    'value' => static fn ($model) => $model->getDisplayedId(),
                 ],
                 [
                     'attribute' => 'id',
-                    'value' => static function ($model) {
-                        return $model->getDisplayedId();
-                    },
+                    'value' => static fn ($model) => $model->getDisplayedId(),
                     'visible' => false,
                 ],
                 [
                     'attribute' => 'id',
-                    'value' => static function ($model) {
-                        return $model->getDisplayedId();
-                    },
+                    'value' => static fn ($model) => $model->getDisplayedId(),
                     'visible' => true,
                 ],
             ],

@@ -151,9 +151,7 @@ abstract class AbstractDbSessionTest extends TestCase
     {
         $session = new DbSession();
 
-        $session->writeCallback = static function ($session) {
-            return ['data' => 'changed by callback data'];
-        };
+        $session->writeCallback = static fn ($session) => ['data' => 'changed by callback data'];
 
         $session->writeSession('test', 'session data');
 
@@ -175,9 +173,7 @@ abstract class AbstractDbSessionTest extends TestCase
         $migration->compact = true;
         $migration->addColumn($session->sessionTable, 'user_id', $migration->integer());
 
-        $session->writeCallback = static function ($session) {
-            return ['user_id' => $session['user_id']];
-        };
+        $session->writeCallback = static fn ($session) => ['user_id' => $session['user_id']];
 
         // here used to be error, fixed issue #9438
         $session->close();
@@ -234,9 +230,7 @@ abstract class AbstractDbSessionTest extends TestCase
         $migrate->run($action, $params);
         ob_get_clean();
 
-        return array_map(static function ($version) {
-            return substr($version, 15);
-        }, (new Query())->select(['version'])->from('migration')->column());
+        return array_map(static fn ($version) => substr($version, 15), (new Query())->select(['version'])->from('migration')->column());
     }
 
     public function testMigration(): void

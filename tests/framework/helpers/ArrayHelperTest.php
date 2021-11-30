@@ -66,9 +66,7 @@ class ArrayHelperTest extends TestCase
             $object::className() => [
                 'id', 'secret',
                 '_content' => 'content',
-                'length' => static function ($post) {
-                    return strlen($post->content);
-                },
+                'length' => static fn ($post) => strlen($post->content),
             ],
         ]));
 
@@ -94,15 +92,11 @@ class ArrayHelperTest extends TestCase
         ], ArrayHelper::toArray($object, [
             $object::className() => [
                 'id', 'subObject',
-                'id_plus_1' => static function ($post) {
-                    return $post->id + 1;
-                },
+                'id_plus_1' => static fn ($post) => $post->id + 1,
             ],
             $subObject::className() => [
                 'id',
-                'id_plus_1' => static function ($post) {
-                    return $post->id + 1;
-                },
+                'id_plus_1' => static fn ($post) => $post->id + 1,
             ],
         ]));
 
@@ -116,9 +110,7 @@ class ArrayHelperTest extends TestCase
         ], ArrayHelper::toArray($object, [
             $subObject::className() => [
                 'id',
-                'id_plus_1' => static function ($post) {
-                    return $post->id + 1;
-                },
+                'id_plus_1' => static fn ($post) => $post->id + 1,
             ],
         ]));
 
@@ -537,9 +529,7 @@ class ArrayHelperTest extends TestCase
             '345' => ['id' => '345', 'data' => 'ghi'],
         ], $result);
 
-        $result = ArrayHelper::index($array, static function ($element) {
-            return $element['data'];
-        });
+        $result = ArrayHelper::index($array, static fn ($element) => $element['data']);
         $this->assertEquals([
             'abc' => ['id' => '123', 'data' => 'abc'],
             'def' => ['id' => '345', 'data' => 'def'],
@@ -549,14 +539,10 @@ class ArrayHelperTest extends TestCase
         $result = ArrayHelper::index($array, null);
         $this->assertEquals([], $result);
 
-        $result = ArrayHelper::index($array, static function ($element) {
-            return null;
-        });
+        $result = ArrayHelper::index($array, static fn ($element) => null);
         $this->assertEquals([], $result);
 
-        $result = ArrayHelper::index($array, static function ($element) {
-            return $element['id'] == '345' ? null : $element['id'];
-        });
+        $result = ArrayHelper::index($array, static fn ($element) => $element['id'] == '345' ? null : $element['id']);
         $this->assertEquals([
             '123' => ['id' => '123', 'data' => 'abc'],
         ], $result);
@@ -614,9 +600,7 @@ class ArrayHelperTest extends TestCase
         $this->assertEquals($expected, $result);
         $result = ArrayHelper::index($array, 'data', 'id');
         $this->assertEquals($expected, $result);
-        $result = ArrayHelper::index($array, static function ($element) {
-            return $element['data'];
-        }, 'id');
+        $result = ArrayHelper::index($array, static fn ($element) => $element['data'], 'id');
         $this->assertEquals($expected, $result);
 
         $expected = [
@@ -636,9 +620,7 @@ class ArrayHelperTest extends TestCase
         ];
         $result = ArrayHelper::index($array, 'data', ['id', 'data']);
         $this->assertEquals($expected, $result);
-        $result = ArrayHelper::index($array, static function ($element) {
-            return $element['data'];
-        }, ['id', 'data']);
+        $result = ArrayHelper::index($array, static fn ($element) => $element['data'], ['id', 'data']);
         $this->assertEquals($expected, $result);
     }
 
@@ -677,13 +659,9 @@ class ArrayHelperTest extends TestCase
         $result = ArrayHelper::getColumn($array, 'id', false);
         $this->assertEquals(['123', '345'], $result);
 
-        $result = ArrayHelper::getColumn($array, static function ($element) {
-            return $element['data'];
-        });
+        $result = ArrayHelper::getColumn($array, static fn ($element) => $element['data']);
         $this->assertEquals(['a' => 'abc', 'b' => 'def'], $result);
-        $result = ArrayHelper::getColumn($array, static function ($element) {
-            return $element['data'];
-        }, false);
+        $result = ArrayHelper::getColumn($array, static fn ($element) => $element['data'], false);
         $this->assertEquals(['abc', 'def'], $result);
     }
 
@@ -774,9 +752,7 @@ class ArrayHelperTest extends TestCase
             ['admin.firstname', 'Qiang', 'test'],
             ['admin.lastname', 'Xue'],
             [
-                static function ($array, $defaultValue) {
-                    return $array['date'] . $defaultValue;
-                },
+                static fn ($array, $defaultValue) => $array['date'] . $defaultValue,
                 '31-12-2113test',
                 'test',
             ],

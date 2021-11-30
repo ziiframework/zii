@@ -83,9 +83,7 @@ class ConnectionTest extends \yiiunit\framework\db\ConnectionTest
                 $this->assertNull($db->getMaster());
             }
             $this->assertNotEquals('test', $db->createCommand('SELECT description FROM profile WHERE id=1')->queryScalar());
-            $result = $db->useMaster(static function (Connection $db) {
-                return $db->createCommand('SELECT description FROM profile WHERE id=1')->queryScalar();
-            });
+            $result = $db->useMaster(static fn (Connection $db) => $db->createCommand('SELECT description FROM profile WHERE id=1')->queryScalar());
             $this->assertEquals('test', $result);
 
             // test ActiveRecord read/write split
@@ -103,9 +101,7 @@ class ConnectionTest extends \yiiunit\framework\db\ConnectionTest
             $customer = Customer::findOne(1);
             $this->assertInstanceOf(Customer::className(), $customer);
             $this->assertEquals('user1', $customer->name);
-            $result = $db->useMaster(static function () {
-                return Customer::findOne(1)->name;
-            });
+            $result = $db->useMaster(static fn () => Customer::findOne(1)->name);
             $this->assertEquals('test', $result);
         }
     }

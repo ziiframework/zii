@@ -199,9 +199,7 @@ class FragmentCacheTest extends \yiiunit\TestCase
 
     public function testVariations(): void
     {
-        $this->setOutputCallback(static function ($output) {
-            return null;
-        });
+        $this->setOutputCallback(static fn ($output) => null);
 
         ob_start();
         ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);

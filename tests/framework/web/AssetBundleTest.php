@@ -109,9 +109,7 @@ class AssetBundleTest extends \yiiunit\TestCase
     {
         $view = $this->getView([
             'linkAssets' => true,
-            'hashCallback' => static function ($path) {
-                return sprintf('%x/%x', crc32($path), crc32(Yii::getVersion()));
-            },
+            'hashCallback' => static fn ($path) => sprintf('%x/%x', crc32($path), crc32(Yii::getVersion())),
         ]);
         $bundle = $this->verifySourcesPublishedBySymlink($view);
         $this->assertTrue(is_dir(dirname($bundle->basePath)));
@@ -120,9 +118,7 @@ class AssetBundleTest extends \yiiunit\TestCase
     public function testSourcesPublishAssetManagerBeforeCopy(): void
     {
         $view = $this->getView([
-            'beforeCopy' => static function ($from, $to) {
-                return false;
-            },
+            'beforeCopy' => static fn ($from, $to) => false,
         ]);
         $am = $view->assetManager;
 
@@ -144,9 +140,7 @@ class AssetBundleTest extends \yiiunit\TestCase
 
         $bundle = new TestSourceAsset();
         $bundle->publishOptions = [
-            'beforeCopy' => static function ($from, $to) {
-                return false;
-            },
+            'beforeCopy' => static fn ($from, $to) => false,
         ];
         $bundle->publish($am);
 

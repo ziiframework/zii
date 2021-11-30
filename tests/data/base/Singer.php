@@ -35,7 +35,7 @@ class Singer extends Model
             [['lastName'], 'required'],
             [['lastName'], 'string', 'max' => 25],
             [['underscore_style'], 'yii\captcha\CaptchaValidator'],
-            [['test'], 'required', 'when' => static function ($model) { return $model->firstName === 'cebe'; }],
+            [['test'], 'required', 'when' => static fn ($model) => $model->firstName === 'cebe'],
         ];
     }
 }
