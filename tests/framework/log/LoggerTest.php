@@ -70,13 +70,15 @@ class LoggerTest extends TestCase
         $memory = memory_get_usage();
         $this->logger->traceLevel = 3;
         $this->logger->log('test3', Logger::LEVEL_INFO);
+        $logger_log_line = __LINE__ - 1;
+
         $this->assertCount(1, $this->logger->messages);
         $this->assertEquals('test3', $this->logger->messages[0][0]);
         $this->assertEquals(Logger::LEVEL_INFO, $this->logger->messages[0][1]);
         $this->assertEquals('application', $this->logger->messages[0][2]);
         $this->assertEquals([
             'file' => __FILE__,
-            'line' => 72, // line number of: $this->logger->log('test3', Logger::LEVEL_INFO);
+            'line' => $logger_log_line, // line number of: $this->logger->log('test3', Logger::LEVEL_INFO);
             'function' => 'log',
             'class' => get_class($this->logger),
             'type' => '->',
