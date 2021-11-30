@@ -25,7 +25,7 @@ return (new PhpCsFixer\Config())
         'method_argument_space' => [
             'on_multiline' => 'ensure_single_line',
         ],
-        'phpdoc_annotation_without_dot' => true,
+        'phpdoc_annotation_without_dot' => false,
         'single_line_comment_style' => false,
 //        'phpdoc_no_alias_tag' => [
 //            'replacements' => [
@@ -36,7 +36,8 @@ return (new PhpCsFixer\Config())
 //            ],
 //        ],
         'phpdoc_no_alias_tag' => false,
-        'phpdoc_align' => ['align' => 'left'],
+        'phpdoc_align' => false,
+        'align_multiline_comment' => false,
         'fully_qualified_strict_types' => true,
         'static_lambda' => true,
         'lambda_not_used_import' => true,
