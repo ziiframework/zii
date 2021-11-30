@@ -128,8 +128,8 @@ class AttributesBehavior extends Behavior
     public function events()
     {
         return array_fill_keys(array_reduce($this->attributes, static function ($carry, $item) {
-                return array_merge($carry, array_keys($item));
-            }, []), 'evaluateAttributes');
+            return array_merge($carry, array_keys($item));
+        }, []), 'evaluateAttributes');
     }
 
     /**

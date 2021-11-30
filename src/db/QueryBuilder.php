@@ -1256,8 +1256,8 @@ class QueryBuilder extends \yii\base\BaseObject
         if ($subQuery instanceof Query) {
             [$rawQuery, $params] = $this->build($subQuery);
             array_walk($params, function (&$param) {
-                    $param = $this->db->quoteValue($param);
-                });
+                $param = $this->db->quoteValue($param);
+            });
             $subQuery = strtr($rawQuery, $params);
         }
 
