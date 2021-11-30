@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -37,7 +36,6 @@ use yii\web\TooManyRequestsHttpException;
  * do nothing if [[user]] is not set or does not implement [[RateLimitInterface]].
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class RateLimiter extends ActionFilter
@@ -52,13 +50,13 @@ class RateLimiter extends ActionFilter
     public $errorMessage = 'Rate limit exceeded.';
     /**
      * @var RateLimitInterface|Closure the user object that implements the RateLimitInterface. If not set, it will take the value of `Yii::$app->user->getIdentity(false)`.
-     *                                 {@since 2.0.38} It's possible to provide a closure function in order to assign the user identity on runtime. Using a closure to assign the user identity is recommend
-     *                                 when you are **not** using the standard `Yii::$app->user` component. See the example below:
-     *                                 ```php
-     *                                 'user' => function() {
-     *                                 return Yii::$app->apiUser->identity;
-     *                                 }
-     *                                 ```
+     * {@since 2.0.38} It's possible to provide a closure function in order to assign the user identity on runtime. Using a closure to assign the user identity is recommend
+     * when you are **not** using the standard `Yii::$app->user` component. See the example below:
+     * ```php
+     * 'user' => function() {
+     *     return Yii::$app->apiUser->identity;
+     * }
+     * ```
      */
     public $user;
     /**
@@ -70,6 +68,7 @@ class RateLimiter extends ActionFilter
      */
     public $response;
 
+
     /**
      * {@inheritdoc}
      */
@@ -78,7 +77,6 @@ class RateLimiter extends ActionFilter
         if ($this->request === null) {
             $this->request = Yii::$app->getRequest();
         }
-
         if ($this->response === null) {
             $this->response = Yii::$app->getResponse();
         }
@@ -111,23 +109,20 @@ class RateLimiter extends ActionFilter
 
     /**
      * Checks whether the rate limit exceeds.
-     *
-     * @param RateLimitInterface $user     the current user
-     * @param Request            $request
-     * @param Response           $response
-     * @param \yii\base\Action   $action   the action to be executed
-     *
+     * @param RateLimitInterface $user the current user
+     * @param Request $request
+     * @param Response $response
+     * @param \yii\base\Action $action the action to be executed
      * @throws TooManyRequestsHttpException if rate limit exceeds
      */
     public function checkRateLimit($user, $request, $response, $action)
     {
-        [$limit, $window] = $user->getRateLimit($request, $action);
-        [$allowance, $timestamp] = $user->loadAllowance($request, $action);
+        list($limit, $window) = $user->getRateLimit($request, $action);
+        list($allowance, $timestamp) = $user->loadAllowance($request, $action);
 
         $current = time();
 
         $allowance += (int) (($current - $timestamp) * $limit / $window);
-
         if ($allowance > $limit) {
             $allowance = $limit;
         }
@@ -135,7 +130,6 @@ class RateLimiter extends ActionFilter
         if ($allowance < 1) {
             $user->saveAllowance($request, $action, 0, $current);
             $this->addRateLimitHeaders($response, $limit, 0, $window);
-
             throw new TooManyRequestsHttpException($this->errorMessage);
         }
 
@@ -145,11 +139,10 @@ class RateLimiter extends ActionFilter
 
     /**
      * Adds the rate limit headers to the response.
-     *
      * @param Response $response
-     * @param int      $limit     the maximum number of allowed requests during a period
-     * @param int      $remaining the remaining number of allowed requests within the current period
-     * @param int      $reset     the number of seconds to wait before having maximum number of allowed requests again
+     * @param int $limit the maximum number of allowed requests during a period
+     * @param int $remaining the remaining number of allowed requests within the current period
+     * @param int $reset the number of seconds to wait before having maximum number of allowed requests again
      */
     public function addRateLimitHeaders($response, $limit, $remaining, $reset)
     {

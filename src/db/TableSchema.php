@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -17,13 +16,12 @@ use yii\base\InvalidArgumentException;
  * @property-read array $columnNames List of column names. This property is read-only.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class TableSchema extends BaseObject
 {
     /**
-     * @var string the name of the schema that this table belongs to
+     * @var string the name of the schema that this table belongs to.
      */
     public $schemaName;
     /**
@@ -32,12 +30,12 @@ class TableSchema extends BaseObject
     public $name;
     /**
      * @var string the full name of this table, which includes the schema name prefix, if any.
-     *             Note that if the schema name is the same as the [[Schema::defaultSchema|default schema name]],
-     *             the schema name will not be included.
+     * Note that if the schema name is the same as the [[Schema::defaultSchema|default schema name]],
+     * the schema name will not be included.
      */
     public $fullName;
     /**
-     * @var string[] primary keys of this table
+     * @var string[] primary keys of this table.
      */
     public $primaryKey = [];
     /**
@@ -61,22 +59,20 @@ class TableSchema extends BaseObject
      */
     public $columns = [];
 
+
     /**
      * Gets the named column metadata.
      * This is a convenient method for retrieving a named column even if it does not exist.
-     *
      * @param string $name column name
-     *
      * @return ColumnSchema|null metadata of the named column. Null if the named column does not exist.
      */
     public function getColumn($name)
     {
-        return $this->columns[$name] ?? null;
+        return isset($this->columns[$name]) ? $this->columns[$name] : null;
     }
 
     /**
      * Returns the names of all columns in this table.
-     *
      * @return array list of column names
      */
     public function getColumnNames()
@@ -86,20 +82,16 @@ class TableSchema extends BaseObject
 
     /**
      * Manually specifies the primary key for this table.
-     *
      * @param string|array $keys the primary key (can be composite)
-     *
-     * @throws InvalidArgumentException if the specified key cannot be found in the table
+     * @throws InvalidArgumentException if the specified key cannot be found in the table.
      */
     public function fixPrimaryKey($keys)
     {
         $keys = (array) $keys;
         $this->primaryKey = $keys;
-
         foreach ($this->columns as $column) {
             $column->isPrimaryKey = false;
         }
-
         foreach ($keys as $key) {
             if (isset($this->columns[$key])) {
                 $this->columns[$key]->isPrimaryKey = true;

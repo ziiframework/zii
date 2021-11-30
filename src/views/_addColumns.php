@@ -1,9 +1,12 @@
-<?php foreach ($fields as $field) { ?>
-        $this->addColumn('<?= $table;
-        ?>', '<?= $field['property'];
-        ?>', $this-><?= $field['decorators'];
+<?php foreach ($fields as $field): ?>
+        $this->addColumn('<?=
+            $table
+        ?>', '<?=
+            $field['property']
+        ?>', $this-><?=
+            $field['decorators']
         ?>);
-<?php }
+<?php endforeach;
 
 echo $this->render('_addForeignKeys', [
     'table' => $table,

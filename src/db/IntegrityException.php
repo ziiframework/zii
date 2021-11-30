@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -12,7 +11,6 @@ namespace yii\db;
  * Exception represents an exception that is caused by violation of DB constraints.
  *
  * @author Alexander Makarov <sam@rmcreative.ru>
- *
  * @since 2.0
  */
 class IntegrityException extends Exception

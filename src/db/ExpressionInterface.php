@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -18,7 +17,6 @@ namespace yii\db;
  * The default implementation is a class [[Expression]].
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
- *
  * @since 2.0.14
  */
 interface ExpressionInterface

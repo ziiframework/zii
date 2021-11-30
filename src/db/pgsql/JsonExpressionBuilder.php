@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -20,16 +19,15 @@ use yii\helpers\Json;
  * Class JsonExpressionBuilder builds [[JsonExpression]] for PostgreSQL DBMS.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
- *
  * @since 2.0.14
  */
 class JsonExpressionBuilder implements ExpressionBuilderInterface
 {
     use ExpressionBuilderTrait;
 
+
     /**
      * {@inheritdoc}
-     *
      * @param JsonExpression|ExpressionInterface $expression the expression to be built
      */
     public function build(ExpressionInterface $expression, array &$params = [])
@@ -37,11 +35,9 @@ class JsonExpressionBuilder implements ExpressionBuilderInterface
         $value = $expression->getValue();
 
         if ($value instanceof Query) {
-            [$sql, $params] = $this->queryBuilder->build($value, $params);
-
+            list ($sql, $params) = $this->queryBuilder->build($value, $params);
             return "($sql)" . $this->getTypecast($expression);
         }
-
         if ($value instanceof ArrayExpression) {
             $placeholder = 'array_to_json(' . $this->queryBuilder->buildExpression($value, $params) . ')';
         } else {
@@ -52,7 +48,8 @@ class JsonExpressionBuilder implements ExpressionBuilderInterface
     }
 
     /**
-     * @return string the typecast expression based on [[type]]
+     * @param JsonExpression $expression
+     * @return string the typecast expression based on [[type]].
      */
     protected function getTypecast(JsonExpression $expression)
     {

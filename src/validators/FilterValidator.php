@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -30,14 +29,13 @@ use yii\base\InvalidConfigException;
  * To specify the filter, set [[filter]] property to be the callback.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class FilterValidator extends Validator
 {
     /**
      * @var callable the filter. This can be a global function name, anonymous function, etc.
-     *               The function signature must be as follows,
+     * The function signature must be as follows,
      *
      * ```php
      * function foo($value) {
@@ -49,14 +47,15 @@ class FilterValidator extends Validator
     public $filter;
     /**
      * @var bool whether the filter should be skipped if an array input is given.
-     *           If true and an array input is given, the filter will not be applied.
+     * If true and an array input is given, the filter will not be applied.
      */
     public $skipOnArray = false;
     /**
      * @var bool this property is overwritten to be false so that this validator will
-     *           be applied when the value being validated is empty
+     * be applied when the value being validated is empty.
      */
     public $skipOnEmpty = false;
+
 
     /**
      * {@inheritdoc}
@@ -64,7 +63,6 @@ class FilterValidator extends Validator
     public function init()
     {
         parent::init();
-
         if ($this->filter === null) {
             throw new InvalidConfigException('The "filter" property must be set.');
         }
@@ -76,7 +74,6 @@ class FilterValidator extends Validator
     public function validateAttribute($model, $attribute)
     {
         $value = $model->$attribute;
-
         if (!$this->skipOnArray || !is_array($value)) {
             $model->$attribute = call_user_func($this->filter, $value);
         }
@@ -103,7 +100,6 @@ class FilterValidator extends Validator
     public function getClientOptions($model, $attribute)
     {
         $options = [];
-
         if ($this->skipOnEmpty) {
             $options['skipOnEmpty'] = 1;
         }

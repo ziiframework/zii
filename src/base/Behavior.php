@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -19,7 +18,6 @@ namespace yii\base;
  * For more details and usage information on Behavior, see the [guide article on behaviors](guide:concept-behaviors).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class Behavior extends BaseObject
@@ -33,6 +31,7 @@ class Behavior extends BaseObject
      * @var array Attached events handlers
      */
     private $_attachedEvents = [];
+
 
     /**
      * Declares event handlers for the [[owner]]'s events.
@@ -60,7 +59,7 @@ class Behavior extends BaseObject
      * ]
      * ```
      *
-     * @return array events (array keys) and the corresponding event handler methods (array values)
+     * @return array events (array keys) and the corresponding event handler methods (array values).
      */
     public function events()
     {
@@ -72,13 +71,11 @@ class Behavior extends BaseObject
      * The default implementation will set the [[owner]] property
      * and attach event handlers as declared in [[events]].
      * Make sure you call the parent implementation if you override this method.
-     *
-     * @param Component $owner the component that this behavior is to be attached to
+     * @param Component $owner the component that this behavior is to be attached to.
      */
     public function attach($owner)
     {
         $this->owner = $owner;
-
         foreach ($this->events() as $event => $handler) {
             $this->_attachedEvents[$event] = $handler;
             $owner->on($event, is_string($handler) ? [$this, $handler] : $handler);

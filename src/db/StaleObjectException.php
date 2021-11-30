@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,7 +9,6 @@ namespace yii\db;
 
 /**
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class StaleObjectException extends Exception

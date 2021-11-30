@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -14,16 +13,16 @@ namespace yii\base;
  * For more details and usage information on Response, see the [guide article on responses](guide:runtime-responses).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class Response extends Component
 {
     /**
      * @var int the exit status. Exit statuses should be in the range 0 to 254.
-     *          The status 0 means the program terminates successfully.
+     * The status 0 means the program terminates successfully.
      */
     public $exitStatus = 0;
+
 
     /**
      * Sends the response to client.
