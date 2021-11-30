@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -26,6 +27,7 @@ use yii\base\ViewNotFoundException;
  *
  * @author Alexander Makarov <sam@rmcreative.ru>
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class ViewAction extends Action
@@ -38,6 +40,7 @@ class ViewAction extends Action
      * @var string the name of the default view when [[\yii\web\ViewAction::$viewParam]] GET parameter is not provided
      * by user. Defaults to 'index'. This should be in the format of 'path/to/view', similar to that given in the
      * GET parameter.
+     *
      * @see \yii\web\ViewAction::$viewPrefix
      */
     public $defaultView = 'index';
@@ -46,6 +49,7 @@ class ViewAction extends Action
      * For example, if a user requests for `tutorial/chap1`, the corresponding view name will
      * be `pages/tutorial/chap1`, assuming the prefix is `pages`.
      * The actual view file is determined by [[\yii\base\View::findViewFile()]].
+     *
      * @see \yii\base\View::findViewFile()
      */
     public $viewPrefix = 'pages';
@@ -57,10 +61,10 @@ class ViewAction extends Action
      */
     public $layout;
 
-
     /**
      * Runs the action.
      * This method displays the view requested by the user.
+     *
      * @throws NotFoundHttpException if the view file cannot be found
      */
     public function run()
@@ -69,6 +73,7 @@ class ViewAction extends Action
         $this->controller->actionParams[$this->viewParam] = Yii::$app->request->get($this->viewParam);
 
         $controllerLayout = null;
+
         if ($this->layout !== null) {
             $controllerLayout = $this->controller->layout;
             $this->controller->layout = $this->layout;
@@ -89,9 +94,7 @@ class ViewAction extends Action
                 throw new NotFoundHttpException($e->getMessage());
             }
 
-            throw new NotFoundHttpException(
-                Yii::t('yii', 'The requested view "{name}" was not found.', ['name' => $viewName])
-            );
+            throw new NotFoundHttpException(Yii::t('yii', 'The requested view "{name}" was not found.', ['name' => $viewName]));
         }
 
         return $output;
@@ -101,6 +104,7 @@ class ViewAction extends Action
      * Renders a view.
      *
      * @param string $viewName view name
+     *
      * @return string result of the rendering
      */
     protected function render($viewName)
@@ -112,6 +116,7 @@ class ViewAction extends Action
      * Resolves the view name currently being requested.
      *
      * @return string the resolved view name
+     *
      * @throws NotFoundHttpException if the specified view name is invalid
      */
     protected function resolveViewName()

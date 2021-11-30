@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -50,6 +51,7 @@ use yii\helpers\Html;
  * ```
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class Breadcrumbs extends Widget
@@ -60,6 +62,7 @@ class Breadcrumbs extends Widget
     public $tag = 'ul';
     /**
      * @var array the HTML attributes for the breadcrumb container tag.
+     *
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $options = ['class' => 'breadcrumb'];
@@ -123,7 +126,6 @@ class Breadcrumbs extends Widget
      */
     public $activeItemTemplate = "<li class=\"active\">{link}</li>\n";
 
-
     /**
      * Renders the widget.
      */
@@ -133,6 +135,7 @@ class Breadcrumbs extends Widget
             return;
         }
         $links = [];
+
         if ($this->homeLink === null) {
             $links[] = $this->renderItem([
                 'label' => Yii::t('yii', 'Home'),
@@ -141,6 +144,7 @@ class Breadcrumbs extends Widget
         } elseif ($this->homeLink !== false) {
             $links[] = $this->renderItem($this->homeLink, $this->itemTemplate);
         }
+
         foreach ($this->links as $link) {
             if (!is_array($link)) {
                 $link = ['label' => $link];
@@ -152,22 +156,28 @@ class Breadcrumbs extends Widget
 
     /**
      * Renders a single breadcrumb item.
+     *
      * @param array $link the link to be rendered. It must contain the "label" element. The "url" element is optional.
      * @param string $template the template to be used to rendered the link. The token "{link}" will be replaced by the link.
+     *
      * @return string the rendering result
+     *
      * @throws InvalidConfigException if `$link` does not have "label" element.
      */
     protected function renderItem($link, $template)
     {
         $encodeLabel = ArrayHelper::remove($link, 'encode', $this->encodeLabels);
+
         if (array_key_exists('label', $link)) {
             $label = $encodeLabel ? Html::encode($link['label']) : $link['label'];
         } else {
             throw new InvalidConfigException('The "label" element is required for each link.');
         }
+
         if (isset($link['template'])) {
             $template = $link['template'];
         }
+
         if (isset($link['url'])) {
             $options = $link;
             unset($options['template'], $options['label'], $options['url']);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -19,6 +20,7 @@ use yii\helpers\Console;
  * Based on [cebe/markdown](https://github.com/cebe/markdown).
  *
  * @author Carsten Brandt <mail@cebe.cc>
+ *
  * @since 2.0
  */
 class Markdown extends \cebe\markdown\Parser
@@ -41,11 +43,11 @@ class Markdown extends \cebe\markdown\Parser
         '~', // tilde
     ];
 
-
     /**
      * Renders a code block.
      *
      * @param array $block
+     *
      * @return string
      */
     protected function renderCode($block)
@@ -57,6 +59,7 @@ class Markdown extends \cebe\markdown\Parser
      * Render a paragraph block.
      *
      * @param string $block
+     *
      * @return string
      */
     protected function renderParagraph($block)
@@ -66,7 +69,9 @@ class Markdown extends \cebe\markdown\Parser
 
     /**
      * Renders an inline code span `` ` ``.
+     *
      * @param array $element
+     *
      * @return string
      */
     protected function renderInlineCode($element)
@@ -76,7 +81,9 @@ class Markdown extends \cebe\markdown\Parser
 
     /**
      * Renders empathized elements.
+     *
      * @param array $element
+     *
      * @return string
      */
     protected function renderEmph($element)
@@ -86,7 +93,9 @@ class Markdown extends \cebe\markdown\Parser
 
     /**
      * Renders strong elements.
+     *
      * @param array $element
+     *
      * @return string
      */
     protected function renderStrong($element)
@@ -96,7 +105,9 @@ class Markdown extends \cebe\markdown\Parser
 
     /**
      * Renders the strike through feature.
+     *
      * @param array $element
+     *
      * @return string
      */
     protected function renderStrike($element)

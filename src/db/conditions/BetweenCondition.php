@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -13,12 +14,13 @@ use yii\base\InvalidArgumentException;
  * Class BetweenCondition represents a `BETWEEN` condition.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ *
  * @since 2.0.14
  */
 class BetweenCondition implements ConditionInterface
 {
     /**
-     * @var string $operator the operator to use (e.g. `BETWEEN` or `NOT BETWEEN`)
+     * @var string the operator to use (e.g. `BETWEEN` or `NOT BETWEEN`)
      */
     private $operator;
     /**
@@ -33,7 +35,6 @@ class BetweenCondition implements ConditionInterface
      * @var mixed end of the interval
      */
     private $intervalEnd;
-
 
     /**
      * Creates a condition with the `BETWEEN` operator.
@@ -85,6 +86,7 @@ class BetweenCondition implements ConditionInterface
 
     /**
      * {@inheritdoc}
+     *
      * @throws InvalidArgumentException if wrong number of operands have been given.
      */
     public static function fromArrayDefinition($operator, $operands)

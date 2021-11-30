@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,8 @@
 
 namespace yii\db;
 
+use Exception;
+use Throwable;
 use yii\base\Component;
 use yii\di\Instance;
 use yii\helpers\StringHelper;
@@ -41,6 +44,7 @@ use yii\helpers\StringHelper;
  * For more details and usage information on Migration, see the [guide article on Migration](guide:db-migrations).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class Migration extends Component implements MigrationInterface
@@ -68,6 +72,7 @@ class Migration extends Component implements MigrationInterface
     /**
      * @var int max number of characters of the SQL outputted. Useful for reduction of long statements and making
      * console output more compact.
+     *
      * @since 2.0.13
      */
     public $maxSqlOutputLength;
@@ -75,10 +80,10 @@ class Migration extends Component implements MigrationInterface
      * @var bool indicates whether the console output should be compacted.
      * If this is set to true, the individual commands ran within the migration will not be output to the console.
      * Default is false, in other words the output is fully verbose by default.
+     *
      * @since 2.0.13
      */
     public $compact = false;
-
 
     /**
      * Initializes the migration.
@@ -94,6 +99,7 @@ class Migration extends Component implements MigrationInterface
 
     /**
      * {@inheritdoc}
+     *
      * @since 2.0.6
      */
     protected function getDb()
@@ -104,25 +110,30 @@ class Migration extends Component implements MigrationInterface
     /**
      * This method contains the logic to be executed when applying this migration.
      * Child classes may override this method to provide actual migration logic.
+     *
      * @return false|void|mixed return a false value to indicate the migration fails
      * and should not proceed further. All other return values mean the migration succeeds.
      */
     public function up()
     {
         $transaction = $this->db->beginTransaction();
+
         try {
             if ($this->safeUp() === false) {
                 $transaction->rollBack();
+
                 return false;
             }
             $transaction->commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->printException($e);
             $transaction->rollBack();
+
             return false;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->printException($e);
             $transaction->rollBack();
+
             return false;
         }
 
@@ -133,25 +144,30 @@ class Migration extends Component implements MigrationInterface
      * This method contains the logic to be executed when removing this migration.
      * The default implementation throws an exception indicating the migration cannot be removed.
      * Child classes may override this method if the corresponding migrations can be removed.
+     *
      * @return false|void|mixed return a false value to indicate the migration fails
      * and should not proceed further. All other return values mean the migration succeeds.
      */
     public function down()
     {
         $transaction = $this->db->beginTransaction();
+
         try {
             if ($this->safeDown() === false) {
                 $transaction->rollBack();
+
                 return false;
             }
             $transaction->commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->printException($e);
             $transaction->rollBack();
+
             return false;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->printException($e);
             $transaction->rollBack();
+
             return false;
         }
 
@@ -159,7 +175,7 @@ class Migration extends Component implements MigrationInterface
     }
 
     /**
-     * @param \Throwable|\Exception $e
+     * @param Throwable|Exception $e
      */
     private function printException($e)
     {
@@ -204,6 +220,7 @@ class Migration extends Component implements MigrationInterface
     /**
      * Executes a SQL statement.
      * This method executes the specified SQL statement using [[db]].
+     *
      * @param string $sql the SQL statement to be executed
      * @param array $params input parameters (name => value) for the SQL execution.
      * See [[Command::execute()]] for more details.
@@ -211,6 +228,7 @@ class Migration extends Component implements MigrationInterface
     public function execute($sql, $params = [])
     {
         $sqlOutput = $sql;
+
         if ($this->maxSqlOutputLength !== null) {
             $sqlOutput = StringHelper::truncate($sql, $this->maxSqlOutputLength, '[... hidden]');
         }
@@ -223,6 +241,7 @@ class Migration extends Component implements MigrationInterface
     /**
      * Creates and executes an INSERT SQL statement.
      * The method will properly escape the column names, and bind the values to be inserted.
+     *
      * @param string $table the table that new rows will be inserted into.
      * @param array $columns the column data (name => value) to be inserted into the table.
      */
@@ -236,6 +255,7 @@ class Migration extends Component implements MigrationInterface
     /**
      * Creates and executes a batch INSERT SQL statement.
      * The method will properly escape the column names, and bind the values to be inserted.
+     *
      * @param string $table the table that new rows will be inserted into.
      * @param array $columns the column names.
      * @param array $rows the rows to be batch inserted into the table
@@ -261,7 +281,9 @@ class Migration extends Component implements MigrationInterface
      * If `true` is passed, the column data will be updated to match the insert column data.
      * If `false` is passed, no update will be performed if the column data already exists.
      * @param array $params the parameters to be bound to the command.
+     *
      * @return $this the command object itself.
+     *
      * @since 2.0.14
      */
     public function upsert($table, $insertColumns, $updateColumns = true, $params = [])
@@ -274,6 +296,7 @@ class Migration extends Component implements MigrationInterface
     /**
      * Creates and executes an UPDATE SQL statement.
      * The method will properly escape the column names and bind the values to be updated.
+     *
      * @param string $table the table to be updated.
      * @param array $columns the column data (name => value) to be updated.
      * @param array|string $condition the conditions that will be put in the WHERE part. Please
@@ -289,6 +312,7 @@ class Migration extends Component implements MigrationInterface
 
     /**
      * Creates and executes a DELETE SQL statement.
+     *
      * @param string $table the table where the data will be deleted from.
      * @param array|string $condition the conditions that will be put in the WHERE part. Please
      * refer to [[Query::where()]] on how to specify conditions.
@@ -321,6 +345,7 @@ class Migration extends Component implements MigrationInterface
     {
         $time = $this->beginCommand("create table $table");
         $this->db->createCommand()->createTable($table, $columns, $options)->execute();
+
         foreach ($columns as $column => $type) {
             if ($type instanceof ColumnSchemaBuilder && $type->comment !== null) {
                 $this->db->createCommand()->addCommentOnColumn($table, $column, $type->comment)->execute();
@@ -331,6 +356,7 @@ class Migration extends Component implements MigrationInterface
 
     /**
      * Builds and executes a SQL statement for renaming a DB table.
+     *
      * @param string $table the table to be renamed. The name will be properly quoted by the method.
      * @param string $newName the new table name. The name will be properly quoted by the method.
      */
@@ -343,6 +369,7 @@ class Migration extends Component implements MigrationInterface
 
     /**
      * Builds and executes a SQL statement for dropping a DB table.
+     *
      * @param string $table the table to be dropped. The name will be properly quoted by the method.
      */
     public function dropTable($table)
@@ -354,6 +381,7 @@ class Migration extends Component implements MigrationInterface
 
     /**
      * Builds and executes a SQL statement for truncating a DB table.
+     *
      * @param string $table the table to be truncated. The name will be properly quoted by the method.
      */
     public function truncateTable($table)
@@ -365,6 +393,7 @@ class Migration extends Component implements MigrationInterface
 
     /**
      * Builds and executes a SQL statement for adding a new DB column.
+     *
      * @param string $table the table that the new column will be added to. The table name will be properly quoted by the method.
      * @param string $column the name of the new column. The name will be properly quoted by the method.
      * @param string $type the column type. The [[QueryBuilder::getColumnType()]] method will be invoked to convert abstract column type (if any)
@@ -375,6 +404,7 @@ class Migration extends Component implements MigrationInterface
     {
         $time = $this->beginCommand("add column $column $type to table $table");
         $this->db->createCommand()->addColumn($table, $column, $type)->execute();
+
         if ($type instanceof ColumnSchemaBuilder && $type->comment !== null) {
             $this->db->createCommand()->addCommentOnColumn($table, $column, $type->comment)->execute();
         }
@@ -383,6 +413,7 @@ class Migration extends Component implements MigrationInterface
 
     /**
      * Builds and executes a SQL statement for dropping a DB column.
+     *
      * @param string $table the table whose column is to be dropped. The name will be properly quoted by the method.
      * @param string $column the name of the column to be dropped. The name will be properly quoted by the method.
      */
@@ -395,6 +426,7 @@ class Migration extends Component implements MigrationInterface
 
     /**
      * Builds and executes a SQL statement for renaming a column.
+     *
      * @param string $table the table whose column is to be renamed. The name will be properly quoted by the method.
      * @param string $name the old name of the column. The name will be properly quoted by the method.
      * @param string $newName the new name of the column. The name will be properly quoted by the method.
@@ -408,6 +440,7 @@ class Migration extends Component implements MigrationInterface
 
     /**
      * Builds and executes a SQL statement for changing the definition of a column.
+     *
      * @param string $table the table whose column is to be changed. The table name will be properly quoted by the method.
      * @param string $column the name of the column to be changed. The name will be properly quoted by the method.
      * @param string $type the new column type. The [[QueryBuilder::getColumnType()]] method will be invoked to convert abstract column type (if any)
@@ -418,6 +451,7 @@ class Migration extends Component implements MigrationInterface
     {
         $time = $this->beginCommand("alter column $column in table $table to $type");
         $this->db->createCommand()->alterColumn($table, $column, $type)->execute();
+
         if ($type instanceof ColumnSchemaBuilder && $type->comment !== null) {
             $this->db->createCommand()->addCommentOnColumn($table, $column, $type->comment)->execute();
         }
@@ -427,6 +461,7 @@ class Migration extends Component implements MigrationInterface
     /**
      * Builds and executes a SQL statement for creating a primary key.
      * The method will properly quote the table and column names.
+     *
      * @param string $name the name of the primary key constraint.
      * @param string $table the table that the primary key constraint will be added to.
      * @param string|array $columns comma separated string or array of columns that the primary key will consist of.
@@ -440,6 +475,7 @@ class Migration extends Component implements MigrationInterface
 
     /**
      * Builds and executes a SQL statement for dropping a primary key.
+     *
      * @param string $name the name of the primary key constraint to be removed.
      * @param string $table the table that the primary key constraint will be removed from.
      */
@@ -453,6 +489,7 @@ class Migration extends Component implements MigrationInterface
     /**
      * Builds a SQL statement for adding a foreign key constraint to an existing table.
      * The method will properly quote the table and column names.
+     *
      * @param string $name the name of the foreign key constraint.
      * @param string $table the table that the foreign key constraint will be added to.
      * @param string|array $columns the name of the column to that the constraint will be added on. If there are multiple columns, separate them with commas or use an array.
@@ -470,6 +507,7 @@ class Migration extends Component implements MigrationInterface
 
     /**
      * Builds a SQL statement for dropping a foreign key constraint.
+     *
      * @param string $name the name of the foreign key constraint to be dropped. The name will be properly quoted by the method.
      * @param string $table the table whose foreign is to be dropped. The name will be properly quoted by the method.
      */
@@ -482,6 +520,7 @@ class Migration extends Component implements MigrationInterface
 
     /**
      * Builds and executes a SQL statement for creating a new index.
+     *
      * @param string $name the name of the index. The name will be properly quoted by the method.
      * @param string $table the table that the new index will be created for. The table name will be properly quoted by the method.
      * @param string|array $columns the column(s) that should be included in the index. If there are multiple columns, please separate them
@@ -498,6 +537,7 @@ class Migration extends Component implements MigrationInterface
 
     /**
      * Builds and executes a SQL statement for dropping an index.
+     *
      * @param string $name the name of the index to be dropped. The name will be properly quoted by the method.
      * @param string $table the table whose index is to be dropped. The name will be properly quoted by the method.
      */
@@ -514,6 +554,7 @@ class Migration extends Component implements MigrationInterface
      * @param string $table the table whose column is to be commented. The table name will be properly quoted by the method.
      * @param string $column the name of the column to be commented. The column name will be properly quoted by the method.
      * @param string $comment the text of the comment to be added. The comment will be properly quoted by the method.
+     *
      * @since 2.0.8
      */
     public function addCommentOnColumn($table, $column, $comment)
@@ -528,6 +569,7 @@ class Migration extends Component implements MigrationInterface
      *
      * @param string $table the table to be commented. The table name will be properly quoted by the method.
      * @param string $comment the text of the comment to be added. The comment will be properly quoted by the method.
+     *
      * @since 2.0.8
      */
     public function addCommentOnTable($table, $comment)
@@ -542,6 +584,7 @@ class Migration extends Component implements MigrationInterface
      *
      * @param string $table the table whose column is to be commented. The table name will be properly quoted by the method.
      * @param string $column the name of the column to be commented. The column name will be properly quoted by the method.
+     *
      * @since 2.0.8
      */
     public function dropCommentFromColumn($table, $column)
@@ -555,6 +598,7 @@ class Migration extends Component implements MigrationInterface
      * Builds a SQL statement for dropping comment from table.
      *
      * @param string $table the table whose column is to be commented. The table name will be properly quoted by the method.
+     *
      * @since 2.0.8
      */
     public function dropCommentFromTable($table)
@@ -568,7 +612,9 @@ class Migration extends Component implements MigrationInterface
      * Prepares for a command to be executed, and outputs to the console.
      *
      * @param string $description the description for the command, to be output to the console.
+     *
      * @return float the time before the command is executed, for the time elapsed to be calculated.
+     *
      * @since 2.0.13
      */
     protected function beginCommand($description)
@@ -576,6 +622,7 @@ class Migration extends Component implements MigrationInterface
         if (!$this->compact) {
             echo "    > $description ...";
         }
+
         return microtime(true);
     }
 
@@ -583,6 +630,7 @@ class Migration extends Component implements MigrationInterface
      * Finalizes after the command has been executed, and outputs to the console the time elapsed.
      *
      * @param float $time the time before the command was executed.
+     *
      * @since 2.0.13
      */
     protected function endCommand($time)

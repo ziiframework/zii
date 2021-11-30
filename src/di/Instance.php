@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,6 +9,7 @@
 namespace yii\di;
 
 use Exception;
+use ReflectionException;
 use Yii;
 use yii\base\InvalidConfigException;
 
@@ -52,6 +54,7 @@ use yii\base\InvalidConfigException;
  * ```
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class Instance
@@ -65,9 +68,9 @@ class Instance
      */
     public $optional;
 
-
     /**
      * Constructor.
+     *
      * @param string $id the component ID
      * @param bool $optional if null should be returned instead of throwing an exception
      */
@@ -79,8 +82,10 @@ class Instance
 
     /**
      * Creates a new Instance object.
+     *
      * @param string $id the component ID
      * @param bool $optional if null should be returned instead of throwing an exception
+     *
      * @return Instance the new Instance object.
      */
     public static function of($id, $optional = false)
@@ -113,18 +118,22 @@ class Instance
      * If the "class" value is not specified in the configuration array, it will use the value of `$type`.
      * @param string $type the class/interface name to be checked. If null, type check will not be performed.
      * @param ServiceLocator|Container $container the container. This will be passed to [[get()]].
+     *
      * @return object the object referenced by the Instance, or `$reference` itself if it is an object.
+     *
      * @throws InvalidConfigException if the reference is invalid
      */
     public static function ensure($reference, $type = null, $container = null)
     {
         if (is_array($reference)) {
-            $class = isset($reference['class']) ? $reference['class'] : $type;
+            $class = $reference['class'] ?? $type;
+
             if (!$container instanceof Container) {
                 $container = Yii::$container;
             }
             unset($reference['class']);
             $component = $container->get($class, [], $reference);
+
             if ($type === null || $component instanceof $type) {
                 return $component;
             }
@@ -143,9 +152,10 @@ class Instance
         if ($reference instanceof self) {
             try {
                 $component = $reference->get($container);
-            } catch (\ReflectionException $e) {
+            } catch (ReflectionException $e) {
                 throw new InvalidConfigException('Failed to instantiate component or class "' . $reference->id . '".', 0, $e);
             }
+
             if ($type === null || $component instanceof $type) {
                 return $component;
             }
@@ -154,13 +164,16 @@ class Instance
         }
 
         $valueType = is_object($reference) ? get_class($reference) : gettype($reference);
+
         throw new InvalidConfigException("Invalid data type: $valueType. $type is expected.");
     }
 
     /**
      * Returns the actual object referenced by this Instance object.
+     *
      * @param ServiceLocator|Container $container the container used to locate the referenced object.
      * If null, the method will first try `Yii::$app` then `Yii::$container`.
+     *
      * @return object the actual object referenced by this Instance object.
      */
     public function get($container = null)
@@ -169,6 +182,7 @@ class Instance
             if ($container) {
                 return $container->get($this->id);
             }
+
             if (Yii::$app && Yii::$app->has($this->id)) {
                 return Yii::$app->get($this->id);
             }
@@ -178,6 +192,7 @@ class Instance
             if ($this->optional) {
                 return null;
             }
+
             throw $e;
         }
     }
@@ -186,8 +201,11 @@ class Instance
      * Restores class state after using `var_export()`.
      *
      * @param array $state
+     *
      * @return Instance
+     *
      * @throws InvalidConfigException when $state property does not contain `id` parameter
+     *
      * @see https://www.php.net/manual/en/function.var-export.php
      * @since 2.0.12
      */

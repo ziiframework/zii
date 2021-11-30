@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -19,6 +20,7 @@ use yii\di\Instance;
  * For more details and usage information on DbFixture, see the [guide article on fixtures](guide:test-fixtures).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 abstract class DbFixture extends Fixture
@@ -30,7 +32,6 @@ abstract class DbFixture extends Fixture
      * Starting from version 2.0.2, this can also be a configuration array for creating the object.
      */
     public $db = 'db';
-
 
     /**
      * {@inheritdoc}

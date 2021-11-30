@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -52,6 +53,7 @@ use yii\web\User;
  * ```
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class AccessControl extends ActionFilter
@@ -87,10 +89,10 @@ class AccessControl extends ActionFilter
      * @var array a list of access rule objects or configuration arrays for creating the rule objects.
      * If a rule is specified via a configuration array, it will be merged with [[ruleConfig]] first
      * before it is used for creating the rule object.
+     *
      * @see ruleConfig
      */
     public $rules = [];
-
 
     /**
      * Initializes the [[rules]] array by instantiating rule objects from configurations.
@@ -98,9 +100,11 @@ class AccessControl extends ActionFilter
     public function init()
     {
         parent::init();
+
         if ($this->user !== false) {
             $this->user = Instance::ensure($this->user, User::className());
         }
+
         foreach ($this->rules as $i => $rule) {
             if (is_array($rule)) {
                 $this->rules[$i] = Yii::createObject(array_merge($this->ruleConfig, $rule));
@@ -111,7 +115,9 @@ class AccessControl extends ActionFilter
     /**
      * This method is invoked right before an action is to be executed (after all possible filters.)
      * You may override this method to do last-minute preparation for the action.
+     *
      * @param Action $action the action to be executed.
+     *
      * @return bool whether the action should continue to be executed.
      */
     public function beforeAction($action)
@@ -134,6 +140,7 @@ class AccessControl extends ActionFilter
                 return false;
             }
         }
+
         if ($this->denyCallback !== null) {
             call_user_func($this->denyCallback, null, $action);
         } else {
@@ -147,7 +154,9 @@ class AccessControl extends ActionFilter
      * Denies the access of the user.
      * The default implementation will redirect the user to the login page if he is a guest;
      * if the user is already logged, a 403 HTTP exception will be thrown.
+     *
      * @param User|false $user the current user or boolean `false` in case of detached User component
+     *
      * @throws ForbiddenHttpException if the user is already logged in or in case of detached User component.
      */
     protected function denyAccess($user)

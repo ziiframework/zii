@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -40,6 +41,7 @@ use yii\web\Response;
  * ```
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class Pjax extends Widget
@@ -70,6 +72,7 @@ class Pjax extends Widget
     public $formSelector;
     /**
      * @var string The jQuery event that will trigger form handler. Defaults to "submit".
+     *
      * @since 2.0.9
      */
     public $submitEvent = 'submit';
@@ -99,6 +102,7 @@ class Pjax extends Widget
     public $clientOptions;
     /**
      * {@inheritdoc}
+     *
      * @internal
      */
     public static $counter = 0;
@@ -107,13 +111,13 @@ class Pjax extends Widget
      */
     public static $autoIdPrefix = 'p';
 
-
     /**
      * {@inheritdoc}
      */
     public function init()
     {
         parent::init();
+
         if (!isset($this->options['id'])) {
             $this->options['id'] = $this->getId();
         }
@@ -126,6 +130,7 @@ class Pjax extends Widget
             $view->beginPage();
             $view->head();
             $view->beginBody();
+
             if ($view->title !== null) {
                 echo Html::tag('title', Html::encode($view->title));
             }
@@ -192,15 +197,18 @@ class Pjax extends Widget
         $this->clientOptions['replace'] = $this->enableReplaceState;
         $this->clientOptions['timeout'] = $this->timeout;
         $this->clientOptions['scrollTo'] = $this->scrollTo;
+
         if (!isset($this->clientOptions['container'])) {
             $this->clientOptions['container'] = "#$id";
         }
         $options = Json::htmlEncode($this->clientOptions);
         $js = '';
+
         if ($this->linkSelector !== false) {
             $linkSelector = Json::htmlEncode($this->linkSelector !== null ? $this->linkSelector : '#' . $id . ' a');
             $js .= "jQuery(document).pjax($linkSelector, $options);";
         }
+
         if ($this->formSelector !== false) {
             $formSelector = Json::htmlEncode($this->formSelector !== null ? $this->formSelector : '#' . $id . ' form[data-pjax]');
             $submitEvent = Json::htmlEncode($this->submitEvent);

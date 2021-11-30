@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -44,40 +45,44 @@ use yii\helpers\Console;
  * @property-write int $screenWidth Screen width. This property is write-only.
  *
  * @author Daniel Gomez Pan <pana_1990@hotmail.com>
+ *
  * @since 2.0.13
  */
 class Table extends Widget
 {
-    const DEFAULT_CONSOLE_SCREEN_WIDTH = 120;
-    const CONSOLE_SCROLLBAR_OFFSET = 3;
-    const CHAR_TOP = 'top';
-    const CHAR_TOP_MID = 'top-mid';
-    const CHAR_TOP_LEFT = 'top-left';
-    const CHAR_TOP_RIGHT = 'top-right';
-    const CHAR_BOTTOM = 'bottom';
-    const CHAR_BOTTOM_MID = 'bottom-mid';
-    const CHAR_BOTTOM_LEFT = 'bottom-left';
-    const CHAR_BOTTOM_RIGHT = 'bottom-right';
-    const CHAR_LEFT = 'left';
-    const CHAR_LEFT_MID = 'left-mid';
-    const CHAR_MID = 'mid';
-    const CHAR_MID_MID = 'mid-mid';
-    const CHAR_RIGHT = 'right';
-    const CHAR_RIGHT_MID = 'right-mid';
-    const CHAR_MIDDLE = 'middle';
+    public const DEFAULT_CONSOLE_SCREEN_WIDTH = 120;
+    public const CONSOLE_SCROLLBAR_OFFSET = 3;
+    public const CHAR_TOP = 'top';
+    public const CHAR_TOP_MID = 'top-mid';
+    public const CHAR_TOP_LEFT = 'top-left';
+    public const CHAR_TOP_RIGHT = 'top-right';
+    public const CHAR_BOTTOM = 'bottom';
+    public const CHAR_BOTTOM_MID = 'bottom-mid';
+    public const CHAR_BOTTOM_LEFT = 'bottom-left';
+    public const CHAR_BOTTOM_RIGHT = 'bottom-right';
+    public const CHAR_LEFT = 'left';
+    public const CHAR_LEFT_MID = 'left-mid';
+    public const CHAR_MID = 'mid';
+    public const CHAR_MID_MID = 'mid-mid';
+    public const CHAR_RIGHT = 'right';
+    public const CHAR_RIGHT_MID = 'right-mid';
+    public const CHAR_MIDDLE = 'middle';
 
     /**
      * @var array table headers
+     *
      * @since 2.0.19
      */
     protected $headers = [];
     /**
      * @var array table rows
+     *
      * @since 2.0.19
      */
     protected $rows = [];
     /**
      * @var array table chars
+     *
      * @since 2.0.19
      */
     protected $chars = [
@@ -99,30 +104,34 @@ class Table extends Widget
     ];
     /**
      * @var array table column widths
+     *
      * @since 2.0.19
      */
     protected $columnWidths = [];
     /**
      * @var int screen width
+     *
      * @since 2.0.19
      */
     protected $screenWidth;
     /**
      * @var string list prefix
+     *
      * @since 2.0.19
      */
     protected $listPrefix = '• ';
-
 
     /**
      * Set table headers.
      *
      * @param array $headers table headers
+     *
      * @return $this
      */
     public function setHeaders(array $headers)
     {
         $this->headers = array_values($headers);
+
         return $this;
     }
 
@@ -130,15 +139,17 @@ class Table extends Widget
      * Set table rows.
      *
      * @param array $rows table rows
+     *
      * @return $this
      */
     public function setRows(array $rows)
     {
-        $this->rows = array_map(function($row) {
-            return array_map(function($value) {
+        $this->rows = array_map(static function ($row) {
+            return array_map(static function ($value) {
                 return empty($value) && !is_numeric($value) ? ' ' : $value;
             }, array_values($row));
         }, $rows);
+
         return $this;
     }
 
@@ -146,11 +157,13 @@ class Table extends Widget
      * Set table chars.
      *
      * @param array $chars table chars
+     *
      * @return $this
      */
     public function setChars(array $chars)
     {
         $this->chars = $chars;
+
         return $this;
     }
 
@@ -158,11 +171,13 @@ class Table extends Widget
      * Set screen width.
      *
      * @param int $width screen width
+     *
      * @return $this
      */
     public function setScreenWidth($width)
     {
         $this->screenWidth = $width;
+
         return $this;
     }
 
@@ -170,11 +185,13 @@ class Table extends Widget
      * Set list prefix.
      *
      * @param string $listPrefix list prefix
+     *
      * @return $this
      */
     public function setListPrefix($listPrefix)
     {
         $this->listPrefix = $listPrefix;
+
         return $this;
     }
 
@@ -186,43 +203,21 @@ class Table extends Widget
         $this->calculateRowsSize();
         $headerCount = count($this->headers);
 
-        $buffer = $this->renderSeparator(
-            $this->chars[self::CHAR_TOP_LEFT],
-            $this->chars[self::CHAR_TOP_MID],
-            $this->chars[self::CHAR_TOP],
-            $this->chars[self::CHAR_TOP_RIGHT]
-        );
+        $buffer = $this->renderSeparator($this->chars[self::CHAR_TOP_LEFT], $this->chars[self::CHAR_TOP_MID], $this->chars[self::CHAR_TOP], $this->chars[self::CHAR_TOP_RIGHT]);
         // Header
         if ($headerCount > 0) {
-            $buffer .= $this->renderRow($this->headers,
-                $this->chars[self::CHAR_LEFT],
-                $this->chars[self::CHAR_MIDDLE],
-                $this->chars[self::CHAR_RIGHT]
-            );
+            $buffer .= $this->renderRow($this->headers, $this->chars[self::CHAR_LEFT], $this->chars[self::CHAR_MIDDLE], $this->chars[self::CHAR_RIGHT]);
         }
 
         // Content
         foreach ($this->rows as $i => $row) {
             if ($i > 0 || $headerCount > 0) {
-                $buffer .= $this->renderSeparator(
-                    $this->chars[self::CHAR_LEFT_MID],
-                    $this->chars[self::CHAR_MID_MID],
-                    $this->chars[self::CHAR_MID],
-                    $this->chars[self::CHAR_RIGHT_MID]
-                );
+                $buffer .= $this->renderSeparator($this->chars[self::CHAR_LEFT_MID], $this->chars[self::CHAR_MID_MID], $this->chars[self::CHAR_MID], $this->chars[self::CHAR_RIGHT_MID]);
             }
-            $buffer .= $this->renderRow($row,
-                $this->chars[self::CHAR_LEFT],
-                $this->chars[self::CHAR_MIDDLE],
-                $this->chars[self::CHAR_RIGHT]);
+            $buffer .= $this->renderRow($row, $this->chars[self::CHAR_LEFT], $this->chars[self::CHAR_MIDDLE], $this->chars[self::CHAR_RIGHT]);
         }
 
-        $buffer .= $this->renderSeparator(
-            $this->chars[self::CHAR_BOTTOM_LEFT],
-            $this->chars[self::CHAR_BOTTOM_MID],
-            $this->chars[self::CHAR_BOTTOM],
-            $this->chars[self::CHAR_BOTTOM_RIGHT]
-        );
+        $buffer .= $this->renderSeparator($this->chars[self::CHAR_BOTTOM_LEFT], $this->chars[self::CHAR_BOTTOM_MID], $this->chars[self::CHAR_BOTTOM], $this->chars[self::CHAR_BOTTOM_RIGHT]);
 
         return $buffer;
     }
@@ -234,7 +229,9 @@ class Table extends Widget
      * @param string $spanLeft character for left border
      * @param string $spanMiddle character for middle border
      * @param string $spanRight character for right border
+     *
      * @return string
+     *
      * @see \yii\console\widgets\Table::render()
      */
     protected function renderRow(array $row, $spanLeft, $spanMiddle, $spanRight)
@@ -244,19 +241,24 @@ class Table extends Widget
         $buffer = '';
         $arrayPointer = [];
         $renderedChunkTexts = [];
-        for ($i = 0, ($max = $this->calculateRowHeight($row)) ?: $max = 1; $i < $max; $i++) {
+
+        for ($i = 0, ($max = $this->calculateRowHeight($row)) ?: $max = 1; $i < $max; ++$i) {
             $buffer .= $spanLeft . ' ';
+
             foreach ($size as $index => $cellSize) {
-                $cell = isset($row[$index]) ? $row[$index] : null;
+                $cell = $row[$index] ?? null;
                 $prefix = '';
+
                 if ($index !== 0) {
                     $buffer .= $spanMiddle . ' ';
                 }
+
                 if (is_array($cell)) {
                     if (empty($renderedChunkTexts[$index])) {
                         $renderedChunkTexts[$index] = '';
                         $start = 0;
                         $prefix = $this->listPrefix;
+
                         if (!isset($arrayPointer[$index])) {
                             $arrayPointer[$index] = 0;
                         }
@@ -266,8 +268,9 @@ class Table extends Widget
                     $chunk = Console::ansiColorizedSubstr($cell[$arrayPointer[$index]], $start, $cellSize - 4);
                     $renderedChunkTexts[$index] .= Console::stripAnsiFormat($chunk);
                     $fullChunkText = Console::stripAnsiFormat($cell[$arrayPointer[$index]]);
+
                     if (isset($cell[$arrayPointer[$index] + 1]) && $renderedChunkTexts[$index] === $fullChunkText) {
-                        $arrayPointer[$index]++;
+                        ++$arrayPointer[$index];
                         $renderedChunkTexts[$index] = '';
                     }
                 } else {
@@ -276,6 +279,7 @@ class Table extends Widget
                 $chunk = $prefix . $chunk;
                 $repeat = $cellSize - Console::ansiStrwidth($chunk) - 1;
                 $buffer .= $chunk;
+
                 if ($repeat >= 0) {
                     $buffer .= str_repeat(' ', $repeat);
                 }
@@ -293,12 +297,15 @@ class Table extends Widget
      * @param string $spanMid character for middle border
      * @param string $spanMidMid character for middle-middle border
      * @param string $spanRight character for right border
+     *
      * @return string the generated separator row
+     *
      * @see \yii\console\widgets\Table::render()
      */
     protected function renderSeparator($spanLeft, $spanMid, $spanMidMid, $spanRight)
     {
         $separator = $spanLeft;
+
         foreach ($this->columnWidths as $index => $rowSize) {
             if ($index !== 0) {
                 $separator .= $spanMid;
@@ -306,6 +313,7 @@ class Table extends Widget
             $separator .= str_repeat($spanMidMid, $rowSize);
         }
         $separator .= $spanRight . "\n";
+
         return $separator;
     }
 
@@ -321,14 +329,17 @@ class Table extends Widget
         $screenWidth = $this->getScreenWidth() - self::CONSOLE_SCROLLBAR_OFFSET;
 
         $headerCount = count($this->headers);
+
         if (empty($this->rows)) {
             $rowColCount = 0;
         } else {
             $rowColCount = max(array_map('count', $this->rows));
         }
         $count = max($headerCount, $rowColCount);
-        for ($i = 0; $i < $count; $i++) {
+
+        for ($i = 0; $i < $count; ++$i) {
             $columns[] = ArrayHelper::getColumn($this->rows, $i);
+
             if ($i < $headerCount) {
                 $columns[$i][] = $this->headers[$i];
             }
@@ -339,6 +350,7 @@ class Table extends Widget
                 if (is_array($val)) {
                     return max(array_map('yii\helpers\Console::ansiStrwidth', $val)) + Console::ansiStrwidth($this->listPrefix);
                 }
+
                 return Console::ansiStrwidth($val);
             }, $column)) + 2;
             $this->columnWidths[] = $columnWidth;
@@ -349,8 +361,10 @@ class Table extends Widget
             $minWidth = 3;
             $fixWidths = [];
             $relativeWidth = $screenWidth / $totalWidth;
+
             foreach ($this->columnWidths as $j => $width) {
                 $scaledWidth = (int) ($width * $relativeWidth);
+
                 if ($scaledWidth < $minWidth) {
                     $fixWidths[$j] = 3;
                 }
@@ -358,6 +372,7 @@ class Table extends Widget
 
             $totalFixWidth = array_sum($fixWidths);
             $relativeWidth = ($screenWidth - $totalFixWidth) / ($totalWidth - $totalFixWidth);
+
             foreach ($this->columnWidths as $j => $width) {
                 if (!array_key_exists($j, $fixWidths)) {
                     $this->columnWidths[$j] = (int) ($width * $relativeWidth);
@@ -370,26 +385,33 @@ class Table extends Widget
      * Calculate the height of a row.
      *
      * @param array $row
+     *
      * @return int maximum row per cell
+     *
      * @see \yii\console\widgets\Table::render()
      */
     protected function calculateRowHeight($row)
     {
-        $rowsPerCell = array_map(function ($size, $columnWidth) {
+        $rowsPerCell = array_map(static function ($size, $columnWidth) {
             if (is_array($columnWidth)) {
                 $rows = 0;
+
                 foreach ($columnWidth as $width) {
-                    $rows +=  $size == 2 ? 0 : ceil($width / ($size - 2));
+                    $rows += $size == 2 ? 0 : ceil($width / ($size - 2));
                 }
+
                 return $rows;
             }
+
             return $size == 2 || $columnWidth == 0 ? 0 : ceil($columnWidth / ($size - 2));
-        }, $this->columnWidths, array_map(function ($val) {
+        }, $this->columnWidths, array_map(static function ($val) {
             if (is_array($val)) {
                 return array_map('yii\helpers\Console::ansiStrwidth', $val);
             }
+
             return Console::ansiStrwidth($val);
         }, $row));
+
         return max($rowsPerCell);
     }
 
@@ -403,10 +425,10 @@ class Table extends Widget
     {
         if (!$this->screenWidth) {
             $size = Console::getScreenSize();
-            $this->screenWidth = isset($size[0])
-                ? $size[0]
-                : self::DEFAULT_CONSOLE_SCREEN_WIDTH + self::CONSOLE_SCROLLBAR_OFFSET;
+            $this->screenWidth = $size[0]
+                ?? self::DEFAULT_CONSOLE_SCREEN_WIDTH + self::CONSOLE_SCROLLBAR_OFFSET;
         }
+
         return $this->screenWidth;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -34,6 +35,7 @@ use Yii;
  * read-only.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class Action extends Component
@@ -46,7 +48,6 @@ class Action extends Component
      * @var Controller|\yii\web\Controller|\yii\console\Controller the controller that owns this action
      */
     public $controller;
-
 
     /**
      * Constructor.
@@ -77,7 +78,9 @@ class Action extends Component
      * This method is mainly invoked by the controller.
      *
      * @param array $params the parameters to be bound to the action's run() method.
+     *
      * @return mixed the result of the action
+     *
      * @throws InvalidConfigException if the action class does not have a run() method
      */
     public function runWithParams($params)
@@ -86,10 +89,12 @@ class Action extends Component
             throw new InvalidConfigException(get_class($this) . ' must define a "run()" method.');
         }
         $args = $this->controller->bindActionParams($this, $params);
-        Yii::debug('Running action: ' . get_class($this) . '::run(), invoked by '  . get_class($this->controller), __METHOD__);
+        Yii::debug('Running action: ' . get_class($this) . '::run(), invoked by ' . get_class($this->controller), __METHOD__);
+
         if (Yii::$app->requestedParams === null) {
             Yii::$app->requestedParams = $args;
         }
+
         if ($this->beforeRun()) {
             $result = call_user_func_array([$this, 'run'], $args);
             $this->afterRun();

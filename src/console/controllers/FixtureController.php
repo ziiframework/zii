@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -40,6 +41,7 @@ use yii\test\FixtureTrait;
  * The `unload` sub-command can be used similarly to unload fixtures.
  *
  * @author Mark Jebri <mark.github@yandex.ru>
+ *
  * @since 2.0
  */
 class FixtureController extends Controller
@@ -62,7 +64,6 @@ class FixtureController extends Controller
         'yii\test\InitDbFixture',
     ];
 
-
     /**
      * {@inheritdoc}
      */
@@ -75,6 +76,7 @@ class FixtureController extends Controller
 
     /**
      * {@inheritdoc}
+     *
      * @since 2.0.8
      */
     public function optionAliases()
@@ -102,14 +104,15 @@ class FixtureController extends Controller
      * yii fixture/load "*, -User, -UserProfile"
      * ```
      *
-     * @param array $fixturesInput
      * @return int return code
+     *
      * @throws Exception if the specified fixture does not exist.
      */
     public function actionLoad(array $fixturesInput = [])
     {
         if ($fixturesInput === []) {
             $this->printHelpMessage();
+
             return ExitCode::OK;
         }
 
@@ -132,14 +135,12 @@ class FixtureController extends Controller
         $fixturesToLoad = array_diff($foundFixtures, $except);
 
         if (!$foundFixtures) {
-            throw new Exception(
-                'No files were found for: "' . implode(', ', $fixturesInput) . "\".\n" .
-                "Check that files exist under fixtures path: \n\"" . $this->getFixturePath() . '".'
-            );
+            throw new Exception('No files were found for: "' . implode(', ', $fixturesInput) . "\".\n" . "Check that files exist under fixtures path: \n\"" . $this->getFixturePath() . '".');
         }
 
         if ($fixturesToLoad === []) {
             $this->notifyNothingToLoad($foundFixtures, $except);
+
             return ExitCode::OK;
         }
 
@@ -178,14 +179,15 @@ class FixtureController extends Controller
      * yii fixture/unload "*, -User, -UserProfile"
      * ```
      *
-     * @param array $fixturesInput
      * @return int return code
+     *
      * @throws Exception if the specified fixture does not exist.
      */
     public function actionUnload(array $fixturesInput = [])
     {
         if ($fixturesInput === []) {
             $this->printHelpMessage();
+
             return ExitCode::OK;
         }
 
@@ -206,16 +208,14 @@ class FixtureController extends Controller
         }
 
         if ($foundFixtures === []) {
-            throw new Exception(
-                'No files were found for: "' . implode(', ', $fixturesInput) . "\".\n" .
-                "Check that files exist under fixtures path: \n\"" . $this->getFixturePath() . '".'
-            );
+            throw new Exception('No files were found for: "' . implode(', ', $fixturesInput) . "\".\n" . "Check that files exist under fixtures path: \n\"" . $this->getFixturePath() . '".');
         }
 
         $fixturesToUnload = array_diff($foundFixtures, $except);
 
         if ($fixturesToUnload === []) {
             $this->notifyNothingToUnload($foundFixtures, $except);
+
             return ExitCode::OK;
         }
 
@@ -235,6 +235,7 @@ class FixtureController extends Controller
 
     /**
      * Show help message.
+     *
      * @param array $fixturesInput
      */
     private function printHelpMessage()
@@ -247,6 +248,7 @@ class FixtureController extends Controller
 
     /**
      * Notifies user that fixtures were successfully loaded.
+     *
      * @param array $fixtures
      */
     private function notifyLoaded($fixtures)
@@ -258,6 +260,7 @@ class FixtureController extends Controller
 
     /**
      * Notifies user that there are no fixtures to load according input conditions.
+     *
      * @param array $foundFixtures array of found fixtures
      * @param array $except array of names of fixtures that should not be loaded
      */
@@ -280,6 +283,7 @@ class FixtureController extends Controller
 
     /**
      * Notifies user that there are no fixtures to unload according input conditions.
+     *
      * @param array $foundFixtures array of found fixtures
      * @param array $except array of names of fixtures that should not be loaded
      */
@@ -302,6 +306,7 @@ class FixtureController extends Controller
 
     /**
      * Notifies user that fixtures were successfully unloaded.
+     *
      * @param array $fixtures
      */
     private function notifyUnloaded($fixtures)
@@ -313,6 +318,7 @@ class FixtureController extends Controller
 
     /**
      * Notifies user that fixtures were not found under fixtures path.
+     *
      * @param array $fixtures
      */
     private function notifyNotFound($fixtures)
@@ -326,8 +332,10 @@ class FixtureController extends Controller
 
     /**
      * Prompts user with confirmation if fixtures should be loaded.
+     *
      * @param array $fixtures
      * @param array $except
+     *
      * @return bool
      */
     private function confirmLoad($fixtures, $except)
@@ -358,8 +366,10 @@ class FixtureController extends Controller
 
     /**
      * Prompts user with confirmation for fixtures that should be unloaded.
+     *
      * @param array $fixtures
      * @param array $except
+     *
      * @return bool
      */
     private function confirmUnload($fixtures, $except)
@@ -387,6 +397,7 @@ class FixtureController extends Controller
 
     /**
      * Outputs data to the console as a list.
+     *
      * @param array $data
      */
     private function outputList($data)
@@ -398,7 +409,9 @@ class FixtureController extends Controller
 
     /**
      * Checks if needed to apply all fixtures.
+     *
      * @param string $fixture
+     *
      * @return bool
      */
     public function needToApplyAll($fixture)
@@ -409,7 +422,9 @@ class FixtureController extends Controller
     /**
      * Finds fixtures to be loaded, for example "User", if no fixtures were specified then all of them
      * will be searching by suffix "Fixture.php".
+     *
      * @param array $fixtures fixtures to be loaded
+     *
      * @return array Array of found fixtures. These may differ from input parameter as not all fixtures may exists.
      */
     private function findFixtures(array $fixtures = [])
@@ -440,8 +455,11 @@ class FixtureController extends Controller
     /**
      * Calculates fixture's name
      * Basically, strips [[getFixturePath()]] and `Fixture.php' suffix from fixture's full path.
+     *
      * @see getFixturePath()
+     *
      * @param string $fullFixturePath Full fixture path
+     *
      * @return string Relative fixture name
      */
     private function getFixtureRelativeName($fullFixturePath)
@@ -457,7 +475,9 @@ class FixtureController extends Controller
 
     /**
      * Returns valid fixtures config that can be used to load them.
+     *
      * @param array $fixtures fixtures to configure
+     *
      * @return array
      */
     private function getFixturesConfig($fixtures)
@@ -498,7 +518,9 @@ class FixtureController extends Controller
      *     ],
      * ]
      * ```
+     *
      * @param array $fixtures
+     *
      * @return array fixtures array with 'apply' and 'except' elements.
      */
     private function filterFixtures($fixtures)
@@ -521,7 +543,9 @@ class FixtureController extends Controller
 
     /**
      * Returns fixture path that determined on fixtures namespace.
+     *
      * @throws InvalidConfigException if fixture namespace is invalid
+     *
      * @return string fixture path
      */
     private function getFixturePath()

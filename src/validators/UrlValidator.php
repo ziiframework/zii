@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -19,6 +20,7 @@ use yii\web\JsExpression;
  * It does not check the remaining parts of a URL.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class UrlValidator extends Validator
@@ -48,16 +50,17 @@ class UrlValidator extends Validator
      */
     public $enableIDN = false;
 
-
     /**
      * {@inheritdoc}
      */
     public function init()
     {
         parent::init();
+
         if ($this->enableIDN && !function_exists('idn_to_ascii')) {
             throw new InvalidConfigException('In order to use IDN validation intl extension must be installed and enabled.');
         }
+
         if ($this->message === null) {
             $this->message = Yii::t('yii', '{attribute} is not a valid URL.');
         }
@@ -70,6 +73,7 @@ class UrlValidator extends Validator
     {
         $value = $model->$attribute;
         $result = $this->validateValue($value);
+
         if (!empty($result)) {
             $this->addError($model, $attribute, $result[0], $result[1]);
         } elseif ($this->defaultScheme !== null && strpos($value, '://') === false) {
@@ -124,6 +128,7 @@ class UrlValidator extends Validator
     public function clientValidateAttribute($model, $attribute, $view)
     {
         ValidationAsset::register($view);
+
         if ($this->enableIDN) {
             PunycodeAsset::register($view);
         }
@@ -150,9 +155,11 @@ class UrlValidator extends Validator
             ]),
             'enableIDN' => (bool) $this->enableIDN,
         ];
+
         if ($this->skipOnEmpty) {
             $options['skipOnEmpty'] = 1;
         }
+
         if ($this->defaultScheme !== null) {
             $options['defaultScheme'] = $this->defaultScheme;
         }

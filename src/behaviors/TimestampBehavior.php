@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -67,6 +68,7 @@ use yii\db\BaseActiveRecord;
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @author Alexander Kochetov <creocoder@gmail.com>
+ *
  * @since 2.0
  */
 class TimestampBehavior extends AttributeBehavior
@@ -88,7 +90,6 @@ class TimestampBehavior extends AttributeBehavior
      * will be used as value.
      */
     public $value;
-
 
     /**
      * {@inheritdoc}
@@ -126,13 +127,16 @@ class TimestampBehavior extends AttributeBehavior
      * ```php
      * $model->touch('lastVisit');
      * ```
+     *
      * @param string $attribute the name of the attribute to update.
+     *
      * @throws InvalidCallException if owner is a new record (since version 2.0.6).
      */
     public function touch($attribute)
     {
         /* @var $owner BaseActiveRecord */
         $owner = $this->owner;
+
         if ($owner->getIsNewRecord()) {
             throw new InvalidCallException('Updating the timestamp is not possible on a new record.');
         }

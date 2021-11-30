@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -28,6 +29,7 @@ use yii\base\Component;
  * This is a base class, which should be extended in order to implement the actual lock mechanism.
  *
  * @author resurtm <resurtm@gmail.com>
+ *
  * @since 2.0
  */
 abstract class Mutex extends Component
@@ -43,7 +45,6 @@ abstract class Mutex extends Component
      * @var string[] names of the locks acquired by the current PHP process.
      */
     private $_locks = [];
-
 
     /**
      * Initializes the Mutex component.
@@ -62,9 +63,11 @@ abstract class Mutex extends Component
 
     /**
      * Acquires a lock by name.
+     *
      * @param string $name of the lock to be acquired. Must be unique.
      * @param int $timeout time (in seconds) to wait for lock to be released. Defaults to zero meaning that method will return
      * false immediately in case lock was already acquired.
+     *
      * @return bool lock acquiring result.
      */
     public function acquire($name, $timeout = 0)
@@ -80,13 +83,16 @@ abstract class Mutex extends Component
 
     /**
      * Releases acquired lock. This method will return false in case the lock was not found.
+     *
      * @param string $name of the lock to be released. This lock must already exist.
+     *
      * @return bool lock release result: false in case named lock was not found..
      */
     public function release($name)
     {
         if ($this->releaseLock($name)) {
             $index = array_search($name, $this->_locks);
+
             if ($index !== false) {
                 unset($this->_locks[$index]);
             }
@@ -102,7 +108,9 @@ abstract class Mutex extends Component
      * Note that it returns false if the mutex is acquired in another process.
      *
      * @param string $name of the lock to check.
+     *
      * @return bool Returns true if currently acquired.
+     *
      * @since 2.0.36
      */
     public function isAcquired($name)
@@ -112,15 +120,19 @@ abstract class Mutex extends Component
 
     /**
      * This method should be extended by a concrete Mutex implementations. Acquires lock by name.
+     *
      * @param string $name of the lock to be acquired.
      * @param int $timeout time (in seconds) to wait for the lock to be released.
+     *
      * @return bool acquiring result.
      */
     abstract protected function acquireLock($name, $timeout = 0);
 
     /**
      * This method should be extended by a concrete Mutex implementations. Releases lock by given name.
+     *
      * @param string $name of the lock to be released.
+     *
      * @return bool release result.
      */
     abstract protected function releaseLock($name);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -22,6 +23,7 @@ use yii\base\InvalidConfigException;
  * [[getMessageFormatter()]] and [[setMessageFormatter()]] for details.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class I18N extends Component
@@ -48,13 +50,13 @@ class I18N extends Component
      */
     public $translations;
 
-
     /**
      * Initializes the component by configuring the default message categories.
      */
     public function init()
     {
         parent::init();
+
         if (!isset($this->translations['yii']) && !isset($this->translations['yii*'])) {
             $this->translations['yii'] = [
                 'class' => 'yii\i18n\PhpMessageSource',
@@ -82,12 +84,14 @@ class I18N extends Component
      * @param string $message the message to be translated.
      * @param array $params the parameters that will be used to replace the corresponding placeholders in the message.
      * @param string $language the language code (e.g. `en-US`, `en`).
+     *
      * @return string the translated and formatted message.
      */
     public function translate($category, $message, $params, $language)
     {
         $messageSource = $this->getMessageSource($category);
         $translation = $messageSource->translate($category, $message, $language);
+
         if ($translation === false) {
             return $this->format($message, $params, $messageSource->sourceLanguage);
         }
@@ -101,11 +105,13 @@ class I18N extends Component
      * @param string $message the message to be formatted.
      * @param array $params the parameters that will be used to replace the corresponding placeholders in the message.
      * @param string $language the language code (e.g. `en-US`, `en`).
+     *
      * @return string the formatted message.
      */
     public function format($message, $params, $language)
     {
         $params = (array) $params;
+
         if ($params === []) {
             return $message;
         }
@@ -113,6 +119,7 @@ class I18N extends Component
         if (preg_match('~{\s*[\w.]+\s*,~u', $message)) {
             $formatter = $this->getMessageFormatter();
             $result = $formatter->format($message, $params, $language);
+
             if ($result === false) {
                 $errorMessage = $formatter->getErrorMessage();
                 Yii::warning("Formatting message for language '$language' failed with error: $errorMessage. The message being formatted was: $message.", __METHOD__);
@@ -124,6 +131,7 @@ class I18N extends Component
         }
 
         $p = [];
+
         foreach ($params as $name => $value) {
             $p['{' . $name . '}'] = $value;
         }
@@ -138,6 +146,7 @@ class I18N extends Component
 
     /**
      * Returns the message formatter instance.
+     *
      * @return MessageFormatter the message formatter to be used to format message via ICU message format.
      */
     public function getMessageFormatter()
@@ -163,14 +172,18 @@ class I18N extends Component
 
     /**
      * Returns the message source for the given category.
+     *
      * @param string $category the category name.
+     *
      * @return MessageSource the message source for the given category.
+     *
      * @throws InvalidConfigException if there is no message source available for the specified category.
      */
     public function getMessageSource($category)
     {
         if (isset($this->translations[$category])) {
             $source = $this->translations[$category];
+
             if ($source instanceof MessageSource) {
                 return $source;
             }
@@ -191,6 +204,7 @@ class I18N extends Component
         // match '*' in the last
         if (isset($this->translations['*'])) {
             $source = $this->translations['*'];
+
             if ($source instanceof MessageSource) {
                 return $source;
             }

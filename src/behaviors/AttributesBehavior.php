@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -59,6 +60,7 @@ use yii\db\ActiveRecord;
  * @author Luciano Baraglia <luciano.baraglia@gmail.com>
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @author Bogdan Stepanenko <bscheshirwork@gmail.com>
+ *
  * @since 2.0.13
  */
 class AttributesBehavior extends Behavior
@@ -120,22 +122,19 @@ class AttributesBehavior extends Behavior
      */
     public $preserveNonEmptyValues = false;
 
-
     /**
      * {@inheritdoc}
      */
     public function events()
     {
-        return array_fill_keys(
-            array_reduce($this->attributes, function ($carry, $item) {
+        return array_fill_keys(array_reduce($this->attributes, static function ($carry, $item) {
                 return array_merge($carry, array_keys($item));
-            }, []),
-            'evaluateAttributes'
-        );
+            }, []), 'evaluateAttributes');
     }
 
     /**
      * Evaluates the attributes values and assigns it to the current attributes.
+     *
      * @param Event $event
      */
     public function evaluateAttributes($event)
@@ -146,14 +145,14 @@ class AttributesBehavior extends Behavior
         ) {
             return;
         }
-        $attributes = array_keys(array_filter($this->attributes, function ($carry) use ($event) {
+        $attributes = array_keys(array_filter($this->attributes, static function ($carry) use ($event) {
             return array_key_exists($event->name, $carry);
         }));
+
         if (!empty($this->order[$event->name])) {
-            $attributes = array_merge(
-                array_intersect((array) $this->order[$event->name], $attributes),
-                array_diff($attributes, (array) $this->order[$event->name]));
+            $attributes = array_merge(array_intersect((array) $this->order[$event->name], $attributes), array_diff($attributes, (array) $this->order[$event->name]));
         }
+
         foreach ($attributes as $attribute) {
             if ($this->preserveNonEmptyValues && !empty($this->owner->$attribute)) {
                 continue;
@@ -166,8 +165,10 @@ class AttributesBehavior extends Behavior
      * Returns the value for the current attributes.
      * This method is called by [[evaluateAttributes()]]. Its return value will be assigned
      * to the target attribute corresponding to the triggering event.
+     *
      * @param string $attribute target attribute name
      * @param Event $event the event that triggers the current attribute updating.
+     *
      * @return mixed the attribute value
      */
     protected function getValue($attribute, $event)
@@ -176,6 +177,7 @@ class AttributesBehavior extends Behavior
             return null;
         }
         $value = $this->attributes[$attribute][$event->name];
+
         if ($value instanceof Closure || (is_array($value) && is_callable($value))) {
             return $value($event, $attribute);
         }

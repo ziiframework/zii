@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -46,6 +47,7 @@ use yii\base\UserException;
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @author Dmitry Naumenko <d.naumenko.a@gmail.com>
+ *
  * @since 2.0
  */
 class ErrorAction extends Action
@@ -69,6 +71,7 @@ class ErrorAction extends Action
     /**
      * @var string|false|null the name of the layout to be applied to this error action view.
      * If not set, the layout configured in the controller will be used.
+     *
      * @see \yii\base\Controller::$layout
      * @since 2.0.14
      */
@@ -76,11 +79,11 @@ class ErrorAction extends Action
 
     /**
      * @var \Exception the exception object, normally is filled on [[init()]] method call.
+     *
      * @see findException() to know default way of obtaining exception.
      * @since 2.0.11
      */
     protected $exception;
-
 
     /**
      * {@inheritdoc}
@@ -121,7 +124,9 @@ class ErrorAction extends Action
     /**
      * Builds string that represents the exception.
      * Normally used to generate a response to AJAX request.
+     *
      * @return string
+     *
      * @since 2.0.11
      */
     protected function renderAjaxResponse()
@@ -131,7 +136,9 @@ class ErrorAction extends Action
 
     /**
      * Renders a view that represents the exception.
+     *
      * @return string
+     *
      * @since 2.0.11
      */
     protected function renderHtmlResponse()
@@ -141,7 +148,9 @@ class ErrorAction extends Action
 
     /**
      * Builds array of parameters that will be passed to the view.
+     *
      * @return array
+     *
      * @since 2.0.11
      */
     protected function getViewRenderParams()
@@ -157,7 +166,9 @@ class ErrorAction extends Action
      * Gets exception from the [[yii\web\ErrorHandler|ErrorHandler]] component.
      * In case there is no exception in the component, treat as the action has been invoked
      * not from error handler, but by direct route, so '404 Not Found' error will be displayed.
+     *
      * @return \Exception
+     *
      * @since 2.0.11
      */
     protected function findException()
@@ -171,7 +182,9 @@ class ErrorAction extends Action
 
     /**
      * Gets the code from the [[exception]].
+     *
      * @return mixed
+     *
      * @since 2.0.11
      */
     protected function getExceptionCode()
@@ -187,6 +200,7 @@ class ErrorAction extends Action
      * Returns the exception name, followed by the code (if present).
      *
      * @return string
+     *
      * @since 2.0.11
      */
     protected function getExceptionName()
@@ -207,7 +221,9 @@ class ErrorAction extends Action
     /**
      * Returns the [[exception]] message for [[yii\base\UserException]] only.
      * For other cases [[defaultMessage]] will be returned.
+     *
      * @return string
+     *
      * @since 2.0.11
      */
     protected function getExceptionMessage()

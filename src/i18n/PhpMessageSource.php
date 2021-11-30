@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -30,6 +31,7 @@ use yii\base\InvalidArgumentException;
  * You may use [[fileMap]] to customize the association between category names and the file names.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class PhpMessageSource extends MessageSource
@@ -51,7 +53,6 @@ class PhpMessageSource extends MessageSource
      */
     public $fileMap;
 
-
     /**
      * Loads the message translation for the specified $language and $category.
      * If translation for specific locale code such as `en-US` isn't found it
@@ -63,7 +64,9 @@ class PhpMessageSource extends MessageSource
      *
      * @param string $category the message category
      * @param string $language the target language
+     *
      * @return array the loaded messages. The keys are original messages, and the values are the translated messages.
+     *
      * @see loadFallbackMessages
      * @see sourceLanguage
      */
@@ -96,7 +99,9 @@ class PhpMessageSource extends MessageSource
      * The keys are original messages, and the values are the translated messages.
      * @param string $originalMessageFile the path to the file with messages. Used to log an error message
      * in case when no translations were found.
+     *
      * @return array the loaded messages. The keys are original messages, and the values are the translated messages.
+     *
      * @since 2.0.7
      */
     protected function loadFallbackMessages($category, $fallbackLanguage, $messages, $originalMessageFile)
@@ -129,15 +134,18 @@ class PhpMessageSource extends MessageSource
      *
      * @param string $category the message category
      * @param string $language the target language
+     *
      * @return string path to message file
      */
     protected function getMessageFilePath($category, $language)
     {
         $language = (string) $language;
+
         if ($language !== '' && !preg_match('/^[a-z_-]+$/i', $language)) {
             throw new InvalidArgumentException(sprintf('Invalid language code: "%s".', $language));
         }
         $messageFile = Yii::getAlias($this->basePath) . "/$language/";
+
         if (isset($this->fileMap[$category])) {
             $messageFile .= $this->fileMap[$category];
         } else {
@@ -151,12 +159,14 @@ class PhpMessageSource extends MessageSource
      * Loads the message translation for the specified language and category or returns null if file doesn't exist.
      *
      * @param string $messageFile path to message file
+     *
      * @return array|null array of messages or null if file not found
      */
     protected function loadMessagesFromFile($messageFile)
     {
         if (is_file($messageFile)) {
             $messages = include $messageFile;
+
             if (!is_array($messages)) {
                 $messages = [];
             }

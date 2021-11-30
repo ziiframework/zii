@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -13,6 +14,7 @@ use yii\base\InvalidArgumentException;
  * Class LikeCondition represents a `LIKE` condition.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ *
  * @since 2.0.14
  */
 class LikeCondition extends SimpleCondition
@@ -23,7 +25,6 @@ class LikeCondition extends SimpleCondition
      * By default it's set to `null`.
      */
     protected $escapingReplacements;
-
 
     /**
      * @param string $column the column name.
@@ -60,6 +61,7 @@ class LikeCondition extends SimpleCondition
 
     /**
      * {@inheritdoc}
+     *
      * @throws InvalidArgumentException if wrong number of operands have been given.
      */
     public static function fromArrayDefinition($operator, $operands)
@@ -69,6 +71,7 @@ class LikeCondition extends SimpleCondition
         }
 
         $condition = new static($operands[0], $operator, $operands[1]);
+
         if (isset($operands[2])) {
             $condition->escapingReplacements = $operands[2];
         }

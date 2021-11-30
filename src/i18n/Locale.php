@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,7 @@
 
 namespace yii\i18n;
 
+use NumberFormatter;
 use Yii;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
@@ -28,7 +30,6 @@ class Locale extends Component
      */
     public $locale;
 
-
     /**
      * {@inheritdoc}
      */
@@ -44,10 +45,11 @@ class Locale extends Component
     }
 
     /**
-     * Returns a currency symbol
+     * Returns a currency symbol.
      *
      * @param string $currencyCode the 3-letter ISO 4217 currency code to get symbol for. If null,
      * method will attempt using currency code from [[locale]].
+     *
      * @return string
      */
     public function getCurrencySymbol($currencyCode = null)
@@ -58,7 +60,8 @@ class Locale extends Component
             $locale .= '@currency=' . $currencyCode;
         }
 
-        $formatter = new \NumberFormatter($locale, \NumberFormatter::CURRENCY);
-        return $formatter->getSymbol(\NumberFormatter::CURRENCY_SYMBOL);
+        $formatter = new NumberFormatter($locale, NumberFormatter::CURRENCY);
+
+        return $formatter->getSymbol(NumberFormatter::CURRENCY_SYMBOL);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -17,23 +18,27 @@ use yii\web\JsExpression;
  * EmailValidator validates that the attribute value is a valid email address.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class EmailValidator extends Validator
 {
     /**
      * @var string the regular expression used to validate the attribute value.
+     *
      * @see http://www.regular-expressions.info/email.html
      */
     public $pattern = '/^[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/';
     /**
      * @var string the regular expression used to validate email addresses with the name part.
      * This property is used only when [[allowName]] is true.
+     *
      * @see allowName
      */
     public $fullPattern = '/^[^@]*<[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?>$/';
     /**
      * @var string the regular expression used to validate the part before the @ symbol, used if ASCII conversion fails to validate the address.
+     *
      * @see http://www.regular-expressions.info/email.html
      * @since 2.0.42
      */
@@ -41,12 +46,14 @@ class EmailValidator extends Validator
     /**
      * @var string the regular expression used to validate email addresses with the name part before the @ symbol, used if ASCII conversion fails to validate the address.
      * This property is used only when [[allowName]] is true.
+     *
      * @see allowName
      * @since 2.0.42
      */
     public $fullPatternASCII = '/^[^@]*<[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*$/';
     /**
      * @var bool whether to allow name in the email address (e.g. "John Smith <john.smith@example.com>"). Defaults to false.
+     *
      * @see fullPattern
      */
     public $allowName = false;
@@ -66,10 +73,10 @@ class EmailValidator extends Validator
     /**
      * @var bool whether [[enableIDN]] should apply to the local part of the email (left side
      * of the `@`). Only applies if [[enableIDN]] is `true`.
+     *
      * @since 2.0.43
      */
     public $enableLocalIDN = true;
-
 
     /**
      * {@inheritdoc}
@@ -77,9 +84,11 @@ class EmailValidator extends Validator
     public function init()
     {
         parent::init();
+
         if ($this->enableIDN && !function_exists('idn_to_ascii')) {
             throw new InvalidConfigException('In order to use IDN validation intl extension must be installed and enabled.');
         }
+
         if ($this->message === null) {
             $this->message = Yii::t('yii', '{attribute} is not a valid email address.');
         }
@@ -117,6 +126,7 @@ class EmailValidator extends Validator
                 $valid = false;
             } else {
                 $valid = preg_match($this->pattern, $value) || ($this->allowName && preg_match($this->fullPattern, $value));
+
                 if ($valid && $this->checkDNS) {
                     $valid = $this->isDNSValid($matches['domain']);
                 }
@@ -128,7 +138,9 @@ class EmailValidator extends Validator
 
     /**
      * @param string $domain
+     *
      * @return bool if DNS records for domain are valid
+     *
      * @see https://github.com/yiisoft/yii2/issues/17083
      */
     protected function isDNSValid($domain)
@@ -139,6 +151,7 @@ class EmailValidator extends Validator
     private function hasDNSRecord($domain, $isMX)
     {
         $normalizedDomain = $domain . '.';
+
         if (!checkdnsrr($normalizedDomain, ($isMX ? 'MX' : 'A'))) {
             return false;
         }
@@ -169,6 +182,7 @@ class EmailValidator extends Validator
     public function clientValidateAttribute($model, $attribute, $view)
     {
         ValidationAsset::register($view);
+
         if ($this->enableIDN) {
             PunycodeAsset::register($view);
         }
@@ -191,6 +205,7 @@ class EmailValidator extends Validator
             ]),
             'enableIDN' => (bool) $this->enableIDN,
         ];
+
         if ($this->skipOnEmpty) {
             $options['skipOnEmpty'] = 1;
         }
@@ -200,12 +215,15 @@ class EmailValidator extends Validator
 
     /**
      * @param string $value
+     *
      * @return string|bool returns string if it is valid and/or can be converted, bool false if it can't be converted and/or is invalid
+     *
      * @see https://github.com/yiisoft/yii2/issues/18585
      */
     private function idnToAsciiWithFallback($value)
     {
         $ascii = $this->idnToAscii($value);
+
         if ($ascii === false) {
             if (preg_match($this->patternASCII, $value) || ($this->allowName && preg_match($this->fullPatternASCII, $value))) {
                 return $value;

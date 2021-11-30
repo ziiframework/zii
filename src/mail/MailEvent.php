@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -15,6 +16,7 @@ use yii\base\Event;
  * By setting the [[isValid]] property, one may control whether to continue running the action.
  *
  * @author Mark Jebri <mark.github@yandex.ru>
+ *
  * @since 2.0
  */
 class MailEvent extends Event

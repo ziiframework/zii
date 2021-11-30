@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -25,6 +26,7 @@ use yii\di\Instance;
  * @see QueryInterface
  *
  * @author Paul Klimov <klimov.paul@gmail.com>
+ *
  * @since 2.0.12
  */
 class DbQueryDependency extends Dependency
@@ -58,18 +60,21 @@ class DbQueryDependency extends Dependency
      */
     public $method;
 
-
     /**
      * Generates the data needed to determine if dependency is changed.
      *
      * This method returns the query result.
+     *
      * @param CacheInterface $cache the cache component that is currently evaluating this dependency
+     *
      * @return mixed the data needed to determine if dependency has been changed.
+     *
      * @throws InvalidConfigException on invalid configuration.
      */
     protected function generateDependencyData($cache)
     {
         $db = $this->db;
+
         if ($db !== null) {
             $db = Instance::ensure($db);
         }
@@ -93,8 +98,10 @@ class DbQueryDependency extends Dependency
 
     /**
      * Executes the query according to [[method]] specification.
+     *
      * @param QueryInterface $query query to be executed.
      * @param mixed $db connection.
+     *
      * @return mixed query result.
      */
     private function executeQuery($query, $db)
@@ -102,6 +109,7 @@ class DbQueryDependency extends Dependency
         if ($this->method === null) {
             return $query->one($db);
         }
+
         if (is_string($this->method)) {
             return call_user_func([$query, $this->method], $db);
         }

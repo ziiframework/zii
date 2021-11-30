@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -34,6 +35,7 @@ use yii\base\Widget;
  * desired when redefining it in subviews.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class Block extends Widget
@@ -43,7 +45,6 @@ class Block extends Widget
      * meaning the captured block content will not be displayed.
      */
     public $renderInPlace = false;
-
 
     /**
      * Starts recording a block.
@@ -63,6 +64,7 @@ class Block extends Widget
     public function run()
     {
         $block = ob_get_clean();
+
         if ($this->renderInPlace) {
             echo $block;
         }

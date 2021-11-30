@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,7 @@
 
 namespace yii\db;
 
+use PDO;
 use yii\base\BaseObject;
 use yii\helpers\StringHelper;
 
@@ -14,6 +16,7 @@ use yii\helpers\StringHelper;
  * ColumnSchema class describes the metadata of a column in a database table.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class ColumnSchema extends BaseObject
@@ -79,11 +82,12 @@ class ColumnSchema extends BaseObject
      */
     public $comment;
 
-
     /**
      * Converts the input value according to [[phpType]] after retrieval from the database.
      * If the value is null or an [[Expression]], it will not be converted.
+     *
      * @param mixed $value input value
+     *
      * @return mixed converted value
      */
     public function phpTypecast($value)
@@ -94,7 +98,9 @@ class ColumnSchema extends BaseObject
     /**
      * Converts the input value according to [[type]] and [[dbType]] for use in a db query.
      * If the value is null or an [[Expression]], it will not be converted.
+     *
      * @param mixed $value input value
+     *
      * @return mixed converted value. This may also be an array containing the value as the first element
      * and the PDO type as the second element.
      */
@@ -108,22 +114,22 @@ class ColumnSchema extends BaseObject
     /**
      * Converts the input value according to [[phpType]] after retrieval from the database.
      * If the value is null or an [[Expression]], it will not be converted.
+     *
      * @param mixed $value input value
+     *
      * @return mixed converted value
+     *
      * @since 2.0.3
      */
     protected function typecast($value)
     {
         if ($value === ''
-            && !in_array(
-                $this->type,
-                [
+            && !in_array($this->type, [
                     Schema::TYPE_TEXT,
                     Schema::TYPE_STRING,
                     Schema::TYPE_BINARY,
-                    Schema::TYPE_CHAR
-                ],
-                true)
+                    Schema::TYPE_CHAR,
+                ], true)
         ) {
             return null;
         }
@@ -150,10 +156,12 @@ class ColumnSchema extends BaseObject
                 if (is_resource($value)) {
                     return $value;
                 }
+
                 if (is_float($value)) {
                     // ensure type cast always has . as decimal separator in all locales
                     return StringHelper::floatToString($value);
                 }
+
                 if (is_numeric($value)
                     && ColumnSchemaBuilder::CATEGORY_NUMERIC === ColumnSchemaBuilder::$typeCategoryMap[$this->type]
                 ) {
@@ -180,6 +188,6 @@ class ColumnSchema extends BaseObject
      */
     private function getPdoParamTypes()
     {
-        return [\PDO::PARAM_BOOL, \PDO::PARAM_INT, \PDO::PARAM_STR, \PDO::PARAM_LOB, \PDO::PARAM_NULL, \PDO::PARAM_STMT];
+        return [PDO::PARAM_BOOL, PDO::PARAM_INT, PDO::PARAM_STR, PDO::PARAM_LOB, PDO::PARAM_NULL, PDO::PARAM_STMT];
     }
 }

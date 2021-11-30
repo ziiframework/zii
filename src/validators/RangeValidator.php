@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,8 @@
 
 namespace yii\validators;
 
+use Closure;
+use Traversable;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
@@ -19,12 +22,13 @@ use yii\helpers\ArrayHelper;
  * is NOT among the specified range.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class RangeValidator extends Validator
 {
     /**
-     * @var array|\Traversable|\Closure a list of valid values that the attribute value should be among or an anonymous function that returns
+     * @var array|Traversable|Closure a list of valid values that the attribute value should be among or an anonymous function that returns
      * such a list. The signature of the anonymous function should be as follows,
      *
      * ```php
@@ -49,19 +53,20 @@ class RangeValidator extends Validator
      */
     public $allowArray = false;
 
-
     /**
      * {@inheritdoc}
      */
     public function init()
     {
         parent::init();
+
         if (!is_array($this->range)
-            && !($this->range instanceof \Closure)
-            && !($this->range instanceof \Traversable)
+            && !($this->range instanceof Closure)
+            && !($this->range instanceof Traversable)
         ) {
             throw new InvalidConfigException('The "range" property must be set.');
         }
+
         if ($this->message === null) {
             $this->message = Yii::t('yii', '{attribute} is invalid.');
         }
@@ -75,7 +80,7 @@ class RangeValidator extends Validator
         $in = false;
 
         if ($this->allowArray
-            && ($value instanceof \Traversable || is_array($value))
+            && ($value instanceof Traversable || is_array($value))
             && ArrayHelper::isSubset($value, $this->range, $this->strict)
         ) {
             $in = true;
@@ -93,7 +98,7 @@ class RangeValidator extends Validator
      */
     public function validateAttribute($model, $attribute)
     {
-        if ($this->range instanceof \Closure) {
+        if ($this->range instanceof Closure) {
             $this->range = call_user_func($this->range, $model, $attribute);
         }
         parent::validateAttribute($model, $attribute);
@@ -104,7 +109,7 @@ class RangeValidator extends Validator
      */
     public function clientValidateAttribute($model, $attribute, $view)
     {
-        if ($this->range instanceof \Closure) {
+        if ($this->range instanceof Closure) {
             $this->range = call_user_func($this->range, $model, $attribute);
         }
 
@@ -120,6 +125,7 @@ class RangeValidator extends Validator
     public function getClientOptions($model, $attribute)
     {
         $range = [];
+
         foreach ($this->range as $value) {
             $range[] = (string) $value;
         }
@@ -130,9 +136,11 @@ class RangeValidator extends Validator
                 'attribute' => $model->getAttributeLabel($attribute),
             ]),
         ];
+
         if ($this->skipOnEmpty) {
             $options['skipOnEmpty'] = 1;
         }
+
         if ($this->allowArray) {
             $options['allowArray'] = 1;
         }

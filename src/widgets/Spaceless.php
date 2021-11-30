@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -44,7 +45,9 @@ use yii\base\Widget;
  * [HTML Tidy Project](http://tidy.sourceforge.net/) instead.
  *
  * @see http://tidy.sourceforge.net/
+ *
  * @author resurtm <resurtm@gmail.com>
+ *
  * @since 2.0
  */
 class Spaceless extends Widget

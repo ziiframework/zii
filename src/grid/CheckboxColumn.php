@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -38,6 +39,7 @@ use yii\helpers\Json;
  * For more details and usage information on CheckboxColumn, see the [guide article on data widgets](guide:output-data-widgets).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class CheckboxColumn extends Column
@@ -47,7 +49,7 @@ class CheckboxColumn extends Column
      */
     public $name = 'selection';
     /**
-     * @var array|\Closure the HTML attributes for checkboxes. This can either be an array of
+     * @var array|Closure the HTML attributes for checkboxes. This can either be an array of
      * attributes or an anonymous function ([[Closure]]) that returns such an array.
      * The signature of the function should be the following: `function ($model, $key, $index, $column)`.
      * Where `$model`, `$key`, and `$index` refer to the model, key and index of the row currently being rendered
@@ -71,21 +73,24 @@ class CheckboxColumn extends Column
     public $multiple = true;
     /**
      * @var string the css class that will be used to find the checkboxes.
+     *
      * @since 2.0.9
      */
     public $cssClass;
 
-
     /**
      * {@inheritdoc}
+     *
      * @throws \yii\base\InvalidConfigException if [[name]] is not set.
      */
     public function init()
     {
         parent::init();
+
         if (empty($this->name)) {
             throw new InvalidConfigException('The "name" property must be set.');
         }
+
         if (substr_compare($this->name, '[]', -2, 2)) {
             $this->name .= '[]';
         }
@@ -97,6 +102,7 @@ class CheckboxColumn extends Column
      * Renders the header cell content.
      * The default implementation simply renders [[header]].
      * This method may be overridden to customize the rendering of the header cell.
+     *
      * @return string the rendering result
      */
     protected function renderHeaderCellContent()
@@ -136,15 +142,19 @@ class CheckboxColumn extends Column
 
     /**
      * Returns header checkbox name.
+     *
      * @return string header checkbox name
+     *
      * @since 2.0.8
      */
     protected function getHeaderCheckBoxName()
     {
         $name = $this->name;
+
         if (substr_compare($name, '[]', -2, 2) === 0) {
             $name = substr($name, 0, -2);
         }
+
         if (substr_compare($name, ']', -1, 1) === 0) {
             $name = substr($name, 0, -1) . '_all]';
         } else {
@@ -156,6 +166,7 @@ class CheckboxColumn extends Column
 
     /**
      * Registers the needed JavaScript.
+     *
      * @since 2.0.8
      */
     public function registerClientScript()

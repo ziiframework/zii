@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,6 +12,7 @@ namespace yii\base;
  * ModelEvent represents the parameter needed by [[Model]] events.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class ModelEvent extends Event
