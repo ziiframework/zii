@@ -36,6 +36,7 @@ return (new PhpCsFixer\Config())
 //            ],
 //        ],
         'phpdoc_no_alias_tag' => false,
+        'phpdoc_align' => ['align' => 'left'],
         'fully_qualified_strict_types' => true,
         'static_lambda' => true,
         'lambda_not_used_import' => true,
