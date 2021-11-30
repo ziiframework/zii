@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace yiiunit\data\ar;
 
-use function get_called_class;
 use yii\db\ActiveQuery;
 use yiiunit\framework\db\ActiveRecordTest;
 
@@ -105,6 +104,6 @@ class Customer extends ActiveRecord
      */
     public static function find()
     {
-        return new CustomerQuery(get_called_class());
+        return new CustomerQuery(static::class);
     }
 }

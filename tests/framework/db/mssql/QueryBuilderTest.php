@@ -658,13 +658,13 @@ ALTER TABLE [foo1] ADD CONSTRAINT [UQ_foo1_bar] UNIQUE ([bar])";
         $schema = $connection->getTableSchema('[foo1]', true);
 
         $this->assertEquals('varchar(255)', $schema->getColumn('bar')->dbType);
-        $this->assertEquals(true, $schema->getColumn('bar')->allowNull);
+        $this->assertTrue($schema->getColumn('bar')->allowNull);
 
         $sql = $connection->getQueryBuilder()->alterColumn('foo1', 'bar', $this->string(128)->notNull());
         $connection->createCommand($sql)->execute();
         $schema = $connection->getTableSchema('[foo1]', true);
         $this->assertEquals('nvarchar(128)', $schema->getColumn('bar')->dbType);
-        $this->assertEquals(false, $schema->getColumn('bar')->allowNull);
+        $this->assertFalse($schema->getColumn('bar')->allowNull);
     }
 
     public function testAlterColumnWithNull(): void
@@ -739,7 +739,7 @@ ALTER TABLE [foo1] ADD CONSTRAINT [DF_foo1_bar] DEFAULT CAST(GETDATE() AS INT) F
         $connection->createCommand($sql)->execute();
         $schema = $connection->getTableSchema('[foo1]', true);
         $this->assertEquals('nvarchar(128)', $schema->getColumn('bar')->dbType);
-        $this->assertEquals(true, $schema->getColumn('bar')->allowNull);
+        $this->assertTrue($schema->getColumn('bar')->allowNull);
 
         $sql = "INSERT INTO [foo1]([bar]) values('abcdef')";
         $this->assertEquals(1, $connection->createCommand($sql)->execute());
@@ -813,7 +813,7 @@ ALTER TABLE [foo1] DROP COLUMN [bar]";
         $this->assertEquals(0, $connection->createCommand($sql)->execute());
 
         $schema = $connection->getTableSchema('[foo1]', true);
-        $this->assertEquals(null, $schema->getColumn('bar'));
+        $this->assertNull($schema->getColumn('bar'));
     }
 
     public function buildFromDataProvider()

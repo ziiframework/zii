@@ -27,10 +27,7 @@ class BaseConsoleTest extends TestCase
         $this->mockApplication();
     }
 
-    /**
-     * @test
-     */
-    public function renderColoredString(): void
+    public function testRenderColoredString(): void
     {
         $data = '%yfoo';
         $actual = BaseConsole::renderColoredString($data);
@@ -42,10 +39,7 @@ class BaseConsoleTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @test
-     */
-    public function ansiColorizedSubstrWithoutColors(): void
+    public function testAnsiColorizedSubstrWithoutColors(): void
     {
         $str = 'FooBar';
 
@@ -63,7 +57,6 @@ class BaseConsoleTest extends TestCase
     }
 
     /**
-     * @test
      * @dataProvider ansiColorizedSubstr_withColors_data
      *
      * @param $str
@@ -71,7 +64,7 @@ class BaseConsoleTest extends TestCase
      * @param $length
      * @param $expected
      */
-    public function ansiColorizedSubstrWithColors($str, $start, $length, $expected): void
+    public function testAnsiColorizedSubstrWithColors($str, $start, $length, $expected): void
     {
         $ansiStr = BaseConsole::renderColoredString($str);
 

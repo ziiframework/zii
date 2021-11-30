@@ -392,7 +392,7 @@ class AccessRuleTest extends \yiiunit\TestCase
         $user = $this->mockUser('user2');
         $user->accessChecker = $auth;
 
-        $this->assertEquals(true, $rule->allows($action, $user, $request));
+        $this->assertTrue($rule->allows($action, $user, $request));
     }
 
     public function testMatchVerb(): void

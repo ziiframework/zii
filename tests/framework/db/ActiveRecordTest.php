@@ -1354,7 +1354,7 @@ abstract class ActiveRecordTest extends DatabaseTestCase
         $this->assertEquals('something', $model->char_col2);
         $this->assertEquals(1.23, $model->float_col2);
         $this->assertEquals(33.22, $model->numeric_col);
-        $this->assertEquals(true, $model->bool_col2);
+        $this->assertTrue($model->bool_col2);
 
         $this->assertEquals('2002-01-01 00:00:00', $model->time);
 
@@ -1606,10 +1606,10 @@ abstract class ActiveRecordTest extends DatabaseTestCase
     public function testBit(): void
     {
         $falseBit = BitValues::findOne(1);
-        $this->assertEquals(false, $falseBit->val);
+        $this->assertFalse($falseBit->val);
 
         $trueBit = BitValues::findOne(2);
-        $this->assertEquals(true, $trueBit->val);
+        $this->assertTrue($trueBit->val);
     }
 
     public function testLinkWhenRelationIsIndexed2(): void

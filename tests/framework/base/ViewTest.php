@@ -33,7 +33,7 @@ class ViewTest extends TestCase
         parent::setUp();
 
         $this->mockApplication();
-        $this->testViewPath = Yii::getAlias('@yiiunit/runtime') . DIRECTORY_SEPARATOR . str_replace('\\', '_', get_class($this)) . uniqid();
+        $this->testViewPath = Yii::getAlias('@yiiunit/runtime') . DIRECTORY_SEPARATOR . str_replace('\\', '_', static::class) . uniqid();
         FileHelper::createDirectory($this->testViewPath);
     }
 

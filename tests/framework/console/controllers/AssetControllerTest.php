@@ -41,7 +41,7 @@ class AssetControllerTest extends TestCase
     public function setUp(): void
     {
         $this->mockApplication();
-        $this->testFilePath = Yii::getAlias('@yiiunit/runtime') . DIRECTORY_SEPARATOR . str_replace('\\', '_', get_class($this)) . uniqid();
+        $this->testFilePath = Yii::getAlias('@yiiunit/runtime') . DIRECTORY_SEPARATOR . str_replace('\\', '_', static::class) . uniqid();
         $this->createDir($this->testFilePath);
         $this->testAssetsBasePath = $this->testFilePath . DIRECTORY_SEPARATOR . 'assets';
         $this->createDir($this->testAssetsBasePath);
@@ -225,7 +225,7 @@ class AssetControllerTest extends TestCase
     protected function composeAssetBundleClassSource(array &$config)
     {
         $config = array_merge([
-                'namespace' => StringHelper::dirname(get_class($this)),
+                'namespace' => StringHelper::dirname(static::class),
                 'class' => 'AppAsset',
                 'sourcePath' => null,
                 'basePath' => $this->testFilePath,

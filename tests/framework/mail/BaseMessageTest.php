@@ -178,6 +178,6 @@ class TestMessage extends BaseMessage
 
     public function toString()
     {
-        return get_class($this);
+        return static::class;
     }
 }

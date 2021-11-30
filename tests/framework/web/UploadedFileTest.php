@@ -94,7 +94,7 @@ class UploadedFileTest extends TestCase
         $tmpImage = UploadedFile::getInstance(new ModelStub(), 'temp_image');
         $targetFile = '@runtime/test_saved_uploaded_file_' . time();
 
-        $this->assertEquals(true, $tmpImage->saveAs($targetFile, $deleteTempFile = false));
+        $this->assertTrue($tmpImage->saveAs($targetFile, $deleteTempFile = false));
         $this->markTestIncomplete("`$deleteTempFile` flag simply uses php's move_uploaded_file() method, so this not work in test");
 
         @unlink($targetFile);

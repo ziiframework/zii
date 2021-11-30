@@ -10,8 +10,6 @@ declare(strict_types=1);
 
 namespace yiiunit\data\ar;
 
-use function get_called_class;
-
 /**
  * Class Animal.
  *
@@ -32,7 +30,7 @@ class Animal extends ActiveRecord
     public function init(): void
     {
         parent::init();
-        $this->type = get_called_class();
+        $this->type = static::class;
     }
 
     public function getDoes()

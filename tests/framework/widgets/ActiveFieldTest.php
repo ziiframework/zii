@@ -768,7 +768,7 @@ class TestInputWidget extends InputWidget
 
     public function run()
     {
-        return 'Render: ' . get_class($this);
+        return 'Render: ' . static::class;
     }
 }
 
