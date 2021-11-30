@@ -103,7 +103,8 @@ class AttributesBehaviorTest extends TestCase
      * @param string      $name
      * @param string|null $alias
      */
-    public function testPreserveNonEmptyValues($aliasExpected, $preserveNonEmptyValues, $name, $alias) {
+    public function testPreserveNonEmptyValues($aliasExpected, $preserveNonEmptyValues, $name, $alias)
+    {
         $model = new ActiveRecordWithAttributesBehavior();
         $model->attributesBehavior->preserveNonEmptyValues = $preserveNonEmptyValues;
         $model->name = $name;
@@ -144,7 +145,8 @@ class AttributesBehaviorTest extends TestCase
      * @param string $name
      * @param string $alias
      */
-    public function testOrder($aliasExpected, $order, $name, $alias) {
+    public function testOrder($aliasExpected, $order, $name, $alias)
+    {
         $model = new ActiveRecordWithAttributesBehavior();
         $model->attributesBehavior->order = $order;
         $model->name = $name;

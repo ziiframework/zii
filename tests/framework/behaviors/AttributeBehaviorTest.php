@@ -103,7 +103,8 @@ class AttributeBehaviorTest extends TestCase
      * @param string      $name
      * @param string|null $alias
      */
-    public function testPreserveNonEmptyValues($aliasExpected, $preserveNonEmptyValues, $name, $alias) {
+    public function testPreserveNonEmptyValues($aliasExpected, $preserveNonEmptyValues, $name, $alias)
+    {
         $model = new ActiveRecordWithAttributeBehavior();
         $model->attributeBehavior->preserveNonEmptyValues = $preserveNonEmptyValues;
         $model->name = $name;

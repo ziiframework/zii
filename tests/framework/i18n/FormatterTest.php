@@ -89,9 +89,9 @@ class FormatterTest extends TestCase
             return date('Y-m-d', $value);
         }));
         $this->assertSame('from: ' . date('Y-m-d', $value), $this->formatter->format($value, static function ($value, $formatter) {
-                /* @var $formatter Formatter */
-                return 'from: ' . $formatter->asDate($value, 'php:Y-m-d');
-            }));
+            /* @var $formatter Formatter */
+            return 'from: ' . $formatter->asDate($value, 'php:Y-m-d');
+        }));
     }
 
     public function testLocale()

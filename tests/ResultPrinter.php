@@ -17,7 +17,8 @@ class ResultPrinter extends \PHPUnit\TextUI\DefaultResultPrinter
 {
     private bool $is_stdout = false;
 
-    public function __construct($out = null, $verbose = false, $colors = \PHPUnit\TextUI\DefaultResultPrinter::COLOR_DEFAULT, $debug = false, $numberOfColumns = 80, $reverse = false) {
+    public function __construct($out = null, $verbose = false, $colors = \PHPUnit\TextUI\DefaultResultPrinter::COLOR_DEFAULT, $debug = false, $numberOfColumns = 80, $reverse = false)
+    {
         if ($out === null) {
             $out = STDOUT;
         }
