@@ -153,7 +153,7 @@ class FileHelperTest extends TestCase
      */
     protected function assertFileMode($expectedMode, $fileName, $message = ''): void
     {
-        $expectedMode = str_pad(sprintf('%o', $expectedMode), '4', '0', STR_PAD_LEFT);
+        $expectedMode = str_pad(sprintf('%o', $expectedMode), 4, '0', STR_PAD_LEFT);
         $this->assertEquals($expectedMode, $this->getMode($fileName), $message);
     }
 

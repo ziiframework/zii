@@ -818,9 +818,9 @@ class FormatterDateTest extends TestCase
         $this->formatter->timeZone = 'Europe/Berlin';
         $this->assertEquals('24.11.2014 12:48:53', $this->formatter->format(1416829733, ['date', 'php:d.m.Y H:i:s']));
 
-        $this->assertFalse(DateTime::createFromFormat('Y-m-d', 1416829733));
+        $this->assertFalse(DateTime::createFromFormat('Y-m-d', '1416829733'));
         $this->assertFalse(DateTime::createFromFormat('Y-m-d', '2014-05-08 12:48:53'));
-        $this->assertFalse(DateTime::createFromFormat('Y-m-d H:i:s', 1416829733));
+        $this->assertFalse(DateTime::createFromFormat('Y-m-d H:i:s', '1416829733'));
         $this->assertFalse(DateTime::createFromFormat('Y-m-d H:i:s', '2014-05-08'));
     }
 

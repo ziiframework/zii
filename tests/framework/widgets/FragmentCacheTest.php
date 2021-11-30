@@ -150,7 +150,7 @@ class FragmentCacheTest extends \yiiunit\TestCase
             }
 
             $expectedContent = vsprintf('multiple dynamic cached fragments: %s%d', [
-                md5($counter),
+                md5((string) $counter),
                 $counter,
             ]);
             $this->assertEquals($expectedContent, ob_get_clean());
@@ -189,8 +189,8 @@ class FragmentCacheTest extends \yiiunit\TestCase
             }
 
             $expectedContent = vsprintf('nested dynamic cached fragments: %s%s%d', [
-                md5($counter),
-                sha1($counter),
+                md5((string) $counter),
+                sha1((string) $counter),
                 $counter,
             ]);
             $this->assertEquals($expectedContent, ob_get_clean());
