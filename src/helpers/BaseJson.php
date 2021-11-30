@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,9 +7,6 @@
 
 namespace yii\helpers;
 
-use DateTimeInterface;
-use JsonSerializable;
-use SimpleXMLElement;
 use yii\base\Arrayable;
 use yii\base\InvalidArgumentException;
 use yii\base\Model;
@@ -23,26 +19,23 @@ use yii\web\JsonResponseFormatter;
  * Do not use BaseJson. Use [[Json]] instead.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class BaseJson
 {
     /**
      * @var bool|null Enables human readable output a.k.a. Pretty Print.
-     *                This can useful for debugging during development but is not recommended in a production environment!
-     *                In case `prettyPrint` is `null` (default) the `options` passed to `encode` functions will not be changed.
-     *
+     * This can useful for debugging during development but is not recommended in a production environment!
+     * In case `prettyPrint` is `null` (default) the `options` passed to `encode` functions will not be changed.
      * @since 2.0.43
      */
     public static $prettyPrint;
 
     /**
      * @var bool Avoids objects with zero-indexed keys to be encoded as array
-     *           `Json::encode((object)['test'])` will be encoded as an object not as an array. This matches the behaviour of `json_encode()`.
-     *           Defaults to false to avoid any backwards compatibility issues.
-     *           Enable for single purpose: `Json::$keepObjectType = true;`
-     *
+     * `Json::encode((object)['test'])` will be encoded as an object not as an array. This matches the behaviour of `json_encode()`.
+     * Defaults to false to avoid any backwards compatibility issues.
+     * Enable for single purpose: `Json::$keepObjectType = true;`
      * @see JsonResponseFormatter documentation to enable for all JSON responses
      * @since 2.0.44
      */
@@ -50,7 +43,6 @@ class BaseJson
 
     /**
      * @var array List of JSON Error messages assigned to constant names for better handling of PHP <= 5.5.
-     *
      * @since 2.0.7
      */
     public static $jsonErrorMessages = [
@@ -62,6 +54,7 @@ class BaseJson
         'JSON_ERROR_UTF8' => 'Malformed UTF-8 characters, possibly incorrectly encoded',
     ];
 
+
     /**
      * Encodes the given value into a JSON string.
      *
@@ -72,19 +65,17 @@ class BaseJson
      * Note that data encoded as JSON must be UTF-8 encoded according to the JSON specification.
      * You must ensure strings passed to this method have proper encoding before passing them.
      *
-     * @param mixed $value the data to be encoded
+     * @param mixed $value the data to be encoded.
      * @param int $options the encoding options. For more details please refer to
-     *                     <https://www.php.net/manual/en/function.json-encode.php>. Default is `JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE`.
-     *
-     * @return string the encoding result
-     *
-     * @throws InvalidArgumentException if there is any encoding error
+     * <https://www.php.net/manual/en/function.json-encode.php>. Default is `JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE`.
+     * @return string the encoding result.
+     * @throws InvalidArgumentException if there is any encoding error.
      */
     public static function encode($value, $options = 320)
     {
         $expressions = [];
         $value = static::processData($value, $expressions, uniqid('', true));
-        set_error_handler(static function () {
+        set_error_handler(function () {
             static::handleJsonError(JSON_ERROR_SYNTAX);
         }, E_WARNING);
 
@@ -112,11 +103,8 @@ class BaseJson
      * You must ensure strings passed to this method have proper encoding before passing them.
      *
      * @param mixed $value the data to be encoded
-     *
      * @return string the encoding result
-     *
      * @since 2.0.4
-     *
      * @throws InvalidArgumentException if there is any encoding error
      */
     public static function htmlEncode($value)
@@ -126,12 +114,9 @@ class BaseJson
 
     /**
      * Decodes the given JSON string into a PHP data structure.
-     *
      * @param string $json the JSON string to be decoded
-     * @param bool $asArray whether to return objects in terms of associative arrays
-     *
+     * @param bool $asArray whether to return objects in terms of associative arrays.
      * @return mixed the PHP data
-     *
      * @throws InvalidArgumentException if there is any decoding error
      */
     public static function decode($json, $asArray = true)
@@ -151,9 +136,7 @@ class BaseJson
      * Handles [[encode()]] and [[decode()]] errors by throwing exceptions with the respective error message.
      *
      * @param int $lastError error code from [json_last_error()](https://www.php.net/manual/en/function.json-last-error.php).
-     *
-     * @throws InvalidArgumentException if there is any encoding/decoding error
-     *
+     * @throws InvalidArgumentException if there is any encoding/decoding error.
      * @since 2.0.6
      */
     protected static function handleJsonError($lastError)
@@ -177,11 +160,9 @@ class BaseJson
 
     /**
      * Pre-processes the data before sending it to `json_encode()`.
-     *
      * @param mixed $data the data to be processed
      * @param array $expressions collection of JavaScript expressions
      * @param string $expPrefix a prefix internally used to handle JS expressions
-     *
      * @return mixed the processed data
      */
     protected static function processData($data, &$expressions, $expPrefix)
@@ -196,17 +177,17 @@ class BaseJson
                 return $token;
             }
 
-            if ($data instanceof JsonSerializable) {
+            if ($data instanceof \JsonSerializable) {
                 return static::processData($data->jsonSerialize(), $expressions, $expPrefix);
             }
 
-            if ($data instanceof DateTimeInterface) {
-                return static::processData((array) $data, $expressions, $expPrefix);
+            if ($data instanceof \DateTimeInterface) {
+                return static::processData((array)$data, $expressions, $expPrefix);
             }
 
             if ($data instanceof Arrayable) {
                 $data = $data->toArray();
-            } elseif ($data instanceof SimpleXMLElement) {
+            } elseif ($data instanceof \SimpleXMLElement) {
                 $data = (array) $data;
 
                 // Avoid empty elements to be returned as array.
@@ -221,7 +202,6 @@ class BaseJson
                 $revertToObject = static::$keepObjectType;
 
                 $result = [];
-
                 foreach ($data as $name => $value) {
                     $result[$name] = $value;
                 }
@@ -248,14 +228,13 @@ class BaseJson
     /**
      * Generates a summary of the validation errors.
      *
-     * @param Model|Model[] $models the model(s) whose validation errors are to be displayed
+     * @param Model|Model[] $models the model(s) whose validation errors are to be displayed.
      * @param array $options the tag options in terms of name-value pairs. The following options are specially handled:
      *
      * - showAllErrors: boolean, if set to true every error message for each attribute will be shown otherwise
      *   only the first error message for each attribute will be shown. Defaults to `false`.
      *
      * @return string the generated error summary
-     *
      * @since 2.0.14
      */
     public static function errorSummary($models, $options = [])
@@ -269,12 +248,10 @@ class BaseJson
     /**
      * Return array of the validation errors.
      *
-     * @param Model|Model[] $models the model(s) whose validation errors are to be displayed
+     * @param Model|Model[] $models the model(s) whose validation errors are to be displayed.
      * @param bool $showAllErrors if set to true every error message for each attribute will be shown otherwise
-     *                            only the first error message for each attribute will be shown
-     *
+     * only the first error message for each attribute will be shown.
      * @return array of the validation errors
-     *
      * @since 2.0.14
      */
     private static function collectErrors($models, $showAllErrors)
@@ -284,7 +261,6 @@ class BaseJson
         if (!is_array($models)) {
             $models = [$models];
         }
-
         foreach ($models as $model) {
             $lines[] = $model->getErrorSummary($showAllErrors);
         }

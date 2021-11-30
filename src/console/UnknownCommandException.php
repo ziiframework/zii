@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -14,13 +13,12 @@ use yii\console\controllers\HelpController;
  * UnknownCommandException represents an exception caused by incorrect usage of a console command.
  *
  * @author Carsten Brandt <mail@cebe.cc>
- *
  * @since 2.0.11
  */
 class UnknownCommandException extends Exception
 {
     /**
-     * @var string the name of the command that could not be recognized
+     * @var string the name of the command that could not be recognized.
      */
     public $command;
 
@@ -29,13 +27,14 @@ class UnknownCommandException extends Exception
      */
     protected $application;
 
+
     /**
      * Construct the exception.
      *
-     * @param string $route the route of the command that could not be found
-     * @param Application $application the console application instance involved
-     * @param int $code the Exception code
-     * @param \Exception $previous the previous exception used for the exception chaining
+     * @param string $route the route of the command that could not be found.
+     * @param Application $application the console application instance involved.
+     * @param int $code the Exception code.
+     * @param \Exception $previous the previous exception used for the exception chaining.
      */
     public function __construct($route, $application, $code = 0, \Exception $previous = null)
     {
@@ -63,26 +62,22 @@ class UnknownCommandException extends Exception
      *   characters you have to replace, insert or delete to transform str1 into str2.
      *
      * @see https://www.php.net/manual/en/function.levenshtein.php
-     *
-     * @return array a list of suggested alternatives sorted by similarity
+     * @return array a list of suggested alternatives sorted by similarity.
      */
     public function getSuggestedAlternatives()
     {
         $help = $this->application->createController('help');
-
         if ($help === false || $this->command === '') {
             return [];
         }
         /** @var $helpController HelpController */
-        [$helpController, $actionID] = $help;
+        list($helpController, $actionID) = $help;
 
         $availableActions = [];
-
         foreach ($helpController->getCommands() as $command) {
             $result = $this->application->createController($command);
             /** @var $controller Controller */
-            [$controller, $actionID] = $result;
-
+            list($controller, $actionID) = $result;
             if ($controller->createAction($controller->defaultAction) !== null) {
                 // add the command itself (default action)
                 $availableActions[] = $command;
@@ -91,7 +86,6 @@ class UnknownCommandException extends Exception
             // add all actions of this controller
             $actions = $helpController->getActions($controller);
             $prefix = $controller->getUniqueId();
-
             foreach ($actions as $action) {
                 $availableActions[] = $prefix . '/' . $action;
             }
@@ -111,11 +105,9 @@ class UnknownCommandException extends Exception
      *   characters you have to replace, insert or delete to transform str1 into str2.
      *
      * @see https://www.php.net/manual/en/function.levenshtein.php
-     *
-     * @param array $actions available command names
-     * @param string $command the command to compare to
-     *
-     * @return array a list of suggested alternatives sorted by similarity
+     * @param array $actions available command names.
+     * @param string $command the command to compare to.
+     * @return array a list of suggested alternatives sorted by similarity.
      */
     private function filterBySimilarity($actions, $command)
     {
@@ -129,15 +121,14 @@ class UnknownCommandException extends Exception
         }
 
         // calculate the Levenshtein distance between the unknown command and all available commands.
-        $distances = array_map(static function ($action) use ($command) {
+        $distances = array_map(function ($action) use ($command) {
             $action = strlen($action) > 255 ? substr($action, 0, 255) : $action;
             $command = strlen($command) > 255 ? substr($command, 0, 255) : $command;
-
             return levenshtein($action, $command);
         }, array_combine($actions, $actions));
 
         // we assume a typo if the levensthein distance is no more than 3, i.e. 3 replacements needed
-        $relevantTypos = array_filter($distances, static function ($distance) {
+        $relevantTypos = array_filter($distances, function ($distance) {
             return $distance <= 3;
         });
         asort($relevantTypos);

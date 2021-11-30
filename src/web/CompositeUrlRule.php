@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -14,30 +13,28 @@ use yii\base\BaseObject;
 /**
  * CompositeUrlRule is the base class for URL rule classes that consist of multiple simpler rules.
  *
- * @property-read int|null $createUrlStatus Status of the URL creation after the last [[createUrl()]] call.
+ * @property-read null|int $createUrlStatus Status of the URL creation after the last [[createUrl()]] call.
  * `null` if rule does not provide info about create status. This property is read-only.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 abstract class CompositeUrlRule extends BaseObject implements UrlRuleInterface
 {
     /**
      * @var UrlRuleInterface[] the URL rules contained in this composite rule.
-     *                         This property is set in [[init()]] by the return value of [[createRules()]].
+     * This property is set in [[init()]] by the return value of [[createRules()]].
      */
     protected $rules = [];
     /**
-     * @var int|null status of the URL creation after the last [[createUrl()]] call
-     *
+     * @var int|null status of the URL creation after the last [[createUrl()]] call.
      * @since 2.0.12
      */
     protected $createStatus;
 
+
     /**
      * Creates the URL rules that should be contained within this composite rule.
-     *
      * @return UrlRuleInterface[] the URL rules
      */
     abstract protected function createRules();
@@ -59,7 +56,6 @@ abstract class CompositeUrlRule extends BaseObject implements UrlRuleInterface
         foreach ($this->rules as $rule) {
             /* @var $rule UrlRule */
             $result = $rule->parseRequest($manager, $request);
-
             if (YII_DEBUG) {
                 Yii::debug([
                     'rule' => method_exists($rule, '__toString') ? $rule->__toString() : get_class($rule),
@@ -67,7 +63,6 @@ abstract class CompositeUrlRule extends BaseObject implements UrlRuleInterface
                     'parent' => self::className(),
                 ], __METHOD__);
             }
-
             if ($result !== false) {
                 return $result;
             }
@@ -83,7 +78,6 @@ abstract class CompositeUrlRule extends BaseObject implements UrlRuleInterface
     {
         $this->createStatus = UrlRule::CREATE_STATUS_SUCCESS;
         $url = $this->iterateRules($this->rules, $manager, $route, $params);
-
         if ($url !== false) {
             return $url;
         }
@@ -99,13 +93,11 @@ abstract class CompositeUrlRule extends BaseObject implements UrlRuleInterface
     /**
      * Iterates through specified rules and calls [[createUrl()]] for each of them.
      *
-     * @param UrlRuleInterface[] $rules rules to iterate
+     * @param UrlRuleInterface[] $rules rules to iterate.
      * @param UrlManager $manager the URL manager
      * @param string $route the route. It should not have slashes at the beginning or the end.
      * @param array $params the parameters
-     *
-     * @return bool|string the created URL, or `false` if none of specified rules cannot be used for creating this URL
-     *
+     * @return bool|string the created URL, or `false` if none of specified rules cannot be used for creating this URL.
      * @see createUrl()
      * @since 2.0.12
      */
@@ -114,13 +106,10 @@ abstract class CompositeUrlRule extends BaseObject implements UrlRuleInterface
         /* @var $rule UrlRule */
         foreach ($rules as $rule) {
             $url = $rule->createUrl($manager, $route, $params);
-
             if ($url !== false) {
                 $this->createStatus = UrlRule::CREATE_STATUS_SUCCESS;
-
                 return $url;
             }
-
             if (
                 $this->createStatus === null
                 || !method_exists($rule, 'getCreateUrlStatus')
@@ -141,9 +130,8 @@ abstract class CompositeUrlRule extends BaseObject implements UrlRuleInterface
      * For multiple rules statuses will be combined by bitwise `or` operator
      * (e.g. `UrlRule::CREATE_STATUS_PARSING_ONLY | UrlRule::CREATE_STATUS_PARAMS_MISMATCH`).
      *
-     * @return int|null Status of the URL creation after the last [[createUrl()]] call. `null` if rule does not provide
-     *                  info about create status.
-     *
+     * @return null|int Status of the URL creation after the last [[createUrl()]] call. `null` if rule does not provide
+     * info about create status.
      * @see createStatus
      * @see https://www.php.net/manual/en/language.operators.bitwise.php
      * @since 2.0.12

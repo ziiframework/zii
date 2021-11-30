@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -16,7 +15,6 @@ use Yii;
  * For more details and usage information on OptionsAction, see the [guide article on rest controllers](guide:rest-controllers).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class OptionsAction extends \yii\base\Action
@@ -30,9 +28,9 @@ class OptionsAction extends \yii\base\Action
      */
     public $resourceOptions = ['GET', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'];
 
+
     /**
      * Responds to the OPTIONS request.
-     *
      * @param string $id
      */
     public function run($id = null)

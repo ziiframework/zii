@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -13,7 +12,6 @@ namespace yii\db;
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @author Bob Olde Hampsink <b.oldehampsink@nerds.company>
- *
  * @since 2.0.12
  */
 trait ViewFinderTrait
@@ -25,22 +23,18 @@ trait ViewFinderTrait
 
     /**
      * Returns all views names in the database.
-     *
      * @param string $schema the schema of the views. Defaults to empty string, meaning the current or default schema.
-     *
      * @return array all views names in the database. The names have NO schema name prefix.
      */
     abstract protected function findViewNames($schema = '');
 
     /**
      * Returns all view names in the database.
-     *
      * @param string $schema the schema of the views. Defaults to empty string, meaning the current or default schema name.
-     *                       If not empty, the returned view names will be prefixed with the schema name.
+     * If not empty, the returned view names will be prefixed with the schema name.
      * @param bool $refresh whether to fetch the latest available view names. If this is false,
-     *                      view names fetched previously (if available) will be returned.
-     *
-     * @return string[] all view names in the database
+     * view names fetched previously (if available) will be returned.
+     * @return string[] all view names in the database.
      */
     public function getViewNames($schema = '', $refresh = false)
     {

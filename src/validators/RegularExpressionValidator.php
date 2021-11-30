@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -20,7 +19,6 @@ use yii\web\JsExpression;
  * If the [[not]] property is set true, the validator will ensure the attribute value do NOT match the [[pattern]].
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class RegularExpressionValidator extends Validator
@@ -31,9 +29,10 @@ class RegularExpressionValidator extends Validator
     public $pattern;
     /**
      * @var bool whether to invert the validation logic. Defaults to false. If set to true,
-     *           the regular expression defined via [[pattern]] should NOT match the attribute value.
+     * the regular expression defined via [[pattern]] should NOT match the attribute value.
      */
     public $not = false;
+
 
     /**
      * {@inheritdoc}
@@ -41,11 +40,9 @@ class RegularExpressionValidator extends Validator
     public function init()
     {
         parent::init();
-
         if ($this->pattern === null) {
             throw new InvalidConfigException('The "pattern" property must be set.');
         }
-
         if ($this->message === null) {
             $this->message = Yii::t('yii', '{attribute} is invalid.');
         }
@@ -88,7 +85,6 @@ class RegularExpressionValidator extends Validator
                 'attribute' => $model->getAttributeLabel($attribute),
             ]),
         ];
-
         if ($this->skipOnEmpty) {
             $options['skipOnEmpty'] = 1;
         }

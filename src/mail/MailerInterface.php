@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -25,7 +24,6 @@ namespace yii\mail;
  * @see MessageInterface
  *
  * @author Paul Klimov <klimov.paul@gmail.com>
- *
  * @since 2.0
  */
 interface MailerInterface
@@ -41,17 +39,15 @@ interface MailerInterface
      *   for rendering the HTML body, while 'text' element is for rendering the text body. For example,
      *   `['html' => 'contact-html', 'text' => 'contact-text']`.
      * - null, meaning the message instance will be returned without body content.
-     * @param array $params the parameters (name-value pairs) that will be extracted and made available in the view file
      *
-     * @return MessageInterface message instance
+     * @param array $params the parameters (name-value pairs) that will be extracted and made available in the view file.
+     * @return MessageInterface message instance.
      */
     public function compose($view = null, array $params = []);
 
     /**
      * Sends the given email message.
-     *
      * @param MessageInterface $message email message instance to be sent
-     *
      * @return bool whether the message has been sent successfully
      */
     public function send($message);
@@ -61,9 +57,8 @@ interface MailerInterface
      *
      * This method may be implemented by some mailers which support more efficient way of sending multiple messages in the same batch.
      *
-     * @param array $messages list of email messages, which should be sent
-     *
-     * @return int number of messages that are successfully sent
+     * @param array $messages list of email messages, which should be sent.
+     * @return int number of messages that are successfully sent.
      */
     public function sendMultiple(array $messages);
 }

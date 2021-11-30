@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -13,9 +12,9 @@ use yii\base\InvalidRouteException;
 
 // define STDIN, STDOUT and STDERR if the PHP SAPI did not define them (e.g. creating console application in web env)
 // https://www.php.net/manual/en/features.commandline.io-streams.php
-defined('STDIN') or define('STDIN', fopen('php://stdin', 'rb'));
-defined('STDOUT') or define('STDOUT', fopen('php://stdout', 'wb'));
-defined('STDERR') or define('STDERR', fopen('php://stderr', 'wb'));
+defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
+defined('STDOUT') or define('STDOUT', fopen('php://stdout', 'w'));
+defined('STDERR') or define('STDERR', fopen('php://stderr', 'w'));
 
 /**
  * Application represents a console application.
@@ -57,7 +56,6 @@ defined('STDERR') or define('STDERR', fopen('php://stderr', 'wb'));
  * @property-read Response $response The response component. This property is read-only.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class Application extends \yii\base\Application
@@ -65,22 +63,23 @@ class Application extends \yii\base\Application
     /**
      * The option name for specifying the application configuration file path.
      */
-    public const OPTION_APPCONFIG = 'appconfig';
+    const OPTION_APPCONFIG = 'appconfig';
 
     /**
      * @var string the default route of this application. Defaults to 'help',
-     *             meaning the `help` command.
+     * meaning the `help` command.
      */
     public $defaultRoute = 'help';
     /**
      * @var bool whether to enable the commands provided by the core framework.
-     *           Defaults to true.
+     * Defaults to true.
      */
     public $enableCoreCommands = true;
     /**
      * @var Controller the currently active controller instance
      */
     public $controller;
+
 
     /**
      * {@inheritdoc}
@@ -96,20 +95,16 @@ class Application extends \yii\base\Application
      * This method will check if the command line option [[OPTION_APPCONFIG]] is specified.
      * If so, the corresponding file will be loaded as the application configuration.
      * Otherwise, the configuration provided as the parameter will be returned back.
-     *
-     * @param array $config the configuration provided in the constructor
-     *
-     * @return array the actual configuration to be used by the application
+     * @param array $config the configuration provided in the constructor.
+     * @return array the actual configuration to be used by the application.
      */
     protected function loadConfig($config)
     {
         if (!empty($_SERVER['argv'])) {
             $option = '--' . self::OPTION_APPCONFIG . '=';
-
             foreach ($_SERVER['argv'] as $param) {
                 if (strpos($param, $option) !== false) {
                     $path = substr($param, strlen($option));
-
                     if (!empty($path) && is_file($file = Yii::getAlias($path))) {
                         return require $file;
                     }
@@ -128,7 +123,6 @@ class Application extends \yii\base\Application
     public function init()
     {
         parent::init();
-
         if ($this->enableCoreCommands) {
             foreach ($this->coreCommands() as $id => $command) {
                 if (!isset($this->controllerMap[$id])) {
@@ -144,17 +138,14 @@ class Application extends \yii\base\Application
 
     /**
      * Handles the specified request.
-     *
      * @param Request $request the request to be handled
-     *
      * @return Response the resulting response
      */
     public function handleRequest($request)
     {
-        [$route, $params] = $request->resolve();
+        list($route, $params) = $request->resolve();
         $this->requestedRoute = $route;
         $result = $this->runAction($route, $params);
-
         if ($result instanceof Response) {
             return $result;
         }
@@ -178,19 +169,16 @@ class Application extends \yii\base\Application
      * \Yii::$app->runAction('controller/test', ['option' => 'value', $a, $b]);
      * ```
      *
-     * @param string $route the route that specifies the action
+     * @param string $route the route that specifies the action.
      * @param array $params the parameters to be passed to the action
-     *
      * @return int|Response the result of the action. This can be either an exit code or Response object.
-     *                      Exit code 0 means normal, and other values mean abnormal. Exit code of `null` is treated as `0` as well.
-     *
+     * Exit code 0 means normal, and other values mean abnormal. Exit code of `null` is treated as `0` as well.
      * @throws Exception if the route is invalid
      */
     public function runAction($route, $params = [])
     {
         try {
             $res = parent::runAction($route, $params);
-
             return is_object($res) ? $res : (int) $res;
         } catch (InvalidRouteException $e) {
             throw new UnknownCommandException($route, $this, 0, $e);
@@ -199,8 +187,7 @@ class Application extends \yii\base\Application
 
     /**
      * Returns the configuration of the built-in commands.
-     *
-     * @return array the configuration of the built-in commands
+     * @return array the configuration of the built-in commands.
      */
     public function coreCommands()
     {
@@ -217,8 +204,7 @@ class Application extends \yii\base\Application
 
     /**
      * Returns the error handler component.
-     *
-     * @return ErrorHandler the error handler application component
+     * @return ErrorHandler the error handler application component.
      */
     public function getErrorHandler()
     {
@@ -227,8 +213,7 @@ class Application extends \yii\base\Application
 
     /**
      * Returns the request component.
-     *
-     * @return Request the request component
+     * @return Request the request component.
      */
     public function getRequest()
     {
@@ -237,8 +222,7 @@ class Application extends \yii\base\Application
 
     /**
      * Returns the response component.
-     *
-     * @return Response the response component
+     * @return Response the response component.
      */
     public function getResponse()
     {

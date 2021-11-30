@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,7 +7,6 @@
 
 namespace yii\di;
 
-use Exception;
 use yii\base\InvalidConfigException;
 
 /**
@@ -16,7 +14,6 @@ use yii\base\InvalidConfigException;
  * configuration or usage.
  *
  * @author Sam Mousa <sam@mousa.nl>
- *
  * @since 2.0.9
  */
 class NotInstantiableException extends InvalidConfigException
@@ -24,7 +21,7 @@ class NotInstantiableException extends InvalidConfigException
     /**
      * {@inheritdoc}
      */
-    public function __construct($class, $message = null, $code = 0, Exception $previous = null)
+    public function __construct($class, $message = null, $code = 0, \Exception $previous = null)
     {
         if ($message === null) {
             $message = "Can not instantiate $class.";

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -19,18 +18,17 @@ use yii\helpers\Console;
  * a virtual machine.
  *
  * @author Alexander Makarov <sam@rmcreative.ru>
- *
  * @since 2.0.7
  */
 class ServeController extends Controller
 {
-    public const EXIT_CODE_NO_DOCUMENT_ROOT = 2;
-    public const EXIT_CODE_NO_ROUTING_FILE = 3;
-    public const EXIT_CODE_ADDRESS_TAKEN_BY_ANOTHER_SERVER = 4;
-    public const EXIT_CODE_ADDRESS_TAKEN_BY_ANOTHER_PROCESS = 5;
+    const EXIT_CODE_NO_DOCUMENT_ROOT = 2;
+    const EXIT_CODE_NO_ROUTING_FILE = 3;
+    const EXIT_CODE_ADDRESS_TAKEN_BY_ANOTHER_SERVER = 4;
+    const EXIT_CODE_ADDRESS_TAKEN_BY_ANOTHER_PROCESS = 5;
 
     /**
-     * @var int port to serve on
+     * @var int port to serve on.
      */
     public $port = 8080;
     /**
@@ -39,9 +37,10 @@ class ServeController extends Controller
     public $docroot = '@app/web';
     /**
      * @var string path or [path alias](guide:concept-aliases) to router script.
-     *             See https://www.php.net/manual/en/features.commandline.webserver.php
+     * See https://www.php.net/manual/en/features.commandline.webserver.php
      */
     public $router;
+
 
     /**
      * Runs PHP built-in web server.
@@ -61,25 +60,21 @@ class ServeController extends Controller
 
         if (!is_dir($documentRoot)) {
             $this->stdout("Document root \"$documentRoot\" does not exist.\n", Console::FG_RED);
-
             return self::EXIT_CODE_NO_DOCUMENT_ROOT;
         }
 
         if ($this->isAddressTaken($address)) {
             $this->stdout("http://$address is taken by another process.\n", Console::FG_RED);
-
             return self::EXIT_CODE_ADDRESS_TAKEN_BY_ANOTHER_PROCESS;
         }
 
         if ($this->router !== null && !file_exists($router)) {
             $this->stdout("Routing file \"$router\" does not exist.\n", Console::FG_RED);
-
             return self::EXIT_CODE_NO_ROUTING_FILE;
         }
 
         $this->stdout("Server started on http://{$address}/\n");
         $this->stdout("Document root is \"{$documentRoot}\"\n");
-
         if ($this->router) {
             $this->stdout("Routing file is \"$router\"\n");
         }
@@ -102,7 +97,6 @@ class ServeController extends Controller
 
     /**
      * {@inheritdoc}
-     *
      * @since 2.0.8
      */
     public function optionAliases()
@@ -116,19 +110,16 @@ class ServeController extends Controller
 
     /**
      * @param string $address server address
-     *
      * @return bool if address is already in use
      */
     protected function isAddressTaken($address)
     {
-        [$hostname, $port] = explode(':', $address);
+        list($hostname, $port) = explode(':', $address);
         $fp = @fsockopen($hostname, $port, $errno, $errstr, 3);
-
         if ($fp === false) {
             return false;
         }
         fclose($fp);
-
         return true;
     }
 }

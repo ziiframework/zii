@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -40,25 +39,22 @@ use yii\base\Exception;
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class GettextMoFile extends GettextFile
 {
     /**
-     * @var bool whether to use big-endian when reading and writing an integer
+     * @var bool whether to use big-endian when reading and writing an integer.
      */
     public $useBigEndian = false;
 
+
     /**
      * Loads messages from an MO file.
-     *
      * @param string $filePath file path
      * @param string $context message context
-     *
      * @return array message translations. Array keys are source messages and array values are translated messages:
-     *               source message => translated message.
-     *
+     * source message => translated message.
      * @throws Exception if unable to read the MO file
      */
     public function load($filePath, $context)
@@ -66,7 +62,6 @@ class GettextMoFile extends GettextFile
         if (false === ($fileHandle = @fopen($filePath, 'rb'))) {
             throw new Exception('Unable to read file "' . $filePath . '".');
         }
-
         if (false === @flock($fileHandle, LOCK_SH)) {
             throw new Exception('Unable to lock file "' . $filePath . '" for reading.');
         }
@@ -74,7 +69,6 @@ class GettextMoFile extends GettextFile
         // magic
         $array = unpack('c', $this->readBytes($fileHandle, 4));
         $magic = current($array);
-
         if ($magic == -34) {
             $this->useBigEndian = false;
         } elseif ($magic == -107) {
@@ -85,7 +79,6 @@ class GettextMoFile extends GettextFile
 
         // revision
         $revision = $this->readInteger($fileHandle);
-
         if ($revision !== 0) {
             throw new Exception('Invalid MO file revision: ' . $revision . '.');
         }
@@ -97,7 +90,6 @@ class GettextMoFile extends GettextFile
         $sourceLengths = [];
         $sourceOffsets = [];
         fseek($fileHandle, $sourceOffset);
-
         for ($i = 0; $i < $count; ++$i) {
             $sourceLengths[] = $this->readInteger($fileHandle);
             $sourceOffsets[] = $this->readInteger($fileHandle);
@@ -106,17 +98,16 @@ class GettextMoFile extends GettextFile
         $targetLengths = [];
         $targetOffsets = [];
         fseek($fileHandle, $targetOffset);
-
         for ($i = 0; $i < $count; ++$i) {
             $targetLengths[] = $this->readInteger($fileHandle);
             $targetOffsets[] = $this->readInteger($fileHandle);
         }
 
         $messages = [];
-
         for ($i = 0; $i < $count; ++$i) {
             $id = $this->readString($fileHandle, $sourceLengths[$i], $sourceOffsets[$i]);
             $separatorPosition = strpos($id, chr(4));
+
 
             if ((!$context && $separatorPosition === false) || ($context && $separatorPosition !== false && strncmp($id, $context, $separatorPosition) === 0)) {
                 if ($separatorPosition !== false) {
@@ -136,12 +127,10 @@ class GettextMoFile extends GettextFile
 
     /**
      * Saves messages to an MO file.
-     *
      * @param string $filePath file path
      * @param array $messages message translations. Array keys are source messages and array values are
-     *                        translated messages: source message => translated message. Note if the message has a context,
-     *                        the message ID must be prefixed with the context with chr(4) as the separator.
-     *
+     * translated messages: source message => translated message. Note if the message has a context,
+     * the message ID must be prefixed with the context with chr(4) as the separator.
      * @throws Exception if unable to save the MO file
      */
     public function save($filePath, $messages)
@@ -149,16 +138,15 @@ class GettextMoFile extends GettextFile
         if (false === ($fileHandle = @fopen($filePath, 'wb'))) {
             throw new Exception('Unable to write file "' . $filePath . '".');
         }
-
         if (false === @flock($fileHandle, LOCK_EX)) {
             throw new Exception('Unable to lock file "' . $filePath . '" for reading.');
         }
 
         // magic
         if ($this->useBigEndian) {
-            $this->writeBytes($fileHandle, pack('c*', 0x95, 0x04, 0x12, 0xDE)); // -107
+            $this->writeBytes($fileHandle, pack('c*', 0x95, 0x04, 0x12, 0xde)); // -107
         } else {
-            $this->writeBytes($fileHandle, pack('c*', 0xDE, 0x12, 0x04, 0x95)); // -34
+            $this->writeBytes($fileHandle, pack('c*', 0xde, 0x12, 0x04, 0x95)); // -34
         }
 
         // revision
@@ -211,10 +199,8 @@ class GettextMoFile extends GettextFile
 
     /**
      * Reads one or several bytes.
-     *
      * @param resource $fileHandle to read from
      * @param int $byteCount to be read
-     *
      * @return string bytes
      */
     protected function readBytes($fileHandle, $byteCount = 1)
@@ -228,10 +214,8 @@ class GettextMoFile extends GettextFile
 
     /**
      * Write bytes.
-     *
      * @param resource $fileHandle to write to
      * @param string $bytes to be written
-     *
      * @return int how many bytes are written
      */
     protected function writeBytes($fileHandle, $bytes)
@@ -241,9 +225,7 @@ class GettextMoFile extends GettextFile
 
     /**
      * Reads a 4-byte integer.
-     *
      * @param resource $fileHandle to read from
-     *
      * @return int the result
      */
     protected function readInteger($fileHandle)
@@ -255,10 +237,8 @@ class GettextMoFile extends GettextFile
 
     /**
      * Writes a 4-byte integer.
-     *
      * @param resource $fileHandle to write to
      * @param int $integer to be written
-     *
      * @return int how many bytes are written
      */
     protected function writeInteger($fileHandle, $integer)
@@ -268,11 +248,9 @@ class GettextMoFile extends GettextFile
 
     /**
      * Reads a string.
-     *
      * @param resource $fileHandle file handle
      * @param int $length of the string
      * @param int $offset of the string in the file. If null, it reads from the current position.
-     *
      * @return string the result
      */
     protected function readString($fileHandle, $length, $offset = null)
@@ -286,10 +264,8 @@ class GettextMoFile extends GettextFile
 
     /**
      * Writes a string.
-     *
      * @param resource $fileHandle to write to
      * @param string $string to be written
-     *
      * @return int how many bytes are written
      */
     protected function writeString($fileHandle, $string)

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -27,7 +26,6 @@ namespace yii\base;
  * For more details and usage information on Configurable, see the [guide article on configurations](guide:concept-configurations).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0.3
  */
 interface Configurable

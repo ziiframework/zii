@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -17,7 +16,6 @@ use Yii;
  * And the comparison can be either [[strict]] or not.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class BooleanValidator extends Validator
@@ -32,10 +30,11 @@ class BooleanValidator extends Validator
     public $falseValue = '0';
     /**
      * @var bool whether the comparison to [[trueValue]] and [[falseValue]] is strict.
-     *           When this is true, the attribute value and type must both match those of [[trueValue]] or [[falseValue]].
-     *           Defaults to false, meaning only the value needs to be matched.
+     * When this is true, the attribute value and type must both match those of [[trueValue]] or [[falseValue]].
+     * Defaults to false, meaning only the value needs to be matched.
      */
     public $strict = false;
+
 
     /**
      * {@inheritdoc}
@@ -43,7 +42,6 @@ class BooleanValidator extends Validator
     public function init()
     {
         parent::init();
-
         if ($this->message === null) {
             $this->message = Yii::t('yii', '{attribute} must be either "{true}" or "{false}".');
         }
@@ -95,11 +93,9 @@ class BooleanValidator extends Validator
                 'false' => $this->falseValue === false ? 'false' : $this->falseValue,
             ]),
         ];
-
         if ($this->skipOnEmpty) {
             $options['skipOnEmpty'] = 1;
         }
-
         if ($this->strict) {
             $options['strict'] = 1;
         }

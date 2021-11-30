@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,8 +6,6 @@
  */
 
 namespace yii\validators;
-
-use Closure;
 
 /**
  * InlineValidator represents a validator which is defined as a method in the object being validated.
@@ -24,14 +21,13 @@ use Closure;
  * [[InlineValidator]] object and is available since version 2.0.11.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class InlineValidator extends Validator
 {
     /**
-     * @var string|Closure an anonymous function or the name of a model class method that will be
-     *                     called to perform the actual validation. The signature of the method should be like the following:
+     * @var string|\Closure an anonymous function or the name of a model class method that will be
+     * called to perform the actual validation. The signature of the method should be like the following:
      *
      * ```php
      * function foo($attribute, $params, $validator)
@@ -47,8 +43,8 @@ class InlineValidator extends Validator
      */
     public $params;
     /**
-     * @var string|Closure an anonymous function or the name of a model class method that returns the client validation code.
-     *                     The signature of the method should be like the following:
+     * @var string|\Closure an anonymous function or the name of a model class method that returns the client validation code.
+     * The signature of the method should be like the following:
      *
      * ```php
      * function foo($attribute, $params, $validator)
@@ -63,11 +59,11 @@ class InlineValidator extends Validator
      */
     public $clientValidate;
     /**
-     * @var mixed the value of attribute being currently validated
-     *
+     * @var mixed the value of attribute being currently validated.
      * @since 2.0.36
      */
     public $current;
+
 
     /**
      * {@inheritdoc}
@@ -75,15 +71,13 @@ class InlineValidator extends Validator
     public function validateAttribute($model, $attribute)
     {
         $method = $this->method;
-
         if (is_string($method)) {
             $method = [$model, $method];
-        } elseif ($method instanceof Closure) {
+        } elseif ($method instanceof \Closure) {
             $method = $this->method->bindTo($model);
         }
 
         $current = $this->current;
-
         if ($current === null) {
             $current = $model->$attribute;
         }
@@ -97,18 +91,15 @@ class InlineValidator extends Validator
     {
         if ($this->clientValidate !== null) {
             $method = $this->clientValidate;
-
             if (is_string($method)) {
                 $method = [$model, $method];
-            } elseif ($method instanceof Closure) {
+            } elseif ($method instanceof \Closure) {
                 $method = $method->bindTo($model);
             }
             $current = $this->current;
-
             if ($current === null) {
                 $current = $model->$attribute;
             }
-
             return $method($attribute, $this->params, $this, $current);
         }
 

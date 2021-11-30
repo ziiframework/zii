@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -15,25 +14,22 @@ namespace yii\db;
  * and the [[down()]] method for the "downgrading" logic.
  *
  * @author Klimov Paul <klimov@zfort.com>
- *
  * @since 2.0
  */
 interface MigrationInterface
 {
     /**
      * This method contains the logic to be executed when applying this migration.
-     *
      * @return bool return a false value to indicate the migration fails
-     *              and should not proceed further. All other return values mean the migration succeeds.
+     * and should not proceed further. All other return values mean the migration succeeds.
      */
     public function up();
 
     /**
      * This method contains the logic to be executed when removing this migration.
      * The default implementation throws an exception indicating the migration cannot be removed.
-     *
      * @return bool return a false value to indicate the migration fails
-     *              and should not proceed further. All other return values mean the migration succeeds.
+     * and should not proceed further. All other return values mean the migration succeeds.
      */
     public function down();
 }
