@@ -26,7 +26,7 @@ class FileHelperTest extends TestCase
 
     public function setUp(): void
     {
-        $this->testFilePath = Yii::getAlias('@yiiunit/runtime') . DIRECTORY_SEPARATOR . get_class($this);
+        $this->testFilePath = Yii::getAlias('@yiiunit/runtime') . DIRECTORY_SEPARATOR . static::class;
         $this->createDir($this->testFilePath);
 
         if (!file_exists($this->testFilePath)) {

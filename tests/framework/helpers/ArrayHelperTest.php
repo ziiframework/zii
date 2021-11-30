@@ -860,7 +860,7 @@ class ArrayHelperTest extends TestCase
             'null' => null,
         ]);
 
-        $this->assertEquals(null, ArrayHelper::getValue($arrayAccessibleObject, 'four'));
+        $this->assertNull(ArrayHelper::getValue($arrayAccessibleObject, 'four'));
     }
 
     /**

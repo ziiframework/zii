@@ -301,7 +301,7 @@ class ActiveRecordTest extends \yiiunit\framework\db\ActiveRecordTest
                     '5.8',
                 ],
                 'jsonb_col' => [
-                    pi(),
+                    M_PI,
                 ],
             ]],
         ];

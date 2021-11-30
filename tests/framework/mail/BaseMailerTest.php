@@ -50,7 +50,7 @@ class BaseMailerTest extends TestCase
      */
     protected function getTestFilePath()
     {
-        return Yii::getAlias('@yiiunit/runtime') . DIRECTORY_SEPARATOR . basename(str_replace('\\', DIRECTORY_SEPARATOR, get_class($this))) . '_' . getmypid();
+        return Yii::getAlias('@yiiunit/runtime') . DIRECTORY_SEPARATOR . basename(str_replace('\\', DIRECTORY_SEPARATOR, static::class)) . '_' . getmypid();
     }
 
     /**
@@ -308,7 +308,7 @@ TEXT
         $mailerMock = $this->getMockBuilder('yiiunit\framework\mail\Mailer')
             ->setMethods(['beforeSend', 'afterSend'])
             ->getMock();
-        $mailerMock->expects($this->once())->method('beforeSend')->with($message)->will($this->returnValue(true));
+        $mailerMock->expects($this->once())->method('beforeSend')->with($message)->willReturn(true);
         $mailerMock->expects($this->once())->method('afterSend')->with($message, true);
         $mailerMock->send($message);
     }

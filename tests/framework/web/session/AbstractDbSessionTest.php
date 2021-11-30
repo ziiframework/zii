@@ -63,7 +63,7 @@ abstract class AbstractDbSessionTest extends TestCase
         }
 
         if (!isset($driverAvailable)) {
-            $this->markTestIncomplete(get_called_class() . ' requires ' . implode(' or ', $driverNames) . ' PDO driver! Configuration for connection required too.');
+            $this->markTestIncomplete(static::class . ' requires ' . implode(' or ', $driverNames) . ' PDO driver! Configuration for connection required too.');
 
             return [];
         }
@@ -189,7 +189,7 @@ abstract class AbstractDbSessionTest extends TestCase
     {
         $object = new stdClass();
         $object->nullValue = null;
-        $object->floatValue = pi();
+        $object->floatValue = M_PI;
         $object->textValue = str_repeat('QweåßƒТест', 200);
         $object->array = [null, 'ab' => 'cd'];
         $object->binary = base64_decode('5qS2UUcXWH7rjAmvhqGJTDNkYWFiOGMzNTFlMzNmMWIyMDhmOWIwYzAwYTVmOTFhM2E5MDg5YjViYzViN2RlOGZlNjllYWMxMDA0YmQxM2RQ3ZC0in5ahjNcehNB/oP/NtOWB0u3Skm67HWGwGt9MA==');

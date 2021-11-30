@@ -16,8 +16,9 @@ return (new PhpCsFixer\Config())
         '@PHP74Migration' => true,
         '@PHP74Migration:risky' => true,
         '@Symfony' => true,
-        // '@Symfony:risky' => true,
+        '@Symfony:risky' => true,
         'yoda_style' => false,
+        'is_null' => false,
         'concat_space' => ['spacing' => 'one'],
         'header_comment' => ['header' => $header_comment_block, 'comment_type' => 'PHPDoc'], // TODO change to: comment_type => comment
         'heredoc_indentation' => false,
@@ -93,4 +94,5 @@ return (new PhpCsFixer\Config())
             ->exclude('data/console/migrate_create')
             ->exclude('data/views')
             ->notName('add_columns_fk.php')
+            ->notName('DetailViewTest.php')
     );
