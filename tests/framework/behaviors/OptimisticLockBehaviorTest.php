@@ -260,7 +260,7 @@ class OptimisticLockBehaviorTest extends TestCase
         $request->setBodyParams(['version' => '1']);
         Yii::$app->set('request', $request);
 
-        $this->assertTrue($model->delete(), 'model is successfully deleted');
+        $this->assertSame(1, $model->delete(), 'model is successfully deleted');
         $this->assertEquals(1, $model->version, 'deleted version should remain 1');
 
         // save it again, upgrade then remove it one more time but mocking a HTML web form
