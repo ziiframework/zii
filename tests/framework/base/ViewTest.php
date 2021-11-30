@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -44,7 +46,7 @@ class ViewTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/13058
      */
-    public function testExceptionOnRenderFile()
+    public function testExceptionOnRenderFile(): void
     {
         $view = new View();
 
@@ -70,7 +72,7 @@ PHP);
         $this->assertEquals($obInitialLevel, ob_get_level());
     }
 
-    public function testRelativePathInView()
+    public function testRelativePathInView(): void
     {
         $view = new View();
         FileHelper::createDirectory($this->testViewPath . '/theme1');
@@ -97,7 +99,7 @@ PHP);
         $this->assertSame($subViewContent, $view->render('@testviews/base'));
     }
 
-    public function testAfterRender()
+    public function testAfterRender(): void
     {
         $view = new View();
         $filename = 'path/to/file';
@@ -105,7 +107,7 @@ PHP);
         $output = 'This is a simple rendered output. (filename)';
         $expectedOutput = 'This is a new rendered output. (path/to/file)';
 
-        $view->on(View::EVENT_AFTER_RENDER, static function (ViewEvent $event) {
+        $view->on(View::EVENT_AFTER_RENDER, static function (ViewEvent $event): void {
             $event->output = str_replace($event->params['search'], $event->params['replace'], $event->output);
             $event->output = str_replace('filename', $event->viewFile, $event->output);
         });

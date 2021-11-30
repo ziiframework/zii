@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -35,7 +37,7 @@ class SerializerTest extends TestCase
         TestModel::$extraFields = [];
     }
 
-    public function testSerializeModelErrors()
+    public function testSerializeModelErrors(): void
     {
         $serializer = new Serializer();
         $model = new TestModel();
@@ -56,7 +58,7 @@ class SerializerTest extends TestCase
         ], $serializer->serialize($model));
     }
 
-    public function testSerializeModelData()
+    public function testSerializeModelData(): void
     {
         $serializer = new Serializer();
         $model = new TestModel();
@@ -81,7 +83,7 @@ class SerializerTest extends TestCase
         ], $serializer->serialize($model));
     }
 
-    public function testExpand()
+    public function testExpand(): void
     {
         $serializer = new Serializer();
         $model = new TestModel();
@@ -115,7 +117,7 @@ class SerializerTest extends TestCase
         ], $serializer->serialize($model));
     }
 
-    public function testNestedExpand()
+    public function testNestedExpand(): void
     {
         $serializer = new Serializer();
         $model = new TestModel();
@@ -136,7 +138,7 @@ class SerializerTest extends TestCase
         ], $serializer->serialize($model));
     }
 
-    public function testFields()
+    public function testFields(): void
     {
         $serializer = new Serializer();
         $model = new TestModel();
@@ -247,7 +249,7 @@ class SerializerTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/12107
      */
-    public function testExpandInvalidInput()
+    public function testExpandInvalidInput(): void
     {
         $serializer = new Serializer();
         $model = new TestModel();
@@ -398,7 +400,7 @@ class SerializerTest extends TestCase
      * @param array                           $expectedResult
      * @param bool                            $saveKeys
      */
-    public function testSerializeDataProvider($dataProvider, $expectedResult, $saveKeys = false)
+    public function testSerializeDataProvider($dataProvider, $expectedResult, $saveKeys = false): void
     {
         $serializer = new Serializer();
         $serializer->preserveKeys = $saveKeys;
@@ -409,7 +411,7 @@ class SerializerTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/16334
      */
-    public function testSerializeJsonSerializable()
+    public function testSerializeJsonSerializable(): void
     {
         $serializer = new Serializer();
         $model3 = new TestModel3();
@@ -422,7 +424,7 @@ class SerializerTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/16334
      */
-    public function testSerializeArrayableWithJsonSerializableAttribute()
+    public function testSerializeArrayableWithJsonSerializableAttribute(): void
     {
         $serializer = new Serializer();
         $model = new TestModel5();
@@ -439,7 +441,7 @@ class SerializerTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/17886
      */
-    public function testSerializeArray()
+    public function testSerializeArray(): void
     {
         $serializer = new Serializer();
         $model1 = new TestModel();

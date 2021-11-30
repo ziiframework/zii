@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -59,7 +61,7 @@ namespace yiiunit\framework\log {
             $this->logger = new Logger();
         }
 
-        public function testConfigureLogger()
+        public function testConfigureLogger(): void
         {
             $dispatcher = new Dispatcher();
             $this->assertSame(Yii::getLogger(), $dispatcher->getLogger());
@@ -89,7 +91,7 @@ namespace yiiunit\framework\log {
         /**
          * @covers \yii\log\Dispatcher::setLogger()
          */
-        public function testSetLogger()
+        public function testSetLogger(): void
         {
             $this->dispatcher->setLogger($this->logger);
             $this->assertSame($this->logger, $this->dispatcher->getLogger());
@@ -109,7 +111,7 @@ namespace yiiunit\framework\log {
         /**
          * @covers \yii\log\Dispatcher::getTraceLevel()
          */
-        public function testGetTraceLevel()
+        public function testGetTraceLevel(): void
         {
             $this->logger->traceLevel = 123;
             $this->dispatcher->setLogger($this->logger);
@@ -119,7 +121,7 @@ namespace yiiunit\framework\log {
         /**
          * @covers \yii\log\Dispatcher::setTraceLevel()
          */
-        public function testSetTraceLevel()
+        public function testSetTraceLevel(): void
         {
             $this->dispatcher->setLogger($this->logger);
             $this->dispatcher->setTraceLevel(123);
@@ -129,7 +131,7 @@ namespace yiiunit\framework\log {
         /**
          * @covers \yii\log\Dispatcher::getFlushInterval()
          */
-        public function testGetFlushInterval()
+        public function testGetFlushInterval(): void
         {
             $this->logger->flushInterval = 99;
             $this->dispatcher->setLogger($this->logger);
@@ -139,7 +141,7 @@ namespace yiiunit\framework\log {
         /**
          * @covers \yii\log\Dispatcher::setFlushInterval()
          */
-        public function testSetFlushInterval()
+        public function testSetFlushInterval(): void
         {
             $this->dispatcher->setLogger($this->logger);
             $this->dispatcher->setFlushInterval(99);
@@ -149,7 +151,7 @@ namespace yiiunit\framework\log {
         /**
          * @covers \yii\log\Dispatcher::dispatch()
          */
-        public function testDispatchWithDisabledTarget()
+        public function testDispatchWithDisabledTarget(): void
         {
             $target = $this->getMockBuilder('yii\\log\\Target')
                 ->setMethods(['collect'])
@@ -165,7 +167,7 @@ namespace yiiunit\framework\log {
         /**
          * @covers \yii\log\Dispatcher::dispatch()
          */
-        public function testDispatchWithSuccessTargetCollect()
+        public function testDispatchWithSuccessTargetCollect(): void
         {
             $target = $this->getMockBuilder('yii\\log\\Target')
                 ->setMethods(['collect'])
@@ -182,7 +184,7 @@ namespace yiiunit\framework\log {
         /**
          * @covers \yii\log\Dispatcher::dispatch()
          */
-        public function testDispatchWithFakeTarget2ThrowExceptionWhenCollect()
+        public function testDispatchWithFakeTarget2ThrowExceptionWhenCollect(): void
         {
             static::$microtimeIsMocked = true;
             $target1 = $this->getMockBuilder('yii\\log\\Target')
@@ -244,7 +246,7 @@ namespace yiiunit\framework\log {
         /**
          * @covers \yii\log\Dispatcher::init()
          */
-        public function testInitWithCreateTargetObject()
+        public function testInitWithCreateTargetObject(): void
         {
             $dispatcher = new Dispatcher([
                     'targets' => [
@@ -276,12 +278,12 @@ namespace yiiunit\framework\log {
         private $targetThrowFirstCount;
         private $targetThrowSecondOutputs;
 
-        public function testTargetThrow()
+        public function testTargetThrow(): void
         {
             $this->targetThrowFirstCount = 0;
             $this->targetThrowSecondOutputs = [];
             $targetFirst = new TargetMock([
-                'collectOverride' => function () {
+                'collectOverride' => function (): void {
                     ++$this->targetThrowFirstCount;
 
                     if (PHP_MAJOR_VERSION < 7) {
@@ -293,7 +295,7 @@ namespace yiiunit\framework\log {
                 },
             ]);
             $targetSecond = new TargetMock([
-                'collectOverride' => function ($message, $final) {
+                'collectOverride' => function ($message, $final): void {
                     $this->targetThrowSecondOutputs[] = array_pop($message);
                 },
             ]);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -32,7 +34,7 @@ class LinkSorterTest extends DatabaseTestCase
         $this->breadcrumbs = new Breadcrumbs();
     }
 
-    public function testLabelsSimple()
+    public function testLabelsSimple(): void
     {
         $dataProvider = new ActiveDataProvider([
             'query' => Order::find(),
@@ -54,7 +56,7 @@ class LinkSorterTest extends DatabaseTestCase
         $this->assertNotFalse(strpos($actualHtml, '<a href="/index.php?r=site%2Findex&amp;sort=total" data-sort="total">Invoice Total</a>'));
     }
 
-    public function testLabelsExplicit()
+    public function testLabelsExplicit(): void
     {
         $dataProvider = new ActiveDataProvider([
             'query' => Order::find(),
@@ -80,7 +82,7 @@ class LinkSorterTest extends DatabaseTestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/15536
      */
-    public function testShouldTriggerInitEvent()
+    public function testShouldTriggerInitEvent(): void
     {
         $initTriggered = false;
         new LinkSorter([
@@ -88,7 +90,7 @@ class LinkSorterTest extends DatabaseTestCase
                     'attributes' => ['total'],
                     'route' => 'site/index',
                 ],
-                'on init' => static function () use (&$initTriggered) {
+                'on init' => static function () use (&$initTriggered): void {
                     $initTriggered = true;
                 },
             ]);

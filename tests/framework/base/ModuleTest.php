@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -25,7 +27,7 @@ class ModuleTest extends TestCase
         $this->mockApplication();
     }
 
-    public function testTrueParentModule()
+    public function testTrueParentModule(): void
     {
         $parent = new Module('parent');
         $child = new Module('child');
@@ -38,14 +40,14 @@ class ModuleTest extends TestCase
         $this->assertEquals('parent', $child2->module->id);
     }
 
-    public function testControllerPath()
+    public function testControllerPath(): void
     {
         $module = new TestModule('test');
         $this->assertEquals('yiiunit\framework\base\controllers', $module->controllerNamespace);
         $this->assertEquals(__DIR__ . DIRECTORY_SEPARATOR . 'controllers', str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $module->controllerPath));
     }
 
-    public function testSetupVersion()
+    public function testSetupVersion(): void
     {
         $module = new TestModule('test');
 
@@ -63,7 +65,7 @@ class ModuleTest extends TestCase
     /**
      * @depends testSetupVersion
      */
-    public function testDefaultVersion()
+    public function testDefaultVersion(): void
     {
         $module = new TestModule('test');
 
@@ -73,7 +75,7 @@ class ModuleTest extends TestCase
 
     public static $actionRuns = [];
 
-    public function testRunControllerAction()
+    public function testRunControllerAction(): void
     {
         $module = new TestModule('test');
         $this->assertNull(Yii::$app->controller);
@@ -101,7 +103,7 @@ class ModuleTest extends TestCase
         $this->assertEquals('test/test-controller1/test1', Yii::$app->controller->action->uniqueId);
     }
 
-    public function testServiceLocatorTraversal()
+    public function testServiceLocatorTraversal(): void
     {
         $parent = new Module('parent');
         $child = new Module('child', $parent);
@@ -134,7 +136,7 @@ class ModuleTest extends TestCase
         $this->assertFalse($parent->has('test'));
     }
 
-    public function testCreateControllerByID()
+    public function testCreateControllerByID(): void
     {
         $module = new TestModule('test');
         $module->controllerNamespace = 'yiiunit\framework\base';
@@ -161,7 +163,7 @@ class ModuleTest extends TestCase
         $this->assertNotInstanceOf(VeryComplexNameTestController::className(), $module->createControllerByID($route));
     }
 
-    public function testCreateController()
+    public function testCreateController(): void
     {
         // app module has a submodule "base" which has two controllers: "default" and "other"
         $module = new Module('app');
@@ -215,12 +217,12 @@ class TestModule extends \yii\base\Module
 
 class ModuleTestController extends Controller
 {
-    public function actionTest1()
+    public function actionTest1(): void
     {
         ModuleTest::$actionRuns[] = $this->action->uniqueId;
     }
 
-    public function actionTest2()
+    public function actionTest2(): void
     {
         ModuleTest::$actionRuns[] = $this->action->uniqueId;
     }
@@ -228,7 +230,7 @@ class ModuleTestController extends Controller
 
 class VeryComplexNameTestController extends Controller
 {
-    public function actionIndex()
+    public function actionIndex(): void
     {
         ModuleTest::$actionRuns[] = $this->action->uniqueId;
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -69,7 +71,7 @@ class FakedValidationModel extends Model
         return parent::__get($name);
     }
 
-    public function __set($name, $value)
+    public function __set($name, $value): void
     {
         if (strncasecmp($name, 'attr', 4) === 0) {
             $this->attr[$name] = $value;

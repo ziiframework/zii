@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -86,7 +88,7 @@ class CacheControllerTest extends TestCase
         }
     }
 
-    public function testFlushOne()
+    public function testFlushOne(): void
     {
         Yii::$app->firstCache->set('firstKey', 'firstValue');
         Yii::$app->firstCache->set('secondKey', 'secondValue');
@@ -99,7 +101,7 @@ class CacheControllerTest extends TestCase
         $this->assertEquals('thirdValue', Yii::$app->secondCache->get('thirdKey'), 'second cache data should not be flushed');
     }
 
-    public function testClearSchema()
+    public function testClearSchema(): void
     {
         $schema = Yii::$app->db->schema;
         Yii::$app->db->createCommand()->createTable('test_schema_cache', ['id' => 'pk'])->execute();
@@ -117,7 +119,7 @@ class CacheControllerTest extends TestCase
         $this->assertEquals($noCacheSchemas, $cacheSchema, 'Schema cache should be flushed.');
     }
 
-    public function testFlushBoth()
+    public function testFlushBoth(): void
     {
         Yii::$app->firstCache->set('firstKey', 'firstValue');
         Yii::$app->firstCache->set('secondKey', 'secondValue');
@@ -130,7 +132,7 @@ class CacheControllerTest extends TestCase
         $this->assertFalse(Yii::$app->secondCache->get('thirdKey'), 'second cache data should be flushed');
     }
 
-    public function testNotFoundFlush()
+    public function testNotFoundFlush(): void
     {
         Yii::$app->firstCache->set('firstKey', 'firstValue');
 
@@ -139,13 +141,13 @@ class CacheControllerTest extends TestCase
         $this->assertEquals('firstValue', Yii::$app->firstCache->get('firstKey'), 'first cache data should not be flushed');
     }
 
-    public function testNothingToFlushException()
+    public function testNothingToFlushException(): void
     {
         $this->expectException('\yii\console\Exception');
         $this->_cacheController->actionFlush();
     }
 
-    public function testFlushAll()
+    public function testFlushAll(): void
     {
         Yii::$app->firstCache->set('firstKey', 'firstValue');
         Yii::$app->secondCache->set('secondKey', 'secondValue');

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -27,7 +29,7 @@ class HttpCacheTest extends \yiiunit\TestCase
         $this->mockWebApplication();
     }
 
-    public function testDisabled()
+    public function testDisabled(): void
     {
         $httpCache = new HttpCache();
         $this->assertTrue($httpCache->beforeAction(null));
@@ -35,7 +37,7 @@ class HttpCacheTest extends \yiiunit\TestCase
         $this->assertTrue($httpCache->beforeAction(null));
     }
 
-    public function testEmptyPragma()
+    public function testEmptyPragma(): void
     {
         $httpCache = new HttpCache();
         $httpCache->etagSeed = static function ($action, $params) {
@@ -50,7 +52,7 @@ class HttpCacheTest extends \yiiunit\TestCase
     /**
      * @covers \yii\filters\HttpCache::validateCache
      */
-    public function testValidateCache()
+    public function testValidateCache(): void
     {
         $httpCache = new HttpCache();
         $request = Yii::$app->getRequest();
@@ -83,7 +85,7 @@ class HttpCacheTest extends \yiiunit\TestCase
     /**
      * @covers \yii\filters\HttpCache::generateEtag
      */
-    public function testGenerateEtag()
+    public function testGenerateEtag(): void
     {
         $httpCache = new HttpCache();
         $httpCache->weakEtag = false;

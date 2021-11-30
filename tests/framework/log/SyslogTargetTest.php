@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -61,7 +63,7 @@ namespace yiiunit\framework\log {
         /**
          * @covers \yii\log\SyslogTarget::export()
          */
-        public function testExport()
+        public function testExport(): void
         {
             $identity = 'identity string';
             $options = LOG_ODELAY | LOG_PID;
@@ -132,7 +134,7 @@ namespace yiiunit\framework\log {
          *
          * See https://github.com/yiisoft/yii2/issues/14296
          */
-        public function testFailedExport()
+        public function testFailedExport(): void
         {
             $syslogTarget = $this->getMockBuilder('yii\\log\\SyslogTarget')
                 ->setMethods(['openlog', 'syslog', 'formatMessage', 'closelog'])
@@ -187,7 +189,7 @@ namespace yiiunit\framework\log {
         /**
          * @covers \yii\log\SyslogTarget::formatMessage()
          */
-        public function testFormatMessageWhereTextIsString()
+        public function testFormatMessageWhereTextIsString(): void
         {
             $message = ['text', Logger::LEVEL_INFO, 'category', 'timestamp'];
 
@@ -204,7 +206,7 @@ namespace yiiunit\framework\log {
         /**
          * @covers \yii\log\SyslogTarget::formatMessage()
          */
-        public function testFormatMessageWhereTextIsException()
+        public function testFormatMessageWhereTextIsException(): void
         {
             $exception = new \Exception('exception text');
             $message = [$exception, Logger::LEVEL_INFO, 'category', 'timestamp'];
@@ -222,7 +224,7 @@ namespace yiiunit\framework\log {
         /**
          * @covers \yii\log\SyslogTarget::formatMessage()
          */
-        public function testFormatMessageWhereTextIsNotStringAndNotThrowable()
+        public function testFormatMessageWhereTextIsNotStringAndNotThrowable(): void
         {
             $text = new \stdClass();
             $text->var = 'some text';

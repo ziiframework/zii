@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -24,13 +26,13 @@ class FilterValidatorTest extends TestCase
         $this->destroyApplication();
     }
 
-    public function testAssureExceptionOnInit()
+    public function testAssureExceptionOnInit(): void
     {
         $this->expectException('yii\base\InvalidConfigException');
         new FilterValidator();
     }
 
-    public function testValidateAttribute()
+    public function testValidateAttribute(): void
     {
         $m = FakedValidationModel::createWithAttributes([
                 'attr_one' => '  to be trimmed  ',

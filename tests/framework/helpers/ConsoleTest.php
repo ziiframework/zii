@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -32,7 +34,7 @@ class ConsoleTest extends TestCase
     /**
      * Set up streams for Console helper stub.
      */
-    protected function setupStreams()
+    protected function setupStreams(): void
     {
         ConsoleStub::$inputStream = fopen('php://memory', 'w+');
         ConsoleStub::$outputStream = fopen('php://memory', 'w+');
@@ -42,7 +44,7 @@ class ConsoleTest extends TestCase
     /**
      * Clean streams in Console helper stub.
      */
-    protected function truncateStreams()
+    protected function truncateStreams(): void
     {
         ftruncate(ConsoleStub::$inputStream, 0);
         rewind(ConsoleStub::$inputStream);
@@ -80,14 +82,14 @@ class ConsoleTest extends TestCase
      * Write passed arguments to Console helper input stream and rewind the position
      * of a input stream pointer.
      */
-    protected function sendInput()
+    protected function sendInput(): void
     {
         fwrite(ConsoleStub::$inputStream, implode(PHP_EOL, func_get_args()) . PHP_EOL);
 
         rewind(ConsoleStub::$inputStream);
     }
 
-    public function testStripAnsiFormat()
+    public function testStripAnsiFormat(): void
     {
         ob_start();
         ob_implicit_flush(false);
@@ -203,12 +205,12 @@ class ConsoleTest extends TestCase
      * @param string $ansi
      * @param string $html
      */
-    public function testAnsi2Html($ansi, $html)
+    public function testAnsi2Html($ansi, $html): void
     {
         $this->assertEquals($html, Console::ansiToHtml($ansi));
     }
 
-    public function testErrorSummary()
+    public function testErrorSummary(): void
     {
         $model = new TestConsoleModel();
         $model->name = 'not_an_integer';
@@ -236,7 +238,7 @@ class TestConsoleModel extends DynamicModel
         ];
     }
 
-    public function init()
+    public function init(): void
     {
         $this->defineAttribute('name');
     }
@@ -244,7 +246,7 @@ class TestConsoleModel extends DynamicModel
     /**
      * @covers \yii\helpers\BaseConsole::input()
      */
-    public function testInput()
+    public function testInput(): void
     {
         $this->sendInput('test1');
         $result = ConsoleStub::input();
@@ -262,7 +264,7 @@ class TestConsoleModel extends DynamicModel
     /**
      * @covers \yii\helpers\BaseConsole::output()
      */
-    public function testOutput()
+    public function testOutput(): void
     {
         $result = ConsoleStub::output('Smth');
         $this->assertEquals('Smth' . PHP_EOL, $this->readOutput());
@@ -272,7 +274,7 @@ class TestConsoleModel extends DynamicModel
     /**
      * @covers \yii\helpers\BaseConsole::error()
      */
-    public function testError()
+    public function testError(): void
     {
         $result = ConsoleStub::error('SomeError');
         $this->assertEquals('SomeError' . PHP_EOL, $this->readOutput(ConsoleStub::$errorStream));
@@ -282,7 +284,7 @@ class TestConsoleModel extends DynamicModel
     /**
      * @covers \yii\helpers\BaseConsole::prompt()
      */
-    public function testPrompt()
+    public function testPrompt(): void
     {
         // testing output variations
 
@@ -373,7 +375,7 @@ class TestConsoleModel extends DynamicModel
     /**
      * @covers \yii\helpers\BaseConsole::confirm()
      */
-    public function testConfirm()
+    public function testConfirm(): void
     {
         $this->sendInput('y');
         ConsoleStub::confirm('Are you sure?');
@@ -413,7 +415,7 @@ class TestConsoleModel extends DynamicModel
     /**
      * @covers \yii\helpers\BaseConsole::select()
      */
-    public function testSelect()
+    public function testSelect(): void
     {
         $options = [
             'c' => 'cat',

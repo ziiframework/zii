@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -33,7 +35,7 @@ class FileCacheTest extends CacheTestCase
         return $this->_cacheInstance;
     }
 
-    public function testExpire()
+    public function testExpire(): void
     {
         $cache = $this->getCacheInstance();
 
@@ -45,7 +47,7 @@ class FileCacheTest extends CacheTestCase
         $this->assertFalse($cache->get('expire_test'));
     }
 
-    public function testExpireAdd()
+    public function testExpireAdd(): void
     {
         $cache = $this->getCacheInstance();
 
@@ -57,7 +59,7 @@ class FileCacheTest extends CacheTestCase
         $this->assertFalse($cache->get('expire_testa'));
     }
 
-    public function testKeyPrefix()
+    public function testKeyPrefix(): void
     {
         $keyPrefix = 'foobar';
         $key = uniqid('uid-cache_');
@@ -87,7 +89,7 @@ class FileCacheTest extends CacheTestCase
         $this->assertEquals($value, $refMethodGet->invoke($cache, $key));
     }
 
-    public function testCacheRenewalOnDifferentOwnership()
+    public function testCacheRenewalOnDifferentOwnership(): void
     {
         $TRAVIS_SECOND_USER = getenv('TRAVIS_SECOND_USER');
 

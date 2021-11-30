@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -54,7 +56,7 @@ class BlameableBehaviorConsoleTest extends TestCase
         gc_collect_cycles();
     }
 
-    public function testDefaultValue()
+    public function testDefaultValue(): void
     {
         $model = new ActiveRecordBlameableConsole([
             'as blameable' => [
@@ -70,7 +72,7 @@ class BlameableBehaviorConsoleTest extends TestCase
         $this->assertEquals(2, $model->updated_by);
     }
 
-    public function testDefaultValueWithClosure()
+    public function testDefaultValueWithClosure(): void
     {
         $model = new ActiveRecordBlameableConsoleWithDefaultValueClosure();
         $model->name = __METHOD__;

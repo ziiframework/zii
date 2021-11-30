@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -52,7 +54,7 @@ class FakeController extends Controller
         ];
     }
 
-    public function actionIndex()
+    public function actionIndex(): void
     {
         self::$_wasActionIndexCalled = true;
     }
@@ -67,7 +69,7 @@ class FakeController extends Controller
         return [$values, $value];
     }
 
-    public function actionAksi3($available, $missing)
+    public function actionAksi3($available, $missing): void
     {
     }
 

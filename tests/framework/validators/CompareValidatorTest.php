@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -27,14 +29,14 @@ class CompareValidatorTest extends TestCase
         $this->destroyApplication();
     }
 
-    public function testValidateValueException()
+    public function testValidateValueException(): void
     {
         $this->expectException('yii\base\InvalidConfigException');
         $val = new CompareValidator();
         $val->validate('val');
     }
 
-    public function testValidateValue()
+    public function testValidateValue(): void
     {
         $value = 18449;
         // default config
@@ -111,7 +113,7 @@ class CompareValidatorTest extends TestCase
         ];
     }
 
-    public function testValidateAttribute()
+    public function testValidateAttribute(): void
     {
         // invalid-array
         $val = new CompareValidator();
@@ -161,7 +163,7 @@ class CompareValidatorTest extends TestCase
         $this->assertTrue($model->hasErrors('attr_o'));
     }
 
-    public function testAttributeErrorMessages()
+    public function testAttributeErrorMessages(): void
     {
         $model = FakedValidationModel::createWithAttributes([
             'attr1' => 1,
@@ -205,7 +207,7 @@ class CompareValidatorTest extends TestCase
         ];
     }
 
-    public function testValidateAttributeOperators()
+    public function testValidateAttributeOperators(): void
     {
         $value = 55;
 
@@ -221,7 +223,7 @@ class CompareValidatorTest extends TestCase
         }
     }
 
-    public function testEnsureMessageSetOnInit()
+    public function testEnsureMessageSetOnInit(): void
     {
         foreach ($this->getOperationTestData(1337) as $operator => $tests) {
             $val = new CompareValidator(['operator' => $operator]);

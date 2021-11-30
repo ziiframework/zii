@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -65,7 +67,7 @@ class AuthMethodTest extends TestCase
 
     // Tests :
 
-    public function testBeforeAction()
+    public function testBeforeAction(): void
     {
         $action = $this->createAction();
 
@@ -77,7 +79,7 @@ class AuthMethodTest extends TestCase
         $this->assertTrue($filter->beforeAction($action));
     }
 
-    public function testIsOptional()
+    public function testIsOptional(): void
     {
         $reflection = new ReflectionClass(AuthMethod::className());
         $method = $reflection->getMethod('isOptional');

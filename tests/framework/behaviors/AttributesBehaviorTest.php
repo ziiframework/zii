@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -103,7 +105,7 @@ class AttributesBehaviorTest extends TestCase
      * @param string      $name
      * @param string|null $alias
      */
-    public function testPreserveNonEmptyValues($aliasExpected, $preserveNonEmptyValues, $name, $alias)
+    public function testPreserveNonEmptyValues($aliasExpected, $preserveNonEmptyValues, $name, $alias): void
     {
         $model = new ActiveRecordWithAttributesBehavior();
         $model->attributesBehavior->preserveNonEmptyValues = $preserveNonEmptyValues;
@@ -145,7 +147,7 @@ class AttributesBehaviorTest extends TestCase
      * @param string $name
      * @param string $alias
      */
-    public function testOrder($aliasExpected, $order, $name, $alias)
+    public function testOrder($aliasExpected, $order, $name, $alias): void
     {
         $model = new ActiveRecordWithAttributesBehavior();
         $model->attributesBehavior->order = $order;

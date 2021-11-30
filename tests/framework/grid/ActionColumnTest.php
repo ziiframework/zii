@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -18,7 +20,7 @@ use yii\helpers\Html;
  */
 class ActionColumnTest extends \yiiunit\TestCase
 {
-    public function testInit()
+    public function testInit(): void
     {
         $column = new ActionColumn();
         $this->assertEquals(['view', 'update', 'delete'], array_keys($column->buttons));
@@ -36,7 +38,7 @@ class ActionColumnTest extends \yiiunit\TestCase
         $this->assertEquals(['view'], array_keys($column->buttons));
     }
 
-    public function testRenderDataCell()
+    public function testRenderDataCell(): void
     {
         $column = new ActionColumn();
         $column->urlCreator = static function ($model, $key, $index) {

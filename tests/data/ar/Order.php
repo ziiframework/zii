@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -79,7 +81,7 @@ class Order extends ActiveRecord
     public function getItems()
     {
         return $this->hasMany(Item::className(), ['id' => 'item_id'])
-            ->via('orderItems', static function ($q) {
+            ->via('orderItems', static function ($q): void {
                 // additional query configuration
             })->orderBy('item.id');
     }
@@ -87,7 +89,7 @@ class Order extends ActiveRecord
     public function getExpensiveItemsUsingViaWithCallable()
     {
         return $this->hasMany(Item::className(), ['id' => 'item_id'])
-            ->via('orderItems', static function (ActiveQuery $q) {
+            ->via('orderItems', static function (ActiveQuery $q): void {
                 $q->where(['>=', 'subtotal', 10]);
             });
     }
@@ -95,7 +97,7 @@ class Order extends ActiveRecord
     public function getCheapItemsUsingViaWithCallable()
     {
         return $this->hasMany(Item::className(), ['id' => 'item_id'])
-            ->via('orderItems', static function (ActiveQuery $q) {
+            ->via('orderItems', static function (ActiveQuery $q): void {
                 $q->where(['<', 'subtotal', 10]);
             });
     }
@@ -115,7 +117,7 @@ class Order extends ActiveRecord
     public function getItemsInOrder1()
     {
         return $this->hasMany(Item::className(), ['id' => 'item_id'])
-            ->via('orderItems', static function ($q) {
+            ->via('orderItems', static function ($q): void {
                 $q->orderBy(['subtotal' => SORT_ASC]);
             })->orderBy('name');
     }
@@ -123,7 +125,7 @@ class Order extends ActiveRecord
     public function getItemsInOrder2()
     {
         return $this->hasMany(Item::className(), ['id' => 'item_id'])
-            ->via('orderItems', static function ($q) {
+            ->via('orderItems', static function ($q): void {
                 $q->orderBy(['subtotal' => SORT_DESC]);
             })->orderBy('name');
     }
