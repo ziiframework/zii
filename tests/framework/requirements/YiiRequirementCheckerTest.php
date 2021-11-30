@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -14,13 +11,12 @@ use yiiunit\TestCase;
 
 /**
  * Test case for [[YiiRequirementChecker]].
- *
  * @see YiiRequirementChecker
  * @group requirements
  */
 class YiiRequirementCheckerTest extends TestCase
 {
-    public function testCheck(): void
+    public function testCheck()
     {
         $requirementsChecker = new YiiRequirementChecker();
 
@@ -70,7 +66,7 @@ class YiiRequirementCheckerTest extends TestCase
     /**
      * @depends testCheck
      */
-    public function testCheckEval(): void
+    public function testCheckEval()
     {
         $requirementsChecker = new YiiRequirementChecker();
 
@@ -104,7 +100,7 @@ class YiiRequirementCheckerTest extends TestCase
     /**
      * @depends testCheck
      */
-    public function testCheckChained(): void
+    public function testCheckChained()
     {
         $requirementsChecker = new YiiRequirementChecker();
 
@@ -131,13 +127,12 @@ class YiiRequirementCheckerTest extends TestCase
         $mergedRequirements = array_merge($requirements1, $requirements2);
 
         $this->assertCount($checkResult['summary']['total'], $mergedRequirements, 'Wrong total checks count!');
-
         foreach ($mergedRequirements as $key => $mergedRequirement) {
             $this->assertEquals($mergedRequirement['name'], $checkResult['requirements'][$key]['name'], 'Wrong requirements list!');
         }
     }
 
-    public function testCheckPhpExtensionVersion(): void
+    public function testCheckPhpExtensionVersion()
     {
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('Can not test this on HHVM.');
@@ -151,7 +146,6 @@ class YiiRequirementCheckerTest extends TestCase
 
     /**
      * Data provider for [[testGetByteSize()]].
-     *
      * @return array
      */
     public function dataProviderGetByteSize()
@@ -170,10 +164,10 @@ class YiiRequirementCheckerTest extends TestCase
     /**
      * @dataProvider dataProviderGetByteSize
      *
-     * @param string $verboseValue     verbose value
-     * @param int    $expectedByteSize expected byte size
+     * @param string  $verboseValue     verbose value.
+     * @param int $expectedByteSize expected byte size.
      */
-    public function testGetByteSize($verboseValue, $expectedByteSize): void
+    public function testGetByteSize($verboseValue, $expectedByteSize)
     {
         $requirementsChecker = new YiiRequirementChecker();
 
@@ -181,8 +175,7 @@ class YiiRequirementCheckerTest extends TestCase
     }
 
     /**
-     * Data provider for [[testCompareByteSize()]].
-     *
+     * Data provider for [[testCompareByteSize()]]
      * @return array
      */
     public function dataProviderCompareByteSize()
@@ -200,12 +193,12 @@ class YiiRequirementCheckerTest extends TestCase
      * @depends testGetByteSize
      * @dataProvider dataProviderCompareByteSize
      *
-     * @param string $a                        first value
-     * @param string $b                        second value
-     * @param string $compare                  comparison
-     * @param bool   $expectedComparisonResult expected comparison result
+     * @param string  $a                        first value.
+     * @param string  $b                        second value.
+     * @param string  $compare                  comparison.
+     * @param bool $expectedComparisonResult expected comparison result.
      */
-    public function testCompareByteSize($a, $b, $compare, $expectedComparisonResult): void
+    public function testCompareByteSize($a, $b, $compare, $expectedComparisonResult)
     {
         $requirementsChecker = new YiiRequirementChecker();
         $this->assertEquals($expectedComparisonResult, $requirementsChecker->compareByteSize($a, $b, $compare), "Wrong compare '{$a}{$compare}{$b}'");

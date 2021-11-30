@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,7 +7,6 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\data;
 
-use stdClass;
 use yii\base\DynamicModel;
 use yii\data\DataFilter;
 use yiiunit\data\base\Singer;
@@ -30,7 +26,7 @@ class DataFilterTest extends TestCase
 
     // Tests :
 
-    public function testSetupSearchModel(): void
+    public function testSetupSearchModel()
     {
         $builder = new DataFilter();
 
@@ -50,7 +46,7 @@ class DataFilterTest extends TestCase
         $this->assertTrue($model instanceof Singer);
         $this->assertEquals('search', $model->getScenario());
 
-        $builder->setSearchModel(static function () {
+        $builder->setSearchModel(function () {
             return (new DynamicModel(['name' => null, 'price' => null]))
                 ->addRule(['name'], 'string', ['max' => 128])
                 ->addRule(['price'], 'number');
@@ -59,10 +55,10 @@ class DataFilterTest extends TestCase
         $this->assertTrue($model instanceof DynamicModel);
 
         $this->expectException('yii\base\InvalidConfigException');
-        $builder->setSearchModel(new stdClass());
+        $builder->setSearchModel(new \stdClass());
     }
 
-    public function testLoad(): void
+    public function testLoad()
     {
         $filterValue = [
             'name' => 'value',
@@ -87,8 +83,7 @@ class DataFilterTest extends TestCase
 
     /**
      * Data provider for [[testValidate()]].
-     *
-     * @return array test data
+     * @return array test data.
      */
     public function dataProviderValidate()
     {
@@ -264,10 +259,10 @@ class DataFilterTest extends TestCase
      * @dataProvider dataProviderValidate
      *
      * @param array $filter
-     * @param bool  $expectedResult
+     * @param bool $expectedResult
      * @param array $expectedErrors
      */
-    public function testValidate($filter, $expectedResult, $expectedErrors): void
+    public function testValidate($filter, $expectedResult, $expectedErrors)
     {
         $builder = new DataFilter();
         $searchModel = (new DynamicModel([
@@ -296,8 +291,7 @@ class DataFilterTest extends TestCase
 
     /**
      * Data provider for [[testNormalize()]].
-     *
-     * @return array test data
+     * @return array test data.
      */
     public function dataProviderNormalize()
     {
@@ -413,7 +407,7 @@ class DataFilterTest extends TestCase
      * @param array $filter
      * @param array $expectedResult
      */
-    public function testNormalize($filter, $expectedResult): void
+    public function testNormalize($filter, $expectedResult)
     {
         $builder = new DataFilter();
         $searchModel = (new DynamicModel([
@@ -442,7 +436,7 @@ class DataFilterTest extends TestCase
         $this->assertEquals($expectedResult, $builder->normalize(false));
     }
 
-    public function testNormalizeNonDefaultNull(): void
+    public function testNormalizeNonDefaultNull()
     {
         $builder = new DataFilter();
         $builder->nullValue = 'abcde';
@@ -451,7 +445,7 @@ class DataFilterTest extends TestCase
         $this->assertEquals(['name' => null], $builder->normalize(false));
     }
 
-    public function testSetupErrorMessages(): void
+    public function testSetupErrorMessages()
     {
         $builder = new DataFilter();
         $builder->setErrorMessages([
@@ -462,7 +456,7 @@ class DataFilterTest extends TestCase
         $this->assertEquals('Test message', $errorMessages['unsupportedOperatorType']);
         $this->assertTrue(isset($errorMessages['unknownAttribute']));
 
-        $builder->setErrorMessages(static function () {
+        $builder->setErrorMessages(function () {
             return [
                 'unsupportedOperatorType' => 'Test message callback',
             ];

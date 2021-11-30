@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -27,17 +24,15 @@ class GroupUrlRuleTest extends TestCase
         $this->mockApplication();
     }
 
-    public function testCreateUrl(): void
+    public function testCreateUrl()
     {
         $manager = new UrlManager(['cache' => null]);
         $suites = $this->getTestsForCreateUrl();
-
         foreach ($suites as $i => $suite) {
-            [$name, $config, $tests] = $suite;
+            list($name, $config, $tests) = $suite;
             $rule = new GroupUrlRule($config);
-
             foreach ($tests as $j => $test) {
-                [$route, $params, $expected, $status] = $test;
+                list($route, $params, $expected, $status) = $test;
                 $url = $rule->createUrl($manager, $route, $params);
                 $this->assertEquals($expected, $url, "Test#$i-$j: $name");
                 $this->assertSame($status, $rule->getCreateUrlStatus(), "Test#$i-$j: $name");
@@ -45,22 +40,19 @@ class GroupUrlRuleTest extends TestCase
         }
     }
 
-    public function testParseRequest(): void
+    public function testParseRequest()
     {
         $manager = new UrlManager(['cache' => null]);
         $request = new Request(['hostInfo' => 'http://en.example.com']);
         $suites = $this->getTestsForParseRequest();
-
         foreach ($suites as $i => $suite) {
-            [$name, $config, $tests] = $suite;
+            list($name, $config, $tests) = $suite;
             $rule = new GroupUrlRule($config);
-
             foreach ($tests as $j => $test) {
                 $request->pathInfo = $test[0];
                 $route = $test[1];
-                $params = $test[2] ?? [];
+                $params = isset($test[2]) ? $test[2] : [];
                 $result = $rule->parseRequest($manager, $request);
-
                 if ($route === false) {
                     $this->assertFalse($result, "Test#$i-$j: $name");
                 } else {
@@ -70,12 +62,12 @@ class GroupUrlRuleTest extends TestCase
         }
     }
 
-    public function testParseVerb(): void
+    public function testParseVerb()
     {
         $config = [
             'prefix' => 'admin',
             'rules' => [
-                'login' => 'user/login',
+                'login' => 'user/login'
             ],
         ];
         $rules = new GroupUrlRule($config);
@@ -95,7 +87,7 @@ class GroupUrlRuleTest extends TestCase
         $config = [
             'prefix' => 'admin',
             'rules' => [
-                'POST login' => 'user/login',
+                'POST login' => 'user/login'
             ],
         ];
         $rules = new GroupUrlRule($config);
@@ -106,7 +98,7 @@ class GroupUrlRuleTest extends TestCase
         $config = [
             'prefix' => 'admin',
             'rules' => [
-                'POST,GET login' => 'user/login',
+                'POST,GET login' => 'user/login'
             ],
         ];
         $rules = new GroupUrlRule($config);

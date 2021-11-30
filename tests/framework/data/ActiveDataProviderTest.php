@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -22,7 +19,6 @@ use yiiunit\framework\db\UnqueryableQueryMock;
 
 /**
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  *
  * @group data
@@ -36,7 +32,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         ActiveRecord::$db = $this->getConnection();
     }
 
-    public function testActiveQuery(): void
+    public function testActiveQuery()
     {
         $provider = new ActiveDataProvider([
             'query' => Order::find()->orderBy('id'),
@@ -58,7 +54,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertCount(2, $orders);
     }
 
-    public function testActiveRelation(): void
+    public function testActiveRelation()
     {
         /* @var $customer Customer */
         $customer = Customer::findOne(2);
@@ -81,7 +77,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertCount(1, $orders);
     }
 
-    public function testActiveRelationVia(): void
+    public function testActiveRelationVia()
     {
         /* @var $order Order */
         $order = Order::findOne(2);
@@ -105,7 +101,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertCount(2, $items);
     }
 
-    public function testActiveRelationViaTable(): void
+    public function testActiveRelationViaTable()
     {
         /* @var $order Order */
         $order = Order::findOne(1);
@@ -127,7 +123,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertCount(1, $items);
     }
 
-    public function testQuery(): void
+    public function testQuery()
     {
         $query = new Query();
         $provider = new ActiveDataProvider([
@@ -151,7 +147,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertCount(2, $orders);
     }
 
-    public function testRefresh(): void
+    public function testRefresh()
     {
         $query = new Query();
         $provider = new ActiveDataProvider([
@@ -166,7 +162,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertCount(2, $provider->getModels());
     }
 
-    public function testPaginationBeforeModels(): void
+    public function testPaginationBeforeModels()
     {
         $query = new Query();
         $provider = new ActiveDataProvider([
@@ -184,7 +180,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertCount(2, $provider->getModels());
     }
 
-    public function testDoesNotPerformQueryWhenHasNoModels(): void
+    public function testDoesNotPerformQueryWhenHasNoModels()
     {
         $query = new UnqueryableQueryMock();
         $provider = new ActiveDataProvider([

@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -23,7 +20,7 @@ class ArrayTarget extends Target
     /**
      * Exports log [[messages]] to a specific destination.
      */
-    public function export(): void
+    public function export()
     {
         // throw exception if message limit is reached
         throw new Exception('More than 1000000 messages logged.');

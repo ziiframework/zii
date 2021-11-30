@@ -1,20 +1,11 @@
 <?php
-
-declare(strict_types=1);
-
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace yiiunit\framework\helpers;
 
-use yii\helpers\BaseConsole;
 use yiiunit\TestCase;
+use yii\helpers\BaseConsole;
 
 /**
- * Unit test for [[yii\helpers\BaseConsole]].
+ * Unit test for [[yii\helpers\BaseConsole]]
  *
  * @see BaseConsole
  * @group helpers
@@ -30,7 +21,7 @@ class BaseConsoleTest extends TestCase
     /**
      * @test
      */
-    public function renderColoredString(): void
+    public function renderColoredString()
     {
         $data = '%yfoo';
         $actual = BaseConsole::renderColoredString($data);
@@ -38,14 +29,14 @@ class BaseConsoleTest extends TestCase
         $this->assertEquals($expected, $actual);
 
         $actual = BaseConsole::renderColoredString($data, false);
-        $expected = 'foo';
+        $expected = "foo";
         $this->assertEquals($expected, $actual);
     }
 
     /**
      * @test
      */
-    public function ansiColorizedSubstrWithoutColors(): void
+    public function ansiColorizedSubstr_withoutColors()
     {
         $str = 'FooBar';
 
@@ -65,13 +56,12 @@ class BaseConsoleTest extends TestCase
     /**
      * @test
      * @dataProvider ansiColorizedSubstr_withColors_data
-     *
      * @param $str
      * @param $start
      * @param $length
      * @param $expected
      */
-    public function ansiColorizedSubstrWithColors($str, $start, $length, $expected): void
+    public function ansiColorizedSubstr_withColors($str, $start, $length, $expected)
     {
         $ansiStr = BaseConsole::renderColoredString($str);
 
@@ -91,7 +81,7 @@ class BaseConsoleTest extends TestCase
         ];
     }
 
-    public function testAnsiStrlen(): void
+    public function testAnsiStrlen()
     {
         $this->assertSame(3, BaseConsole::ansiStrlen('Foo'));
         $this->assertSame(3, BaseConsole::ansiStrlen(BaseConsole::renderColoredString('Bar%y')));

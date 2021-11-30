@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -19,11 +16,10 @@ class SqliteTargetTest extends DbTargetTest
 {
     protected static $driverName = 'sqlite';
 
-    public function testTransactionRollBack(): void
+    public function testTransactionRollBack()
     {
         if (self::getConnection()->dsn === 'sqlite::memory:') {
             $this->markTestSkipped('It is not possible to test logging during transaction when the DB is in memory');
-
             return;
         }
 

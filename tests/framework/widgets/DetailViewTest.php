@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -30,7 +27,7 @@ class DetailViewTest extends \yiiunit\TestCase
         $this->mockWebApplication();
     }
 
-    public function testAttributeValue(): void
+    public function testAttributeValue()
     {
         $model = new ModelMock();
         $model->id = 'id';
@@ -54,7 +51,9 @@ class DetailViewTest extends \yiiunit\TestCase
                 ],
                 [
                     'attribute' => 'id',
-                    'value' => static fn ($model) => $model->getDisplayedId(),
+                    'value' => function ($model) {
+                        return $model->getDisplayedId();
+                    },
                 ],
             ],
         ]);
@@ -70,7 +69,7 @@ class DetailViewTest extends \yiiunit\TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/13243
      */
-    public function testUnicodeAttributeNames(): void
+    public function testUnicodeAttributeNames()
     {
         $model = new UnicodeAttributesModelMock();
         $model->ИдентификаторТовара = 'A00001';
@@ -85,11 +84,17 @@ class DetailViewTest extends \yiiunit\TestCase
             ],
         ]);
 
-        $this->assertEquals('Идентификатор Товара:A00001', $this->detailView->renderAttribute($this->detailView->attributes[0], 0));
-        $this->assertEquals('Το Αναγνωριστικό Του:A00002', $this->detailView->renderAttribute($this->detailView->attributes[1], 1));
+        $this->assertEquals(
+            'Идентификатор Товара:A00001',
+            $this->detailView->renderAttribute($this->detailView->attributes[0], 0)
+        );
+        $this->assertEquals(
+            'Το Αναγνωριστικό Του:A00002',
+            $this->detailView->renderAttribute($this->detailView->attributes[1], 1)
+        );
     }
 
-    public function testAttributeVisible(): void
+    public function testAttributeVisible()
     {
         $model = new ModelMock();
         $model->id = 'id';
@@ -114,16 +119,22 @@ class DetailViewTest extends \yiiunit\TestCase
                 ],
                 [
                     'attribute' => 'id',
-                    'value' => static fn ($model) => $model->getDisplayedId(),
+                    'value' => function ($model) {
+                        return $model->getDisplayedId();
+                    },
                 ],
                 [
                     'attribute' => 'id',
-                    'value' => static fn ($model) => $model->getDisplayedId(),
+                    'value' => function ($model) {
+                        return $model->getDisplayedId();
+                    },
                     'visible' => false,
                 ],
                 [
                     'attribute' => 'id',
-                    'value' => static fn ($model) => $model->getDisplayedId(),
+                    'value' => function ($model) {
+                        return $model->getDisplayedId();
+                    },
                     'visible' => true,
                 ],
             ],
@@ -160,7 +171,7 @@ class DetailViewTest extends \yiiunit\TestCase
         $this->assertEquals(5, $model->getDisplayedIdCallCount());
     }
 
-    public function testRelationAttribute(): void
+    public function testRelationAttribute()
     {
         $model = new ModelMock();
         $model->id = 'model';
@@ -195,7 +206,7 @@ class DetailViewTest extends \yiiunit\TestCase
         $this->assertEquals('Related Id:<span class="not-set">(not set)</span>', $this->detailView->renderAttribute($this->detailView->attributes[1], 1));
     }
 
-    public function testArrayableModel(): void
+    public function testArrayableModel()
     {
         $expectedValue = [
             [
@@ -223,7 +234,7 @@ class DetailViewTest extends \yiiunit\TestCase
         $this->assertEquals($expectedValue, $this->detailView->attributes);
     }
 
-    public function testObjectModel(): void
+    public function testObjectModel()
     {
         $expectedValue = [
             [
@@ -251,7 +262,7 @@ class DetailViewTest extends \yiiunit\TestCase
         $this->assertEquals($expectedValue, $this->detailView->attributes);
     }
 
-    public function testArrayModel(): void
+    public function testArrayModel()
     {
         $expectedValue = [
             [
@@ -280,7 +291,7 @@ class DetailViewTest extends \yiiunit\TestCase
         $this->assertEquals($expectedValue, $this->detailView->attributes);
     }
 
-    public function testOptionsTags(): void
+    public function testOptionsTags()
     {
         $expectedValue = '<tr><th tooltip="Tooltip">Text</th><td class="bg-red">I`m an array</td></tr>';
 
@@ -307,7 +318,7 @@ class DetailViewTest extends \yiiunit\TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/15536
      */
-    public function testShouldTriggerInitEvent(): void
+    public function testShouldTriggerInitEvent()
     {
         $initTriggered = false;
         $model = new ModelMock();
@@ -316,9 +327,9 @@ class DetailViewTest extends \yiiunit\TestCase
 
         $this->detailView = new DetailView([
             'model' => $model,
-            'on init' => static function () use (&$initTriggered): void {
+            'on init' => function () use (&$initTriggered) {
                 $initTriggered = true;
-            },
+            }
         ]);
 
         $this->assertTrue($initTriggered);
@@ -353,14 +364,14 @@ class ModelMock extends Model
         return $this->_related;
     }
 
-    public function setRelated($related): void
+    public function setRelated($related)
     {
         $this->_related = $related;
     }
 
     public function getDisplayedId()
     {
-        ++$this->_displayedIdCallCount;
+        $this->_displayedIdCallCount++;
 
         return "Displayed $this->id";
     }
@@ -378,13 +389,11 @@ class UnicodeAttributesModelMock extends Model
 {
     /**
      * Product's ID (Russian).
-     *
      * @var mixed
      */
     public $ИдентификаторТовара;
     /**
      * ID (Greek).
-     *
      * @var mixed
      */
     public $το_αναγνωριστικό_του;

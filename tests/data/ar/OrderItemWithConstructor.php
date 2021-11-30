@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,14 +7,12 @@ declare(strict_types=1);
 
 namespace yiiunit\data\ar;
 
-use ReflectionClass;
-
 /**
  * OrderItemWithConstructor.
  *
- * @property int    $order_id
- * @property int    $item_id
- * @property int    $quantity
+ * @property int $order_id
+ * @property int $item_id
+ * @property int $quantity
  * @property string $subtotal
  */
 class OrderItemWithConstructor extends ActiveRecord
@@ -41,7 +36,7 @@ class OrderItemWithConstructor extends ActiveRecord
 
     public static function instantiate($row)
     {
-        return (new ReflectionClass(static::className()))->newInstanceWithoutConstructor();
+        return (new \ReflectionClass(static::className()))->newInstanceWithoutConstructor();
     }
 
     public function getOrder()
