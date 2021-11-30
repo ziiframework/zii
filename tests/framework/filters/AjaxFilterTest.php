@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -21,6 +22,7 @@ class AjaxFilterTest extends TestCase
 {
     /**
      * @param bool $isAjax
+     *
      * @return Request
      */
     protected function mockRequest($isAjax)

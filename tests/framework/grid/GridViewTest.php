@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,7 @@
 
 namespace yiiunit\framework\grid;
 
+use Exception;
 use yii\data\ArrayDataProvider;
 use yii\grid\DataColumn;
 use yii\grid\GridView;
@@ -48,9 +50,11 @@ class GridViewTest extends \yiiunit\TestCase
 
     /**
      * @dataProvider emptyDataProvider
-     * @param mixed $emptyText
+     *
+     * @param mixed  $emptyText
      * @param string $expectedText
-     * @throws \Exception
+     *
+     * @throws Exception
      */
     public function testEmpty($emptyText, $expectedText)
     {
@@ -81,13 +85,11 @@ class GridViewTest extends \yiiunit\TestCase
         $row = ['id' => 1, 'name' => 'Name1', 'value' => 'Value1', 'description' => 'Description1'];
 
         $grid = new GridView([
-            'dataProvider' => new ArrayDataProvider(
-                [
+            'dataProvider' => new ArrayDataProvider([
                     'allModels' => [
                         $row,
                     ],
-                ]
-            ),
+                ]),
         ]);
 
         $columns = $grid->columns;
@@ -102,13 +104,11 @@ class GridViewTest extends \yiiunit\TestCase
         $row = array_merge($row, ['otherRelation' => (object) $row['relation']]);
 
         $grid = new GridView([
-            'dataProvider' => new ArrayDataProvider(
-                [
+            'dataProvider' => new ArrayDataProvider([
                     'allModels' => [
                         $row,
                     ],
-                ]
-            ),
+                ]),
         ]);
 
         $columns = $grid->columns;
@@ -122,32 +122,33 @@ class GridViewTest extends \yiiunit\TestCase
         }
     }
 
-	/**
-	 * @throws \Exception
-	 */
-	public function testFooter() {
-		$config = [
-			'id'           => 'grid',
-			'dataProvider' => new ArrayDataProvider(['allModels' => []]),
-			'showHeader'   => false,
-			'showFooter'   => true,
-			'options'      => [],
-			'tableOptions' => [],
-			'view'         => new View(),
-			'filterUrl'    => '/',
-		];
+    /**
+     * @throws Exception
+     */
+    public function testFooter()
+    {
+        $config = [
+            'id' => 'grid',
+            'dataProvider' => new ArrayDataProvider(['allModels' => []]),
+            'showHeader' => false,
+            'showFooter' => true,
+            'options' => [],
+            'tableOptions' => [],
+            'view' => new View(),
+            'filterUrl' => '/',
+        ];
 
-		$html = GridView::widget($config);
-		$html = preg_replace("/\r|\n/", '', $html);
+        $html = GridView::widget($config);
+        $html = preg_replace("/\r|\n/", '', $html);
 
-		$this->assertTrue(preg_match("/<\/tfoot><tbody>/", $html) === 1);
+        $this->assertTrue(preg_match("/<\/tfoot><tbody>/", $html) === 1);
 
-		// Place footer after body
-		$config['placeFooterAfterBody'] = true;
+        // Place footer after body
+        $config['placeFooterAfterBody'] = true;
 
-		$html = GridView::widget($config);
-		$html = preg_replace("/\r|\n/", '', $html);
+        $html = GridView::widget($config);
+        $html = preg_replace("/\r|\n/", '', $html);
 
-		$this->assertTrue(preg_match("/<\/tbody><tfoot>/", $html) === 1);
-	}
+        $this->assertTrue(preg_match("/<\/tbody><tfoot>/", $html) === 1);
+    }
 }

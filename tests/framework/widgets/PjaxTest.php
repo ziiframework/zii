@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -46,13 +47,11 @@ class PjaxTest extends TestCase
     {
         $initTriggered = false;
         ob_start();
-        $pjax = new Pjax(
-            [
-                'on init' => function () use (&$initTriggered) {
+        $pjax = new Pjax([
+                'on init' => static function () use (&$initTriggered) {
                     $initTriggered = true;
-                }
-            ]
-        );
+                },
+            ]);
         ob_end_clean();
         $this->assertTrue($initTriggered);
     }

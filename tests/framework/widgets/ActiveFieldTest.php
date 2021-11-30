@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -84,7 +85,7 @@ EOD;
     {
         // field will be the html of the model's attribute wrapped with the return string below.
         $field = $this->attributeName;
-        $content = function ($field) {
+        $content = static function ($field) {
             return "<div class=\"custom-container\"> $field </div>";
         };
 
@@ -250,7 +251,7 @@ EOT;
 
     public function testTabularInputErrors()
     {
-        $this->activeField->attribute = '[0]'.$this->attributeName;
+        $this->activeField->attribute = '[0]' . $this->attributeName;
         $this->helperModel->addError($this->attributeName, 'Error Message');
 
         $expectedValue = '<div class="form-group field-activefieldtestmodel-0-attributename has-error">';
@@ -270,7 +271,8 @@ EOT;
 
     /**
      * @dataProvider hintDataProvider
-     * @param mixed $hint
+     *
+     * @param mixed  $hint
      * @param string $expectedHtml
      */
     public function testHint($hint, $expectedHtml)
@@ -681,7 +683,7 @@ HTML;
         $this->activeField->inputOptions = ['placeholder' => 'pholder_both_input'];
         $widget = $this->activeField->widget(TestMaskedInput::className(), [
             'mask' => '999-999-9999',
-            'options' => ['placeholder' => 'pholder_both_direct']
+            'options' => ['placeholder' => 'pholder_both_direct'],
         ]);
         $this->assertStringContainsString('placeholder="pholder_both_direct"', (string) $widget);
     }
@@ -783,17 +785,13 @@ class TestMaskedInput extends MaskedInput
         self::$lastInstance = $this;
     }
 
-    public function getOptions() {
+    public function getOptions()
+    {
         return $this->options;
     }
 
     public function run()
     {
-        return 'Options: ' . implode(', ', array_map(
-            function ($v, $k) { return sprintf('%s="%s"', $k, $v); },
-            $this->options,
-            array_keys($this->options)
-        ));
+        return 'Options: ' . implode(', ', array_map(static function ($v, $k) { return sprintf('%s="%s"', $k, $v); }, $this->options, array_keys($this->options)));
     }
 }
-

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -13,6 +14,7 @@ use yiiunit\TestCase;
 
 /**
  * Unit test for [[\yii\console\controllers\HelpController]].
+ *
  * @see HelpController
  * @group console
  */
@@ -28,6 +30,7 @@ class HelpControllerTest extends TestCase
 
     /**
      * Creates controller instance.
+     *
      * @return BufferedHelpController
      */
     protected function createController()
@@ -36,20 +39,24 @@ class HelpControllerTest extends TestCase
             ->setMethods(['fake'])
             ->setConstructorArgs(['console'])
             ->getMock();
+
         return new BufferedHelpController('help', $module);
     }
 
     /**
      * Emulates running controller action.
-     * @param string $actionID id of action to be run.
-     * @param array $actionParams action arguments.
-     * @return string command output.
+     *
+     * @param string $actionID     id of action to be run
+     * @param array  $actionParams action arguments
+     *
+     * @return string command output
      */
     protected function runControllerAction($actionID, $actionParams = [])
     {
         $controller = $this->createController();
         $action = $controller->createAction($actionID);
         $action->runWithParams($actionParams);
+
         return $controller->flushStdOutBuffer();
     }
 
@@ -206,13 +213,12 @@ STRING
             'controllerNamespace' => 'yiiunit\data\console\controllers',
         ]);
         $result = Console::stripAnsiFormat($this->runControllerAction('index'));
-        $this->assertStringNotContainsString("- fake-empty", $result);
-        $this->assertStringContainsString("- fake-no-default", $result);
-        $this->assertStringContainsString("    fake-no-default/index", $result);
-        $this->assertStringNotContainsString("    fake-no-default/index (default)", $result);
+        $this->assertStringNotContainsString('- fake-empty', $result);
+        $this->assertStringContainsString('- fake-no-default', $result);
+        $this->assertStringContainsString('    fake-no-default/index', $result);
+        $this->assertStringNotContainsString('    fake-no-default/index (default)', $result);
     }
 }
-
 
 class BufferedHelpController extends HelpController
 {

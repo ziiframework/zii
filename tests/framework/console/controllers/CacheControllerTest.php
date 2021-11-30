@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -14,6 +15,7 @@ use yiiunit\TestCase;
 
 /**
  * Unit test for [[\yii\console\controllers\CacheController]].
+ *
  * @see CacheController
  *
  * @group console
@@ -41,20 +43,19 @@ class CacheControllerTest extends TestCase
             $this->markTestSkipped('pdo and ' . $pdoDriver . ' extensions are required.');
         }
 
-
         $this->mockApplication([
             'components' => [
                 'firstCache' => 'yii\caching\ArrayCache',
-                'secondCache' => function () {
+                'secondCache' => static function () {
                     return new ArrayCache();
                 },
                 'thirdCache' => 'yii\caching\CacheInterface',
                 'session' => 'yii\web\CacheSession', // should be ignored at `actionFlushAll()`
                 'db' => [
-                    'class' => isset($config['class']) ? $config['class'] : 'yii\db\Connection',
+                    'class' => $config['class'] ?? 'yii\db\Connection',
                     'dsn' => $config['dsn'],
-                    'username' => isset($config['username']) ? $config['username'] : null,
-                    'password' => isset($config['password']) ? $config['password'] : null,
+                    'username' => $config['username'] ?? null,
+                    'password' => $config['password'] ?? null,
                     'enableSchemaCache' => true,
                     'schemaCache' => 'firstCache',
                 ],
@@ -64,7 +65,7 @@ class CacheControllerTest extends TestCase
                     'yii\caching\CacheInterface' => [
                         'class' => 'yii\caching\ArrayCache',
                     ],
-                ]
+                ],
             ],
         ]);
 
@@ -76,6 +77,7 @@ class CacheControllerTest extends TestCase
         if (isset($config['fixture'])) {
             Yii::$app->db->open();
             $lines = explode(';', file_get_contents($config['fixture']));
+
             foreach ($lines as $line) {
                 if (trim($line) !== '') {
                     Yii::$app->db->pdo->exec($line);

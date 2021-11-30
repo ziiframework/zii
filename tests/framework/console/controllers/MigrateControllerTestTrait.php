@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -16,6 +17,7 @@ use yiiunit\TestCase;
 
 /**
  * This trait provides unit tests shared by the different migration controllers implementations.
+ *
  * @see BaseMigrateController
  */
 trait MigrateControllerTestTrait
@@ -23,15 +25,15 @@ trait MigrateControllerTestTrait
     /* @var $this TestCase */
 
     /**
-     * @var string name of the migration controller class, which is under test.
+     * @var string name of the migration controller class, which is under test
      */
     protected $migrateControllerClass;
     /**
-     * @var string name of the migration base class.
+     * @var string name of the migration base class
      */
     protected $migrationBaseClass;
     /**
-     * @var string test migration path.
+     * @var string test migration path
      */
     protected $migrationPath;
     /**
@@ -43,7 +45,6 @@ trait MigrateControllerTestTrait
      */
     protected $migrationExitCode;
 
-
     public function getExitCode()
     {
         return $this->migrationExitCode;
@@ -54,6 +55,7 @@ trait MigrateControllerTestTrait
         $this->migrationNamespace = 'yiiunit\runtime\test_migrations';
         $this->migrationPath = Yii::getAlias('@yiiunit/runtime/test_migrations');
         FileHelper::createDirectory($this->migrationPath);
+
         if (!file_exists($this->migrationPath)) {
             $this->markTestIncomplete('Unit tests runtime directory should have writable permissions!');
         }
@@ -73,8 +75,10 @@ trait MigrateControllerTestTrait
 
     /**
      * Creates test migrate controller instance.
-     * @param array $config controller configuration.
-     * @return BaseMigrateController migrate command instance.
+     *
+     * @param array $config controller configuration
+     *
+     * @return BaseMigrateController migrate command instance
      */
     protected function createMigrateController(array $config = [])
     {
@@ -86,15 +90,18 @@ trait MigrateControllerTestTrait
         $migrateController = new $class('migrate', $module);
         $migrateController->interactive = false;
         $migrateController->migrationPath = $this->migrationPath;
+
         return Yii::configure($migrateController, $config);
     }
 
     /**
      * Emulates running of the migrate controller action.
-     * @param string $actionID id of action to be run.
-     * @param array $args action arguments.
-     * @param array $config controller configuration.
-     * @return string command output.
+     *
+     * @param string $actionID id of action to be run
+     * @param array  $args     action arguments
+     * @param array  $config   controller configuration
+     *
+     * @return string command output
      */
     protected function runMigrateControllerAction($actionID, array $args = [], array $config = [])
     {
@@ -107,9 +114,10 @@ trait MigrateControllerTestTrait
     }
 
     /**
-     * @param string $name
+     * @param string      $name
      * @param string|null $date
      * @param string|null $path
+     *
      * @return string generated class name
      */
     protected function createMigration($name, $date = null, $path = null)
@@ -135,12 +143,14 @@ class {$class} extends {$baseClass}
 }
 CODE;
         file_put_contents(($path ? Yii::getAlias($path) : $this->migrationPath) . DIRECTORY_SEPARATOR . $class . '.php', $code);
+
         return $class;
     }
 
     /**
-     * @param string $name
+     * @param string      $name
      * @param string|null $date
+     *
      * @return string generated class name
      */
     protected function createNamespaceMigration($name, $date = null)
@@ -169,48 +179,60 @@ class {$class} extends \\{$baseClass}
 }
 CODE;
         file_put_contents($this->migrationPath . DIRECTORY_SEPARATOR . $class . '.php', $code);
+
         return $class;
     }
 
     /**
      * Change class name migration to $class.
+     *
      * @param string $class name class
+     *
      * @return string content generated class migration
+     *
      * @see https://github.com/yiisoft/yii2/pull/10213
      */
     protected function parseNameClassMigration($class)
     {
         $files = FileHelper::findFiles($this->migrationPath);
         $file = file_get_contents($files[0]);
+
         if (preg_match('/class (m\d+_?\d+_?.*) extends Migration/i', $file, $match)) {
             $file = str_replace($match[1], $class, $file);
         }
         $this->tearDownMigrationPath();
+
         return $file;
     }
 
     /**
      * Checks if applied migration history matches expected one.
-     * @param array $expectedMigrations migration names in expected order
-     * @param string $message failure message
+     *
+     * @param array  $expectedMigrations migration names in expected order
+     * @param string $message            failure message
      */
     protected function assertMigrationHistory(array $expectedMigrations, $message = '')
     {
         $success = true;
         $migrationHistory = $this->getMigrationHistory();
         $appliedMigrations = $migrationHistory;
+
         foreach ($expectedMigrations as $expectedMigrationName) {
             $appliedMigration = array_shift($appliedMigrations);
+
             if (!StringHelper::matchWildcard(strtr($expectedMigrationName, ['\\' => DIRECTORY_SEPARATOR]), strtr($appliedMigration['version'], ['\\' => DIRECTORY_SEPARATOR]))) {
                 $success = false;
+
                 break;
             }
         }
+
         if (!$success) {
             $message .= "\n";
             $message .= 'Expected: ' . var_export($expectedMigrations, true) . "\n";
 
             $actualMigrations = [];
+
             foreach ($migrationHistory as $row) {
                 $actualMigrations[] = $row['version'];
             }

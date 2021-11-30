@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -24,8 +25,8 @@ class ActiveQueryModelConnectionTest extends TestCase
 
         $this->mockApplication([
             'components' => [
-                'db' => $this->globalConnection
-            ]
+                'db' => $this->globalConnection,
+            ],
         ]);
 
         ActiveRecord::$db = $this->modelConnection;

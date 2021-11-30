@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -14,8 +15,11 @@ use yiiunit\TestCase;
 
 /**
  * Dependency (abstract) tests.
+ *
  * @group caching
+ *
  * @author Boudewijn Vahrmeijer <vahrmeijer@gmail.com>
+ *
  * @since 2.0.11
  */
 class DependencyTest extends TestCase

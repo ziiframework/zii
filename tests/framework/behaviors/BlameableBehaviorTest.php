@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -120,7 +121,7 @@ class BlameableBehaviorTest extends TestCase
     {
         $model = new ActiveRecordBlameable();
         $model->name = __METHOD__;
-        $model->getBlameable()->value = function ($event) {
+        $model->getBlameable()->value = static function ($event) {
             return strlen($event->sender->name); // $model->name;
         };
         $model->beforeSave(true);
@@ -162,7 +163,7 @@ class BlameableBehaviorTest extends TestCase
         $model = new ActiveRecordBlameable([
             'as blameable' => [
                 'class' => BlameableBehavior::className(),
-                'defaultValue' => 2
+                'defaultValue' => 2,
             ],
         ]);
 
@@ -196,7 +197,7 @@ class ActiveRecordBlameableWithDefaultValueClosure extends ActiveRecordBlameable
                 'class' => BlameableBehavior::className(),
                 'defaultValue' => function () {
                     return $this->created_by + 1;
-                }
+                },
             ],
         ];
     }
@@ -205,10 +206,9 @@ class ActiveRecordBlameableWithDefaultValueClosure extends ActiveRecordBlameable
 /**
  * Test Active Record class with [[BlameableBehavior]] behavior attached.
  *
- * @property string $name
- * @property int $created_by
- * @property int $updated_by
- *
+ * @property string            $name
+ * @property int               $created_by
+ * @property int               $updated_by
  * @property BlameableBehavior $blameable
  */
 class ActiveRecordBlameable extends ActiveRecord

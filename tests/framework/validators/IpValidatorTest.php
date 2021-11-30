@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -42,6 +43,7 @@ class IpValidatorTest extends TestCase
 
     /**
      * @dataProvider provideRangesForSubstitution
+     *
      * @param array $range
      * @param array $expectedRange
      */
@@ -50,7 +52,6 @@ class IpValidatorTest extends TestCase
         $validator = new IpValidator(['ranges' => $range]);
         $this->assertEquals($expectedRange, $validator->ranges);
     }
-
 
     public function testValidateOrder()
     {
@@ -72,6 +73,7 @@ class IpValidatorTest extends TestCase
 
     /**
      * @dataProvider provideBadIps
+     *
      * @param mixed $badIp
      */
     public function testValidateValueNotAnIP($badIp)
@@ -83,6 +85,7 @@ class IpValidatorTest extends TestCase
 
     /**
      * @dataProvider provideBadIps
+     *
      * @param mixed $badIp
      */
     public function testValidateModelAttributeNotAnIP($badIp)
@@ -95,14 +98,12 @@ class IpValidatorTest extends TestCase
         $this->assertEquals('attr_ip must be a valid IP address.', $model->getFirstError('attr_ip'));
         $model->clearErrors();
 
-
         $validator->ipv4 = false;
 
         $model->attr_ip = $badIp;
         $validator->validateAttribute($model, 'attr_ip');
         $this->assertEquals('attr_ip must be a valid IP address.', $model->getFirstError('attr_ip'));
         $model->clearErrors();
-
 
         $validator->ipv4 = true;
         $validator->ipv6 = false;
@@ -146,7 +147,6 @@ class IpValidatorTest extends TestCase
         $this->assertTrue($validator->validate('!192.168.5.32/32'));
         $this->assertFalse($validator->validate('!!192.168.5.32/32'));
     }
-
 
     public function testValidateValueIPv6()
     {
@@ -345,7 +345,6 @@ class IpValidatorTest extends TestCase
         $this->assertFalse($model->hasErrors('attr_ip'));
         $this->assertEquals('8.8.8.8/32', $model->attr_ip);
     }
-
 
     public function testValidateAttributeIPv6()
     {

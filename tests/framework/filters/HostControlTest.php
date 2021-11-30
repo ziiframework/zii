@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -30,7 +31,7 @@ class HostControlTest extends TestCase
     }
 
     /**
-     * @return array test data.
+     * @return array test data
      */
     public function hostInfoValidationDataProvider()
     {
@@ -66,14 +67,14 @@ class HostControlTest extends TestCase
                 false,
             ],
             [
-                function () {
+                static function () {
                     return ['example.com'];
                 },
                 'example.com',
                 true,
             ],
             [
-                function () {
+                static function () {
                     return ['example.com'];
                 },
                 'fake.com',
@@ -85,9 +86,9 @@ class HostControlTest extends TestCase
     /**
      * @dataProvider hostInfoValidationDataProvider
      *
-     * @param mixed $allowedHosts
+     * @param mixed  $allowedHosts
      * @param string $host
-     * @param bool $allowed
+     * @param bool   $allowed
      */
     public function testFilter($allowedHosts, $host, $allowed)
     {
@@ -142,7 +143,7 @@ class HostControlTest extends TestCase
         $filter = new HostControl();
         $filter->allowedHosts = ['example.com'];
         $filter->fallbackHostInfo = 'http://yiiframework.com';
-        $filter->denyCallback = function () {};
+        $filter->denyCallback = static function () {};
 
         $controller = new Controller('test', Yii::$app);
         $action = new Action('test', $controller);

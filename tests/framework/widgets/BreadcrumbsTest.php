@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,7 +8,7 @@
 
 namespace yiiunit\framework\widgets;
 
-use Yii;
+use ReflectionMethod;
 use yii\widgets\Breadcrumbs;
 
 /**
@@ -69,7 +70,6 @@ class BreadcrumbsTest extends \yiiunit\TestCase
 
         $this->assertEquals($expectedHtml, $actualHtml);
     }
-
 
     public function testHomeLink()
     {
@@ -189,12 +189,13 @@ class BreadcrumbsTest extends \yiiunit\TestCase
 
     /**
      * Helper methods.
+     *
      * @param string $class
      * @param string $method
      */
     protected function reflectMethod($class = '\yii\widgets\Breadcrumbs', $method = 'renderItem')
     {
-        $value = new \ReflectionMethod($class, $method);
+        $value = new ReflectionMethod($class, $method);
         $value->setAccessible(true);
 
         return $value;

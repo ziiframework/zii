@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,8 @@
 
 namespace yiiunit\framework\web;
 
+use stdClass;
+use Yii;
 use yii\web\Request;
 use yiiunit\TestCase;
 
@@ -147,13 +150,13 @@ class RequestTest extends TestCase
         $request->enableCookieValidation = false;
 
         $_SERVER['REQUEST_METHOD'] = 'POST';
-        \Yii::$app->security->unmaskToken('');
+        Yii::$app->security->unmaskToken('');
         $this->assertFalse($request->validateCsrfToken(''));
 
         // When an empty CSRF token is given it is regenerated.
         $this->assertNotEmpty($request->getCsrfToken());
-
     }
+
     /**
      * Test CSRF token validation by POST param.
      */
@@ -273,7 +276,7 @@ class RequestTest extends TestCase
             // empty
             [
                 [],
-                [null, null]
+                [null, null],
             ],
             // normal
             [
@@ -284,7 +287,7 @@ class RequestTest extends TestCase
                 [
                     'http://example1.com',
                     'example1.com',
-                ]
+                ],
             ],
             // HTTP header missing
             [
@@ -294,7 +297,7 @@ class RequestTest extends TestCase
                 [
                     'http://example2.com',
                     'example2.com',
-                ]
+                ],
             ],
             // forwarded from untrusted server
             [
@@ -306,7 +309,7 @@ class RequestTest extends TestCase
                 [
                     'http://example1.com',
                     'example1.com',
-                ]
+                ],
             ],
             // forwarded from trusted proxy
             [
@@ -319,7 +322,7 @@ class RequestTest extends TestCase
                 [
                     'http://example3.com',
                     'example3.com',
-                ]
+                ],
             ],
             // forwarded from trusted proxy
             [
@@ -332,7 +335,7 @@ class RequestTest extends TestCase
                 [
                     'http://example3.com',
                     'example3.com',
-                ]
+                ],
             ],
             // RFC 7239 forwarded from untrusted server
             [
@@ -344,7 +347,7 @@ class RequestTest extends TestCase
                 [
                     'http://example1.com',
                     'example1.com',
-                ]
+                ],
             ],
             // RFC 7239 forwarded from trusted proxy
             [
@@ -356,7 +359,7 @@ class RequestTest extends TestCase
                 [
                     'http://example3.com',
                     'example3.com',
-                ]
+                ],
             ],
             // RFC 7239 forwarded from trusted proxy
             [
@@ -368,13 +371,14 @@ class RequestTest extends TestCase
                 [
                     'http://example2.com',
                     'example2.com',
-                ]
+                ],
             ],
         ];
     }
 
     /**
      * @dataProvider getHostInfoDataProvider
+     *
      * @param array $server
      * @param array $expected
      */
@@ -394,7 +398,6 @@ class RequestTest extends TestCase
             ],
         ]);
 
-
         $this->assertEquals($expected[0], $request->getHostInfo());
         $this->assertEquals($expected[1], $request->getHostName());
 
@@ -410,12 +413,10 @@ class RequestTest extends TestCase
             ],
         ]);
 
-
         $this->assertEquals($expected[0], $request->getHostInfo());
         $this->assertEquals($expected[1], $request->getHostName());
         $_SERVER = $original;
     }
-
 
     public function testSetHostInfo()
     {
@@ -558,8 +559,9 @@ class RequestTest extends TestCase
 
     /**
      * @dataProvider isSecureServerDataProvider
+     *
      * @param array $server
-     * @param bool $expected
+     * @param bool  $expected
      */
     public function testGetIsSecureConnection($server, $expected)
     {
@@ -612,8 +614,9 @@ class RequestTest extends TestCase
 
     /**
      * @dataProvider isSecureServerWithoutTrustedHostDataProvider
+     *
      * @param array $server
-     * @param bool $expected
+     * @param bool  $expected
      */
     public function testGetIsSecureConnectionWithoutTrustedHost($server, $expected)
     {
@@ -776,7 +779,8 @@ class RequestTest extends TestCase
 
     /**
      * @dataProvider getUserIPDataProvider
-     * @param array $server
+     *
+     * @param array  $server
      * @param string $expected
      */
     public function testGetUserIP($server, $expected)
@@ -831,16 +835,17 @@ class RequestTest extends TestCase
     }
 
     /**
-    * @dataProvider getUserIPWithoutTruestHostDataProvider
-    * @param array $server
-    * @param string $expected
-    */
-   public function testGetUserIPWithoutTrustedHost($server, $expected)
-   {
-       $original = $_SERVER;
-       $_SERVER = $server;
+     * @dataProvider getUserIPWithoutTruestHostDataProvider
+     *
+     * @param array  $server
+     * @param string $expected
+     */
+    public function testGetUserIPWithoutTrustedHost($server, $expected)
+    {
+        $original = $_SERVER;
+        $_SERVER = $server;
 
-       $request = new Request([
+        $request = new Request([
            'trustedHosts' => [
                '192.168.0.0/24' => ['X-Forwarded-For'],
            ],
@@ -853,10 +858,10 @@ class RequestTest extends TestCase
                'forwarded',
            ],
        ]);
-       $this->assertEquals($expected, $request->getUserIP());
+        $this->assertEquals($expected, $request->getUserIP());
 
-       $_SERVER = $original;
-   }
+        $_SERVER = $original;
+    }
 
     public function getMethodDataProvider()
     {
@@ -879,7 +884,8 @@ class RequestTest extends TestCase
 
     /**
      * @dataProvider getMethodDataProvider
-     * @param array $server
+     *
+     * @param array  $server
      * @param string $expected
      */
     public function testGetMethod($server, $expected)
@@ -911,8 +917,9 @@ class RequestTest extends TestCase
 
     /**
      * @dataProvider getIsAjaxDataProvider
+     *
      * @param array $server
-     * @param bool $expected
+     * @param bool  $expected
      */
     public function testGetIsAjax($server, $expected)
     {
@@ -944,8 +951,9 @@ class RequestTest extends TestCase
 
     /**
      * @dataProvider getIsPjaxDataProvider
+     *
      * @param array $server
-     * @param bool $expected
+     * @param bool  $expected
      */
     public function testGetIsPjax($server, $expected)
     {
@@ -984,8 +992,9 @@ class RequestTest extends TestCase
 
     /**
      * @dataProvider httpAuthorizationHeadersProvider
+     *
      * @param string $secret
-     * @param array $expected
+     * @param array  $expected
      */
     public function testHttpAuthCredentialsFromHttpAuthorizationHeader($secret, $expected)
     {
@@ -1009,7 +1018,7 @@ class RequestTest extends TestCase
     public function testHttpAuthCredentialsFromServerSuperglobal()
     {
         $original = $_SERVER;
-        list($user, $pw) = ['foo', 'bar'];
+        [$user, $pw] = ['foo', 'bar'];
         $_SERVER['PHP_AUTH_USER'] = $user;
         $_SERVER['PHP_AUTH_PW'] = $pw;
 
@@ -1037,7 +1046,7 @@ class RequestTest extends TestCase
         $this->assertSame('default', $request->getBodyParam('unexisting', 'default'));
 
         // @see https://github.com/yiisoft/yii2/issues/14135
-        $bodyParams = new \stdClass();
+        $bodyParams = new stdClass();
         $bodyParams->someParam = 'some value';
         $bodyParams->{'param.dot'} = 'value.dot';
         $request->setBodyParams($bodyParams);
@@ -1101,7 +1110,8 @@ class RequestTest extends TestCase
         $params = [
             'trustedHosts' => $trustedHosts,
         ];
-        if($ipHeaders !== null) {
+
+        if ($ipHeaders !== null) {
             $params['ipHeaders'] = $ipHeaders;
         }
         $request = new Request($params);
@@ -1125,7 +1135,8 @@ class RequestTest extends TestCase
         $this->assertSame($expectedMethod, $request->getMethod());
     }
 
-    public function alreadyResolvedIpDataProvider() {
+    public function alreadyResolvedIpDataProvider()
+    {
         return [
             'resolvedXForwardedFor' => [
                 '50.0.0.1',
@@ -1153,13 +1164,14 @@ class RequestTest extends TestCase
     /**
      * @dataProvider alreadyResolvedIpDataProvider
      */
-    public function testAlreadyResolvedIp($remoteAddress, $xForwardedFor, $xForwardedProto, $trustedHosts, $expectedRemoteAddress, $expectedUserIp, $expectedIsSecureConnection) {
+    public function testAlreadyResolvedIp($remoteAddress, $xForwardedFor, $xForwardedProto, $trustedHosts, $expectedRemoteAddress, $expectedUserIp, $expectedIsSecureConnection)
+    {
         $_SERVER['REMOTE_ADDR'] = $remoteAddress;
         $_SERVER['HTTP_X_FORWARDED_FOR'] = $xForwardedFor;
         $_SERVER['HTTP_X_FORWARDED_PROTO'] = $xForwardedProto;
         $request = new Request([
             'trustedHosts' => $trustedHosts,
-            'ipHeaders' => []
+            'ipHeaders' => [],
         ]);
         $this->assertSame($expectedRemoteAddress, $request->remoteIP, 'Remote IP fail!');
         $this->assertSame($expectedUserIp, $request->userIP, 'User IP fail!');
@@ -1173,44 +1185,44 @@ class RequestTest extends TestCase
                 '192.168.10.10',
                 'for=10.0.0.2;host=yiiframework.com;proto=https',
                 'https://yiiframework.com',
-                '10.0.0.2'
+                '10.0.0.2',
             ],
             [
                 '192.168.10.10',
                 'for=10.0.0.2;proto=https',
                 'https://example.com',
-                '10.0.0.2'
+                '10.0.0.2',
             ],
             [
                 '192.168.10.10',
                 'host=yiiframework.com;proto=https',
                 'https://yiiframework.com',
-                '192.168.10.10'
+                '192.168.10.10',
             ],
             [
                 '192.168.10.10',
                 'host=yiiframework.com;for=10.0.0.2',
                 'http://yiiframework.com',
-                '10.0.0.2'
+                '10.0.0.2',
             ],
             [
                 '192.168.20.10',
                 'host=yiiframework.com;for=10.0.0.2;proto=https',
                 'https://yiiframework.com',
-                '10.0.0.2'
+                '10.0.0.2',
             ],
             [
                 '192.168.10.10',
                 'for=10.0.0.1;host=yiiframework.com;proto=https, for=192.168.20.20;host=awesome.proxy.com;proto=http',
                 'https://yiiframework.com',
-                '10.0.0.1'
+                '10.0.0.1',
             ],
             [
                 '192.168.10.10',
                 'for=8.8.8.8;host=spoofed.host;proto=https, for=10.0.0.1;host=yiiframework.com;proto=https, for=192.168.20.20;host=trusted.proxy;proto=http',
                 'https://yiiframework.com',
-                '10.0.0.1'
-            ]
+                '10.0.0.1',
+            ],
         ];
     }
 
@@ -1226,7 +1238,7 @@ class RequestTest extends TestCase
         $request = new Request([
             'trustedHosts' => [
                 '192.168.10.0/24',
-                '192.168.20.0/24'
+                '192.168.20.0/24',
             ],
             'secureHeaders' => [
                 'X-Forwarded-For',
@@ -1252,7 +1264,7 @@ class RequestTest extends TestCase
         $request = new Request([
             'trustedHosts' => [
                 '192.168.10.0/24',
-                '192.168.20.0/24'
+                '192.168.20.0/24',
             ],
             'secureHeaders' => [
                 'X-Forwarded-For',

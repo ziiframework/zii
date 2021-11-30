@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -42,7 +43,7 @@ class FilterValidatorTest extends TestCase
         $val = new FilterValidator(['filter' => 'trim']);
         $val->validateAttribute($m, 'attr_one');
         $this->assertSame('to be trimmed', $m->attr_one);
-        $val->filter = function ($value) {
+        $val->filter = static function ($value) {
             return null;
         };
         $val->validateAttribute($m, 'attr_two');
@@ -53,7 +54,7 @@ class FilterValidatorTest extends TestCase
         $val->skipOnEmpty = true;
         $val->validateAttribute($m, 'attr_empty2');
         $this->assertNotNull($m->attr_empty2);
-        $val->filter = function ($value) {
+        $val->filter = static function ($value) {
             return implode(',', $value);
         };
         $val->skipOnArray = false;

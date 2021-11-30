@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -49,10 +50,8 @@ class LinkSorterTest extends DatabaseTestCase
         ]);
         $actualHtml = ob_get_clean();
 
-        $this->assertNotFalse(strpos($actualHtml,
-            '<a href="/index.php?r=site%2Findex&amp;sort=customer_id" data-sort="customer_id">Customer</a>'));
-        $this->assertNotFalse(strpos($actualHtml,
-            '<a href="/index.php?r=site%2Findex&amp;sort=total" data-sort="total">Invoice Total</a>'));
+        $this->assertNotFalse(strpos($actualHtml, '<a href="/index.php?r=site%2Findex&amp;sort=customer_id" data-sort="customer_id">Customer</a>'));
+        $this->assertNotFalse(strpos($actualHtml, '<a href="/index.php?r=site%2Findex&amp;sort=total" data-sort="total">Invoice Total</a>'));
     }
 
     public function testLabelsExplicit()
@@ -74,10 +73,8 @@ class LinkSorterTest extends DatabaseTestCase
         ]);
         $actualHtml = ob_get_clean();
 
-        $this->assertFalse(strpos($actualHtml,
-            '<a href="/index.php?r=site%2Findex&amp;sort=customer_id" data-sort="customer_id">Customer</a>'));
-        $this->assertNotFalse(strpos($actualHtml,
-            '<a href="/index.php?r=site%2Findex&amp;sort=total" data-sort="total">Invoice Total</a>'));
+        $this->assertFalse(strpos($actualHtml, '<a href="/index.php?r=site%2Findex&amp;sort=customer_id" data-sort="customer_id">Customer</a>'));
+        $this->assertNotFalse(strpos($actualHtml, '<a href="/index.php?r=site%2Findex&amp;sort=total" data-sort="total">Invoice Total</a>'));
     }
 
     /**
@@ -86,17 +83,15 @@ class LinkSorterTest extends DatabaseTestCase
     public function testShouldTriggerInitEvent()
     {
         $initTriggered = false;
-        new LinkSorter(
-            [
+        new LinkSorter([
                 'sort' => [
                     'attributes' => ['total'],
                     'route' => 'site/index',
                 ],
-                'on init' => function () use (&$initTriggered) {
+                'on init' => static function () use (&$initTriggered) {
                     $initTriggered = true;
-                }
-            ]
-        );
+                },
+            ]);
 
         $this->assertTrue($initTriggered);
     }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -30,6 +31,7 @@ class PaginationTest extends TestCase
 
     /**
      * Data provider for [[testCreateUrl()]].
+     *
      * @return array test data
      */
     public function dataProviderCreateUrl()
@@ -72,11 +74,11 @@ class PaginationTest extends TestCase
     /**
      * @dataProvider dataProviderCreateUrl
      *
-     * @param int $page
-     * @param int $pageSize
+     * @param int    $page
+     * @param int    $pageSize
      * @param string $expectedUrl
-     * @param array $params
-     * @param bool $absolute
+     * @param array  $params
+     * @param bool   $absolute
      */
     public function testCreateUrl($page, $pageSize, $expectedUrl, $params, $absolute = false)
     {
@@ -174,9 +176,9 @@ class PaginationTest extends TestCase
      * @dataProvider dataProviderSetPage
      *
      * @param int|null $value
-     * @param bool $validate
-     * @param int $totalCount
-     * @param int $page
+     * @param bool     $validate
+     * @param int      $totalCount
+     * @param int      $page
      */
     public function testSetPage($value, $validate, $totalCount, $page)
     {
@@ -204,7 +206,7 @@ class PaginationTest extends TestCase
      * @dataProvider dataProviderGetPageSize
      *
      * @param array|bool $pageSizeLimit
-     * @param int $pageSize
+     * @param int        $pageSize
      */
     public function testGetPageSize($pageSizeLimit, $pageSize)
     {
@@ -235,10 +237,10 @@ class PaginationTest extends TestCase
     /**
      * @dataProvider dataProviderSetPageSize
      *
-     * @param int|null $value
-     * @param bool $validate
+     * @param int|null    $value
+     * @param bool        $validate
      * @param array|false $pageSizeLimit
-     * @param int $pageSize
+     * @param int         $pageSize
      */
     public function testSetPageSize($value, $validate, $pageSizeLimit, $pageSize)
     {
@@ -380,10 +382,10 @@ class PaginationTest extends TestCase
     /**
      * @dataProvider dataProviderGetLinks
      *
-     * @param int $page
-     * @param int $pageSize
-     * @param int $totalCount
-     * @param string $self
+     * @param int         $page
+     * @param int         $pageSize
+     * @param int         $totalCount
+     * @param string      $self
      * @param string|null $first
      * @param string|null $last
      * @param string|null $prev
@@ -406,16 +408,19 @@ class PaginationTest extends TestCase
         } else {
             $this->assertArrayNotHasKey(Pagination::LINK_FIRST, $links);
         }
+
         if ($last) {
             $this->assertSame($last, $links[Pagination::LINK_LAST]);
         } else {
             $this->assertArrayNotHasKey(Pagination::LINK_LAST, $links);
         }
+
         if ($prev) {
             $this->assertSame($prev, $links[Pagination::LINK_PREV]);
         } else {
             $this->assertArrayNotHasKey(Pagination::LINK_PREV, $links);
         }
+
         if ($next) {
             $this->assertSame($next, $links[Pagination::LINK_NEXT]);
         } else {

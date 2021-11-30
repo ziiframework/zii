@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -16,6 +17,7 @@ use yiiunit\framework\db\DatabaseTestCase;
 
 /**
  * Unit test for [[\yii\console\controllers\FixtureController]].
+ *
  * @see FixtureController
  *
  * @group console
@@ -35,7 +37,7 @@ class FixtureControllerTest extends DatabaseTestCase
         parent::setUp();
 
         $db = $this->getConnection();
-        \Yii::$app->set('db', $db);
+        Yii::$app->set('db', $db);
         ActiveRecord::$db = $db;
 
         $this->_fixtureController = Yii::createObject([
@@ -202,10 +204,7 @@ class FixtureControllerTest extends DatabaseTestCase
     {
         $this->_fixtureController->actionLoad(['First', '-First']);
 
-        $this->assertEmpty(
-            FixtureStorage::$firstFixtureData,
-            'first fixture data should not be loaded'
-        );
+        $this->assertEmpty(FixtureStorage::$firstFixtureData, 'first fixture data should not be loaded');
     }
 
     public function testNothingToUnloadParticularExceptOnes()

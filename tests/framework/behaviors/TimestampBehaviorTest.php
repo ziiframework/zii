@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -17,6 +18,7 @@ use yiiunit\TestCase;
 
 /**
  * Unit test for [[\yii\behaviors\TimestampBehavior]].
+ *
  * @see TimestampBehavior
  *
  * @group behaviors
@@ -119,12 +121,9 @@ class TimestampBehaviorTest extends TestCase
         $model = new ActiveRecordTimestamp();
         $model->save(false);
 
-        $model->on(
-            ActiveRecordTimestamp::EVENT_AFTER_UPDATE,
-            function ($event) {
+        $model->on(ActiveRecordTimestamp::EVENT_AFTER_UPDATE, function ($event) {
                 $this->assertEmpty($event->changedAttributes);
-            }
-        );
+            });
 
         $model->save(false);
     }
@@ -132,7 +131,7 @@ class TimestampBehaviorTest extends TestCase
     public function expressionProvider()
     {
         return [
-            [function () { return '2015-01-01'; }, '2015-01-01'],
+            [static function () { return '2015-01-01'; }, '2015-01-01'],
             [new Expression("strftime('%Y')"), date('Y')],
             ['2015-10-20', '2015-10-20'],
             [time(), time()],
@@ -142,6 +141,7 @@ class TimestampBehaviorTest extends TestCase
 
     /**
      * @dataProvider expressionProvider
+     *
      * @param mixed $expression
      * @param mixed $expected
      */
@@ -156,6 +156,7 @@ class TimestampBehaviorTest extends TestCase
         ];
         $model = new ActiveRecordTimestamp();
         $model->save(false);
+
         if ($expression instanceof ExpressionInterface) {
             $this->assertInstanceOf('yii\db\ExpressionInterface', $model->created_at);
             $this->assertInstanceOf('yii\db\ExpressionInterface', $model->updated_at);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -12,6 +13,7 @@ use yiiunit\TestCase;
 
 /**
  * Class EmailTargetTest.
+ *
  * @group log
  */
 class EmailTargetTest extends TestCase
@@ -88,12 +90,10 @@ class EmailTargetTest extends TestCase
             ->getMock();
 
         $mailTarget->messages = $messages;
-        $mailTarget->expects($this->exactly(2))->method('formatMessage')->willReturnMap(
-            [
+        $mailTarget->expects($this->exactly(2))->method('formatMessage')->willReturnMap([
                 [$message1, $message1[0]],
                 [$message2, $message2[0]],
-            ]
-        );
+            ]);
         $mailTarget->export();
     }
 
@@ -132,12 +132,10 @@ class EmailTargetTest extends TestCase
             ->getMock();
 
         $mailTarget->messages = $messages;
-        $mailTarget->expects($this->exactly(2))->method('formatMessage')->willReturnMap(
-            [
+        $mailTarget->expects($this->exactly(2))->method('formatMessage')->willReturnMap([
                 [$message1, $message1[0]],
                 [$message2, $message2[0]],
-            ]
-        );
+            ]);
         $mailTarget->export();
     }
 

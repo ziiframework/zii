@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -9,7 +10,9 @@ namespace yii\rbac;
 
 /**
  * Mock for the filemtime() function for rbac classes. Avoid random test fails.
+ *
  * @param string $file
+ *
  * @return int
  */
 function filemtime($file)
@@ -19,6 +22,7 @@ function filemtime($file)
 
 /**
  * Mock for the time() function for rbac classes. Avoid random test fails.
+ *
  * @return int
  */
 function time()
@@ -32,6 +36,7 @@ use Yii;
 
 /**
  * @group rbac
+ *
  * @property ExposedPhpManager $auth
  */
 class PhpManagerTest extends ManagerTestCase

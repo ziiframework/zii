@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -73,6 +74,7 @@ class UrlManagerTest extends TestCase
 
     /**
      * @dataProvider ignoredOptionsProvider
+     *
      * @param bool $showScriptName
      * @param bool $enableStrictParsing
      */
@@ -98,6 +100,7 @@ class UrlManagerTest extends TestCase
 
     /**
      * @dataProvider ignoredOptionsProvider
+     *
      * @param bool $showScriptName
      * @param bool $enableStrictParsing
      */
@@ -121,6 +124,7 @@ class UrlManagerTest extends TestCase
      * @dataProvider ignoredOptionsProvider
      *
      * @see https://github.com/yiisoft/yii2/pull/9596
+     *
      * @param bool $showScriptName
      * @param bool $enableStrictParsing
      */
@@ -146,6 +150,7 @@ class UrlManagerTest extends TestCase
 
     /**
      * @dataProvider ignoredOptionsProvider
+     *
      * @param bool $showScriptName
      * @param bool $enableStrictParsing
      */
@@ -193,7 +198,9 @@ class UrlManagerTest extends TestCase
 
     /**
      * Test normalisation of different routes.
+     *
      * @dataProvider ignoredOptionsProvider
+     *
      * @param bool $showScriptName
      * @param bool $enableStrictParsing
      */
@@ -211,7 +218,6 @@ class UrlManagerTest extends TestCase
         $this->assertEquals('/index.php?r=post%2Fview', $url);
     }
 
-
     /**
      * @return array provides different names for UrlManager::$routeParam
      */
@@ -226,6 +232,7 @@ class UrlManagerTest extends TestCase
 
     /**
      * @dataProvider routeParamProvider
+     *
      * @param string $routeParam
      */
     public function testParseRequest($routeParam)

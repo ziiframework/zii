@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -61,6 +62,7 @@ class SessionTest extends TestCase
         $oldUseCookies = $session->getUseCookies();
         $session->setUseCookies(false);
         $newUseCookies = $session->getUseCookies();
+
         if (null !== $newUseCookies) {
             $this->assertNotEquals($oldUseCookies, $newUseCookies);
             $this->assertFalse($newUseCookies);
@@ -75,7 +77,7 @@ class SessionTest extends TestCase
     }
 
     /**
-     * Test set name. Also check set name twice and after open
+     * Test set name. Also check set name twice and after open.
      */
     public function testSetName()
     {

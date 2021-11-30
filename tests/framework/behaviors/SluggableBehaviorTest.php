@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -15,6 +16,7 @@ use yiiunit\TestCase;
 
 /**
  * Unit test for [[\yii\behaviors\SluggableBehavior]].
+ *
  * @see SluggableBehavior
  *
  * @group behaviors
@@ -144,7 +146,7 @@ class SluggableBehaviorTest extends TestCase
         $model->save();
 
         $model = new ActiveRecordSluggableUnique();
-        $model->sluggable->uniqueSlugGenerator = function ($baseSlug, $iteration) {return $baseSlug . '-callback';};
+        $model->sluggable->uniqueSlugGenerator = static function ($baseSlug, $iteration) {return $baseSlug . '-callback'; };
         $model->name = $name;
         $model->save();
 
@@ -215,7 +217,7 @@ class SluggableBehaviorTest extends TestCase
         $model = new ActiveRecordSluggable();
         $model->getSluggable()->immutable = true;
         $model->getSluggable()->attribute = null;
-        $model->getSluggable()->value = function () use ($model) {
+        $model->getSluggable()->value = static function () use ($model) {
             return $model->name;
         };
 
@@ -232,11 +234,10 @@ class SluggableBehaviorTest extends TestCase
 /**
  * Test Active Record class with [[SluggableBehavior]] behavior attached.
  *
- * @property int $id
- * @property string $name
- * @property string $slug
- * @property int $category_id
- *
+ * @property int               $id
+ * @property string            $name
+ * @property string            $slug
+ * @property int               $category_id
  * @property SluggableBehavior $sluggable
  */
 class ActiveRecordSluggable extends ActiveRecord

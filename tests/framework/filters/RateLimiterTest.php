@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -30,6 +31,7 @@ class RateLimiterTest extends TestCase
 
         $this->mockWebApplication();
     }
+
     protected function tearDown(): void
     {
         parent::tearDown();
@@ -156,7 +158,7 @@ class RateLimiterTest extends TestCase
     public function testUserWithClosureFunction()
     {
         $rateLimiter = new RateLimiter();
-        $rateLimiter->user = function($action) {
+        $rateLimiter->user = static function ($action) {
             return new User(['identityClass' => RateLimit::className()]);
         };
         $rateLimiter->beforeAction('test');

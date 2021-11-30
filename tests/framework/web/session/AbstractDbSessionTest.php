@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,9 @@
 
 namespace yiiunit\framework\web\session;
 
+use Exception;
+use PDO;
+use stdClass;
 use Yii;
 use yii\db\Connection;
 use yii\db\Migration;
@@ -47,14 +51,18 @@ abstract class AbstractDbSessionTest extends TestCase
     {
         $driverNames = $this->getDriverNames();
         $databases = self::getParam('databases');
+
         foreach ($driverNames as $driverName) {
-            if (in_array($driverName, \PDO::getAvailableDrivers()) && array_key_exists($driverName, $databases)) {
+            if (in_array($driverName, PDO::getAvailableDrivers()) && array_key_exists($driverName, $databases)) {
                 $driverAvailable = $driverName;
+
                 break;
             }
         }
+
         if (!isset($driverAvailable)) {
             $this->markTestIncomplete(get_called_class() . ' requires ' . implode(' or ', $driverNames) . ' PDO driver! Configuration for connection required too.');
+
             return [];
         }
         $config = $databases[$driverAvailable];
@@ -67,6 +75,7 @@ abstract class AbstractDbSessionTest extends TestCase
         if (isset($config['username'])) {
             $result['username'] = $config['username'];
         }
+
         if (isset($config['password'])) {
             $result['password'] = $config['password'];
         }
@@ -83,7 +92,7 @@ abstract class AbstractDbSessionTest extends TestCase
     {
         try {
             $this->runMigrate('down', ['all']);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Table may not exist for different reasons, but since this method
             // reverts DB changes to make next test pass, this exception is skipped.
         }
@@ -140,7 +149,7 @@ abstract class AbstractDbSessionTest extends TestCase
     {
         $session = new DbSession();
 
-        $session->writeCallback = function ($session) {
+        $session->writeCallback = static function ($session) {
             return ['data' => 'changed by callback data'];
         };
 
@@ -160,11 +169,11 @@ abstract class AbstractDbSessionTest extends TestCase
         $session->set('user_id', 12345);
 
         // add mapped custom column
-        $migration = new Migration;
+        $migration = new Migration();
         $migration->compact = true;
         $migration->addColumn($session->sessionTable, 'user_id', $migration->integer());
 
-        $session->writeCallback = function ($session) {
+        $session->writeCallback = static function ($session) {
             return ['user_id' => $session['user_id']];
         };
 
@@ -180,7 +189,7 @@ abstract class AbstractDbSessionTest extends TestCase
 
     protected function buildObjectForSerialization()
     {
-        $object = new \stdClass();
+        $object = new stdClass();
         $object->nullValue = null;
         $object->floatValue = pi();
         $object->textValue = str_repeat('QweåßƒТест', 200);
@@ -223,7 +232,7 @@ abstract class AbstractDbSessionTest extends TestCase
         $migrate->run($action, $params);
         ob_get_clean();
 
-        return array_map(function ($version) {
+        return array_map(static function ($version) {
             return substr($version, 15);
         }, (new Query())->select(['version'])->from('migration')->column());
     }

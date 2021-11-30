@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -29,6 +30,7 @@ class Fixture1 extends Fixture
 class Fixture2 extends Fixture
 {
     public $depends = ['yiiunit\framework\test\Fixture3'];
+
     public function load()
     {
         MyTestCase::$load .= '2';
@@ -56,6 +58,7 @@ class Fixture3 extends Fixture
 class Fixture4 extends Fixture
 {
     public $depends = ['yiiunit\framework\test\Fixture5'];
+
     public function load()
     {
         MyTestCase::$load .= '4';
@@ -70,6 +73,7 @@ class Fixture4 extends Fixture
 class Fixture5 extends Fixture
 {
     public $depends = ['yiiunit\framework\test\Fixture4'];
+
     public function load()
     {
         MyTestCase::$load .= '5';
@@ -80,7 +84,6 @@ class Fixture5 extends Fixture
         MyTestCase::$unload .= '5';
     }
 }
-
 
 class MyTestCase
 {
@@ -146,6 +149,7 @@ class MyTestCase
                 'fixture3a' => Fixture3::className(), // duplicate fixtures may occur two fixtures depend on the same fixture.
                 'fixture3b' => Fixture3::className(),
             ];
+
             default: return [];
         }
     }
@@ -162,6 +166,7 @@ class FixtureTest extends TestCase
             $test = new MyTestCase();
             $test->scenario = $scenario;
             $test->setUp();
+
             foreach ($result as $name => $loaded) {
                 $this->assertEquals($loaded, $test->fetchFixture($name) !== null, "Verifying scenario $scenario fixture $name");
             }

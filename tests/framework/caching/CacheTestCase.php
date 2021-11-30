@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -9,6 +10,7 @@ namespace yii\caching;
 
 /**
  * Mock for the time() function for caching classes.
+ *
  * @return int
  */
 function time()
@@ -18,7 +20,9 @@ function time()
 
 /**
  * Mock for the microtime() function for caching classes.
+ *
  * @param bool $float
+ *
  * @return float
  */
 function microtime($float = false)
@@ -39,15 +43,14 @@ abstract class CacheTestCase extends TestCase
 {
     /**
      * @var int virtual time to be returned by mocked time() function.
-     * Null means normal time() behavior.
+     *          Null means normal time() behavior.
      */
     public static $time;
     /**
      * @var float virtual time to be returned by mocked microtime() function.
-     * Null means normal microtime() behavior.
+     *            Null means normal microtime() behavior.
      */
     public static $microtime;
-
 
     /**
      * @return CacheInterface
@@ -114,6 +117,7 @@ abstract class CacheTestCase extends TestCase
 
     /**
      * @dataProvider multiSetExpiry
+     *
      * @param int $expiry
      */
     public function testMultiset($expiry)
@@ -281,11 +285,11 @@ abstract class CacheTestCase extends TestCase
         $dependency = new TagDependency(['tags' => 'test']);
 
         $expected = 'SilverFire';
-        $loginClosure = function ($cache) use (&$login) { return 'SilverFire'; };
+        $loginClosure = static function ($cache) use (&$login) { return 'SilverFire'; };
         $this->assertEquals($expected, $cache->getOrSet('some-login', $loginClosure, null, $dependency));
 
         // Call again with another login to make sure that value is cached
-        $loginClosure = function ($cache) use (&$login) { return 'SamDark'; };
+        $loginClosure = static function ($cache) use (&$login) { return 'SamDark'; };
         $this->assertEquals($expected, $cache->getOrSet('some-login', $loginClosure, null, $dependency));
 
         $dependency->invalidate($cache, 'test');

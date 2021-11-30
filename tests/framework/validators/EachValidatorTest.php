@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,8 +12,8 @@ use yii\validators\EachValidator;
 use yiiunit\data\base\ArrayAccessObject;
 use yiiunit\data\base\Speaker;
 use yiiunit\data\validators\models\FakedValidationModel;
-use yiiunit\data\validators\models\ValidatorTestTypedPropModel;
 use yiiunit\data\validators\models\ValidatorTestEachAndInlineMethodModel;
+use yiiunit\data\validators\models\ValidatorTestTypedPropModel;
 use yiiunit\TestCase;
 
 /**
@@ -192,7 +193,7 @@ class EachValidatorTest extends TestCase
     public function testValidateArrayAccess()
     {
         $model = FakedValidationModel::createWithAttributes([
-            'attr_array' => new ArrayAccessObject([1,2,3]),
+            'attr_array' => new ArrayAccessObject([1, 2, 3]),
         ]);
 
         $validator = new EachValidator(['rule' => ['integer']]);
@@ -214,6 +215,7 @@ class EachValidatorTest extends TestCase
     {
         if (PHP_VERSION_ID < 70400) {
             $this->markTestSkipped('Can not be tested on PHP < 7.4');
+
             return;
         }
 

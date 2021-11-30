@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,6 +12,7 @@ use yii\web\Controller;
 
 /**
  * @author Brandon Kelly <branodn@craftcms.com>
+ *
  * @since 2.0.31
  */
 class FakePhp7Controller extends Controller

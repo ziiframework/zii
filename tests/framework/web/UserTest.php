@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -9,6 +10,7 @@ namespace yii\web;
 
 /**
  * Mock for the time() function for web classes.
+ *
  * @return int
  */
 function time()
@@ -34,7 +36,7 @@ class UserTest extends TestCase
 {
     /**
      * @var int virtual time to be returned by mocked time() function.
-     * Null means normal time() behavior.
+     *          Null means normal time() behavior.
      */
     public static $time;
 
@@ -94,6 +96,7 @@ class UserTest extends TestCase
 
     /**
      * Make sure autologin works more than once.
+     *
      * @see https://github.com/yiisoft/yii2/issues/11825
      */
     public function testIssue11825()
@@ -209,6 +212,7 @@ class UserTest extends TestCase
         ]);
         Yii::$app->user->setReturnUrl(null);
     }
+
     public function testLoginRequired()
     {
         $appConfig = [
@@ -226,7 +230,6 @@ class UserTest extends TestCase
         ];
         $this->mockWebApplication($appConfig);
 
-
         $user = Yii::$app->user;
 
         $this->reset();
@@ -234,7 +237,6 @@ class UserTest extends TestCase
         $user->loginRequired();
         $this->assertEquals('normal', $user->getReturnUrl());
         $this->assertTrue(Yii::$app->response->getIsRedirection());
-
 
         $this->reset();
         Yii::$app->request->setUrl('ajax');
@@ -273,6 +275,7 @@ class UserTest extends TestCase
         $this->reset();
         Yii::$app->request->setUrl('json-and-accept-all');
         $_SERVER['HTTP_ACCEPT'] = 'text/json, */*; q=0.1';
+
         try {
             $user->loginRequired();
         } catch (ForbiddenHttpException $e) {
@@ -311,6 +314,7 @@ class UserTest extends TestCase
         $this->reset();
         Yii::$app->request->setUrl('json-only');
         $_SERVER['HTTP_ACCEPT'] = 'text/json;q=0.1';
+
         try {
             $user->loginRequired();
         } catch (ForbiddenHttpException $e) {
@@ -352,8 +356,8 @@ class UserTest extends TestCase
             'components' => [
                 'user' => [
                     'identityClass' => UserIdentity::className(),
-                    'accessChecker' => AccessChecker::className()
-                ]
+                    'accessChecker' => AccessChecker::className(),
+                ],
             ],
         ]);
         $this->assertInstanceOf(AccessChecker::className(), Yii::$app->user->accessChecker);
@@ -378,7 +382,7 @@ class UserTest extends TestCase
                 ],
                 'accessChecker' => [
                     'class' => AccessChecker::className(),
-                ]
+                ],
             ],
         ]);
         $this->assertInstanceOf(AccessChecker::className(), Yii::$app->user->accessChecker);
@@ -401,6 +405,7 @@ class UserTest extends TestCase
         $this->mockWebApplication($appConfig);
 
         $exceptionThrown = false;
+
         try {
             Yii::$app->getUser()->getIdentity();
         } catch (\Exception $e) {
@@ -501,7 +506,6 @@ class UserTest extends TestCase
         Yii::$app->session->set('__id', 'user1');
         Yii::$app->session->set('__authKey', 'invalid');
 
-
         $this->assertNull(Yii::$app->user->getIdentity());
     }
 
@@ -548,7 +552,6 @@ class MockResponse extends \yii\web\Response
 
 class AccessChecker extends BaseObject implements CheckAccessInterface
 {
-
     public function checkAccess($userId, $permissionName, $params = [])
     {
         // Implement checkAccess() method.

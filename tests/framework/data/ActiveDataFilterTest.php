@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -152,7 +153,7 @@ class ActiveDataFilterTest extends TestCase
             [
                 [
                     'number' => [
-                        'neq' => 'NULL'
+                        'neq' => 'NULL',
                     ],
                 ],
                 ['!=', 'number', null],
@@ -194,10 +195,10 @@ class ActiveDataFilterTest extends TestCase
 
         $builder->setSearchModel($searchModel);
 
-        $builder->conditionBuilders['OR'] = function ($operator, $condition) {
+        $builder->conditionBuilders['OR'] = static function ($operator, $condition) {
             return ['CALLBACK-OR', $condition];
         };
-        $builder->conditionBuilders['LIKE'] = function ($operator, $condition, $attribute) {
+        $builder->conditionBuilders['LIKE'] = static function ($operator, $condition, $attribute) {
             return ['CALLBACK-LIKE', $operator, $condition, $attribute];
         };
 

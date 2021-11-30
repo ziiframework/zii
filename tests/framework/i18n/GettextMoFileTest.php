@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -62,9 +63,11 @@ class GettextMoFileTest extends TestCase
 
         // create temporary directory and dump messages
         $poFileDirectory = __DIR__ . '/../../runtime/i18n';
+
         if (!is_dir($poFileDirectory)) {
             mkdir($poFileDirectory);
         }
+
         if (is_file($poFileDirectory . '/test.mo')) {
             unlink($poFileDirectory . '/test.mo');
         }

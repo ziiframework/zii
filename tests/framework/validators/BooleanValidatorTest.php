@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -84,10 +85,7 @@ class BooleanValidatorTest extends TestCase
         $obj->attrC = '0';
         $obj->attrD = [];
 
-        $this->assertEquals(
-            'yii.validation.boolean(value, messages, {"trueValue":true,"falseValue":false,"message":"attrB must be either \"true\" or \"false\".","skipOnEmpty":1,"strict":1});',
-            $validator->clientValidateAttribute($obj, 'attrB', new ViewStub())
-        );
+        $this->assertEquals('yii.validation.boolean(value, messages, {"trueValue":true,"falseValue":false,"message":"attrB must be either \"true\" or \"false\".","skipOnEmpty":1,"strict":1});', $validator->clientValidateAttribute($obj, 'attrB', new ViewStub()));
     }
 }
 

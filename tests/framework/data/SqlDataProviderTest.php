@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -63,6 +64,7 @@ class SqlDataProviderTest extends DatabaseTestCase
 
     /**
      * @dataProvider providerForOrderByColumn
+     *
      * @see https://github.com/yiisoft/yii2/issues/18552
      */
     public function testRemovingOrderBy($column)
@@ -72,7 +74,7 @@ class SqlDataProviderTest extends DatabaseTestCase
             'db' => $this->getConnection(),
             'sort' => [
                 'attributes' => ['email'],
-                'params' => ['sort' => '-email']
+                'params' => ['sort' => '-email'],
             ],
         ]);
         $modelsSorted = $dataProvider->getModels();

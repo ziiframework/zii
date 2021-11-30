@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -27,6 +28,7 @@ class BaseMailerTest extends TestCase
             ],
         ]);
         $filePath = $this->getTestFilePath();
+
         if (!file_exists($filePath)) {
             FileHelper::createDirectory($filePath);
         }
@@ -35,13 +37,14 @@ class BaseMailerTest extends TestCase
     public function tearDown(): void
     {
         $filePath = $this->getTestFilePath();
+
         if (file_exists($filePath)) {
             FileHelper::removeDirectory($filePath);
         }
     }
 
     /**
-     * @return string test file path.
+     * @return string test file path
      */
     protected function getTestFilePath()
     {
@@ -49,7 +52,7 @@ class BaseMailerTest extends TestCase
     }
 
     /**
-     * @return Mailer test email component instance.
+     * @return Mailer test email component instance
      */
     protected function createTestMailComponent()
     {
@@ -136,6 +139,7 @@ class BaseMailerTest extends TestCase
         foreach ($notPropertyConfig as $name => $value) {
             $this->assertEquals($value, $message->{'_' . $name});
         }
+
         foreach ($propertyConfig as $name => $value) {
             $this->assertEquals($value, $message->$name);
         }
@@ -253,7 +257,8 @@ TEXT
 
     /**
      * @dataProvider htmlAndPlainProvider
-     * @param int $i
+     *
+     * @param int    $i
      * @param string $htmlViewFileContent
      * @param string $expectedTextRendering
      */
@@ -282,7 +287,7 @@ TEXT
 
         $mailer->fileTransportPath = '@yiiunit/runtime/mail';
         $mailer->useFileTransport = true;
-        $mailer->fileTransportCallback = function () {
+        $mailer->fileTransportCallback = static function () {
             return 'message.txt';
         };
         $message = $mailer->compose()
@@ -462,6 +467,7 @@ class Message extends BaseMessage
         $this->mailer = null;
         $s = var_export($this, true);
         $this->mailer = $mailer;
+
         return $s;
     }
 }

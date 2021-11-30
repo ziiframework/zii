@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -129,13 +130,14 @@ class CompositeAuthTest extends \yiiunit\TestCase
 
     public function testCompositeAuth()
     {
-        Yii::$app->request->headers->set('Authorization', base64_encode("foo:bar"));
+        Yii::$app->request->headers->set('Authorization', base64_encode('foo:bar'));
         /** @var TestAuthController $controller */
         $controller = Yii::$app->createController('test')[0];
         $controller->authMethods = [
             HttpBearerAuth::className(),
             TestAuth::className(),
         ];
+
         try {
             $this->assertEquals('success', $controller->run('b'));
         } catch (UnauthorizedHttpException $e) {

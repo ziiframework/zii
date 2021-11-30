@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,8 @@
 
 namespace yiiunit\framework\ar;
 
+use Exception;
+use function get_class;
 use yii\base\Event;
 use yii\db\ActiveRecordInterface;
 use yii\db\BaseActiveRecord;
@@ -21,6 +24,7 @@ use yiiunit\TestCase;
  * It is used directly in the unit tests for database active records in `tests/framework/db/ActiveRecordTest.php`
  * but also used in the test suites of `redis`, `mongodb`, `elasticsearch` and `sphinx` AR implementations
  * in the extensions.
+ *
  * @see https://github.com/yiisoft/yii2-redis/blob/a920547708c4a7091896923abc2499bc8c1c0a3b/tests/bootstrap.php#L17-L26
  */
 trait ActiveRecordTestTrait
@@ -28,24 +32,28 @@ trait ActiveRecordTestTrait
     /* @var $this TestCase */
     /**
      * This method should return the classname of Customer class.
+     *
      * @return string
      */
     abstract public function getCustomerClass();
 
     /**
      * This method should return the classname of Order class.
+     *
      * @return string
      */
     abstract public function getOrderClass();
 
     /**
      * This method should return the classname of OrderItem class.
+     *
      * @return string
      */
     abstract public function getOrderItemClass();
 
     /**
      * This method should return the classname of Item class.
+     *
      * @return string
      */
     abstract public function getItemClass();
@@ -110,9 +118,7 @@ trait ActiveRecordTestTrait
         $customer = $customerClass::findOne(new Expression('[[id]] = :id', [':id' => 2]));
         $this->assertInstanceOf($customerClass, $customer);
         $this->assertEquals('user2', $customer->name);
-        $customer = $customerClass::findOne(
-            new Expression('[[id]] = :id AND [[name]] = :name', [':id' => 2, ':name' => 'user1'])
-        );
+        $customer = $customerClass::findOne(new Expression('[[id]] = :id AND [[name]] = :name', [':id' => 2, ':name' => 'user1']));
         $this->assertNull($customer);
         $customer = $customerClass::findOne(new Expression('[[id]] = :id', [':id' => 5]));
         $this->assertNull($customer);
@@ -220,7 +226,7 @@ trait ActiveRecordTestTrait
         $this->assertInstanceOf($customerClass, $customers['user3']);
 
         // indexBy callable
-        $customers = $customerClass::find()->indexBy(function ($customer) {
+        $customers = $customerClass::find()->indexBy(static function ($customer) {
             return $customer->id . '-' . $customer->name;
         })->orderBy('id')->all();
         $this->assertCount(3, $customers);
@@ -255,7 +261,7 @@ trait ActiveRecordTestTrait
         $this->assertArrayHasKey('status', $customers['user3']);
 
         // indexBy callable + asArray
-        $customers = $customerClass::find()->indexBy(function ($customer) {
+        $customers = $customerClass::find()->indexBy(static function ($customer) {
             return $customer['id'] . '-' . $customer['name'];
         })->asArray()->all();
         $this->assertCount(3, $customers);
@@ -802,7 +808,6 @@ trait ActiveRecordTestTrait
         $this->assertNull($orderClass::findOne(2));
         $this->assertNull($orderClass::findOne(3));
 
-
         // has many without delete
         $customer = $customerClass::findOne(2);
         $this->assertCount(2, $customer->ordersWithNullFK);
@@ -812,7 +817,6 @@ trait ActiveRecordTestTrait
         $this->assertCount(0, $customer->ordersWithNullFK);
         $this->assertEquals(3, $orderWithNullFKClass::find()->count());
         $this->assertEquals(2, $orderWithNullFKClass::find()->where(['AND', ['id' => [2, 3]], ['customer_id' => null]])->count());
-
 
         // via model with delete
         /* @var $order Order */
@@ -1115,10 +1119,10 @@ trait ActiveRecordTestTrait
         /* @var $this TestCase|ActiveRecordTestTrait */
 
         $afterFindCalls = [];
-        Event::on(BaseActiveRecord::className(), BaseActiveRecord::EVENT_AFTER_FIND, function ($event) use (&$afterFindCalls) {
+        Event::on(BaseActiveRecord::className(), BaseActiveRecord::EVENT_AFTER_FIND, static function ($event) use (&$afterFindCalls) {
             /* @var $ar BaseActiveRecord */
             $ar = $event->sender;
-            $afterFindCalls[] = [\get_class($ar), $ar->getIsNewRecord(), $ar->getPrimaryKey(), $ar->isRelationPopulated('orders')];
+            $afterFindCalls[] = [get_class($ar), $ar->getIsNewRecord(), $ar->getPrimaryKey(), $ar->isRelationPopulated('orders')];
         });
 
         $customer = $customerClass::findOne(1);
@@ -1170,10 +1174,10 @@ trait ActiveRecordTestTrait
         /* @var $this TestCase|ActiveRecordTestTrait */
 
         $afterRefreshCalls = [];
-        Event::on(BaseActiveRecord::className(), BaseActiveRecord::EVENT_AFTER_REFRESH, function ($event) use (&$afterRefreshCalls) {
+        Event::on(BaseActiveRecord::className(), BaseActiveRecord::EVENT_AFTER_REFRESH, static function ($event) use (&$afterRefreshCalls) {
             /* @var $ar BaseActiveRecord */
             $ar = $event->sender;
-            $afterRefreshCalls[] = [\get_class($ar), $ar->getIsNewRecord(), $ar->getPrimaryKey(), $ar->isRelationPopulated('orders')];
+            $afterRefreshCalls[] = [get_class($ar), $ar->getIsNewRecord(), $ar->getPrimaryKey(), $ar->isRelationPopulated('orders')];
         });
 
         $customer = $customerClass::findOne(1);
@@ -1248,7 +1252,6 @@ trait ActiveRecordTestTrait
         $baseModel = new $customerClass();
         $this->assertFalse($baseModel->hasProperty('unExistingColumn'));
 
-
         /* @var $customer ActiveRecord */
         $customer = new $customerClass();
         $this->assertInstanceOf($customerClass, $customer);
@@ -1277,7 +1280,7 @@ trait ActiveRecordTestTrait
             $itemClass = $this->getItemClass();
             $customer->orderItems = [new $itemClass()];
             $this->fail('setter call above MUST throw Exception');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // catch exception "Setting read-only property"
             $this->assertInstanceOf('yii\base\InvalidCallException', $e);
         }

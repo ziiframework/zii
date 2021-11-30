@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -38,7 +39,7 @@ class ActionColumnTest extends \yiiunit\TestCase
     public function testRenderDataCell()
     {
         $column = new ActionColumn();
-        $column->urlCreator = function ($model, $key, $index) {
+        $column->urlCreator = static function ($model, $key, $index) {
             return 'http://test.com';
         };
         $columnContents = $column->renderDataCell(['id' => 1], 1, 0);
@@ -49,21 +50,21 @@ class ActionColumnTest extends \yiiunit\TestCase
         $this->assertEquals($expectedHtml, $columnContents);
 
         $column = new ActionColumn();
-        $column->urlCreator = function ($model, $key, $index) {
+        $column->urlCreator = static function ($model, $key, $index) {
             return 'http://test.com';
         };
         $column->template = '{update}';
 
         //test custom icon
         $column->icons = [
-            'pencil' => Html::tag('span', '', ['class' => ['glyphicon', 'glyphicon-pencil']])
+            'pencil' => Html::tag('span', '', ['class' => ['glyphicon', 'glyphicon-pencil']]),
         ];
         $columnContents = $column->renderDataCell(['id' => 1], 1, 0);
         $expectedHtml = '<td><a href="http://test.com" title="Update" aria-label="Update" data-pjax="0"><span class="glyphicon glyphicon-pencil"></span></a></td>';
         $this->assertEquals($expectedHtml, $columnContents);
 
         $column->buttons = [
-            'update' => function ($url, $model, $key) {
+            'update' => static function ($url, $model, $key) {
                 return 'update_button';
             },
         ];
@@ -81,7 +82,7 @@ class ActionColumnTest extends \yiiunit\TestCase
 
         //test visible button (condition is callback)
         $column->visibleButtons = [
-            'update' => function ($model, $key, $index) {return $model['id'] == 1;},
+            'update' => static function ($model, $key, $index) {return $model['id'] == 1; },
         ];
         $columnContents = $column->renderDataCell(['id' => 1], 1, 0);
         $this->assertStringContainsString('update_button', $columnContents);
@@ -95,7 +96,7 @@ class ActionColumnTest extends \yiiunit\TestCase
 
         //test invisible button (condition is callback)
         $column->visibleButtons = [
-            'update' => function ($model, $key, $index) {return $model['id'] != 1;},
+            'update' => static function ($model, $key, $index) {return $model['id'] != 1; },
         ];
         $columnContents = $column->renderDataCell(['id' => 1], 1, 0);
         $this->assertStringNotContainsString('update_button', $columnContents);

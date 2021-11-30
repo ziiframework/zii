@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,7 @@
 
 namespace yiiunit\framework\validators;
 
+use stdClass;
 use yii\validators\StringValidator;
 use yiiunit\data\validators\models\FakedValidationModel;
 use yiiunit\TestCase;
@@ -144,7 +146,7 @@ class StringValidatorTest extends TestCase
 
         // non-scalar
         $this->assertFalse($val->validate(['array']));
-        $this->assertFalse($val->validate(new \stdClass()));
+        $this->assertFalse($val->validate(new stdClass()));
         $this->assertFalse($val->validate(null));
 
         // bool

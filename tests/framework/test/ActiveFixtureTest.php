@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -84,7 +85,6 @@ class ActiveFixtureTest extends DatabaseTestCase
         $this->assertEquals(1, $directory->id);
         $this->assertEquals('directory@example.com', $directory['email']);
         $test->tearDown();
-
     }
 
     public function testDataPath()
@@ -242,8 +242,8 @@ class DataPathDbTestCase extends BaseDbTestCase
         return [
             'customers' => [
                 'class' => CustomDirectoryFixture::className(),
-                'dataFile' => '@app/framework/test/data/customer.php'
-            ]
+                'dataFile' => '@app/framework/test/data/customer.php',
+            ],
         ];
     }
 }
@@ -255,7 +255,7 @@ class TruncateTestCase extends BaseDbTestCase
         return [
             'animals' => [
                 'class' => AnimalFixture::className(),
-            ]
+            ],
         ];
     }
 }

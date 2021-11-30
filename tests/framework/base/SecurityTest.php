@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -15,7 +16,7 @@ use yiiunit\TestCase;
  */
 class SecurityTest extends TestCase
 {
-    const CRYPT_VECTORS = 'old';
+    public const CRYPT_VECTORS = 'old';
 
     /**
      * @var ExposedSecurity
@@ -476,8 +477,8 @@ TEXT;
     /**
      * @dataProvider dataProviderEncryptByKeyCompat
      *
-     * @param string $key encryption key hex string
-     * @param string $data plaintext hex string
+     * @param string $key       encryption key hex string
+     * @param string $data      plaintext hex string
      * @param string $encrypted ciphertext hex string
      */
     public function testEncryptByKeyCompat($key, $data, $encrypted)
@@ -787,8 +788,8 @@ TEXT;
     /**
      * @dataProvider dataProviderEncryptByPasswordCompat
      *
-     * @param string $password encryption password
-     * @param string $data plaintext hex string
+     * @param string $password  encryption password
+     * @param string $data      plaintext hex string
      * @param string $encrypted ciphertext hex string
      */
     public function testEncryptByPasswordCompat($password, $data, $encrypted)
@@ -798,7 +799,6 @@ TEXT;
 
         $this->assertEquals($data, $this->security->decryptByPassword($encrypted, $password));
     }
-
 
     public function randomKeyInvalidInputs()
     {
@@ -813,6 +813,7 @@ TEXT;
 
     /**
      * @dataProvider randomKeyInvalidInputs
+     *
      * @param mixed $input
      */
     public function testRandomKeyInvalidInput($input)
@@ -824,13 +825,14 @@ TEXT;
     public function testGenerateRandomKey()
     {
         // test various string lengths
-        for ($length = 1; $length < 64; $length++) {
+        for ($length = 1; $length < 64; ++$length) {
             $key1 = $this->security->generateRandomKey($length);
             $this->assertIsString($key1);
             $this->assertEquals($length, strlen($key1));
             $key2 = $this->security->generateRandomKey($length);
             $this->assertIsString($key2);
             $this->assertEquals($length, strlen($key2));
+
             if ($length >= 7) { // avoid random test failure, short strings are likely to collide
                 $this->assertNotEquals($key1, $key2);
             }
@@ -850,7 +852,8 @@ TEXT;
     protected function randTime(Security $security, $count, $length, $message)
     {
         $t = microtime(true);
-        for ($i = 0; $i < $count; $i += 1) {
+
+        for ($i = 0; $i < $count; ++$i) {
             $key = $security->generateRandomKey($length);
         }
         $t = microtime(true) - $t;
@@ -952,8 +955,8 @@ TEXT;
      * @param string $hash
      * @param string $password
      * @param string $salt
-     * @param int $iterations
-     * @param int $length
+     * @param int    $iterations
+     * @param int    $length
      * @param string $okm
      */
     public function testPbkdf2($hash, $password, $salt, $iterations, $length, $okm)
@@ -1040,7 +1043,7 @@ TEXT;
      * @param string $ikm
      * @param string $salt
      * @param string $info
-     * @param int $l
+     * @param int    $l
      * @param string $prk
      * @param string $okm
      */
@@ -1083,6 +1086,7 @@ TEXT;
 
     /**
      * @dataProvider maskProvider
+     *
      * @param mixed $unmaskedToken
      */
     public function testMasking($unmaskedToken)

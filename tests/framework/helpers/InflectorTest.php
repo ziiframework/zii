@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -78,6 +79,7 @@ class InflectorTest extends TestCase
             'software' => 'software',
             'hardware' => 'hardware',
         ];
+
         foreach ($testData as $testIn => $testOut) {
             $this->assertEquals($testOut, Inflector::singularize($testIn));
             $this->assertEquals(ucfirst($testOut), ucfirst(Inflector::singularize($testIn)));

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -65,7 +66,7 @@ class CheckboxColumnTest extends TestCase
         $this->assertStringContainsString('value="42"', $column->renderDataCell([], 1, 0));
 
         $column = new CheckboxColumn([
-            'checkboxOptions' => function ($model, $key, $index, $column) {
+            'checkboxOptions' => static function ($model, $key, $index, $column) {
                 return [];
             },
             'grid' => $this->getGrid(),
@@ -75,7 +76,7 @@ class CheckboxColumnTest extends TestCase
         $this->assertStringContainsString('value="[1,42]"', $column->renderDataCell([], [1, 42], 0));
 
         $column = new CheckboxColumn([
-            'checkboxOptions' => function ($model, $key, $index, $column) {
+            'checkboxOptions' => static function ($model, $key, $index, $column) {
                 return ['value' => 42];
             },
             'grid' => $this->getGrid(),
@@ -87,7 +88,7 @@ class CheckboxColumnTest extends TestCase
     public function testContent()
     {
         $column = new CheckboxColumn([
-            'content' => function ($model, $key, $index, $column) {
+            'content' => static function ($model, $key, $index, $column) {
                 return null;
             },
             'grid' => $this->getGrid(),
@@ -95,7 +96,7 @@ class CheckboxColumnTest extends TestCase
         $this->assertStringContainsString('<td></td>', $column->renderDataCell([], 1, 0));
 
         $column = new CheckboxColumn([
-            'content' => function ($model, $key, $index, $column) {
+            'content' => static function ($model, $key, $index, $column) {
                 return Html::checkBox('checkBoxInput', false);
             },
             'grid' => $this->getGrid(),

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -16,6 +17,7 @@ use yiiunit\TestCase;
 
 /**
  * Unit test for [[\yii\behaviors\AttributeTypecastBehavior]].
+ *
  * @see AttributeTypecastBehavior
  *
  * @group behaviors
@@ -148,7 +150,7 @@ class AttributeTypecastBehaviorTest extends TestCase
 
         $beforeInsertHappened = false;
         $model->callback = 'insert';
-        $model->on(ActiveRecordAttributeTypecast::EVENT_BEFORE_INSERT, function (Event $event) use (&$beforeInsertHappened) {
+        $model->on(ActiveRecordAttributeTypecast::EVENT_BEFORE_INSERT, static function (Event $event) use (&$beforeInsertHappened) {
             $beforeInsertHappened = true;
         });
         $model->save(false);
@@ -158,7 +160,7 @@ class AttributeTypecastBehaviorTest extends TestCase
 
         $beforeUpdateHappened = false;
         $model->callback = 'update';
-        $model->on(ActiveRecordAttributeTypecast::EVENT_BEFORE_UPDATE, function (Event $event) use (&$beforeUpdateHappened) {
+        $model->on(ActiveRecordAttributeTypecast::EVENT_BEFORE_UPDATE, static function (Event $event) use (&$beforeUpdateHappened) {
             $beforeUpdateHappened = true;
         });
         $model->save(false);
@@ -173,17 +175,17 @@ class AttributeTypecastBehaviorTest extends TestCase
     public function testAfterSaveEvent()
     {
         $model = new ActiveRecordAttributeTypecast([
-            'typecastAfterSave' => true
+            'typecastAfterSave' => true,
         ]);
 
         $model->callback = 'insert';
 
         $beforeInsertHappened = false;
-        $model->on(ActiveRecordAttributeTypecast::EVENT_BEFORE_INSERT, function (Event $event) use (&$beforeInsertHappened) {
+        $model->on(ActiveRecordAttributeTypecast::EVENT_BEFORE_INSERT, static function (Event $event) use (&$beforeInsertHappened) {
             $beforeInsertHappened = true;
         });
         $afterInsertHappened = false;
-        $model->on(ActiveRecordAttributeTypecast::EVENT_AFTER_INSERT, function (Event $event) use (&$afterInsertHappened) {
+        $model->on(ActiveRecordAttributeTypecast::EVENT_AFTER_INSERT, static function (Event $event) use (&$afterInsertHappened) {
             $afterInsertHappened = true;
         });
         $model->save(false);
@@ -192,14 +194,13 @@ class AttributeTypecastBehaviorTest extends TestCase
         $this->assertSame('callback: callback: insert', $model->callback);
         $beforeInsertHappened = $afterInsertHappened = false;
 
-
         $model->callback = 'update';
         $beforeUpdateHappened = false;
-        $model->on(ActiveRecordAttributeTypecast::EVENT_BEFORE_UPDATE, function (Event $event) use (&$beforeUpdateHappened) {
+        $model->on(ActiveRecordAttributeTypecast::EVENT_BEFORE_UPDATE, static function (Event $event) use (&$beforeUpdateHappened) {
             $beforeUpdateHappened = true;
         });
         $afterUpdateHappened = false;
-        $model->on(ActiveRecordAttributeTypecast::EVENT_AFTER_UPDATE, function (Event $event) use (&$afterUpdateHappened) {
+        $model->on(ActiveRecordAttributeTypecast::EVENT_AFTER_UPDATE, static function (Event $event) use (&$afterUpdateHappened) {
             $afterUpdateHappened = true;
         });
         $model->save(false);
@@ -263,13 +264,12 @@ class AttributeTypecastBehaviorTest extends TestCase
 /**
  * Test Active Record class with [[AttributeTypecastBehavior]] behavior attached.
  *
- * @property int $id
- * @property string $name
- * @property int $amount
- * @property float $price
- * @property bool $isActive
- * @property string $callback
- *
+ * @property int                       $id
+ * @property string                    $name
+ * @property int                       $amount
+ * @property float                     $price
+ * @property bool                      $isActive
+ * @property string                    $callback
  * @property AttributeTypecastBehavior $attributeTypecastBehavior
  */
 class ActiveRecordAttributeTypecast extends ActiveRecord
@@ -286,7 +286,7 @@ class ActiveRecordAttributeTypecast extends ActiveRecord
                     'amount' => AttributeTypecastBehavior::TYPE_INTEGER,
                     'price' => AttributeTypecastBehavior::TYPE_FLOAT,
                     'isActive' => AttributeTypecastBehavior::TYPE_BOOLEAN,
-                    'callback' => function ($value) {
+                    'callback' => static function ($value) {
                         return 'callback: ' . $value;
                     },
                 ],

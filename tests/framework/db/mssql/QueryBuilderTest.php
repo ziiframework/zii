@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -35,7 +36,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         $query = new Query();
         $query->select('id')->from('example')->limit(10)->offset(5);
 
-        list($actualQuerySql, $actualQueryParams) = $this->getQueryBuilder()->build($query);
+        [$actualQuerySql, $actualQueryParams] = $this->getQueryBuilder()->build($query);
 
         $this->assertEquals($expectedQuerySql, $actualQuerySql);
         $this->assertEquals($expectedQueryParams, $actualQueryParams);
@@ -49,7 +50,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         $query = new Query();
         $query->select('id')->from('example')->limit(10);
 
-        list($actualQuerySql, $actualQueryParams) = $this->getQueryBuilder()->build($query);
+        [$actualQuerySql, $actualQueryParams] = $this->getQueryBuilder()->build($query);
 
         $this->assertEquals($expectedQuerySql, $actualQuerySql);
         $this->assertEquals($expectedQueryParams, $actualQueryParams);
@@ -63,7 +64,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         $query = new Query();
         $query->select('id')->from('example')->offset(10);
 
-        list($actualQuerySql, $actualQueryParams) = $this->getQueryBuilder()->build($query);
+        [$actualQuerySql, $actualQueryParams] = $this->getQueryBuilder()->build($query);
 
         $this->assertEquals($expectedQuerySql, $actualQuerySql);
         $this->assertEquals($expectedQueryParams, $actualQueryParams);
@@ -76,9 +77,10 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
             FROM fn_listextendedproperty (
                 N'MS_description',
                 'SCHEMA', N'dbo',
-                'TABLE', N" . $db->quoteValue($table) . ",
+                'TABLE', N" . $db->quoteValue($table) . ',
                 DEFAULT, DEFAULT
-        )";
+        )';
+
         return $db->createCommand($sql)->queryAll();
     }
 
@@ -90,8 +92,9 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
                 N'MS_description',
                 'SCHEMA', N'dbo',
                 'TABLE', N" . $db->quoteValue($table) . ",
-                'COLUMN', N" . $db->quoteValue($column) . "
-        )";
+                'COLUMN', N" . $db->quoteValue($column) . '
+        )';
+
         return $db->createCommand($sql)->queryAll();
     }
 
@@ -100,6 +103,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         $qb = $this->getQueryBuilder();
         $db = $this->getConnection(false, false);
         $sql = $qb->addCommentOnTable($table, $comment);
+
         return $db->createCommand($sql)->execute();
     }
 
@@ -108,6 +112,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         $qb = $this->getQueryBuilder();
         $db = $this->getConnection(false, false);
         $sql = $qb->addCommentOnColumn($table, $column, $comment);
+
         return $db->createCommand($sql)->execute();
     }
 
@@ -116,6 +121,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         $qb = $this->getQueryBuilder();
         $db = $this->getConnection(false, false);
         $sql = $qb->dropCommentFromTable($table);
+
         return $db->createCommand($sql)->execute();
     }
 
@@ -124,6 +130,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         $qb = $this->getQueryBuilder();
         $db = $this->getConnection(false, false);
         $sql = $qb->dropCommentFromColumn($table, $column);
+
         return $db->createCommand($sql)->execute();
     }
 
@@ -235,12 +242,12 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
 
     public function testCommentColumn()
     {
-        $this->markTestSkipped("Testing the behavior, not sql generation anymore.");
+        $this->markTestSkipped('Testing the behavior, not sql generation anymore.');
     }
 
     public function testCommentTable()
     {
-        $this->markTestSkipped("Testing the behavior, not sql generation anymore.");
+        $this->markTestSkipped('Testing the behavior, not sql generation anymore.');
     }
 
     /**
@@ -420,9 +427,11 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
             ],
         ];
         $newData = parent::upsertProvider();
+
         foreach ($concreteData as $testName => $data) {
             $newData[$testName] = array_replace($newData[$testName], $data);
         }
+
         return $newData;
     }
 
@@ -646,13 +655,13 @@ ALTER TABLE [foo1] ADD CONSTRAINT [UQ_foo1_bar] UNIQUE ([bar])";
         $connection->createCommand($sql)->execute();
         $schema = $connection->getTableSchema('[foo1]', true);
 
-        $this->assertEquals("varchar(255)", $schema->getColumn('bar')->dbType);
+        $this->assertEquals('varchar(255)', $schema->getColumn('bar')->dbType);
         $this->assertEquals(true, $schema->getColumn('bar')->allowNull);
 
         $sql = $connection->getQueryBuilder()->alterColumn('foo1', 'bar', $this->string(128)->notNull());
         $connection->createCommand($sql)->execute();
         $schema = $connection->getTableSchema('[foo1]', true);
-        $this->assertEquals("nvarchar(128)", $schema->getColumn('bar')->dbType);
+        $this->assertEquals('nvarchar(128)', $schema->getColumn('bar')->dbType);
         $this->assertEquals(false, $schema->getColumn('bar')->allowNull);
     }
 
@@ -684,7 +693,7 @@ WHILE 1=1 BEGIN
     EXEC (N'ALTER TABLE ' + @tableName + ' DROP CONSTRAINT [' + @constraintName + ']')
 END
 ALTER TABLE [foo1] ADD CONSTRAINT [DF_foo1_bar] DEFAULT NULL FOR [bar]";
-        $sql = $qb->alterColumn('foo1', 'bar', $this->integer()->null()->defaultValue(NULL));
+        $sql = $qb->alterColumn('foo1', 'bar', $this->integer()->null()->defaultValue(null));
         $this->assertEquals($expected, $sql);
     }
 
@@ -727,7 +736,7 @@ ALTER TABLE [foo1] ADD CONSTRAINT [DF_foo1_bar] DEFAULT CAST(GETDATE() AS INT) F
         $sql = $connection->getQueryBuilder()->alterColumn('foo1', 'bar', $this->string(128)->null()->check('LEN(bar) > 5'));
         $connection->createCommand($sql)->execute();
         $schema = $connection->getTableSchema('[foo1]', true);
-        $this->assertEquals("nvarchar(128)", $schema->getColumn('bar')->dbType);
+        $this->assertEquals('nvarchar(128)', $schema->getColumn('bar')->dbType);
         $this->assertEquals(true, $schema->getColumn('bar')->allowNull);
 
         $sql = "INSERT INTO [foo1]([bar]) values('abcdef')";
@@ -795,14 +804,14 @@ ALTER TABLE [foo1] DROP COLUMN [bar]";
     {
         $connection = $this->getConnection();
 
-        $sql = $connection->getQueryBuilder()->alterColumn('foo1', 'bar', $this->string(64)->defaultValue("")->check('LEN(bar) < 5')->unique());
+        $sql = $connection->getQueryBuilder()->alterColumn('foo1', 'bar', $this->string(64)->defaultValue('')->check('LEN(bar) < 5')->unique());
         $connection->createCommand($sql)->execute();
 
         $sql = $connection->getQueryBuilder()->dropColumn('foo1', 'bar');
         $this->assertEquals(0, $connection->createCommand($sql)->execute());
 
         $schema = $connection->getTableSchema('[foo1]', true);
-        $this->assertEquals(NULL, $schema->getColumn('bar'));
+        $this->assertEquals(null, $schema->getColumn('bar'));
     }
 
     public function buildFromDataProvider()

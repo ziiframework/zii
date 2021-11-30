@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -16,6 +17,7 @@ use yiiunit\TestCase;
 
 /**
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  * @group di
  */
@@ -55,7 +57,7 @@ class InstanceTest extends TestCase
     /**
      * ensure an InvalidConfigException is thrown when a component does not exist.
      */
-    public function testEnsure_NonExistingComponentException()
+    public function testEnsureNonExistingComponentException()
     {
         $container = new Container();
         $this->expectException('yii\base\InvalidConfigException');
@@ -66,7 +68,7 @@ class InstanceTest extends TestCase
     /**
      * ensure an InvalidConfigException is thrown when a class does not exist.
      */
-    public function testEnsure_NonExistingClassException()
+    public function testEnsureNonExistingClassException()
     {
         $container = new Container();
         $this->expectException('yii\base\InvalidConfigException');
@@ -74,7 +76,7 @@ class InstanceTest extends TestCase
         Instance::ensure('yii\cache\DoesNotExist', 'yii\cache\Cache', $container);
     }
 
-    public function testEnsure_WithoutType()
+    public function testEnsureWithoutType()
     {
         $container = new Container();
         $container->set('db', [
@@ -87,7 +89,7 @@ class InstanceTest extends TestCase
         $this->assertInstanceOf('\\yii\\db\\Connection', Instance::ensure(['class' => 'yii\db\Connection', 'dsn' => 'test'], null, $container));
     }
 
-    public function testEnsure_MinimalSettings()
+    public function testEnsureMinimalSettings()
     {
         Yii::$container->set('db', [
             'class' => 'yii\db\Connection',

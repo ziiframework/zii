@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -47,7 +48,7 @@ class QueryTest extends \yiiunit\framework\db\QueryTest
         // make sure int => string for strict equals
         foreach ($columnValues as $i => $columnValue) {
             if (is_int($columnValue)) {
-                $columnValues[$i] = (string)$columnValue;
+                $columnValues[$i] = (string) $columnValue;
             }
         }
 

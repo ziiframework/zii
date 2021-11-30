@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,10 +8,13 @@
 
 namespace yiiunit\framework\caching;
 
+use ReflectionClass;
+use function time;
 use yii\caching\FileCache;
 
 /**
  * Class for testing file cache backend.
+ *
  * @group caching
  */
 class FileCacheTest extends CacheTestCase
@@ -33,11 +37,11 @@ class FileCacheTest extends CacheTestCase
     {
         $cache = $this->getCacheInstance();
 
-        static::$time = \time();
+        static::$time = time();
         $this->assertTrue($cache->set('expire_test', 'expire_test', 2));
-        static::$time++;
+        ++static::$time;
         $this->assertEquals('expire_test', $cache->get('expire_test'));
-        static::$time++;
+        ++static::$time;
         $this->assertFalse($cache->get('expire_test'));
     }
 
@@ -45,11 +49,11 @@ class FileCacheTest extends CacheTestCase
     {
         $cache = $this->getCacheInstance();
 
-        static::$time = \time();
+        static::$time = time();
         $this->assertTrue($cache->add('expire_testa', 'expire_testa', 2));
-        static::$time++;
+        ++static::$time;
         $this->assertEquals('expire_testa', $cache->get('expire_testa'));
-        static::$time++;
+        ++static::$time;
         $this->assertFalse($cache->get('expire_testa'));
     }
 
@@ -65,9 +69,9 @@ class FileCacheTest extends CacheTestCase
         $normalizeKey = $cache->buildKey($key);
         $expectedDirectoryName = substr($normalizeKey, 6, 2);
 
-        $value = \time();
+        $value = time();
 
-        $refClass = new \ReflectionClass($cache);
+        $refClass = new ReflectionClass($cache);
 
         $refMethodGetCacheFile = $refClass->getMethod('getCacheFile');
         $refMethodGetCacheFile->setAccessible(true);
@@ -86,6 +90,7 @@ class FileCacheTest extends CacheTestCase
     public function testCacheRenewalOnDifferentOwnership()
     {
         $TRAVIS_SECOND_USER = getenv('TRAVIS_SECOND_USER');
+
         if (empty($TRAVIS_SECOND_USER)) {
             $this->markTestSkipped('Travis second user not found');
         }
@@ -96,22 +101,19 @@ class FileCacheTest extends CacheTestCase
         $cachePublicKey = uniqid('key_');
         $cacheInternalKey = $cache->buildKey($cachePublicKey);
 
-        static::$time = \time();
+        static::$time = time();
         $this->assertTrue($cache->set($cachePublicKey, $cacheValue, 2));
         $this->assertSame($cacheValue, $cache->get($cachePublicKey));
 
-        $refClass = new \ReflectionClass($cache);
+        $refClass = new ReflectionClass($cache);
         $refMethodGetCacheFile = $refClass->getMethod('getCacheFile');
         $refMethodGetCacheFile->setAccessible(true);
         $cacheFile = $refMethodGetCacheFile->invoke($cache, $cacheInternalKey);
         $refMethodGetCacheFile->setAccessible(false);
 
-        $output = array();
+        $output = [];
         $returnVar = null;
-        exec(sprintf('sudo chown %s %s',
-            escapeshellarg($TRAVIS_SECOND_USER),
-            escapeshellarg($cacheFile)
-        ), $output, $returnVar);
+        exec(sprintf('sudo chown %s %s', escapeshellarg($TRAVIS_SECOND_USER), escapeshellarg($cacheFile)), $output, $returnVar);
 
         $this->assertSame(0, $returnVar, 'Cannot change ownership of cache file to test cache renewal');
 

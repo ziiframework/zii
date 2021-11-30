@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,7 @@
 
 namespace yiiunit\framework\db\sqlite;
 
+use PDO;
 use yii\db\Query;
 use yii\db\Schema;
 use yii\db\sqlite\QueryBuilder;
@@ -73,7 +75,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
 
         $result['with schema'] = [
             "CREATE INDEX {{{$schemaName}}}.[[$indexName]] ON {{{$tableName}}} ([[C_index_1]])",
-            function (QueryBuilder $qb) use ($tableName, $indexName, $schemaName) {
+            static function (QueryBuilder $qb) use ($tableName, $indexName, $schemaName) {
                 return $qb->createIndex($indexName, $schemaName . '.' . $tableName, 'C_index_1');
             },
         ];
@@ -110,13 +112,15 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
     {
         $data = parent::batchInsertProvider();
         $data['escape-danger-chars']['expected'] = "INSERT INTO `customer` (`address`) VALUES ('SQL-danger chars are escaped: ''); --')";
+
         return $data;
     }
 
     public function testBatchInsertOnOlderVersions()
     {
         $db = $this->getConnection();
-        if (version_compare($db->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION), '3.7.11', '>=')) {
+
+        if (version_compare($db->pdo->getAttribute(PDO::ATTR_SERVER_VERSION), '3.7.11', '>=')) {
             $this->markTestSkipped('This test is only relevant for SQLite < 3.7.11');
         }
         $sql = $this->getQueryBuilder()->batchInsert('{{customer}} t', ['t.id', 't.name'], [[1, 'a'], [2, 'b']]);
@@ -134,9 +138,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
      */
     public function testBuildUnion()
     {
-        $expectedQuerySql = $this->replaceQuotes(
-            'SELECT `id` FROM `TotalExample` `t1` WHERE (w > 0) AND (x < 2) UNION  SELECT `id` FROM `TotalTotalExample` `t2` WHERE w > 5 UNION ALL  SELECT `id` FROM `TotalTotalExample` `t3` WHERE w = 3'
-        );
+        $expectedQuerySql = $this->replaceQuotes('SELECT `id` FROM `TotalExample` `t1` WHERE (w > 0) AND (x < 2) UNION  SELECT `id` FROM `TotalTotalExample` `t2` WHERE w > 5 UNION ALL  SELECT `id` FROM `TotalTotalExample` `t3` WHERE w = 3');
         $query = new Query();
         $secondQuery = new Query();
         $secondQuery->select('id')
@@ -151,16 +153,14 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
             ->where(['and', 'w > 0', 'x < 2'])
             ->union($secondQuery)
             ->union($thirdQuery, true);
-        list($actualQuerySql, $queryParams) = $this->getQueryBuilder()->build($query);
+        [$actualQuerySql, $queryParams] = $this->getQueryBuilder()->build($query);
         $this->assertEquals($expectedQuerySql, $actualQuerySql);
         $this->assertEquals([], $queryParams);
     }
 
     public function testBuildWithQuery()
     {
-        $expectedQuerySql = $this->replaceQuotes(
-            'WITH a1 AS (SELECT [[id]] FROM [[t1]] WHERE expr = 1), a2 AS (SELECT [[id]] FROM [[t2]] INNER JOIN [[a1]] ON t2.id = a1.id WHERE expr = 2 UNION  SELECT [[id]] FROM [[t3]] WHERE expr = 3) SELECT * FROM [[a2]]'
-        );
+        $expectedQuerySql = $this->replaceQuotes('WITH a1 AS (SELECT [[id]] FROM [[t1]] WHERE expr = 1), a2 AS (SELECT [[id]] FROM [[t2]] INNER JOIN [[a1]] ON t2.id = a1.id WHERE expr = 2 UNION  SELECT [[id]] FROM [[t3]] WHERE expr = 3) SELECT * FROM [[a2]]');
         $with1Query = (new Query())
             ->select('id')
             ->from('t1')
@@ -182,7 +182,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
             ->withQuery($with2Query->union($with3Query), 'a2')
             ->from('a2');
 
-        list($actualQuerySql, $queryParams) = $this->getQueryBuilder()->build($query);
+        [$actualQuerySql, $queryParams] = $this->getQueryBuilder()->build($query);
         $this->assertEquals($expectedQuerySql, $actualQuerySql);
         $this->assertEquals([], $queryParams);
     }
@@ -241,9 +241,11 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
             ],
         ];
         $newData = parent::upsertProvider();
+
         foreach ($concreteData as $testName => $data) {
             $newData[$testName] = array_replace($newData[$testName], $data);
         }
+
         return $newData;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,8 @@
 
 namespace yiiunit\framework\log;
 
+use function microtime;
+use PHPUnit_Framework_MockObject_MockObject;
 use yii\log\Dispatcher;
 use yii\log\Logger;
 use yiiunit\TestCase;
@@ -22,7 +25,7 @@ class LoggerTest extends TestCase
     protected $logger;
 
     /**
-     * @var Dispatcher|\PHPUnit_Framework_MockObject_MockObject
+     * @var Dispatcher|PHPUnit_Framework_MockObject_MockObject
      */
     protected $dispatcher;
 
@@ -71,7 +74,7 @@ class LoggerTest extends TestCase
         $this->assertEquals('application', $this->logger->messages[0][2]);
         $this->assertEquals([
             'file' => __FILE__,
-            'line' => 67,
+            'line' => 70, // line number of: $this->logger->log('test3', Logger::LEVEL_INFO);
             'function' => 'log',
             'class' => get_class($this->logger),
             'type' => '->',
@@ -206,9 +209,7 @@ class LoggerTest extends TestCase
                 'memory' => 2097152,
                 'memoryDiff' => 1048576,
             ],
-        ],
-            $this->logger->calculateTimings($messages)
-        );
+        ], $this->logger->calculateTimings($messages));
 
         $messages = [
             'anyKey' => [['a', 'b'], Logger::LEVEL_PROFILE_BEGIN, 'category', 10, 'trace', 1048576],
@@ -225,9 +226,7 @@ class LoggerTest extends TestCase
                 'memory' => 2097152,
                 'memoryDiff' => 1048576,
             ],
-        ],
-            $this->logger->calculateTimings($messages)
-        );
+        ], $this->logger->calculateTimings($messages));
     }
 
     /**
@@ -262,9 +261,7 @@ class LoggerTest extends TestCase
                 'memory' => 3145728,
                 'memoryDiff' => 1048576,
             ],
-        ],
-            $this->logger->calculateTimings($messages)
-        );
+        ], $this->logger->calculateTimings($messages));
     }
 
     /**
@@ -301,9 +298,7 @@ class LoggerTest extends TestCase
                 'memory' => 3145728,
                 'memoryDiff' => 1048576,
             ],
-        ],
-            $this->logger->calculateTimings($messages)
-        );
+        ], $this->logger->calculateTimings($messages));
     }
 
     /**
@@ -311,11 +306,11 @@ class LoggerTest extends TestCase
      */
     public function testGetElapsedTime()
     {
-        $timeBefore = \microtime(true) - YII_BEGIN_TIME;
+        $timeBefore = microtime(true) - YII_BEGIN_TIME;
         usleep(1);
         $actual = $this->logger->getElapsedTime();
         usleep(1);
-        $timeAfter = \microtime(true) - YII_BEGIN_TIME;
+        $timeAfter = microtime(true) - YII_BEGIN_TIME;
 
         $this->assertGreaterThan($timeBefore, $actual);
         $this->assertLessThan($timeAfter, $actual);

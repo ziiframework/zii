@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -12,22 +13,23 @@ use yiiunit\TestCase;
 
 /**
  * @author Alexander Makarov <sam@rmcreative.ru>
+ *
  * @since 2.0
  * @group i18n
  */
 class MessageFormatterTest extends TestCase
 {
-    const N = 'n';
-    const N_VALUE = 42;
-    const F = 'f';
-    const F_VALUE = 2e+8;
-    const F_VALUE_FORMATTED = '200,000,000';
-    const D = 'd';
-    const D_VALUE = 200000000.101;
-    const D_VALUE_FORMATTED = '200,000,000.101';
-    const D_VALUE_FORMATTED_INTEGER = '200,000,000';
-    const SUBJECT = 'сабж';
-    const SUBJECT_VALUE = 'Answer to the Ultimate Question of Life, the Universe, and Everything';
+    public const N = 'n';
+    public const N_VALUE = 42;
+    public const F = 'f';
+    public const F_VALUE = 2e+8;
+    public const F_VALUE_FORMATTED = '200,000,000';
+    public const D = 'd';
+    public const D_VALUE = 200000000.101;
+    public const D_VALUE_FORMATTED = '200,000,000.101';
+    public const D_VALUE_FORMATTED_INTEGER = '200,000,000';
+    public const SUBJECT = 'сабж';
+    public const SUBJECT_VALUE = 'Answer to the Ultimate Question of Life, the Universe, and Everything';
 
     public function patterns()
     {
@@ -57,7 +59,6 @@ class MessageFormatterTest extends TestCase
                     self::F => self::F_VALUE,
                 ],
             ],
-
 
             [
                 'Here is a big number: {' . self::F . ', number, integer}', // pattern
@@ -269,7 +270,7 @@ _MSG_
                 'Уважаемый Vadim,',
                 [
                     'gender' => null,
-                    'firstname' => 'Vadim'
+                    'firstname' => 'Vadim',
                 ],
             ],
         ];
@@ -350,10 +351,11 @@ _MSG_
 
     /**
      * @dataProvider patterns
+     *
      * @param string $pattern
      * @param string $expected
-     * @param array $args
-     * @param bool $skip
+     * @param array  $args
+     * @param bool   $skip
      * @param string $skipMessage
      */
     public function testNamedArguments($pattern, $expected, $args, $skip = false, $skipMessage = '')
@@ -368,9 +370,10 @@ _MSG_
 
     /**
      * @dataProvider parsePatterns
+     *
      * @param string $pattern
      * @param string $expected
-     * @param array $args
+     * @param array  $args
      * @param string $locale
      */
     public function testParseNamedArguments($pattern, $expected, $args, $locale = 'en-US')

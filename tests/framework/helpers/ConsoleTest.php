@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,9 +9,9 @@
 namespace yiiunit\framework\helpers;
 
 use Yii;
+use yii\base\DynamicModel;
 use yii\helpers\Console;
 use yiiunit\TestCase;
-use yii\base\DynamicModel;
 
 /**
  * @group helpers
@@ -29,7 +30,7 @@ class ConsoleTest extends TestCase
     }
 
     /**
-     * Set up streams for Console helper stub
+     * Set up streams for Console helper stub.
      */
     protected function setupStreams()
     {
@@ -39,7 +40,7 @@ class ConsoleTest extends TestCase
     }
 
     /**
-     * Clean streams in Console helper stub
+     * Clean streams in Console helper stub.
      */
     protected function truncateStreams()
     {
@@ -52,9 +53,10 @@ class ConsoleTest extends TestCase
     }
 
     /**
-     * Read data from Console helper stream, defaults to output stream
+     * Read data from Console helper stream, defaults to output stream.
      *
      * @param resource $stream
+     *
      * @return string
      */
     protected function readOutput($stream = null)
@@ -76,7 +78,7 @@ class ConsoleTest extends TestCase
 
     /**
      * Write passed arguments to Console helper input stream and rewind the position
-     * of a input stream pointer
+     * of a input stream pointer.
      */
     protected function sendInput()
     {
@@ -197,6 +199,7 @@ class ConsoleTest extends TestCase
 
     /**
      * @dataProvider ansiFormats
+     *
      * @param string $ansi
      * @param string $html
      */
@@ -213,7 +216,7 @@ class ConsoleTest extends TestCase
         $model->addError('name', 'Error message. Here are even more chars: ""');
         $model->validate(null, false);
         $options = ['showAllErrors' => true];
-        $expectedHtml =  "Error message. Here are some chars: < >\nError message. Here are even more chars: \"\"";
+        $expectedHtml = "Error message. Here are some chars: < >\nError message. Here are even more chars: \"\"";
         $this->assertEqualsWithoutLE($expectedHtml, Console::errorSummary($model, $options));
     }
 }
@@ -229,7 +232,7 @@ class TestConsoleModel extends DynamicModel
     {
         return [
             ['name', 'required'],
-            ['name', 'string', 'max' => 100]
+            ['name', 'string', 'max' => 100],
         ];
     }
 
@@ -328,7 +331,7 @@ class TestConsoleModel extends DynamicModel
 
         // testing custom callable check ("validator" param)
         $this->sendInput('cat', '15');
-        $result = ConsoleStub::prompt('SmthNumeric', ['validator' => function ($value, &$error) {
+        $result = ConsoleStub::prompt('SmthNumeric', ['validator' => static function ($value, &$error) {
             return is_numeric($value);
         }]);
         $this->assertEquals('SmthNumeric Invalid input.' . PHP_EOL . 'SmthNumeric ', $this->readOutput());
@@ -338,7 +341,7 @@ class TestConsoleModel extends DynamicModel
         // testing custom callable check with custom error message
         $this->sendInput('cat', '15');
         $result = ConsoleStub::prompt('SmthNumeric', [
-            'validator' => function ($value, &$error) {
+            'validator' => static function ($value, &$error) {
                 if (!$response = is_numeric($value)) {
                     $error = 'RealCustomError';
                 }
@@ -357,7 +360,7 @@ class TestConsoleModel extends DynamicModel
             'required' => true,
             'default' => 'kraken',
             'pattern' => '/^\d+$/',
-            'validator' => function ($value, &$error) {
+            'validator' => static function ($value, &$error) {
                 return $value == 15;
             },
             'error' => 'CustomError',
@@ -432,8 +435,7 @@ class TestConsoleModel extends DynamicModel
 
         $this->sendInput('?', 'm');
         $result = ConsoleStub::select('Using help', $options);
-        $this->assertEquals(
-            'Using help [c,d,m,?]: '
+        $this->assertEquals('Using help [c,d,m,?]: '
                 . ' c - cat'
                 . PHP_EOL
                 . ' d - dog'
@@ -442,9 +444,7 @@ class TestConsoleModel extends DynamicModel
                 . PHP_EOL
                 . ' ? - Show help'
                 . PHP_EOL
-                . 'Using help [c,d,m,?]: ',
-            $this->readOutput()
-        );
+                . 'Using help [c,d,m,?]: ', $this->readOutput());
         $this->truncateStreams();
     }
 }
