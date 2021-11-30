@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -40,7 +38,7 @@ class TestSubclass extends TestClass
  */
 class ServiceLocatorTest extends TestCase
 {
-    public function testCallable(): void
+    public function testCallable()
     {
         // anonymous function
         $container = new ServiceLocator();
@@ -66,7 +64,7 @@ class ServiceLocatorTest extends TestCase
         $this->assertNull($object->prop2);
     }
 
-    public function testObject(): void
+    public function testObject()
     {
         $object = new TestClass();
         $className = TestClass::className();
@@ -75,7 +73,7 @@ class ServiceLocatorTest extends TestCase
         $this->assertSame($container->get($className), $object);
     }
 
-    public function testDi3Compatibility(): void
+    public function testDi3Compatibility()
     {
         $config = [
             'components' => [
@@ -92,7 +90,7 @@ class ServiceLocatorTest extends TestCase
         $this->assertInstanceOf(TestSubclass::className(), $app->get('test'));
     }
 
-    public function testShared(): void
+    public function testShared()
     {
         // with configuration: shared
         $container = new ServiceLocator();
@@ -115,7 +113,7 @@ class ServiceLocatorTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/11771
      */
-    public function testModulePropertyIsset(): void
+    public function testModulePropertyIsset()
     {
         $config = [
             'components' => [

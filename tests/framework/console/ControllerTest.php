@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -40,7 +38,7 @@ class ControllerTest extends TestCase
         ];
     }
 
-    public function testBindArrayToActionParams(): void
+    public function testBindArrayToActionParams()
     {
         $controller = new FakeController('fake', Yii::$app);
 
@@ -49,7 +47,7 @@ class ControllerTest extends TestCase
         $this->assertEquals([], $controller->runAction('aksi4', $params));
     }
 
-    public function testBindActionParams(): void
+    public function testBindActionParams()
     {
         $controller = new FakeController('fake', Yii::$app);
 
@@ -101,7 +99,7 @@ class ControllerTest extends TestCase
         $result = $controller->runAction('aksi3', $params);
     }
 
-    public function testNullableInjectedActionParams(): void
+    public function testNullableInjectedActionParams()
     {
         if (PHP_VERSION_ID < 70100) {
             $this->markTestSkipped('Can not be tested on PHP < 7.1');
@@ -123,7 +121,7 @@ class ControllerTest extends TestCase
         $this->assertNull($args[1]);
     }
 
-    public function testInjectionContainerException(): void
+    public function testInjectionContainerException()
     {
         if (PHP_VERSION_ID < 70100) {
             $this->markTestSkipped('Can not be tested on PHP < 7.1');
@@ -139,14 +137,14 @@ class ControllerTest extends TestCase
 
         $injectionAction = new InlineAction('injection', $this->controller, 'actionInjection');
         $params = ['between' => 'test', 'after' => 'another', 'before' => 'test'];
-        Yii::$container->set(DummyService::className(), static function (): void { throw new RuntimeException('uh oh'); });
+        Yii::$container->set(DummyService::className(), static function () { throw new RuntimeException('uh oh'); });
 
         $this->expectException(get_class(new RuntimeException()));
         $this->expectExceptionMessage('uh oh');
         $this->controller->bindActionParams($injectionAction, $params);
     }
 
-    public function testUnknownInjection(): void
+    public function testUnknownInjection()
     {
         if (PHP_VERSION_ID < 70100) {
             $this->markTestSkipped('Can not be tested on PHP < 7.1');
@@ -168,7 +166,7 @@ class ControllerTest extends TestCase
         $this->controller->bindActionParams($injectionAction, $params);
     }
 
-    public function testInjectedActionParams(): void
+    public function testInjectedActionParams()
     {
         if (PHP_VERSION_ID < 70100) {
             $this->markTestSkipped('Can not be tested on PHP < 7.1');
@@ -197,7 +195,7 @@ class ControllerTest extends TestCase
         $this->assertEquals($params['after'], $args[5]);
     }
 
-    public function testInjectedActionParamsFromModule(): void
+    public function testInjectedActionParamsFromModule()
     {
         if (PHP_VERSION_ID < 70100) {
             $this->markTestSkipped('Can not be tested on PHP < 7.1');
@@ -221,7 +219,7 @@ class ControllerTest extends TestCase
         $this->assertEquals('Module yii\base\Module DI: yii\data\DataProviderInterface $dataProvider', Yii::$app->requestedParams['dataProvider']);
     }
 
-    public function assertResponseStatus($status, $response): void
+    public function assertResponseStatus($status, $response)
     {
         $this->assertInstanceOf('yii\console\Response', $response);
         $this->assertSame($status, $response->exitStatus);
@@ -235,7 +233,7 @@ class ControllerTest extends TestCase
         return Yii::$app->handleRequest($request);
     }
 
-    public function testResponse(): void
+    public function testResponse()
     {
         $status = 123;
 
@@ -255,7 +253,7 @@ class ControllerTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/12028
      */
-    public function testHelpOptionNotSet(): void
+    public function testHelpOptionNotSet()
     {
         $controller = new FakeController('posts', Yii::$app);
         $controller->runAction('index');
@@ -267,7 +265,7 @@ class ControllerTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/12028
      */
-    public function testHelpOption(): void
+    public function testHelpOption()
     {
         $controller = new FakeController('posts', Yii::$app);
         $controller->help = true;
@@ -284,7 +282,7 @@ class ControllerTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/13071
      */
-    public function testHelpOptionWithModule(): void
+    public function testHelpOptionWithModule()
     {
         $controller = new FakeController('posts', new Module('news'));
         $controller->help = true;
@@ -299,7 +297,7 @@ class ControllerTest extends TestCase
      *
      * @see #10372
      */
-    public function testHelpSkipsTypeHintedArguments(): void
+    public function testHelpSkipsTypeHintedArguments()
     {
         $controller = new FakeController('fake', Yii::$app);
         $help = $controller->getActionArgsHelp($controller->createAction('with-complex-type-hint'));
@@ -308,7 +306,7 @@ class ControllerTest extends TestCase
         $this->assertArrayHasKey('simpleArgument', $help);
     }
 
-    public function testGetActionHelpSummaryOnNull(): void
+    public function testGetActionHelpSummaryOnNull()
     {
         $controller = new FakeController('fake', Yii::$app);
 

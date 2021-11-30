@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -30,7 +28,7 @@ class DataFilterTest extends TestCase
 
     // Tests :
 
-    public function testSetupSearchModel(): void
+    public function testSetupSearchModel()
     {
         $builder = new DataFilter();
 
@@ -62,7 +60,7 @@ class DataFilterTest extends TestCase
         $builder->setSearchModel(new stdClass());
     }
 
-    public function testLoad(): void
+    public function testLoad()
     {
         $filterValue = [
             'name' => 'value',
@@ -267,7 +265,7 @@ class DataFilterTest extends TestCase
      * @param bool  $expectedResult
      * @param array $expectedErrors
      */
-    public function testValidate($filter, $expectedResult, $expectedErrors): void
+    public function testValidate($filter, $expectedResult, $expectedErrors)
     {
         $builder = new DataFilter();
         $searchModel = (new DynamicModel([
@@ -413,7 +411,7 @@ class DataFilterTest extends TestCase
      * @param array $filter
      * @param array $expectedResult
      */
-    public function testNormalize($filter, $expectedResult): void
+    public function testNormalize($filter, $expectedResult)
     {
         $builder = new DataFilter();
         $searchModel = (new DynamicModel([
@@ -442,7 +440,7 @@ class DataFilterTest extends TestCase
         $this->assertEquals($expectedResult, $builder->normalize(false));
     }
 
-    public function testNormalizeNonDefaultNull(): void
+    public function testNormalizeNonDefaultNull()
     {
         $builder = new DataFilter();
         $builder->nullValue = 'abcde';
@@ -451,7 +449,7 @@ class DataFilterTest extends TestCase
         $this->assertEquals(['name' => null], $builder->normalize(false));
     }
 
-    public function testSetupErrorMessages(): void
+    public function testSetupErrorMessages()
     {
         $builder = new DataFilter();
         $builder->setErrorMessages([

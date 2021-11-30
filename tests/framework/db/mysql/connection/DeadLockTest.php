@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -38,7 +36,7 @@ class DeadLockTest extends \yiiunit\framework\db\mysql\ConnectionTest
      * @link https://github.com/yiisoft/yii2/issues/12715
      * @link https://github.com/yiisoft/yii2/pull/13346
      */
-    public function testDeadlockException(): void
+    public function testDeadlockException()
     {
         if (!function_exists('pcntl_fork')) {
             $this->markTestSkipped('pcntl_fork() is not available');
@@ -176,8 +174,8 @@ class DeadLockTest extends \yiiunit\framework\db\mysql\ConnectionTest
                 ->execute();
 
             $this->log('child 1: transaction');
-            $first->transaction(function (Connection $first) use ($pidSecond): void {
-                $first->transaction(function (Connection $first) use ($pidSecond): void {
+            $first->transaction(function (Connection $first) use ($pidSecond) {
+                $first->transaction(function (Connection $first) use ($pidSecond) {
                     $this->log('child 1: select');
                     // SELECT with shared lock
                     $first->createCommand('SELECT id FROM {{customer}} WHERE id = 97 LOCK IN SHARE MODE')
@@ -237,7 +235,7 @@ class DeadLockTest extends \yiiunit\framework\db\mysql\ConnectionTest
     private function childrenUpdateLocked()
     {
         // install no-op signal handler to prevent termination
-        if (!pcntl_signal(SIGUSR1, static function (): void {}, false)) {
+        if (!pcntl_signal(SIGUSR1, static function () {}, false)) {
             $this->log('child 2: cannot install signal handler');
 
             return 1;
@@ -259,8 +257,8 @@ class DeadLockTest extends \yiiunit\framework\db\mysql\ConnectionTest
             $second->open();
             //sleep(1);
             $this->log('child 2: transaction');
-            $second->transaction(function (Connection $second): void {
-                $second->transaction(function (Connection $second): void {
+            $second->transaction(function (Connection $second) {
+                $second->transaction(function (Connection $second) {
                     $this->log('child 2: update');
                     // do the 2nd update
                     $second->createCommand()
@@ -299,10 +297,10 @@ class DeadLockTest extends \yiiunit\framework\db\mysql\ConnectionTest
      * all the rest tests. So, all the rest tests in this case will run both in the child
      * and parent processes. Such mess must be prevented with child's own error handler.
      */
-    private function setErrorHandler(): void
+    private function setErrorHandler()
     {
         if (PHP_VERSION_ID < 70000) {
-            set_error_handler(static function ($errno, $errstr, $errfile, $errline): void {
+            set_error_handler(static function ($errno, $errstr, $errfile, $errline) {
                 throw new ErrorException($errstr, $errno, $errno, $errfile, $errline);
             });
         }
@@ -313,7 +311,7 @@ class DeadLockTest extends \yiiunit\framework\db\mysql\ConnectionTest
      *
      * @param string $filename
      */
-    private function setLogFile($filename): void
+    private function setLogFile($filename)
     {
         $this->logFile = $filename;
     }
@@ -322,7 +320,7 @@ class DeadLockTest extends \yiiunit\framework\db\mysql\ConnectionTest
      * Deletes shared log file.
      * Deletes the file [[logFile]] if it exists.
      */
-    private function deleteLog(): void
+    private function deleteLog()
     {
         if (null !== $this->logFile && is_file($this->logFile)) {
             unlink($this->logFile);
@@ -355,7 +353,7 @@ class DeadLockTest extends \yiiunit\framework\db\mysql\ConnectionTest
      * @param string $message Message to append to the log. The message will be prepended
      *                        with timestamp and appended with new line.
      */
-    private function log($message): void
+    private function log($message)
     {
         if (null !== $this->logFile) {
             $time = microtime(true);

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -29,7 +27,7 @@ class ActionFilterTest extends TestCase
         $this->mockApplication();
     }
 
-    public function testFilter(): void
+    public function testFilter()
     {
         // no filters
         $controller = new FakeController('fake', Yii::$app);
@@ -107,7 +105,7 @@ class ActionFilterTest extends TestCase
      *
      * @param string|array $filterClass
      */
-    public function testActive($filterClass): void
+    public function testActive($filterClass)
     {
         $this->mockWebApplication();
 
@@ -142,7 +140,7 @@ class ActionFilterTest extends TestCase
     /**
      * @depends testActive
      */
-    public function testActiveWildcard(): void
+    public function testActiveWildcard()
     {
         $this->mockWebApplication();
 
@@ -246,7 +244,7 @@ class Filter3 extends ActionFilter
 
 class MockUser extends User
 {
-    public function init(): void
+    public function init()
     {
         // do not call parent to avoid the need to mock configuration
     }

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -50,7 +48,7 @@ class CacheableWidgetBehaviorTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testWidgetIsRunWhenCacheIsEmpty(): void
+    public function testWidgetIsRunWhenCacheIsEmpty()
     {
         $this->simpleWidget
             ->expects($this->once())
@@ -63,7 +61,7 @@ class CacheableWidgetBehaviorTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testWidgetIsNotRunWhenCacheIsNotEmpty(): void
+    public function testWidgetIsNotRunWhenCacheIsNotEmpty()
     {
         $this->simpleWidget->cacheDuration = 0;
         $this->simpleWidget
@@ -78,7 +76,7 @@ class CacheableWidgetBehaviorTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testDynamicContent(): void
+    public function testDynamicContent()
     {
         $this->dynamicWidget->cacheDuration = 0;
         $this->dynamicWidget
@@ -94,7 +92,7 @@ class CacheableWidgetBehaviorTest extends TestCase
     /**
      * Initializes a mock application.
      */
-    private function initializeApplicationMock(): void
+    private function initializeApplicationMock()
     {
         $this->mockApplication([
             'components' => [
@@ -112,7 +110,7 @@ class CacheableWidgetBehaviorTest extends TestCase
     /**
      * Initializes mock widgets.
      */
-    private function initializeWidgetMocks(): void
+    private function initializeWidgetMocks()
     {
         $this->simpleWidget = $this->getWidgetMock(SimpleCacheableWidget::className());
         $this->dynamicWidget = $this->getWidgetMock(DynamicCacheableWidget::className());

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -22,7 +20,7 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
 {
     public $driverName = 'pgsql';
 
-    public function testAutoQuoting(): void
+    public function testAutoQuoting()
     {
         $db = $this->getConnection(false);
 
@@ -31,7 +29,7 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
         $this->assertEquals('SELECT "id", "t"."name" FROM "customer" t', $command->sql);
     }
 
-    public function testBooleanValuesInsert(): void
+    public function testBooleanValuesInsert()
     {
         $db = $this->getConnection();
         $command = $db->createCommand();
@@ -48,7 +46,7 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
         $this->assertEquals(1, $command->queryScalar());
     }
 
-    public function testBooleanValuesBatchInsert(): void
+    public function testBooleanValuesBatchInsert()
     {
         $db = $this->getConnection();
         $command = $db->createCommand();
@@ -64,7 +62,7 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
         $this->assertEquals(1, $command->queryScalar());
     }
 
-    public function testLastInsertId(): void
+    public function testLastInsertId()
     {
         $db = $this->getConnection();
 
@@ -93,7 +91,7 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
     /**
      * @see https://github.com/yiisoft/yii2/issues/11498
      */
-    public function testSaveSerializedObject(): void
+    public function testSaveSerializedObject()
     {
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('HHVMs PgSQL implementation does not seem to support blob colums in the way they are used here.');
@@ -156,7 +154,7 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
     /**
      * @see https://github.com/yiisoft/yii2/issues/15827
      */
-    public function testIssue15827(): void
+    public function testIssue15827()
     {
         $db = $this->getConnection();
 

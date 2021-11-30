@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -21,7 +19,7 @@ class ActiveRecordTest extends \yiiunit\framework\db\ActiveRecordTest
 {
     public $driverName = 'sqlsrv';
 
-    public function testExplicitPkOnAutoIncrement(): void
+    public function testExplicitPkOnAutoIncrement()
     {
         $this->markTestSkipped('MSSQL does not support explicit value for an IDENTITY column.');
     }
@@ -29,7 +27,7 @@ class ActiveRecordTest extends \yiiunit\framework\db\ActiveRecordTest
     /**
      * @throws \yii\db\Exception
      */
-    public function testSaveWithTrigger(): void
+    public function testSaveWithTrigger()
     {
         $db = $this->getConnection();
 
@@ -63,7 +61,7 @@ END';
     /**
      * @throws \yii\db\Exception
      */
-    public function testSaveWithComputedColumn(): void
+    public function testSaveWithComputedColumn()
     {
         $db = $this->getConnection();
 

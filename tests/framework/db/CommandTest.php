@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -29,7 +27,7 @@ abstract class CommandTest extends DatabaseTestCase
 {
     protected $upsertTestCharCast = 'CAST([[address]] AS VARCHAR(255))';
 
-    public function testConstruct(): void
+    public function testConstruct()
     {
         $db = $this->getConnection(false);
 
@@ -43,7 +41,7 @@ abstract class CommandTest extends DatabaseTestCase
         $this->assertEquals($sql, $command->sql);
     }
 
-    public function testGetSetSql(): void
+    public function testGetSetSql()
     {
         $db = $this->getConnection(false);
 
@@ -56,7 +54,7 @@ abstract class CommandTest extends DatabaseTestCase
         $this->assertEquals($sql2, $command->sql);
     }
 
-    public function testAutoQuoting(): void
+    public function testAutoQuoting()
     {
         $db = $this->getConnection(false);
 
@@ -65,7 +63,7 @@ abstract class CommandTest extends DatabaseTestCase
         $this->assertEquals('SELECT `id`, `t`.`name` FROM `customer` t', $command->sql);
     }
 
-    public function testPrepareCancel(): void
+    public function testPrepareCancel()
     {
         $db = $this->getConnection(false);
 
@@ -77,7 +75,7 @@ abstract class CommandTest extends DatabaseTestCase
         $this->assertNull($command->pdoStatement);
     }
 
-    public function testExecute(): void
+    public function testExecute()
     {
         $db = $this->getConnection();
 
@@ -94,7 +92,7 @@ abstract class CommandTest extends DatabaseTestCase
         $command->execute();
     }
 
-    public function testQuery(): void
+    public function testQuery()
     {
         $db = $this->getConnection();
 
@@ -155,7 +153,7 @@ abstract class CommandTest extends DatabaseTestCase
         $command->query();
     }
 
-    public function testBindParamValue(): void
+    public function testBindParamValue()
     {
         if (defined('HHVM_VERSION') && $this->driverName === 'pgsql') {
             $this->markTestSkipped('HHVMs PgSQL implementation has some specific behavior that breaks some parts of this test.');
@@ -252,7 +250,7 @@ SQL;
      *
      * @param string $sql
      */
-    public function testBindParamsNonWhere($sql): void
+    public function testBindParamsNonWhere($sql)
     {
         $db = $this->getConnection();
 
@@ -266,7 +264,7 @@ SQL;
         $this->assertEquals('Params', $command->queryScalar());
     }
 
-    public function testFetchMode(): void
+    public function testFetchMode()
     {
         $db = $this->getConnection();
 
@@ -290,7 +288,7 @@ SQL;
         $this->assertTrue(is_array($result) && isset($result[0]));
     }
 
-    public function testBatchInsert(): void
+    public function testBatchInsert()
     {
         $command = $this->getConnection()->createCommand();
         $command->batchInsert('{{customer}}', ['email', 'name', 'address'], [
@@ -305,7 +303,7 @@ SQL;
         $this->assertEquals(0, $command->execute());
     }
 
-    public function testBatchInsertWithYield(): void
+    public function testBatchInsertWithYield()
     {
         if (PHP_VERSION_ID < 50500) {
             $this->markTestSkipped('The yield function is only supported with php 5.5 =< version');
@@ -321,7 +319,7 @@ SQL;
      *
      * https://github.com/yiisoft/yii2/issues/6526
      */
-    public function testBatchInsertDataTypesLocale(): void
+    public function testBatchInsertDataTypesLocale()
     {
         $locale = setlocale(LC_NUMERIC, 0);
 
@@ -424,7 +422,7 @@ SQL;
      * @param mixed $values
      * @param mixed $expected
      */
-    public function testBatchInsertSQL($table, $columns, $values, $expected, array $expectedParams = []): void
+    public function testBatchInsertSQL($table, $columns, $values, $expected, array $expectedParams = [])
     {
         $command = $this->getConnection()->createCommand();
         $command->batchInsert($table, $columns, $values);
@@ -433,7 +431,7 @@ SQL;
         $this->assertSame($expectedParams, $command->params);
     }
 
-    public function testInsert(): void
+    public function testInsert()
     {
         $db = $this->getConnection();
         $db->createCommand('DELETE FROM {{customer}}')->execute();
@@ -456,7 +454,7 @@ SQL;
     /**
      * verify that {{}} are not going to be replaced in parameters.
      */
-    public function testNoTablenameReplacement(): void
+    public function testNoTablenameReplacement()
     {
         $db = $this->getConnection();
 
@@ -487,7 +485,7 @@ SQL;
     /**
      * Test INSERT INTO ... SELECT SQL statement.
      */
-    public function testInsertSelect(): void
+    public function testInsertSelect()
     {
         $db = $this->getConnection();
         $db->createCommand('DELETE FROM {{customer}}')->execute();
@@ -534,7 +532,7 @@ SQL;
     /**
      * Test INSERT INTO ... SELECT SQL statement with alias syntax.
      */
-    public function testInsertSelectAlias(): void
+    public function testInsertSelectAlias()
     {
         $db = $this->getConnection();
         $db->createCommand('DELETE FROM {{customer}}')->execute();
@@ -599,7 +597,7 @@ SQL;
      *
      * @param mixed $invalidSelectColumns
      */
-    public function testInsertSelectFailed($invalidSelectColumns): void
+    public function testInsertSelectFailed($invalidSelectColumns)
     {
         $this->expectException('\yii\base\InvalidParamException');
         $this->expectExceptionMessage('Expected select query object with enumerated (named) parameters');
@@ -611,7 +609,7 @@ SQL;
         $command->insert('{{customer}}', $query)->execute();
     }
 
-    public function testInsertExpression(): void
+    public function testInsertExpression()
     {
         $db = $this->getConnection();
         $db->createCommand('DELETE FROM {{order_with_null_fk}}')->execute();
@@ -645,7 +643,7 @@ SQL;
         ], $record);
     }
 
-    public function testsInsertQueryAsColumnValue(): void
+    public function testsInsertQueryAsColumnValue()
     {
         $time = time();
 
@@ -681,7 +679,7 @@ SQL;
         $db->createCommand('DELETE FROM {{order}} WHERE [[id]] = ' . $orderId)->execute();
     }
 
-    public function testCreateTable(): void
+    public function testCreateTable()
     {
         $db = $this->getConnection();
 
@@ -697,7 +695,7 @@ SQL;
         ], $records);
     }
 
-    public function testAlterTable(): void
+    public function testAlterTable()
     {
         if ($this->driverName === 'sqlite') {
             $this->markTestSkipped('Sqlite does not support alterTable');
@@ -722,7 +720,7 @@ SQL;
         ], $records);
     }
 
-    public function testDropTable(): void
+    public function testDropTable()
     {
         $db = $this->getConnection();
 
@@ -732,7 +730,7 @@ SQL;
         $this->assertNull($db->getSchema()->getTableSchema($tableName));
     }
 
-    public function testTruncateTable(): void
+    public function testTruncateTable()
     {
         $db = $this->getConnection();
 
@@ -743,7 +741,7 @@ SQL;
         $this->assertCount(0, $rows);
     }
 
-    public function testRenameTable(): void
+    public function testRenameTable()
     {
         $db = $this->getConnection();
 
@@ -988,7 +986,7 @@ SQL;
     /**
      * @dataProvider upsertProvider
      */
-    public function testUpsert(array $firstData, array $secondData): void
+    public function testUpsert(array $firstData, array $secondData)
     {
         $db = $this->getConnection();
         $this->assertEquals(0, $db->createCommand('SELECT COUNT(*) FROM {{T_upsert}}')->queryScalar());
@@ -997,7 +995,7 @@ SQL;
         $this->performAndCompareUpsertResult($db, $secondData);
     }
 
-    protected function performAndCompareUpsertResult(Connection $db, array $data): void
+    protected function performAndCompareUpsertResult(Connection $db, array $data)
     {
         $params = $data['params'];
         $expected = $data['expected'] ?? $params[1];
@@ -1037,7 +1035,7 @@ SQL;
     }
     */
 
-    public function testAddDropPrimaryKey(): void
+    public function testAddDropPrimaryKey()
     {
         $db = $this->getConnection(false);
         $tableName = 'test_pk';
@@ -1064,7 +1062,7 @@ SQL;
         $this->assertEquals(['int1', 'int2'], $schema->getTablePrimaryKey($tableName, true)->columnNames);
     }
 
-    public function testAddDropForeignKey(): void
+    public function testAddDropForeignKey()
     {
         $db = $this->getConnection(false);
         $tableName = 'test_fk';
@@ -1097,7 +1095,7 @@ SQL;
         $this->assertEquals(['int3', 'int4'], $schema->getTableForeignKeys($tableName, true)[0]->foreignColumnNames);
     }
 
-    public function testCreateDropIndex(): void
+    public function testCreateDropIndex()
     {
         $db = $this->getConnection(false);
         $tableName = 'test_idx';
@@ -1141,7 +1139,7 @@ SQL;
         $this->assertTrue($schema->getTableIndexes($tableName, true)[0]->isUnique);
     }
 
-    public function testAddDropUnique(): void
+    public function testAddDropUnique()
     {
         $db = $this->getConnection(false);
         $tableName = 'test_uq';
@@ -1168,7 +1166,7 @@ SQL;
         $this->assertEquals(['int1', 'int2'], $schema->getTableUniques($tableName, true)[0]->columnNames);
     }
 
-    public function testAddDropCheck(): void
+    public function testAddDropCheck()
     {
         $db = $this->getConnection(false);
         $tableName = 'test_ck';
@@ -1191,12 +1189,12 @@ SQL;
         $this->assertEmpty($schema->getTableChecks($tableName, true));
     }
 
-    public function testAddDropDefaultValue(): void
+    public function testAddDropDefaultValue()
     {
         $this->markTestSkipped($this->driverName . ' does not support adding/dropping default value constraints.');
     }
 
-    public function testIntegrityViolation(): void
+    public function testIntegrityViolation()
     {
         $this->expectException('\yii\db\IntegrityException');
 
@@ -1208,7 +1206,7 @@ SQL;
         $command->execute();
     }
 
-    public function testLastInsertId(): void
+    public function testLastInsertId()
     {
         $db = $this->getConnection();
 
@@ -1218,7 +1216,7 @@ SQL;
         $this->assertEquals(3, $db->getSchema()->getLastInsertID());
     }
 
-    public function testQueryCache(): void
+    public function testQueryCache()
     {
         $db = $this->getConnection();
         $db->enableQueryCache = true;
@@ -1230,12 +1228,12 @@ SQL;
         $update->bindValues([':id' => 1, ':name' => 'user11'])->execute();
         $this->assertEquals('user11', $command->bindValue(':id', 1)->queryScalar());
 
-        $db->cache(function (Connection $db) use ($command, $update): void {
+        $db->cache(function (Connection $db) use ($command, $update) {
             $this->assertEquals('user2', $command->bindValue(':id', 2)->queryScalar());
             $update->bindValues([':id' => 2, ':name' => 'user22'])->execute();
             $this->assertEquals('user2', $command->bindValue(':id', 2)->queryScalar());
 
-            $db->noCache(function () use ($command): void {
+            $db->noCache(function () use ($command) {
                 $this->assertEquals('user22', $command->bindValue(':id', 2)->queryScalar());
             });
 
@@ -1243,7 +1241,7 @@ SQL;
         }, 10);
 
         $db->enableQueryCache = false;
-        $db->cache(function ($db) use ($command, $update): void {
+        $db->cache(function ($db) use ($command, $update) {
             $this->assertEquals('user22', $command->bindValue(':id', 2)->queryScalar());
             $update->bindValues([':id' => 2, ':name' => 'user2'])->execute();
             $this->assertEquals('user2', $command->bindValue(':id', 2)->queryScalar());
@@ -1257,13 +1255,13 @@ SQL;
         $this->assertEquals('user1', $command->noCache()->bindValue(':id', 1)->queryScalar());
 
         $command = $db->createCommand('SELECT [[name]] FROM {{customer}} WHERE [[id]] = :id');
-        $db->cache(function (Connection $db) use ($command): void {
+        $db->cache(function (Connection $db) use ($command) {
             $this->assertEquals('user11', $command->bindValue(':id', 1)->queryScalar());
             $this->assertEquals('user1', $command->noCache()->bindValue(':id', 1)->queryScalar());
         }, 10);
     }
 
-    public function testColumnCase(): void
+    public function testColumnCase()
     {
         $db = $this->getConnection(false);
         $this->assertEquals(PDO::CASE_NATURAL, $db->slavePdo->getAttribute(PDO::ATTR_CASE));
@@ -1351,14 +1349,14 @@ SQL;
      * @param string $sql
      * @param string $expectedRawSql
      */
-    public function testGetRawSql($sql, array $params, $expectedRawSql): void
+    public function testGetRawSql($sql, array $params, $expectedRawSql)
     {
         $db = $this->getConnection(false);
         $command = $db->createCommand($sql, $params);
         $this->assertEquals($expectedRawSql, $command->getRawSql());
     }
 
-    public function testAutoRefreshTableSchema(): void
+    public function testAutoRefreshTableSchema()
     {
         if ($this->driverName === 'sqlsrv') {
             // related to https://github.com/yiisoft/yii2/pull/17364
@@ -1405,7 +1403,7 @@ SQL;
         $this->assertNull($db->getSchema()->getTableSchema($tableName));
     }
 
-    public function testTransaction(): void
+    public function testTransaction()
     {
         $connection = $this->getConnection(false);
         $this->assertNull($connection->transaction);
@@ -1416,7 +1414,7 @@ SQL;
         $this->assertEquals(1, $connection->createCommand("SELECT COUNT(*) FROM {{profile}} WHERE [[description]] = 'command transaction'")->queryScalar());
     }
 
-    public function testRetryHandler(): void
+    public function testRetryHandler()
     {
         $connection = $this->getConnection(false);
         $this->assertNull($connection->transaction);
@@ -1447,7 +1445,7 @@ SQL;
         $this->assertTrue($hitCatch);
     }
 
-    public function testCreateView(): void
+    public function testCreateView()
     {
         $db = $this->getConnection();
         $subquery = (new \yii\db\Query())
@@ -1474,7 +1472,7 @@ SQL;
         $this->assertEquals([['bar' => 6]], $records);
     }
 
-    public function testDropView(): void
+    public function testDropView()
     {
         $db = $this->getConnection();
         $viewName = 'animal_view'; // since it already exists in the fixtures
@@ -1485,7 +1483,7 @@ SQL;
     }
 
     // TODO: Remove in Yii 2.1
-    public function testBindValuesSupportsDeprecatedPDOCastingFormat(): void
+    public function testBindValuesSupportsDeprecatedPDOCastingFormat()
     {
         $db = $this->getConnection();
         $db->createCommand()->setSql('SELECT :p1')->bindValues([':p1' => [2, PDO::PARAM_STR]]);

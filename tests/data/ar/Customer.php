@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -85,13 +83,13 @@ class Customer extends ActiveRecord
         /* @var $rel ActiveQuery */
         $rel = $this->hasMany(Item::className(), ['id' => 'item_id']);
 
-        return $rel->viaTable('order_item', ['order_id' => 'id'], static function ($q): void {
+        return $rel->viaTable('order_item', ['order_id' => 'id'], static function ($q) {
             /* @var $q ActiveQuery */
             $q->viaTable('order', ['customer_id' => 'id']);
         })->orderBy('id');
     }
 
-    public function afterSave($insert, $changedAttributes): void
+    public function afterSave($insert, $changedAttributes)
     {
         ActiveRecordTest::$afterSaveInsert = $insert;
         ActiveRecordTest::$afterSaveNewRecord = $this->isNewRecord;

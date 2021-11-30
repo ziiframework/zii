@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -49,7 +47,7 @@ class TableTest extends TestCase
     /**
      * @dataProvider getTableData
      */
-    public function testTable($headers, $rows): void
+    public function testTable($headers, $rows)
     {
         $table = new Table();
 
@@ -72,7 +70,7 @@ EXPECTED;
         $this->assertEqualsWithoutLE($expected, $tableContent);
     }
 
-    public function testTableWithFullwidthChars(): void
+    public function testTableWithFullwidthChars()
     {
         $table = new Table();
 
@@ -96,7 +94,7 @@ EXPECTED;
             ])->setScreenWidth(200)->run());
     }
 
-    public function testLists(): void
+    public function testLists()
     {
         $table = new Table();
 
@@ -119,7 +117,7 @@ EXPECTED;
             ])->setScreenWidth(200)->run());
     }
 
-    public function testListPrefix(): void
+    public function testListPrefix()
     {
         $table = new Table();
 
@@ -142,7 +140,7 @@ EXPECTED;
             ])->setScreenWidth(200)->setListPrefix('* ')->run());
     }
 
-    public function testCustomChars(): void
+    public function testCustomChars()
     {
         $table = new Table();
 
@@ -170,7 +168,7 @@ EXPECTED;
             ])->setScreenWidth(200)->run());
     }
 
-    public function testTableWidgetSyntax(): void
+    public function testTableWidgetSyntax()
     {
         $expected = <<<'EXPECTED'
 ╔═══════════════╤═══════════════╤═══════════════╗
@@ -193,7 +191,7 @@ EXPECTED;
             ]));
     }
 
-    public function testShortRow(): void
+    public function testShortRow()
     {
         $table = new Table();
 
@@ -224,7 +222,7 @@ EXPECTED;
             ])->setScreenWidth(200)->run());
     }
 
-    public function testEmptyRow(): void
+    public function testEmptyRow()
     {
         $table = new Table();
 
@@ -246,7 +244,7 @@ EXPECTED;
             ])->setScreenWidth(200)->run());
     }
 
-    public function testEmptyHeaders(): void
+    public function testEmptyHeaders()
     {
         $table = new Table();
 
@@ -265,7 +263,7 @@ EXPECTED;
         ])->setScreenWidth(200)->run());
     }
 
-    public function testEmptyTable(): void
+    public function testEmptyTable()
     {
         $table = new Table();
 
@@ -280,7 +278,7 @@ EXPECTED;
             ->setRows([])->setScreenWidth(200)->run());
     }
 
-    public function testEmptyAndZeroTableCell(): void
+    public function testEmptyAndZeroTableCell()
     {
         $table = new Table();
 
@@ -305,7 +303,7 @@ EXPECTED;
                 ->run());
     }
 
-    public function testColorizedInput(): void
+    public function testColorizedInput()
     {
         $table = new Table();
 
@@ -331,7 +329,7 @@ EXPECTED;
                 ->run());
     }
 
-    public function testColorizedInputStripsANSIMarkersInternally(): void
+    public function testColorizedInputStripsANSIMarkersInternally()
     {
         $table = new Table();
 
@@ -352,7 +350,7 @@ EXPECTED;
         $this->assertEquals(8 + 2, $columnWidths[2]);
     }
 
-    public function testCalculateRowHeightShouldNotThrowDivisionByZeroException(): void
+    public function testCalculateRowHeightShouldNotThrowDivisionByZeroException()
     {
         $rows = [
             ['XXXXXX', 'XXXXXXXXXXXXXXXXXXXX', '', '', 'XXXXXXXXXXXXXXXXXX', 'X', 'XXX'],
@@ -367,7 +365,7 @@ EXPECTED;
         $this->assertEqualsWithoutLE($table, $table);
     }
 
-    public function testLineBreakTableCell(): void
+    public function testLineBreakTableCell()
     {
         $table = new Table();
 
@@ -399,7 +397,7 @@ EXPECTED;
                 ->run());
     }
 
-    public function testColorizedLineBreakTableCell(): void
+    public function testColorizedLineBreakTableCell()
     {
         $table = new Table();
 
@@ -449,7 +447,7 @@ EXPECTED;
      * @param $smallString
      * @dataProvider dataMinimumWidth
      */
-    public function testMinimumWidth($smallString): void
+    public function testMinimumWidth($smallString)
     {
         $bigString = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
 
@@ -476,7 +474,7 @@ EXPECTED;
         ];
     }
 
-    public function testTableWithAnsiFormat(): void
+    public function testTableWithAnsiFormat()
     {
         $table = new Table();
 

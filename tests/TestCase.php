@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -66,7 +64,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * @param array  $config   The application configuration, if needed
      * @param string $appClass name of the application class to create
      */
-    protected function mockApplication($config = [], $appClass = '\yii\console\Application'): void
+    protected function mockApplication($config = [], $appClass = '\yii\console\Application')
     {
         new $appClass(ArrayHelper::merge([
             'id' => 'testapp',
@@ -75,7 +73,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         ], $config));
     }
 
-    protected function mockWebApplication($config = [], $appClass = '\yii\web\Application'): void
+    protected function mockWebApplication($config = [], $appClass = '\yii\web\Application')
     {
         new $appClass(ArrayHelper::merge([
             'id' => 'testapp',
@@ -97,10 +95,10 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
     protected function getVendorPath()
     {
-        $vendor = dirname(__DIR__, 2) . '/vendor';
+        $vendor = dirname(dirname(__DIR__)) . '/vendor';
 
         if (!is_dir($vendor)) {
-            $vendor = dirname(__DIR__, 4);
+            $vendor = dirname(dirname(dirname(dirname(__DIR__))));
         }
 
         return $vendor;
@@ -109,7 +107,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * Destroys application in Yii::$app by setting it to null.
      */
-    protected function destroyApplication(): void
+    protected function destroyApplication()
     {
         if (Yii::$app && Yii::$app->has('session', true)) {
             Yii::$app->session->close();
@@ -124,7 +122,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * @param string $actual
      * @param string $message
      */
-    protected function assertEqualsWithoutLE($expected, $actual, $message = ''): void
+    protected function assertEqualsWithoutLE($expected, $actual, $message = '')
     {
         $expected = str_replace("\r\n", "\n", $expected);
         $actual = str_replace("\r\n", "\n", $actual);
@@ -139,7 +137,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * @param mixed  $haystack
      * @param string $message
      */
-    protected function assertContainsWithoutLE($needle, $haystack, $message = ''): void
+    protected function assertContainsWithoutLE($needle, $haystack, $message = '')
     {
         $needle = str_replace("\r\n", "\n", $needle);
         $haystack = str_replace("\r\n", "\n", $haystack);
@@ -183,7 +181,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      *
      * @since 2.0.11
      */
-    protected function setInaccessibleProperty($object, $propertyName, $value, $revoke = true): void
+    protected function setInaccessibleProperty($object, $propertyName, $value, $revoke = true)
     {
         $class = new ReflectionClass($object);
 
@@ -232,7 +230,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * @param mixed  $actual
      * @param string $message
      */
-    public function assertIsOneOf($actual, array $expected, $message = ''): void
+    public function assertIsOneOf($actual, array $expected, $message = '')
     {
         $this->assertThat($actual, new IsOneOfAssert($expected), $message);
     }
@@ -242,7 +240,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      *
      * @param $db
      */
-    protected function switchDbConnection($db): void
+    protected function switchDbConnection($db)
     {
         $databases = $this->getParam('databases');
 

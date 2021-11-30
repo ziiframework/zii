@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -19,7 +17,7 @@ use yiiunit\TestCase;
  */
 class TagDependencyTest extends TestCase
 {
-    public function testInvalidate(): void
+    public function testInvalidate()
     {
         $cache = new FileCache(['cachePath' => '@yiiunit/runtime/cache']);
 

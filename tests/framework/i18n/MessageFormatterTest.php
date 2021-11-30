@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -360,7 +358,7 @@ _MSG_
      * @param bool   $skip
      * @param string $skipMessage
      */
-    public function testNamedArguments($pattern, $expected, $args, $skip = false, $skipMessage = ''): void
+    public function testNamedArguments($pattern, $expected, $args, $skip = false, $skipMessage = '')
     {
         if ($skip) {
             $this->markTestSkipped($skipMessage);
@@ -378,7 +376,7 @@ _MSG_
      * @param array  $args
      * @param string $locale
      */
-    public function testParseNamedArguments($pattern, $expected, $args, $locale = 'en-US'): void
+    public function testParseNamedArguments($pattern, $expected, $args, $locale = 'en-US')
     {
         if (!extension_loaded('intl')) {
             $this->markTestSkipped('intl not installed. Skipping.');
@@ -389,7 +387,7 @@ _MSG_
         $this->assertEquals($args, $result, $formatter->getErrorMessage() . ' Pattern: ' . $pattern);
     }
 
-    public function testInsufficientArguments(): void
+    public function testInsufficientArguments()
     {
         $expected = '{' . self::SUBJECT . '} is ' . self::N_VALUE;
 
@@ -401,7 +399,7 @@ _MSG_
         $this->assertEquals($expected, $result, $formatter->getErrorMessage());
     }
 
-    public function testNoParams(): void
+    public function testNoParams()
     {
         $pattern = '{' . self::SUBJECT . '} is ' . self::N;
         $formatter = new MessageFormatter();
@@ -409,7 +407,7 @@ _MSG_
         $this->assertEquals($pattern, $result, $formatter->getErrorMessage());
     }
 
-    public function testMalformedFormatter(): void
+    public function testMalformedFormatter()
     {
         $formatter = new MessageFormatter();
         $result = $formatter->format('{word,umber}', ['word' => 'test'], 'en-US'); // typo is intentional, message pattern should be invalid

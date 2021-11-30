@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -169,7 +167,7 @@ class ActiveDataFilterTest extends TestCase
      * @param array $filter
      * @param array $expectedResult
      */
-    public function testBuild($filter, $expectedResult): void
+    public function testBuild($filter, $expectedResult)
     {
         $builder = new ActiveDataFilter();
         $searchModel = (new DynamicModel(['name' => null, 'number' => null, 'price' => null, 'tags' => null]))
@@ -188,7 +186,7 @@ class ActiveDataFilterTest extends TestCase
     /**
      * @depends testBuild
      */
-    public function testBuildCallback(): void
+    public function testBuildCallback()
     {
         $builder = new ActiveDataFilter();
         $searchModel = (new DynamicModel(['name' => null]))
@@ -197,8 +195,12 @@ class ActiveDataFilterTest extends TestCase
 
         $builder->setSearchModel($searchModel);
 
-        $builder->conditionBuilders['OR'] = static fn ($operator, $condition) => ['CALLBACK-OR', $condition];
-        $builder->conditionBuilders['LIKE'] = static fn ($operator, $condition, $attribute) => ['CALLBACK-LIKE', $operator, $condition, $attribute];
+        $builder->conditionBuilders['OR'] = static function ($operator, $condition) {
+            return ['CALLBACK-OR', $condition];
+        };
+        $builder->conditionBuilders['LIKE'] = static function ($operator, $condition, $attribute) {
+            return ['CALLBACK-LIKE', $operator, $condition, $attribute];
+        };
 
         $builder->filter = [
             'or' => [

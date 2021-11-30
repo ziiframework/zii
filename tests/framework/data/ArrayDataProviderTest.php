@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -24,7 +22,7 @@ class ArrayDataProviderTest extends TestCase
         $this->mockApplication();
     }
 
-    public function testGetModels(): void
+    public function testGetModels()
     {
         $simpleArray = [
             ['name' => 'zero'],
@@ -34,7 +32,7 @@ class ArrayDataProviderTest extends TestCase
         $this->assertEquals($simpleArray, $dataProvider->getModels());
     }
 
-    public function testGetSortedData(): void
+    public function testGetSortedData()
     {
         $simpleArray = [['sortField' => 1], ['sortField' => 0]];
         $dataProvider = new ArrayDataProvider([
@@ -57,7 +55,7 @@ class ArrayDataProviderTest extends TestCase
         $this->assertEquals($sortedArray, $dataProvider->getModels());
     }
 
-    public function testGetSortedDataByInnerArrayField(): void
+    public function testGetSortedDataByInnerArrayField()
     {
         $simpleArray = [
             ['innerArray' => ['sortField' => 1]],
@@ -86,7 +84,7 @@ class ArrayDataProviderTest extends TestCase
         $this->assertEquals($sortedArray, $dataProvider->getModels());
     }
 
-    public function testCaseSensitiveSort(): void
+    public function testCaseSensitiveSort()
     {
         // source data
         $unsortedProjects = [
@@ -153,7 +151,7 @@ class ArrayDataProviderTest extends TestCase
         $this->assertEquals($sortedProjects, $dataProvider->getModels());
     }
 
-    public function testGetKeys(): void
+    public function testGetKeys()
     {
         $pagination = ['pageSize' => 2];
 
@@ -182,7 +180,7 @@ class ArrayDataProviderTest extends TestCase
         $this->assertEquals(['key1', 9], $dataProvider->getKeys());
     }
 
-    public function testSortFlags(): void
+    public function testSortFlags()
     {
         $simpleArray = [['sortField' => 1], ['sortField' => 2], ['sortField' => 11]];
         $dataProvider = new ArrayDataProvider([

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -28,7 +26,7 @@ class StringValidatorTest extends TestCase
         $this->destroyApplication();
     }
 
-    public function testValidateValue(): void
+    public function testValidateValue()
     {
         $val = new StringValidator();
         $this->assertFalse($val->validate(['not a string']));
@@ -37,7 +35,7 @@ class StringValidatorTest extends TestCase
         $this->assertFalse($val->validate(false));
     }
 
-    public function testValidateValueLength(): void
+    public function testValidateValueLength()
     {
         $val = new StringValidator(['length' => 25]);
         $this->assertTrue($val->validate(str_repeat('x', 25)));
@@ -62,7 +60,7 @@ class StringValidatorTest extends TestCase
         $this->assertFalse($val->validate(str_repeat('x', 30)));
     }
 
-    public function testValidateValueMinMax(): void
+    public function testValidateValueMinMax()
     {
         $val = new StringValidator(['min' => 10]);
         $this->assertTrue($val->validate(str_repeat('x', 10)));
@@ -76,7 +74,7 @@ class StringValidatorTest extends TestCase
         $this->assertFalse($val->validate(str_repeat('b', 25)));
     }
 
-    public function testValidateAttribute(): void
+    public function testValidateAttribute()
     {
         $val = new StringValidator();
         $model = new FakedValidationModel();
@@ -113,7 +111,7 @@ class StringValidatorTest extends TestCase
         $this->assertTrue($model->hasErrors('attr_str'));
     }
 
-    public function testEnsureMessagesOnInit(): void
+    public function testEnsureMessagesOnInit()
     {
         $val = new StringValidator(['min' => 1, 'max' => 2]);
         $this->assertIsString($val->message);
@@ -121,7 +119,7 @@ class StringValidatorTest extends TestCase
         $this->assertIsString($val->tooShort);
     }
 
-    public function testCustomErrorMessageInValidateAttribute(): void
+    public function testCustomErrorMessageInValidateAttribute()
     {
         $val = new StringValidator([
             'min' => 5,
@@ -138,7 +136,7 @@ class StringValidatorTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/13327
      */
-    public function testValidateValueInNonStrictMode(): void
+    public function testValidateValueInNonStrictMode()
     {
         $val = new StringValidator();
         $val->strict = false;

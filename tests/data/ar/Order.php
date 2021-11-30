@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -68,7 +66,9 @@ class Order extends ActiveRecord
     public function getOrderItems3()
     {
         return $this->hasMany(OrderItem::className(), ['order_id' => 'id'])
-            ->indexBy(static fn ($row) => $row['order_id'] . '_' . $row['item_id']);
+            ->indexBy(static function ($row) {
+                return $row['order_id'] . '_' . $row['item_id'];
+            });
     }
 
     public function getOrderItemsWithNullFK()
@@ -79,7 +79,7 @@ class Order extends ActiveRecord
     public function getItems()
     {
         return $this->hasMany(Item::className(), ['id' => 'item_id'])
-            ->via('orderItems', static function ($q): void {
+            ->via('orderItems', static function ($q) {
                 // additional query configuration
             })->orderBy('item.id');
     }
@@ -87,7 +87,7 @@ class Order extends ActiveRecord
     public function getExpensiveItemsUsingViaWithCallable()
     {
         return $this->hasMany(Item::className(), ['id' => 'item_id'])
-            ->via('orderItems', static function (ActiveQuery $q): void {
+            ->via('orderItems', static function (ActiveQuery $q) {
                 $q->where(['>=', 'subtotal', 10]);
             });
     }
@@ -95,7 +95,7 @@ class Order extends ActiveRecord
     public function getCheapItemsUsingViaWithCallable()
     {
         return $this->hasMany(Item::className(), ['id' => 'item_id'])
-            ->via('orderItems', static function (ActiveQuery $q): void {
+            ->via('orderItems', static function (ActiveQuery $q) {
                 $q->where(['<', 'subtotal', 10]);
             });
     }
@@ -115,7 +115,7 @@ class Order extends ActiveRecord
     public function getItemsInOrder1()
     {
         return $this->hasMany(Item::className(), ['id' => 'item_id'])
-            ->via('orderItems', static function ($q): void {
+            ->via('orderItems', static function ($q) {
                 $q->orderBy(['subtotal' => SORT_ASC]);
             })->orderBy('name');
     }
@@ -123,7 +123,7 @@ class Order extends ActiveRecord
     public function getItemsInOrder2()
     {
         return $this->hasMany(Item::className(), ['id' => 'item_id'])
-            ->via('orderItems', static function ($q): void {
+            ->via('orderItems', static function ($q) {
                 $q->orderBy(['subtotal' => SORT_DESC]);
             })->orderBy('name');
     }

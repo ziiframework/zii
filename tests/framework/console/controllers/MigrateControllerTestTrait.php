@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -52,7 +50,7 @@ trait MigrateControllerTestTrait
         return $this->migrationExitCode;
     }
 
-    public function setUpMigrationPath(): void
+    public function setUpMigrationPath()
     {
         $this->migrationNamespace = 'yiiunit\runtime\test_migrations';
         $this->migrationPath = Yii::getAlias('@yiiunit/runtime/test_migrations');
@@ -63,7 +61,7 @@ trait MigrateControllerTestTrait
         }
     }
 
-    public function tearDownMigrationPath(): void
+    public function tearDownMigrationPath()
     {
         FileHelper::removeDirectory($this->migrationPath);
         FileHelper::removeDirectory(Yii::getAlias('@yiiunit/runtime/app_migrations'));
@@ -213,7 +211,7 @@ CODE;
      * @param array  $expectedMigrations migration names in expected order
      * @param string $message            failure message
      */
-    protected function assertMigrationHistory(array $expectedMigrations, $message = ''): void
+    protected function assertMigrationHistory(array $expectedMigrations, $message = '')
     {
         $success = true;
         $migrationHistory = $this->getMigrationHistory();
@@ -245,7 +243,7 @@ CODE;
 
     // Tests :
 
-    public function testCreate(): void
+    public function testCreate()
     {
         $migrationName = 'test_migration';
         $this->runMigrateControllerAction('create', [$migrationName]);
@@ -255,7 +253,7 @@ CODE;
         $this->assertStringContainsString($migrationName, basename($files[0]), 'Wrong migration name!');
     }
 
-    public function testUp(): void
+    public function testUp()
     {
         $this->createMigration('test_up1');
         $this->createMigration('test_up2');
@@ -269,7 +267,7 @@ CODE;
     /**
      * @depends testUp
      */
-    public function testUpCount(): void
+    public function testUpCount()
     {
         $this->createMigration('test_down1');
         $this->createMigration('test_down2');
@@ -283,7 +281,7 @@ CODE;
     /**
      * @depends testUp
      */
-    public function testDownCount(): void
+    public function testDownCount()
     {
         $this->createMigration('test_down_count1');
         $this->createMigration('test_down_count2');
@@ -299,7 +297,7 @@ CODE;
     /**
      * @depends testDownCount
      */
-    public function testDownAll(): void
+    public function testDownAll()
     {
         $this->createMigration('test_down_all1');
         $this->createMigration('test_down_all2');
@@ -315,7 +313,7 @@ CODE;
     /**
      * @depends testUp
      */
-    public function testHistory(): void
+    public function testHistory()
     {
         $output = $this->runMigrateControllerAction('history');
         $this->assertStringContainsString('No migration', $output);
@@ -334,7 +332,7 @@ CODE;
     /**
      * @depends testUp
      */
-    public function testNew(): void
+    public function testNew()
     {
         $this->createMigration('test_new1');
 
@@ -350,7 +348,7 @@ CODE;
         $this->assertStringNotContainsString('_test_new1', $output);
     }
 
-    public function testMark(): void
+    public function testMark()
     {
         $version = '010101_000001';
         $this->createMigration('test_mark1', $version);
@@ -361,7 +359,7 @@ CODE;
         $this->assertMigrationHistory(['m*_base', 'm*_test_mark1']);
     }
 
-    public function testMarkBase(): void
+    public function testMarkBase()
     {
         $version = '010101_000001';
         $this->createMigration('test_mark1', $version);
@@ -375,7 +373,7 @@ CODE;
         $this->assertMigrationHistory(['m*_base']);
     }
 
-    public function testTo(): void
+    public function testTo()
     {
         $version = '020202_000001';
         $this->createMigration('to1', $version);
@@ -389,7 +387,7 @@ CODE;
     /**
      * @depends testUp
      */
-    public function testRedo(): void
+    public function testRedo()
     {
         $this->createMigration('test_redo1');
         $this->runMigrateControllerAction('up');
@@ -406,7 +404,7 @@ CODE;
     /**
      * @depends testCreate
      */
-    public function testNamespaceCreate(): void
+    public function testNamespaceCreate()
     {
         // default namespace apply :
         $migrationName = 'testDefaultNamespace';
@@ -448,7 +446,7 @@ CODE;
     /**
      * @depends testUp
      */
-    public function testNamespaceUp(): void
+    public function testNamespaceUp()
     {
         $this->createNamespaceMigration('nsTest1');
         $this->createNamespaceMigration('nsTest2');
@@ -470,7 +468,7 @@ CODE;
      * @depends testNamespaceUp
      * @depends testDownCount
      */
-    public function testNamespaceDownCount(): void
+    public function testNamespaceDownCount()
     {
         $this->createNamespaceMigration('down1');
         $this->createNamespaceMigration('down2');
@@ -494,7 +492,7 @@ CODE;
      * @depends testNamespaceUp
      * @depends testHistory
      */
-    public function testNamespaceHistory(): void
+    public function testNamespaceHistory()
     {
         $controllerConfig = [
             'migrationPath' => null,
@@ -518,7 +516,7 @@ CODE;
     /**
      * @depends testMark
      */
-    public function testNamespaceMark(): void
+    public function testNamespaceMark()
     {
         $controllerConfig = [
             'migrationPath' => null,
@@ -537,7 +535,7 @@ CODE;
     /**
      * @depends testTo
      */
-    public function testNamespaceTo(): void
+    public function testNamespaceTo()
     {
         $controllerConfig = [
             'migrationPath' => null,
@@ -556,7 +554,7 @@ CODE;
     /**
      * Test migration with using multiple migration paths and namespaces.
      */
-    public function testCombinedMigrationProcess(): void
+    public function testCombinedMigrationProcess()
     {
         FileHelper::createDirectory(Yii::getAlias('@yiiunit/runtime/app_migrations'));
         FileHelper::createDirectory(Yii::getAlias('@yiiunit/runtime/extension_migrations'));

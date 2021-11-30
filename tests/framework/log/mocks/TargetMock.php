@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -19,11 +17,11 @@ class TargetMock extends Target
     /**
      * {@inheritDoc}
      */
-    public function export(): void
+    public function export()
     {
     }
 
-    public function collect($messages, $final): void
+    public function collect($messages, $final)
     {
         if ($this->collectOverride !== null) {
             call_user_func($this->collectOverride, $messages, $final);

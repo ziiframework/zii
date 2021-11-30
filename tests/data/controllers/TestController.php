@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -19,7 +17,7 @@ class TestController extends Controller
 
     private $actionConfig = [];
 
-    public function setActionConfig($config = []): void
+    public function setActionConfig($config = [])
     {
         $this->actionConfig = $config;
     }

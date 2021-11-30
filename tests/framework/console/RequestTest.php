@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -188,7 +186,7 @@ class RequestTest extends TestCase
      * @param array      $expected
      * @param array|null $expectedException
      */
-    public function testResolve($params, $expected, $expectedException = null): void
+    public function testResolve($params, $expected, $expectedException = null)
     {
         if (isset($expectedException)) {
             $this->expectException($expectedException[0]);

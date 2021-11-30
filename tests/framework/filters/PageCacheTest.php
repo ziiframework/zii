@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -144,7 +142,7 @@ class PageCacheTest extends TestCase
      *
      * @param array $testCase
      */
-    public function testCache($testCase): void
+    public function testCache($testCase)
     {
         $testCase = ArrayHelper::merge([
             'properties' => [],
@@ -253,7 +251,7 @@ class PageCacheTest extends TestCase
         }
     }
 
-    public function testExpired(): void
+    public function testExpired()
     {
         CacheTestCase::$time = time();
         CacheTestCase::$microtime = microtime(true);
@@ -298,7 +296,7 @@ class PageCacheTest extends TestCase
         ob_end_clean();
     }
 
-    public function testVaryByRoute(): void
+    public function testVaryByRoute()
     {
         $testCases = [
             false,
@@ -349,7 +347,7 @@ class PageCacheTest extends TestCase
         }
     }
 
-    public function testVariations(): void
+    public function testVariations()
     {
         $testCases = [
             [true, 'name' => 'value'],
@@ -401,7 +399,7 @@ class PageCacheTest extends TestCase
         }
     }
 
-    public function testDependency(): void
+    public function testDependency()
     {
         $testCases = [
             false,
@@ -459,7 +457,7 @@ class PageCacheTest extends TestCase
         }
     }
 
-    public function testCalculateCacheKey(): void
+    public function testCalculateCacheKey()
     {
         $expected = ['yii\filters\PageCache', 'test', 'ru'];
         Yii::$app->requestedRoute = 'test';

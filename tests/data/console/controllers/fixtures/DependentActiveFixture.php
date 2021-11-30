@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -21,7 +19,7 @@ class DependentActiveFixture extends ActiveFixture
         'yiiunit\data\console\controllers\fixtures\SecondIndependentActiveFixture',
     ];
 
-    public function load(): void
+    public function load()
     {
         FixtureStorage::$activeFixtureSequence[] = self::className();
         parent::load();

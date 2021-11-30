@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -58,7 +56,7 @@ class FixtureControllerTest extends DatabaseTestCase
         parent::tearDown();
     }
 
-    public function testLoadGlobalFixture(): void
+    public function testLoadGlobalFixture()
     {
         $this->_fixtureController->globalFixtures = [
             '\yiiunit\data\console\controllers\fixtures\Global',
@@ -70,7 +68,7 @@ class FixtureControllerTest extends DatabaseTestCase
         $this->assertCount(1, FixtureStorage::$firstFixtureData, 'first fixture data should be loaded');
     }
 
-    public function testLoadGlobalFixtureWithFixture(): void
+    public function testLoadGlobalFixtureWithFixture()
     {
         $this->_fixtureController->globalFixtures = [
             '\yiiunit\data\console\controllers\fixtures\GlobalFixture',
@@ -82,7 +80,7 @@ class FixtureControllerTest extends DatabaseTestCase
         $this->assertCount(1, FixtureStorage::$firstFixtureData, 'first fixture data should be loaded');
     }
 
-    public function testUnloadGlobalFixture(): void
+    public function testUnloadGlobalFixture()
     {
         $this->_fixtureController->globalFixtures = [
             '\yiiunit\data\console\controllers\fixtures\Global',
@@ -100,7 +98,7 @@ class FixtureControllerTest extends DatabaseTestCase
         $this->assertEmpty(FixtureStorage::$firstFixtureData, 'first fixture data should be unloaded');
     }
 
-    public function testLoadAll(): void
+    public function testLoadAll()
     {
         $this->assertEmpty(FixtureStorage::$globalFixturesData, 'global fixture data should be empty');
         $this->assertEmpty(FixtureStorage::$firstFixtureData, 'first fixture data should be empty');
@@ -117,7 +115,7 @@ class FixtureControllerTest extends DatabaseTestCase
         $this->assertCount(1, FixtureStorage::$subdirSecondFixtureData, 'subdir / second fixture data should be loaded');
     }
 
-    public function testUnloadAll(): void
+    public function testUnloadAll()
     {
         FixtureStorage::$globalFixturesData[] = 'some seeded global fixture data';
         FixtureStorage::$firstFixtureData[] = 'some seeded first fixture data';
@@ -140,7 +138,7 @@ class FixtureControllerTest extends DatabaseTestCase
         $this->assertEmpty(FixtureStorage::$subdirSecondFixtureData, 'subdir/second fixture data should be unloaded');
     }
 
-    public function testLoadParticularExceptOnes(): void
+    public function testLoadParticularExceptOnes()
     {
         $this->_fixtureController->actionLoad(['First', 'subdir/First', '-Second', '-Global', '-subdir/Second']);
 
@@ -151,7 +149,7 @@ class FixtureControllerTest extends DatabaseTestCase
         $this->assertEmpty(FixtureStorage::$subdirSecondFixtureData, 'subdir/second fixture data should not be loaded');
     }
 
-    public function testUnloadParticularExceptOnes(): void
+    public function testUnloadParticularExceptOnes()
     {
         FixtureStorage::$globalFixturesData[] = 'some seeded global fixture data';
         FixtureStorage::$firstFixtureData[] = 'some seeded first fixture data';
@@ -174,7 +172,7 @@ class FixtureControllerTest extends DatabaseTestCase
         $this->assertNotEmpty(FixtureStorage::$subdirSecondFixtureData, 'subdir/second fixture data should not be unloaded');
     }
 
-    public function testLoadAllExceptOnes(): void
+    public function testLoadAllExceptOnes()
     {
         $this->_fixtureController->actionLoad(['*', '-Second', '-Global', '-subdir/First']);
 
@@ -185,7 +183,7 @@ class FixtureControllerTest extends DatabaseTestCase
         $this->assertEmpty(FixtureStorage::$subdirFirstFixtureData, 'subdir/first fixture data should not be loaded');
     }
 
-    public function testUnloadAllExceptOnes(): void
+    public function testUnloadAllExceptOnes()
     {
         FixtureStorage::$globalFixturesData[] = 'some seeded global fixture data';
         FixtureStorage::$firstFixtureData[] = 'some seeded first fixture data';
@@ -202,33 +200,33 @@ class FixtureControllerTest extends DatabaseTestCase
         $this->assertNotEmpty(FixtureStorage::$subdirFirstFixtureData, 'subdir/first fixture data should not be unloaded');
     }
 
-    public function testNothingToLoadParticularExceptOnes(): void
+    public function testNothingToLoadParticularExceptOnes()
     {
         $this->_fixtureController->actionLoad(['First', '-First']);
 
         $this->assertEmpty(FixtureStorage::$firstFixtureData, 'first fixture data should not be loaded');
     }
 
-    public function testNothingToUnloadParticularExceptOnes(): void
+    public function testNothingToUnloadParticularExceptOnes()
     {
         $this->_fixtureController->actionUnload(['First', '-First']);
 
         $this->assertEmpty(FixtureStorage::$firstFixtureData, 'first fixture data should not be loaded');
     }
 
-    public function testNoFixturesWereFoundInLoad(): void
+    public function testNoFixturesWereFoundInLoad()
     {
         $this->expectException('\yii\console\Exception');
         $this->_fixtureController->actionLoad(['NotExistingFixture']);
     }
 
-    public function testNoFixturesWereFoundInUnload(): void
+    public function testNoFixturesWereFoundInUnload()
     {
         $this->expectException('\yii\console\Exception');
         $this->_fixtureController->actionUnload(['NotExistingFixture']);
     }
 
-    public function testLoadActiveFixtureSequence(): void
+    public function testLoadActiveFixtureSequence()
     {
         $this->assertEmpty(FixtureStorage::$activeFixtureSequence, 'Active fixture sequence should be empty.');
 
@@ -242,7 +240,7 @@ class FixtureControllerTest extends DatabaseTestCase
 
 class FixtureConsoledController extends FixtureController
 {
-    public function stdout($string): void
+    public function stdout($string)
     {
     }
 }

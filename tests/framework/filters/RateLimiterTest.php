@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -40,35 +38,35 @@ class RateLimiterTest extends TestCase
         Yii::setLogger(null);
     }
 
-    public function testInitFilledRequest(): void
+    public function testInitFilledRequest()
     {
         $rateLimiter = new RateLimiter(['request' => 'Request']);
 
         $this->assertEquals('Request', $rateLimiter->request);
     }
 
-    public function testInitNotFilledRequest(): void
+    public function testInitNotFilledRequest()
     {
         $rateLimiter = new RateLimiter();
 
         $this->assertInstanceOf(Request::className(), $rateLimiter->request);
     }
 
-    public function testInitFilledResponse(): void
+    public function testInitFilledResponse()
     {
         $rateLimiter = new RateLimiter(['response' => 'Response']);
 
         $this->assertEquals('Response', $rateLimiter->response);
     }
 
-    public function testInitNotFilledResponse(): void
+    public function testInitNotFilledResponse()
     {
         $rateLimiter = new RateLimiter();
 
         $this->assertInstanceOf(Response::className(), $rateLimiter->response);
     }
 
-    public function testBeforeActionUserInstanceOfRateLimitInterface(): void
+    public function testBeforeActionUserInstanceOfRateLimitInterface()
     {
         $rateLimiter = new RateLimiter();
         $rateLimit = new RateLimit();
@@ -82,7 +80,7 @@ class RateLimiterTest extends TestCase
         $this->assertTrue($result);
     }
 
-    public function testBeforeActionUserNotInstanceOfRateLimitInterface(): void
+    public function testBeforeActionUserNotInstanceOfRateLimitInterface()
     {
         $rateLimiter = new RateLimiter(['user' => 'User']);
 
@@ -92,7 +90,7 @@ class RateLimiterTest extends TestCase
         $this->assertTrue($result);
     }
 
-    public function testBeforeActionEmptyUser(): void
+    public function testBeforeActionEmptyUser()
     {
         $user = new User(['identityClass' => RateLimit::className()]);
         Yii::$app->set('user', $user);
@@ -104,7 +102,7 @@ class RateLimiterTest extends TestCase
         $this->assertTrue($result);
     }
 
-    public function testCheckRateLimitTooManyRequests(): void
+    public function testCheckRateLimitTooManyRequests()
     {
         /* @var $rateLimit UserIdentity|\Prophecy\ObjectProphecy */
         $rateLimit = new RateLimit();
@@ -117,7 +115,7 @@ class RateLimiterTest extends TestCase
         $rateLimiter->checkRateLimit($rateLimit, Yii::$app->request, Yii::$app->response, 'testAction');
     }
 
-    public function testCheckRateaddRateLimitHeaders(): void
+    public function testCheckRateaddRateLimitHeaders()
     {
         /* @var $user UserIdentity|\Prophecy\ObjectProphecy */
         $rateLimit = new RateLimit();
@@ -134,7 +132,7 @@ class RateLimiterTest extends TestCase
         $this->assertEquals(5, $headers->get('X-Rate-Limit-Reset'));
     }
 
-    public function testAddRateLimitHeadersDisabledRateLimitHeaders(): void
+    public function testAddRateLimitHeadersDisabledRateLimitHeaders()
     {
         $rateLimiter = new RateLimiter();
         $rateLimiter->enableRateLimitHeaders = false;
@@ -144,7 +142,7 @@ class RateLimiterTest extends TestCase
         $this->assertCount(0, $response->getHeaders());
     }
 
-    public function testAddRateLimitHeadersEnabledRateLimitHeaders(): void
+    public function testAddRateLimitHeadersEnabledRateLimitHeaders()
     {
         $rateLimiter = new RateLimiter();
         $rateLimiter->enableRateLimitHeaders = true;
@@ -157,10 +155,12 @@ class RateLimiterTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/18236
      */
-    public function testUserWithClosureFunction(): void
+    public function testUserWithClosureFunction()
     {
         $rateLimiter = new RateLimiter();
-        $rateLimiter->user = static fn ($action) => new User(['identityClass' => RateLimit::className()]);
+        $rateLimiter->user = static function ($action) {
+            return new User(['identityClass' => RateLimit::className()]);
+        };
         $rateLimiter->beforeAction('test');
 
         // testing the evaluation of user closure, which in this case returns not the expect object and therefore

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -205,17 +203,17 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         return $result;
     }
 
-    public function checksProvider(): void
+    public function checksProvider()
     {
         $this->markTestSkipped('Adding/dropping check constraints is not supported in MySQL.');
     }
 
-    public function defaultValuesProvider(): void
+    public function defaultValuesProvider()
     {
         $this->markTestSkipped('Adding/dropping default constraints is not supported in MySQL.');
     }
 
-    public function testResetSequence(): void
+    public function testResetSequence()
     {
         $qb = $this->getQueryBuilder();
 
@@ -354,7 +352,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         return $items;
     }
 
-    public function testIssue17449(): void
+    public function testIssue17449()
     {
         $db = $this->getConnection();
         $pdo = $db->pdo;
@@ -382,7 +380,7 @@ MySqlStatement;
     /**
      * Test for issue https://github.com/yiisoft/yii2/issues/14663.
      */
-    public function testInsertInteger(): void
+    public function testInsertInteger()
     {
         $db = $this->getConnection();
         $command = $db->createCommand();

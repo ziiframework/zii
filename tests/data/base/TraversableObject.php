@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -38,7 +36,7 @@ class TraversableObject implements Iterator, Countable
      *
      * @since 5.1.0
      */
-    public function count(): void
+    public function count()
     {
         throw new Exception('Count called on object that should only be traversed.');
     }
@@ -54,7 +52,7 @@ class TraversableObject implements Iterator, Countable
     /**
      * {@inheritdoc}
      */
-    public function next(): void
+    public function next()
     {
         ++$this->position;
     }
@@ -78,7 +76,7 @@ class TraversableObject implements Iterator, Countable
     /**
      * {@inheritdoc}
      */
-    public function rewind(): void
+    public function rewind()
     {
         $this->position = 0;
     }

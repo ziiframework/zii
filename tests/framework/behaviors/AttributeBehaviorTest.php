@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -105,7 +103,7 @@ class AttributeBehaviorTest extends TestCase
      * @param string      $name
      * @param string|null $alias
      */
-    public function testPreserveNonEmptyValues($aliasExpected, $preserveNonEmptyValues, $name, $alias): void
+    public function testPreserveNonEmptyValues($aliasExpected, $preserveNonEmptyValues, $name, $alias)
     {
         $model = new ActiveRecordWithAttributeBehavior();
         $model->attributeBehavior->preserveNonEmptyValues = $preserveNonEmptyValues;
@@ -138,7 +136,9 @@ class ActiveRecordWithAttributeBehavior extends ActiveRecord
                 'attributes' => [
                     self::EVENT_BEFORE_VALIDATE => 'alias',
                 ],
-                'value' => static fn ($event) => $event->sender->name,
+                'value' => static function ($event) {
+                    return $event->sender->name;
+                },
             ],
         ];
     }

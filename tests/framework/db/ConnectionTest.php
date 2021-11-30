@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -21,7 +19,7 @@ use yii\db\Transaction;
 
 abstract class ConnectionTest extends DatabaseTestCase
 {
-    public function testConstruct(): void
+    public function testConstruct()
     {
         $connection = $this->getConnection(false);
         $params = $this->database;
@@ -31,7 +29,7 @@ abstract class ConnectionTest extends DatabaseTestCase
         $this->assertEquals($params['password'], $connection->password);
     }
 
-    public function testOpenClose(): void
+    public function testOpenClose()
     {
         $connection = $this->getConnection(false, false);
 
@@ -52,7 +50,7 @@ abstract class ConnectionTest extends DatabaseTestCase
         $connection->open();
     }
 
-    public function testQueryBuilderConfigurationAfterOpenClose(): void
+    public function testQueryBuilderConfigurationAfterOpenClose()
     {
         $connection = $this->getConnection(false, false);
         $connection->setQueryBuilder([
@@ -84,7 +82,7 @@ abstract class ConnectionTest extends DatabaseTestCase
         $this->assertInstanceOf('\yii\db\conditions\InConditionBuilder', $connection->getQueryBuilder()->getExpressionBuilder($andCondition));
     }
 
-    public function testSerialize(): void
+    public function testSerialize()
     {
         $connection = $this->getConnection(false, false);
         $connection->open();
@@ -99,13 +97,13 @@ abstract class ConnectionTest extends DatabaseTestCase
         $this->assertEquals(123, $unserialized->createCommand('SELECT 123')->queryScalar());
     }
 
-    public function testGetDriverName(): void
+    public function testGetDriverName()
     {
         $connection = $this->getConnection(false, false);
         $this->assertEquals($this->driverName, $connection->driverName);
     }
 
-    public function testQuoteValue(): void
+    public function testQuoteValue()
     {
         $connection = $this->getConnection(false);
         $this->assertEquals(123, $connection->quoteValue(123));
@@ -113,7 +111,7 @@ abstract class ConnectionTest extends DatabaseTestCase
         $this->assertEquals("'It\\'s interesting'", $connection->quoteValue("It's interesting"));
     }
 
-    public function testQuoteTableName(): void
+    public function testQuoteTableName()
     {
         $connection = $this->getConnection(false, false);
         $this->assertEquals('`table`', $connection->quoteTableName('table'));
@@ -126,7 +124,7 @@ abstract class ConnectionTest extends DatabaseTestCase
         $this->assertEquals('`table(0)`', $connection->quoteTableName('table(0)'));
     }
 
-    public function testQuoteColumnName(): void
+    public function testQuoteColumnName()
     {
         $connection = $this->getConnection(false, false);
         $this->assertEquals('`column`', $connection->quoteColumnName('column'));
@@ -139,7 +137,7 @@ abstract class ConnectionTest extends DatabaseTestCase
         $this->assertEquals('`column`', $connection->quoteSql('{{column}}'));
     }
 
-    public function testQuoteFullColumnName(): void
+    public function testQuoteFullColumnName()
     {
         $connection = $this->getConnection(false, false);
         $this->assertEquals('`table`.`column`', $connection->quoteColumnName('table.column'));
@@ -161,7 +159,7 @@ abstract class ConnectionTest extends DatabaseTestCase
         $this->assertEquals('`table`.`column`', $connection->quoteSql('{{%table}}.`column`'));
     }
 
-    public function testTransaction(): void
+    public function testTransaction()
     {
         $connection = $this->getConnection(false);
         $this->assertNull($connection->transaction);
@@ -186,7 +184,7 @@ abstract class ConnectionTest extends DatabaseTestCase
         $this->assertEquals(1, $connection->createCommand("SELECT COUNT(*) FROM {{profile}} WHERE [[description]] = 'test transaction'")->queryScalar());
     }
 
-    public function testTransactionIsolation(): void
+    public function testTransactionIsolation()
     {
         $connection = $this->getConnection(true);
 
@@ -205,11 +203,11 @@ abstract class ConnectionTest extends DatabaseTestCase
         $this->assertTrue(true); // should not be any exception so far
     }
 
-    public function testTransactionShortcutException(): void
+    public function testTransactionShortcutException()
     {
         $this->expectException('\Exception');
         $connection = $this->getConnection(true);
-        $connection->transaction(static function () use ($connection): void {
+        $connection->transaction(static function () use ($connection) {
             $connection->createCommand()->insert('profile', ['description' => 'test transaction shortcut'])->execute();
 
             throw new Exception('Exception in transaction shortcut');
@@ -219,7 +217,7 @@ abstract class ConnectionTest extends DatabaseTestCase
         $this->assertEquals(0, $profilesCount, 'profile should not be inserted in transaction shortcut');
     }
 
-    public function testTransactionShortcutCorrect(): void
+    public function testTransactionShortcutCorrect()
     {
         $connection = $this->getConnection(true);
 
@@ -236,7 +234,7 @@ abstract class ConnectionTest extends DatabaseTestCase
         $this->assertEquals(1, $profilesCount, 'profile should be inserted in transaction shortcut');
     }
 
-    public function testTransactionShortcutCustom(): void
+    public function testTransactionShortcutCustom()
     {
         $connection = $this->getConnection(true);
 
@@ -257,13 +255,13 @@ abstract class ConnectionTest extends DatabaseTestCase
      *
      * @see https://github.com/yiisoft/yii2/issues/9851
      */
-    public function testNestedTransaction(): void
+    public function testNestedTransaction()
     {
         /** @var Connection $connection */
         $connection = $this->getConnection(true);
-        $connection->transaction(function (Connection $db): void {
+        $connection->transaction(function (Connection $db) {
             $this->assertNotNull($db->transaction);
-            $db->transaction(function (Connection $db): void {
+            $db->transaction(function (Connection $db) {
                 $this->assertNotNull($db->transaction);
                 $db->transaction->rollBack();
             });
@@ -271,18 +269,18 @@ abstract class ConnectionTest extends DatabaseTestCase
         });
     }
 
-    public function testNestedTransactionNotSupported(): void
+    public function testNestedTransactionNotSupported()
     {
         $connection = $this->getConnection();
         $connection->enableSavepoint = false;
-        $connection->transaction(function (Connection $db): void {
+        $connection->transaction(function (Connection $db) {
             $this->assertNotNull($db->transaction);
             $this->expectException('yii\base\NotSupportedException');
             $db->beginTransaction();
         });
     }
 
-    public function testEnableQueryLog(): void
+    public function testEnableQueryLog()
     {
         $connection = $this->getConnection();
 
@@ -343,7 +341,7 @@ abstract class ConnectionTest extends DatabaseTestCase
         $this->assertCount(0, Yii::getLogger()->messages);
     }
 
-    public function testExceptionContainsRawQuery(): void
+    public function testExceptionContainsRawQuery()
     {
         $connection = $this->getConnection();
 
@@ -376,7 +374,7 @@ abstract class ConnectionTest extends DatabaseTestCase
     /**
      * @param Connection $connection
      */
-    private function runExceptionTest($connection): void
+    private function runExceptionTest($connection)
     {
         $thrown = false;
 
@@ -404,7 +402,7 @@ abstract class ConnectionTest extends DatabaseTestCase
      * Make sure each connection element has its own PDO instance i.e. own connection to the DB.
      * Also transaction elements should not be shared between two connections.
      */
-    public function testClone(): void
+    public function testClone()
     {
         $connection = $this->getConnection(true, false);
         $this->assertNull($connection->transaction);
@@ -459,7 +457,7 @@ abstract class ConnectionTest extends DatabaseTestCase
      *
      * @see https://github.com/yiisoft/yii2/issues/14165
      */
-    public function testGetPdoAfterClose(): void
+    public function testGetPdoAfterClose()
     {
         $connection = $this->getConnection();
         $connection->slaves[] = [
@@ -480,7 +478,7 @@ abstract class ConnectionTest extends DatabaseTestCase
         $this->assertNotSame($masterPdo, $slavePdo);
     }
 
-    public function testServerStatusCacheWorks(): void
+    public function testServerStatusCacheWorks()
     {
         $cache = new ArrayCache();
         Yii::$app->set('cache', $cache);
@@ -497,7 +495,7 @@ abstract class ConnectionTest extends DatabaseTestCase
 
         $this->assertFalse($cache->exists($cacheKey));
         $connection->open();
-        $this->assertFalse($cache->exists($cacheKey), "Connection was successful –\u{a0}cache must not contain information about this DSN");
+        $this->assertFalse($cache->exists($cacheKey), 'Connection was successful – cache must not contain information about this DSN');
         $connection->close();
 
         $cacheKey = ['yii\db\Connection::openFromPoolSequentially', 'host:invalid'];
@@ -507,11 +505,11 @@ abstract class ConnectionTest extends DatabaseTestCase
             $connection->open();
         } catch (InvalidConfigException $e) {
         }
-        $this->assertTrue($cache->exists($cacheKey), "Connection was not successful –\u{a0}cache must contain information about this DSN");
+        $this->assertTrue($cache->exists($cacheKey), 'Connection was not successful – cache must contain information about this DSN');
         $connection->close();
     }
 
-    public function testServerStatusCacheCanBeDisabled(): void
+    public function testServerStatusCacheCanBeDisabled()
     {
         $cache = new ArrayCache();
         Yii::$app->set('cache', $cache);

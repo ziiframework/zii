@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -28,7 +26,7 @@ class VarDumperTest extends TestCase
         $this->destroyApplication();
     }
 
-    public function testDumpIncompleteObject(): void
+    public function testDumpIncompleteObject()
     {
         $serializedObj = 'O:16:"nonExistingClass":0:{}';
         $incompleteObj = unserialize($serializedObj);
@@ -37,7 +35,7 @@ class VarDumperTest extends TestCase
         $this->assertStringContainsString('nonExistingClass', $dumpResult);
     }
 
-    public function testExportIncompleteObject(): void
+    public function testExportIncompleteObject()
     {
         $serializedObj = 'O:16:"nonExistingClass":0:{}';
         $incompleteObj = unserialize($serializedObj);
@@ -45,7 +43,7 @@ class VarDumperTest extends TestCase
         $this->assertStringContainsString('nonExistingClass', $exportResult);
     }
 
-    public function testDumpObject(): void
+    public function testDumpObject()
     {
         $obj = new StdClass();
         $this->assertEquals("stdClass#1\n(\n)", VarDumper::dumpAsString($obj));
@@ -152,7 +150,7 @@ RESULT;
         $expectedResult = "unserialize('" . serialize($var) . "')";
         $data[] = [$var, $expectedResult];
 
-        $var = static fn () => 2;
+        $var = static function () {return 2; };
         $expectedResult = 'function () {return 2; }';
         $data[] = [$var, $expectedResult];
 
@@ -165,7 +163,7 @@ RESULT;
      * @param mixed  $var
      * @param string $expectedResult
      */
-    public function testExport($var, $expectedResult): void
+    public function testExport($var, $expectedResult)
     {
         $exportResult = VarDumper::export($var);
         $this->assertEqualsWithoutLE($expectedResult, $exportResult);
@@ -175,10 +173,10 @@ RESULT;
     /**
      * @depends testExport
      */
-    public function testExportObjectFallback(): void
+    public function testExportObjectFallback()
     {
         $var = new StdClass();
-        $var->testFunction = static fn () => 2;
+        $var->testFunction = static function () {return 2; };
         $exportResult = VarDumper::export($var);
         $this->assertNotEmpty($exportResult);
 
@@ -186,7 +184,7 @@ RESULT;
         $slave = new StdClass();
         $master->slave = $slave;
         $slave->master = $master;
-        $master->function = static fn () => true;
+        $master->function = static function () {return true; };
 
         $exportResult = VarDumper::export($master);
         $this->assertNotEmpty($exportResult);
@@ -195,7 +193,7 @@ RESULT;
     /**
      * @depends testDumpObject
      */
-    public function testDumpClassWithCustomDebugInfo(): void
+    public function testDumpClassWithCustomDebugInfo()
     {
         $object = new CustomDebugInfo();
         $object->volume = 10;

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -34,7 +32,7 @@ class ConsoleTest extends TestCase
     /**
      * Set up streams for Console helper stub.
      */
-    protected function setupStreams(): void
+    protected function setupStreams()
     {
         ConsoleStub::$inputStream = fopen('php://memory', 'w+');
         ConsoleStub::$outputStream = fopen('php://memory', 'w+');
@@ -44,7 +42,7 @@ class ConsoleTest extends TestCase
     /**
      * Clean streams in Console helper stub.
      */
-    protected function truncateStreams(): void
+    protected function truncateStreams()
     {
         ftruncate(ConsoleStub::$inputStream, 0);
         rewind(ConsoleStub::$inputStream);
@@ -82,14 +80,14 @@ class ConsoleTest extends TestCase
      * Write passed arguments to Console helper input stream and rewind the position
      * of a input stream pointer.
      */
-    protected function sendInput(): void
+    protected function sendInput()
     {
         fwrite(ConsoleStub::$inputStream, implode(PHP_EOL, func_get_args()) . PHP_EOL);
 
         rewind(ConsoleStub::$inputStream);
     }
 
-    public function testStripAnsiFormat(): void
+    public function testStripAnsiFormat()
     {
         ob_start();
         ob_implicit_flush(false);
@@ -205,12 +203,12 @@ class ConsoleTest extends TestCase
      * @param string $ansi
      * @param string $html
      */
-    public function testAnsi2Html($ansi, $html): void
+    public function testAnsi2Html($ansi, $html)
     {
         $this->assertEquals($html, Console::ansiToHtml($ansi));
     }
 
-    public function testErrorSummary(): void
+    public function testErrorSummary()
     {
         $model = new TestConsoleModel();
         $model->name = 'not_an_integer';
@@ -238,7 +236,7 @@ class TestConsoleModel extends DynamicModel
         ];
     }
 
-    public function init(): void
+    public function init()
     {
         $this->defineAttribute('name');
     }
@@ -246,7 +244,7 @@ class TestConsoleModel extends DynamicModel
     /**
      * @covers \yii\helpers\BaseConsole::input()
      */
-    public function testInput(): void
+    public function testInput()
     {
         $this->sendInput('test1');
         $result = ConsoleStub::input();
@@ -264,7 +262,7 @@ class TestConsoleModel extends DynamicModel
     /**
      * @covers \yii\helpers\BaseConsole::output()
      */
-    public function testOutput(): void
+    public function testOutput()
     {
         $result = ConsoleStub::output('Smth');
         $this->assertEquals('Smth' . PHP_EOL, $this->readOutput());
@@ -274,7 +272,7 @@ class TestConsoleModel extends DynamicModel
     /**
      * @covers \yii\helpers\BaseConsole::error()
      */
-    public function testError(): void
+    public function testError()
     {
         $result = ConsoleStub::error('SomeError');
         $this->assertEquals('SomeError' . PHP_EOL, $this->readOutput(ConsoleStub::$errorStream));
@@ -284,7 +282,7 @@ class TestConsoleModel extends DynamicModel
     /**
      * @covers \yii\helpers\BaseConsole::prompt()
      */
-    public function testPrompt(): void
+    public function testPrompt()
     {
         // testing output variations
 
@@ -333,7 +331,9 @@ class TestConsoleModel extends DynamicModel
 
         // testing custom callable check ("validator" param)
         $this->sendInput('cat', '15');
-        $result = ConsoleStub::prompt('SmthNumeric', ['validator' => static fn ($value, &$error) => is_numeric($value)]);
+        $result = ConsoleStub::prompt('SmthNumeric', ['validator' => static function ($value, &$error) {
+            return is_numeric($value);
+        }]);
         $this->assertEquals('SmthNumeric Invalid input.' . PHP_EOL . 'SmthNumeric ', $this->readOutput());
         $this->assertEquals('15', $result);
         $this->truncateStreams();
@@ -360,7 +360,9 @@ class TestConsoleModel extends DynamicModel
             'required' => true,
             'default' => 'kraken',
             'pattern' => '/^\d+$/',
-            'validator' => static fn ($value, &$error) => $value == 15,
+            'validator' => static function ($value, &$error) {
+                return $value == 15;
+            },
             'error' => 'CustomError',
         ]);
         $this->assertEquals('Combined [kraken] CustomError' . PHP_EOL . 'Combined [kraken] ', $this->readOutput());
@@ -371,7 +373,7 @@ class TestConsoleModel extends DynamicModel
     /**
      * @covers \yii\helpers\BaseConsole::confirm()
      */
-    public function testConfirm(): void
+    public function testConfirm()
     {
         $this->sendInput('y');
         ConsoleStub::confirm('Are you sure?');
@@ -411,7 +413,7 @@ class TestConsoleModel extends DynamicModel
     /**
      * @covers \yii\helpers\BaseConsole::select()
      */
-    public function testSelect(): void
+    public function testSelect()
     {
         $options = [
             'c' => 'cat',

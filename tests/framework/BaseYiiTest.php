@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -42,7 +40,7 @@ class BaseYiiTest extends TestCase
         Yii::$aliases = $this->aliases;
     }
 
-    public function testAlias(): void
+    public function testAlias()
     {
         $this->assertEquals(YII2_PATH, Yii::getAlias('@yii'));
 
@@ -69,17 +67,17 @@ class BaseYiiTest extends TestCase
         $this->assertEquals('/www', Yii::getAlias('@some/alias'));
     }
 
-    public function testGetVersion(): void
+    public function testGetVersion()
     {
         $this->assertTrue((bool) preg_match('~\d+\.\d+(?:\.\d+)?(?:-\w+)?~', Yii::getVersion()));
     }
 
-    public function testPowered(): void
+    public function testPowered()
     {
         $this->assertIsString(Yii::powered());
     }
 
-    public function testCreateObjectArray(): void
+    public function testCreateObjectArray()
     {
         Yii::$container = new Container();
 
@@ -92,23 +90,29 @@ class BaseYiiTest extends TestCase
         $this->assertSame(42, $qux->a);
     }
 
-    public function testCreateObjectCallable(): void
+    public function testCreateObjectCallable()
     {
         Yii::$container = new Container();
 
         // Test passing in of normal params combined with DI params.
-        $this->assertTrue(Yii::createObject(static fn (Singer $singer, $a) => $a === 'a', ['a']));
+        $this->assertTrue(Yii::createObject(static function (Singer $singer, $a) {
+            return $a === 'a';
+        }, ['a']));
 
         $singer = new Singer();
         $singer->firstName = 'Bob';
-        $this->assertTrue(Yii::createObject(static fn (Singer $singer, $a) => $singer->firstName === 'Bob', [$singer, 'a']));
+        $this->assertTrue(Yii::createObject(static function (Singer $singer, $a) {
+            return $singer->firstName === 'Bob';
+        }, [$singer, 'a']));
 
-        $this->assertTrue(Yii::createObject(static fn (Singer $singer, $a = 3) => true));
+        $this->assertTrue(Yii::createObject(static function (Singer $singer, $a = 3) {
+            return true;
+        }));
 
         $this->assertTrue(Yii::createObject(new CallableClass()));
     }
 
-    public function testCreateObjectEmptyArrayException(): void
+    public function testCreateObjectEmptyArrayException()
     {
         $this->expectException('yii\base\InvalidConfigException');
         $this->expectExceptionMessage('Object configuration must be an array containing a "class" or "__class" element.');
@@ -116,7 +120,7 @@ class BaseYiiTest extends TestCase
         Yii::createObject([]);
     }
 
-    public function testCreateObjectInvalidConfigException(): void
+    public function testCreateObjectInvalidConfigException()
     {
         $this->expectException('yii\base\InvalidConfigException');
         $this->expectExceptionMessage('Unsupported configuration type: ' . gettype(null));
@@ -124,7 +128,7 @@ class BaseYiiTest extends TestCase
         Yii::createObject(null);
     }
 
-    public function testDi3CompatibilityCreateDependentObject(): void
+    public function testDi3CompatibilityCreateDependentObject()
     {
         $object = Yii::createObject([
             '__class' => FooBaz::className(),
@@ -139,7 +143,7 @@ class BaseYiiTest extends TestCase
      * @covers \yii\BaseYii::setLogger()
      * @covers \yii\BaseYii::getLogger()
      */
-    public function testSetupLogger(): void
+    public function testSetupLogger()
     {
         $logger = new Logger();
         BaseYii::setLogger($logger);
@@ -159,7 +163,7 @@ class BaseYiiTest extends TestCase
      * @covers \yii\BaseYii::beginProfile()
      * @covers \yii\BaseYii::endProfile()
      */
-    public function testLog(): void
+    public function testLog()
     {
         $logger = $this->getMockBuilder('yii\\log\\Logger')
             ->setMethods(['log'])

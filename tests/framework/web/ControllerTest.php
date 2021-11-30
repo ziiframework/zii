@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -47,7 +45,7 @@ class ControllerTest extends TestCase
         Yii::$app->controller = $this->controller;
     }
 
-    public function testBindActionParams(): void
+    public function testBindActionParams()
     {
         $aksi1 = new InlineAction('aksi1', $this->controller, 'actionAksi1');
 
@@ -62,7 +60,7 @@ class ControllerTest extends TestCase
         $this->assertEquals('available', $other);
     }
 
-    public function testNullableInjectedActionParams(): void
+    public function testNullableInjectedActionParams()
     {
         if (PHP_VERSION_ID < 70100) {
             $this->markTestSkipped('Can not be tested on PHP < 7.1');
@@ -92,7 +90,7 @@ class ControllerTest extends TestCase
         $this->assertNull($args[1]);
     }
 
-    public function testModelBindingHttpException(): void
+    public function testModelBindingHttpException()
     {
         if (PHP_VERSION_ID < 70100) {
             $this->markTestSkipped('Can not be tested on PHP < 7.1');
@@ -124,7 +122,7 @@ class ControllerTest extends TestCase
         $this->controller->bindActionParams($injectionAction, []);
     }
 
-    public function testInjectionContainerException(): void
+    public function testInjectionContainerException()
     {
         if (PHP_VERSION_ID < 70100) {
             $this->markTestSkipped('Can not be tested on PHP < 7.1');
@@ -148,14 +146,14 @@ class ControllerTest extends TestCase
 
         $injectionAction = new InlineAction('injection', $this->controller, 'actionInjection');
         $params = ['between' => 'test', 'after' => 'another', 'before' => 'test'];
-        Yii::$container->set(VendorImage::className(), static function (): void { throw new RuntimeException('uh oh'); });
+        Yii::$container->set(VendorImage::className(), static function () { throw new RuntimeException('uh oh'); });
 
         $this->expectException(get_class(new RuntimeException()));
         $this->expectExceptionMessage('uh oh');
         $this->controller->bindActionParams($injectionAction, $params);
     }
 
-    public function testUnknownInjection(): void
+    public function testUnknownInjection()
     {
         if (PHP_VERSION_ID < 70100) {
             $this->markTestSkipped('Can not be tested on PHP < 7.1');
@@ -184,7 +182,7 @@ class ControllerTest extends TestCase
         $this->controller->bindActionParams($injectionAction, $params);
     }
 
-    public function testInjectedActionParams(): void
+    public function testInjectedActionParams()
     {
         if (PHP_VERSION_ID < 70100) {
             $this->markTestSkipped('Can not be tested on PHP < 7.1');
@@ -220,7 +218,7 @@ class ControllerTest extends TestCase
         $this->assertEquals($params['after'], $args[5]);
     }
 
-    public function testInjectedActionParamsFromModule(): void
+    public function testInjectedActionParamsFromModule()
     {
         if (PHP_VERSION_ID < 70100) {
             $this->markTestSkipped('Can not be tested on PHP < 7.1');
@@ -254,7 +252,7 @@ class ControllerTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/17701
      */
-    public function testBindTypedActionParams(): void
+    public function testBindTypedActionParams()
     {
         if (PHP_VERSION_ID < 70000) {
             $this->markTestSkipped('Can not be tested on PHP < 7.0');
@@ -302,7 +300,7 @@ class ControllerTest extends TestCase
         $this->controller->bindActionParams($aksi1, $params);
     }
 
-    public function testAsJson(): void
+    public function testAsJson()
     {
         $data = [
             'test' => 123,
@@ -315,7 +313,7 @@ class ControllerTest extends TestCase
         $this->assertEquals($data, $result->data);
     }
 
-    public function testAsXml(): void
+    public function testAsXml()
     {
         $data = [
             'test' => 123,
@@ -328,7 +326,7 @@ class ControllerTest extends TestCase
         $this->assertEquals($data, $result->data);
     }
 
-    public function testRedirect(): void
+    public function testRedirect()
     {
         $_SERVER['REQUEST_URI'] = 'http://test-domain.com/';
         $this->assertEquals($this->controller->redirect('')->headers->get('location'), '/');

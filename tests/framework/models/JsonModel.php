@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -36,7 +34,7 @@ class JsonModel extends DynamicModel implements JsonSerializable
     /**
      * {@inheritdoc}
      */
-    public function init(): void
+    public function init()
     {
         $this->defineAttribute('name');
     }

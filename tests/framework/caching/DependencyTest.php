@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -26,7 +24,7 @@ use yiiunit\TestCase;
  */
 class DependencyTest extends TestCase
 {
-    public function testResetReusableData(): void
+    public function testResetReusableData()
     {
         $value = ['dummy'];
         $dependency = new MockDependency();
@@ -38,7 +36,7 @@ class DependencyTest extends TestCase
         $this->assertEquals([], $this->getInaccessibleProperty($dependency, '_reusableData'));
     }
 
-    public function testGenerateReusableHash(): void
+    public function testGenerateReusableHash()
     {
         $dependency = $this->getMockForAbstractClass(Dependency::className());
         $dependency->data = 'dummy';
@@ -48,7 +46,7 @@ class DependencyTest extends TestCase
         $this->assertEquals(40, strlen($result));
     }
 
-    public function testIsChanged(): void
+    public function testIsChanged()
     {
         $dependency = $this->getMockForAbstractClass(Dependency::className());
         $cache = $this->getMockForAbstractClass(Cache::className());

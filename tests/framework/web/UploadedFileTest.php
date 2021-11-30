@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -49,7 +47,7 @@ class UploadedFileTest extends TestCase
         ];
     }
 
-    private function generateFakeFiles(): void
+    private function generateFakeFiles()
     {
         $_FILES['ModelStub[prod_image]'] = $this->generateFakeFileData();
         $_FILES['ModelStub[prod_images][]'] = $this->generateFakeFileData();
@@ -66,7 +64,7 @@ class UploadedFileTest extends TestCase
 
     // Tests :
 
-    public function testGetInstance(): void
+    public function testGetInstance()
     {
         $productImage = UploadedFile::getInstance(new ModelStub(), 'prod_image');
         $vendorImage = VendorImage::getInstance(new ModelStub(), 'vendor_image');
@@ -75,7 +73,7 @@ class UploadedFileTest extends TestCase
         $this->assertInstanceOf(VendorImage::className(), $vendorImage);
     }
 
-    public function testGetInstances(): void
+    public function testGetInstances()
     {
         $productImages = UploadedFile::getInstances(new ModelStub(), 'prod_images');
         $vendorImages = VendorImage::getInstances(new ModelStub(), 'vendor_images');
@@ -89,7 +87,7 @@ class UploadedFileTest extends TestCase
         }
     }
 
-    public function testSaveAs(): void
+    public function testSaveAs()
     {
         $tmpImage = UploadedFile::getInstance(new ModelStub(), 'temp_image');
         $targetFile = '@runtime/test_saved_uploaded_file_' . time();
@@ -100,7 +98,7 @@ class UploadedFileTest extends TestCase
         @unlink($targetFile);
     }
 
-    public function testSaveFileFromMultipartFormDataParser(): void
+    public function testSaveFileFromMultipartFormDataParser()
     {
         $_FILES = [];
         UploadedFile::reset();

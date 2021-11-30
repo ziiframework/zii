@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -26,7 +24,7 @@ class IpValidatorTest extends TestCase
         $this->destroyApplication();
     }
 
-    public function testInitException(): void
+    public function testInitException()
     {
         $this->expectException('yii\base\InvalidConfigException');
         $this->expectExceptionMessage('Both IPv4 and IPv6 checks can not be disabled at the same time');
@@ -49,13 +47,13 @@ class IpValidatorTest extends TestCase
      * @param array $range
      * @param array $expectedRange
      */
-    public function testRangesSubstitution($range, $expectedRange): void
+    public function testRangesSubstitution($range, $expectedRange)
     {
         $validator = new IpValidator(['ranges' => $range]);
         $this->assertEquals($expectedRange, $validator->ranges);
     }
 
-    public function testValidateOrder(): void
+    public function testValidateOrder()
     {
         $validator = new IpValidator([
             'ranges' => ['10.0.0.1', '!10.0.0.0/8', '!babe::/8', 'any'],
@@ -78,7 +76,7 @@ class IpValidatorTest extends TestCase
      *
      * @param mixed $badIp
      */
-    public function testValidateValueNotAnIP($badIp): void
+    public function testValidateValueNotAnIP($badIp)
     {
         $validator = new IpValidator();
 
@@ -90,7 +88,7 @@ class IpValidatorTest extends TestCase
      *
      * @param mixed $badIp
      */
-    public function testValidateModelAttributeNotAnIP($badIp): void
+    public function testValidateModelAttributeNotAnIP($badIp)
     {
         $validator = new IpValidator();
         $model = new FakedValidationModel();
@@ -116,7 +114,7 @@ class IpValidatorTest extends TestCase
         $model->clearErrors();
     }
 
-    public function testValidateValueIPv4(): void
+    public function testValidateValueIPv4()
     {
         $validator = new IpValidator();
 
@@ -150,7 +148,7 @@ class IpValidatorTest extends TestCase
         $this->assertFalse($validator->validate('!!192.168.5.32/32'));
     }
 
-    public function testValidateValueIPv6(): void
+    public function testValidateValueIPv6()
     {
         $validator = new IpValidator();
 
@@ -185,7 +183,7 @@ class IpValidatorTest extends TestCase
         $this->assertFalse($validator->validate('!!2008:fa::0:1/64'));
     }
 
-    public function testValidateValueIPvBoth(): void
+    public function testValidateValueIPvBoth()
     {
         $validator = new IpValidator();
 
@@ -241,7 +239,7 @@ class IpValidatorTest extends TestCase
         $this->assertFalse($validator->validate('!!2008:fa::0:1/64'));
     }
 
-    public function testValidateRangeIPv4(): void
+    public function testValidateRangeIPv4()
     {
         $validator = new IpValidator([
             'ranges' => ['10.0.1.0/24'],
@@ -266,7 +264,7 @@ class IpValidatorTest extends TestCase
         $this->assertFalse($validator->validate('10.0.1.1/22'));
     }
 
-    public function testValidateRangeIPv6(): void
+    public function testValidateRangeIPv6()
     {
         $validator = new IpValidator([
             'ranges' => '2001:db0:1:1::/64',
@@ -285,7 +283,7 @@ class IpValidatorTest extends TestCase
         $this->assertTrue($validator->validate('2001:db0:1:2::7'));
     }
 
-    public function testValidateRangeIPvBoth(): void
+    public function testValidateRangeIPvBoth()
     {
         $validator = new IpValidator([
             'ranges' => '10.0.1.0/24',
@@ -314,7 +312,7 @@ class IpValidatorTest extends TestCase
         $this->assertFalse($validator->validate('10.0.1.1/22'));
     }
 
-    public function testValidateAttributeIPv4(): void
+    public function testValidateAttributeIPv4()
     {
         $validator = new IpValidator();
         $model = new FakedValidationModel();
@@ -348,7 +346,7 @@ class IpValidatorTest extends TestCase
         $this->assertEquals('8.8.8.8/32', $model->attr_ip);
     }
 
-    public function testValidateAttributeIPv6(): void
+    public function testValidateAttributeIPv6()
     {
         $validator = new IpValidator();
         $model = new FakedValidationModel();

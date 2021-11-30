@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -82,7 +80,7 @@ class PaginationTest extends TestCase
      * @param array  $params
      * @param bool   $absolute
      */
-    public function testCreateUrl($page, $pageSize, $expectedUrl, $params, $absolute = false): void
+    public function testCreateUrl($page, $pageSize, $expectedUrl, $params, $absolute = false)
     {
         $pagination = new Pagination();
         $pagination->route = 'item/list';
@@ -93,7 +91,7 @@ class PaginationTest extends TestCase
     /**
      * @depends testCreateUrl
      */
-    public function testForcePageParam(): void
+    public function testForcePageParam()
     {
         $pagination = new Pagination();
         $pagination->route = 'item/list';
@@ -105,7 +103,7 @@ class PaginationTest extends TestCase
         $this->assertEquals('/index.php?r=item%2Flist', $pagination->createUrl(0));
     }
 
-    public function testValidatePage(): void
+    public function testValidatePage()
     {
         $pagination = new Pagination();
         $pagination->validatePage = true;
@@ -142,7 +140,7 @@ class PaginationTest extends TestCase
      * @param int $totalCount
      * @param int $pageCount
      */
-    public function testPageCount($pageSize, $totalCount, $pageCount): void
+    public function testPageCount($pageSize, $totalCount, $pageCount)
     {
         $pagination = new Pagination();
         $pagination->setPageSize($pageSize);
@@ -151,7 +149,7 @@ class PaginationTest extends TestCase
         $this->assertEquals($pageCount, $pagination->getPageCount());
     }
 
-    public function testGetDefaultPage(): void
+    public function testGetDefaultPage()
     {
         $this->assertEquals(0, (new Pagination())->getPage());
     }
@@ -182,7 +180,7 @@ class PaginationTest extends TestCase
      * @param int      $totalCount
      * @param int      $page
      */
-    public function testSetPage($value, $validate, $totalCount, $page): void
+    public function testSetPage($value, $validate, $totalCount, $page)
     {
         $pagination = new Pagination();
         $pagination->totalCount = $totalCount;
@@ -210,7 +208,7 @@ class PaginationTest extends TestCase
      * @param array|bool $pageSizeLimit
      * @param int        $pageSize
      */
-    public function testGetPageSize($pageSizeLimit, $pageSize): void
+    public function testGetPageSize($pageSizeLimit, $pageSize)
     {
         $pagination = new Pagination();
         $pagination->pageSizeLimit = $pageSizeLimit;
@@ -244,7 +242,7 @@ class PaginationTest extends TestCase
      * @param array|false $pageSizeLimit
      * @param int         $pageSize
      */
-    public function testSetPageSize($value, $validate, $pageSizeLimit, $pageSize): void
+    public function testSetPageSize($value, $validate, $pageSizeLimit, $pageSize)
     {
         $pagination = new Pagination();
         $pagination->pageSizeLimit = $pageSizeLimit;
@@ -271,7 +269,7 @@ class PaginationTest extends TestCase
      * @param int $page
      * @param int $offset
      */
-    public function testGetOffset($pageSize, $page, $offset): void
+    public function testGetOffset($pageSize, $page, $offset)
     {
         $pagination = new Pagination();
         $pagination->setPageSize($pageSize);
@@ -295,7 +293,7 @@ class PaginationTest extends TestCase
      * @param int $pageSize
      * @param int $limit
      */
-    public function testGetLimit($pageSize, $limit): void
+    public function testGetLimit($pageSize, $limit)
     {
         $pagination = new Pagination();
         $pagination->setPageSize($pageSize);
@@ -393,7 +391,7 @@ class PaginationTest extends TestCase
      * @param string|null $prev
      * @param string|null $next
      */
-    public function testGetLinks($page, $pageSize, $totalCount, $self, $first, $last, $prev, $next): void
+    public function testGetLinks($page, $pageSize, $totalCount, $self, $first, $last, $prev, $next)
     {
         $pagination = new Pagination();
         $pagination->totalCount = $totalCount;

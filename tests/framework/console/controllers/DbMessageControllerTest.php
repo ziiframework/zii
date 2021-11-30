@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -29,7 +27,7 @@ class DbMessageControllerTest extends BaseMessageControllerTest
      */
     protected static $db;
 
-    protected static function runConsoleAction($route, $params = []): void
+    protected static function runConsoleAction($route, $params = [])
     {
         if (Yii::$app === null) {
             new \yii\console\Application([
@@ -134,7 +132,7 @@ class DbMessageControllerTest extends BaseMessageControllerTest
     /**
      * {@inheritdoc}
      */
-    protected function saveMessages($messages, $category): void
+    protected function saveMessages($messages, $category)
     {
         static::$db->createCommand()->checkIntegrity(false, '', 'message')->execute();
         static::$db->createCommand()->truncateTable('message')->execute();
@@ -176,7 +174,7 @@ class DbMessageControllerTest extends BaseMessageControllerTest
      *
      * @depends testMerge
      */
-    public function testMarkObsoleteMessages(): void
+    public function testMarkObsoleteMessages()
     {
         $category = 'category';
 
@@ -198,7 +196,7 @@ class DbMessageControllerTest extends BaseMessageControllerTest
         $this->assertEquals($obsoleteTranslation, $messages[$obsoleteMessage], "Obsolete message was not marked properly. Command output:\n\n" . $out);
     }
 
-    public function testMessagesSorting(): void
+    public function testMessagesSorting()
     {
         $this->markTestSkipped('There\'s no need to order messages for database');
     }

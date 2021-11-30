@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -1125,7 +1123,7 @@ SELECT*from/*foo*/`T_constraints_1`WHERE not`C_check`=\'foo\'\'bar\'--bar
      *
      * @param string $sql
      */
-    public function testTokenizer($sql, SqlToken $expectedToken): void
+    public function testTokenizer($sql, SqlToken $expectedToken)
     {
         $actualToken = (new SqlTokenizer($sql))->tokenize();
         $this->assertEquals($expectedToken, $actualToken);
@@ -1140,7 +1138,9 @@ SELECT*from/*foo*/`T_constraints_1`WHERE not`C_check`=\'foo\'\'bar\'--bar
     {
         $result = get_object_vars($token);
         unset($result['parent']);
-        $result['children'] = array_map(fn (SqlToken $token) => $this->exportToken($token), $token->children);
+        $result['children'] = array_map(function (SqlToken $token) {
+            return $this->exportToken($token);
+        }, $token->children);
 
         return $result;
     }

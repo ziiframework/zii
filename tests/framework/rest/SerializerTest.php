@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -37,7 +35,7 @@ class SerializerTest extends TestCase
         TestModel::$extraFields = [];
     }
 
-    public function testSerializeModelErrors(): void
+    public function testSerializeModelErrors()
     {
         $serializer = new Serializer();
         $model = new TestModel();
@@ -58,7 +56,7 @@ class SerializerTest extends TestCase
         ], $serializer->serialize($model));
     }
 
-    public function testSerializeModelData(): void
+    public function testSerializeModelData()
     {
         $serializer = new Serializer();
         $model = new TestModel();
@@ -83,7 +81,7 @@ class SerializerTest extends TestCase
         ], $serializer->serialize($model));
     }
 
-    public function testExpand(): void
+    public function testExpand()
     {
         $serializer = new Serializer();
         $model = new TestModel();
@@ -117,7 +115,7 @@ class SerializerTest extends TestCase
         ], $serializer->serialize($model));
     }
 
-    public function testNestedExpand(): void
+    public function testNestedExpand()
     {
         $serializer = new Serializer();
         $model = new TestModel();
@@ -138,7 +136,7 @@ class SerializerTest extends TestCase
         ], $serializer->serialize($model));
     }
 
-    public function testFields(): void
+    public function testFields()
     {
         $serializer = new Serializer();
         $model = new TestModel();
@@ -249,7 +247,7 @@ class SerializerTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/12107
      */
-    public function testExpandInvalidInput(): void
+    public function testExpandInvalidInput()
     {
         $serializer = new Serializer();
         $model = new TestModel();
@@ -400,7 +398,7 @@ class SerializerTest extends TestCase
      * @param array                           $expectedResult
      * @param bool                            $saveKeys
      */
-    public function testSerializeDataProvider($dataProvider, $expectedResult, $saveKeys = false): void
+    public function testSerializeDataProvider($dataProvider, $expectedResult, $saveKeys = false)
     {
         $serializer = new Serializer();
         $serializer->preserveKeys = $saveKeys;
@@ -411,7 +409,7 @@ class SerializerTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/16334
      */
-    public function testSerializeJsonSerializable(): void
+    public function testSerializeJsonSerializable()
     {
         $serializer = new Serializer();
         $model3 = new TestModel3();
@@ -424,7 +422,7 @@ class SerializerTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/16334
      */
-    public function testSerializeArrayableWithJsonSerializableAttribute(): void
+    public function testSerializeArrayableWithJsonSerializableAttribute()
     {
         $serializer = new Serializer();
         $model = new TestModel5();
@@ -441,7 +439,7 @@ class SerializerTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/17886
      */
-    public function testSerializeArray(): void
+    public function testSerializeArray()
     {
         $serializer = new Serializer();
         $model1 = new TestModel();
@@ -519,7 +517,9 @@ class TestModel3 extends Model implements JsonSerializable
     public function fields()
     {
         return [
-            'customField' => fn () => $this->field3 . '/' . $this->field4,
+            'customField' => function () {
+                return $this->field3 . '/' . $this->field4;
+            },
         ];
     }
 
@@ -558,9 +558,15 @@ class TestModel5 extends Model
     public function fields()
     {
         $fields = static::$fields;
-        $fields['testModel3'] = fn () => $this->getTestModel3();
-        $fields['testModel4'] = fn () => $this->getTestModel4();
-        $fields['testModelArray'] = fn () => [$this->getTestModel3(), $this->getTestModel4()];
+        $fields['testModel3'] = function () {
+            return $this->getTestModel3();
+        };
+        $fields['testModel4'] = function () {
+            return $this->getTestModel4();
+        };
+        $fields['testModelArray'] = function () {
+            return [$this->getTestModel3(), $this->getTestModel4()];
+        };
 
         return $fields;
     }

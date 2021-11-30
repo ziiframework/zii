@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -140,7 +138,7 @@ class XmlResponseFormatterTest extends FormatterTest
         ]);
     }
 
-    public function testCustomRootTag(): void
+    public function testCustomRootTag()
     {
         $rootTag = 'custom';
         $formatter = $this->getFormatterInstance([
@@ -152,7 +150,7 @@ class XmlResponseFormatterTest extends FormatterTest
         $this->assertEquals($this->xmlHead . "<$rootTag>1</$rootTag>\n", $this->response->content);
     }
 
-    public function testRootTagRemoval(): void
+    public function testRootTagRemoval()
     {
         $formatter = $this->getFormatterInstance([
             'rootTag' => null,
@@ -163,7 +161,7 @@ class XmlResponseFormatterTest extends FormatterTest
         $this->assertEquals($this->xmlHead . "1\n", $this->response->content);
     }
 
-    public function testNoObjectTags(): void
+    public function testNoObjectTags()
     {
         $formatter = $this->getFormatterInstance([
             'useObjectTags' => false,
@@ -174,7 +172,7 @@ class XmlResponseFormatterTest extends FormatterTest
         $this->assertEquals($this->xmlHead . "<response><id>123</id><title>abc</title></response>\n", $this->response->content);
     }
 
-    public function testObjectTagToLowercase(): void
+    public function testObjectTagToLowercase()
     {
         $formatter = $this->getFormatterInstance(['objectTagToLowercase' => true]);
 

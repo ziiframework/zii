@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -29,7 +27,7 @@ class UrlRuleTest extends TestCase
         $this->mockApplication();
     }
 
-    public function testInitControllerNamePluralization(): void
+    public function testInitControllerNamePluralization()
     {
         $suites = $this->getTestsForControllerNamePluralization();
 
@@ -44,7 +42,7 @@ class UrlRuleTest extends TestCase
         }
     }
 
-    public function testParseRequest(): void
+    public function testParseRequest()
     {
         $manager = new UrlManager(['cache' => null]);
         $request = new Request(['hostInfo' => 'http://en.example.com', 'methodParam' => '_METHOD']);
@@ -366,7 +364,7 @@ class UrlRuleTest extends TestCase
      * @param array $ruleConfig
      * @param array $tests
      */
-    public function testCreateUrl($ruleConfig, $tests): void
+    public function testCreateUrl($ruleConfig, $tests)
     {
         foreach ($tests as $test) {
             [$params, $expected] = $test;
@@ -389,7 +387,7 @@ class UrlRuleTest extends TestCase
      * @param array $ruleConfig
      * @param array $tests
      */
-    public function testGetCreateUrlStatus($ruleConfig, $tests): void
+    public function testGetCreateUrlStatus($ruleConfig, $tests)
     {
         foreach ($tests as $test) {
             [$params, $expected, $status] = $test;

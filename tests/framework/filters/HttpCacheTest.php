@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -29,7 +27,7 @@ class HttpCacheTest extends \yiiunit\TestCase
         $this->mockWebApplication();
     }
 
-    public function testDisabled(): void
+    public function testDisabled()
     {
         $httpCache = new HttpCache();
         $this->assertTrue($httpCache->beforeAction(null));
@@ -37,10 +35,12 @@ class HttpCacheTest extends \yiiunit\TestCase
         $this->assertTrue($httpCache->beforeAction(null));
     }
 
-    public function testEmptyPragma(): void
+    public function testEmptyPragma()
     {
         $httpCache = new HttpCache();
-        $httpCache->etagSeed = static fn ($action, $params) => '';
+        $httpCache->etagSeed = static function ($action, $params) {
+            return '';
+        };
         $httpCache->beforeAction(null);
         $response = Yii::$app->getResponse();
         $this->assertFalse($response->getHeaders()->offsetExists('Pragma'));
@@ -50,7 +50,7 @@ class HttpCacheTest extends \yiiunit\TestCase
     /**
      * @covers \yii\filters\HttpCache::validateCache
      */
-    public function testValidateCache(): void
+    public function testValidateCache()
     {
         $httpCache = new HttpCache();
         $request = Yii::$app->getRequest();
@@ -83,17 +83,21 @@ class HttpCacheTest extends \yiiunit\TestCase
     /**
      * @covers \yii\filters\HttpCache::generateEtag
      */
-    public function testGenerateEtag(): void
+    public function testGenerateEtag()
     {
         $httpCache = new HttpCache();
         $httpCache->weakEtag = false;
 
-        $httpCache->etagSeed = static fn ($action, $params) => null;
+        $httpCache->etagSeed = static function ($action, $params) {
+            return null;
+        };
         $httpCache->beforeAction(null);
         $response = Yii::$app->getResponse();
         $this->assertFalse($response->getHeaders()->offsetExists('ETag'));
 
-        $httpCache->etagSeed = static fn ($action, $params) => '';
+        $httpCache->etagSeed = static function ($action, $params) {
+            return '';
+        };
         $httpCache->beforeAction(null);
         $response = Yii::$app->getResponse();
 

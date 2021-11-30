@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -17,15 +15,15 @@ use yiiunit\framework\console\stubs\DummyService;
 
 class FakePhp71Controller extends Controller
 {
-    public function actionInjection($before, Request $request, $between, DummyService $dummyService, Post $post = null, $after): void
+    public function actionInjection($before, Request $request, $between, DummyService $dummyService, Post $post = null, $after)
     {
     }
 
-    public function actionNullableInjection(?Request $request, ?Post $post): void
+    public function actionNullableInjection(?Request $request, ?Post $post)
     {
     }
 
-    public function actionModuleServiceInjection(DataProviderInterface $dataProvider): void
+    public function actionModuleServiceInjection(DataProviderInterface $dataProvider)
     {
     }
 }

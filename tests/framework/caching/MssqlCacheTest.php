@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -87,7 +85,7 @@ class MssqlCacheTest extends CacheTestCase
         return $this->_cacheInstance;
     }
 
-    public function testExpire(): void
+    public function testExpire()
     {
         $cache = $this->getCacheInstance();
 
@@ -99,7 +97,7 @@ class MssqlCacheTest extends CacheTestCase
         $this->assertFalse($cache->get('expire_test'));
     }
 
-    public function testExpireAdd(): void
+    public function testExpireAdd()
     {
         $cache = $this->getCacheInstance();
 
@@ -111,7 +109,7 @@ class MssqlCacheTest extends CacheTestCase
         $this->assertFalse($cache->get('expire_testa'));
     }
 
-    public function testSynchronousSetWithTheSameKey(): void
+    public function testSynchronousSetWithTheSameKey()
     {
         $KEY = 'sync-test-key';
         $VALUE = 'sync-test-value';

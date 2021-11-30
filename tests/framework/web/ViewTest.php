@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -25,7 +23,7 @@ class ViewTest extends TestCase
         parent::setUp();
     }
 
-    public function testRegisterJsVar(): void
+    public function testRegisterJsVar()
     {
         $this->mockWebApplication([
             'components' => [
@@ -50,7 +48,7 @@ class ViewTest extends TestCase
         $this->assertStringContainsString('<script>var objectTest = {"number":42,"question":"Unknown"};</script></head>', $html);
     }
 
-    public function testRegisterJsFileWithAlias(): void
+    public function testRegisterJsFileWithAlias()
     {
         $this->mockWebApplication([
             'components' => [
@@ -83,7 +81,7 @@ class ViewTest extends TestCase
         $this->assertStringContainsString('<script src="/baseUrl/js/somefile.js"></script></body>', $html);
     }
 
-    public function testRegisterCssFileWithAlias(): void
+    public function testRegisterCssFileWithAlias()
     {
         $this->mockWebApplication([
             'components' => [
@@ -106,7 +104,7 @@ class ViewTest extends TestCase
         $this->assertStringContainsString('<link href="/baseUrl/css/somefile.css" rel="stylesheet"></head>', $html);
     }
 
-    public function testRegisterregisterCsrfMetaTags(): void
+    public function testRegisterregisterCsrfMetaTags()
     {
         $this->mockWebApplication([
             'components' => [
@@ -155,7 +153,7 @@ class ViewTest extends TestCase
         return $matches[1];
     }
 
-    private function setUpAliases(): void
+    private function setUpAliases()
     {
         Yii::setAlias('@web', '/');
         Yii::setAlias('@webroot', '@yiiunit/data/web');
@@ -164,7 +162,7 @@ class ViewTest extends TestCase
         Yii::setAlias('@testSourcePath', '@webroot/assetSources');
     }
 
-    public function testAppendTimestampForRegisterJsFile(): void
+    public function testAppendTimestampForRegisterJsFile()
     {
         $this->mockWebApplication([
             'components' => [
@@ -306,7 +304,7 @@ class ViewTest extends TestCase
         $this->assertStringContainsString('<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>', $html);
     }
 
-    public function testAppendTimestampForRegisterCssFile(): void
+    public function testAppendTimestampForRegisterCssFile()
     {
         $this->mockWebApplication([
             'components' => [

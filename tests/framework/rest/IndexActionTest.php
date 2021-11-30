@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -44,7 +42,7 @@ class IndexActionTest extends TestCase
         Yii::$app->getDb()->createCommand()->createTable(IndexActionModel::tableName(), $columns)->execute();
     }
 
-    public function testPrepareSearchQueryAttribute(): void
+    public function testPrepareSearchQueryAttribute()
     {
         $sql = '';
         Yii::$app->controller = new RestController('rest', new Module('rest'), [

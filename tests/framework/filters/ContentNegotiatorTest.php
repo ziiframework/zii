@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -41,7 +39,7 @@ class ContentNegotiatorTest extends TestCase
         return [$action, $filter];
     }
 
-    public function testWhenLanguageGETParamIsArray(): void
+    public function testWhenLanguageGETParamIsArray()
     {
         [$action, $filter] = $this->mockActionAndFilter();
 
@@ -58,7 +56,7 @@ class ContentNegotiatorTest extends TestCase
         $this->assertEquals($targetLanguage, Yii::$app->language);
     }
 
-    public function testWhenFormatGETParamIsArray(): void
+    public function testWhenFormatGETParamIsArray()
     {
         $this->expectException('yii\web\BadRequestHttpException');
         $this->expectExceptionMessageMatches("|Invalid data received for GET parameter '.+'|");
@@ -78,7 +76,7 @@ class ContentNegotiatorTest extends TestCase
         $filter->beforeAction($action);
     }
 
-    public function testVaryHeader(): void
+    public function testVaryHeader()
     {
         [$action, $filter] = $this->mockActionAndFilter();
         $filter->formats = [];
@@ -119,7 +117,7 @@ class ContentNegotiatorTest extends TestCase
         $this->assertContains('Accept-Language', $varyHeader);
     }
 
-    public function testNegotiateContentType(): void
+    public function testNegotiateContentType()
     {
         $filter = new ContentNegotiator([
             'formats' => [

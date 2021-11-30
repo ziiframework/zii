@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -30,7 +28,7 @@ class BaseConsoleTest extends TestCase
     /**
      * @test
      */
-    public function renderColoredString(): void
+    public function renderColoredString()
     {
         $data = '%yfoo';
         $actual = BaseConsole::renderColoredString($data);
@@ -45,7 +43,7 @@ class BaseConsoleTest extends TestCase
     /**
      * @test
      */
-    public function ansiColorizedSubstrWithoutColors(): void
+    public function ansiColorizedSubstrWithoutColors()
     {
         $str = 'FooBar';
 
@@ -71,7 +69,7 @@ class BaseConsoleTest extends TestCase
      * @param $length
      * @param $expected
      */
-    public function ansiColorizedSubstrWithColors($str, $start, $length, $expected): void
+    public function ansiColorizedSubstrWithColors($str, $start, $length, $expected)
     {
         $ansiStr = BaseConsole::renderColoredString($str);
 
@@ -91,7 +89,7 @@ class BaseConsoleTest extends TestCase
         ];
     }
 
-    public function testAnsiStrlen(): void
+    public function testAnsiStrlen()
     {
         $this->assertSame(3, BaseConsole::ansiStrlen('Foo'));
         $this->assertSame(3, BaseConsole::ansiStrlen(BaseConsole::renderColoredString('Bar%y')));

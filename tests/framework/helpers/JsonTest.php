@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -34,7 +32,7 @@ class JsonTest extends TestCase
         $this->destroyApplication();
     }
 
-    public function testEncode(): void
+    public function testEncode()
     {
         // Arrayable data encoding
         $dataArrayable = $this->getMockBuilder('\yii\base\Arrayable')->getMock();
@@ -104,7 +102,7 @@ class JsonTest extends TestCase
         $this->assertSame('{}', Json::encode($data));
     }
 
-    public function testHtmlEncode(): void
+    public function testHtmlEncode()
     {
         // HTML escaped chars
         $data = '&<>"\'/';
@@ -177,7 +175,7 @@ class JsonTest extends TestCase
         $this->assertSame('{"1":{"id":456,"title":"record2"},"0":{"id":915,"title":"record1"}}', Json::encode($postsStack));
     }
 
-    public function testDecode(): void
+    public function testDecode()
     {
         // empty value
         $json = '';
@@ -201,7 +199,7 @@ class JsonTest extends TestCase
     /**
      * @covers ::decode
      */
-    public function testDecodeInvalidParamException(): void
+    public function testDecodeInvalidParamException()
     {
         $this->expectException('\yii\base\InvalidArgumentException');
         $this->expectExceptionMessage('Invalid JSON data.');
@@ -211,7 +209,7 @@ class JsonTest extends TestCase
     /**
      * @covers ::decode
      */
-    public function testHandleJsonError(): void
+    public function testHandleJsonError()
     {
         // basic syntax error
         try {
@@ -236,7 +234,7 @@ class JsonTest extends TestCase
         }
     }
 
-    public function testErrorSummary(): void
+    public function testErrorSummary()
     {
         $model = new JsonModel();
         $model->name = 'not_an_integer';
@@ -252,7 +250,7 @@ class JsonTest extends TestCase
      * @see https://github.com/yiisoft/yii2/issues/17760
      * @covers ::encode
      */
-    public function testEncodeDateTime(): void
+    public function testEncodeDateTime()
     {
         $input = new DateTime('October 12, 2014', new DateTimeZone('UTC'));
         $output = Json::encode($input);
@@ -262,7 +260,7 @@ class JsonTest extends TestCase
     /**
      * @covers ::encode
      */
-    public function testPrettyPrint(): void
+    public function testPrettyPrint()
     {
         $defaultValue = Json::$prettyPrint;
         $input = ['a' => 1, 'b' => 2];

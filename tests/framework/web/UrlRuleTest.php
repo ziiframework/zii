@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -31,7 +29,7 @@ class UrlRuleTest extends TestCase
         $this->mockApplication();
     }
 
-    public function testCreateUrl(): void
+    public function testCreateUrl()
     {
         $manager = new UrlManager(['cache' => null]);
         $suites = $this->getTestsForCreateUrl();
@@ -48,7 +46,7 @@ class UrlRuleTest extends TestCase
         }
     }
 
-    public function testParseRequest(): void
+    public function testParseRequest()
     {
         $manager = new UrlManager([
             'cache' => null,
@@ -75,7 +73,7 @@ class UrlRuleTest extends TestCase
         }
     }
 
-    public function testParseRequestWithNormalizer(): void
+    public function testParseRequestWithNormalizer()
     {
         $manager = new UrlManager([
             'cache' => null,
@@ -107,7 +105,7 @@ class UrlRuleTest extends TestCase
         }
     }
 
-    public function testParseRequestWithUrlManagerCustomNormalizer(): void
+    public function testParseRequestWithUrlManagerCustomNormalizer()
     {
         $manager = new UrlManager([
             'cache' => null,
@@ -268,7 +266,7 @@ class UrlRuleTest extends TestCase
         }
     }
 
-    public function testParseRequestWithUrlRuleCustomNormalizer(): void
+    public function testParseRequestWithUrlRuleCustomNormalizer()
     {
         $manager = new UrlManager([
             'cache' => null,
@@ -310,7 +308,7 @@ class UrlRuleTest extends TestCase
         $this->assertEquals(['post/index', ['page' => 1, 'tag' => 'a']], $result);
     }
 
-    public function testToString(): void
+    public function testToString()
     {
         $suites = $this->getTestsForToString();
 
@@ -1329,7 +1327,7 @@ class UrlRuleTest extends TestCase
      * @param array $config
      * @param array $tests
      */
-    public function testGetCreateUrlStatus($config, $tests): void
+    public function testGetCreateUrlStatus($config, $tests)
     {
         foreach ($tests as $test) {
             [$route, $params, $expected, $status] = $test;

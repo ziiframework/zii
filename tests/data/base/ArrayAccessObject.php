@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -78,7 +76,7 @@ class ArrayAccessObject extends TraversableObject implements ArrayAccess
      *
      * @since 2.0.14.1
      */
-    public function offsetSet($offset, $value): void
+    public function offsetSet($offset, $value)
     {
         $this->data[$offset] = $value;
     }
@@ -96,7 +94,7 @@ class ArrayAccessObject extends TraversableObject implements ArrayAccess
      *
      * @since 2.0.14.1
      */
-    public function offsetUnset($offset): void
+    public function offsetUnset($offset)
     {
         unset($this->data[$offset]);
     }

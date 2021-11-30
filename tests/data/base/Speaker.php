@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -55,7 +53,7 @@ class Speaker extends Model
 
     private $_checkedValues = [];
 
-    public function customValidatingMethod($attribute, $params, $validator, $current): void
+    public function customValidatingMethod($attribute, $params, $validator, $current)
     {
         $this->_checkedValues[] = $current;
         $this->addError($attribute, 'Custom method error');

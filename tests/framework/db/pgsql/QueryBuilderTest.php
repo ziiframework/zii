@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -157,7 +155,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         ]);
     }
 
-    public function testAlterColumn(): void
+    public function testAlterColumn()
     {
         $qb = $this->getQueryBuilder();
 
@@ -214,12 +212,12 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         return $result;
     }
 
-    public function defaultValuesProvider(): void
+    public function defaultValuesProvider()
     {
         $this->markTestSkipped('Adding/dropping default constraints is not supported in PostgreSQL.');
     }
 
-    public function testCommentColumn(): void
+    public function testCommentColumn()
     {
         $qb = $this->getQueryBuilder();
 
@@ -232,7 +230,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         $this->assertEquals($this->replaceQuotes($expected), $sql);
     }
 
-    public function testCommentTable(): void
+    public function testCommentTable()
     {
         $qb = $this->getQueryBuilder();
 
@@ -256,7 +254,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         return $data;
     }
 
-    public function testResetSequence(): void
+    public function testResetSequence()
     {
         $qb = $this->getQueryBuilder();
 
@@ -269,7 +267,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         $this->assertEquals($expected, $sql);
     }
 
-    public function testResetSequencePostgres12(): void
+    public function testResetSequencePostgres12()
     {
         if (version_compare($this->getConnection(false)->getServerVersion(), '12.0', '<')) {
             $this->markTestSkipped('PostgreSQL < 12.0 does not support GENERATED AS IDENTITY columns.');
@@ -414,7 +412,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         return $items;
     }
 
-    public function testDropIndex(): void
+    public function testDropIndex()
     {
         $qb = $this->getQueryBuilder();
 

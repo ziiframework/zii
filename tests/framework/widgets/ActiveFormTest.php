@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -26,7 +24,7 @@ class ActiveFormTest extends \yiiunit\TestCase
         $this->mockApplication();
     }
 
-    public function testBooleanAttributes(): void
+    public function testBooleanAttributes()
     {
         $o = ['template' => '{input}'];
 
@@ -58,7 +56,7 @@ EOF
             , (string) $form->field($model, 'name', $o)->input('email', ['required' => 'test']));
     }
 
-    public function testIssue5356(): void
+    public function testIssue5356()
     {
         $o = ['template' => '{input}'];
 
@@ -82,7 +80,7 @@ EOF
              , (string) $form->field($model, 'categories', $o)->listBox(['apple', 'banana', 'avocado'], ['multiple' => true]));
     }
 
-    public function testOutputBuffering(): void
+    public function testOutputBuffering()
     {
         $obLevel = ob_get_level();
         ob_start();
@@ -110,7 +108,7 @@ HTML
 , $content);
     }
 
-    public function testRegisterClientScript(): void
+    public function testRegisterClientScript()
     {
         $this->mockWebApplication();
         $_SERVER['REQUEST_URI'] = 'http://example.com/';
@@ -140,14 +138,14 @@ HTML
     /**
      * @see https://github.com/yiisoft/yii2/issues/15536
      */
-    public function testShouldTriggerInitEvent(): void
+    public function testShouldTriggerInitEvent()
     {
         $initTriggered = false;
         ob_start();
         $form = ActiveForm::begin([
                 'action' => '/something',
                 'enableClientScript' => false,
-                'on init' => static function () use (&$initTriggered): void {
+                'on init' => static function () use (&$initTriggered) {
                     $initTriggered = true;
                 },
             ]);
@@ -160,7 +158,7 @@ HTML
      * @see https://github.com/yiisoft/yii2/issues/15476
      * @see https://github.com/yiisoft/yii2/issues/16892
      */
-    public function testValidationStateOnInput(): void
+    public function testValidationStateOnInput()
     {
         $model = new DynamicModel(['name']);
         $model->addError('name', 'I have an error!');

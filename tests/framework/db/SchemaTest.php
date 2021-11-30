@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -42,7 +40,7 @@ abstract class SchemaTest extends DatabaseTestCase
         ];
     }
 
-    public function testGetSchemaNames(): void
+    public function testGetSchemaNames()
     {
         /* @var $schema Schema */
         $schema = $this->getConnection()->schema;
@@ -60,7 +58,7 @@ abstract class SchemaTest extends DatabaseTestCase
      *
      * @param array $pdoAttributes
      */
-    public function testGetTableNames($pdoAttributes): void
+    public function testGetTableNames($pdoAttributes)
     {
         $connection = $this->getConnection();
 
@@ -77,7 +75,9 @@ abstract class SchemaTest extends DatabaseTestCase
         $tables = $schema->getTableNames();
 
         if ($this->driverName === 'sqlsrv') {
-            $tables = array_map(static fn ($item) => trim($item, '[]'), $tables);
+            $tables = array_map(static function ($item) {
+                return trim($item, '[]');
+            }, $tables);
         }
         $this->assertContains('customer', $tables);
         $this->assertContains('category', $tables);
@@ -94,7 +94,7 @@ abstract class SchemaTest extends DatabaseTestCase
      *
      * @param array $pdoAttributes
      */
-    public function testGetTableSchemas($pdoAttributes): void
+    public function testGetTableSchemas($pdoAttributes)
     {
         $connection = $this->getConnection();
 
@@ -115,7 +115,7 @@ abstract class SchemaTest extends DatabaseTestCase
         }
     }
 
-    public function testGetTableSchemasWithAttrCase(): void
+    public function testGetTableSchemasWithAttrCase()
     {
         $db = $this->getConnection(false);
         $db->slavePdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
@@ -125,12 +125,12 @@ abstract class SchemaTest extends DatabaseTestCase
         $this->assertEquals(count($db->schema->getTableNames()), count($db->schema->getTableSchemas()));
     }
 
-    public function testGetNonExistingTableSchema(): void
+    public function testGetNonExistingTableSchema()
     {
         $this->assertNull($this->getConnection()->schema->getTableSchema('nonexisting_table'));
     }
 
-    public function testSchemaCache(): void
+    public function testSchemaCache()
     {
         /* @var $db Connection */
         $db = $this->getConnection();
@@ -154,7 +154,7 @@ abstract class SchemaTest extends DatabaseTestCase
     /**
      * @depends testSchemaCache
      */
-    public function testRefreshTableSchema(): void
+    public function testRefreshTableSchema()
     {
         /* @var $schema Schema */
         $schema = $this->getConnection()->schema;
@@ -209,7 +209,7 @@ abstract class SchemaTest extends DatabaseTestCase
      * @dataProvider tableSchemaCachePrefixesProvider
      * @depends      testSchemaCache
      */
-    public function testTableSchemaCacheWithTablePrefixes($tablePrefix, $tableName, $testTablePrefix, $testTableName): void
+    public function testTableSchemaCacheWithTablePrefixes($tablePrefix, $tableName, $testTablePrefix, $testTableName)
     {
         /* @var $schema Schema */
         $schema = $this->getConnection()->schema;
@@ -240,7 +240,7 @@ abstract class SchemaTest extends DatabaseTestCase
         $this->assertNotSame($testNoCacheTable, $testRefreshedTable);
     }
 
-    public function testCompositeFk(): void
+    public function testCompositeFk()
     {
         /* @var $schema Schema */
         $schema = $this->getConnection()->schema;
@@ -254,7 +254,7 @@ abstract class SchemaTest extends DatabaseTestCase
         $this->assertEquals('item_id', $table->foreignKeys['FK_composite_fk_order_item']['item_id']);
     }
 
-    public function testGetPDOType(): void
+    public function testGetPDOType()
     {
         $values = [
             [null, PDO::PARAM_NULL],
@@ -499,7 +499,7 @@ abstract class SchemaTest extends DatabaseTestCase
         ];
     }
 
-    public function testNegativeDefaultValues(): void
+    public function testNegativeDefaultValues()
     {
         /* @var $schema Schema */
         $schema = $this->getConnection()->schema;
@@ -513,7 +513,7 @@ abstract class SchemaTest extends DatabaseTestCase
         $this->assertEquals(-33.22, $table->getColumn('numeric_col')->defaultValue);
     }
 
-    public function testColumnSchema(): void
+    public function testColumnSchema()
     {
         $columns = $this->getExpectedColumns();
 
@@ -550,13 +550,13 @@ abstract class SchemaTest extends DatabaseTestCase
         }
     }
 
-    public function testColumnSchemaDbTypecastWithEmptyCharType(): void
+    public function testColumnSchemaDbTypecastWithEmptyCharType()
     {
         $columnSchema = new ColumnSchema(['type' => Schema::TYPE_CHAR]);
         $this->assertSame('', $columnSchema->dbTypecast(''));
     }
 
-    public function testFindUniqueIndexes(): void
+    public function testFindUniqueIndexes()
     {
         if ($this->driverName === 'sqlsrv') {
             $this->markTestSkipped('`\yii\db\mssql\Schema::findUniqueIndexes()` returns only unique constraints not unique indexes.');
@@ -607,7 +607,7 @@ abstract class SchemaTest extends DatabaseTestCase
         ], $uniqueIndexes);
     }
 
-    public function testContraintTablesExistance(): void
+    public function testContraintTablesExistance()
     {
         $tableNames = [
             'T_constraints_1',
@@ -747,7 +747,7 @@ abstract class SchemaTest extends DatabaseTestCase
      * @param string $type
      * @param mixed  $expected
      */
-    public function testTableSchemaConstraints($tableName, $type, $expected): void
+    public function testTableSchemaConstraints($tableName, $type, $expected)
     {
         if ($expected === false) {
             $this->expectException('yii\base\NotSupportedException');
@@ -764,7 +764,7 @@ abstract class SchemaTest extends DatabaseTestCase
      * @param string $type
      * @param mixed  $expected
      */
-    public function testTableSchemaConstraintsWithPdoUppercase($tableName, $type, $expected): void
+    public function testTableSchemaConstraintsWithPdoUppercase($tableName, $type, $expected)
     {
         if ($expected === false) {
             $this->expectException('yii\base\NotSupportedException');
@@ -783,7 +783,7 @@ abstract class SchemaTest extends DatabaseTestCase
      * @param string $type
      * @param mixed  $expected
      */
-    public function testTableSchemaConstraintsWithPdoLowercase($tableName, $type, $expected): void
+    public function testTableSchemaConstraintsWithPdoLowercase($tableName, $type, $expected)
     {
         if ($expected === false) {
             $this->expectException('yii\base\NotSupportedException');
@@ -795,7 +795,7 @@ abstract class SchemaTest extends DatabaseTestCase
         $this->assertMetadataEquals($expected, $constraints);
     }
 
-    private function assertMetadataEquals($expected, $actual): void
+    private function assertMetadataEquals($expected, $actual)
     {
         $gettype = gettype($expected);
 
@@ -832,7 +832,7 @@ abstract class SchemaTest extends DatabaseTestCase
         $this->assertEquals($expected, $actual);
     }
 
-    private function normalizeArrayKeys(array &$array, $caseSensitive): void
+    private function normalizeArrayKeys(array &$array, $caseSensitive)
     {
         $newArray = [];
 
@@ -858,7 +858,7 @@ abstract class SchemaTest extends DatabaseTestCase
         $array = $newArray;
     }
 
-    private function normalizeConstraints(&$expected, &$actual): void
+    private function normalizeConstraints(&$expected, &$actual)
     {
         if (is_array($expected)) {
             foreach ($expected as $key => $value) {
@@ -873,7 +873,7 @@ abstract class SchemaTest extends DatabaseTestCase
         }
     }
 
-    private function normalizeConstraintPair(Constraint $expectedConstraint, Constraint $actualConstraint): void
+    private function normalizeConstraintPair(Constraint $expectedConstraint, Constraint $actualConstraint)
     {
         if ($expectedConstraint::className() !== $actualConstraint::className()) {
             return;

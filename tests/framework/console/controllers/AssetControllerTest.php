@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -57,7 +55,7 @@ class AssetControllerTest extends TestCase
      *
      * @param string $dirName directory full name
      */
-    protected function createDir($dirName): void
+    protected function createDir($dirName)
     {
         FileHelper::createDirectory($dirName);
     }
@@ -67,7 +65,7 @@ class AssetControllerTest extends TestCase
      *
      * @param string $dirName directory full name
      */
-    protected function removeDir($dirName): void
+    protected function removeDir($dirName)
     {
         if (!empty($dirName)) {
             FileHelper::removeDirectory($dirName);
@@ -151,7 +149,7 @@ class AssetControllerTest extends TestCase
      *
      * @throws Exception on failure
      */
-    protected function createCompressConfigFile($fileName, array $bundles, array $config = []): void
+    protected function createCompressConfigFile($fileName, array $bundles, array $config = [])
     {
         $content = '<?php return ' . var_export($this->createCompressConfig($bundles, $config), true) . ';';
 
@@ -169,7 +167,7 @@ class AssetControllerTest extends TestCase
      *
      * @throws Exception on failure
      */
-    protected function createAssetSourceFile($fileRelativeName, $content, $fileBasePath = null): void
+    protected function createAssetSourceFile($fileRelativeName, $content, $fileBasePath = null)
     {
         if ($fileBasePath === null) {
             $fileBasePath = $this->testFilePath;
@@ -188,7 +186,7 @@ class AssetControllerTest extends TestCase
      * @param array  $files        assert source files in format: file/relative/name => fileContent
      * @param string $fileBasePath base path for the created files, if not set [[testFilePath]]
      */
-    protected function createAssetSourceFiles(array $files, $fileBasePath = null): void
+    protected function createAssetSourceFiles(array $files, $fileBasePath = null)
     {
         foreach ($files as $name => $content) {
             $this->createAssetSourceFile($name, $content, $fileBasePath);
@@ -277,7 +275,7 @@ EOL;
 
     // Tests :
 
-    public function testActionTemplate(): void
+    public function testActionTemplate()
     {
         $configFileName = $this->testFilePath . DIRECTORY_SEPARATOR . 'config.php';
         $this->runAssetControllerAction('template', [$configFileName]);
@@ -286,7 +284,7 @@ EOL;
         $this->assertIsArray($config, 'Invalid config created!');
     }
 
-    public function testActionCompress(): void
+    public function testActionCompress()
     {
         // Given :
         $cssFiles = [
@@ -360,7 +358,7 @@ EOL;
      *
      * @see https://github.com/yiisoft/yii2/issues/5194
      */
-    public function testCompressExternalAsset(): void
+    public function testCompressExternalAsset()
     {
         // Given :
         $externalAssetConfig = [
@@ -427,7 +425,7 @@ EOL;
      *
      * @see https://github.com/yiisoft/yii2/issues/7539
      */
-    public function testDetectCircularDependency(): void
+    public function testDetectCircularDependency()
     {
         // Given :
         $namespace = __NAMESPACE__;
@@ -591,7 +589,7 @@ EOL;
      * @param $outputFilePath
      * @param $expectedCssContent
      */
-    public function testAdjustCssUrl($cssContent, $inputFilePath, $outputFilePath, $expectedCssContent): void
+    public function testAdjustCssUrl($cssContent, $inputFilePath, $outputFilePath, $expectedCssContent)
     {
         $adjustedCssContent = $this->invokeAssetControllerMethod('adjustCssUrl', [$cssContent, $inputFilePath, $outputFilePath]);
 
@@ -639,7 +637,7 @@ EOL;
      * @param string $sourcePath
      * @param string $expectedRealPath
      */
-    public function testFindRealPath($sourcePath, $expectedRealPath): void
+    public function testFindRealPath($sourcePath, $expectedRealPath)
     {
         $expectedRealPath = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $expectedRealPath);
         $realPath = $this->invokeAssetControllerMethod('findRealPath', [$sourcePath]);
@@ -651,7 +649,7 @@ EOL;
      *
      * @see https://github.com/yiisoft/yii2/issues/9708
      */
-    public function testActionCompressDeleteSource(): void
+    public function testActionCompressDeleteSource()
     {
         // Given :
         $cssFiles = [
@@ -721,7 +719,7 @@ EOL;
      *
      * @see https://github.com/yiisoft/yii2/issues/10567
      */
-    public function testActionCompressOverrideAsExternal(): void
+    public function testActionCompressOverrideAsExternal()
     {
         // Given :
         $cssFiles = [

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -22,7 +20,7 @@ use yiiunit\TestCase;
  */
 class CorsTest extends TestCase
 {
-    public function testPreflight(): void
+    public function testPreflight()
     {
         $this->mockWebApplication();
         $controller = new Controller('id', Yii::$app);
@@ -45,7 +43,7 @@ class CorsTest extends TestCase
         $this->assertTrue($cors->beforeAction($action));
     }
 
-    public function testWildcardOrigin(): void
+    public function testWildcardOrigin()
     {
         $this->mockWebApplication();
         $controller = new Controller('id', Yii::$app);
@@ -66,7 +64,7 @@ class CorsTest extends TestCase
         $this->assertEquals('*', $cors->response->getHeaders()->get('access-control-allow-origin'));
     }
 
-    public function testAccessControlAllowHeadersPreflight(): void
+    public function testAccessControlAllowHeadersPreflight()
     {
         $this->mockWebApplication();
         $controller = new Controller('id', Yii::$app);

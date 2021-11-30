@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -27,7 +25,7 @@ class EmailValidatorTest extends TestCase
         $this->destroyApplication();
     }
 
-    public function testValidateValue(): void
+    public function testValidateValue()
     {
         $validator = new EmailValidator();
 
@@ -68,7 +66,7 @@ class EmailValidatorTest extends TestCase
         $this->assertFalse($validator->validate(['developer@yiiframework.com']));
     }
 
-    public function testValidateValueIdn(): void
+    public function testValidateValueIdn()
     {
         if (!function_exists('idn_to_ascii')) {
             $this->markTestSkipped('Intl extension required');
@@ -114,7 +112,7 @@ class EmailValidatorTest extends TestCase
         $this->assertFalse($validator->validate('Короткое имя <тест@это-доменное-имя.после-преобразования-в-idn.будет-содержать-больше-254-символов.бла-бла-бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.com>'));
     }
 
-    public function testValidateValueMx(): void
+    public function testValidateValueMx()
     {
         $validator = new EmailValidator();
 
@@ -138,7 +136,7 @@ class EmailValidatorTest extends TestCase
         }
     }
 
-    public function testValidateAttribute(): void
+    public function testValidateAttribute()
     {
         $validator = new EmailValidator();
         $model = new FakedValidationModel();
@@ -183,7 +181,7 @@ class EmailValidatorTest extends TestCase
      *
      * @param string $value
      */
-    public function testMalformedAddressesIdnDisabled($value): void
+    public function testMalformedAddressesIdnDisabled($value)
     {
         $validator = new EmailValidator();
         $validator->enableIDN = false;
@@ -199,7 +197,7 @@ class EmailValidatorTest extends TestCase
      *
      * @param string $value
      */
-    public function testMalformedAddressesIdnEnabled($value): void
+    public function testMalformedAddressesIdnEnabled($value)
     {
         if (!function_exists('idn_to_ascii')) {
             $this->markTestSkipped('Intl extension required');

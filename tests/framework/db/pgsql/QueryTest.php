@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -20,7 +18,7 @@ class QueryTest extends \yiiunit\framework\db\QueryTest
 {
     public $driverName = 'pgsql';
 
-    public function testBooleanValues(): void
+    public function testBooleanValues()
     {
         $db = $this->getConnection();
         $command = $db->createCommand();

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -75,7 +73,7 @@ class AssetBundleTest extends \yiiunit\TestCase
         return $view;
     }
 
-    public function testSourcesPublish(): void
+    public function testSourcesPublish()
     {
         $view = $this->getView();
         $am = $view->assetManager;
@@ -88,7 +86,7 @@ class AssetBundleTest extends \yiiunit\TestCase
         $this->sourcesPublish_VerifyFiles('js', $bundle);
     }
 
-    private function sourcesPublish_VerifyFiles($type, $bundle): void
+    private function sourcesPublish_VerifyFiles($type, $bundle)
     {
         foreach ($bundle->$type as $filename) {
             $publishedFile = $bundle->basePath . DIRECTORY_SEPARATOR . $filename;
@@ -99,26 +97,30 @@ class AssetBundleTest extends \yiiunit\TestCase
         $this->assertTrue(is_dir($bundle->basePath . DIRECTORY_SEPARATOR . $type));
     }
 
-    public function testSourcesPublishedBySymlink(): void
+    public function testSourcesPublishedBySymlink()
     {
         $view = $this->getView(['linkAssets' => true]);
         $this->verifySourcesPublishedBySymlink($view);
     }
 
-    public function testSourcesPublishedBySymlinkIssue9333(): void
+    public function testSourcesPublishedBySymlinkIssue9333()
     {
         $view = $this->getView([
             'linkAssets' => true,
-            'hashCallback' => static fn ($path) => sprintf('%x/%x', crc32($path), crc32(Yii::getVersion())),
+            'hashCallback' => static function ($path) {
+                return sprintf('%x/%x', crc32($path), crc32(Yii::getVersion()));
+            },
         ]);
         $bundle = $this->verifySourcesPublishedBySymlink($view);
         $this->assertTrue(is_dir(dirname($bundle->basePath)));
     }
 
-    public function testSourcesPublishAssetManagerBeforeCopy(): void
+    public function testSourcesPublishAssetManagerBeforeCopy()
     {
         $view = $this->getView([
-            'beforeCopy' => static fn ($from, $to) => false,
+            'beforeCopy' => static function ($from, $to) {
+                return false;
+            },
         ]);
         $am = $view->assetManager;
 
@@ -133,14 +135,16 @@ class AssetBundleTest extends \yiiunit\TestCase
         }
     }
 
-    public function testSourcesPublishAssetBeforeCopy(): void
+    public function testSourcesPublishAssetBeforeCopy()
     {
         $view = $this->getView();
         $am = $view->assetManager;
 
         $bundle = new TestSourceAsset();
         $bundle->publishOptions = [
-            'beforeCopy' => static fn ($from, $to) => false,
+            'beforeCopy' => static function ($from, $to) {
+                return false;
+            },
         ];
         $bundle->publish($am);
 
@@ -152,7 +156,7 @@ class AssetBundleTest extends \yiiunit\TestCase
         }
     }
 
-    public function testSourcesPublishPublishOptionsOnly(): void
+    public function testSourcesPublishPublishOptionsOnly()
     {
         $view = $this->getView();
         $am = $view->assetManager;
@@ -177,7 +181,7 @@ class AssetBundleTest extends \yiiunit\TestCase
         $this->assertTrue(is_dir($bundle->basePath));
     }
 
-    public function testBasePathIsWritableOnPublish(): void
+    public function testBasePathIsWritableOnPublish()
     {
         Yii::setAlias('@testReadOnlyAssetPath', '@webroot/readOnlyAssets');
         $path = Yii::getAlias('@testReadOnlyAssetPath');
@@ -229,7 +233,7 @@ class AssetBundleTest extends \yiiunit\TestCase
         return $bundle;
     }
 
-    public function testRegister(): void
+    public function testRegister()
     {
         $view = $this->getView();
 
@@ -245,7 +249,7 @@ EOF;
         $this->assertEquals($expected, $view->renderFile('@yiiunit/data/views/rawlayout.php'));
     }
 
-    public function testSimpleDependency(): void
+    public function testSimpleDependency()
     {
         $view = $this->getView();
 
@@ -284,7 +288,7 @@ EOF;
      * @param int  $pos
      * @param bool $jqAlreadyRegistered
      */
-    public function testPositionDependency($pos, $jqAlreadyRegistered): void
+    public function testPositionDependency($pos, $jqAlreadyRegistered)
     {
         $view = $this->getView();
 
@@ -361,7 +365,7 @@ EOF;
      * @param int  $pos
      * @param bool $jqAlreadyRegistered
      */
-    public function testPositionDependencyConflict($pos, $jqAlreadyRegistered): void
+    public function testPositionDependencyConflict($pos, $jqAlreadyRegistered)
     {
         $view = $this->getView();
 
@@ -385,13 +389,13 @@ EOF;
         TestAssetBundle::register($view);
     }
 
-    public function testCircularDependency(): void
+    public function testCircularDependency()
     {
         $this->expectException('yii\\base\\InvalidConfigException');
         TestAssetCircleA::register($this->getView());
     }
 
-    public function testDuplicateAssetFile(): void
+    public function testDuplicateAssetFile()
     {
         $view = $this->getView();
 
@@ -409,7 +413,7 @@ EOF;
         $this->assertEquals($expected, $view->renderFile('@yiiunit/data/views/rawlayout.php'));
     }
 
-    public function testPerFileOptions(): void
+    public function testPerFileOptions()
     {
         $view = $this->getView();
 
@@ -537,7 +541,7 @@ EOF;
      * @param string      $expected
      * @param string|null $webAlias
      */
-    public function testRegisterFileAppendTimestamp($type, $path, $appendTimestamp, $expected, $webAlias = null): void
+    public function testRegisterFileAppendTimestamp($type, $path, $appendTimestamp, $expected, $webAlias = null)
     {
         $originalAlias = Yii::getAlias('@web');
 
@@ -554,7 +558,7 @@ EOF;
         Yii::setAlias('@web', $originalAlias);
     }
 
-    public function testCustomFilePublishWithTimestamp(): void
+    public function testCustomFilePublishWithTimestamp()
     {
         $path = Yii::getAlias('@webroot');
 
@@ -576,7 +580,7 @@ EOF;
     /**
      * @see https://github.com/yiisoft/yii2/issues/18529
      */
-    public function testNonRelativeAssetWebPathWithTimestamp(): void
+    public function testNonRelativeAssetWebPathWithTimestamp()
     {
         Yii::setAlias('@webroot', '@yiiunit/data/web/assetSources/');
 

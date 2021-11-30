@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -28,7 +26,7 @@ class ModelTest extends TestCase
         $this->mockApplication();
     }
 
-    public function testGetAttributeLabel(): void
+    public function testGetAttributeLabel()
     {
         $speaker = new Speaker();
         $this->assertEquals('First Name', $speaker->getAttributeLabel('firstName'));
@@ -36,7 +34,7 @@ class ModelTest extends TestCase
         $this->assertEquals('Underscore Style', $speaker->getAttributeLabel('underscore_style'));
     }
 
-    public function testGetAttributes(): void
+    public function testGetAttributes()
     {
         $speaker = new Speaker();
         $speaker->firstName = 'Qiang';
@@ -64,7 +62,7 @@ class ModelTest extends TestCase
         ], $speaker->getAttributes(['firstName', 'lastName'], ['lastName', 'customLabel', 'underscore_style']));
     }
 
-    public function testSetAttributes(): void
+    public function testSetAttributes()
     {
         // by default mass assignment doesn't work at all
         $speaker = new Speaker();
@@ -84,7 +82,7 @@ class ModelTest extends TestCase
         $this->assertEquals('Qiang', $speaker->firstName);
     }
 
-    public function testLoad(): void
+    public function testLoad()
     {
         $singer = new Singer();
         $this->assertEquals('Singer', $singer->formName());
@@ -110,7 +108,7 @@ class ModelTest extends TestCase
         $this->assertEquals('', $model->firstName);
     }
 
-    public function testLoadMultiple(): void
+    public function testLoadMultiple()
     {
         $data = [
             ['firstName' => 'Thomas', 'lastName' => 'Anderson'],
@@ -145,7 +143,7 @@ class ModelTest extends TestCase
         $this->assertEquals('', $smith->lastName);
     }
 
-    public function testActiveAttributes(): void
+    public function testActiveAttributes()
     {
         // by default mass assignment doesn't work at all
         $speaker = new Speaker();
@@ -156,7 +154,7 @@ class ModelTest extends TestCase
         $this->assertEquals(['firstName', 'lastName', 'underscore_style'], $speaker->activeAttributes());
     }
 
-    public function testActiveAttributesAreUnique(): void
+    public function testActiveAttributesAreUnique()
     {
         // by default mass assignment doesn't work at all
         $speaker = new Speaker();
@@ -167,7 +165,7 @@ class ModelTest extends TestCase
         $this->assertEquals(['firstName', 'underscore_style'], $speaker->activeAttributes());
     }
 
-    public function testIsAttributeSafe(): void
+    public function testIsAttributeSafe()
     {
         // by default mass assignment doesn't work at all
         $speaker = new Speaker();
@@ -178,7 +176,7 @@ class ModelTest extends TestCase
         $this->assertTrue($speaker->isAttributeSafe('firstName'));
     }
 
-    public function testIsAttributeSafeForIntegerAttribute(): void
+    public function testIsAttributeSafeForIntegerAttribute()
     {
         $model = new RulesModel();
         $model->rules = [
@@ -190,7 +188,7 @@ class ModelTest extends TestCase
         $this->assertTrue($model->isAttributeSafe(123456));
     }
 
-    public function testSafeScenarios(): void
+    public function testSafeScenarios()
     {
         $model = new RulesModel();
         $model->rules = [
@@ -242,7 +240,7 @@ class ModelTest extends TestCase
         $this->assertEquals(['account_id', 'user_id', 'email', 'name'], $model->activeAttributes());
     }
 
-    public function testUnsafeAttributes(): void
+    public function testUnsafeAttributes()
     {
         $model = new RulesModel();
         $model->rules = [
@@ -289,7 +287,7 @@ class ModelTest extends TestCase
         $this->assertNotEquals('d426@mdm.com', $model->email);
     }
 
-    public function testErrors(): void
+    public function testErrors()
     {
         $speaker = new Speaker();
 
@@ -338,7 +336,7 @@ class ModelTest extends TestCase
         $this->assertFalse($speaker->hasErrors());
     }
 
-    public function testAddErrors(): void
+    public function testAddErrors()
     {
         $singer = new Singer();
 
@@ -380,7 +378,7 @@ class ModelTest extends TestCase
         $this->assertEquals($singer->getErrors(), $errors);
     }
 
-    public function testArraySyntax(): void
+    public function testArraySyntax()
     {
         $speaker = new Speaker();
 
@@ -418,14 +416,14 @@ class ModelTest extends TestCase
         $this->assertFalse(isset($speaker['firstName']));
     }
 
-    public function testDefaults(): void
+    public function testDefaults()
     {
         $singer = new Model();
         $this->assertEquals([], $singer->rules());
         $this->assertEquals([], $singer->attributeLabels());
     }
 
-    public function testDefaultScenarios(): void
+    public function testDefaultScenarios()
     {
         $singer = new Singer();
         $this->assertEquals(['default' => ['lastName', 'underscore_style', 'test']], $singer->scenarios());
@@ -445,7 +443,7 @@ class ModelTest extends TestCase
         $this->assertEquals($scenarios, $model->scenarios());
     }
 
-    public function testValidatorsWithDifferentScenarios(): void
+    public function testValidatorsWithDifferentScenarios()
     {
         $model = new CustomScenariosModel();
         $this->assertCount(3, $model->getActiveValidators());
@@ -457,7 +455,7 @@ class ModelTest extends TestCase
         $this->assertCount(0, $model->getActiveValidators('name'), 'This attribute has no validators in current scenario.');
     }
 
-    public function testIsAttributeRequired(): void
+    public function testIsAttributeRequired()
     {
         $singer = new Singer();
         $this->assertFalse($singer->isAttributeRequired('firstName'));
@@ -471,7 +469,7 @@ class ModelTest extends TestCase
         $this->assertFalse($singer->isAttributeRequired('test'));
     }
 
-    public function testCreateValidators(): void
+    public function testCreateValidators()
     {
         $this->expectException('yii\base\InvalidConfigException');
         $this->expectExceptionMessage('Invalid validation rule: a rule must specify both attribute names and validator type.');
@@ -484,7 +482,7 @@ class ModelTest extends TestCase
      * Ensure 'safe' validator works for write-only properties.
      * Normal validator can not work here though.
      */
-    public function testValidateWriteOnly(): void
+    public function testValidateWriteOnly()
     {
         $model = new WriteOnlyModel();
 
@@ -494,7 +492,7 @@ class ModelTest extends TestCase
         $this->assertTrue($model->validate());
     }
 
-    public function testValidateAttributeNames(): void
+    public function testValidateAttributeNames()
     {
         $model = new ComplexModel1();
         $model->name = 'Some value';
@@ -503,7 +501,7 @@ class ModelTest extends TestCase
         $this->assertFalse($model->validate(), 'Should validate all attributes');
     }
 
-    public function testFormNameWithAnonymousClass(): void
+    public function testFormNameWithAnonymousClass()
     {
         if (PHP_VERSION_ID < 70000) {
             $this->markTestSkipped('Can not be tested on PHP < 7.0');
@@ -560,7 +558,7 @@ class WriteOnlyModel extends Model
         ];
     }
 
-    public function setPassword($pw): void
+    public function setPassword($pw)
     {
         $this->passwordHash = $pw;
     }

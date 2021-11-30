@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -74,7 +72,7 @@ class BaseMailerTest extends TestCase
 
     // Tests :
 
-    public function testSetupView(): void
+    public function testSetupView()
     {
         $mailer = new Mailer();
 
@@ -97,14 +95,14 @@ class BaseMailerTest extends TestCase
     /**
      * @depends testSetupView
      */
-    public function testGetDefaultView(): void
+    public function testGetDefaultView()
     {
         $mailer = new Mailer();
         $view = $mailer->getView();
         $this->assertIsObject($view, 'Unable to get default view!');
     }
 
-    public function testCreateMessage(): void
+    public function testCreateMessage()
     {
         $mailer = new Mailer();
         $message = $mailer->compose();
@@ -115,7 +113,7 @@ class BaseMailerTest extends TestCase
     /**
      * @depends testCreateMessage
      */
-    public function testDefaultMessageConfig(): void
+    public function testDefaultMessageConfig()
     {
         $mailer = new Mailer();
 
@@ -150,7 +148,7 @@ class BaseMailerTest extends TestCase
     /**
      * @depends testGetDefaultView
      */
-    public function testRender(): void
+    public function testRender()
     {
         $mailer = $this->getTestMailComponent();
 
@@ -169,7 +167,7 @@ class BaseMailerTest extends TestCase
     /**
      * @depends testRender
      */
-    public function testRenderLayout(): void
+    public function testRenderLayout()
     {
         $mailer = $this->getTestMailComponent();
 
@@ -193,7 +191,7 @@ class BaseMailerTest extends TestCase
      * @depends testCreateMessage
      * @depends testRender
      */
-    public function testCompose(): void
+    public function testCompose()
     {
         $mailer = $this->getTestMailComponent();
         $mailer->htmlLayout = false;
@@ -264,7 +262,7 @@ TEXT
      * @param string $htmlViewFileContent
      * @param string $expectedTextRendering
      */
-    public function testComposePlainTextFallback($i, $htmlViewFileContent, $expectedTextRendering): void
+    public function testComposePlainTextFallback($i, $htmlViewFileContent, $expectedTextRendering)
     {
         $mailer = $this->getTestMailComponent();
         $mailer->htmlLayout = false;
@@ -281,7 +279,7 @@ TEXT
         $this->assertEqualsWithoutLE($expectedTextRendering, $message->_textBody, 'Unable to render text!');
     }
 
-    public function testUseFileTransport(): void
+    public function testUseFileTransport()
     {
         $mailer = new Mailer();
         $this->assertFalse($mailer->useFileTransport);
@@ -289,7 +287,9 @@ TEXT
 
         $mailer->fileTransportPath = '@yiiunit/runtime/mail';
         $mailer->useFileTransport = true;
-        $mailer->fileTransportCallback = static fn () => 'message.txt';
+        $mailer->fileTransportCallback = static function () {
+            return 'message.txt';
+        };
         $message = $mailer->compose()
             ->setTo('to@example.com')
             ->setFrom('from@example.com')
@@ -301,7 +301,7 @@ TEXT
         $this->assertStringEqualsFile($file, $message->toString());
     }
 
-    public function testBeforeSendEvent(): void
+    public function testBeforeSendEvent()
     {
         $message = new Message();
 
@@ -445,19 +445,19 @@ class Message extends BaseMessage
         return $this;
     }
 
-    public function attachContent($content, array $options = []): void
+    public function attachContent($content, array $options = [])
     {
     }
 
-    public function attach($fileName, array $options = []): void
+    public function attach($fileName, array $options = [])
     {
     }
 
-    public function embed($fileName, array $options = []): void
+    public function embed($fileName, array $options = [])
     {
     }
 
-    public function embedContent($content, array $options = []): void
+    public function embedContent($content, array $options = [])
     {
     }
 

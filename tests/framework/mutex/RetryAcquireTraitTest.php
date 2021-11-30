@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -27,7 +25,7 @@ class RetryAcquireTraitTest extends TestCase
     /**
      * @throws InvalidConfigException
      */
-    public function testRetryAcquire(): void
+    public function testRetryAcquire()
     {
         $mutexName = __FUNCTION__;
         $mutexOne = $this->createMutex();

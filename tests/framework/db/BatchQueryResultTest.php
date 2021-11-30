@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -23,7 +21,7 @@ abstract class BatchQueryResultTest extends DatabaseTestCase
         ActiveRecord::$db = $this->getConnection();
     }
 
-    public function testQuery(): void
+    public function testQuery()
     {
         $db = $this->getConnection();
 
@@ -89,7 +87,7 @@ abstract class BatchQueryResultTest extends DatabaseTestCase
         $this->assertEquals('address3', $allRows['user3']['address']);
     }
 
-    public function testActiveQuery(): void
+    public function testActiveQuery()
     {
         $db = $this->getConnection();
 
@@ -113,7 +111,7 @@ abstract class BatchQueryResultTest extends DatabaseTestCase
         $this->assertCount(0, $customers[2]->orders);
     }
 
-    public function testBatchWithoutDbParameter(): void
+    public function testBatchWithoutDbParameter()
     {
         $query = Customer::find()->orderBy('id')->limit(3);
         $customers = $this->getAllRowsFromBatch($query->batch(2));
@@ -123,7 +121,7 @@ abstract class BatchQueryResultTest extends DatabaseTestCase
         $this->assertEquals('user3', $customers[2]->name);
     }
 
-    public function testBatchWithIndexBy(): void
+    public function testBatchWithIndexBy()
     {
         $query = Customer::find()->orderBy('id')->limit(3)->indexBy('id');
         $customers = $this->getAllRowsFromBatch($query->batch(2));

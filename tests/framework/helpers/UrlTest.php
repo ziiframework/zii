@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -65,7 +63,7 @@ class UrlTest extends TestCase
      * @param string $moduleID
      * @param array  $params
      */
-    protected function mockAction($controllerId, $actionID, $moduleID = null, $params = []): void
+    protected function mockAction($controllerId, $actionID, $moduleID = null, $params = [])
     {
         Yii::$app->controller = $controller = new Controller($controllerId, Yii::$app);
         $controller->actionParams = $params;
@@ -76,12 +74,12 @@ class UrlTest extends TestCase
         }
     }
 
-    protected function removeMockedAction(): void
+    protected function removeMockedAction()
     {
         Yii::$app->controller = null;
     }
 
-    public function testToRoute(): void
+    public function testToRoute()
     {
         $this->mockAction('page', 'view', null, ['id' => 10]);
 
@@ -122,7 +120,7 @@ class UrlTest extends TestCase
         Url::toRoute('site/view');
     }
 
-    public function testCurrent(): void
+    public function testCurrent()
     {
         $this->mockAction('page', 'view', null, []);
         Yii::$app->request->setQueryParams(['id' => 10, 'name' => 'test', 10 => 0]);
@@ -145,7 +143,7 @@ class UrlTest extends TestCase
         $this->assertEquals($uri . '&arr%5Battr_one%5D=1&arr%5Battr_two%5D=two', Url::current(['arr' => ['attr_two' => 'two']]));
     }
 
-    public function testPrevious(): void
+    public function testPrevious()
     {
         Yii::$app->getUser()->login(UserIdentity::findIdentity('user1'));
 
@@ -156,7 +154,7 @@ class UrlTest extends TestCase
         $this->assertEquals('/base/index.php', Url::previous());
     }
 
-    public function testTo(): void
+    public function testTo()
     {
         // is an array: the first array element is considered a route, while the rest of the name-value
         // pairs are treated as the parameters to be used for URL creation using Url::toRoute.
@@ -245,7 +243,7 @@ class UrlTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/11925
      */
-    public function testToWithSuffix(): void
+    public function testToWithSuffix()
     {
         Yii::$app->set('urlManager', [
             'class' => 'yii\web\UrlManager',
@@ -275,7 +273,7 @@ class UrlTest extends TestCase
         $this->assertMatchesRegularExpression('~<a href="/site/page.html\?view=about">~', $output);
     }
 
-    public function testBase(): void
+    public function testBase()
     {
         $this->mockAction('page', 'view', null, ['id' => 10]);
         $this->assertEquals('/base', Url::base());
@@ -284,7 +282,7 @@ class UrlTest extends TestCase
         $this->assertEquals('//example.com/base', Url::base(''));
     }
 
-    public function testHome(): void
+    public function testHome()
     {
         $this->assertEquals('/base/index.php', Url::home());
         $this->assertEquals('http://example.com/base/index.php', Url::home(true));
@@ -292,14 +290,14 @@ class UrlTest extends TestCase
         $this->assertEquals('//example.com/base/index.php', Url::home(''));
     }
 
-    public function testCanonical(): void
+    public function testCanonical()
     {
         $this->mockAction('page', 'view', null, ['id' => 10]);
         $this->assertEquals('http://example.com/base/index.php?r=page%2Fview&id=10', Url::canonical());
         $this->removeMockedAction();
     }
 
-    public function testIsRelative(): void
+    public function testIsRelative()
     {
         $this->assertTrue(Url::isRelative('/test/index.php'));
         $this->assertTrue(Url::isRelative('index.php'));
@@ -308,7 +306,7 @@ class UrlTest extends TestCase
         $this->assertFalse(Url::isRelative('https://example.com/'));
     }
 
-    public function testRemember(): void
+    public function testRemember()
     {
         Yii::$app->getUser()->login(UserIdentity::findIdentity('user1'));
 

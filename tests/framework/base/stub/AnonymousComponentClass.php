@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -16,7 +14,7 @@ $obj->attachBehavior('bar', (new class() extends \yii\base\Behavior {
     public function events()
     {
         return [
-            'barEventOnce' => function ($event): void {
+            'barEventOnce' => function ($event) {
                 ++$this->owner->foo;
                 $this->detach();
             },

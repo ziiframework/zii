@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -61,7 +59,7 @@ class PhpManagerTest extends ManagerTestCase
         return Yii::$app->getRuntimePath() . '/rbac-rules.php';
     }
 
-    protected function removeDataFiles(): void
+    protected function removeDataFiles()
     {
         @unlink($this->getItemFile());
         @unlink($this->getAssignmentFile());
@@ -104,7 +102,7 @@ class PhpManagerTest extends ManagerTestCase
         parent::tearDown();
     }
 
-    public function testSaveLoad(): void
+    public function testSaveLoad()
     {
         static::$time = static::$filemtime = \time();
 
@@ -124,7 +122,7 @@ class PhpManagerTest extends ManagerTestCase
         $this->assertEquals($rules, $this->auth->rules);
     }
 
-    public function testUpdateItemName(): void
+    public function testUpdateItemName()
     {
         $this->prepareData();
 
@@ -134,7 +132,7 @@ class PhpManagerTest extends ManagerTestCase
         $this->assertTrue($this->auth->update($name, $permission), 'You should be able to update name.');
     }
 
-    public function testUpdateDescription(): void
+    public function testUpdateDescription()
     {
         $this->prepareData();
         $name = 'readPost';
@@ -143,7 +141,7 @@ class PhpManagerTest extends ManagerTestCase
         $this->assertTrue($this->auth->update($name, $permission), 'You should be able to save w/o changing name.');
     }
 
-    public function testOverwriteName(): void
+    public function testOverwriteName()
     {
         $this->expectException('\yii\base\InvalidArgumentException');
 
@@ -154,7 +152,7 @@ class PhpManagerTest extends ManagerTestCase
         $this->auth->update($name, $permission);
     }
 
-    public function testSaveAssignments(): void
+    public function testSaveAssignments()
     {
         $this->auth->removeAll();
         $role = $this->auth->createRole('Admin');

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -21,11 +19,11 @@ class FakeController extends Controller
 {
     public $defaultAction = 'default';
 
-    public function actionDefault(): void
+    public function actionDefault()
     {
     }
 
-    public function actionSecond(): void
+    public function actionSecond()
     {
     }
 }

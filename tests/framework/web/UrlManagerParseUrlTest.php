@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -75,7 +73,7 @@ class UrlManagerParseUrlTest extends TestCase
         parent::tearDown();
     }
 
-    public function testWithoutRules(): void
+    public function testWithoutRules()
     {
         $manager = $this->getUrlManager();
 
@@ -93,7 +91,7 @@ class UrlManagerParseUrlTest extends TestCase
         $this->assertEquals(['module/site/index/', []], $result);
     }
 
-    public function testWithoutRulesStrict(): void
+    public function testWithoutRulesStrict()
     {
         $manager = $this->getUrlManager();
         $manager->enableStrictParsing = true;
@@ -121,7 +119,7 @@ class UrlManagerParseUrlTest extends TestCase
      *
      * @param string $suffix
      */
-    public function testWithoutRulesWithSuffix($suffix): void
+    public function testWithoutRulesWithSuffix($suffix)
     {
         $manager = $this->getUrlManager(['suffix' => $suffix]);
 
@@ -147,7 +145,7 @@ class UrlManagerParseUrlTest extends TestCase
         $this->assertEquals(['module/site/index/', []], $result);
     }
 
-    public function testSimpleRules(): void
+    public function testSimpleRules()
     {
         $config = [
             'rules' => [
@@ -175,7 +173,7 @@ class UrlManagerParseUrlTest extends TestCase
         $this->assertEquals(['module/site/index', []], $result);
     }
 
-    public function testSimpleRulesStrict(): void
+    public function testSimpleRulesStrict()
     {
         $config = [
             'rules' => [
@@ -209,7 +207,7 @@ class UrlManagerParseUrlTest extends TestCase
      *
      * @param string $suffix
      */
-    public function testSimpleRulesWithSuffix($suffix): void
+    public function testSimpleRulesWithSuffix($suffix)
     {
         $config = [
             'rules' => [
@@ -256,7 +254,7 @@ class UrlManagerParseUrlTest extends TestCase
      *
      * @param string $suffix
      */
-    public function testSimpleRulesWithSuffixStrict($suffix): void
+    public function testSimpleRulesWithSuffixStrict($suffix)
     {
         $config = [
             'rules' => [
@@ -301,7 +299,7 @@ class UrlManagerParseUrlTest extends TestCase
 
     // TODO implement with hostinfo
 
-    public function testParseRESTRequest(): void
+    public function testParseRESTRequest()
     {
         $request = new Request();
 
@@ -353,7 +351,7 @@ class UrlManagerParseUrlTest extends TestCase
         unset($_SERVER['REQUEST_METHOD']);
     }
 
-    public function testAppendRules(): void
+    public function testAppendRules()
     {
         $manager = $this->getUrlManager(['rules' => ['post/<id:\d+>' => 'post/view']]);
 
@@ -369,7 +367,7 @@ class UrlManagerParseUrlTest extends TestCase
         $this->assertSame($firstRule, $manager->rules[0]);
     }
 
-    public function testPrependRules(): void
+    public function testPrependRules()
     {
         $manager = $this->getUrlManager(['rules' => ['post/<id:\d+>' => 'post/view']]);
 
@@ -386,7 +384,7 @@ class UrlManagerParseUrlTest extends TestCase
         $this->assertSame($firstRule, $manager->rules[2]);
     }
 
-    public function testRulesCache(): void
+    public function testRulesCache()
     {
         $arrayCache = new ArrayCache();
 
@@ -412,7 +410,7 @@ class UrlManagerParseUrlTest extends TestCase
             'two additional caches: one for each addRules() method call.');
     }
 
-    public function testRulesCacheIsUsed(): void
+    public function testRulesCacheIsUsed()
     {
         $arrayCache = $this->getMockBuilder('yii\caching\ArrayCache')
             ->setMethods(['get', 'set'])
@@ -439,7 +437,7 @@ class UrlManagerParseUrlTest extends TestCase
     /**
      * Test a scenario where catch-all rule is used at the end for a CMS but module names should use the module actions and controllers.
      */
-    public function testModuleRoute(): void
+    public function testModuleRoute()
     {
         $modules = 'user|my-admin';
 

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -49,7 +47,7 @@ class UserTest extends TestCase
         parent::tearDown();
     }
 
-    public function testLoginExpires(): void
+    public function testLoginExpires()
     {
         $appConfig = [
             'components' => [
@@ -101,7 +99,7 @@ class UserTest extends TestCase
      *
      * @see https://github.com/yiisoft/yii2/issues/11825
      */
-    public function testIssue11825(): void
+    public function testIssue11825()
     {
         global $cookiesMock;
         $cookiesMock = new CookieCollection();
@@ -152,7 +150,7 @@ class UserTest extends TestCase
         $this->assertTrue(Yii::$app->user->isGuest);
     }
 
-    public function testCookieCleanup(): void
+    public function testCookieCleanup()
     {
         global $cookiesMock;
 
@@ -196,7 +194,7 @@ class UserTest extends TestCase
     /**
      * Resets request, response and $_SERVER.
      */
-    protected function reset(): void
+    protected function reset()
     {
         static $server;
 
@@ -215,7 +213,7 @@ class UserTest extends TestCase
         Yii::$app->user->setReturnUrl(null);
     }
 
-    public function testLoginRequired(): void
+    public function testLoginRequired()
     {
         $appConfig = [
             'components' => [
@@ -329,7 +327,7 @@ class UserTest extends TestCase
         $user->loginRequired();
     }
 
-    public function testLoginRequiredException1(): void
+    public function testLoginRequiredException1()
     {
         $appConfig = [
             'components' => [
@@ -352,7 +350,7 @@ class UserTest extends TestCase
         Yii::$app->user->loginRequired();
     }
 
-    public function testAccessChecker(): void
+    public function testAccessChecker()
     {
         $this->mockWebApplication([
             'components' => [
@@ -390,7 +388,7 @@ class UserTest extends TestCase
         $this->assertInstanceOf(AccessChecker::className(), Yii::$app->user->accessChecker);
     }
 
-    public function testGetIdentityException(): void
+    public function testGetIdentityException()
     {
         $session = $this->createMock('yii\web\Session');
         $session->method('getHasSessionId')->willReturn(true);
@@ -420,7 +418,7 @@ class UserTest extends TestCase
         Yii::$app->getUser()->getIdentity();
     }
 
-    public function testSetIdentity(): void
+    public function testSetIdentity()
     {
         $appConfig = [
             'components' => [
@@ -459,7 +457,7 @@ class UserTest extends TestCase
         Yii::$app->user->setIdentity(new \stdClass());
     }
 
-    public function testSessionAuthWithNonExistingId(): void
+    public function testSessionAuthWithNonExistingId()
     {
         $appConfig = [
             'components' => [
@@ -476,7 +474,7 @@ class UserTest extends TestCase
         $this->assertNull(Yii::$app->user->getIdentity());
     }
 
-    public function testSessionAuthWithMissingKey(): void
+    public function testSessionAuthWithMissingKey()
     {
         $appConfig = [
             'components' => [
@@ -493,7 +491,7 @@ class UserTest extends TestCase
         $this->assertNotNull(Yii::$app->user->getIdentity());
     }
 
-    public function testSessionAuthWithInvalidKey(): void
+    public function testSessionAuthWithInvalidKey()
     {
         $appConfig = [
             'components' => [
@@ -511,7 +509,7 @@ class UserTest extends TestCase
         $this->assertNull(Yii::$app->user->getIdentity());
     }
 
-    public function testSessionAuthWithValidKey(): void
+    public function testSessionAuthWithValidKey()
     {
         $appConfig = [
             'components' => [
@@ -554,7 +552,7 @@ class MockResponse extends \yii\web\Response
 
 class AccessChecker extends BaseObject implements CheckAccessInterface
 {
-    public function checkAccess($userId, $permissionName, $params = []): void
+    public function checkAccess($userId, $permissionName, $params = [])
     {
         // Implement checkAccess() method.
     }
@@ -562,7 +560,7 @@ class AccessChecker extends BaseObject implements CheckAccessInterface
 
 class ExceptionIdentity extends \yiiunit\framework\filters\stubs\UserIdentity
 {
-    public static function findIdentity($id): void
+    public static function findIdentity($id)
     {
         throw new \Exception();
     }

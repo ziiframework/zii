@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -29,7 +27,7 @@ class ActiveRecordTest extends \yiiunit\framework\db\ActiveRecordTest
 {
     protected $driverName = 'pgsql';
 
-    public function testBooleanAttribute(): void
+    public function testBooleanAttribute()
     {
         /* @var $customerClass ActiveRecordInterface */
         $customerClass = $this->getCustomerClass();
@@ -56,7 +54,7 @@ class ActiveRecordTest extends \yiiunit\framework\db\ActiveRecordTest
         $this->assertCount(1, $customers);
     }
 
-    public function testFindAsArray(): void
+    public function testFindAsArray()
     {
         /* @var $customerClass ActiveRecordInterface */
         $customerClass = $this->getCustomerClass();
@@ -96,7 +94,7 @@ class ActiveRecordTest extends \yiiunit\framework\db\ActiveRecordTest
         $this->assertArrayHasKey('bool_status', $customers[2]);
     }
 
-    public function testBooleanValues(): void
+    public function testBooleanValues()
     {
         $db = $this->getConnection();
         $command = $db->createCommand();
@@ -123,7 +121,7 @@ class ActiveRecordTest extends \yiiunit\framework\db\ActiveRecordTest
     /**
      * @see https://github.com/yiisoft/yii2/issues/4672
      */
-    public function testBooleanValues2(): void
+    public function testBooleanValues2()
     {
         $db = $this->getConnection();
         $db->charset = 'utf8';
@@ -156,7 +154,7 @@ class ActiveRecordTest extends \yiiunit\framework\db\ActiveRecordTest
         $this->assertCount(1, UserAR::find()->where(['is_deleted' => [true, false]])->all($db));
     }
 
-    public function testBooleanDefaultValues(): void
+    public function testBooleanDefaultValues()
     {
         $model = new BoolAR();
         $this->assertNull($model->bool_col);
@@ -170,7 +168,7 @@ class ActiveRecordTest extends \yiiunit\framework\db\ActiveRecordTest
         $this->assertTrue($model->save(false));
     }
 
-    public function testPrimaryKeyAfterSave(): void
+    public function testPrimaryKeyAfterSave()
     {
         $record = new DefaultPk();
         $record->type = 'type';
@@ -181,7 +179,7 @@ class ActiveRecordTest extends \yiiunit\framework\db\ActiveRecordTest
     /**
      * @dataProvider arrayValuesProvider $attributes
      */
-    public function testArrayValues($attributes): void
+    public function testArrayValues($attributes)
     {
         $type = new ArrayAndJsonTypes();
 

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -47,7 +45,7 @@ class ArrayParserTest extends TestCase
     /**
      * @dataProvider convertProvider
      */
-    public function testConvert($string, $expected): void
+    public function testConvert($string, $expected)
     {
         $this->assertSame($expected, $this->arrayParser->parse($string));
     }

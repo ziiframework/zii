@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -25,19 +23,19 @@ class FakePhp71Controller extends Controller
 {
     public $enableCsrfValidation = false;
 
-    public function actionInjection($before, Request $request, $between, VendorImage $vendorImage, Post $post = null, $after): void
+    public function actionInjection($before, Request $request, $between, VendorImage $vendorImage, Post $post = null, $after)
     {
     }
 
-    public function actionNullableInjection(?Request $request, ?Post $post): void
+    public function actionNullableInjection(?Request $request, ?Post $post)
     {
     }
 
-    public function actionModuleServiceInjection(DataProviderInterface $dataProvider): void
+    public function actionModuleServiceInjection(DataProviderInterface $dataProvider)
     {
     }
 
-    public function actionModelBindingInjection(ModelBindingStub $model): void
+    public function actionModelBindingInjection(ModelBindingStub $model)
     {
     }
 }

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -31,7 +29,7 @@ class BasicAuthTest extends AuthTest
      * @param string|null $token
      * @param string|null $login
      */
-    public function testHttpBasicAuth($token, $login): void
+    public function testHttpBasicAuth($token, $login)
     {
         $original = $_SERVER;
 
@@ -48,7 +46,7 @@ class BasicAuthTest extends AuthTest
      * @param string|null $token
      * @param string|null $login
      */
-    public function testHttpBasicAuthWithHttpAuthorizationHeader($token, $login): void
+    public function testHttpBasicAuthWithHttpAuthorizationHeader($token, $login)
     {
         $original = $_SERVER;
 
@@ -64,7 +62,7 @@ class BasicAuthTest extends AuthTest
      * @param string|null $token
      * @param string|null $login
      */
-    public function testHttpBasicAuthWithRedirectHttpAuthorizationHeader($token, $login): void
+    public function testHttpBasicAuthWithRedirectHttpAuthorizationHeader($token, $login)
     {
         $original = $_SERVER;
 
@@ -80,7 +78,7 @@ class BasicAuthTest extends AuthTest
      * @param string|null $token
      * @param string|null $login
      */
-    public function testHttpBasicAuthCustom($token, $login): void
+    public function testHttpBasicAuthCustom($token, $login)
     {
         $_SERVER['PHP_AUTH_USER'] = $login;
         $_SERVER['PHP_AUTH_PW'] = 'whatever, we are testers';
@@ -107,7 +105,7 @@ class BasicAuthTest extends AuthTest
      * @param string|null $token
      * @param string|null $login
      */
-    public function testHttpBasicAuthIssue15658($token, $login): void
+    public function testHttpBasicAuthIssue15658($token, $login)
     {
         $_SERVER['PHP_AUTH_USER'] = $login;
         $_SERVER['PHP_AUTH_PW'] = 'y0u7h1nk175r34l?';
@@ -120,7 +118,7 @@ class BasicAuthTest extends AuthTest
 
         $filter = [
             'class' => HttpBasicAuth::className(),
-            'auth' => function ($username, $password): void {
+            'auth' => function ($username, $password) {
                 $this->fail('Authentication closure should not be called when user is already authenticated');
             },
         ];
@@ -144,10 +142,10 @@ class BasicAuthTest extends AuthTest
      * @param string|null $token
      * @param string|null $login
      */
-    public function testAfterLoginEventIsTriggered18031($token, $login): void
+    public function testAfterLoginEventIsTriggered18031($token, $login)
     {
         $triggered = false;
-        Event::on('\yii\web\User', User::EVENT_AFTER_LOGIN, function ($event) use (&$triggered): void {
+        Event::on('\yii\web\User', User::EVENT_AFTER_LOGIN, function ($event) use (&$triggered) {
             $triggered = true;
             $this->assertTrue($triggered);
         });

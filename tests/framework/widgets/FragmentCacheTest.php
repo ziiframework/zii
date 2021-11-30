@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -29,7 +27,7 @@ class FragmentCacheTest extends \yiiunit\TestCase
         ]);
     }
 
-    public function testCacheEnabled(): void
+    public function testCacheEnabled()
     {
         $expectedLevel = ob_get_level();
         ob_start();
@@ -49,7 +47,7 @@ class FragmentCacheTest extends \yiiunit\TestCase
         $this->assertEquals($expectedLevel, ob_get_level(), 'Output buffer not closed correctly.');
     }
 
-    public function testCacheDisabled1(): void
+    public function testCacheDisabled1()
     {
         $expectedLevel = ob_get_level();
         ob_start();
@@ -71,7 +69,7 @@ class FragmentCacheTest extends \yiiunit\TestCase
         $this->assertEquals($expectedLevel, ob_get_level(), 'Output buffer not closed correctly.');
     }
 
-    public function testCacheDisabled2(): void
+    public function testCacheDisabled2()
     {
         $expectedLevel = ob_get_level();
         ob_start();
@@ -93,7 +91,7 @@ class FragmentCacheTest extends \yiiunit\TestCase
         $this->assertEquals($expectedLevel, ob_get_level(), 'Output buffer not closed correctly.');
     }
 
-    public function testSingleDynamicFragment(): void
+    public function testSingleDynamicFragment()
     {
         Yii::$app->params['counter'] = 0;
 
@@ -124,7 +122,7 @@ class FragmentCacheTest extends \yiiunit\TestCase
         }
     }
 
-    public function testMultipleDynamicFragments(): void
+    public function testMultipleDynamicFragments()
     {
         Yii::$app->params['counter'] = 0;
 
@@ -157,7 +155,7 @@ class FragmentCacheTest extends \yiiunit\TestCase
         }
     }
 
-    public function testNestedDynamicFragments(): void
+    public function testNestedDynamicFragments()
     {
         Yii::$app->params['counter'] = 0;
 
@@ -197,9 +195,11 @@ class FragmentCacheTest extends \yiiunit\TestCase
         }
     }
 
-    public function testVariations(): void
+    public function testVariations()
     {
-        $this->setOutputCallback(static fn ($output) => null);
+        $this->setOutputCallback(static function ($output) {
+            return null;
+        });
 
         ob_start();
         ob_implicit_flush(false);

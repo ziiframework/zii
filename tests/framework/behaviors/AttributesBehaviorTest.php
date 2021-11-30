@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -105,7 +103,7 @@ class AttributesBehaviorTest extends TestCase
      * @param string      $name
      * @param string|null $alias
      */
-    public function testPreserveNonEmptyValues($aliasExpected, $preserveNonEmptyValues, $name, $alias): void
+    public function testPreserveNonEmptyValues($aliasExpected, $preserveNonEmptyValues, $name, $alias)
     {
         $model = new ActiveRecordWithAttributesBehavior();
         $model->attributesBehavior->preserveNonEmptyValues = $preserveNonEmptyValues;
@@ -147,7 +145,7 @@ class AttributesBehaviorTest extends TestCase
      * @param string $name
      * @param string $alias
      */
-    public function testOrder($aliasExpected, $order, $name, $alias): void
+    public function testOrder($aliasExpected, $order, $name, $alias)
     {
         $model = new ActiveRecordWithAttributesBehavior();
         $model->attributesBehavior->order = $order;
@@ -179,10 +177,14 @@ class ActiveRecordWithAttributesBehavior extends ActiveRecord
                 'class' => AttributesBehavior::className(),
                 'attributes' => [
                     'alias' => [
-                        self::EVENT_BEFORE_VALIDATE => static fn ($event) => $event->sender->name,
+                        self::EVENT_BEFORE_VALIDATE => static function ($event) {
+                            return $event->sender->name;
+                        },
                     ],
                     'name' => [
-                        self::EVENT_BEFORE_VALIDATE => static fn ($event, $attribute) => $attribute . ': ' . $event->sender->alias,
+                        self::EVENT_BEFORE_VALIDATE => static function ($event, $attribute) {
+                            return $attribute . ': ' . $event->sender->alias;
+                        },
                     ],
                 ],
             ],

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -60,7 +58,7 @@ class TargetTest extends TestCase
      * @param array $filter
      * @param array $expected
      */
-    public function testFilter($filter, $expected): void
+    public function testFilter($filter, $expected)
     {
         static::$messages = [];
 
@@ -88,7 +86,7 @@ class TargetTest extends TestCase
         }
     }
 
-    public function testGetContextMessage(): void
+    public function testGetContextMessage()
     {
         $target = new TestTarget([
             'logVars' => [
@@ -146,7 +144,7 @@ class TargetTest extends TestCase
      * @covers \yii\log\Target::setLevels()
      * @covers \yii\log\Target::getLevels()
      */
-    public function testSetupLevelsThroughArray(): void
+    public function testSetupLevelsThroughArray()
     {
         $target = $this->getMockForAbstractClass('yii\\log\\Target');
 
@@ -165,7 +163,7 @@ class TargetTest extends TestCase
      * @covers \yii\log\Target::setLevels()
      * @covers \yii\log\Target::getLevels()
      */
-    public function testSetupLevelsThroughBitmap(): void
+    public function testSetupLevelsThroughBitmap()
     {
         $target = $this->getMockForAbstractClass('yii\\log\\Target');
 
@@ -180,7 +178,7 @@ class TargetTest extends TestCase
         $target->setLevels(128);
     }
 
-    public function testGetEnabled(): void
+    public function testGetEnabled()
     {
         /** @var Target $target */
         $target = $this->getMockForAbstractClass('yii\\log\\Target');
@@ -191,11 +189,13 @@ class TargetTest extends TestCase
         $target->enabled = false;
         $this->assertFalse($target->enabled);
 
-        $target->enabled = static fn ($target) => empty($target->messages);
+        $target->enabled = static function ($target) {
+            return empty($target->messages);
+        };
         $this->assertTrue($target->enabled);
     }
 
-    public function testFormatMessage(): void
+    public function testFormatMessage()
     {
         /** @var Target $target */
         $target = $this->getMockForAbstractClass('yii\\log\\Target');
@@ -224,7 +224,7 @@ class TargetTest extends TestCase
         $this->assertSame($expectedWithMicro, $formatted);
     }
 
-    public function testCollectMessageStructure(): void
+    public function testCollectMessageStructure()
     {
         $target = new TestTarget(['logVars' => ['_SERVER']]);
         static::$messages = [];
@@ -240,7 +240,7 @@ class TargetTest extends TestCase
         $this->assertCount(6, static::$messages[1]);
     }
 
-    public function testBreakProfilingWithFlushWithProfilingDisabled(): void
+    public function testBreakProfilingWithFlushWithProfilingDisabled()
     {
         $dispatcher = $this->getMockBuilder('yii\log\Dispatcher')
             ->setMethods(['dispatch'])
@@ -262,13 +262,15 @@ class TargetTest extends TestCase
         $logger->log('token.a', Logger::LEVEL_PROFILE_END, 'category');
     }
 
-    public function testNotBreakProfilingWithFlushWithProfilingEnabled(): void
+    public function testNotBreakProfilingWithFlushWithProfilingEnabled()
     {
         $dispatcher = $this->getMockBuilder('yii\log\Dispatcher')
             ->setMethods(['dispatch'])
             ->getMock();
         $dispatcher->expects($this->exactly(2))->method('dispatch')->withConsecutive([
-                $this->callback(static fn ($messages) => count($messages) === 1 && $messages[0][0] === 'info'),
+                $this->callback(static function ($messages) {
+                    return count($messages) === 1 && $messages[0][0] === 'info';
+                }),
                 false,
             ], [
                 $this->callback(static function ($messages) {
@@ -292,7 +294,7 @@ class TargetTest extends TestCase
         $logger->log('token.a', Logger::LEVEL_PROFILE_END, 'category');
     }
 
-    public function testFlushingWithProfilingEnabledAndOverflow(): void
+    public function testFlushingWithProfilingEnabledAndOverflow()
     {
         $dispatcher = $this->getMockBuilder('yii\log\Dispatcher')
             ->setMethods(['dispatch'])
@@ -344,7 +346,7 @@ class TestTarget extends Target
      * Exports log [[messages]] to a specific destination.
      * Child classes must implement this method.
      */
-    public function export(): void
+    public function export()
     {
         TargetTest::$messages = array_merge(TargetTest::$messages, $this->messages);
         $this->messages = [];

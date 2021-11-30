@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -34,7 +32,7 @@ class ArrayCacheTest extends CacheTestCase
         return $this->_cacheInstance;
     }
 
-    public function testExpire(): void
+    public function testExpire()
     {
         $cache = $this->getCacheInstance();
 
@@ -46,7 +44,7 @@ class ArrayCacheTest extends CacheTestCase
         $this->assertFalse($cache->get('expire_test'));
     }
 
-    public function testExpireAdd(): void
+    public function testExpireAdd()
     {
         $cache = $this->getCacheInstance();
 
@@ -61,7 +59,7 @@ class ArrayCacheTest extends CacheTestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/16028
      */
-    public function testSerializationOfComplexKeysThatContainNonUTFSequences(): void
+    public function testSerializationOfComplexKeysThatContainNonUTFSequences()
     {
         $cache = $this->getCacheInstance();
 

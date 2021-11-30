@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -34,7 +32,7 @@ class UserIdentity extends Component implements IdentityInterface
         }
     }
 
-    public static function findIdentityByAccessToken($token, $type = null): void
+    public static function findIdentityByAccessToken($token, $type = null)
     {
         throw new NotSupportedException();
     }

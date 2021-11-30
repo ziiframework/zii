@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -106,7 +104,7 @@ class CompositeAuthTest extends \yiiunit\TestCase
         $this->mockWebApplication($appConfig);
     }
 
-    public function testCallingRunWithCompleteRoute(): void
+    public function testCallingRunWithCompleteRoute()
     {
         /** @var TestController $controller */
         $controller = Yii::$app->createController('test')[0];
@@ -116,21 +114,21 @@ class CompositeAuthTest extends \yiiunit\TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/7409
      */
-    public function testRunAction(): void
+    public function testRunAction()
     {
         /** @var TestController $controller */
         $controller = Yii::$app->createController('test')[0];
         $this->assertEquals('success', $controller->run('b'));
     }
 
-    public function testRunButWithActionIdOnly(): void
+    public function testRunButWithActionIdOnly()
     {
         /** @var TestController $controller */
         $controller = Yii::$app->createController('test')[0];
         $this->assertEquals('success', $controller->run('c'));
     }
 
-    public function testCompositeAuth(): void
+    public function testCompositeAuth()
     {
         Yii::$app->request->headers->set('Authorization', base64_encode('foo:bar'));
         /** @var TestAuthController $controller */

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -36,7 +34,7 @@ class DbMessageSourceTest extends I18NTest
      */
     protected static $db;
 
-    protected function setI18N(): void
+    protected function setI18N()
     {
         $this->i18n = new I18N([
             'translations' => [
@@ -53,7 +51,7 @@ class DbMessageSourceTest extends I18NTest
         return DbMessageSource::className();
     }
 
-    protected static function runConsoleAction($route, $params = []): void
+    protected static function runConsoleAction($route, $params = [])
     {
         if (Yii::$app === null) {
             new \yii\console\Application([
@@ -152,19 +150,19 @@ class DbMessageSourceTest extends I18NTest
         return static::$db;
     }
 
-    public function testMissingTranslationEvent(): void
+    public function testMissingTranslationEvent()
     {
         $this->assertEquals('Hallo Welt!', $this->i18n->translate('test', 'Hello world!', [], 'de-DE'));
         $this->assertEquals('Missing translation message.', $this->i18n->translate('test', 'Missing translation message.', [], 'de-DE'));
         $this->assertEquals('Hallo Welt!', $this->i18n->translate('test', 'Hello world!', [], 'de-DE'));
 
-        Event::on(DbMessageSource::className(), DbMessageSource::EVENT_MISSING_TRANSLATION, static function ($event): void {});
+        Event::on(DbMessageSource::className(), DbMessageSource::EVENT_MISSING_TRANSLATION, static function ($event) {});
         $this->assertEquals('Hallo Welt!', $this->i18n->translate('test', 'Hello world!', [], 'de-DE'));
         $this->assertEquals('Missing translation message.', $this->i18n->translate('test', 'Missing translation message.', [], 'de-DE'));
         $this->assertEquals('Hallo Welt!', $this->i18n->translate('test', 'Hello world!', [], 'de-DE'));
         Event::off(DbMessageSource::className(), DbMessageSource::EVENT_MISSING_TRANSLATION);
 
-        Event::on(DbMessageSource::className(), DbMessageSource::EVENT_MISSING_TRANSLATION, static function ($event): void {
+        Event::on(DbMessageSource::className(), DbMessageSource::EVENT_MISSING_TRANSLATION, static function ($event) {
             if ($event->message == 'New missing translation message.') {
                 $event->translatedMessage = 'TRANSLATION MISSING HERE!';
             }
@@ -177,7 +175,7 @@ class DbMessageSourceTest extends I18NTest
         Event::off(DbMessageSource::className(), DbMessageSource::EVENT_MISSING_TRANSLATION);
     }
 
-    public function testIssue11429($sourceLanguage = null): void
+    public function testIssue11429($sourceLanguage = null)
     {
         $this->markTestSkipped('DbMessageSource does not produce any errors when messages file is missing.');
     }
