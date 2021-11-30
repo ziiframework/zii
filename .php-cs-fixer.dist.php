@@ -12,9 +12,9 @@ return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
     ->setRules([
         '@PSR12' => true,
-        '@PSR12:risky' => true,
+        // '@PSR12:risky' => true,
         '@PHP74Migration' => true,
-        '@PHP74Migration:risky' => true,
+        // '@PHP74Migration:risky' => true,
         '@Symfony' => true,
         // '@Symfony:risky' => true,
         'yoda_style' => false,
