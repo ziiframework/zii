@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -26,7 +25,6 @@ use yii\helpers\Url;
  * @property-read User $user The user component. This property is read-only.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class Application extends \yii\base\Application
@@ -37,11 +35,11 @@ class Application extends \yii\base\Application
     public $defaultRoute = 'site';
     /**
      * @var array the configuration specifying a controller action which should handle
-     *            all user requests. This is mainly used when the application is in maintenance mode
-     *            and needs to handle all incoming requests via a single action.
-     *            The configuration is an array whose first element specifies the route of the action.
-     *            The rest of the array elements (key-value pairs) specify the parameters to be bound
-     *            to the action. For example,
+     * all user requests. This is mainly used when the application is in maintenance mode
+     * and needs to handle all incoming requests via a single action.
+     * The configuration is an array whose first element specifies the route of the action.
+     * The rest of the array elements (key-value pairs) specify the parameters to be bound
+     * to the action. For example,
      *
      * ```php
      * [
@@ -59,6 +57,7 @@ class Application extends \yii\base\Application
      */
     public $controller;
 
+
     /**
      * {@inheritdoc}
      */
@@ -73,21 +72,17 @@ class Application extends \yii\base\Application
 
     /**
      * Handles the specified request.
-     *
      * @param Request $request the request to be handled
-     *
      * @return Response the resulting response
-     *
      * @throws NotFoundHttpException if the requested route is invalid
      */
     public function handleRequest($request)
     {
         if (empty($this->catchAll)) {
             try {
-                [$route, $params] = $request->resolve();
+                list($route, $params) = $request->resolve();
             } catch (UrlNormalizerRedirectException $e) {
                 $url = $e->url;
-
                 if (is_array($url)) {
                     if (isset($url[0])) {
                         // ensure the route is absolute
@@ -103,18 +98,15 @@ class Application extends \yii\base\Application
             $params = $this->catchAll;
             unset($params[0]);
         }
-
         try {
             Yii::debug("Route requested: '$route'", __METHOD__);
             $this->requestedRoute = $route;
             $result = $this->runAction($route, $params);
-
             if ($result instanceof Response) {
                 return $result;
             }
 
             $response = $this->getResponse();
-
             if ($result !== null) {
                 $response->data = $result;
             }
@@ -153,7 +145,6 @@ class Application extends \yii\base\Application
 
     /**
      * Returns the error handler component.
-     *
      * @return ErrorHandler the error handler application component.
      */
     public function getErrorHandler()
@@ -163,7 +154,6 @@ class Application extends \yii\base\Application
 
     /**
      * Returns the request component.
-     *
      * @return Request the request component.
      */
     public function getRequest()
@@ -173,7 +163,6 @@ class Application extends \yii\base\Application
 
     /**
      * Returns the response component.
-     *
      * @return Response the response component.
      */
     public function getResponse()
@@ -183,7 +172,6 @@ class Application extends \yii\base\Application
 
     /**
      * Returns the session component.
-     *
      * @return Session the session component.
      */
     public function getSession()
@@ -193,7 +181,6 @@ class Application extends \yii\base\Application
 
     /**
      * Returns the user component.
-     *
      * @return User the user component.
      */
     public function getUser()

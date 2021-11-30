@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -55,7 +54,6 @@ use yii\base\InvalidConfigException;
  * ```
  *
  * @author Robert Korulczyk <robert@korulczyk.pl>
- *
  * @since 2.0.10
  */
 class ReplaceArrayValue
@@ -65,9 +63,9 @@ class ReplaceArrayValue
      */
     public $value;
 
+
     /**
      * Constructor.
-     *
      * @param mixed $value value used as replacement.
      */
     public function __construct($value)
@@ -79,11 +77,8 @@ class ReplaceArrayValue
      * Restores class state after using `var_export()`.
      *
      * @param array $state
-     *
      * @return ReplaceArrayValue
-     *
      * @throws InvalidConfigException when $state property does not contain `value` parameter
-     *
      * @see https://www.php.net/manual/en/function.var-export.php
      * @since 2.0.16
      */

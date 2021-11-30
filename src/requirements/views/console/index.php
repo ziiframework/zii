@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -28,7 +27,6 @@ foreach ($requirements as $key => $requirement) {
         echo $requirement['name'] . ': ' . ($requirement['mandatory'] ? 'FAILED!!!' : 'WARNING!!!') . "\n";
         echo 'Required by: ' . strip_tags($requirement['by']) . "\n";
         $memo = strip_tags($requirement['memo']);
-
         if (!empty($memo)) {
             echo 'Memo: ' . strip_tags($requirement['memo']) . "\n";
         }

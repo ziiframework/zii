@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -19,16 +18,15 @@ use yii\db\Expression;
  * read-only.
  *
  * @author Valerii Gorbachev <darkdef@gmail.com>
- *
  * @since 2.0.42
  */
 class ColumnSchemaBuilder extends AbstractColumnSchemaBuilder
 {
     protected $format = '{type}{length}{notnull}{unique}{default}{check}{append}';
 
+
     /**
      * Builds the full string for the column's schema.
-     *
      * @return string
      */
     public function __toString()
@@ -51,8 +49,7 @@ class ColumnSchemaBuilder extends AbstractColumnSchemaBuilder
     }
 
     /**
-     * Getting the `Default` value for constraint.
-     *
+     * Getting the `Default` value for constraint
      * @return string|Expression|null default value of the column.
      */
     public function getDefaultValue()
@@ -65,8 +62,7 @@ class ColumnSchemaBuilder extends AbstractColumnSchemaBuilder
     }
 
     /**
-     * Get the `Check` value for constraint.
-     *
+     * Get the `Check` value for constraint
      * @return string|null the `CHECK` constraint for the column.
      */
     public function getCheckValue()

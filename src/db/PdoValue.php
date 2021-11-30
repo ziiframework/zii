@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -20,9 +19,7 @@ namespace yii\db;
  * To see possible types, check [PDO::PARAM_* constants](https://www.php.net/manual/en/pdo.constants.php).
  *
  * @see https://www.php.net/manual/en/pdostatement.bindparam.php
- *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
- *
  * @since 2.0.14
  */
 final class PdoValue implements ExpressionInterface
@@ -33,10 +30,10 @@ final class PdoValue implements ExpressionInterface
     private $value;
     /**
      * @var int One of PDO_PARAM_* constants
-     *
      * @see https://www.php.net/manual/en/pdo.constants.php
      */
     private $type;
+
 
     /**
      * PdoValue constructor.

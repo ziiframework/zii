@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,6 +7,7 @@
 
 namespace yii\widgets;
 
+use Yii;
 use yii\base\InvalidConfigException;
 use yii\base\Widget;
 use yii\data\Sort;
@@ -21,7 +21,6 @@ use yii\helpers\Html;
  * For more details and usage information on LinkSorter, see the [guide article on sorting](guide:output-sorting).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class LinkSorter extends Widget
@@ -32,23 +31,22 @@ class LinkSorter extends Widget
     public $sort;
     /**
      * @var array list of the attributes that support sorting. If not set, it will be determined
-     *            using [[Sort::attributes]].
+     * using [[Sort::attributes]].
      */
     public $attributes;
     /**
      * @var array HTML attributes for the sorter container tag.
-     *
      * @see \yii\helpers\Html::ul() for special attributes.
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $options = ['class' => 'sorter'];
     /**
      * @var array HTML attributes for the link in a sorter container tag which are passed to [[Sort::link()]].
-     *
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      * @since 2.0.6
      */
     public $linkOptions = [];
+
 
     /**
      * Initializes the sorter.
@@ -73,14 +71,12 @@ class LinkSorter extends Widget
 
     /**
      * Renders the sort links.
-     *
      * @return string the rendering result
      */
     protected function renderSortLinks()
     {
         $attributes = empty($this->attributes) ? array_keys($this->sort->attributes) : $this->attributes;
         $links = [];
-
         foreach ($attributes as $name) {
             $links[] = $this->sort->link($name, $this->linkOptions);
         }

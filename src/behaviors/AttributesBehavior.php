@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -60,20 +59,19 @@ use yii\db\ActiveRecord;
  * @author Luciano Baraglia <luciano.baraglia@gmail.com>
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @author Bogdan Stepanenko <bscheshirwork@gmail.com>
- *
  * @since 2.0.13
  */
 class AttributesBehavior extends Behavior
 {
     /**
      * @var array list of attributes that are to be automatically filled with the values specified via enclosed arrays.
-     *            The array keys are the ActiveRecord attributes upon which the events are to be updated,
-     *            and the array values are the array of corresponding events(s). For this enclosed array:
-     *            the array keys are the ActiveRecord events upon which the attributes are to be updated,
-     *            and the array values are the value that will be assigned to the current attributes. This can be an anonymous function,
-     *            callable in array format (e.g. `[$this, 'methodName']`), an [[\yii\db\Expression|Expression]] object representing a DB expression
-     *            (e.g. `new Expression('NOW()')`), scalar, string or an arbitrary value. If the former, the return value of the
-     *            function will be assigned to the attributes.
+     * The array keys are the ActiveRecord attributes upon which the events are to be updated,
+     * and the array values are the array of corresponding events(s). For this enclosed array:
+     * the array keys are the ActiveRecord events upon which the attributes are to be updated,
+     * and the array values are the value that will be assigned to the current attributes. This can be an anonymous function,
+     * callable in array format (e.g. `[$this, 'methodName']`), an [[\yii\db\Expression|Expression]] object representing a DB expression
+     * (e.g. `new Expression('NOW()')`), scalar, string or an arbitrary value. If the former, the return value of the
+     * function will be assigned to the attributes.
      *
      * ```php
      * [
@@ -100,10 +98,10 @@ class AttributesBehavior extends Behavior
     public $attributes = [];
     /**
      * @var array list of order of attributes that are to be automatically filled with the event.
-     *            The array keys are the ActiveRecord events upon which the attributes are to be updated,
-     *            and the array values are represent the order corresponding attributes.
-     *            The rest of the attributes are processed at the end.
-     *            If the [[attributes]] for this attribute do not specify this event, it is ignored
+     * The array keys are the ActiveRecord events upon which the attributes are to be updated,
+     * and the array values are represent the order corresponding attributes.
+     * The rest of the attributes are processed at the end.
+     * If the [[attributes]] for this attribute do not specify this event, it is ignored
      *
      * ```php
      * [
@@ -122,19 +120,22 @@ class AttributesBehavior extends Behavior
      */
     public $preserveNonEmptyValues = false;
 
+
     /**
      * {@inheritdoc}
      */
     public function events()
     {
-        return array_fill_keys(array_reduce($this->attributes, static function ($carry, $item) {
+        return array_fill_keys(
+            array_reduce($this->attributes, function ($carry, $item) {
                 return array_merge($carry, array_keys($item));
-            }, []), 'evaluateAttributes');
+            }, []),
+            'evaluateAttributes'
+        );
     }
 
     /**
      * Evaluates the attributes values and assigns it to the current attributes.
-     *
      * @param Event $event
      */
     public function evaluateAttributes($event)
@@ -145,14 +146,14 @@ class AttributesBehavior extends Behavior
         ) {
             return;
         }
-        $attributes = array_keys(array_filter($this->attributes, static function ($carry) use ($event) {
+        $attributes = array_keys(array_filter($this->attributes, function ($carry) use ($event) {
             return array_key_exists($event->name, $carry);
         }));
-
         if (!empty($this->order[$event->name])) {
-            $attributes = array_merge(array_intersect((array) $this->order[$event->name], $attributes), array_diff($attributes, (array) $this->order[$event->name]));
+            $attributes = array_merge(
+                array_intersect((array) $this->order[$event->name], $attributes),
+                array_diff($attributes, (array) $this->order[$event->name]));
         }
-
         foreach ($attributes as $attribute) {
             if ($this->preserveNonEmptyValues && !empty($this->owner->$attribute)) {
                 continue;
@@ -165,10 +166,8 @@ class AttributesBehavior extends Behavior
      * Returns the value for the current attributes.
      * This method is called by [[evaluateAttributes()]]. Its return value will be assigned
      * to the target attribute corresponding to the triggering event.
-     *
      * @param string $attribute target attribute name
      * @param Event $event the event that triggers the current attribute updating.
-     *
      * @return mixed the attribute value
      */
     protected function getValue($attribute, $event)
@@ -177,7 +176,6 @@ class AttributesBehavior extends Behavior
             return null;
         }
         $value = $this->attributes[$attribute][$event->name];
-
         if ($value instanceof Closure || (is_array($value) && is_callable($value))) {
             return $value($event, $attribute);
         }

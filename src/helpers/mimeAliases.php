@@ -1,11 +1,9 @@
 <?php
-
 /**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * MIME aliases.
+ *
+ * This file contains aliases for MIME types.
  */
-
 return [
     'text/xml' => 'application/xml',
     'image/svg' => 'image/svg+xml',

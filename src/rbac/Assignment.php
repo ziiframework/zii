@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,6 +7,7 @@
 
 namespace yii\rbac;
 
+use Yii;
 use yii\base\BaseObject;
 
 /**
@@ -17,7 +17,6 @@ use yii\base\BaseObject;
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @author Alexander Kochetov <creocoder@gmail.com>
- *
  * @since 2.0
  */
 class Assignment extends BaseObject

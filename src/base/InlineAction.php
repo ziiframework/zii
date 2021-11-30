@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -19,7 +18,6 @@ use Yii;
  * For more details and usage information on InlineAction, see the [guide article on actions](guide:structure-controllers).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class InlineAction extends Action
@@ -28,6 +26,7 @@ class InlineAction extends Action
      * @var string the controller method that this inline action is associated with
      */
     public $actionMethod;
+
 
     /**
      * @param string $id the ID of this action
@@ -44,16 +43,13 @@ class InlineAction extends Action
     /**
      * Runs this action with the specified parameters.
      * This method is mainly invoked by the controller.
-     *
      * @param array $params action parameters
-     *
      * @return mixed the result of the action
      */
     public function runWithParams($params)
     {
         $args = $this->controller->bindActionParams($this, $params);
         Yii::debug('Running action: ' . get_class($this->controller) . '::' . $this->actionMethod . '()', __METHOD__);
-
         if (Yii::$app->requestedParams === null) {
             Yii::$app->requestedParams = $args;
         }

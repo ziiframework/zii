@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -18,7 +17,6 @@ use yii\log\DbTarget;
  * want to create additional indexes (e.g. index on `log_time`).
  *
  * @author Alexander Makarov <sam@rmcreative.ru>
- *
  * @since 2.0.1
  */
 class m141106_185632_log_init extends Migration
@@ -30,7 +28,6 @@ class m141106_185632_log_init extends Migration
 
     /**
      * @throws InvalidConfigException
-     *
      * @return DbTarget[]
      */
     protected function getDbTargets()
@@ -39,14 +36,12 @@ class m141106_185632_log_init extends Migration
             $log = Yii::$app->getLog();
 
             $usedTargets = [];
-
             foreach ($log->targets as $target) {
                 if ($target instanceof DbTarget) {
                     $currentTarget = [
                         $target->db,
                         $target->logTable,
                     ];
-
                     if (!in_array($currentTarget, $usedTargets, true)) {
                         // do not create same table twice
                         $usedTargets[] = $currentTarget;
@@ -69,7 +64,6 @@ class m141106_185632_log_init extends Migration
             $this->db = $target->db;
 
             $tableOptions = null;
-
             if ($this->db->driverName === 'mysql') {
                 // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
                 $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';

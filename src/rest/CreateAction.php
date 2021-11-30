@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -19,7 +18,6 @@ use yii\web\ServerErrorHttpException;
  * For more details and usage information on CreateAction, see the [guide article on rest controllers](guide:rest-controllers).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class CreateAction extends Action
@@ -33,11 +31,10 @@ class CreateAction extends Action
      */
     public $viewAction = 'view';
 
+
     /**
      * Creates a new model.
-     *
      * @return \yii\db\ActiveRecordInterface the model newly created
-     *
      * @throws ServerErrorHttpException if there is any error when creating the model
      */
     public function run()
@@ -52,7 +49,6 @@ class CreateAction extends Action
         ]);
 
         $model->load(Yii::$app->getRequest()->getBodyParams(), '');
-
         if ($model->save()) {
             $response = Yii::$app->getResponse();
             $response->setStatusCode(201);

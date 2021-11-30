@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,7 +7,6 @@
 
 namespace yii\db;
 
-use JsonSerializable;
 use yii\base\InvalidConfigException;
 
 /**
@@ -21,32 +19,32 @@ use yii\base\InvalidConfigException;
  * ```
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
- *
  * @since 2.0.14
  */
-class JsonExpression implements ExpressionInterface, JsonSerializable
+class JsonExpression implements ExpressionInterface, \JsonSerializable
 {
-    public const TYPE_JSON = 'json';
-    public const TYPE_JSONB = 'jsonb';
+    const TYPE_JSON = 'json';
+    const TYPE_JSONB = 'jsonb';
 
     /**
      * @var mixed the value to be encoded to JSON.
-     *            The value must be compatible with [\yii\helpers\Json::encode()|Json::encode()]] input requirements.
+     * The value must be compatible with [\yii\helpers\Json::encode()|Json::encode()]] input requirements.
      */
     protected $value;
     /**
      * @var string|null Type of JSON, expression should be casted to. Defaults to `null`, meaning
-     *                  no explicit casting will be performed.
-     *                  This property will be encountered only for DBMSs that support different types of JSON.
-     *                  For example, PostgreSQL has `json` and `jsonb` types.
+     * no explicit casting will be performed.
+     * This property will be encountered only for DBMSs that support different types of JSON.
+     * For example, PostgreSQL has `json` and `jsonb` types.
      */
     protected $type;
+
 
     /**
      * JsonExpression constructor.
      *
      * @param mixed $value the value to be encoded to JSON.
-     *                     The value must be compatible with [\yii\helpers\Json::encode()|Json::encode()]] requirements.
+     * The value must be compatible with [\yii\helpers\Json::encode()|Json::encode()]] requirements.
      * @param string|null $type the type of the JSON. See [[JsonExpression::type]]
      *
      * @see type
@@ -63,7 +61,6 @@ class JsonExpression implements ExpressionInterface, JsonSerializable
 
     /**
      * @return mixed
-     *
      * @see value
      */
     public function getValue()
@@ -72,8 +69,7 @@ class JsonExpression implements ExpressionInterface, JsonSerializable
     }
 
     /**
-     * @return string|null the type of JSON
-     *
+     * @return null|string the type of JSON
      * @see type
      */
     public function getType()
@@ -82,21 +78,17 @@ class JsonExpression implements ExpressionInterface, JsonSerializable
     }
 
     /**
-     * Specify data which should be serialized to JSON.
+     * Specify data which should be serialized to JSON
      *
      * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
-     *
      * @return mixed data which can be serialized by <b>json_encode</b>,
-     *               which is a value of any type other than a resource.
-     *
+     * which is a value of any type other than a resource.
      * @since 2.0.14.2
-     *
      * @throws InvalidConfigException when JsonExpression contains QueryInterface object
      */
     public function jsonSerialize()
     {
         $value = $this->getValue();
-
         if ($value instanceof QueryInterface) {
             throw new InvalidConfigException('The JsonExpression class can not be serialized to JSON when the value is a QueryInterface object');
         }

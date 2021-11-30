@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,8 +6,6 @@
  */
 
 namespace yii\web;
-
-use Exception;
 
 /**
  * ForbiddenHttpException represents a "Forbidden" HTTP exception with status code 403.
@@ -19,21 +16,18 @@ use Exception;
  * to respond with a 404 [[NotFoundHttpException]].
  *
  * @see https://tools.ietf.org/html/rfc7231#section-6.5.3
- *
  * @author Dan Schmidt <danschmidt5189@gmail.com>
- *
  * @since 2.0
  */
 class ForbiddenHttpException extends HttpException
 {
     /**
      * Constructor.
-     *
      * @param string $message error message
      * @param int $code error code
-     * @param Exception $previous The previous exception used for the exception chaining.
+     * @param \Exception $previous The previous exception used for the exception chaining.
      */
-    public function __construct($message = null, $code = 0, Exception $previous = null)
+    public function __construct($message = null, $code = 0, \Exception $previous = null)
     {
         parent::__construct(403, $message, $code, $previous);
     }

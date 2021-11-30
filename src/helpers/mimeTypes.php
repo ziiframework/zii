@@ -1,11 +1,13 @@
 <?php
-
 /**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * MIME types.
+ *
+ * This file contains most commonly used MIME types
+ * according to file extension names.
+ * Its content is generated from the apache http mime.types file.
+ * http://svn.apache.org/viewvc/httpd/httpd/trunk/docs/conf/mime.types?view=markup
+ * This file has been placed in the public domain for unlimited redistribution.
  */
-
 return [
     '3dml' => 'text/vnd.in3d.3dml',
     '3ds' => 'image/x-3ds',

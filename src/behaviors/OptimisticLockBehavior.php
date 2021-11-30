@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -9,10 +8,10 @@
 namespace yii\behaviors;
 
 use Yii;
-use yii\base\InvalidCallException;
 use yii\db\BaseActiveRecord;
-use yii\helpers\ArrayHelper;
+use yii\base\InvalidCallException;
 use yii\validators\NumberValidator;
+use yii\helpers\ArrayHelper;
 
 /**
  * OptimisticLockBehavior automatically upgrades a model's lock version using the column name
@@ -60,7 +59,6 @@ use yii\validators\NumberValidator;
  * ```
  *
  * @author Salem Ouerdani <tunecino@gmail.com>
- *
  * @since 2.0.16
  * @see \yii\db\BaseActiveRecord::optimisticLock() for details on how to enable optimistic lock.
  */
@@ -81,6 +79,7 @@ class OptimisticLockBehavior extends AttributeBehavior
      * @var string the attribute name holding the version value.
      */
     private $_lockAttribute;
+
 
     /**
      * {@inheritdoc}
@@ -109,11 +108,8 @@ class OptimisticLockBehavior extends AttributeBehavior
 
     /**
      * Returns the column name to hold the version value as defined in [[\yii\db\BaseActiveRecord::optimisticLock()|optimisticLock()]].
-     *
      * @return string the property name.
-     *
      * @throws InvalidCallException if [[\yii\db\BaseActiveRecord::optimisticLock()|optimisticLock()]] is not properly configured.
-     *
      * @since 2.0.16
      */
     protected function getLockAttribute()
@@ -125,12 +121,10 @@ class OptimisticLockBehavior extends AttributeBehavior
         /* @var $owner BaseActiveRecord */
         $owner = $this->owner;
         $lock = $owner->optimisticLock();
-
         if ($lock === null || $owner->hasAttribute($lock) === false) {
             throw new InvalidCallException("Unable to get the optimistic lock attribute. Probably 'optimisticLock()' method is misconfigured.");
         }
         $this->_lockAttribute = $lock;
-
         return $lock;
     }
 
@@ -148,7 +142,6 @@ class OptimisticLockBehavior extends AttributeBehavior
             $formValue = $formName ? ArrayHelper::getValue($request->getBodyParams(), $formName . '.' . $lock) : null;
             $input = $formValue ?: $request->getBodyParam($lock);
             $isValid = $input && (new NumberValidator())->validate($input);
-
             return $isValid ? $input : 0;
         }
 
@@ -161,16 +154,13 @@ class OptimisticLockBehavior extends AttributeBehavior
      * ```php
      * $model->upgrade();
      * ```
-     *
      * @throws InvalidCallException if owner is a new record.
-     *
      * @since 2.0.16
      */
     public function upgrade()
     {
         /* @var $owner BaseActiveRecord */
         $owner = $this->owner;
-
         if ($owner->getIsNewRecord()) {
             throw new InvalidCallException('Upgrading the model version is not possible on a new record.');
         }

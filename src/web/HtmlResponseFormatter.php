@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -16,7 +15,6 @@ use yii\base\Component;
  * It is used by [[Response]] to format response data.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class HtmlResponseFormatter extends Component implements ResponseFormatterInterface
@@ -26,9 +24,9 @@ class HtmlResponseFormatter extends Component implements ResponseFormatterInterf
      */
     public $contentType = 'text/html';
 
+
     /**
      * Formats the specified response.
-     *
      * @param Response $response the response to be formatted.
      */
     public function format($response)
@@ -37,7 +35,6 @@ class HtmlResponseFormatter extends Component implements ResponseFormatterInterf
             $this->contentType .= '; charset=' . $response->charset;
         }
         $response->getHeaders()->set('Content-Type', $this->contentType);
-
         if ($response->data !== null) {
             $response->content = $response->data;
         }

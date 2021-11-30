@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,7 +7,6 @@
 
 namespace yii\web;
 
-use stdClass;
 use yii\base\InvalidArgumentException;
 use yii\helpers\Json;
 
@@ -26,7 +24,6 @@ use yii\helpers\Json;
  * ```
  *
  * @author Dan Schmidt <danschmidt5189@gmail.com>
- *
  * @since 2.0
  */
 class JsonParser implements RequestParserInterface
@@ -40,14 +37,12 @@ class JsonParser implements RequestParserInterface
      */
     public $throwException = true;
 
+
     /**
      * Parses a HTTP request body.
-     *
      * @param string $rawBody the raw HTTP request body.
      * @param string $contentType the content type specified for the request body.
-     *
-     * @return array|stdClass parameters parsed from the request body
-     *
+     * @return array|\stdClass parameters parsed from the request body
      * @throws BadRequestHttpException if the body contains invalid json and [[throwException]] is `true`.
      */
     public function parse($rawBody, $contentType)
@@ -59,7 +54,6 @@ class JsonParser implements RequestParserInterface
 
         try {
             $parameters = Json::decode($rawBody, $this->asArray);
-
             return $parameters === null ? [] : $parameters;
         } catch (InvalidArgumentException $e) {
             if ($this->throwException) {

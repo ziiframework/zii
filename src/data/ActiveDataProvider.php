@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -52,7 +51,6 @@ use yii\di\Instance;
  * For more details and usage information on ActiveDataProvider, see the [guide article on data providers](guide:output-data-providers).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class ActiveDataProvider extends BaseDataProvider
@@ -63,7 +61,7 @@ class ActiveDataProvider extends BaseDataProvider
     public $query;
     /**
      * @var string|callable|null the column that is used as the key of the data models.
-     *                           This can be either a column name, or a callable that returns the key value of a given data model.
+     * This can be either a column name, or a callable that returns the key value of a given data model.
      *
      * If this is not set, the following rules will be used to determine the keys of the data models:
      *
@@ -75,21 +73,20 @@ class ActiveDataProvider extends BaseDataProvider
     public $key;
     /**
      * @var Connection|array|string|null the DB connection object or the application component ID of the DB connection.
-     *                                   If set it overrides [[query]] default DB connection.
-     *                                   Starting from version 2.0.2, this can also be a configuration array for creating the object.
+     * If set it overrides [[query]] default DB connection.
+     * Starting from version 2.0.2, this can also be a configuration array for creating the object.
      */
     public $db;
+
 
     /**
      * Initializes the DB connection component.
      * This method will initialize the [[db]] property (when set) to make sure it refers to a valid DB connection.
-     *
      * @throws InvalidConfigException if [[db]] is invalid.
      */
     public function init()
     {
         parent::init();
-
         if ($this->db !== null) {
             $this->db = Instance::ensure($this->db);
         }
@@ -104,16 +101,13 @@ class ActiveDataProvider extends BaseDataProvider
             throw new InvalidConfigException('The "query" property must be an instance of a class that implements the QueryInterface e.g. yii\db\Query or its subclasses.');
         }
         $query = clone $this->query;
-
         if (($pagination = $this->getPagination()) !== false) {
             $pagination->totalCount = $this->getTotalCount();
-
             if ($pagination->totalCount === 0) {
                 return [];
             }
             $query->limit($pagination->getLimit())->offset($pagination->getOffset());
         }
-
         if (($sort = $this->getSort()) !== false) {
             $query->addOrderBy($sort->getOrders());
         }
@@ -127,7 +121,6 @@ class ActiveDataProvider extends BaseDataProvider
     protected function prepareKeys($models)
     {
         $keys = [];
-
         if ($this->key !== null) {
             foreach ($models as $model) {
                 if (is_string($this->key)) {
@@ -142,17 +135,14 @@ class ActiveDataProvider extends BaseDataProvider
             /* @var $class \yii\db\ActiveRecordInterface */
             $class = $this->query->modelClass;
             $pks = $class::primaryKey();
-
             if (count($pks) === 1) {
                 $pk = $pks[0];
-
                 foreach ($models as $model) {
                     $keys[] = $model[$pk];
                 }
             } else {
                 foreach ($models as $model) {
                     $kk = [];
-
                     foreach ($pks as $pk) {
                         $kk[$pk] = $model[$pk];
                     }
@@ -175,7 +165,6 @@ class ActiveDataProvider extends BaseDataProvider
             throw new InvalidConfigException('The "query" property must be an instance of a class that implements the QueryInterface e.g. yii\db\Query or its subclasses.');
         }
         $query = clone $this->query;
-
         return (int) $query->limit(-1)->offset(-1)->orderBy([])->count('*', $this->db);
     }
 
@@ -185,12 +174,10 @@ class ActiveDataProvider extends BaseDataProvider
     public function setSort($value)
     {
         parent::setSort($value);
-
         if ($this->query instanceof ActiveQueryInterface && ($sort = $this->getSort()) !== false) {
             /* @var $modelClass Model */
             $modelClass = $this->query->modelClass;
             $model = $modelClass::instance();
-
             if (empty($sort->attributes)) {
                 foreach ($model->attributes() as $attribute) {
                     $sort->attributes[$attribute] = [

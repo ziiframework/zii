@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -17,7 +16,6 @@ use yii\base\InvalidArgumentException;
  * Do not use BaseMarkdown. Use [[Markdown]] instead.
  *
  * @author Carsten Brandt <mail@cebe.cc>
- *
  * @since 2.0
  */
 class BaseMarkdown
@@ -46,21 +44,19 @@ class BaseMarkdown
     ];
     /**
      * @var string the markdown flavor to use when none is specified explicitly.
-     *             Defaults to `original`.
-     *
+     * Defaults to `original`.
      * @see flavors
      */
     public static $defaultFlavor = 'original';
+
 
     /**
      * Converts markdown into HTML.
      *
      * @param string $markdown the markdown text to parse
      * @param string $flavor the markdown flavor to use. See [[$flavors]] for available values.
-     *                       Defaults to [[$defaultFlavor]], if not set.
-     *
+     * Defaults to [[$defaultFlavor]], if not set.
      * @return string the parsed HTML output
-     *
      * @throws InvalidArgumentException when an undefined flavor is given.
      */
     public static function process($markdown, $flavor = null)
@@ -77,10 +73,8 @@ class BaseMarkdown
      *
      * @param string $markdown the markdown text to parse
      * @param string $flavor the markdown flavor to use. See [[$flavors]] for available values.
-     *                       Defaults to [[$defaultFlavor]], if not set.
-     *
+     * Defaults to [[$defaultFlavor]], if not set.
      * @return string the parsed HTML output
-     *
      * @throws InvalidArgumentException when an undefined flavor is given.
      */
     public static function processParagraph($markdown, $flavor = null)
@@ -92,10 +86,8 @@ class BaseMarkdown
 
     /**
      * @param string $flavor the markdown flavor to use. See [[$flavors]] for available values.
-     *                       Defaults to [[$defaultFlavor]], if not set.
-     *
+     * Defaults to [[$defaultFlavor]], if not set.
      * @return \cebe\markdown\Parser
-     *
      * @throws InvalidArgumentException when an undefined flavor is given.
      */
     protected static function getParser($flavor)

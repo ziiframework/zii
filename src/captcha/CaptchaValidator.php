@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -23,7 +22,6 @@ use yii\validators\Validator;
  * even if a user enters the same code as shown in the CAPTCHA image which is actually different from the latest CAPTCHA code.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class CaptchaValidator extends Validator
@@ -41,13 +39,13 @@ class CaptchaValidator extends Validator
      */
     public $captchaAction = 'site/captcha';
 
+
     /**
      * {@inheritdoc}
      */
     public function init()
     {
         parent::init();
-
         if ($this->message === null) {
             $this->message = Yii::t('yii', 'The verification code is incorrect.');
         }
@@ -66,25 +64,20 @@ class CaptchaValidator extends Validator
 
     /**
      * Creates the CAPTCHA action object from the route specified by [[captchaAction]].
-     *
      * @return \yii\captcha\CaptchaAction the action object
-     *
      * @throws InvalidConfigException
      */
     public function createCaptchaAction()
     {
         $ca = Yii::$app->createController($this->captchaAction);
-
         if ($ca !== false) {
             /* @var $controller \yii\base\Controller */
-            [$controller, $actionID] = $ca;
+            list($controller, $actionID) = $ca;
             $action = $controller->createAction($actionID);
-
             if ($action !== null) {
                 return $action;
             }
         }
-
         throw new InvalidConfigException('Invalid CAPTCHA action ID: ' . $this->captchaAction);
     }
 
@@ -115,7 +108,6 @@ class CaptchaValidator extends Validator
                 'attribute' => $model->getAttributeLabel($attribute),
             ], Yii::$app->language),
         ];
-
         if ($this->skipOnEmpty) {
             $options['skipOnEmpty'] = 1;
         }

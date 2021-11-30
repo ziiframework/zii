@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,6 +7,7 @@
 
 namespace yii\widgets;
 
+use Yii;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\base\Widget;
@@ -32,15 +32,13 @@ use yii\helpers\Html;
  * For more details and usage information on InputWidget, see the [guide article on forms](guide:input-forms).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class InputWidget extends Widget
 {
     /**
      * @var \yii\widgets\ActiveField active input field, which triggers this widget rendering.
-     *                               This field will be automatically filled up in case widget instance is created via [[\yii\widgets\ActiveField::widget()]].
-     *
+     * This field will be automatically filled up in case widget instance is created via [[\yii\widgets\ActiveField::widget()]].
      * @since 2.0.11
      */
     public $field;
@@ -62,10 +60,10 @@ class InputWidget extends Widget
     public $value;
     /**
      * @var array the HTML attributes for the input tag.
-     *
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $options = [];
+
 
     /**
      * Initializes the widget.
@@ -76,7 +74,6 @@ class InputWidget extends Widget
         if ($this->name === null && !$this->hasModel()) {
             throw new InvalidConfigException("Either 'name', or 'model' and 'attribute' properties must be specified.");
         }
-
         if (!isset($this->options['id'])) {
             $this->options['id'] = $this->hasModel() ? Html::getInputId($this->model, $this->attribute) : $this->getId();
         }
@@ -98,9 +95,7 @@ class InputWidget extends Widget
      * or [[Html::input()]] if not.
      *
      * @param string $type the type of the input to create.
-     *
      * @return string the HTML of the input field.
-     *
      * @since 2.0.13
      * @see Html::activeInput()
      * @see Html::input()
@@ -110,7 +105,6 @@ class InputWidget extends Widget
         if ($this->hasModel()) {
             return Html::activeInput($type, $this->model, $this->attribute, $this->options);
         }
-
         return Html::input($type, $this->name, $this->value, $this->options);
     }
 }

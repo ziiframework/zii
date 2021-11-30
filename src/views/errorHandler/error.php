@@ -7,11 +7,9 @@ if ($exception instanceof \yii\web\HttpException) {
     $code = $exception->getCode();
 }
 $name = $handler->getExceptionName($exception);
-
 if ($name === null) {
     $name = 'Error';
 }
-
 if ($code) {
     $name .= " (#$code)";
 }
@@ -30,7 +28,7 @@ if (method_exists($this, 'beginPage')) {
 <html>
 <head>
     <meta charset="utf-8" />
-    <title><?= $handler->htmlEncode($name); ?></title>
+    <title><?= $handler->htmlEncode($name) ?></title>
 
     <style>
         body {
@@ -71,8 +69,8 @@ if (method_exists($this, 'beginPage')) {
 </head>
 
 <body>
-    <h1><?= $handler->htmlEncode($name); ?></h1>
-    <h2><?= nl2br($handler->htmlEncode($message)); ?></h2>
+    <h1><?= $handler->htmlEncode($name) ?></h1>
+    <h2><?= nl2br($handler->htmlEncode($message)) ?></h2>
     <p>
         The above error occurred while the Web server was processing your request.
     </p>
@@ -80,13 +78,13 @@ if (method_exists($this, 'beginPage')) {
         Please contact us if you think this is a server error. Thank you.
     </p>
     <div class="version">
-        <?= date('Y-m-d H:i:s'); ?>
+        <?= date('Y-m-d H:i:s') ?>
     </div>
-    <?php if (method_exists($this, 'endBody')) { ?>
-        <?php $this->endBody(); // to allow injecting code into body (mostly by Yii Debug Toolbar)?>
-    <?php } ?>
+    <?php if (method_exists($this, 'endBody')): ?>
+        <?php $this->endBody() // to allow injecting code into body (mostly by Yii Debug Toolbar)?>
+    <?php endif ?>
 </body>
 </html>
-<?php if (method_exists($this, 'endPage')) { ?>
-    <?php $this->endPage(); ?>
-<?php } ?>
+<?php if (method_exists($this, 'endPage')): ?>
+    <?php $this->endPage() ?>
+<?php endif ?>

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -14,14 +13,12 @@ use yii\base\NotSupportedException;
  * {@inheritdoc}
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
- *
  * @since 2.0.14
  */
 class InConditionBuilder extends \yii\db\conditions\InConditionBuilder
 {
     /**
      * {@inheritdoc}
-     *
      * @throws NotSupportedException if `$columns` is an array
      */
     protected function buildSubqueryInCondition($operator, $columns, $values, &$params)
@@ -39,15 +36,12 @@ class InConditionBuilder extends \yii\db\conditions\InConditionBuilder
     protected function buildCompositeInCondition($operator, $columns, $values, &$params)
     {
         $quotedColumns = [];
-
         foreach ($columns as $i => $column) {
             $quotedColumns[$i] = strpos($column, '(') === false ? $this->queryBuilder->db->quoteColumnName($column) : $column;
         }
         $vss = [];
-
         foreach ($values as $value) {
             $vs = [];
-
             foreach ($columns as $i => $column) {
                 if (isset($value[$column])) {
                     $phName = $this->queryBuilder->bindParam($value[$column], $params);

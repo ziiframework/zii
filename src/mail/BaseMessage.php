@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,7 +7,6 @@
 
 namespace yii\mail;
 
-use Exception;
 use Yii;
 use yii\base\BaseObject;
 use yii\base\ErrorHandler;
@@ -22,24 +20,22 @@ use yii\base\ErrorHandler;
  * @see BaseMailer
  *
  * @author Paul Klimov <klimov.paul@gmail.com>
- *
  * @since 2.0
  */
 abstract class BaseMessage extends BaseObject implements MessageInterface
 {
     /**
      * @var MailerInterface the mailer instance that created this message.
-     *                      For independently created messages this is `null`.
+     * For independently created messages this is `null`.
      */
     public $mailer;
 
+
     /**
      * Sends this email message.
-     *
      * @param MailerInterface $mailer the mailer that should be used to send this message.
-     *                                If no mailer is given it will first check if [[mailer]] is set and if not,
-     *                                the "mailer" application component will be used instead.
-     *
+     * If no mailer is given it will first check if [[mailer]] is set and if not,
+     * the "mailer" application component will be used instead.
      * @return bool whether this message is sent successfully.
      */
     public function send(MailerInterface $mailer = null)
@@ -55,7 +51,6 @@ abstract class BaseMessage extends BaseObject implements MessageInterface
 
     /**
      * PHP magic method that returns the string representation of this object.
-     *
      * @return string the string representation of this object.
      */
     public function __toString()
@@ -64,9 +59,8 @@ abstract class BaseMessage extends BaseObject implements MessageInterface
         // use trigger_error to bypass this limitation
         try {
             return $this->toString();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             ErrorHandler::convertExceptionToError($e);
-
             return '';
         }
     }

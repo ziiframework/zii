@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -12,7 +11,6 @@ namespace yii\db;
  * IndexConstraint represents the metadata of a table `INDEX` constraint.
  *
  * @author Sergey Makinen <sergey@makinen.ru>
- *
  * @since 2.0.13
  */
 class IndexConstraint extends Constraint

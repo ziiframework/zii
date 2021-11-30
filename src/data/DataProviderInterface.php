@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -17,7 +16,6 @@ namespace yii\data;
  * For more details and usage information on DataProviderInterface, see the [guide article on data providers](guide:output-data-providers).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 interface DataProviderInterface
@@ -38,7 +36,6 @@ interface DataProviderInterface
      * Returns the number of data models in the current page.
      * This is equivalent to `count($provider->getModels())`.
      * When [[getPagination|pagination]] is false, this is the same as [[getTotalCount|totalCount]].
-     *
      * @return int the number of data models in the current page.
      */
     public function getCount();
@@ -46,23 +43,20 @@ interface DataProviderInterface
     /**
      * Returns the total number of data models.
      * When [[getPagination|pagination]] is false, this is the same as [[getCount|count]].
-     *
      * @return int total number of possible data models.
      */
     public function getTotalCount();
 
     /**
      * Returns the data models in the current page.
-     *
      * @return array the list of data models in the current page.
      */
     public function getModels();
 
     /**
      * Returns the key values associated with the data models.
-     *
      * @return array the list of key values corresponding to [[getModels|models]]. Each data model in [[getModels|models]]
-     *               is uniquely identified by the corresponding key value in this array.
+     * is uniquely identified by the corresponding key value in this array.
      */
     public function getKeys();
 

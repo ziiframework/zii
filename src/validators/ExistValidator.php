@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,7 +7,6 @@
 
 namespace yii\validators;
 
-use Closure;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
@@ -46,38 +44,35 @@ use yii\db\QueryInterface;
  * ```
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class ExistValidator extends Validator
 {
     /**
      * @var string the name of the ActiveRecord class that should be used to validate the existence
-     *             of the current attribute value. If not set, it will use the ActiveRecord class of the attribute being validated.
-     *
+     * of the current attribute value. If not set, it will use the ActiveRecord class of the attribute being validated.
      * @see targetAttribute
      */
     public $targetClass;
     /**
      * @var string|array the name of the ActiveRecord attribute that should be used to
-     *                   validate the existence of the current attribute value. If not set, it will use the name
-     *                   of the attribute currently being validated. You may use an array to validate the existence
-     *                   of multiple columns at the same time. The array key is the name of the attribute with the value to validate,
-     *                   the array value is the name of the database field to search.
+     * validate the existence of the current attribute value. If not set, it will use the name
+     * of the attribute currently being validated. You may use an array to validate the existence
+     * of multiple columns at the same time. The array key is the name of the attribute with the value to validate,
+     * the array value is the name of the database field to search.
      */
     public $targetAttribute;
     /**
      * @var string the name of the relation that should be used to validate the existence of the current attribute value
-     *             This param overwrites $targetClass and $targetAttribute
-     *
+     * This param overwrites $targetClass and $targetAttribute
      * @since 2.0.14
      */
     public $targetRelation;
     /**
-     * @var string|array|Closure additional filter to be applied to the DB query used to check the existence of the attribute value.
-     *                           This can be a string or an array representing the additional query condition (refer to [[\yii\db\Query::where()]]
-     *                           on the format of query condition), or an anonymous function with the signature `function ($query)`, where `$query`
-     *                           is the [[\yii\db\Query|Query]] object that you can modify in the function.
+     * @var string|array|\Closure additional filter to be applied to the DB query used to check the existence of the attribute value.
+     * This can be a string or an array representing the additional query condition (refer to [[\yii\db\Query::where()]]
+     * on the format of query condition), or an anonymous function with the signature `function ($query)`, where `$query`
+     * is the [[\yii\db\Query|Query]] object that you can modify in the function.
      */
     public $filter;
     /**
@@ -86,16 +81,15 @@ class ExistValidator extends Validator
     public $allowArray = false;
     /**
      * @var string and|or define how target attributes are related
-     *
      * @since 2.0.11
      */
     public $targetAttributeJunction = 'and';
     /**
      * @var bool whether this validator is forced to always use master DB
-     *
      * @since 2.0.14
      */
     public $forceMasterDb = true;
+
 
     /**
      * {@inheritdoc}
@@ -103,7 +97,6 @@ class ExistValidator extends Validator
     public function init()
     {
         parent::init();
-
         if ($this->message === null) {
             $this->message = Yii::t('yii', '{attribute} is invalid.');
         }
@@ -122,8 +115,7 @@ class ExistValidator extends Validator
     }
 
     /**
-     * Validates existence of the current attribute based on relation name.
-     *
+     * Validates existence of the current attribute based on relation name
      * @param \yii\db\ActiveRecord $model the data model to be validated
      * @param string $attribute the name of the attribute to be validated.
      */
@@ -133,16 +125,15 @@ class ExistValidator extends Validator
         /** @var ActiveQuery $relationQuery */
         $relationQuery = $model->{'get' . ucfirst($this->targetRelation)}();
 
-        if ($this->filter instanceof Closure) {
+        if ($this->filter instanceof \Closure) {
             call_user_func($this->filter, $relationQuery);
         } elseif ($this->filter !== null) {
             $relationQuery->andWhere($this->filter);
         }
 
         $connection = $model::getDb();
-
         if ($this->forceMasterDb && method_exists($connection, 'useMaster')) {
-            $exists = $connection->useMaster(static function () use ($relationQuery) {
+            $exists = $connection->useMaster(function() use ($relationQuery) {
                 return $relationQuery->exists();
             });
         } else {
@@ -155,8 +146,7 @@ class ExistValidator extends Validator
     }
 
     /**
-     * Validates existence of the current attribute based on targetAttribute.
-     *
+     * Validates existence of the current attribute based on targetAttribute
      * @param \yii\base\Model $model the data model to be validated
      * @param string $attribute the name of the attribute to be validated.
      */
@@ -199,9 +189,7 @@ class ExistValidator extends Validator
      * If the key and the value are the same, you can just specify the value.
      * @param \yii\base\Model $model the data model to be validated
      * @param string $attribute the name of the attribute to be validated in the $model
-     *
      * @return array conditions, compatible with [[\yii\db\Query::where()|Query::where()]] key-value format.
-     *
      * @throws InvalidConfigException
      */
     private function prepareConditions($targetAttribute, $model, $attribute)
@@ -211,7 +199,6 @@ class ExistValidator extends Validator
                 throw new InvalidConfigException('The "targetAttribute" property must be configured as a string.');
             }
             $conditions = [];
-
             foreach ($targetAttribute as $k => $v) {
                 $conditions[$v] = is_int($k) ? $model->$v : $model->$k;
             }
@@ -220,18 +207,16 @@ class ExistValidator extends Validator
         }
 
         $targetModelClass = $this->getTargetClass($model);
-
         if (!is_subclass_of($targetModelClass, 'yii\db\ActiveRecord')) {
             return $conditions;
         }
 
-        /* @var ActiveRecord $targetModelClass */
+        /** @var ActiveRecord $targetModelClass */
         return $this->applyTableAlias($targetModelClass::find(), $conditions);
     }
 
     /**
      * @param Model $model the data model to be validated
-     *
      * @return string Target class name
      */
     private function getTargetClass($model)
@@ -247,7 +232,6 @@ class ExistValidator extends Validator
         if ($this->targetClass === null) {
             throw new InvalidConfigException('The "targetClass" property must be set.');
         }
-
         if (!is_string($this->targetAttribute)) {
             throw new InvalidConfigException('The "targetAttribute" property must be configured as a string.');
         }
@@ -267,7 +251,6 @@ class ExistValidator extends Validator
      * @param string $targetClass the model
      * @param QueryInterface $query
      * @param mixed $value the value want to be checked
-     *
      * @return bool
      */
     private function valueExists($targetClass, $query, $value)
@@ -286,12 +269,12 @@ class ExistValidator extends Validator
         return $exists;
     }
 
+
     /**
      * Run query to check if value exists.
      *
      * @param QueryInterface $query
      * @param mixed $value the value to be checked
-     *
      * @return bool
      */
     private function queryValueExists($query, $value)
@@ -299,24 +282,20 @@ class ExistValidator extends Validator
         if (is_array($value)) {
             return $query->count("DISTINCT [[$this->targetAttribute]]") == count(array_unique($value));
         }
-
         return $query->exists();
     }
 
     /**
      * Creates a query instance with the given condition.
-     *
      * @param string $targetClass the target AR class
      * @param mixed $condition query condition
-     *
      * @return \yii\db\ActiveQueryInterface the query instance
      */
     protected function createQuery($targetClass, $condition)
     {
         /* @var $targetClass \yii\db\ActiveRecordInterface */
         $query = $targetClass::find()->andWhere($condition);
-
-        if ($this->filter instanceof Closure) {
+        if ($this->filter instanceof \Closure) {
             call_user_func($this->filter, $query);
         } elseif ($this->filter !== null) {
             $query->andWhere($this->filter);
@@ -327,11 +306,9 @@ class ExistValidator extends Validator
 
     /**
      * Returns conditions with alias.
-     *
      * @param ActiveQuery $query
      * @param array $conditions array of condition, keys to be modified
-     * @param string|null $alias set empty string for no apply alias. Set null for apply primary table alias
-     *
+     * @param null|string $alias set empty string for no apply alias. Set null for apply primary table alias
      * @return array
      */
     private function applyTableAlias($query, $conditions, $alias = null)
@@ -340,10 +317,12 @@ class ExistValidator extends Validator
             $alias = array_keys($query->getTablesUsedInFrom())[0];
         }
         $prefixedConditions = [];
-
         foreach ($conditions as $columnName => $columnValue) {
             if (strpos($columnName, '(') === false) {
-                $prefixedColumn = "{$alias}.[[" . preg_replace('/^' . preg_quote($alias) . '\.(.*)$/', '$1', $columnName) . ']]';
+                $prefixedColumn = "{$alias}.[[" . preg_replace(
+                    '/^' . preg_quote($alias) . '\.(.*)$/',
+                    '$1',
+                    $columnName) . ']]';
             } else {
                 // there is an expression, can't prefix it reliably
                 $prefixedColumn = $columnName;

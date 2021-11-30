@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -61,17 +60,15 @@ use yii\helpers\StringHelper;
  * @property int $uploadFileMaxSize Upload file max size in bytes.
  *
  * @author Paul Klimov <klimov.paul@gmail.com>
- *
  * @since 2.0.10
  */
 class MultipartFormDataParser extends BaseObject implements RequestParserInterface
 {
     /**
      * @var bool whether to parse raw body even for 'POST' request and `$_FILES` already populated.
-     *           By default this option is disabled saving performance for 'POST' requests, which are already
-     *           processed by PHP automatically.
-     *           > Note: if this option is enabled, value of `$_FILES` will be reset on each parse.
-     *
+     * By default this option is disabled saving performance for 'POST' requests, which are already
+     * processed by PHP automatically.
+     * > Note: if this option is enabled, value of `$_FILES` will be reset on each parse.
      * @since 2.0.13
      */
     public $force = false;
@@ -84,6 +81,7 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
      * @var int maximum upload files count.
      */
     private $_uploadFileMaxCount;
+
 
     /**
      * @return int upload file max size in bytes.
@@ -111,7 +109,7 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
     public function getUploadFileMaxCount()
     {
         if ($this->_uploadFileMaxCount === null) {
-            $this->_uploadFileMaxCount = (int) ini_get('max_file_uploads');
+            $this->_uploadFileMaxCount = (int)ini_get('max_file_uploads');
         }
 
         return $this->_uploadFileMaxCount;
@@ -154,12 +152,11 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
 
         $bodyParams = [];
         $filesCount = 0;
-
         foreach ($bodyParts as $bodyPart) {
             if (empty($bodyPart)) {
                 continue;
             }
-            [$headers, $value] = preg_split('/\\R\\R/', $bodyPart, 2);
+            list($headers, $value) = preg_split('/\\R\\R/', $bodyPart, 2);
             $headers = $this->parseHeaders($headers);
 
             if (!isset($headers['content-disposition']['name'])) {
@@ -184,13 +181,11 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
                     $fileInfo['error'] = UPLOAD_ERR_INI_SIZE;
                 } else {
                     $tmpResource = tmpfile();
-
                     if ($tmpResource === false) {
                         $fileInfo['error'] = UPLOAD_ERR_CANT_WRITE;
                     } else {
                         $tmpResourceMetaData = stream_get_meta_data($tmpResource);
                         $tmpFileName = $tmpResourceMetaData['uri'];
-
                         if (empty($tmpFileName)) {
                             $fileInfo['error'] = UPLOAD_ERR_CANT_WRITE;
                             @fclose($tmpResource);
@@ -205,7 +200,7 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
 
                 $this->addFile($_FILES, $headers['content-disposition']['name'], $fileInfo);
 
-                ++$filesCount;
+                $filesCount++;
             } else {
                 // regular parameter:
                 $this->addValue($bodyParams, $headers['content-disposition']['name'], $value);
@@ -217,22 +212,19 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
 
     /**
      * Parses content part headers.
-     *
      * @param string $headerContent headers source content
-     *
      * @return array parsed headers.
      */
     private function parseHeaders($headerContent)
     {
         $headers = [];
         $headerParts = preg_split('/\\R/su', $headerContent, -1, PREG_SPLIT_NO_EMPTY);
-
         foreach ($headerParts as $headerPart) {
             if (strpos($headerPart, ':') === false) {
                 continue;
             }
 
-            [$headerName, $headerValue] = explode(':', $headerPart, 2);
+            list($headerName, $headerValue) = explode(':', $headerPart, 2);
             $headerName = strtolower(trim($headerName));
             $headerValue = trim($headerValue);
 
@@ -240,14 +232,12 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
                 $headers[$headerName] = $headerValue;
             } else {
                 $headers[$headerName] = [];
-
                 foreach (explode(';', $headerValue) as $part) {
                     $part = trim($part);
-
                     if (strpos($part, '=') === false) {
                         $headers[$headerName][] = $part;
                     } else {
-                        [$name, $value] = explode('=', $part, 2);
+                        list($name, $value) = explode('=', $part, 2);
                         $name = strtolower(trim($name));
                         $value = trim(trim($value), '"');
                         $headers[$headerName][$name] = $value;
@@ -261,7 +251,6 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
 
     /**
      * Adds value to the array by input name, e.g. `Item[name]`.
-     *
      * @param array $array array which should store value.
      * @param string $name input name specification.
      * @param mixed $value value to be added.
@@ -270,10 +259,8 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
     {
         $nameParts = preg_split('/\\]\\[|\\[/s', $name);
         $current = &$array;
-
         foreach ($nameParts as $namePart) {
             $namePart = trim($namePart, ']');
-
             if ($namePart === '') {
                 $current[] = [];
                 $keys = array_keys($current);
@@ -291,7 +278,6 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
 
     /**
      * Adds file info to the uploaded files array by input name, e.g. `Item[file]`.
-     *
      * @param array $files array containing uploaded files
      * @param string $name input name specification.
      * @param array $info file info.
@@ -300,7 +286,6 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
     {
         if (strpos($name, '[') === false) {
             $files[$name] = $info;
-
             return;
         }
 
@@ -315,10 +300,8 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
 
         $nameParts = preg_split('/\\]\\[|\\[/s', $name);
         $baseName = array_shift($nameParts);
-
         if (!isset($files[$baseName])) {
             $files[$baseName] = [];
-
             foreach ($fileInfoAttributes as $attribute) {
                 $files[$baseName][$attribute] = [];
             }
@@ -334,10 +317,8 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
             }
 
             $current = &$files[$baseName][$attribute];
-
             foreach ($nameParts as $namePart) {
                 $namePart = trim($namePart, ']');
-
                 if ($namePart === '') {
                     $current[] = [];
                     $keys = array_keys($current);
@@ -358,9 +339,7 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
      * Gets the size in bytes from verbose size representation.
      *
      * For example: '5K' => 5*1024.
-     *
      * @param string $verboseSize verbose size representation.
-     *
      * @return int actual size in bytes.
      */
     private function getByteSize($verboseSize)
@@ -368,17 +347,14 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
         if (empty($verboseSize)) {
             return 0;
         }
-
         if (is_numeric($verboseSize)) {
             return (int) $verboseSize;
         }
         $sizeUnit = trim($verboseSize, '0123456789');
         $size = trim(str_replace($sizeUnit, '', $verboseSize));
-
         if (!is_numeric($size)) {
             return 0;
         }
-
         switch (strtolower($sizeUnit)) {
             case 'kb':
             case 'k':
@@ -389,7 +365,6 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
             case 'gb':
             case 'g':
                 return $size * 1024 * 1024 * 1024;
-
             default:
                 return 0;
         }
