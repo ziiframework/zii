@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -58,8 +59,9 @@ class UnknownCommandExceptionTest extends TestCase
 
     /**
      * @dataProvider suggestedCommandsProvider
+     *
      * @param string $command
-     * @param array $expectedSuggestion
+     * @param array  $expectedSuggestion
      */
     public function testSuggestCommand($command, $expectedSuggestion)
     {

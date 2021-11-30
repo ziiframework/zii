@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -35,6 +36,7 @@ class AccessRuleTest extends \yiiunit\TestCase
 
     /**
      * @param string $method
+     *
      * @return Request
      */
     protected function mockRequest($method = 'GET')
@@ -50,6 +52,7 @@ class AccessRuleTest extends \yiiunit\TestCase
 
     /**
      * @param string $userid optional user id
+     *
      * @return User
      */
     protected function mockUser($userid = null)
@@ -58,6 +61,7 @@ class AccessRuleTest extends \yiiunit\TestCase
             'identityClass' => UserIdentity::className(),
             'enableAutoLogin' => false,
         ]);
+
         if ($userid !== null) {
             $user->setIdentity(UserIdentity::findIdentity($userid));
         }
@@ -71,6 +75,7 @@ class AccessRuleTest extends \yiiunit\TestCase
     protected function mockAction()
     {
         $controller = new Controller('site', Yii::$app);
+
         return new Action('test', $controller);
     }
 
@@ -212,10 +217,10 @@ class AccessRuleTest extends \yiiunit\TestCase
      * Data provider for testMatchRole.
      *
      * @return array or arrays
-     *           the id of the action
-     *           should the action allow (true) or disallow (false)
-     *           test user id
-     *           expected match result (true, false, null)
+     *               the id of the action
+     *               should the action allow (true) or disallow (false)
+     *               test user id
+     *               expected match result (true, false, null)
      */
     public function matchRoleProvider()
     {
@@ -240,14 +245,14 @@ class AccessRuleTest extends \yiiunit\TestCase
             ['update', true,  'unknown', ['authorID' => 'user2'], null],
 
             // user2 is author, can only edit own posts
-            ['update', true,  'user2',   function () { return ['authorID' => 'user2']; }, true],
-            ['update', true,  'user2',   function () { return ['authorID' => 'user1']; }, null],
+            ['update', true,  'user2',   static function () { return ['authorID' => 'user2']; }, true],
+            ['update', true,  'user2',   static function () { return ['authorID' => 'user1']; }, null],
             // user1 is admin, can update all posts
-            ['update', true,  'user1',   function () { return ['authorID' => 'user1']; }, true],
-            ['update', true,  'user1',   function () { return ['authorID' => 'user2']; }, true],
+            ['update', true,  'user1',   static function () { return ['authorID' => 'user1']; }, true],
+            ['update', true,  'user1',   static function () { return ['authorID' => 'user2']; }, true],
             // unknown user can not edit anything
-            ['update', true,  'unknown', function () { return ['authorID' => 'user1']; }, null],
-            ['update', true,  'unknown', function () { return ['authorID' => 'user2']; }, null],
+            ['update', true,  'unknown', static function () { return ['authorID' => 'user1']; }, null],
+            ['update', true,  'unknown', static function () { return ['authorID' => 'user2']; }, null],
         ];
     }
 
@@ -255,11 +260,12 @@ class AccessRuleTest extends \yiiunit\TestCase
      * Test that a user matches certain roles.
      *
      * @dataProvider matchRoleProvider
-     * @param string $actionid the action id
-     * @param bool $allow whether the rule should allow access
-     * @param string $userid the userid to check
+     *
+     * @param string        $actionid   the action id
+     * @param bool          $allow      whether the rule should allow access
+     * @param string        $userid     the userid to check
      * @param array|Closure $roleParams params for $roleParams
-     * @param bool $expected the expected result or null
+     * @param bool          $expected   the expected result or null
      */
     public function testMatchRole($actionid, $allow, $userid, $roleParams, $expected)
     {
@@ -364,7 +370,7 @@ class AccessRuleTest extends \yiiunit\TestCase
     }
 
     /**
-     * Test that callable object can be used as roleParams values
+     * Test that callable object can be used as roleParams values.
      */
     public function testMatchRoleWithRoleParamsCallable()
     {

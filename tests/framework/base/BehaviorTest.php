@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -57,13 +58,13 @@ class BarBehavior extends Behavior
 
     public function attach($owner)
     {
-        self::$attachCount++;
+        ++self::$attachCount;
         parent::attach($owner);
     }
 
     public function detach()
     {
-        self::$detachCount++;
+        ++self::$detachCount;
         parent::detach();
     }
 }

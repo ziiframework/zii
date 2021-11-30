@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,6 +12,7 @@ use yii\caching\ApcCache;
 
 /**
  * Class for testing APC cache backend.
+ *
  * @group apc
  * @group caching
  */

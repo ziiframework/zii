@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,7 @@
 
 namespace yiiunit\framework\validators;
 
+use stdClass;
 use yii\validators\NumberValidator;
 use yii\web\View;
 use yiiunit\data\validators\models\FakedValidationModel;
@@ -259,7 +261,7 @@ class NumberValidatorTest extends TestCase
 
         // @see https://github.com/yiisoft/yii2/issues/11672
         $model = new FakedValidationModel();
-        $model->attr_number = new \stdClass();
+        $model->attr_number = new stdClass();
         $val->validateAttribute($model, 'attr_number');
         $this->assertTrue($model->hasErrors('attr_number'));
     }
@@ -310,10 +312,9 @@ class NumberValidatorTest extends TestCase
 
         // @see https://github.com/yiisoft/yii2/issues/11672
         $model = new FakedValidationModel();
-        $model->attr_number = new \stdClass();
+        $model->attr_number = new stdClass();
         $val->validateAttribute($model, 'attr_number');
         $this->assertTrue($model->hasErrors('attr_number'));
-
 
         $val = new NumberValidator();
         $model = new FakedValidationModel();
@@ -354,7 +355,7 @@ class NumberValidatorTest extends TestCase
 
         // @see https://github.com/yiisoft/yii2/issues/11672
         $model = new FakedValidationModel();
-        $model->attr_number = new \stdClass();
+        $model->attr_number = new stdClass();
         $val->validateAttribute($model, 'attr_number');
         $this->assertTrue($model->hasErrors('attr_number'));
     }
@@ -436,7 +437,7 @@ class NumberValidatorTest extends TestCase
     public function testValidateObject()
     {
         $val = new NumberValidator();
-        $value = new \stdClass();
+        $value = new stdClass();
         $this->assertFalse($val->validate($value));
     }
 

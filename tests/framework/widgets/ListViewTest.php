@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,9 +8,10 @@
 
 namespace yiiunit\framework\widgets;
 
-use yii\web\Request;
+use Yii;
 use yii\data\ArrayDataProvider;
 use yii\data\DataProviderInterface;
+use yii\web\Request;
 use yii\widgets\ListView;
 use yiiunit\TestCase;
 
@@ -67,6 +69,7 @@ HTML
 
     /**
      * @param array $options
+     *
      * @return ListView
      */
     private function getListView($options = [])
@@ -133,7 +136,7 @@ HTML
 </div>',
             ],
             [
-                function ($model, $key, $index, $widget) {
+                static function ($model, $key, $index, $widget) {
                     return "Item #{$index}: {$model['login']} - Widget: " . $widget->className();
                 },
                 '<div id="w0" class="list-view"><div class="summary">Showing <b>1-3</b> of <b>3</b> items.</div>
@@ -155,7 +158,8 @@ HTML
 
     /**
      * @dataProvider itemViewOptions
-     * @param mixed $itemView
+     *
+     * @param mixed  $itemView
      * @param string $expected
      */
     public function testItemViewOptions($itemView, $expected)
@@ -179,7 +183,7 @@ HTML
 </div>',
             ],
             [
-                function ($model, $key, $index, $widget) {
+                static function ($model, $key, $index, $widget) {
                     return [
                         'tag' => 'span',
                         'data' => [
@@ -201,7 +205,8 @@ HTML
 
     /**
      * @dataProvider itemOptions
-     * @param mixed $itemOptions
+     *
+     * @param mixed  $itemOptions
      * @param string $expected
      */
     public function testItemOptions($itemOptions, $expected)
@@ -215,15 +220,17 @@ HTML
 
     public function testBeforeAndAfterItem()
     {
-        $before = function ($model, $key, $index, $widget) {
+        $before = static function ($model, $key, $index, $widget) {
             $widget = get_class($widget);
+
             return "<!-- before: {$model['id']}, key: $key, index: $index, widget: $widget -->";
         };
-        $after = function ($model, $key, $index, $widget) {
+        $after = static function ($model, $key, $index, $widget) {
             if ($model['id'] === 1) {
                 return null;
             }
             $widget = get_class($widget);
+
             return "<!-- after: {$model['id']}, key: $key, index: $index, widget: $widget -->";
         };
 
@@ -246,8 +253,7 @@ HTML
 <!-- after: 3, key: 2, index: 2, widget: yii\widgets\ListView -->
 </div>
 HTML
-    , $out
-);
+    , $out);
     }
 
     /**
@@ -257,7 +263,7 @@ HTML
     {
         $initTriggered = false;
         $this->getListView([
-            'on init' => function () use (&$initTriggered) {
+            'on init' => static function () use (&$initTriggered) {
                 $initTriggered = true;
             },
             'dataProvider' => new ArrayDataProvider(['allModels' => []]),
@@ -307,7 +313,7 @@ HTML
 
     public function testRenderSorter()
     {
-        \Yii::$app->set('request', new Request(['scriptUrl' => '/']));
+        Yii::$app->set('request', new Request(['scriptUrl' => '/']));
 
         ob_start();
         $this->getListView([
@@ -316,8 +322,8 @@ HTML
                 'sort' => [
                     'attributes' => ['id'],
                     'route' => 'list/view',
-                ]
-            ])
+                ],
+            ]),
         ])->run();
         $out = ob_get_clean();
 

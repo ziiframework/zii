@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,9 @@
 
 namespace yiiunit\framework\db\sqlite;
 
+use function count;
+use Exception;
+use Yii;
 use yii\db\Connection;
 use yii\db\Transaction;
 use yiiunit\data\ar\ActiveRecord;
@@ -54,7 +58,7 @@ class ConnectionTest extends \yiiunit\framework\db\ConnectionTest
         $counts = [[0, 2], [1, 2], [2, 2]];
 
         foreach ($counts as $count) {
-            list($masterCount, $slaveCount) = $count;
+            [$masterCount, $slaveCount] = $count;
 
             $db = $this->prepareMasterSlave($masterCount, $slaveCount);
 
@@ -69,6 +73,7 @@ class ConnectionTest extends \yiiunit\framework\db\ConnectionTest
             // test UPDATE uses master
             $db->createCommand("UPDATE profile SET description='test' WHERE id=1")->execute();
             $this->assertTrue($db->isActive);
+
             if ($masterCount > 0) {
                 $this->assertInstanceOf(Connection::className(), $db->getMaster());
                 $this->assertTrue($db->getMaster()->isActive);
@@ -76,7 +81,7 @@ class ConnectionTest extends \yiiunit\framework\db\ConnectionTest
                 $this->assertNull($db->getMaster());
             }
             $this->assertNotEquals('test', $db->createCommand('SELECT description FROM profile WHERE id=1')->queryScalar());
-            $result = $db->useMaster(function (Connection $db) {
+            $result = $db->useMaster(static function (Connection $db) {
                 return $db->createCommand('SELECT description FROM profile WHERE id=1')->queryScalar();
             });
             $this->assertEquals('test', $result);
@@ -96,7 +101,7 @@ class ConnectionTest extends \yiiunit\framework\db\ConnectionTest
             $customer = Customer::findOne(1);
             $this->assertInstanceOf(Customer::className(), $customer);
             $this->assertEquals('user1', $customer->name);
-            $result = $db->useMaster(function () {
+            $result = $db->useMaster(static function () {
                 return Customer::findOne(1)->name;
             });
             $this->assertEquals('test', $result);
@@ -119,7 +124,8 @@ class ConnectionTest extends \yiiunit\framework\db\ConnectionTest
 
             $hit_slaves[$db->getSlave()->dsn] = true;
             $hit_masters[$db->getMaster()->dsn] = true;
-            if (\count($hit_slaves) === $slavesCount && \count($hit_masters) === $mastersCount) {
+
+            if (count($hit_slaves) === $slavesCount && count($hit_masters) === $mastersCount) {
                 break;
             }
         }
@@ -144,7 +150,8 @@ class ConnectionTest extends \yiiunit\framework\db\ConnectionTest
 
             $hit_slaves[$db->getSlave()->dsn] = true;
             $hit_masters[$db->getMaster()->dsn] = true;
-            if (\count($hit_slaves) === $slavesCount) {
+
+            if (count($hit_slaves) === $slavesCount) {
                 break;
             }
         }
@@ -158,12 +165,13 @@ class ConnectionTest extends \yiiunit\framework\db\ConnectionTest
     {
         $db = $this->prepareMasterSlave(1, 1);
         $this->assertTrue($db->enableSlaves);
+
         try {
-            $db->useMaster(function (Connection $db) {
-                throw new \Exception('fail');
+            $db->useMaster(static function (Connection $db) {
+                throw new Exception('fail');
             });
             $this->fail('Exception was caught somewhere');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // ok
         }
         $this->assertTrue($db->enableSlaves);
@@ -172,13 +180,14 @@ class ConnectionTest extends \yiiunit\framework\db\ConnectionTest
     /**
      * @param int $masterCount
      * @param int $slaveCount
+     *
      * @return Connection
      */
     protected function prepareMasterSlave($masterCount, $slaveCount)
     {
         $databases = self::getParam('databases');
         $fixture = $databases[$this->driverName]['fixture'];
-        $basePath = \Yii::getAlias('@yiiunit/runtime');
+        $basePath = Yii::getAlias('@yiiunit/runtime');
 
         $config = [
             'class' => 'yii\db\Connection',
@@ -200,7 +209,7 @@ class ConnectionTest extends \yiiunit\framework\db\ConnectionTest
             $config['slaves'][] = $slave;
         }
 
-        return \Yii::createObject($config);
+        return Yii::createObject($config);
     }
 
     public function testAliasDbPath()

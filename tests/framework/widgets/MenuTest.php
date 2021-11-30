@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,7 +8,6 @@
 
 namespace yiiunit\framework\widgets;
 
-use Yii;
 use yii\widgets\Menu;
 
 /**
@@ -176,7 +176,7 @@ HTML;
                     'label' => 'item1',
                     'url' => '#',
                     'template' => 'label: {label}; url: {url}',
-                    'active' => function ($item, $hasActiveChild, $isItemActive, $widget) {
+                    'active' => static function ($item, $hasActiveChild, $isItemActive, $widget) {
                         return isset($item, $hasActiveChild, $isItemActive, $widget);
                     },
                 ],

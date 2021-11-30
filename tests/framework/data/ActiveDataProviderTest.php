@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -19,6 +20,7 @@ use yiiunit\framework\db\UnqueryableQueryMock;
 
 /**
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  *
  * @group data

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -50,13 +51,11 @@ class SpacelessTest extends \yiiunit\TestCase
     public function testShouldTriggerInitEvent()
     {
         $initTriggered = false;
-        $spaceless = Spaceless::begin(
-            [
-                'on init' => function () use (&$initTriggered) {
+        $spaceless = Spaceless::begin([
+                'on init' => static function () use (&$initTriggered) {
                     $initTriggered = true;
-                }
-            ]
-        );
+                },
+            ]);
         Spaceless::end();
         $this->assertTrue($initTriggered);
     }

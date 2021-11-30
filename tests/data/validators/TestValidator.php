@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,7 @@
 
 namespace yiiunit\data\validators;
 
+use function get_class;
 use yii\validators\Validator;
 
 class TestValidator extends Validator
@@ -17,8 +19,9 @@ class TestValidator extends Validator
     public function validateAttribute($object, $attribute)
     {
         $this->markAttributeValidated($attribute);
+
         if ($this->_setErrorOnValidateAttribute == true) {
-            $this->addError($object, $attribute, sprintf('%s##%s', $attribute, \get_class($object)));
+            $this->addError($object, $attribute, sprintf('%s##%s', $attribute, get_class($object)));
         }
     }
 
@@ -33,7 +36,7 @@ class TestValidator extends Validator
 
     public function countAttributeValidations($attr)
     {
-        return isset($this->_validatedAttributes[$attr]) ? $this->_validatedAttributes[$attr] : 0;
+        return $this->_validatedAttributes[$attr] ?? 0;
     }
 
     public function isAttributeValidated($attr)

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -65,6 +66,7 @@ class POMessageControllerTest extends BaseMessageControllerTest
         $gettext = new GettextPoFile();
 
         $data = [];
+
         foreach ($messages as $message => $translation) {
             $data[$category . chr(4) . $message] = $translation;
         }
@@ -78,11 +80,13 @@ class POMessageControllerTest extends BaseMessageControllerTest
     protected function loadMessages($category)
     {
         $messageFilePath = $this->getMessageFilePath();
+
         if (!file_exists($messageFilePath)) {
             return [];
         }
 
         $gettext = new GettextPoFile();
+
         return $gettext->load($messageFilePath, $category);
     }
 }

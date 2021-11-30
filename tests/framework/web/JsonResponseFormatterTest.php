@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,12 +8,14 @@
 
 namespace yiiunit\framework\web;
 
+use SplStack;
 use yii\helpers\Json;
 use yii\web\JsonResponseFormatter;
 use yiiunit\framework\web\stubs\ModelStub;
 
 /**
  * @author Alexander Makarov <sam@rmcreative.ru>
+ *
  * @since 2.0.3
  *
  * @group web
@@ -91,7 +94,7 @@ class JsonResponseFormatterTest extends FormatterTest
 
     public function formatTraversableObjectDataProvider()
     {
-        $postsStack = new \SplStack();
+        $postsStack = new SplStack();
         $postsStack->push(new Post(915, 'record1'));
         $postsStack->push(new Post(456, 'record2'));
 
@@ -159,8 +162,8 @@ class JsonResponseFormatterTest extends FormatterTest
     }
 
     /**
-     * @param mixed  $data the data to be formatted
-     * @param string $json the expected JSON body
+     * @param mixed  $data       the data to be formatted
+     * @param string $json       the expected JSON body
      * @param string $prettyJson the expected pretty JSON body
      * @dataProvider formatArrayDataProvider
      */
@@ -173,8 +176,8 @@ class JsonResponseFormatterTest extends FormatterTest
     }
 
     /**
-     * @param array $configuration JSON formatter configuration array.
-     * @param string $contentTypeExpected Expected value of the response `Content-Type` header.
+     * @param array  $configuration       JSON formatter configuration array
+     * @param string $contentTypeExpected expected value of the response `Content-Type` header
      * @dataProvider contentTypeGenerationDataProvider
      */
     public function testContentTypeGeneration($configuration, $contentTypeExpected)
@@ -198,7 +201,7 @@ class JsonResponseFormatterTest extends FormatterTest
 
     /**
      * Formatter must return early sets content,
-     * e.g. content may be sets by PageCache filter
+     * e.g. content may be sets by PageCache filter.
      */
     public function testFormatFilledContent()
     {
@@ -210,33 +213,33 @@ class JsonResponseFormatterTest extends FormatterTest
     }
 
     /**
-     * Formatter configuration keepObjectType affects how zero-indexed objects are encoded
+     * Formatter configuration keepObjectType affects how zero-indexed objects are encoded.
      */
     public function testFormatZeroIndexedObjectKeepObject()
     {
         $formatter = $this->getFormatterInstance([
             'keepObjectType' => true,
         ]);
-        $this->response->data = (object)['test'];
+        $this->response->data = (object) ['test'];
         $formatter->format($this->response);
         $this->assertEquals('{"0":"test"}', $this->response->content);
     }
 
     /**
-     * Formatter configuration keepObjectType affects how zero-indexed objects are encoded
+     * Formatter configuration keepObjectType affects how zero-indexed objects are encoded.
      */
     public function testFormatZeroIndexedObjectAllowArray()
     {
         $formatter = $this->getFormatterInstance([
             'keepObjectType' => false,
         ]);
-        $this->response->data = (object)['test'];
+        $this->response->data = (object) ['test'];
         $formatter->format($this->response);
         $this->assertEquals('["test"]', $this->response->content);
     }
 
     /**
-     * Formatter configuration keepObjectType reverts Json::$keepObjectType to its previous value
+     * Formatter configuration keepObjectType reverts Json::$keepObjectType to its previous value.
      */
     public function testFormatCleanupKeepObjectType()
     {
@@ -245,7 +248,7 @@ class JsonResponseFormatterTest extends FormatterTest
         $formatter = $this->getFormatterInstance([
             'keepObjectType' => true,
         ]);
-        $this->response->data = (object)['test'];
+        $this->response->data = (object) ['test'];
         $formatter->format($this->response);
         $this->assertFalse(Json::$keepObjectType);
         Json::$keepObjectType = $default;

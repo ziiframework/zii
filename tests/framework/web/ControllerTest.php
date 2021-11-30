@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,7 +11,6 @@ namespace yiiunit\framework\web;
 use RuntimeException;
 use Yii;
 use yii\base\InlineAction;
-use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\ServerErrorHttpException;
@@ -50,12 +50,12 @@ class ControllerTest extends TestCase
         $aksi1 = new InlineAction('aksi1', $this->controller, 'actionAksi1');
 
         $params = ['fromGet' => 'from query params', 'q' => 'd426', 'validator' => 'available'];
-        list($fromGet, $other) = $this->controller->bindActionParams($aksi1, $params);
+        [$fromGet, $other] = $this->controller->bindActionParams($aksi1, $params);
         $this->assertEquals('from query params', $fromGet);
         $this->assertEquals('default', $other);
 
         $params = ['fromGet' => 'from query params', 'q' => 'd426', 'other' => 'available'];
-        list($fromGet, $other) = $this->controller->bindActionParams($aksi1, $params);
+        [$fromGet, $other] = $this->controller->bindActionParams($aksi1, $params);
         $this->assertEquals('from query params', $fromGet);
         $this->assertEquals('available', $other);
     }
@@ -64,6 +64,7 @@ class ControllerTest extends TestCase
     {
         if (PHP_VERSION_ID < 70100) {
             $this->markTestSkipped('Can not be tested on PHP < 7.1');
+
             return;
         }
 
@@ -89,9 +90,11 @@ class ControllerTest extends TestCase
         $this->assertNull($args[1]);
     }
 
-    public function testModelBindingHttpException() {
+    public function testModelBindingHttpException()
+    {
         if (PHP_VERSION_ID < 70100) {
             $this->markTestSkipped('Can not be tested on PHP < 7.1');
+
             return;
         }
 
@@ -100,8 +103,8 @@ class ControllerTest extends TestCase
             'basePath' => __DIR__,
             'container' => [
                 'definitions' => [
-                    \yiiunit\framework\web\stubs\ModelBindingStub::className() => [ \yiiunit\framework\web\stubs\ModelBindingStub::className() , "build"],
-                ]
+                    \yiiunit\framework\web\stubs\ModelBindingStub::className() => [\yiiunit\framework\web\stubs\ModelBindingStub::className(), 'build'],
+                ],
             ],
             'components' => [
                 'request' => [
@@ -114,7 +117,7 @@ class ControllerTest extends TestCase
         Yii::$container->set(VendorImage::className(), VendorImage::className());
         $this->mockWebApplication(['controller' => $this->controller]);
         $injectionAction = new InlineAction('injection', $this->controller, 'actionModelBindingInjection');
-        $this->expectException(get_class(new NotFoundHttpException("Not Found Item.")));
+        $this->expectException(get_class(new NotFoundHttpException('Not Found Item.')));
         $this->expectExceptionMessage('Not Found Item.');
         $this->controller->bindActionParams($injectionAction, []);
     }
@@ -123,6 +126,7 @@ class ControllerTest extends TestCase
     {
         if (PHP_VERSION_ID < 70100) {
             $this->markTestSkipped('Can not be tested on PHP < 7.1');
+
             return;
         }
         // Use the PHP71 controller for this test
@@ -142,7 +146,7 @@ class ControllerTest extends TestCase
 
         $injectionAction = new InlineAction('injection', $this->controller, 'actionInjection');
         $params = ['between' => 'test', 'after' => 'another', 'before' => 'test'];
-        Yii::$container->set(VendorImage::className(), function() { throw new \RuntimeException('uh oh'); });
+        Yii::$container->set(VendorImage::className(), static function () { throw new RuntimeException('uh oh'); });
 
         $this->expectException(get_class(new RuntimeException()));
         $this->expectExceptionMessage('uh oh');
@@ -153,6 +157,7 @@ class ControllerTest extends TestCase
     {
         if (PHP_VERSION_ID < 70100) {
             $this->markTestSkipped('Can not be tested on PHP < 7.1');
+
             return;
         }
         // Use the PHP71 controller for this test
@@ -181,6 +186,7 @@ class ControllerTest extends TestCase
     {
         if (PHP_VERSION_ID < 70100) {
             $this->markTestSkipped('Can not be tested on PHP < 7.1');
+
             return;
         }
         // Use the PHP71 controller for this test
@@ -216,6 +222,7 @@ class ControllerTest extends TestCase
     {
         if (PHP_VERSION_ID < 70100) {
             $this->markTestSkipped('Can not be tested on PHP < 7.1');
+
             return;
         }
         $module = new \yii\base\Module('fake', new \yii\web\Application([
@@ -249,6 +256,7 @@ class ControllerTest extends TestCase
     {
         if (PHP_VERSION_ID < 70000) {
             $this->markTestSkipped('Can not be tested on PHP < 7.0');
+
             return;
         }
 
@@ -269,7 +277,7 @@ class ControllerTest extends TestCase
         $aksi1 = new InlineAction('aksi1', $this->controller, 'actionAksi1');
 
         $params = ['foo' => '100', 'bar' => null, 'true' => 'on', 'false' => 'false'];
-        list($foo, $bar, $true, $false) = $this->controller->bindActionParams($aksi1, $params);
+        [$foo, $bar, $true, $false] = $this->controller->bindActionParams($aksi1, $params);
         $this->assertSame(100, $foo);
         $this->assertSame(null, $bar);
         $this->assertSame(true, $true);
@@ -278,12 +286,12 @@ class ControllerTest extends TestCase
         // allow nullable argument to be set to empty string (as null)
         // https://github.com/yiisoft/yii2/issues/18450
         $params = ['foo' => 100, 'bar' => '', 'true' => true, 'false' => true];
-        list(, $bar) = $this->controller->bindActionParams($aksi1, $params);
+        [, $bar] = $this->controller->bindActionParams($aksi1, $params);
         $this->assertSame(null, $bar);
 
         // make sure nullable string argument is not set to null when empty string is passed
         $stringy = new InlineAction('stringy', $this->controller, 'actionStringy');
-        list($foo) = $this->controller->bindActionParams($stringy, ['foo' => '']);
+        [$foo] = $this->controller->bindActionParams($stringy, ['foo' => '']);
         $this->assertSame('', $foo);
 
         $params = ['foo' => 'oops', 'bar' => null];

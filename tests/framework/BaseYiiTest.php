@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,15 +12,16 @@ use Yii;
 use yii\BaseYii;
 use yii\di\Container;
 use yii\log\Logger;
-use yiiunit\data\base\Singer;
-use yiiunit\TestCase;
 use yiiunit\data\base\CallableClass;
+use yiiunit\data\base\Singer;
 use yiiunit\framework\di\stubs\FooBaz;
 use yiiunit\framework\di\stubs\FooDependentSubclass;
 use yiiunit\framework\di\stubs\Qux;
+use yiiunit\TestCase;
 
 /**
  * BaseYiiTest.
+ *
  * @group base
  */
 class BaseYiiTest extends TestCase
@@ -67,7 +69,7 @@ class BaseYiiTest extends TestCase
 
     public function testGetVersion()
     {
-        $this->assertTrue((bool) preg_match('~\d+\.\d+(?:\.\d+)?(?:-\w+)?~', \Yii::getVersion()));
+        $this->assertTrue((bool) preg_match('~\d+\.\d+(?:\.\d+)?(?:-\w+)?~', Yii::getVersion()));
     }
 
     public function testPowered()
@@ -93,19 +95,17 @@ class BaseYiiTest extends TestCase
         Yii::$container = new Container();
 
         // Test passing in of normal params combined with DI params.
-        $this->assertTrue(Yii::createObject(function (Singer $singer, $a) {
+        $this->assertTrue(Yii::createObject(static function (Singer $singer, $a) {
             return $a === 'a';
         }, ['a']));
 
-
         $singer = new Singer();
         $singer->firstName = 'Bob';
-        $this->assertTrue(Yii::createObject(function (Singer $singer, $a) {
+        $this->assertTrue(Yii::createObject(static function (Singer $singer, $a) {
             return $singer->firstName === 'Bob';
         }, [$singer, 'a']));
 
-
-        $this->assertTrue(Yii::createObject(function (Singer $singer, $a = 3) {
+        $this->assertTrue(Yii::createObject(static function (Singer $singer, $a = 3) {
             return true;
         }));
 
@@ -172,26 +172,19 @@ class BaseYiiTest extends TestCase
 
         $logger->expects($this->exactly(6))
             ->method('log')
-            ->withConsecutive(
-                [$this->equalTo('info message'), $this->equalTo(Logger::LEVEL_INFO), $this->equalTo('info category')],
-                [
+            ->withConsecutive([$this->equalTo('info message'), $this->equalTo(Logger::LEVEL_INFO), $this->equalTo('info category')], [
                     $this->equalTo('warning message'),
                     $this->equalTo(Logger::LEVEL_WARNING),
                     $this->equalTo('warning category'),
-                ],
-                [$this->equalTo('trace message'), $this->equalTo(Logger::LEVEL_TRACE), $this->equalTo('trace category')],
-                [$this->equalTo('error message'), $this->equalTo(Logger::LEVEL_ERROR), $this->equalTo('error category')],
-                [
+                ], [$this->equalTo('trace message'), $this->equalTo(Logger::LEVEL_TRACE), $this->equalTo('trace category')], [$this->equalTo('error message'), $this->equalTo(Logger::LEVEL_ERROR), $this->equalTo('error category')], [
                     $this->equalTo('beginProfile message'),
                     $this->equalTo(Logger::LEVEL_PROFILE_BEGIN),
                     $this->equalTo('beginProfile category'),
-                ],
-                [
+                ], [
                     $this->equalTo('endProfile message'),
                     $this->equalTo(Logger::LEVEL_PROFILE_END),
                     $this->equalTo('endProfile category'),
-                ]
-            );
+                ]);
 
         BaseYii::info('info message', 'info category');
         BaseYii::warning('warning message', 'warning category');

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -24,13 +25,13 @@ class UniqueValidatorTest extends \yiiunit\framework\validators\UniqueValidatorT
         parent::testPrepareParams();
 
         // Add table prefix for column name
-        $model = new Type;
+        $model = new Type();
         $model->name = 'Angela';
 
         $attribute = 'name';
         $targetAttribute = [$attribute => "[[jsonb_col]]->>'name'"];
         $result = $this->invokeMethod(new UniqueValidator(), 'prepareConditions', [$targetAttribute, $model, $attribute]);
-        $expected = ['{{' . Type::tableName() . '}}.' . $targetAttribute[$attribute]  => $model->name];
+        $expected = ['{{' . Type::tableName() . '}}.' . $targetAttribute[$attribute] => $model->name];
         $this->assertEquals($expected, $result);
     }
 }

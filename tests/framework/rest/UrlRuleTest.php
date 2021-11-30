@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -29,10 +30,12 @@ class UrlRuleTest extends TestCase
     public function testInitControllerNamePluralization()
     {
         $suites = $this->getTestsForControllerNamePluralization();
+
         foreach ($suites as $i => $suite) {
-            list($name, $tests) = $suite;
+            [$name, $tests] = $suite;
+
             foreach ($tests as $j => $test) {
-                list($config, $expected) = $test;
+                [$config, $expected] = $test;
                 $rule = new UrlRule($config);
                 $this->assertEquals($expected, $rule->controller, "Test#$i-$j: $name");
             }
@@ -44,15 +47,18 @@ class UrlRuleTest extends TestCase
         $manager = new UrlManager(['cache' => null]);
         $request = new Request(['hostInfo' => 'http://en.example.com', 'methodParam' => '_METHOD']);
         $suites = $this->getTestsForParseRequest();
+
         foreach ($suites as $i => $suite) {
-            list($name, $config, $tests) = $suite;
+            [$name, $config, $tests] = $suite;
             $rule = new UrlRule($config);
+
             foreach ($tests as $j => $test) {
                 $request->pathInfo = $test[0];
                 $route = $test[1];
-                $params = isset($test[2]) ? $test[2] : [];
-                $_POST['_METHOD'] = isset($test[3]) ? $test[3] : 'GET';
+                $params = $test[2] ?? [];
+                $_POST['_METHOD'] = $test[3] ?? 'GET';
                 $result = $rule->parseRequest($manager, $request);
+
                 if ($route === false) {
                     $this->assertFalse($result, "Test#$i-$j: $name");
                 } else {
@@ -274,7 +280,6 @@ class UrlRuleTest extends TestCase
                 ],
             ],
 
-
             // without pluralize
             [
                 [ // Rule properties
@@ -355,13 +360,14 @@ class UrlRuleTest extends TestCase
 
     /**
      * @dataProvider createUrlDataProvider
+     *
      * @param array $ruleConfig
      * @param array $tests
      */
     public function testCreateUrl($ruleConfig, $tests)
     {
         foreach ($tests as $test) {
-            list($params, $expected) = $test;
+            [$params, $expected] = $test;
 
             $this->mockWebApplication();
             Yii::$app->set('request', new Request(['hostInfo' => 'http://api.example.com', 'scriptUrl' => '/index.php']));
@@ -377,13 +383,14 @@ class UrlRuleTest extends TestCase
 
     /**
      * @dataProvider testGetCreateUrlStatusProvider
+     *
      * @param array $ruleConfig
      * @param array $tests
      */
     public function testGetCreateUrlStatus($ruleConfig, $tests)
     {
         foreach ($tests as $test) {
-            list($params, $expected, $status) = $test;
+            [$params, $expected, $status] = $test;
 
             $this->mockWebApplication();
             Yii::$app->set('request', new Request(['hostInfo' => 'http://api.example.com', 'scriptUrl' => '/index.php']));
@@ -396,6 +403,7 @@ class UrlRuleTest extends TestCase
             $errorMessage = 'Failed test: ' . VarDumper::dumpAsString($test);
             $this->assertSame($expected, $rule->createUrl($manager, $route, $params), $errorMessage);
             $this->assertNotNull($status, $errorMessage);
+
             if ($status > 0) {
                 $this->assertSame($status, $rule->getCreateUrlStatus() & $status, $errorMessage);
             } else {

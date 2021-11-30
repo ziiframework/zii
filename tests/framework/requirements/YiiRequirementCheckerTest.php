@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,6 +12,7 @@ use yiiunit\TestCase;
 
 /**
  * Test case for [[YiiRequirementChecker]].
+ *
  * @see YiiRequirementChecker
  * @group requirements
  */
@@ -127,6 +129,7 @@ class YiiRequirementCheckerTest extends TestCase
         $mergedRequirements = array_merge($requirements1, $requirements2);
 
         $this->assertCount($checkResult['summary']['total'], $mergedRequirements, 'Wrong total checks count!');
+
         foreach ($mergedRequirements as $key => $mergedRequirement) {
             $this->assertEquals($mergedRequirement['name'], $checkResult['requirements'][$key]['name'], 'Wrong requirements list!');
         }
@@ -146,6 +149,7 @@ class YiiRequirementCheckerTest extends TestCase
 
     /**
      * Data provider for [[testGetByteSize()]].
+     *
      * @return array
      */
     public function dataProviderGetByteSize()
@@ -164,8 +168,8 @@ class YiiRequirementCheckerTest extends TestCase
     /**
      * @dataProvider dataProviderGetByteSize
      *
-     * @param string  $verboseValue     verbose value.
-     * @param int $expectedByteSize expected byte size.
+     * @param string $verboseValue     verbose value
+     * @param int    $expectedByteSize expected byte size
      */
     public function testGetByteSize($verboseValue, $expectedByteSize)
     {
@@ -175,7 +179,8 @@ class YiiRequirementCheckerTest extends TestCase
     }
 
     /**
-     * Data provider for [[testCompareByteSize()]]
+     * Data provider for [[testCompareByteSize()]].
+     *
      * @return array
      */
     public function dataProviderCompareByteSize()
@@ -193,10 +198,10 @@ class YiiRequirementCheckerTest extends TestCase
      * @depends testGetByteSize
      * @dataProvider dataProviderCompareByteSize
      *
-     * @param string  $a                        first value.
-     * @param string  $b                        second value.
-     * @param string  $compare                  comparison.
-     * @param bool $expectedComparisonResult expected comparison result.
+     * @param string $a                        first value
+     * @param string $b                        second value
+     * @param string $compare                  comparison
+     * @param bool   $expectedComparisonResult expected comparison result
      */
     public function testCompareByteSize($a, $b, $compare, $expectedComparisonResult)
     {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,7 @@
 
 namespace yiiunit\framework\validators;
 
+use ArrayObject;
 use yii\validators\RangeValidator;
 use yiiunit\data\validators\models\FakedValidationModel;
 use yiiunit\TestCase;
@@ -135,12 +137,11 @@ class RangeValidatorTest extends TestCase
             'range' => ['a', 'b', 'c'],
             'allowArray' => true,
         ]);
-        $this->assertTrue($val->validate(new \ArrayObject(['a', 'b'])));
-
+        $this->assertTrue($val->validate(new ArrayObject(['a', 'b'])));
 
         // Test range as ArrayObject.
         $val = new RangeValidator([
-            'range' => new \ArrayObject(['a', 'b']),
+            'range' => new ArrayObject(['a', 'b']),
             'allowArray' => false,
         ]);
         $this->assertTrue($val->validate('a'));

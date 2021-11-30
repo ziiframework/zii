@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -52,6 +53,7 @@ abstract class BatchQueryResultTest extends DatabaseTestCase
         $query->from('customer')->where(['id' => 100]);
         $allRows = [];
         $batch = $query->batch(2, $db);
+
         foreach ($batch as $rows) {
             $allRows = array_merge($allRows, $rows);
         }
@@ -99,6 +101,7 @@ abstract class BatchQueryResultTest extends DatabaseTestCase
         // batch with eager loading
         $query = Customer::find()->with('orders')->orderBy('id');
         $customers = $this->getAllRowsFromBatch($query->batch(2, $db));
+
         foreach ($customers as $customer) {
             $this->assertTrue($customer->isRelationPopulated('orders'));
         }
@@ -131,6 +134,7 @@ abstract class BatchQueryResultTest extends DatabaseTestCase
     protected function getAllRowsFromBatch(BatchQueryResult $batch)
     {
         $allRows = [];
+
         foreach ($batch as $rows) {
             $allRows = array_merge($allRows, $rows);
         }
@@ -141,6 +145,7 @@ abstract class BatchQueryResultTest extends DatabaseTestCase
     protected function getAllRowsFromEach(BatchQueryResult $each)
     {
         $allRows = [];
+
         foreach ($each as $index => $row) {
             $allRows[$index] = $row;
         }

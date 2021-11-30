@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -214,7 +215,7 @@ class ComponentTest extends TestCase
         $this->assertFalse($this->component->event->handled);
 
         $eventRaised = false;
-        $this->component->on('click', function ($event) use (&$eventRaised) {
+        $this->component->on('click', static function ($event) use (&$eventRaised) {
             $eventRaised = true;
         });
         $this->component->raiseEvent();
@@ -222,7 +223,7 @@ class ComponentTest extends TestCase
 
         // raise event w/o parameters
         $eventRaised = false;
-        $this->component->on('test', function ($event) use (&$eventRaised) {
+        $this->component->on('test', static function ($event) use (&$eventRaised) {
             $eventRaised = true;
         });
         $this->component->trigger('test');
@@ -279,7 +280,7 @@ class ComponentTest extends TestCase
         $this->assertFalse($this->component->event->handled);
 
         $eventRaised = false;
-        $this->component->on('cli*', function ($event) use (&$eventRaised) {
+        $this->component->on('cli*', static function ($event) use (&$eventRaised) {
             $eventRaised = true;
         });
         $this->component->raiseEvent();
@@ -287,7 +288,7 @@ class ComponentTest extends TestCase
 
         // raise event w/o parameters
         $eventRaised = false;
-        $this->component->on('group.*', function ($event) use (&$eventRaised) {
+        $this->component->on('group.*', static function ($event) use (&$eventRaised) {
             $eventRaised = true;
         });
         $this->component->trigger('group.test');
@@ -453,6 +454,7 @@ class ComponentTest extends TestCase
     {
         if (PHP_VERSION_ID < 70000) {
             $this->markTestSkipped('Can not be tested on PHP < 7.0');
+
             return;
         }
 
@@ -463,7 +465,6 @@ class ComponentTest extends TestCase
         $obj->trigger('barEventOnce');
         $this->assertEquals(1, $obj->foo);
     }
-
 }
 
 class NewComponent extends Component
@@ -495,7 +496,7 @@ class NewComponent extends Component
 
     public function getExecute()
     {
-        return function ($param) {
+        return static function ($param) {
             return $param * 2;
         };
     }

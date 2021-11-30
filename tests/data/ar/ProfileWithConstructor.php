@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,10 +8,12 @@
 
 namespace yiiunit\data\ar;
 
+use ReflectionClass;
+
 /**
  * ProfileWithConstructor.
  *
- * @property int $id
+ * @property int    $id
  * @property string $description
  */
 class ProfileWithConstructor extends ActiveRecord
@@ -33,6 +36,6 @@ class ProfileWithConstructor extends ActiveRecord
 
     public static function instantiate($row)
     {
-        return (new \ReflectionClass(static::className()))->newInstanceWithoutConstructor();
+        return (new ReflectionClass(static::className()))->newInstanceWithoutConstructor();
     }
 }

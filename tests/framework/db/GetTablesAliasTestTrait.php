@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,7 @@
 
 namespace yiiunit\framework\db;
 
+use stdClass;
 use yii\db\ActiveQuery;
 use yii\db\Query;
 
@@ -42,7 +44,7 @@ trait GetTablesAliasTestTrait
         $query = $this->createQuery();
         $query->from = [
             '{{profile}}',
-            'user'
+            'user',
         ];
 
         $tables = $query->getTablesUsedInFrom();
@@ -72,7 +74,7 @@ trait GetTablesAliasTestTrait
     public function testGetTableNames_isFromObject_generateException()
     {
         $query = $this->createQuery();
-        $query->from = new \stdClass();
+        $query->from = new stdClass();
 
         $this->expectException('\yii\base\InvalidConfigException');
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,7 @@
 
 namespace yiiunit\framework\web;
 
+use Exception;
 use Yii;
 use yii\web\NotFoundHttpException;
 use yii\web\View;
@@ -48,7 +50,7 @@ Exception: yii\web\NotFoundHttpException', $out);
         /** @var ErrorHandler $handler */
         $handler = Yii::$app->getErrorHandler();
         ob_start(); // suppress response output
-        $this->invokeMethod($handler, 'renderException', [new \Exception('Some Exception')]);
+        $this->invokeMethod($handler, 'renderException', [new Exception('Some Exception')]);
         ob_get_clean();
         $out = Yii::$app->response->data;
         $this->assertEqualsWithoutLE('Exception View
@@ -124,6 +126,7 @@ Exception: yii\web\NotFoundHttpException', $out);
     {
         if (PHP_VERSION_ID < 70000) {
             $this->markTestSkipped('Can not be tested on PHP < 7.0');
+
             return;
         }
 

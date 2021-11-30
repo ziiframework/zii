@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,6 +11,6 @@ return [
         'email' => 'directory@example.com',
         'name' => 'directory name',
         'address' => 'directory-address1',
-        'status' => 1
-    ]
+        'status' => 1,
+    ],
 ];

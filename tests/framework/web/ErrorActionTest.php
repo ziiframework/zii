@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,7 @@
 
 namespace yiiunit\framework\web;
 
+use InvalidArgumentException;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\base\UserException;
@@ -29,6 +31,7 @@ class ErrorActionTest extends TestCase
      * Creates a controller instance.
      *
      * @param array $actionConfig
+     *
      * @return TestController
      */
     public function getController($actionConfig = [])
@@ -65,7 +68,7 @@ Exception: yii\base\UserException', $this->getController()->runAction('error'));
 
     public function testGenericException()
     {
-        Yii::$app->getErrorHandler()->exception = new \InvalidArgumentException('This message will not be shown to the user');
+        Yii::$app->getErrorHandler()->exception = new InvalidArgumentException('This message will not be shown to the user');
 
         $this->assertEqualsWithoutLE('Name: Error
 Code: 500
@@ -75,7 +78,7 @@ Exception: InvalidArgumentException', $this->getController()->runAction('error')
 
     public function testGenericExceptionCustomNameAndMessage()
     {
-        Yii::$app->getErrorHandler()->exception = new \InvalidArgumentException('This message will not be shown to the user');
+        Yii::$app->getErrorHandler()->exception = new InvalidArgumentException('This message will not be shown to the user');
 
         $controller = $this->getController([
             'defaultName' => 'Oops...',

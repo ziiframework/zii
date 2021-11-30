@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,7 @@
 
 namespace yiiunit\data\validators\models;
 
+use function func_get_args;
 use yii\base\Model;
 
 class FakedValidationModel extends Model
@@ -20,12 +22,14 @@ class FakedValidationModel extends Model
     private $inlineValArgs;
 
     /**
-     * @param  array $attributes
+     * @param array $attributes
+     *
      * @return self
      */
     public static function createWithAttributes($attributes = [])
     {
         $m = new static();
+
         foreach ($attributes as $attribute => $value) {
             $m->$attribute = $value;
         }
@@ -46,20 +50,20 @@ class FakedValidationModel extends Model
 
     public function inlineVal($attribute, $params, $validator, $current)
     {
-        $this->inlineValArgs = \func_get_args();
+        $this->inlineValArgs = func_get_args();
 
         return true;
     }
 
     public function clientInlineVal($attribute, $params, $validator, $current)
     {
-        return \func_get_args();
+        return func_get_args();
     }
 
     public function __get($name)
     {
         if (strncasecmp($name, 'attr', 4) === 0) {
-            return isset($this->attr[$name]) ? $this->attr[$name] : null;
+            return $this->attr[$name] ?? null;
         }
 
         return parent::__get($name);
@@ -81,7 +85,9 @@ class FakedValidationModel extends Model
 
     /**
      * Returns the arguments of the inlineVal method in the last call.
-     * @return array|null an array of arguments in the last call or null if method never been called.
+     *
+     * @return array|null an array of arguments in the last call or null if method never been called
+     *
      * @see inlineVal
      */
     public function getInlineValArgs()

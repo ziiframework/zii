@@ -1,11 +1,18 @@
 <?php
-namespace yiiunit\framework\helpers;
-
-use yiiunit\TestCase;
-use yii\helpers\BaseConsole;
 
 /**
- * Unit test for [[yii\helpers\BaseConsole]]
+ * @link http://www.yiiframework.com/
+ * @copyright Copyright (c) 2008 Yii Software LLC
+ * @license http://www.yiiframework.com/license/
+ */
+
+namespace yiiunit\framework\helpers;
+
+use yii\helpers\BaseConsole;
+use yiiunit\TestCase;
+
+/**
+ * Unit test for [[yii\helpers\BaseConsole]].
  *
  * @see BaseConsole
  * @group helpers
@@ -29,14 +36,14 @@ class BaseConsoleTest extends TestCase
         $this->assertEquals($expected, $actual);
 
         $actual = BaseConsole::renderColoredString($data, false);
-        $expected = "foo";
+        $expected = 'foo';
         $this->assertEquals($expected, $actual);
     }
 
     /**
      * @test
      */
-    public function ansiColorizedSubstr_withoutColors()
+    public function ansiColorizedSubstrWithoutColors()
     {
         $str = 'FooBar';
 
@@ -56,12 +63,13 @@ class BaseConsoleTest extends TestCase
     /**
      * @test
      * @dataProvider ansiColorizedSubstr_withColors_data
+     *
      * @param $str
      * @param $start
      * @param $length
      * @param $expected
      */
-    public function ansiColorizedSubstr_withColors($str, $start, $length, $expected)
+    public function ansiColorizedSubstrWithColors($str, $start, $length, $expected)
     {
         $ansiStr = BaseConsole::renderColoredString($str);
 

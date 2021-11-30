@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -52,7 +53,7 @@ class ModuleTest extends TestCase
         $module->setVersion($version);
         $this->assertEquals($version, $module->getVersion());
 
-        $module->setVersion(function ($module) {
+        $module->setVersion(static function ($module) {
             /* @var $module TestModule */
             return 'version.' . $module->getUniqueId();
         });
@@ -99,7 +100,6 @@ class ModuleTest extends TestCase
         $this->assertNotNull(Yii::$app->controller->action);
         $this->assertEquals('test/test-controller1/test1', Yii::$app->controller->action->uniqueId);
     }
-
 
     public function testServiceLocatorTraversal()
     {
@@ -173,27 +173,27 @@ class ModuleTest extends TestCase
             'other' => $otherController,
         ];
 
-        list($controller, $action) = $module->createController('base');
+        [$controller, $action] = $module->createController('base');
         $this->assertSame('', $action);
         $this->assertSame('app/base/default', $controller->uniqueId);
 
-        list($controller, $action) = $module->createController('base/default');
+        [$controller, $action] = $module->createController('base/default');
         $this->assertSame('', $action);
         $this->assertSame('app/base/default', $controller->uniqueId);
 
-        list($controller, $action) = $module->createController('base/other');
+        [$controller, $action] = $module->createController('base/other');
         $this->assertSame('', $action);
         $this->assertSame('app/base/other', $controller->uniqueId);
 
-        list($controller, $action) = $module->createController('base/default/index');
+        [$controller, $action] = $module->createController('base/default/index');
         $this->assertSame('index', $action);
         $this->assertSame('app/base/default', $controller->uniqueId);
 
-        list($controller, $action) = $module->createController('base/other/index');
+        [$controller, $action] = $module->createController('base/other/index');
         $this->assertSame('index', $action);
         $this->assertSame('app/base/other', $controller->uniqueId);
 
-        list($controller, $action) = $module->createController('base/other/someaction');
+        [$controller, $action] = $module->createController('base/other/someaction');
         $this->assertSame('someaction', $action);
         $this->assertSame('app/base/other', $controller->uniqueId);
 
@@ -219,6 +219,7 @@ class ModuleTestController extends Controller
     {
         ModuleTest::$actionRuns[] = $this->action->uniqueId;
     }
+
     public function actionTest2()
     {
         ModuleTest::$actionRuns[] = $this->action->uniqueId;

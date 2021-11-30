@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -27,7 +28,7 @@ class BaseMessageTest extends TestCase
     }
 
     /**
-     * @return Mailer test email component instance.
+     * @return Mailer test email component instance
      */
     protected function createTestEmailComponent()
     {
@@ -37,7 +38,7 @@ class BaseMessageTest extends TestCase
     }
 
     /**
-     * @return TestMailer mailer instance.
+     * @return TestMailer mailer instance
      */
     protected function getMailer()
     {

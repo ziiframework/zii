@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -18,7 +19,9 @@ use yiiunit\framework\console\controllers\EchoMigrateController;
  * @group i18n
  * @group db
  * @group mysql
+ *
  * @author Dmitry Naumenko <d.naumenko.a@gmail.com>
+ *
  * @since 2.0.7
  */
 class DbMessageSourceTest extends I18NTest
@@ -66,6 +69,7 @@ class DbMessageSourceTest extends I18NTest
         ob_start();
         $result = Yii::$app->runAction($route, $params);
         echo 'Result is ' . $result;
+
         if ($result !== \yii\console\Controller::EXIT_CODE_NORMAL) {
             ob_end_flush();
         } else {
@@ -107,6 +111,7 @@ class DbMessageSourceTest extends I18NTest
     public static function tearDownAfterClass(): void
     {
         static::runConsoleAction('migrate/down', ['migrationPath' => '@yii/i18n/migrations/', 'interactive' => false]);
+
         if (static::$db) {
             static::$db->close();
         }
@@ -116,6 +121,7 @@ class DbMessageSourceTest extends I18NTest
 
     /**
      * @return \yii\db\Connection
+     *
      * @throws \yii\db\Exception
      * @throws \yii\base\InvalidConfigException
      * @throws \yii\base\InvalidParamException
@@ -125,13 +131,16 @@ class DbMessageSourceTest extends I18NTest
         if (static::$db == null) {
             $db = new Connection();
             $db->dsn = static::$database['dsn'];
+
             if (isset(static::$database['username'])) {
                 $db->username = static::$database['username'];
                 $db->password = static::$database['password'];
             }
+
             if (isset(static::$database['attributes'])) {
                 $db->attributes = static::$database['attributes'];
             }
+
             if (!$db->isActive) {
                 $db->open();
             }
@@ -147,13 +156,13 @@ class DbMessageSourceTest extends I18NTest
         $this->assertEquals('Missing translation message.', $this->i18n->translate('test', 'Missing translation message.', [], 'de-DE'));
         $this->assertEquals('Hallo Welt!', $this->i18n->translate('test', 'Hello world!', [], 'de-DE'));
 
-        Event::on(DbMessageSource::className(), DbMessageSource::EVENT_MISSING_TRANSLATION, function ($event) {});
+        Event::on(DbMessageSource::className(), DbMessageSource::EVENT_MISSING_TRANSLATION, static function ($event) {});
         $this->assertEquals('Hallo Welt!', $this->i18n->translate('test', 'Hello world!', [], 'de-DE'));
         $this->assertEquals('Missing translation message.', $this->i18n->translate('test', 'Missing translation message.', [], 'de-DE'));
         $this->assertEquals('Hallo Welt!', $this->i18n->translate('test', 'Hello world!', [], 'de-DE'));
         Event::off(DbMessageSource::className(), DbMessageSource::EVENT_MISSING_TRANSLATION);
 
-        Event::on(DbMessageSource::className(), DbMessageSource::EVENT_MISSING_TRANSLATION, function ($event) {
+        Event::on(DbMessageSource::className(), DbMessageSource::EVENT_MISSING_TRANSLATION, static function ($event) {
             if ($event->message == 'New missing translation message.') {
                 $event->translatedMessage = 'TRANSLATION MISSING HERE!';
             }
@@ -165,7 +174,6 @@ class DbMessageSourceTest extends I18NTest
         $this->assertEquals('Hallo Welt!', $this->i18n->translate('test', 'Hello world!', [], 'de-DE'));
         Event::off(DbMessageSource::className(), DbMessageSource::EVENT_MISSING_TRANSLATION);
     }
-
 
     public function testIssue11429($sourceLanguage = null)
     {

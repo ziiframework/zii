@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -31,6 +32,7 @@ class TestSubclass extends TestClass
 
 /**
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  * @group di
  */
@@ -41,7 +43,7 @@ class ServiceLocatorTest extends TestCase
         // anonymous function
         $container = new ServiceLocator();
         $className = TestClass::className();
-        $container->set($className, function () {
+        $container->set($className, static function () {
             return new TestClass([
                 'prop1' => 100,
                 'prop2' => 200,
@@ -87,7 +89,6 @@ class ServiceLocatorTest extends TestCase
         $app = new ServiceLocator($config);
         $this->assertInstanceOf(TestSubclass::className(), $app->get('test'));
     }
-
 
     public function testShared()
     {

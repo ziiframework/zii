@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -59,7 +60,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
             [
                 Schema::TYPE_JSON,
                 $this->json(),
-                "jsonb",
+                'jsonb',
             ],
         ];
 
@@ -96,7 +97,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
             ['scalar can not be converted to array #2' => ['@>', 'id', new ArrayExpression(false)], '"id" @> ARRAY[]', []],
             [['&&', 'price', new ArrayExpression([12, 14], 'float')], '"price" && ARRAY[:qp0, :qp1]::float[]', [':qp0' => 12, ':qp1' => 14]],
             [['@>', 'id', new ArrayExpression([2, 3])], '"id" @> ARRAY[:qp0, :qp1]', [':qp0' => 2, ':qp1' => 3]],
-            'array of arrays' => [['@>', 'id', new ArrayExpression([[1,2], [3,4]], 'float', 2)], '"id" @> ARRAY[ARRAY[:qp0, :qp1]::float[], ARRAY[:qp2, :qp3]::float[]\\]::float[][]', [':qp0' => 1, ':qp1' => 2, ':qp2' => 3, ':qp3' => 4]],
+            'array of arrays' => [['@>', 'id', new ArrayExpression([[1, 2], [3, 4]], 'float', 2)], '"id" @> ARRAY[ARRAY[:qp0, :qp1]::float[], ARRAY[:qp2, :qp3]::float[]\\]::float[][]', [':qp0' => 1, ':qp1' => 2, ':qp2' => 3, ':qp3' => 4]],
             [['@>', 'id', new ArrayExpression([])], '"id" @> ARRAY[]', []],
             'array can contain nulls' => [['@>', 'id', new ArrayExpression([null])], '"id" @> ARRAY[:qp0]', [':qp0' => null]],
             'traversable objects are supported' => [['@>', 'id', new ArrayExpression(new TraversableObject([1, 2, 3]))], '[[id]] @> ARRAY[:qp0, :qp1, :qp2]', [':qp0' => 1, ':qp1' => 2, ':qp2' => 3]],
@@ -110,7 +111,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
             [['=', 'prices', new JsonExpression(['seeds' => 15, 'apples' => 25], 'jsonb')], '[[prices]] = :qp0::jsonb', [':qp0' => '{"seeds":15,"apples":25}']],
             'nested json' => [
                 ['=', 'data', new JsonExpression(['user' => ['login' => 'silverfire', 'password' => 'c4ny0ur34d17?'], 'props' => ['mood' => 'good']])],
-                '"data" = :qp0', [':qp0' => '{"user":{"login":"silverfire","password":"c4ny0ur34d17?"},"props":{"mood":"good"}}']
+                '"data" = :qp0', [':qp0' => '{"user":{"login":"silverfire","password":"c4ny0ur34d17?"},"props":{"mood":"good"}}'],
             ],
             'null value' => [['=', 'jsoncol', new JsonExpression(null)], '"jsoncol" = :qp0', [':qp0' => 'null']],
             'null as array value' => [['=', 'jsoncol', new JsonExpression([null])], '"jsoncol" = :qp0', [':qp0' => '[null]']],
@@ -123,12 +124,12 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
             'array of json expressions' => [
                 ['=', 'colname', new ArrayExpression([new JsonExpression(['a' => null, 'b' => 123, 'c' => [4, 5]]), new JsonExpression([true])])],
                 '"colname" = ARRAY[:qp0, :qp1]',
-                [':qp0' => '{"a":null,"b":123,"c":[4,5]}', ':qp1' => '[true]']
+                [':qp0' => '{"a":null,"b":123,"c":[4,5]}', ':qp1' => '[true]'],
             ],
             'Items in ArrayExpression of type json should be casted to Json' => [
                 ['=', 'colname', new ArrayExpression([['a' => null, 'b' => 123, 'c' => [4, 5]], [true]], 'json')],
                 '"colname" = ARRAY[:qp0, :qp1]::json[]',
-                [':qp0' => '{"a":null,"b":123,"c":[4,5]}', ':qp1' => '[true]']
+                [':qp0' => '{"a":null,"b":123,"c":[4,5]}', ':qp1' => '[true]'],
             ],
             'Two dimension array of text' => [
                 ['=', 'colname', new ArrayExpression([['text1', 'text2'], ['text3', 'text4'], [null, 'text5']], 'text', 2)],
@@ -185,7 +186,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
         $expected = 'ALTER TABLE "foo1" ALTER COLUMN "bar" TYPE varchar(255), ALTER COLUMN "bar" DROP DEFAULT, ALTER COLUMN "bar" DROP NOT NULL, ADD CONSTRAINT foo1_bar_check CHECK (char_length(bar) > 5)';
         $sql = $qb->alterColumn('foo1', 'bar', $this->string(255)->check('char_length(bar) > 5'));
         $this->assertEquals($expected, $sql);
-        
+
         $expected = 'ALTER TABLE "foo1" ALTER COLUMN "bar" TYPE varchar(255), ALTER COLUMN "bar" SET DEFAULT \'\', ALTER COLUMN "bar" DROP NOT NULL';
         $sql = $qb->alterColumn('foo1', 'bar', $this->string(255)->defaultValue(''));
         $this->assertEquals($expected, $sql);
@@ -207,6 +208,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
     {
         $result = parent::indexesProvider();
         $result['drop'][0] = 'DROP INDEX [[CN_constraints_2_single]]';
+
         return $result;
     }
 
@@ -273,7 +275,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
 
         $config = $this->database;
         unset($config['fixture']);
-        $this->prepareDatabase($config, realpath(__DIR__.'/../../../data') . '/postgres12.sql');
+        $this->prepareDatabase($config, realpath(__DIR__ . '/../../../data') . '/postgres12.sql');
 
         $qb = $this->getQueryBuilder(false);
 
@@ -380,9 +382,11 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
             ],
         ];
         $newData = parent::upsertProvider();
+
         foreach ($concreteData as $testName => $data) {
             $newData[$testName] = array_replace($newData[$testName], $data);
         }
+
         return $newData;
     }
 

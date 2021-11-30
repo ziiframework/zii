@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @link http://www.yiiframework.com/
+ * @copyright Copyright (c) 2008 Yii Software LLC
+ * @license http://www.yiiframework.com/license/
+ */
+
 namespace yiiunit\framework\rest;
 
 use Yii;
@@ -39,9 +45,7 @@ class IndexActionTest extends TestCase
     public function testPrepareSearchQueryAttribute()
     {
         $sql = '';
-        Yii::$app->controller = new RestController(
-            'rest',
-            new Module('rest'), [
+        Yii::$app->controller = new RestController('rest', new Module('rest'), [
             'modelClass' => IndexActionModel::className(),
             'actions' => [
                 'index' => [
@@ -58,10 +62,7 @@ class IndexActionTest extends TestCase
         ]);
         Yii::$app->controller->run('index');
 
-        $this->assertEquals(
-            'SELECT * FROM `' . IndexActionModel::tableName() . '`',
-            $sql
-        );
+        $this->assertEquals('SELECT * FROM `' . IndexActionModel::tableName() . '`', $sql);
     }
 }
 
@@ -77,7 +78,6 @@ class RestController extends ActiveController
 
 class Module extends \yii\base\Module
 {
-
 }
 
 /**

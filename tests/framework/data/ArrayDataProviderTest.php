@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -34,8 +35,7 @@ class ArrayDataProviderTest extends TestCase
     public function testGetSortedData()
     {
         $simpleArray = [['sortField' => 1], ['sortField' => 0]];
-        $dataProvider = new ArrayDataProvider(
-            [
+        $dataProvider = new ArrayDataProvider([
                 'allModels' => $simpleArray,
                 'sort' => [
                     'attributes' => [
@@ -50,8 +50,7 @@ class ArrayDataProviderTest extends TestCase
                         'sort' => SORT_ASC,
                     ],
                 ],
-            ]
-        );
+            ]);
         $sortedArray = [['sortField' => 0], ['sortField' => 1]];
         $this->assertEquals($sortedArray, $dataProvider->getModels());
     }
@@ -62,8 +61,7 @@ class ArrayDataProviderTest extends TestCase
             ['innerArray' => ['sortField' => 1]],
             ['innerArray' => ['sortField' => 0]],
         ];
-        $dataProvider = new ArrayDataProvider(
-            [
+        $dataProvider = new ArrayDataProvider([
                 'allModels' => $simpleArray,
                 'sort' => [
                     'attributes' => [
@@ -78,8 +76,7 @@ class ArrayDataProviderTest extends TestCase
                         'sort' => SORT_ASC,
                     ],
                 ],
-            ]
-        );
+            ]);
         $sortedArray = [
             ['innerArray' => ['sortField' => 0]],
             ['innerArray' => ['sortField' => 1]],
@@ -131,8 +128,7 @@ class ArrayDataProviderTest extends TestCase
             ['title' => 'zend framework', 'license' => 'BSD'],
         ];
 
-        $dataProvider = new ArrayDataProvider(
-            [
+        $dataProvider = new ArrayDataProvider([
                 'allModels' => $unsortedProjects,
                 'sort' => [
                     'attributes' => [
@@ -150,8 +146,7 @@ class ArrayDataProviderTest extends TestCase
                 'pagination' => [
                     'pageSize' => 100500,
                 ],
-            ]
-        );
+            ]);
 
         $this->assertEquals($sortedProjects, $dataProvider->getModels());
     }
@@ -188,8 +183,7 @@ class ArrayDataProviderTest extends TestCase
     public function testSortFlags()
     {
         $simpleArray = [['sortField' => 1], ['sortField' => 2], ['sortField' => 11]];
-        $dataProvider = new ArrayDataProvider(
-            [
+        $dataProvider = new ArrayDataProvider([
                 'allModels' => $simpleArray,
                 'sort' => [
                     'sortFlags' => SORT_STRING,
@@ -205,8 +199,7 @@ class ArrayDataProviderTest extends TestCase
                         'sort' => SORT_ASC,
                     ],
                 ],
-            ]
-        );
+            ]);
         $sortedArray = [['sortField' => 1], ['sortField' => 11], ['sortField' => 2]];
         $this->assertEquals($sortedArray, $dataProvider->getModels());
     }

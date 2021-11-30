@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -17,12 +18,11 @@ namespace yii\log {
 }
 
 namespace yiiunit\framework\log {
-
-    use yiiunit\framework\log\mocks\TargetMock;
     use Yii;
     use yii\base\UserException;
     use yii\log\Dispatcher;
     use yii\log\Logger;
+    use yiiunit\framework\log\mocks\TargetMock;
     use yiiunit\TestCase;
 
     /**
@@ -64,20 +64,17 @@ namespace yiiunit\framework\log {
             $dispatcher = new Dispatcher();
             $this->assertSame(Yii::getLogger(), $dispatcher->getLogger());
 
-
             $logger = new Logger();
             $dispatcher = new Dispatcher([
                 'logger' => $logger,
             ]);
             $this->assertSame($logger, $dispatcher->getLogger());
 
-
             $dispatcher = new Dispatcher([
                 'logger' => 'yii\log\Logger',
             ]);
             $this->assertInstanceOf('yii\log\Logger', $dispatcher->getLogger());
             $this->assertEquals(0, $dispatcher->getLogger()->traceLevel);
-
 
             $dispatcher = new Dispatcher([
                 'logger' => [
@@ -176,10 +173,7 @@ namespace yiiunit\framework\log {
 
             $target->expects($this->once())
                 ->method('collect')
-                ->with(
-                    $this->equalTo('messages'),
-                    $this->equalTo(true)
-                );
+                ->with($this->equalTo('messages'), $this->equalTo(true));
 
             $dispatcher = new Dispatcher(['targets' => ['fakeTarget' => $target]]);
             $dispatcher->dispatch('messages', true);
@@ -201,10 +195,8 @@ namespace yiiunit\framework\log {
 
             $target1->expects($this->exactly(2))
                 ->method('collect')
-                ->withConsecutive(
-                    [$this->equalTo('messages'), $this->equalTo(true)],
-                    [
-                        $this->callback(function($arg) use ($target1) {
+                ->withConsecutive([$this->equalTo('messages'), $this->equalTo(true)], [
+                        $this->callback(static function ($arg) use ($target1) {
                             if (!isset($arg[0][0], $arg[0][1], $arg[0][2], $arg[0][3])) {
                                 return false;
                             }
@@ -232,20 +224,17 @@ namespace yiiunit\framework\log {
                             return true;
                         }),
                         true,
-                    ]
-                );
+                    ]);
 
             $target2->expects($this->once())
                 ->method('collect')
-                ->with(
-                    $this->equalTo('messages'),
-                    $this->equalTo(true)
-                )->will($this->throwException(new UserException('some error')));
+                ->with($this->equalTo('messages'), $this->equalTo(true))->will($this->throwException(new UserException('some error')));
 
             $dispatcher = new Dispatcher(['targets' => ['fakeTarget1' => $target1, 'fakeTarget2' => $target2]]);
 
             static::$functions['microtime'] = function ($arguments) {
                 $this->assertEquals([true], $arguments);
+
                 return 'time data';
             };
 
@@ -257,15 +246,13 @@ namespace yiiunit\framework\log {
          */
         public function testInitWithCreateTargetObject()
         {
-            $dispatcher = new Dispatcher(
-                [
+            $dispatcher = new Dispatcher([
                     'targets' => [
                         'syslog' => [
                             'class' => 'yii\log\SyslogTarget',
                             ],
                     ],
-                ]
-            );
+                ]);
 
             $this->assertEquals($dispatcher->targets['syslog'], Yii::createObject('yii\log\SyslogTarget'));
         }
@@ -273,12 +260,14 @@ namespace yiiunit\framework\log {
         /**
          * @param $name
          * @param $arguments
+         *
          * @return mixed
          */
         public static function __callStatic($name, $arguments)
         {
             if (isset(static::$functions[$name]) && is_callable(static::$functions[$name])) {
-                $arguments = isset($arguments[0]) ? $arguments[0] : $arguments;
+                $arguments = $arguments[0] ?? $arguments;
+
                 return forward_static_call(static::$functions[$name], $arguments);
             }
             static::fail("Function '$name' has not implemented yet!");
@@ -293,18 +282,20 @@ namespace yiiunit\framework\log {
             $this->targetThrowSecondOutputs = [];
             $targetFirst = new TargetMock([
                 'collectOverride' => function () {
-                    $this->targetThrowFirstCount++;
+                    ++$this->targetThrowFirstCount;
+
                     if (PHP_MAJOR_VERSION < 7) {
                         throw new \RuntimeException('test');
                     }
+
                     require_once __DIR__ . DIRECTORY_SEPARATOR . 'mocks' . DIRECTORY_SEPARATOR . 'typed_error.php';
                     typed_error_test_mock([]);
-                }
+                },
             ]);
             $targetSecond = new TargetMock([
                 'collectOverride' => function ($message, $final) {
                     $this->targetThrowSecondOutputs[] = array_pop($message);
-                }
+                },
             ]);
             $dispatcher = new Dispatcher([
                 'logger' => new Logger(),

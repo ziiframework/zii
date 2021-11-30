@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,7 +11,7 @@ namespace yiiunit\data\ar;
 /**
  * Class Category.
  *
- * @property int $id
+ * @property int    $id
  * @property string $name
  */
 class Category extends ActiveRecord

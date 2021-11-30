@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -41,6 +42,7 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
         $result['3: default'][2] = [];
 
         $result['4: default'][2] = [];
+
         return $result;
     }
 
@@ -65,16 +67,19 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
                         $expectedType = 'char';
                         $expectedSize = 100;
                         $expectedDbType = 'char(100)';
+
                         break;
                     case 'char_col2':
                         $expectedType = 'string';
                         $expectedSize = 100;
-                        $expectedDbType = "varchar(100)";
+                        $expectedDbType = 'varchar(100)';
+
                         break;
                     case 'char_col3':
                         $expectedType = 'text';
                         $expectedSize = null;
                         $expectedDbType = 'text';
+
                         break;
                 }
 
@@ -87,8 +92,10 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
 
     /**
      * @dataProvider quoteTableNameDataProvider
+     *
      * @param $name
      * @param $expectedName
+     *
      * @throws \yii\base\NotSupportedException
      */
     public function testQuoteTableName($name, $expectedName)
@@ -114,8 +121,10 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
 
     /**
      * @dataProvider getTableSchemaDataProvider
+     *
      * @param $name
      * @param $expectedName
+     *
      * @throws \yii\base\NotSupportedException
      */
     public function testGetTableSchema($name, $expectedName)
@@ -190,10 +199,7 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
             $db->createCommand()->dropTable('testPKTable')->execute();
         }
 
-        $db->createCommand()->createTable(
-            'testPKTable',
-            ['id' => Schema::TYPE_PK, 'bar' => Schema::TYPE_INTEGER]
-        )->execute();
+        $db->createCommand()->createTable('testPKTable', ['id' => Schema::TYPE_PK, 'bar' => Schema::TYPE_INTEGER])->execute();
 
         $insertResult = $db->getSchema()->insert('testPKTable', ['bar' => 1]);
         $selectResult = $db->createCommand('select [id] from [testPKTable] where [bar]=1')->queryOne();

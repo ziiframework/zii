@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -26,13 +27,12 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
 
     /**
      * @dataProvider upsertProvider
-     * @param array $firstData
-     * @param array $secondData
      */
     public function testUpsert(array $firstData, array $secondData)
     {
         if (version_compare($this->getConnection(false)->getServerVersion(), '3.8.3', '<')) {
             $this->markTestSkipped('SQLite < 3.8.3 does not support "WITH" keyword.');
+
             return;
         }
 

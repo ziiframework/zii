@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,7 +11,7 @@ namespace yiiunit\framework\web;
 use yii\base\BaseObject;
 
 /**
- * @inheritdoc
+ * {@inheritdoc}
  */
 class Post extends BaseObject
 {
@@ -24,9 +25,9 @@ class Post extends BaseObject
     public $title;
 
     /**
-     * @param int $id
+     * @param int    $id
      * @param string $title
-     * @param array $config
+     * @param array  $config
      */
     public function __construct($id, $title, $config = [])
     {

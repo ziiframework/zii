@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,6 +12,7 @@ use yii\console\Controller;
 
 /**
  * @author Dmitry V. Alekseev <mail@alexeevdv.ru>
+ *
  * @since 2.0.16
  */
 class FakeController extends Controller

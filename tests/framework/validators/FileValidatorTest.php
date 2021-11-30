@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -28,6 +29,7 @@ class FileValidatorTest extends TestCase
     public function testAssureMessagesSetOnInit()
     {
         $val = new FileValidator();
+
         foreach (['message', 'uploadRequired', 'tooMany', 'wrongExtension', 'tooBig', 'tooSmall', 'wrongMimeType'] as $attr) {
             $this->assertIsString($val->$attr);
         }
@@ -102,6 +104,7 @@ class FileValidatorTest extends TestCase
             case 'G':
             case 'g':
                 return (int) $sizeStr * 1073741824;
+
             default:
                 return (int) $sizeStr;
         }
@@ -119,10 +122,8 @@ class FileValidatorTest extends TestCase
         $val->validateAttribute($m, 'attr_files');
         $this->assertTrue($m->hasErrors('attr_files'));
         $this->assertSame($val->uploadRequired, current($m->getErrors('attr_files')));
-        $m = FakedValidationModel::createWithAttributes(
-            [
-                'attr_files' => $this->createTestFiles(
-                    [
+        $m = FakedValidationModel::createWithAttributes([
+                'attr_files' => $this->createTestFiles([
                         [
                             'name' => 'test_up_1.txt',
                             'size' => 1024,
@@ -130,10 +131,8 @@ class FileValidatorTest extends TestCase
                         [
                             'error' => UPLOAD_ERR_NO_FILE,
                         ],
-                    ]
-                ),
-            ]
-        );
+                    ]),
+            ]);
         $val->validateAttribute($m, 'attr_files');
         $this->assertFalse($m->hasErrors('attr_files'));
         $m = FakedValidationModel::createWithAttributes([
@@ -153,15 +152,11 @@ class FileValidatorTest extends TestCase
             'file_2' => [
                 'name' => 'test_up_2.txt',
                 'size' => 1024,
-            ]
+            ],
         ];
-        $m = FakedValidationModel::createWithAttributes(
-            [
-                'attr_files' => $this->createTestFiles(
-                    $files
-                ),
-            ]
-        );
+        $m = FakedValidationModel::createWithAttributes([
+                'attr_files' => $this->createTestFiles($files),
+            ]);
         $val->validateAttribute($m, 'attr_files');
         $this->assertFalse($m->hasErrors());
         $this->assertEquals(array_keys($m->attr_files), array_keys($files));
@@ -171,10 +166,8 @@ class FileValidatorTest extends TestCase
         $val->validateAttribute($m, 'attr_files');
         $this->assertFalse($m->hasErrors());
 
-        $m = FakedValidationModel::createWithAttributes(
-            [
-                'attr_images' => $this->createTestFiles(
-                    [
+        $m = FakedValidationModel::createWithAttributes([
+                'attr_images' => $this->createTestFiles([
                         [
                             'name' => 'image.png',
                             'size' => 1024,
@@ -189,19 +182,14 @@ class FileValidatorTest extends TestCase
                             'name' => 'text.txt',
                             'size' => 1024,
                         ],
-                    ]
-                ),
-            ]
-        );
+                    ]),
+            ]);
         $m->setScenario('validateMultipleFiles');
         $this->assertFalse($m->validate());
-        $this->assertNotFalse(stripos(current($m->getErrors('attr_images')),
-            'Only files with these extensions are allowed'));
+        $this->assertNotFalse(stripos(current($m->getErrors('attr_images')), 'Only files with these extensions are allowed'));
 
-        $m = FakedValidationModel::createWithAttributes(
-            [
-                'attr_images' => $this->createTestFiles(
-                    [
+        $m = FakedValidationModel::createWithAttributes([
+                'attr_images' => $this->createTestFiles([
                         [
                             'name' => 'image.png',
                             'size' => 1024,
@@ -212,36 +200,28 @@ class FileValidatorTest extends TestCase
                             'size' => 1024,
                             'type' => 'image/png',
                         ],
-                    ]
-                ),
-            ]
-        );
+                    ]),
+            ]);
         $m->setScenario('validateMultipleFiles');
         $this->assertTrue($m->validate());
 
-        $m = FakedValidationModel::createWithAttributes(
-            [
-                'attr_image' => $this->createTestFiles(
-                    [
+        $m = FakedValidationModel::createWithAttributes([
+                'attr_image' => $this->createTestFiles([
                         [
                             'name' => 'text.txt',
                             'size' => 1024,
                         ],
-                    ]
-                ),
-            ]
-        );
+                    ]),
+            ]);
         $m->setScenario('validateFile');
         $this->assertFalse($m->validate());
     }
 
-    public function testValidateAttribute_minFilesGreaterThanOneMaxFilesUnlimited_notError()
+    public function testValidateAttributeMinFilesGreaterThanOneMaxFilesUnlimitedNotError()
     {
         $validator = new FileValidator(['minFiles' => 2, 'maxFiles' => 0]);
-        $model = FakedValidationModel::createWithAttributes(
-            [
-                'attr_images' => $this->createTestFiles(
-                    [
+        $model = FakedValidationModel::createWithAttributes([
+                'attr_images' => $this->createTestFiles([
                         [
                             'name' => 'image.png',
                             'size' => 1024,
@@ -252,23 +232,19 @@ class FileValidatorTest extends TestCase
                             'size' => 1024,
                             'type' => 'image/png',
                         ],
-                    ]
-                )
-            ]
-        );
+                    ]),
+            ]);
 
         $validator->validateAttribute($model, 'attr_images');
 
         $this->assertFalse($model->hasErrors('attr_images'));
     }
 
-    public function testValidateAttribute_minFilesTwoMaxFilesFour_notError()
+    public function testValidateAttributeMinFilesTwoMaxFilesFourNotError()
     {
         $validator = new FileValidator(['minFiles' => 2, 'maxFiles' => 4]);
-        $model = FakedValidationModel::createWithAttributes(
-            [
-                'attr_images' => $this->createTestFiles(
-                    [
+        $model = FakedValidationModel::createWithAttributes([
+                'attr_images' => $this->createTestFiles([
                         [
                             'name' => 'image.png',
                             'size' => 1024,
@@ -279,23 +255,19 @@ class FileValidatorTest extends TestCase
                             'size' => 1024,
                             'type' => 'image/png',
                         ],
-                    ]
-                )
-            ]
-        );
+                    ]),
+            ]);
 
         $validator->validateAttribute($model, 'attr_images');
 
         $this->assertFalse($model->hasErrors('attr_images'));
     }
 
-    public function testValidateAttribute_minFilesTwoMaxFilesUnlimited_hasError()
+    public function testValidateAttributeMinFilesTwoMaxFilesUnlimitedHasError()
     {
         $validator = new FileValidator(['minFiles' => 2, 'maxFiles' => 0]);
-        $model = FakedValidationModel::createWithAttributes(
-            [
-                'attr_images' => $this->createTestFiles(
-                    [
+        $model = FakedValidationModel::createWithAttributes([
+                'attr_images' => $this->createTestFiles([
                         [
                             'name' => 'image.png',
                             'size' => 1024,
@@ -304,10 +276,8 @@ class FileValidatorTest extends TestCase
                         [
                             'error' => UPLOAD_ERR_NO_FILE,
                         ],
-                    ]
-                )
-            ]
-        );
+                    ]),
+            ]);
 
         $validator->validateAttribute($model, 'attr_images');
 
@@ -315,38 +285,41 @@ class FileValidatorTest extends TestCase
     }
 
     /**
-     * @param  array          $params
+     * @param array $params
+     *
      * @return UploadedFile[]
      */
     protected function createTestFiles($params = [])
     {
-        $rndString = function ($len = 10) {
+        $rndString = static function ($len = 10) {
             $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
             $randomString = '';
-            for ($i = 0; $i < $len; $i++) {
+
+            for ($i = 0; $i < $len; ++$i) {
                 $randomString .= $characters[random_int(0, strlen($characters) - 1)];
             }
 
             return $randomString;
         };
         $files = [];
+
         foreach ($params as $key => $param) {
             if (empty($param) && count($params) != 1) {
                 $files[$key] = ['no instance of UploadedFile'];
+
                 continue;
             }
-            $name = isset($param['name']) ? $param['name'] : $rndString();
-            $tempName = \Yii::getAlias('@yiiunit/runtime/validators/file/tmp/') . $name;
+            $name = $param['name'] ?? $rndString();
+            $tempName = Yii::getAlias('@yiiunit/runtime/validators/file/tmp/') . $name;
+
             if (is_readable($tempName)) {
                 $size = filesize($tempName);
             } else {
-                $size = isset($param['size']) ? $param['size'] : random_int(
-                    1,
-                    $this->sizeToBytes(ini_get('upload_max_filesize'))
-                );
+                $size = $param['size'] ?? random_int(1, $this->sizeToBytes(ini_get('upload_max_filesize')));
             }
-            $type = isset($param['type']) ? $param['type'] : 'text/plain';
-            $error = isset($param['error']) ? $param['error'] : UPLOAD_ERR_OK;
+            $type = $param['type'] ?? 'text/plain';
+            $error = $param['error'] ?? UPLOAD_ERR_OK;
+
             if (count($params) == 1) {
                 $error = empty($param) ? UPLOAD_ERR_NO_FILE : $error;
 
@@ -372,11 +345,12 @@ class FileValidatorTest extends TestCase
 
     /**
      * @param $fileName
+     *
      * @return UploadedFile
      */
     protected function getRealTestFile($fileName)
     {
-        $filePath = \Yii::getAlias('@yiiunit/framework/validators/data/mimeType/') . $fileName;
+        $filePath = Yii::getAlias('@yiiunit/framework/validators/data/mimeType/') . $fileName;
 
         return new UploadedFile([
             'name' => $fileName,
@@ -439,12 +413,10 @@ class FileValidatorTest extends TestCase
             'extensions' => 'jpeg, jpg',
             'checkExtensionByMimeType' => false,
         ]);
-        $m = FakedValidationModel::createWithAttributes(
-            [
+        $m = FakedValidationModel::createWithAttributes([
                 'attr_jpg' => $this->createTestFiles([['name' => 'one.jpeg']]),
                 'attr_exe' => $this->createTestFiles([['name' => 'bad.exe']]),
-            ]
-        );
+            ]);
         $val->validateAttribute($m, 'attr_jpg');
         $this->assertFalse($m->hasErrors('attr_jpg'));
         $val->validateAttribute($m, 'attr_exe');
@@ -458,13 +430,11 @@ class FileValidatorTest extends TestCase
             'extensions' => ['txt', ''],
             'checkExtensionByMimeType' => false,
         ]);
-        $m = FakedValidationModel::createWithAttributes(
-            [
+        $m = FakedValidationModel::createWithAttributes([
                 'attr_txt' => $this->createTestFiles([['name' => 'one.txt']]),
                 'attr_empty' => $this->createTestFiles([['name' => 'bad.']]),
                 'attr_empty2' => $this->createTestFiles([['name' => 'bad']]),
-            ]
-        );
+            ]);
         $val->validateAttribute($m, 'attr_txt');
         $this->assertFalse($m->hasErrors('attr_txt'));
         $val->validateAttribute($m, 'attr_empty');
@@ -480,13 +450,11 @@ class FileValidatorTest extends TestCase
             'checkExtensionByMimeType' => false,
         ]);
 
-        $m = FakedValidationModel::createWithAttributes(
-            [
+        $m = FakedValidationModel::createWithAttributes([
                 'attr_tar' => $this->createTestFiles([['name' => 'one.tar.gz']]),
                 'attr_bar' => $this->createTestFiles([['name' => 'bad.bar.xz']]),
                 'attr_badtar' => $this->createTestFiles([['name' => 'badtar.xz']]),
-            ]
-        );
+            ]);
         $val->validateAttribute($m, 'attr_tar');
         $this->assertFalse($m->hasErrors('attr_tar'));
 
@@ -559,8 +527,8 @@ class FileValidatorTest extends TestCase
     }
 
     /**
-     * @param string $fileName
-     * @param mixed $_
+     * @param string       $fileName
+     * @param mixed        $_
      * @param string|array $allowedExtensions
      * @dataProvider validMimeTypes
      */
@@ -573,8 +541,8 @@ class FileValidatorTest extends TestCase
     }
 
     /**
-     * @param string $fileName
-     * @param mixed $_
+     * @param string       $fileName
+     * @param mixed        $_
      * @param string|array $allowedExtensions
      * @dataProvider invalidMimeTypes
      */
@@ -587,8 +555,7 @@ class FileValidatorTest extends TestCase
 
     protected function createModelForAttributeTest()
     {
-        return FakedValidationModel::createWithAttributes(
-            [
+        return FakedValidationModel::createWithAttributes([
                 'attr_files' => $this->createTestFiles([
                     ['name' => 'abc.jpg', 'size' => 1024, 'type' => 'image/jpeg'],
                 ]),
@@ -598,8 +565,7 @@ class FileValidatorTest extends TestCase
                 'attr_err_tmp' => $this->createTestFiles([['error' => UPLOAD_ERR_NO_TMP_DIR]]),
                 'attr_err_write' => $this->createTestFiles([['error' => UPLOAD_ERR_CANT_WRITE]]),
                 'attr_err_ext' => $this->createTestFiles([['error' => UPLOAD_ERR_EXTENSION]]),
-            ]
-        );
+            ]);
     }
 
     public function testValidateAttributeErrPartial()
@@ -644,7 +610,8 @@ class FileValidatorTest extends TestCase
      * @param bool   $expected
      * @dataProvider mimeTypeCaseInsensitive
      */
-    public function testValidateMimeTypeCaseInsensitive($mask, $fileMimeType, $expected) {
+    public function testValidateMimeTypeCaseInsensitive($mask, $fileMimeType, $expected)
+    {
         $validator = $this->getMockBuilder('\yii\validators\FileValidator')
             ->setMethods(['getMimeTypeByFile'])
             ->getMock();
@@ -655,7 +622,8 @@ class FileValidatorTest extends TestCase
         $this->assertEquals($expected, $validator->validate($file), sprintf('Mime type validate fail: "%s" / "%s"', $mask, $fileMimeType));
     }
 
-    public function mimeTypeCaseInsensitive() {
+    public function mimeTypeCaseInsensitive()
+    {
         return [
             ['Image/*', 'image/jp2', true],
             ['image/*', 'Image/jp2', true],

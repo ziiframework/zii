@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -51,7 +52,7 @@ class DetailViewTest extends \yiiunit\TestCase
                 ],
                 [
                     'attribute' => 'id',
-                    'value' => function ($model) {
+                    'value' => static function ($model) {
                         return $model->getDisplayedId();
                     },
                 ],
@@ -84,14 +85,8 @@ class DetailViewTest extends \yiiunit\TestCase
             ],
         ]);
 
-        $this->assertEquals(
-            'Идентификатор Товара:A00001',
-            $this->detailView->renderAttribute($this->detailView->attributes[0], 0)
-        );
-        $this->assertEquals(
-            'Το Αναγνωριστικό Του:A00002',
-            $this->detailView->renderAttribute($this->detailView->attributes[1], 1)
-        );
+        $this->assertEquals('Идентификатор Товара:A00001', $this->detailView->renderAttribute($this->detailView->attributes[0], 0));
+        $this->assertEquals('Το Αναγνωριστικό Του:A00002', $this->detailView->renderAttribute($this->detailView->attributes[1], 1));
     }
 
     public function testAttributeVisible()
@@ -119,20 +114,20 @@ class DetailViewTest extends \yiiunit\TestCase
                 ],
                 [
                     'attribute' => 'id',
-                    'value' => function ($model) {
+                    'value' => static function ($model) {
                         return $model->getDisplayedId();
                     },
                 ],
                 [
                     'attribute' => 'id',
-                    'value' => function ($model) {
+                    'value' => static function ($model) {
                         return $model->getDisplayedId();
                     },
                     'visible' => false,
                 ],
                 [
                     'attribute' => 'id',
-                    'value' => function ($model) {
+                    'value' => static function ($model) {
                         return $model->getDisplayedId();
                     },
                     'visible' => true,
@@ -327,9 +322,9 @@ class DetailViewTest extends \yiiunit\TestCase
 
         $this->detailView = new DetailView([
             'model' => $model,
-            'on init' => function () use (&$initTriggered) {
+            'on init' => static function () use (&$initTriggered) {
                 $initTriggered = true;
-            }
+            },
         ]);
 
         $this->assertTrue($initTriggered);
@@ -371,7 +366,7 @@ class ModelMock extends Model
 
     public function getDisplayedId()
     {
-        $this->_displayedIdCallCount++;
+        ++$this->_displayedIdCallCount;
 
         return "Displayed $this->id";
     }
@@ -389,11 +384,13 @@ class UnicodeAttributesModelMock extends Model
 {
     /**
      * Product's ID (Russian).
+     *
      * @var mixed
      */
     public $ИдентификаторТовара;
     /**
      * ID (Greek).
+     *
      * @var mixed
      */
     public $το_αναγνωριστικό_του;

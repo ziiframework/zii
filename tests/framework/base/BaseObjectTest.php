@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -174,7 +175,6 @@ class BaseObjectTest extends TestCase
     }
 }
 
-
 class NewObject extends BaseObject
 {
     private $_object = null;
@@ -204,7 +204,7 @@ class NewObject extends BaseObject
 
     public function getExecute()
     {
-        return function ($param) {
+        return static function ($param) {
             return $param * 2;
         };
     }

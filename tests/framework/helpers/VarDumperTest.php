@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,7 @@
 
 namespace yiiunit\framework\helpers;
 
+use StdClass;
 use yii\helpers\VarDumper;
 use yiiunit\data\helpers\CustomDebugInfo;
 use yiiunit\TestCase;
@@ -43,10 +45,10 @@ class VarDumperTest extends TestCase
 
     public function testDumpObject()
     {
-        $obj = new \StdClass();
+        $obj = new StdClass();
         $this->assertEquals("stdClass#1\n(\n)", VarDumper::dumpAsString($obj));
 
-        $obj = new \StdClass();
+        $obj = new StdClass();
         $obj->name = 'test-name';
         $obj->price = 19;
         $dumpResult = VarDumper::dumpAsString($obj);
@@ -57,6 +59,7 @@ class VarDumperTest extends TestCase
 
     /**
      * Data provider for [[testExport()]].
+     *
      * @return array test data
      */
     public function dataProviderExport()
@@ -142,12 +145,12 @@ RESULT;
 
         // Objects :
 
-        $var = new \StdClass();
+        $var = new StdClass();
         $var->testField = 'Test Value';
         $expectedResult = "unserialize('" . serialize($var) . "')";
         $data[] = [$var, $expectedResult];
 
-        $var = function () {return 2;};
+        $var = static function () {return 2; };
         $expectedResult = 'function () {return 2;}';
         $data[] = [$var, $expectedResult];
 
@@ -157,7 +160,7 @@ RESULT;
     /**
      * @dataProvider dataProviderExport
      *
-     * @param mixed $var
+     * @param mixed  $var
      * @param string $expectedResult
      */
     public function testExport($var, $expectedResult)
@@ -172,16 +175,16 @@ RESULT;
      */
     public function testExportObjectFallback()
     {
-        $var = new \StdClass();
-        $var->testFunction = function () {return 2;};
+        $var = new StdClass();
+        $var->testFunction = static function () {return 2; };
         $exportResult = VarDumper::export($var);
         $this->assertNotEmpty($exportResult);
 
-        $master = new \StdClass();
-        $slave = new \StdClass();
+        $master = new StdClass();
+        $slave = new StdClass();
         $master->slave = $slave;
         $slave->master = $master;
-        $master->function = function () {return true;};
+        $master->function = static function () {return true; };
 
         $exportResult = VarDumper::export($master);
         $this->assertNotEmpty($exportResult);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -77,9 +78,9 @@ class FormatterNumberTest extends TestCase
         ];
     }
 
-
     /**
      * @dataProvider differentConfigProvider
+     *
      * @param array $config
      */
     public function testIntlAsInteger($config)
@@ -123,7 +124,7 @@ class FormatterNumberTest extends TestCase
     public function testIntlAsIntegerOptions()
     {
         $this->formatter->numberFormatterTextOptions = [
-            \NumberFormatter::POSITIVE_PREFIX => '+',
+            NumberFormatter::POSITIVE_PREFIX => '+',
         ];
         $this->assertSame('+2', $this->formatter->asInteger(2));
         $this->assertSame('+10', $this->formatter->asInteger(10));
@@ -178,7 +179,7 @@ class FormatterNumberTest extends TestCase
         $this->formatter->thousandSeparator = '';
         $this->assertSame('123123,1', $this->formatter->asDecimal($value, 1));
         $this->formatter->thousandSeparator = ' ';
-        $this->assertSame('12 31 23,1', $this->formatter->asDecimal($value, 1, [\NumberFormatter::GROUPING_SIZE => 2]));
+        $this->assertSame('12 31 23,1', $this->formatter->asDecimal($value, 1, [NumberFormatter::GROUPING_SIZE => 2]));
 
         $value = 123123.123;
         $this->formatter->decimalSeparator = ',';
@@ -391,7 +392,7 @@ class FormatterNumberTest extends TestCase
 
         // decimal formatting
         $this->formatter->locale = 'de-DE';
-        $this->assertSame("100\xc2\xa0$", \Yii::$app->formatter->asCurrency(100, 'USD', [
+        $this->assertSame("100\xc2\xa0$", Yii::$app->formatter->asCurrency(100, 'USD', [
             NumberFormatter::MAX_FRACTION_DIGITS => 0,
         ]));
         $this->assertSame("100,00\xc2\xa0$", $this->formatter->asCurrency(100, 'USD', [
@@ -468,10 +469,10 @@ class FormatterNumberTest extends TestCase
     {
         $this->formatter->locale = 'en-US';
         $this->formatter->numberFormatterOptions = [
-            \NumberFormatter::FRACTION_DIGITS => 0,
+            NumberFormatter::FRACTION_DIGITS => 0,
         ];
         $this->formatter->numberFormatterTextOptions = [
-            \NumberFormatter::CURRENCY_CODE => 'EUR',
+            NumberFormatter::CURRENCY_CODE => 'EUR',
         ];
         $this->assertSame('€100', $this->formatter->asCurrency(100, 'EUR'));
     }
@@ -603,8 +604,8 @@ class FormatterNumberTest extends TestCase
     public function testIntlAsShortSize()
     {
         $this->formatter->numberFormatterOptions = [
-            \NumberFormatter::MIN_FRACTION_DIGITS => 0,
-            \NumberFormatter::MAX_FRACTION_DIGITS => 2,
+            NumberFormatter::MIN_FRACTION_DIGITS => 0,
+            NumberFormatter::MAX_FRACTION_DIGITS => 2,
         ];
 
         // tests for base 1000
@@ -688,8 +689,8 @@ class FormatterNumberTest extends TestCase
     public function testIntlAsSize()
     {
         $this->formatter->numberFormatterOptions = [
-            \NumberFormatter::MIN_FRACTION_DIGITS => 0,
-            \NumberFormatter::MAX_FRACTION_DIGITS => 2,
+            NumberFormatter::MIN_FRACTION_DIGITS => 0,
+            NumberFormatter::MAX_FRACTION_DIGITS => 2,
         ];
 
         // tests for base 1000
@@ -722,8 +723,8 @@ class FormatterNumberTest extends TestCase
     public function testIntlAsSizeNegative()
     {
         $this->formatter->numberFormatterOptions = [
-            \NumberFormatter::MIN_FRACTION_DIGITS => 0,
-            \NumberFormatter::MAX_FRACTION_DIGITS => 2,
+            NumberFormatter::MIN_FRACTION_DIGITS => 0,
+            NumberFormatter::MAX_FRACTION_DIGITS => 2,
         ];
 
         // tests for base 1000
@@ -830,32 +831,32 @@ class FormatterNumberTest extends TestCase
             'not-int key for int options' => [
                 ['a' => 1],
                 [],
-                'The $options array keys must be integers recognizable by NumberFormatter::setAttribute(). "string" provided instead.'
+                'The $options array keys must be integers recognizable by NumberFormatter::setAttribute(). "string" provided instead.',
             ],
             'string value for int options' => [
                 [1 => 'a'],
                 [],
-                'The $options array values must be integers. Did you mean to use $textOptions?'
+                'The $options array values must be integers. Did you mean to use $textOptions?',
             ],
             'non-string-int value for int options' => [
                 [1 => 1.1],
                 [],
-                'The $options array values must be integers. "double" provided instead.'
+                'The $options array values must be integers. "double" provided instead.',
             ],
             'not-int key for text options' => [
                 [],
                 ['a' => 1],
-                'The $textOptions array keys must be integers recognizable by NumberFormatter::setTextAttribute(). "string" provided instead.'
+                'The $textOptions array keys must be integers recognizable by NumberFormatter::setTextAttribute(). "string" provided instead.',
             ],
             'int value for text options' => [
                 [],
                 [1 => 1],
-                'The $textOptions array values must be strings. Did you mean to use $options?'
+                'The $textOptions array values must be strings. Did you mean to use $options?',
             ],
             'non-string-int value for text options' => [
                 [],
                 [1 => 1.1],
-                'The $textOptions array values must be strings. "double" provided instead.'
+                'The $textOptions array values must be strings. "double" provided instead.',
             ],
         ];
     }
@@ -877,49 +878,49 @@ class FormatterNumberTest extends TestCase
                 ['a' => 1],
                 [],
                 [],
-                'The numberFormatterOptions array keys must be integers recognizable by NumberFormatter::setAttribute(). "string" provided instead.'
+                'The numberFormatterOptions array keys must be integers recognizable by NumberFormatter::setAttribute(). "string" provided instead.',
             ],
             'string value for int options' => [
                 [1 => 'a'],
                 [],
                 [],
-                'The numberFormatterOptions array values must be integers. Did you mean to use numberFormatterTextOptions?'
+                'The numberFormatterOptions array values must be integers. Did you mean to use numberFormatterTextOptions?',
             ],
             'non-string-int value for int options' => [
                 [1 => 1.1],
                 [],
                 [],
-                'The numberFormatterOptions array values must be integers. "double" provided instead.'
+                'The numberFormatterOptions array values must be integers. "double" provided instead.',
             ],
             'not-int key for text options' => [
                 [],
                 ['a' => 1],
                 [],
-                'The numberFormatterTextOptions array keys must be integers recognizable by NumberFormatter::setTextAttribute(). "string" provided instead.'
+                'The numberFormatterTextOptions array keys must be integers recognizable by NumberFormatter::setTextAttribute(). "string" provided instead.',
             ],
             'int value for text options' => [
                 [],
                 [1 => 1],
                 [],
-                'The numberFormatterTextOptions array values must be strings. Did you mean to use numberFormatterOptions?'
+                'The numberFormatterTextOptions array values must be strings. Did you mean to use numberFormatterOptions?',
             ],
             'non-string-int value for text options' => [
                 [],
                 [1 => 1.1],
                 [],
-                'The numberFormatterTextOptions array values must be strings. "double" provided instead.'
+                'The numberFormatterTextOptions array values must be strings. "double" provided instead.',
             ],
             'non-int key for symbol' => [
                 [],
                 [],
                 ['a' => 2],
-                'The numberFormatterSymbols array keys must be integers recognizable by NumberFormatter::setSymbol(). "string" provided instead.'
+                'The numberFormatterSymbols array keys must be integers recognizable by NumberFormatter::setSymbol(). "string" provided instead.',
             ],
             'non-string value for symbol' => [
                 [],
                 [],
                 [1 => 3],
-                'The numberFormatterSymbols array values must be strings. "integer" provided instead.'
+                'The numberFormatterSymbols array values must be strings. "integer" provided instead.',
             ],
         ];
     }

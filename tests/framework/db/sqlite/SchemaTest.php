@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -40,6 +41,7 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
         $columns['bool_col2']['type'] = 'boolean';
         $columns['bool_col2']['phpType'] = 'boolean';
         $columns['bool_col2']['defaultValue'] = true;
+
         return $columns;
     }
 
@@ -85,8 +87,10 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
 
     /**
      * @dataProvider quoteTableNameDataProvider
+     *
      * @param $name
      * @param $expectedName
+     *
      * @throws \yii\base\NotSupportedException
      */
     public function testQuoteTableName($name, $expectedName)

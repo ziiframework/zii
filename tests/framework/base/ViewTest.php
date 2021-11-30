@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,7 @@
 
 namespace yiiunit\framework\base;
 
+use Exception;
 use Yii;
 use yii\base\Theme;
 use yii\base\View;
@@ -20,7 +22,7 @@ use yiiunit\TestCase;
 class ViewTest extends TestCase
 {
     /**
-     * @var string path for the test files.
+     * @var string path for the test files
      */
     protected $testViewPath = '';
 
@@ -50,19 +52,17 @@ class ViewTest extends TestCase
         file_put_contents($exceptionViewFile, <<<'PHP'
 <h1>Exception</h1>
 <?php throw new Exception('Test Exception'); ?>
-PHP
-);
+PHP);
         $normalViewFile = $this->testViewPath . DIRECTORY_SEPARATOR . 'no-exception.php';
         file_put_contents($normalViewFile, <<<'PHP'
 <h1>No Exception</h1>
-PHP
-        );
+PHP);
 
         $obInitialLevel = ob_get_level();
 
         try {
             $view->renderFile($exceptionViewFile);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // shutdown exception
         }
         $view->renderFile($normalViewFile);
@@ -74,25 +74,24 @@ PHP
     {
         $view = new View();
         FileHelper::createDirectory($this->testViewPath . '/theme1');
-        \Yii::setAlias('@testviews', $this->testViewPath);
-        \Yii::setAlias('@theme', $this->testViewPath . '/theme1');
+        Yii::setAlias('@testviews', $this->testViewPath);
+        Yii::setAlias('@theme', $this->testViewPath . '/theme1');
 
         $baseView = "{$this->testViewPath}/theme1/base.php";
         file_put_contents($baseView, <<<'PHP'
 <?php
     echo $this->render("sub");
 ?>
-PHP
-        );
+PHP);
 
         $subView = "{$this->testViewPath}/sub.php";
-        $subViewContent = "subviewcontent";
+        $subViewContent = 'subviewcontent';
         file_put_contents($subView, $subViewContent);
 
         $view->theme = new Theme([
             'pathMap' => [
-                '@testviews' => '@theme'
-            ]
+                '@testviews' => '@theme',
+            ],
         ]);
 
         $this->assertSame($subViewContent, $view->render('@testviews/base'));
@@ -106,7 +105,7 @@ PHP
         $output = 'This is a simple rendered output. (filename)';
         $expectedOutput = 'This is a new rendered output. (path/to/file)';
 
-        $view->on(View::EVENT_AFTER_RENDER, function (ViewEvent $event) {
+        $view->on(View::EVENT_AFTER_RENDER, static function (ViewEvent $event) {
             $event->output = str_replace($event->params['search'], $event->params['replace'], $event->output);
             $event->output = str_replace('filename', $event->viewFile, $event->output);
         });

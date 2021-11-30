@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -67,7 +68,6 @@ class WidgetTest extends TestCase
         TestWidgetB::end();
     }
 
-
     /**
      * @depends testWidget
      */
@@ -75,13 +75,13 @@ class WidgetTest extends TestCase
     {
         $output = TestWidget::widget([
             'id' => 'test',
-            'on init' => function ($event) {
+            'on init' => static function ($event) {
                 echo '<init>';
             },
-            'on beforeRun' => function (WidgetEvent $event) {
+            'on beforeRun' => static function (WidgetEvent $event) {
                 echo '<before-run>';
             },
-            'on afterRun' => function (WidgetEvent $event) {
+            'on afterRun' => static function (WidgetEvent $event) {
                 $event->result .= '<after-run>';
             },
         ]);
@@ -95,7 +95,7 @@ class WidgetTest extends TestCase
     {
         $output = TestWidget::widget([
             'id' => 'test',
-            'on beforeRun' => function (WidgetEvent $event) {
+            'on beforeRun' => static function (WidgetEvent $event) {
                 $event->isValid = false;
             },
         ]);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -28,13 +29,11 @@ class BlockTest extends \yiiunit\TestCase
     {
         $initTriggered = false;
 
-        $block = new Block(
-            [
-                'on init' => function () use (&$initTriggered) {
+        $block = new Block([
+                'on init' => static function () use (&$initTriggered) {
                     $initTriggered = true;
-                }
-            ]
-        );
+                },
+            ]);
 
         ob_get_clean();
 

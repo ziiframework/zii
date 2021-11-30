@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -18,7 +19,6 @@ class DbQueryDependencyTest extends DatabaseTestCase
      * {@inheritdoc}
      */
     protected $driverName = 'sqlite';
-
 
     /**
      * {@inheritdoc}
@@ -97,7 +97,7 @@ class DbQueryDependencyTest extends DatabaseTestCase
             ->from('dependency_item')
             ->andWhere(['value' => 'not exist']);
         $dependency->reusable = false;
-        $dependency->method = function (Query $query, $db) {
+        $dependency->method = static function (Query $query, $db) {
             return $query->orWhere(['value' => 'initial'])->exists($db);
         };
 

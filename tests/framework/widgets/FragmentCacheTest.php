@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -96,7 +97,7 @@ class FragmentCacheTest extends \yiiunit\TestCase
 
         $view = new View();
 
-        for ($counter = 0; $counter < 42; $counter++) {
+        for ($counter = 0; $counter < 42; ++$counter) {
             ob_start();
             ob_implicit_flush(false);
 
@@ -127,7 +128,7 @@ class FragmentCacheTest extends \yiiunit\TestCase
 
         $view = new View();
 
-        for ($counter = 0; $counter < 42; $counter++) {
+        for ($counter = 0; $counter < 42; ++$counter) {
             ob_start();
             ob_implicit_flush(false);
 
@@ -160,7 +161,7 @@ class FragmentCacheTest extends \yiiunit\TestCase
 
         $view = new View();
 
-        for ($counter = 0; $counter < 42; $counter++) {
+        for ($counter = 0; $counter < 42; ++$counter) {
             ob_start();
             ob_implicit_flush(false);
 
@@ -196,7 +197,7 @@ class FragmentCacheTest extends \yiiunit\TestCase
 
     public function testVariations()
     {
-        $this->setOutputCallback(function($output) {
+        $this->setOutputCallback(static function ($output) {
             return null;
         });
 

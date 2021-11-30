@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -46,7 +47,6 @@ EOF
 </div>
 EOF
             , (string) $form->field($model, 'name', $o)->input('email', ['required' => false]));
-
 
         $this->assertEqualsWithoutLE(<<<'EOF'
 <div class="form-group field-dynamicmodel-name">
@@ -142,15 +142,13 @@ HTML
     {
         $initTriggered = false;
         ob_start();
-        $form = ActiveForm::begin(
-            [
+        $form = ActiveForm::begin([
                 'action' => '/something',
                 'enableClientScript' => false,
-                'on init' => function () use (&$initTriggered) {
+                'on init' => static function () use (&$initTriggered) {
                     $initTriggered = true;
-                }
-            ]
-        );
+                },
+            ]);
         ActiveForm::end();
         ob_end_clean();
         $this->assertTrue($initTriggered);
@@ -182,7 +180,6 @@ HTML
 </div>
 EOF
         , (string) $form->field($model, 'name'));
-
 
         $this->assertEqualsWithoutLE(<<<'EOF'
 <div class="form-group field-dynamicmodel-name">

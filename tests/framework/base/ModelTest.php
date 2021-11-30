@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -181,7 +182,7 @@ class ModelTest extends TestCase
         $model->rules = [
             [
                 [123456], 'safe',
-            ]
+            ],
         ];
 
         $this->assertTrue($model->isAttributeSafe(123456));
@@ -396,6 +397,7 @@ class ModelTest extends TestCase
 
         // iteration
         $attributes = [];
+
         foreach ($speaker as $key => $attribute) {
             $attributes[$key] = $attribute;
         }
@@ -444,13 +446,13 @@ class ModelTest extends TestCase
     public function testValidatorsWithDifferentScenarios()
     {
         $model = new CustomScenariosModel();
-        self::assertCount(3, $model->getActiveValidators());
-        self::assertCount(2, $model->getActiveValidators('name'));
+        $this->assertCount(3, $model->getActiveValidators());
+        $this->assertCount(2, $model->getActiveValidators('name'));
 
         $model->setScenario('secondScenario');
-        self::assertCount(2, $model->getActiveValidators());
-        self::assertCount(2, $model->getActiveValidators('id'));
-        self::assertCount(0, $model->getActiveValidators('name'), 'This attribute has no validators in current scenario.');
+        $this->assertCount(2, $model->getActiveValidators());
+        $this->assertCount(2, $model->getActiveValidators('id'));
+        $this->assertCount(0, $model->getActiveValidators('name'), 'This attribute has no validators in current scenario.');
     }
 
     public function testIsAttributeRequired()
@@ -503,6 +505,7 @@ class ModelTest extends TestCase
     {
         if (PHP_VERSION_ID < 70000) {
             $this->markTestSkipped('Can not be tested on PHP < 7.0');
+
             return;
         }
 

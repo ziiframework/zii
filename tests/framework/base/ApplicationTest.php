@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -37,7 +38,6 @@ class ApplicationTest extends TestCase
     {
         Yii::getLogger()->flush();
 
-
         $this->mockApplication([
             'components' => [
                 'withoutBootstrapInterface' => [
@@ -56,7 +56,7 @@ class ApplicationTest extends TestCase
                 'withoutBootstrapInterface',
                 'withBootstrapInterface',
                 'moduleX',
-                function () {
+                static function () {
                 },
             ],
         ]);
@@ -66,7 +66,7 @@ class ApplicationTest extends TestCase
         $this->assertSame('Bootstrap with yii\base\Module', Yii::getLogger()->messages[3][0]);
         $this->assertSame('Bootstrap with Closure', Yii::getLogger()->messages[4][0]);
     }
-    
+
     public function testModuleId()
     {
         $this->mockApplication(['id' => 'app-basic']);

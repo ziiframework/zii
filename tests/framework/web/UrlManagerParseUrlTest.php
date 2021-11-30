@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -62,6 +63,7 @@ class UrlManagerParseUrlTest extends TestCase
         $config['pathInfo'] = $pathInfo;
         $config['hostInfo'] = $hostInfo;
         $_POST['_method'] = $method;
+
         return new Request($config);
     }
 
@@ -114,6 +116,7 @@ class UrlManagerParseUrlTest extends TestCase
 
     /**
      * @dataProvider suffixProvider
+     *
      * @param string $suffix
      */
     public function testWithoutRulesWithSuffix($suffix)
@@ -201,6 +204,7 @@ class UrlManagerParseUrlTest extends TestCase
 
     /**
      * @dataProvider suffixProvider
+     *
      * @param string $suffix
      */
     public function testSimpleRulesWithSuffix($suffix)
@@ -222,6 +226,7 @@ class UrlManagerParseUrlTest extends TestCase
         $this->assertEquals(['book/view', ['id' => '123', 'title' => 'this+is+sample']], $result);
         // trailing slash is significant, no match
         $result = $manager->parseRequest($this->getRequest('book/123/this+is+sample/'));
+
         if ($suffix === '/') {
             $this->assertEquals(['book/view', ['id' => '123', 'title' => 'this+is+sample']], $result);
         } else {
@@ -246,6 +251,7 @@ class UrlManagerParseUrlTest extends TestCase
 
     /**
      * @dataProvider suffixProvider
+     *
      * @param string $suffix
      */
     public function testSimpleRulesWithSuffixStrict($suffix)
@@ -268,6 +274,7 @@ class UrlManagerParseUrlTest extends TestCase
         $this->assertEquals(['book/view', ['id' => '123', 'title' => 'this+is+sample']], $result);
         // trailing slash is significant, no match
         $result = $manager->parseRequest($this->getRequest('book/123/this+is+sample/'));
+
         if ($suffix === '/') {
             $this->assertEquals(['book/view', ['id' => '123', 'title' => 'this+is+sample']], $result);
         } else {
@@ -290,11 +297,7 @@ class UrlManagerParseUrlTest extends TestCase
         $this->assertFalse($result);
     }
 
-
-
     // TODO implement with hostinfo
-
-
 
     public function testParseRESTRequest()
     {
@@ -393,22 +396,18 @@ class UrlManagerParseUrlTest extends TestCase
         $this->assertCount(1, $manager->rules);
         $firstRule = $manager->rules[0];
         $this->assertInstanceOf('yii\web\UrlRuleInterface', $firstRule);
-        $this->assertCount(1, $this->getInaccessibleProperty($arrayCache, '_cache'),
-            'Cache contains the only one record that represents initial built rules'
-        );
+        $this->assertCount(1, $this->getInaccessibleProperty($arrayCache, '_cache'), 'Cache contains the only one record that represents initial built rules');
 
         $manager->addRules(['posts' => 'post/index']);
         $manager->addRules([
             'book/<id:\d+>/<title>' => 'book/view',
-            'book/<id:\d+>/<author>' => 'book/view'
+            'book/<id:\d+>/<author>' => 'book/view',
         ]);
 
         $this->assertCount(4, $manager->rules);
         $this->assertSame($firstRule, $manager->rules[0]);
-        $this->assertCount(3, $this->getInaccessibleProperty($arrayCache, '_cache'),
-            'The addRules() method was called twice, adding 3 new rules to the UrlManager, but we have only ' .
-            'two additional caches: one for each addRules() method call.'
-        );
+        $this->assertCount(3, $this->getInaccessibleProperty($arrayCache, '_cache'), 'The addRules() method was called twice, adding 3 new rules to the UrlManager, but we have only ' .
+            'two additional caches: one for each addRules() method call.');
     }
 
     public function testRulesCacheIsUsed()
@@ -427,7 +426,7 @@ class UrlManagerParseUrlTest extends TestCase
         $arrayCache->expects($this->exactly(2))->method('get')->willReturn($savedRules);
         $arrayCache->expects($this->never())->method('set');
 
-        for ($i = 0; $i < 2; $i++) {
+        for ($i = 0; $i < 2; ++$i) {
             $this->getUrlManager([
                 'rules' => ['post/<id:\d+>' => 'post/view'],
                 'cache' => $arrayCache,
@@ -460,6 +459,5 @@ class UrlManagerParseUrlTest extends TestCase
 
         $result = $manager->parseRequest($this->getRequest('users/somecontroller/someaction'));
         $this->assertEquals(['site/index', ['url' => 'users/somecontroller/someaction']], $result);
-
     }
 }

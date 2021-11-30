@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -12,11 +13,11 @@ use yiiunit\TestCase;
 
 /**
  * StringHelperTest.
+ *
  * @group helpers
  */
 class StringHelperTest extends TestCase
 {
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -152,8 +153,9 @@ class StringHelperTest extends TestCase
 
     /**
      * @dataProvider providerStartsWith
-     * @param bool $result
-     * @param string $string
+     *
+     * @param bool        $result
+     * @param string      $string
      * @param string|null $with
      */
     public function testStartsWith($result, $string, $with)
@@ -208,8 +210,9 @@ class StringHelperTest extends TestCase
 
     /**
      * @dataProvider providerEndsWith
-     * @param bool $result
-     * @param string $string
+     *
+     * @param bool        $result
+     * @param string      $string
      * @param string|null $with
      */
     public function testEndsWith($result, $string, $with)
@@ -271,7 +274,7 @@ class StringHelperTest extends TestCase
         $this->assertEquals(['Здесь', 'multibyte', 'строка'], StringHelper::explode('Здесь我 multibyte我 строка', '我'));
         $this->assertEquals(['Disable', '  trim  ', 'here but ignore empty'], StringHelper::explode('Disable,  trim  ,,,here but ignore empty', ',', false, true));
         $this->assertEquals(['It/', ' is?', ' a', ' test with rtrim'], StringHelper::explode('It/, is?, a , test with rtrim', ',', 'rtrim'));
-        $this->assertEquals(['It', ' is', ' a ', ' test with closure'], StringHelper::explode('It/, is?, a , test with closure', ',', function ($value) { return trim($value, '/?'); }));
+        $this->assertEquals(['It', ' is', ' a ', ' test with closure'], StringHelper::explode('It/, is?, a , test with closure', ',', static function ($value) { return trim($value, '/?'); }));
     }
 
     public function testWordCount()
@@ -285,6 +288,7 @@ class StringHelperTest extends TestCase
 
     /**
      * @dataProvider base64UrlEncodedStringsProvider
+     *
      * @param $input
      * @param $base64UrlEncoded
      */
@@ -296,6 +300,7 @@ class StringHelperTest extends TestCase
 
     /**
      * @dataProvider base64UrlEncodedStringsProvider
+     *
      * @param $output
      * @param $base64UrlEncoded
      */
@@ -316,8 +321,9 @@ class StringHelperTest extends TestCase
     }
 
     /**
-     * Data provider for [[testMatchWildcard()]]
-     * @return array test data.
+     * Data provider for [[testMatchWildcard()]].
+     *
+     * @return array test data
      */
     public function dataProviderMatchWildcard()
     {
@@ -394,8 +400,8 @@ class StringHelperTest extends TestCase
      *
      * @param string $pattern
      * @param string $string
-     * @param bool $expectedResult
-     * @param array $options
+     * @param bool   $expectedResult
+     * @param array  $options
      */
     public function testMatchWildcard($pattern, $string, $expectedResult, $options = [])
     {
@@ -419,7 +425,7 @@ class StringHelperTest extends TestCase
      * @param string $expectedResult
      * @dataProvider dataProviderMb_ucfirst
      */
-    public function testMb_ucfirst($string, $expectedResult)
+    public function testMbUcfirst($string, $expectedResult)
     {
         $this->assertSame($expectedResult, StringHelper::mb_ucfirst($string));
     }
@@ -448,7 +454,7 @@ class StringHelperTest extends TestCase
      * @param string $expectedResult
      * @dataProvider dataProviderMb_ucwords
      */
-    public function testMb_ucwords($string, $expectedResult)
+    public function testMbUcwords($string, $expectedResult)
     {
         $this->assertSame($expectedResult, StringHelper::mb_ucwords($string));
     }

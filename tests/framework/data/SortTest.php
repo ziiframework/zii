@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -13,6 +14,7 @@ use yiiunit\TestCase;
 
 /**
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  *
  * @group data
@@ -301,6 +303,7 @@ class CustomSort extends Sort
     protected function parseSortParam($params)
     {
         $attributes = [];
+
         foreach ($params as $item) {
             $attributes[] = ($item['dir'] == 'desc') ? '-' . $item['field'] : $item['field'];
         }

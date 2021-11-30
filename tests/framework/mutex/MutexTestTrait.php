@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -17,6 +18,7 @@ trait MutexTestTrait
 {
     /**
      * @return Mutex
+     *
      * @throws InvalidConfigException
      */
     abstract protected function createMutex();
@@ -97,7 +99,7 @@ trait MutexTestTrait
         $this->assertFalse($mutexOne->isAcquired($mutexName));
         $this->assertTrue($mutexOne->acquire($mutexName));
         $this->assertTrue($mutexOne->isAcquired($mutexName));
-        
+
         $this->assertFalse($mutexTwo->isAcquired($mutexName));
 
         $this->assertTrue($mutexOne->release($mutexName));

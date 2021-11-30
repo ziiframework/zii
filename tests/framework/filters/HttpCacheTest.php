@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,7 @@
 
 namespace yiiunit\framework\filters;
 
+use ReflectionMethod;
 use Yii;
 use yii\filters\HttpCache;
 
@@ -36,7 +38,7 @@ class HttpCacheTest extends \yiiunit\TestCase
     public function testEmptyPragma()
     {
         $httpCache = new HttpCache();
-        $httpCache->etagSeed = function ($action, $params) {
+        $httpCache->etagSeed = static function ($action, $params) {
             return '';
         };
         $httpCache->beforeAction(null);
@@ -53,7 +55,7 @@ class HttpCacheTest extends \yiiunit\TestCase
         $httpCache = new HttpCache();
         $request = Yii::$app->getRequest();
 
-        $method = new \ReflectionMethod($httpCache, 'validateCache');
+        $method = new ReflectionMethod($httpCache, 'validateCache');
         $method->setAccessible(true);
 
         $request->headers->remove('If-Modified-Since');
@@ -86,14 +88,14 @@ class HttpCacheTest extends \yiiunit\TestCase
         $httpCache = new HttpCache();
         $httpCache->weakEtag = false;
 
-        $httpCache->etagSeed = function ($action, $params) {
+        $httpCache->etagSeed = static function ($action, $params) {
             return null;
         };
         $httpCache->beforeAction(null);
         $response = Yii::$app->getResponse();
         $this->assertFalse($response->getHeaders()->offsetExists('ETag'));
 
-        $httpCache->etagSeed = function ($action, $params) {
+        $httpCache->etagSeed = static function ($action, $params) {
             return '';
         };
         $httpCache->beforeAction(null);
@@ -104,7 +106,6 @@ class HttpCacheTest extends \yiiunit\TestCase
         $etag = $response->getHeaders()->get('ETag');
         $this->assertStringStartsWith('"', $etag);
         $this->assertStringEndsWith('"', $etag);
-
 
         $httpCache->weakEtag = true;
         $httpCache->beforeAction(null);

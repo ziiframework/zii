@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -6,7 +7,6 @@
  */
 
 namespace yii\log {
-
     function openlog()
     {
         return \yiiunit\framework\log\SyslogTargetTest::openlog(func_get_args());
@@ -24,7 +24,6 @@ namespace yii\log {
 }
 
 namespace yiiunit\framework\log {
-
     use PHPUnit_Framework_MockObject_MockObject;
     use yii\helpers\VarDumper;
     use yii\log\Logger;
@@ -87,23 +86,11 @@ namespace yiiunit\framework\log {
 
             $syslogTarget->expects($this->once())
                 ->method('openlog')
-                ->with(
-                    $this->equalTo($identity),
-                    $this->equalTo($options),
-                    $this->equalTo($facility)
-                );
+                ->with($this->equalTo($identity), $this->equalTo($options), $this->equalTo($facility));
 
             $syslogTarget->expects($this->exactly(7))
                 ->method('formatMessage')
-                ->withConsecutive(
-                    [$this->equalTo($messages[0])],
-                    [$this->equalTo($messages[1])],
-                    [$this->equalTo($messages[2])],
-                    [$this->equalTo($messages[3])],
-                    [$this->equalTo($messages[4])],
-                    [$this->equalTo($messages[5])],
-                    [$this->equalTo($messages[6])]
-                )->willReturnMap([
+                ->withConsecutive([$this->equalTo($messages[0])], [$this->equalTo($messages[1])], [$this->equalTo($messages[2])], [$this->equalTo($messages[3])], [$this->equalTo($messages[4])], [$this->equalTo($messages[5])], [$this->equalTo($messages[6])])->willReturnMap([
                     [$messages[0], 'formatted message 1'],
                     [$messages[1], 'formatted message 2'],
                     [$messages[2], 'formatted message 3'],
@@ -115,30 +102,25 @@ namespace yiiunit\framework\log {
 
             $syslogTarget->expects($this->exactly(7))
                 ->method('syslog')
-                ->withConsecutive(
-                    [$this->equalTo(LOG_INFO), $this->equalTo('formatted message 1')],
-                    [$this->equalTo(LOG_ERR), $this->equalTo('formatted message 2')],
-                    [$this->equalTo(LOG_WARNING), $this->equalTo('formatted message 3')],
-                    [$this->equalTo(LOG_DEBUG), $this->equalTo('formatted message 4')],
-                    [$this->equalTo(LOG_DEBUG), $this->equalTo('formatted message 5')],
-                    [$this->equalTo(LOG_DEBUG), $this->equalTo('formatted message 6')],
-                    [$this->equalTo(LOG_DEBUG), $this->equalTo('formatted message 7')]
-                );
+                ->withConsecutive([$this->equalTo(LOG_INFO), $this->equalTo('formatted message 1')], [$this->equalTo(LOG_ERR), $this->equalTo('formatted message 2')], [$this->equalTo(LOG_WARNING), $this->equalTo('formatted message 3')], [$this->equalTo(LOG_DEBUG), $this->equalTo('formatted message 4')], [$this->equalTo(LOG_DEBUG), $this->equalTo('formatted message 5')], [$this->equalTo(LOG_DEBUG), $this->equalTo('formatted message 6')], [$this->equalTo(LOG_DEBUG), $this->equalTo('formatted message 7')]);
 
             $syslogTarget->expects($this->once())->method('closelog');
 
             static::$functions['openlog'] = function ($arguments) use ($syslogTarget) {
                 $this->assertCount(3, $arguments);
-                list($identity, $option, $facility) = $arguments;
+                [$identity, $option, $facility] = $arguments;
+
                 return $syslogTarget->openlog($identity, $option, $facility);
             };
             static::$functions['syslog'] = function ($arguments) use ($syslogTarget) {
                 $this->assertCount(2, $arguments);
-                list($priority, $message) = $arguments;
+                [$priority, $message] = $arguments;
+
                 return $syslogTarget->syslog($priority, $message);
             };
             static::$functions['closelog'] = function ($arguments) use ($syslogTarget) {
                 $this->assertCount(0, $arguments);
+
                 return $syslogTarget->closelog();
             };
 
@@ -166,16 +148,19 @@ namespace yiiunit\framework\log {
 
             static::$functions['openlog'] = function ($arguments) use ($syslogTarget) {
                 $this->assertCount(3, $arguments);
-                list($identity, $option, $facility) = $arguments;
+                [$identity, $option, $facility] = $arguments;
+
                 return $syslogTarget->openlog($identity, $option, $facility);
             };
             static::$functions['syslog'] = function ($arguments) use ($syslogTarget) {
                 $this->assertCount(2, $arguments);
-                list($priority, $message) = $arguments;
+                [$priority, $message] = $arguments;
+
                 return $syslogTarget->syslog($priority, $message);
             };
             static::$functions['closelog'] = function ($arguments) use ($syslogTarget) {
                 $this->assertCount(0, $arguments);
+
                 return $syslogTarget->closelog();
             };
 
@@ -186,12 +171,14 @@ namespace yiiunit\framework\log {
         /**
          * @param $name
          * @param $arguments
+         *
          * @return mixed
          */
         public static function __callStatic($name, $arguments)
         {
             if (isset(static::$functions[$name]) && is_callable(static::$functions[$name])) {
-                $arguments = isset($arguments[0]) ? $arguments[0] : $arguments;
+                $arguments = $arguments[0] ?? $arguments;
+
                 return forward_static_call(static::$functions[$name], $arguments);
             }
             static::fail("Function '$name' has not implemented yet!");

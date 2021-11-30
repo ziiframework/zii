@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -12,6 +13,7 @@ use yii\console\Response;
 
 /**
  * @author Misbahul D Munir <misbahuldmunir@gmail.com>
+ *
  * @since 2.0
  */
 class FakeController extends Controller
@@ -57,7 +59,7 @@ class FakeController extends Controller
 
     public function actionAksi1($fromParam, $other = 'default')
     {
-        return[$fromParam, $other];
+        return [$fromParam, $other];
     }
 
     public function actionAksi2(array $values, $value)
@@ -103,6 +105,7 @@ class FakeController extends Controller
     {
         $response = new Response();
         $response->exitStatus = (int) $status;
+
         return $response;
     }
 }

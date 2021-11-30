@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,7 @@
 
 namespace yiiunit\framework\base;
 
+use ReflectionClass;
 use Yii;
 use yii\base\Action;
 use yii\base\ActionFilter;
@@ -86,7 +88,6 @@ class ActionFilterTest extends TestCase
         $this->assertEquals([1, 3, 2], $controller->result);
     }
 
-
     public function actionFilterProvider()
     {
         return [
@@ -101,6 +102,7 @@ class ActionFilterTest extends TestCase
 
     /**
      * @dataProvider actionFilterProvider
+     *
      * @param string|array $filterClass
      */
     public function testActive($filterClass)
@@ -109,7 +111,7 @@ class ActionFilterTest extends TestCase
 
         /** @var $filter ActionFilter */
         $filter = Yii::createObject($filterClass);
-        $reflection = new \ReflectionClass($filter);
+        $reflection = new ReflectionClass($filter);
         $method = $reflection->getMethod('isActive');
         $method->setAccessible(true);
 
@@ -143,7 +145,7 @@ class ActionFilterTest extends TestCase
         $this->mockWebApplication();
 
         $filter = new ActionFilter();
-        $reflection = new \ReflectionClass($filter);
+        $reflection = new ReflectionClass($filter);
         $method = $reflection->getMethod('isActive');
         $method->setAccessible(true);
 
@@ -185,6 +187,7 @@ class Filter1 extends ActionFilter
     public function beforeAction($action)
     {
         $action->controller->result[] = 1;
+
         return true;
     }
 
@@ -205,6 +208,7 @@ class Filter2 extends ActionFilter
     public function beforeAction($action)
     {
         $action->controller->result[] = 2;
+
         return false;
     }
 
@@ -225,6 +229,7 @@ class Filter3 extends ActionFilter
     public function beforeAction($action)
     {
         $action->controller->result[] = 3;
+
         return true;
     }
 

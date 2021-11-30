@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -68,7 +69,6 @@ class UrlManagerCreateUrlTest extends TestCase
         return new UrlManager($config);
     }
 
-
     public function variationsProvider()
     {
         $baseUrlConfig = [
@@ -97,10 +97,11 @@ class UrlManagerCreateUrlTest extends TestCase
      * without rules.
      *
      * @dataProvider variationsProvider
+     *
      * @param string $method
-     * @param bool $showScriptName
+     * @param bool   $showScriptName
      * @param string $prefix
-     * @param array $config
+     * @param array  $config
      */
     public function testWithoutRules($method, $showScriptName, $prefix, $config)
     {
@@ -133,10 +134,11 @@ class UrlManagerCreateUrlTest extends TestCase
      * - with UrlManager::$suffix.
      *
      * @dataProvider variationsProvider
+     *
      * @param string $method
-     * @param bool $showScriptName
+     * @param bool   $showScriptName
      * @param string $prefix
-     * @param array $config
+     * @param array  $config
      */
     public function testWithoutRulesWithSuffix($method, $showScriptName, $prefix, $config)
     {
@@ -160,7 +162,6 @@ class UrlManagerCreateUrlTest extends TestCase
         // with defaultAction
         $url = $manager->$method(['/post', 'page' => 1]);
         $this->assertEquals("$prefix/post.html?page=1", $url);
-
 
         // test suffix '/' as it may be trimmed
         $config['suffix'] = '/';
@@ -191,10 +192,11 @@ class UrlManagerCreateUrlTest extends TestCase
      * with simple rules.
      *
      * @dataProvider variationsProvider
+     *
      * @param string $method
-     * @param bool $showScriptName
+     * @param bool   $showScriptName
      * @param string $prefix
-     * @param array $config
+     * @param array  $config
      */
     public function testSimpleRules($method, $showScriptName, $prefix, $config)
     {
@@ -250,10 +252,11 @@ class UrlManagerCreateUrlTest extends TestCase
      * - with UrlManager::$suffix.
      *
      * @dataProvider variationsProvider
+     *
      * @param string $method
-     * @param bool $showScriptName
+     * @param bool   $showScriptName
      * @param string $prefix
-     * @param array $config
+     * @param array  $config
      */
     public function testSimpleRulesWithSuffix($method, $showScriptName, $prefix, $config)
     {
@@ -303,10 +306,11 @@ class UrlManagerCreateUrlTest extends TestCase
      * with rules that have varadic controller/actions.
      *
      * @dataProvider variationsProvider
+     *
      * @param string $method
-     * @param bool $showScriptName
+     * @param bool   $showScriptName
      * @param string $prefix
-     * @param array $config
+     * @param array  $config
      */
     public function testControllerActionParams($method, $showScriptName, $prefix, $config)
     {
@@ -354,10 +358,11 @@ class UrlManagerCreateUrlTest extends TestCase
      * with rules that have default values for parameters.
      *
      * @dataProvider variationsProvider
+     *
      * @param string $method
-     * @param bool $showScriptName
+     * @param bool   $showScriptName
      * @param string $prefix
-     * @param array $config
+     * @param array  $config
      */
     public function testRulesWithDefaultParams($method, $showScriptName, $prefix, $config)
     {
@@ -431,11 +436,13 @@ class UrlManagerCreateUrlTest extends TestCase
      * with empty or null parameters.
      *
      * @dataProvider variationsProvider
+     *
      * @see https://github.com/yiisoft/yii2/issues/10935
+     *
      * @param string $method
-     * @param bool $showScriptName
+     * @param bool   $showScriptName
      * @param string $prefix
-     * @param array $config
+     * @param array  $config
      */
     public function testWithNullParams($method, $showScriptName, $prefix, $config)
     {
@@ -464,18 +471,19 @@ class UrlManagerCreateUrlTest extends TestCase
         $this->assertEquals("$prefix/site/index?param2=123", $url);
     }
 
-
     /**
      * Test createUrl() and createAbsoluteUrl()
      * with varying $showScriptName
      * with empty pattern.
      *
      * @dataProvider variationsProvider
+     *
      * @see https://github.com/yiisoft/yii2/issues/6717
+     *
      * @param string $method
-     * @param bool $showScriptName
+     * @param bool   $showScriptName
      * @param string $prefix
-     * @param array $config
+     * @param array  $config
      */
     public function testWithEmptyPattern($method, $showScriptName, $prefix, $config)
     {
@@ -522,7 +530,6 @@ class UrlManagerCreateUrlTest extends TestCase
         $assertations($manager);
     }
 
-
     public function absolutePatternsVariations()
     {
         $baseUrlConfig = [
@@ -543,10 +550,12 @@ class UrlManagerCreateUrlTest extends TestCase
 
     /**
      * Test rules that have host info in the patterns.
+     *
      * @dataProvider absolutePatternsVariations
-     * @param bool $showScriptName
+     *
+     * @param bool   $showScriptName
      * @param string $prefix
-     * @param array $config
+     * @param array  $config
      */
     public function testAbsolutePatterns($showScriptName, $prefix, $config)
     {
@@ -603,11 +612,14 @@ class UrlManagerCreateUrlTest extends TestCase
 
     /**
      * Test rules that have host info in the patterns, that are protocol relative.
+     *
      * @dataProvider absolutePatternsVariations
+     *
      * @see https://github.com/yiisoft/yii2/issues/12691
-     * @param bool $showScriptName
+     *
+     * @param bool   $showScriptName
      * @param string $prefix
-     * @param array $config
+     * @param array  $config
      */
     public function testProtocolRelativeAbsolutePattern($showScriptName, $prefix, $config)
     {
@@ -698,7 +710,9 @@ class UrlManagerCreateUrlTest extends TestCase
      * Test matching of Url rules dependent on the current host info.
      *
      * @dataProvider multipleHostsRulesDataProvider
+     *
      * @see https://github.com/yiisoft/yii2/issues/7948
+     *
      * @param string $host
      */
     public function testMultipleHostsRules($host)

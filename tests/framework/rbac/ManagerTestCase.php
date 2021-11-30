@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,7 +8,8 @@
 
 namespace yiiunit\framework\rbac;
 
-use yii\base\InvalidParamException;
+use InvalidArgumentException;
+use Yii;
 use yii\rbac\BaseManager;
 use yii\rbac\Item;
 use yii\rbac\Permission;
@@ -141,6 +143,7 @@ abstract class ManagerTestCase extends TestCase
         $rules = $this->auth->getRules();
 
         $ruleNames = [];
+
         foreach ($rules as $rule) {
             $ruleNames[] = $rule->name;
         }
@@ -274,6 +277,7 @@ abstract class ManagerTestCase extends TestCase
         $permissions = $this->auth->getPermissionsByRole('admin');
         $expectedPermissions = ['createPost', 'updatePost', 'readPost', 'updateAnyPost'];
         $this->assertEquals(count($expectedPermissions), count($permissions));
+
         foreach ($expectedPermissions as $permissionName) {
             $this->assertInstanceOf(Permission::className(), $permissions[$permissionName]);
         }
@@ -285,6 +289,7 @@ abstract class ManagerTestCase extends TestCase
         $permissions = $this->auth->getPermissionsByUser('author B');
         $expectedPermissions = ['deletePost', 'createPost', 'updatePost', 'readPost'];
         $this->assertEquals(count($expectedPermissions), count($permissions));
+
         foreach ($expectedPermissions as $permissionName) {
             $this->assertInstanceOf(Permission::className(), $permissions[$permissionName]);
         }
@@ -369,6 +374,7 @@ abstract class ManagerTestCase extends TestCase
 
         $roles = $this->auth->getRolesByUser('readingAuthor');
         $roleNames = [];
+
         foreach ($roles as $role) {
             $roleNames[] = $role->name;
         }
@@ -419,7 +425,6 @@ abstract class ManagerTestCase extends TestCase
         $this->assertFalse($this->auth->canAddChild($reader, $author));
     }
 
-
     public function testRemoveAllRules()
     {
         $this->prepareData();
@@ -466,6 +471,7 @@ abstract class ManagerTestCase extends TestCase
 
     /**
      * @dataProvider RBACItemsProvider
+     *
      * @param mixed $RBACItemType
      */
     public function testAssignRule($RBACItemType)
@@ -500,9 +506,9 @@ abstract class ManagerTestCase extends TestCase
         $this->assertFalse($auth->checkAccess($userId, 'Reader', ['action' => 'write']));
 
         // using DI
-        \Yii::$container->set('write_rule', ['class' => 'yiiunit\framework\rbac\ActionRule', 'action' => 'write']);
-        \Yii::$container->set('delete_rule', ['class' => 'yiiunit\framework\rbac\ActionRule', 'action' => 'delete']);
-        \Yii::$container->set('all_rule', ['class' => 'yiiunit\framework\rbac\ActionRule', 'action' => 'all']);
+        Yii::$container->set('write_rule', ['class' => 'yiiunit\framework\rbac\ActionRule', 'action' => 'write']);
+        Yii::$container->set('delete_rule', ['class' => 'yiiunit\framework\rbac\ActionRule', 'action' => 'delete']);
+        Yii::$container->set('all_rule', ['class' => 'yiiunit\framework\rbac\ActionRule', 'action' => 'all']);
 
         $item = $this->createRBACItem($RBACItemType, 'Writer');
         $item->ruleName = 'write_rule';
@@ -534,6 +540,7 @@ abstract class ManagerTestCase extends TestCase
 
     /**
      * @dataProvider RBACItemsProvider
+     *
      * @param mixed $RBACItemType
      */
     public function testRevokeRule($RBACItemType)
@@ -564,8 +571,10 @@ abstract class ManagerTestCase extends TestCase
 
     /**
      * Create Role or Permission RBAC item.
-     * @param int $RBACItemType
+     *
+     * @param int    $RBACItemType
      * @param string $name
+     *
      * @return Permission|Role
      */
     private function createRBACItem($RBACItemType, $name)
@@ -573,17 +582,20 @@ abstract class ManagerTestCase extends TestCase
         if ($RBACItemType === Item::TYPE_ROLE) {
             return $this->auth->createRole($name);
         }
+
         if ($RBACItemType === Item::TYPE_PERMISSION) {
             return $this->auth->createPermission($name);
         }
 
-        throw new \InvalidArgumentException();
+        throw new InvalidArgumentException();
     }
 
     /**
      * Get Role or Permission RBAC item.
-     * @param int $RBACItemType
+     *
+     * @param int    $RBACItemType
      * @param string $name
+     *
      * @return Permission|Role
      */
     private function getRBACItem($RBACItemType, $name)
@@ -591,11 +603,12 @@ abstract class ManagerTestCase extends TestCase
         if ($RBACItemType === Item::TYPE_ROLE) {
             return $this->auth->getRole($name);
         }
+
         if ($RBACItemType === Item::TYPE_PERMISSION) {
             return $this->auth->getPermission($name);
         }
 
-        throw new \InvalidArgumentException();
+        throw new InvalidArgumentException();
     }
 
     /**
@@ -620,7 +633,7 @@ abstract class ManagerTestCase extends TestCase
     {
         $this->expectException('yii\base\InvalidValueException');
         $this->expectExceptionMessage('Default roles closure must return an array');
-        $this->auth->defaultRoles = function () {
+        $this->auth->defaultRoles = static function () {
             return 'test';
         };
     }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -17,7 +18,9 @@ use yiiunit\TestCase;
 
 /**
  * Class RadiobuttonColumnTest.
+ *
  * @group grid
+ *
  * @since 2.0.11
  */
 class RadiobuttonColumnTest extends TestCase
@@ -48,7 +51,7 @@ class RadiobuttonColumnTest extends TestCase
             'value' => 123,
         ];
         $column = new RadioButtonColumn([
-            'radioOptions' => function ($model) {
+            'radioOptions' => static function ($model) {
                 return [
                     'value' => $model['value'],
                 ];
@@ -61,16 +64,16 @@ class RadiobuttonColumnTest extends TestCase
     public function testContent()
     {
         $column = new RadioButtonColumn([
-            'content' => function ($model, $key, $index, $column) {
+            'content' => static function ($model, $key, $index, $column) {
                 return null;
-            }
+            },
         ]);
         $this->assertStringContainsString('<td></td>', $column->renderDataCell([], 1, 0));
 
         $column = new RadioButtonColumn([
-            'content' => function ($model, $key, $index, $column) {
+            'content' => static function ($model, $key, $index, $column) {
                 return Html::radio('radioButtonInput', false);
-            }
+            },
         ]);
         $this->assertStringContainsString(Html::radio('radioButtonInput', false), $column->renderDataCell([], 1, 0));
     }
@@ -93,7 +96,7 @@ class RadiobuttonColumnTest extends TestCase
             'columns' => [
                 [
                     'class' => RadioButtonColumn::className(),
-                    'radioOptions' => function ($model) {
+                    'radioOptions' => static function ($model) {
                         return [
                             'value' => $model['value'],
                             'checked' => $model['value'] == 2,

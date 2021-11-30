@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,11 +8,13 @@
 
 namespace yiiunit\framework\web;
 
+use SplStack;
 use yii\web\XmlResponseFormatter;
 use yiiunit\framework\web\stubs\ModelStub;
 
 /**
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  *
  * @group web
@@ -20,6 +23,7 @@ class XmlResponseFormatterTest extends FormatterTest
 {
     /**
      * @param array $options
+     *
      * @return XmlResponseFormatter
      */
     protected function getFormatterInstance($options = [])
@@ -61,7 +65,7 @@ class XmlResponseFormatterTest extends FormatterTest
             ], "<response><a>1</a><b>abc</b></response>\n"],
             [
                 ['image:loc' => 'url'],
-                "<response><image:loc>url</image:loc></response>\n"
+                "<response><image:loc>url</image:loc></response>\n",
             ],
             [[
                 1,
@@ -92,7 +96,7 @@ class XmlResponseFormatterTest extends FormatterTest
     {
         $expectedXmlForStack = '';
 
-        $postsStack = new \SplStack();
+        $postsStack = new SplStack();
 
         $postsStack->push(new Post(915, 'record1'));
         $expectedXmlForStack = '<Post><id>915</id><title>record1</title></Post>' .

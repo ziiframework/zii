@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -199,6 +200,7 @@ abstract class ExistValidatorTest extends DatabaseTestCase
 
     /**
      * Test expresssion in targetAttribute.
+     *
      * @see https://github.com/yiisoft/yii2/issues/14304
      */
     public function testExpresionInAttributeColumnName()
@@ -228,14 +230,14 @@ abstract class ExistValidatorTest extends DatabaseTestCase
 
     public function testTargetRelationWithFilter()
     {
-        $val = new ExistValidator(['targetRelation' => 'references', 'filter' => function ($query) {
+        $val = new ExistValidator(['targetRelation' => 'references', 'filter' => static function ($query) {
             $query->andWhere(['a_field' => 'ref_to_2']);
         }]);
         $m = ValidatorTestMainModel::findOne(2);
         $val->validateAttribute($m, 'id');
         $this->assertFalse($m->hasErrors('id'));
 
-        $val = new ExistValidator(['targetRelation' => 'references', 'filter' => function ($query) {
+        $val = new ExistValidator(['targetRelation' => 'references', 'filter' => static function ($query) {
             $query->andWhere(['a_field' => 'ref_to_3']);
         }]);
         $m = ValidatorTestMainModel::findOne(2);
@@ -249,7 +251,7 @@ abstract class ExistValidatorTest extends DatabaseTestCase
         ActiveRecord::$db = $connection;
 
         $model = null;
-        $connection->useMaster(function() use (&$model) {
+        $connection->useMaster(static function () use (&$model) {
             $model = ValidatorTestMainModel::findOne(2);
         });
 
