@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -70,7 +72,7 @@ class OptimisticLockBehaviorTest extends TestCase
 
     // Tests :
 
-    public function testUpdateRecordWithinConsoleRequest()
+    public function testUpdateRecordWithinConsoleRequest(): void
     {
         ActiveRecordLockVersion::$behaviors = [
             OptimisticLockBehavior::className(),
@@ -93,7 +95,7 @@ class OptimisticLockBehaviorTest extends TestCase
         $this->assertEquals(2, $model->version, 'updated version should equal 2');
     }
 
-    public function testNewRecord()
+    public function testNewRecord(): void
     {
         // create a record without any version
 
@@ -126,7 +128,7 @@ class OptimisticLockBehaviorTest extends TestCase
         $this->assertEquals(8, $model->version, 'init version should equal 8');
     }
 
-    public function testUpdateRecord()
+    public function testUpdateRecord(): void
     {
         $request = new Request();
         Yii::$app->set('request', $request);
@@ -209,7 +211,7 @@ class OptimisticLockBehaviorTest extends TestCase
         $this->assertEquals(3, $model->version, 'updated version should equal 3');
     }
 
-    public function testDeleteRecord()
+    public function testDeleteRecord(): void
     {
         $request = new Request();
         Yii::$app->set('request', $request);

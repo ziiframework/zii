@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -28,7 +30,7 @@ class DataColumnTest extends \yiiunit\TestCase
     /**
      * @see DataColumn::getHeaderCellLabel()
      */
-    public function testColumnLabelsOnEmptyArrayProvider()
+    public function testColumnLabelsOnEmptyArrayProvider(): void
     {
         $this->mockApplication();
         $grid = new GridView([
@@ -52,7 +54,7 @@ class DataColumnTest extends \yiiunit\TestCase
     /**
      * @see DataColumn::getHeaderCellLabel()
      */
-    public function testColumnLabelsOnEmptyArrayProviderWithFilterModel()
+    public function testColumnLabelsOnEmptyArrayProviderWithFilterModel(): void
     {
         $this->mockApplication();
         $grid = new GridView([
@@ -77,7 +79,7 @@ class DataColumnTest extends \yiiunit\TestCase
      * @see DataColumn::$filter
      * @see DataColumn::renderFilterCellContent()
      */
-    public function testFilterInputString()
+    public function testFilterInputString(): void
     {
         $this->mockApplication();
         $filterInput = '<input type="text"/>';
@@ -105,7 +107,7 @@ class DataColumnTest extends \yiiunit\TestCase
      * @see DataColumn::$filter
      * @see DataColumn::renderFilterCellContent()
      */
-    public function testFilterHasMaxLengthWhenIsAnActiveTextInput()
+    public function testFilterHasMaxLengthWhenIsAnActiveTextInput(): void
     {
         $this->mockApplication([
             'components' => [
@@ -142,7 +144,7 @@ class DataColumnTest extends \yiiunit\TestCase
      * @see DataColumn::$filter
      * @see DataColumn::renderFilterCellContent()
      */
-    public function testFilterInputArray()
+    public function testFilterInputArray(): void
     {
         $this->mockApplication([
             'components' => [
@@ -193,7 +195,7 @@ HTML
      * @see DataColumn::$filter
      * @see DataColumn::renderFilterCellContent()
      */
-    public function testFilterInputFormatBoolean()
+    public function testFilterInputFormatBoolean(): void
     {
         $this->mockApplication([
             'components' => [
@@ -243,7 +245,7 @@ HTML
      * @see DataColumn::$filterAttribute
      * @see DataColumn::renderFilterCellContent()
      */
-    public function testFilterInputWithFilterAttribute()
+    public function testFilterInputWithFilterAttribute(): void
     {
         $this->mockApplication();
 

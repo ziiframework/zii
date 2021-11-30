@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -39,7 +41,7 @@ class FileTargetTest extends TestCase
      *
      * @see https://github.com/yiisoft/yii2/issues/15662
      */
-    public function testInit()
+    public function testInit(): void
     {
         $logFile = Yii::getAlias('@yiiunit/runtime/log/filetargettest.log');
         FileHelper::removeDirectory(dirname($logFile));
@@ -54,7 +56,7 @@ class FileTargetTest extends TestCase
      *
      * @param bool $rotateByCopy
      */
-    public function testRotate($rotateByCopy)
+    public function testRotate($rotateByCopy): void
     {
         $logFile = Yii::getAlias('@yiiunit/runtime/log/filetargettest.log');
         FileHelper::removeDirectory(dirname($logFile));

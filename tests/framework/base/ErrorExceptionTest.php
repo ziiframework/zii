@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -34,7 +36,7 @@ class ErrorExceptionTest extends TestCase
         return false !== strpos(ini_get('xdebug.mode'), 'develop');
     }
 
-    public function testXdebugTrace()
+    public function testXdebugTrace(): void
     {
         if (!$this->isXdebugStackAvailable()) {
             $this->markTestSkipped('Xdebug is required.');

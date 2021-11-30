@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -15,7 +17,7 @@ use yiiunit\TestCase;
  */
 class MimeTest extends TestCase
 {
-    public function testMimeAliases()
+    public function testMimeAliases(): void
     {
         $this->assertSame([
                 'text/xml' => 'application/xml',
@@ -33,7 +35,7 @@ class MimeTest extends TestCase
             ], require __DIR__ . '/../../../src/helpers/mimeAliases.php');
     }
 
-    public function testMimeTypes()
+    public function testMimeTypes(): void
     {
         $this->assertSame([
                 '3dml' => 'text/vnd.in3d.3dml',

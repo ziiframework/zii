@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -23,7 +25,7 @@ class NumberValidatorTest extends TestCase
     private $pointDecimalLocales = ['en_US.UTF-8', 'en_US.UTF8', 'en_US.utf-8', 'en_US.utf8', 'English_United States.1252'];
     private $oldLocale;
 
-    private function setCommaDecimalLocale()
+    private function setCommaDecimalLocale(): void
     {
         if ($this->oldLocale === false) {
             $this->markTestSkipped('Your platform does not support locales.');
@@ -34,7 +36,7 @@ class NumberValidatorTest extends TestCase
         }
     }
 
-    private function setPointDecimalLocale()
+    private function setPointDecimalLocale(): void
     {
         if ($this->oldLocale === false) {
             $this->markTestSkipped('Your platform does not support locales.');
@@ -45,7 +47,7 @@ class NumberValidatorTest extends TestCase
         }
     }
 
-    private function restoreLocale()
+    private function restoreLocale(): void
     {
         setlocale(LC_NUMERIC, $this->oldLocale);
     }
@@ -60,7 +62,7 @@ class NumberValidatorTest extends TestCase
         $this->destroyApplication();
     }
 
-    public function testEnsureMessageOnInit()
+    public function testEnsureMessageOnInit(): void
     {
         $val = new NumberValidator();
         $this->assertIsString($val->message);
@@ -71,7 +73,7 @@ class NumberValidatorTest extends TestCase
         $this->assertIsString($val->tooBig);
     }
 
-    public function testValidateValueSimple()
+    public function testValidateValueSimple(): void
     {
         $val = new NumberValidator();
         $this->assertTrue($val->validate(20));
@@ -102,7 +104,7 @@ class NumberValidatorTest extends TestCase
         $this->assertFalse($val->validate(true));
     }
 
-    public function testValidateValueArraySimple()
+    public function testValidateValueArraySimple(): void
     {
         $val = new NumberValidator();
         $this->assertFalse($val->validate([20]));
@@ -144,7 +146,7 @@ class NumberValidatorTest extends TestCase
         $this->assertFalse($val->validate([true]));
     }
 
-    public function testValidateValueAdvanced()
+    public function testValidateValueAdvanced(): void
     {
         $val = new NumberValidator();
         $this->assertTrue($val->validate('-1.23')); // signed float
@@ -164,7 +166,7 @@ class NumberValidatorTest extends TestCase
         $this->assertFalse($val->validate('12.23^4'));
     }
 
-    public function testValidateValueWithLocaleWhereDecimalPointIsComma()
+    public function testValidateValueWithLocaleWhereDecimalPointIsComma(): void
     {
         $val = new NumberValidator();
 
@@ -177,7 +179,7 @@ class NumberValidatorTest extends TestCase
         $this->restoreLocale();
     }
 
-    public function testValidateValueMin()
+    public function testValidateValueMin(): void
     {
         $val = new NumberValidator(['min' => 1]);
         $this->assertTrue($val->validate(1));
@@ -192,7 +194,7 @@ class NumberValidatorTest extends TestCase
         $this->assertTrue($val->validate(PHP_INT_MAX + 1));
     }
 
-    public function testValidateValueMax()
+    public function testValidateValueMax(): void
     {
         $val = new NumberValidator(['max' => 1.25]);
         $this->assertTrue($val->validate(1));
@@ -206,7 +208,7 @@ class NumberValidatorTest extends TestCase
         $this->assertFalse($val->validate('125e-2'));
     }
 
-    public function testValidateValueRange()
+    public function testValidateValueRange(): void
     {
         $val = new NumberValidator(['min' => -10, 'max' => 20]);
         $this->assertTrue($val->validate(0));
@@ -220,7 +222,7 @@ class NumberValidatorTest extends TestCase
         $this->assertFalse($val->validate('20e-1'));
     }
 
-    public function testValidateAttribute()
+    public function testValidateAttribute(): void
     {
         $val = new NumberValidator();
         $model = new FakedValidationModel();
@@ -266,7 +268,7 @@ class NumberValidatorTest extends TestCase
         $this->assertTrue($model->hasErrors('attr_number'));
     }
 
-    public function testValidateAttributeArray()
+    public function testValidateAttributeArray(): void
     {
         $val = new NumberValidator();
         $val->allowArray = true;
@@ -360,7 +362,7 @@ class NumberValidatorTest extends TestCase
         $this->assertTrue($model->hasErrors('attr_number'));
     }
 
-    public function testValidateAttributeWithLocaleWhereDecimalPointIsComma()
+    public function testValidateAttributeWithLocaleWhereDecimalPointIsComma(): void
     {
         $val = new NumberValidator();
         $model = new FakedValidationModel();
@@ -377,7 +379,7 @@ class NumberValidatorTest extends TestCase
         $this->restoreLocale();
     }
 
-    public function testEnsureCustomMessageIsSetOnValidateAttribute()
+    public function testEnsureCustomMessageIsSetOnValidateAttribute(): void
     {
         $val = new NumberValidator([
             'tooSmall' => '{attribute} is to small.',
@@ -395,7 +397,7 @@ class NumberValidatorTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/3118
      */
-    public function testClientValidateComparison()
+    public function testClientValidateComparison(): void
     {
         $val = new NumberValidator([
             'min' => 5,
@@ -434,14 +436,14 @@ class NumberValidatorTest extends TestCase
         $this->assertStringContainsString('"max":13.37', $js);
     }
 
-    public function testValidateObject()
+    public function testValidateObject(): void
     {
         $val = new NumberValidator();
         $value = new stdClass();
         $this->assertFalse($val->validate($value));
     }
 
-    public function testValidateResource()
+    public function testValidateResource(): void
     {
         $val = new NumberValidator();
         $fp = fopen('php://stdin', 'r');
@@ -459,7 +461,7 @@ class NumberValidatorTest extends TestCase
         }
     }
 
-    public function testValidateToString()
+    public function testValidateToString(): void
     {
         $val = new NumberValidator();
         $object = new TestClass('10');
@@ -474,7 +476,7 @@ class NumberValidatorTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/18544
      */
-    public function testNotTrimmedStrings()
+    public function testNotTrimmedStrings(): void
     {
         $val = new NumberValidator(['integerOnly' => true]);
         $this->assertFalse($val->validate(' 1 '));

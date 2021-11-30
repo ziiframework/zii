@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -16,7 +18,7 @@ class TestValidator extends Validator
     private $_validatedAttributes = [];
     private $_setErrorOnValidateAttribute = false;
 
-    public function validateAttribute($object, $attribute)
+    public function validateAttribute($object, $attribute): void
     {
         $this->markAttributeValidated($attribute);
 
@@ -25,7 +27,7 @@ class TestValidator extends Validator
         }
     }
 
-    protected function markAttributeValidated($attr, $increaseBy = 1)
+    protected function markAttributeValidated($attr, $increaseBy = 1): void
     {
         if (!isset($this->_validatedAttributes[$attr])) {
             $this->_validatedAttributes[$attr] = 1;
@@ -44,7 +46,7 @@ class TestValidator extends Validator
         return isset($this->_validatedAttributes[$attr]);
     }
 
-    public function enableErrorOnValidateAttribute()
+    public function enableErrorOnValidateAttribute(): void
     {
         $this->_setErrorOnValidateAttribute = true;
     }

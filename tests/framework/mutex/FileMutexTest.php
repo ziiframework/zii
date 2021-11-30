@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -42,7 +44,7 @@ class FileMutexTest extends TestCase
      *
      * @throws InvalidConfigException
      */
-    public function testDeleteLockFile($mutexName)
+    public function testDeleteLockFile($mutexName): void
     {
         $mutex = $this->createMutex();
         $fileName = $mutex->mutexPath . '/' . md5($mutexName) . '.lock';

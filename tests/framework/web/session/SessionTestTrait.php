@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -12,7 +14,7 @@ use yii\web\Session;
 
 trait SessionTestTrait
 {
-    public function initStrictModeTest($class)
+    public function initStrictModeTest($class): void
     {
         /** @var Session $session */
         $session = new $class();
@@ -34,7 +36,7 @@ trait SessionTestTrait
     /**
      * @param string $class
      */
-    protected function useStrictModeTest($class)
+    protected function useStrictModeTest($class): void
     {
         /** @var Session $session */
         $session = new $class();

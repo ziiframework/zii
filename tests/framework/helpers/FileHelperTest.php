@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -68,7 +70,7 @@ class FileHelperTest extends TestCase
      *
      * @param string $dirName directory full name
      */
-    protected function createDir($dirName)
+    protected function createDir($dirName): void
     {
         if (!file_exists($dirName)) {
             mkdir($dirName, 0777, true);
@@ -80,7 +82,7 @@ class FileHelperTest extends TestCase
      *
      * @param string $dirName directory full name
      */
-    protected function removeDir($dirName)
+    protected function removeDir($dirName): void
     {
         if (!empty($dirName) && is_dir($dirName)) {
             if ($handle = opendir($dirName)) {
@@ -120,7 +122,7 @@ class FileHelperTest extends TestCase
      *                         Arrays specifies directories, other values - files
      * @param string $basePath structure base file path
      */
-    protected function createFileStructure(array $items, $basePath = '')
+    protected function createFileStructure(array $items, $basePath = ''): void
     {
         if (empty($basePath)) {
             $basePath = $this->testFilePath;
@@ -149,7 +151,7 @@ class FileHelperTest extends TestCase
      * @param string $fileName     file name
      * @param string $message      error message
      */
-    protected function assertFileMode($expectedMode, $fileName, $message = '')
+    protected function assertFileMode($expectedMode, $fileName, $message = ''): void
     {
         $expectedMode = str_pad(sprintf('%o', $expectedMode), '4', '0', STR_PAD_LEFT);
         $this->assertEquals($expectedMode, $this->getMode($fileName), $message);
@@ -157,7 +159,7 @@ class FileHelperTest extends TestCase
 
     // Tests :
 
-    public function testCreateDirectory()
+    public function testCreateDirectory(): void
     {
         $basePath = $this->testFilePath;
         $dirName = $basePath . DIRECTORY_SEPARATOR . 'test_dir_level_1' . DIRECTORY_SEPARATOR . 'test_dir_level_2';
@@ -173,7 +175,7 @@ class FileHelperTest extends TestCase
     /**
      * @depends testCreateDirectory
      */
-    public function testCopyDirectory()
+    public function testCopyDirectory(): void
     {
         $srcDirName = 'test_src_dir';
         $files = [
@@ -199,7 +201,7 @@ class FileHelperTest extends TestCase
         }
     }
 
-    public function testCopyDirectoryRecursive()
+    public function testCopyDirectoryRecursive(): void
     {
         $srcDirName = 'test_src_dir_rec';
         $structure = [
@@ -225,7 +227,7 @@ class FileHelperTest extends TestCase
 
         $this->assertFileExists($dstDirName, 'Destination directory does not exist!');
 
-        $checker = function ($structure, $dstDirName) use (&$checker) {
+        $checker = function ($structure, $dstDirName) use (&$checker): void {
             foreach ($structure as $name => $content) {
                 if (is_array($content)) {
                     $checker($content, $dstDirName . DIRECTORY_SEPARATOR . $name);
@@ -240,7 +242,7 @@ class FileHelperTest extends TestCase
         $checker($structure, $dstDirName);
     }
 
-    public function testCopyDirectoryNotRecursive()
+    public function testCopyDirectoryNotRecursive(): void
     {
         $srcDirName = 'test_src_dir_not_rec';
         $structure = [
@@ -281,7 +283,7 @@ class FileHelperTest extends TestCase
     /**
      * @depends testCopyDirectory
      */
-    public function testCopyDirectoryPermissions()
+    public function testCopyDirectoryPermissions(): void
     {
         if (DIRECTORY_SEPARATOR === '\\') {
             $this->markTestSkipped("Can't reliably test it on Windows because fileperms() always return 0777.");
@@ -317,7 +319,7 @@ class FileHelperTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/10710
      */
-    public function testCopyDirectoryToItself()
+    public function testCopyDirectoryToItself(): void
     {
         $dirName = 'test_dir';
 
@@ -334,7 +336,7 @@ class FileHelperTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/10710
      */
-    public function testCopyDirToSubdirOfItself()
+    public function testCopyDirToSubdirOfItself(): void
     {
         $this->createFileStructure([
             'data' => [],
@@ -349,7 +351,7 @@ class FileHelperTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/10710
      */
-    public function testCopyDirToAnotherWithSameName()
+    public function testCopyDirToAnotherWithSameName(): void
     {
         $this->createFileStructure([
             'data' => [],
@@ -363,7 +365,7 @@ class FileHelperTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/10710
      */
-    public function testCopyDirWithSameName()
+    public function testCopyDirWithSameName(): void
     {
         $this->createFileStructure([
             'data' => [],
@@ -373,7 +375,7 @@ class FileHelperTest extends TestCase
         FileHelper::copyDirectory($this->testFilePath . DIRECTORY_SEPARATOR . 'data', $this->testFilePath . DIRECTORY_SEPARATOR . 'data-backup');
     }
 
-    public function testRemoveDirectory()
+    public function testRemoveDirectory(): void
     {
         $dirName = 'test_dir_for_remove';
         $this->createFileStructure([
@@ -398,7 +400,7 @@ class FileHelperTest extends TestCase
         FileHelper::removeDirectory($basePath . DIRECTORY_SEPARATOR . 'nonExisting');
     }
 
-    public function testRemoveDirectorySymlinks1()
+    public function testRemoveDirectorySymlinks1(): void
     {
         if (DIRECTORY_SEPARATOR === '\\') {
             $this->markTestSkipped('Cannot test this on MS Windows since symlinks are uncommon for it.');
@@ -441,7 +443,7 @@ class FileHelperTest extends TestCase
         $this->assertFileDoesNotExist($basePath . 'symlinks' . DIRECTORY_SEPARATOR . 'symlinked-directory' . DIRECTORY_SEPARATOR . 'standard-file-1');
     }
 
-    public function testRemoveDirectorySymlinks2()
+    public function testRemoveDirectorySymlinks2(): void
     {
         if (DIRECTORY_SEPARATOR === '\\') {
             $this->markTestSkipped('Cannot test this on MS Windows since symlinks are uncommon for it.');
@@ -484,7 +486,7 @@ class FileHelperTest extends TestCase
         $this->assertFileDoesNotExist($basePath . 'symlinks' . DIRECTORY_SEPARATOR . 'symlinked-directory' . DIRECTORY_SEPARATOR . 'standard-file-1');
     }
 
-    public function testFindFiles()
+    public function testFindFiles(): void
     {
         $dirName = 'test_dir';
         $this->createFileStructure([
@@ -515,7 +517,7 @@ class FileHelperTest extends TestCase
     /**
      * @depends testFindFiles
      */
-    public function testFindFileFilter()
+    public function testFindFileFilter(): void
     {
         $dirName = 'test_dir';
         $passedFileName = 'passed.txt';
@@ -529,9 +531,7 @@ class FileHelperTest extends TestCase
         $dirName = $basePath . DIRECTORY_SEPARATOR . $dirName;
 
         $options = [
-            'filter' => static function ($path) use ($passedFileName) {
-                return $passedFileName == basename($path);
-            },
+            'filter' => static fn ($path) => $passedFileName == basename($path),
         ];
         $foundFiles = FileHelper::findFiles($dirName, $options);
         $this->assertEquals([$dirName . DIRECTORY_SEPARATOR . $passedFileName], $foundFiles);
@@ -540,7 +540,7 @@ class FileHelperTest extends TestCase
     /**
      * @depends testFindFiles
      */
-    public function testFindFilesRecursiveWithSymLink()
+    public function testFindFilesRecursiveWithSymLink(): void
     {
         $dirName = 'test_dir';
         $this->createFileStructure([
@@ -568,7 +568,7 @@ class FileHelperTest extends TestCase
     /**
      * @depends testFindFiles
      */
-    public function testFindFilesNotRecursive()
+    public function testFindFilesNotRecursive(): void
     {
         $dirName = 'test_dir';
         $this->createFileStructure([
@@ -592,13 +592,11 @@ class FileHelperTest extends TestCase
     /**
      * @depends testFindFiles
      */
-    public function testFindFilesExclude()
+    public function testFindFilesExclude(): void
     {
         $basePath = $this->testFilePath . DIRECTORY_SEPARATOR;
         $dirs = ['', 'one', 'one' . DIRECTORY_SEPARATOR . 'two', 'three'];
-        $files = array_fill_keys(array_map(static function ($n) {
-            return "a.$n";
-        }, range(1, 8)), 'file contents');
+        $files = array_fill_keys(array_map(static fn ($n) => "a.$n", range(1, 8)), 'file contents');
 
         $tree = $files;
         $root = $files;
@@ -628,25 +626,19 @@ class FileHelperTest extends TestCase
         // range
         $foundFiles = FileHelper::findFiles($basePath, ['except' => ['a.[2-8]']]);
         sort($foundFiles);
-        $expect = array_values(array_filter($flat, static function ($p) {
-            return substr($p, -3) === 'a.1';
-        }));
+        $expect = array_values(array_filter($flat, static fn ($p) => substr($p, -3) === 'a.1'));
         $this->assertEquals($expect, $foundFiles);
 
         // suffix
         $foundFiles = FileHelper::findFiles($basePath, ['except' => ['*.1']]);
         sort($foundFiles);
-        $expect = array_values(array_filter($flat, static function ($p) {
-            return substr($p, -3) !== 'a.1';
-        }));
+        $expect = array_values(array_filter($flat, static fn ($p) => substr($p, -3) !== 'a.1'));
         $this->assertEquals($expect, $foundFiles);
 
         // dir
         $foundFiles = FileHelper::findFiles($basePath, ['except' => ['/one']]);
         sort($foundFiles);
-        $expect = array_values(array_filter($flat, static function ($p) {
-            return strpos($p, DIRECTORY_SEPARATOR . 'one') === false;
-        }));
+        $expect = array_values(array_filter($flat, static fn ($p) => strpos($p, DIRECTORY_SEPARATOR . 'one') === false));
         $this->assertEquals($expect, $foundFiles);
 
         // dir contents
@@ -662,7 +654,7 @@ class FileHelperTest extends TestCase
     /**
      * @depends testFindFilesExclude
      */
-    public function testFindFilesCaseSensitive()
+    public function testFindFilesCaseSensitive(): void
     {
         $dirName = 'test_dir';
         $this->createFileStructure([
@@ -689,7 +681,7 @@ class FileHelperTest extends TestCase
         $this->assertCount(2, $foundFiles);
     }
 
-    public function testGetMimeTypeByExtension()
+    public function testGetMimeTypeByExtension(): void
     {
         $magicFile = $this->testFilePath . DIRECTORY_SEPARATOR . 'mime_type.php';
         $mimeTypeMap = [
@@ -706,7 +698,7 @@ class FileHelperTest extends TestCase
         }
     }
 
-    public function testGetMimeType()
+    public function testGetMimeType(): void
     {
         $file = $this->testFilePath . DIRECTORY_SEPARATOR . 'mime_type_test.txt';
         file_put_contents($file, 'some text');
@@ -721,7 +713,7 @@ class FileHelperTest extends TestCase
         $this->assertTrue(in_array(FileHelper::getMimeType($file), ['application/json', 'text/plain']));
     }
 
-    public function testNormalizePath()
+    public function testNormalizePath(): void
     {
         $ds = DIRECTORY_SEPARATOR;
         $this->assertEquals("{$ds}a{$ds}b", FileHelper::normalizePath('//a\b/'));
@@ -755,7 +747,7 @@ class FileHelperTest extends TestCase
         $this->assertEquals('ftp://192.168.1.100/test', FileHelper::normalizePath('ftp://192.168.1.100/test/'));
     }
 
-    public function testLocalizedDirectory()
+    public function testLocalizedDirectory(): void
     {
         $this->createFileStructure([
             'views' => [
@@ -783,7 +775,7 @@ class FileHelperTest extends TestCase
      * @depends testCopyDirectory
      * @depends testFindFiles
      */
-    public function testCopyDirectoryExclude()
+    public function testCopyDirectoryExclude(): void
     {
         $srcDirName = 'test_src_dir';
         $textFiles = [
@@ -844,7 +836,7 @@ class FileHelperTest extends TestCase
      * @depends testCopyDirectory
      * @depends testFindFiles
      */
-    public function testCopyDirectoryEmptyDirectories()
+    public function testCopyDirectoryEmptyDirectories(): void
     {
         [$basePath, $srcDirName] = $this->setupCopyEmptyDirectoriesTest();
 
@@ -869,7 +861,7 @@ class FileHelperTest extends TestCase
      * @depends testCopyDirectory
      * @depends testFindFiles
      */
-    public function testCopyDirectoryNoEmptyDirectories()
+    public function testCopyDirectoryNoEmptyDirectories(): void
     {
         [$basePath, $srcDirName] = $this->setupCopyEmptyDirectoriesTest();
 
@@ -888,7 +880,7 @@ class FileHelperTest extends TestCase
         $this->assertFileDoesNotExist($dstDirName . DIRECTORY_SEPARATOR . 'dir3');
     }
 
-    public function testFindDirectories()
+    public function testFindDirectories(): void
     {
         $dirName = 'test_dir';
         $this->createFileStructure([
@@ -918,9 +910,7 @@ class FileHelperTest extends TestCase
             $dirName . DIRECTORY_SEPARATOR . 'second_sub_dir',
         ];
         $options = [
-            'filter' => static function ($path) {
-                return 'second_sub_dir' === basename($path);
-            },
+            'filter' => static fn ($path) => 'second_sub_dir' === basename($path),
         ];
         $foundFiles = FileHelper::findDirectories($dirName, $options);
         sort($expectedFiles);
@@ -940,7 +930,7 @@ class FileHelperTest extends TestCase
         $this->assertEquals($expectedFiles, $foundFiles);
     }
 
-    public function testChangeOwnership()
+    public function testChangeOwnership(): void
     {
         if (DIRECTORY_SEPARATOR !== '/') {
             $this->markTestSkipped('FileHelper::changeOwnership() fails silently on Windows, nothing to test.');
@@ -1188,7 +1178,7 @@ class FileHelperTest extends TestCase
         $this->assertEquals('0' . decoct($fileMode), substr(decoct(fileperms($testFile)), -4), 'Expected created test file mode to be changed.');
     }
 
-    public function testChangeOwnershipNonExistingUser()
+    public function testChangeOwnershipNonExistingUser(): void
     {
         $dirName = 'change_ownership_non_existing_user';
         $fileName = 'file_1.txt';
@@ -1219,7 +1209,7 @@ class FileHelperTest extends TestCase
      * @param mixed $ownership
      * @param mixed $mode
      */
-    public function testChangeOwnershipInvalidArguments($useFile, $ownership, $mode)
+    public function testChangeOwnershipInvalidArguments($useFile, $ownership, $mode): void
     {
         $dirName = 'change_ownership_invalid_arguments';
         $fileName = 'file_1.txt';

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -42,12 +44,12 @@ class ApcCacheTest extends CacheTestCase
         return $this->_cacheInstance;
     }
 
-    public function testExpire()
+    public function testExpire(): void
     {
         $this->markTestSkipped('APC keys are expiring only on the next request.');
     }
 
-    public function testExpireAdd()
+    public function testExpireAdd(): void
     {
         $this->markTestSkipped('APC keys are expiring only on the next request.');
     }

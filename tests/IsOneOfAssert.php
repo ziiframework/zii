@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -30,9 +32,7 @@ class IsOneOfAssert extends \PHPUnit\Framework\Constraint\Constraint
      */
     public function toString(): string
     {
-        $allowedValues = array_map(static function ($value) {
-            return VarDumper::dumpAsString($value);
-        }, $this->allowedValues);
+        $allowedValues = array_map(static fn ($value) => VarDumper::dumpAsString($value), $this->allowedValues);
         $expectedAsString = implode(', ', $allowedValues);
 
         return "is one of $expectedAsString";

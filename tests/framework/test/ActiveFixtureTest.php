@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -37,7 +39,7 @@ class ActiveFixtureTest extends DatabaseTestCase
         parent::tearDown();
     }
 
-    public function testGetData()
+    public function testGetData(): void
     {
         $test = new CustomerDbTestCase();
         $test->setUp();
@@ -56,7 +58,7 @@ class ActiveFixtureTest extends DatabaseTestCase
         $test->tearDown();
     }
 
-    public function testGetModel()
+    public function testGetModel(): void
     {
         $test = new CustomerDbTestCase();
         $test->setUp();
@@ -74,7 +76,7 @@ class ActiveFixtureTest extends DatabaseTestCase
         $test->tearDown();
     }
 
-    public function testDataDirectory()
+    public function testDataDirectory(): void
     {
         $test = new CustomDirectoryDbTestCase();
 
@@ -87,7 +89,7 @@ class ActiveFixtureTest extends DatabaseTestCase
         $test->tearDown();
     }
 
-    public function testDataPath()
+    public function testDataPath(): void
     {
         $test = new DataPathDbTestCase();
 
@@ -100,7 +102,7 @@ class ActiveFixtureTest extends DatabaseTestCase
         $test->tearDown();
     }
 
-    public function testTruncate()
+    public function testTruncate(): void
     {
         $test = new TruncateTestCase();
 
@@ -113,7 +115,7 @@ class ActiveFixtureTest extends DatabaseTestCase
     /**
      * @see https://github.com/yiisoft/yii2/pull/14343
      */
-    public function testDifferentModelDb()
+    public function testDifferentModelDb(): void
     {
         $fixture = new DifferentDbFixture();
 
@@ -126,7 +128,7 @@ class ProfileFixture extends ActiveFixture
 {
     public $modelClass = 'yiiunit\data\ar\Profile';
 
-    public function beforeLoad()
+    public function beforeLoad(): void
     {
         if ($this->db->driverName === 'sqlsrv') {
             $this->db->createCommand()->truncateTable('profile')->execute();
@@ -140,7 +142,7 @@ class ProfileFixture extends ActiveFixture
         $data = parent::getData();
 
         if ($this->db->driverName === 'sqlsrv') {
-            array_walk($data, static function (&$item) {
+            array_walk($data, static function (&$item): void {
                 unset($item['id']);
             });
         }
@@ -157,7 +159,7 @@ class CustomerFixture extends ActiveFixture
         'yiiunit\framework\test\ProfileFixture',
     ];
 
-    public function beforeLoad()
+    public function beforeLoad(): void
     {
         if ($this->db->driverName === 'sqlsrv') {
             $this->db->createCommand()->truncateTable('customer')->execute();
@@ -173,7 +175,7 @@ class CustomDirectoryFixture extends ActiveFixture
 
     public $dataDirectory = '@app/framework/test/custom';
 
-    public function beforeLoad()
+    public function beforeLoad(): void
     {
         if ($this->db->driverName === 'sqlsrv') {
             $this->db->createCommand()->truncateTable('customer')->execute();

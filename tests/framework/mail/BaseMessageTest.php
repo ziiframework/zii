@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -47,7 +49,7 @@ class BaseMessageTest extends TestCase
 
     // Tests :
 
-    public function testSend()
+    public function testSend(): void
     {
         $mailer = $this->getMailer();
         $message = $mailer->compose();
@@ -55,7 +57,7 @@ class BaseMessageTest extends TestCase
         $this->assertEquals($message, $mailer->sentMessages[0], 'Unable to send message!');
     }
 
-    public function testToString()
+    public function testToString(): void
     {
         $mailer = $this->getMailer();
         $message = $mailer->compose();
@@ -71,7 +73,7 @@ class TestMailer extends BaseMailer
     public $messageClass = 'yiiunit\framework\mail\TestMessage';
     public $sentMessages = [];
 
-    protected function sendMessage($message)
+    protected function sendMessage($message): void
     {
         $this->sentMessages[] = $message;
     }
@@ -90,7 +92,7 @@ class TestMessage extends BaseMessage
         return '';
     }
 
-    public function setCharset($charset)
+    public function setCharset($charset): void
     {
     }
 
@@ -99,7 +101,7 @@ class TestMessage extends BaseMessage
         return '';
     }
 
-    public function setFrom($from)
+    public function setFrom($from): void
     {
     }
 
@@ -108,7 +110,7 @@ class TestMessage extends BaseMessage
         return '';
     }
 
-    public function setReplyTo($replyTo)
+    public function setReplyTo($replyTo): void
     {
     }
 
@@ -117,7 +119,7 @@ class TestMessage extends BaseMessage
         return '';
     }
 
-    public function setTo($to)
+    public function setTo($to): void
     {
     }
 
@@ -126,7 +128,7 @@ class TestMessage extends BaseMessage
         return '';
     }
 
-    public function setCc($cc)
+    public function setCc($cc): void
     {
     }
 
@@ -135,7 +137,7 @@ class TestMessage extends BaseMessage
         return '';
     }
 
-    public function setBcc($bcc)
+    public function setBcc($bcc): void
     {
     }
 
@@ -144,33 +146,33 @@ class TestMessage extends BaseMessage
         return '';
     }
 
-    public function setSubject($subject)
+    public function setSubject($subject): void
     {
     }
 
-    public function setTextBody($text)
+    public function setTextBody($text): void
     {
         $this->text = $text;
     }
 
-    public function setHtmlBody($html)
+    public function setHtmlBody($html): void
     {
         $this->html = $html;
     }
 
-    public function attachContent($content, array $options = [])
+    public function attachContent($content, array $options = []): void
     {
     }
 
-    public function attach($fileName, array $options = [])
+    public function attach($fileName, array $options = []): void
     {
     }
 
-    public function embed($fileName, array $options = [])
+    public function embed($fileName, array $options = []): void
     {
     }
 
-    public function embedContent($content, array $options = [])
+    public function embedContent($content, array $options = []): void
     {
     }
 

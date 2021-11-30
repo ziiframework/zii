@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -65,25 +67,25 @@ class AuthMethodTest extends TestCase
 
     // Tests :
 
-    public function testBeforeAction()
+    public function testBeforeAction(): void
     {
         $action = $this->createAction();
 
-        $filter = $this->createFilter(static function () {return new stdClass(); });
+        $filter = $this->createFilter(static fn () => new stdClass());
         $this->assertTrue($filter->beforeAction($action));
 
-        $filter = $this->createFilter(static function () {return null; });
+        $filter = $this->createFilter(static fn () => null);
         $this->expectException('yii\web\UnauthorizedHttpException');
         $this->assertTrue($filter->beforeAction($action));
     }
 
-    public function testIsOptional()
+    public function testIsOptional(): void
     {
         $reflection = new ReflectionClass(AuthMethod::className());
         $method = $reflection->getMethod('isOptional');
         $method->setAccessible(true);
 
-        $filter = $this->createFilter(static function () {return new stdClass(); });
+        $filter = $this->createFilter(static fn () => new stdClass());
 
         $filter->optional = ['some'];
         $this->assertFalse($method->invokeArgs($filter, [$this->createAction(['id' => 'index'])]));
