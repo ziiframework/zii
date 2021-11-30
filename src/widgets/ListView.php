@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -19,17 +20,18 @@ use yii\helpers\Html;
  * For more details and usage information on ListView, see the [guide article on data widgets](guide:output-data-widgets).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class ListView extends BaseListView
 {
     /**
      * @var array|Closure the HTML attributes for the container of the rendering result of each data model.
-     * This can be either an array specifying the common HTML attributes for rendering each data item,
-     * or an anonymous function that returns an array of the HTML attributes. The anonymous function will be
-     * called once for every data model returned by [[dataProvider]].
-     * The "tag" element specifies the tag name of the container element and defaults to "div".
-     * If "tag" is false, it means no container element will be rendered.
+     *                    This can be either an array specifying the common HTML attributes for rendering each data item,
+     *                    or an anonymous function that returns an array of the HTML attributes. The anonymous function will be
+     *                    called once for every data model returned by [[dataProvider]].
+     *                    The "tag" element specifies the tag name of the container element and defaults to "div".
+     *                    If "tag" is false, it means no container element will be rendered.
      *
      * If this property is specified as an anonymous function, it should have the following signature:
      *
@@ -42,8 +44,8 @@ class ListView extends BaseListView
     public $itemOptions = [];
     /**
      * @var string|callable the name of the view for rendering each data item, or a callback (e.g. an anonymous function)
-     * for rendering each data item. If it specifies a view name, the following variables will
-     * be available in the view:
+     *                      for rendering each data item. If it specifies a view name, the following variables will
+     *                      be available in the view:
      *
      * - `$model`: mixed, the data model
      * - `$key`: mixed, the key value associated with the data item
@@ -61,22 +63,23 @@ class ListView extends BaseListView
     public $itemView;
     /**
      * @var array additional parameters to be passed to [[itemView]] when it is being rendered.
-     * This property is used only when [[itemView]] is a string representing a view name.
+     *            This property is used only when [[itemView]] is a string representing a view name.
      */
     public $viewParams = [];
     /**
-     * @var string the HTML code to be displayed between any two consecutive items.
+     * @var string the HTML code to be displayed between any two consecutive items
      */
     public $separator = "\n";
     /**
      * @var array the HTML attributes for the container tag of the list view.
-     * The "tag" element specifies the tag name of the container element and defaults to "div".
+     *            The "tag" element specifies the tag name of the container element and defaults to "div".
+     *
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $options = ['class' => 'list-view'];
     /**
      * @var Closure an anonymous function that is called once BEFORE rendering each data model.
-     * It should have the following signature:
+     *              It should have the following signature:
      *
      * ```php
      * function ($model, $key, $index, $widget)
@@ -89,6 +92,7 @@ class ListView extends BaseListView
      *
      * The return result of the function will be rendered directly.
      * Note: If the function returns `null`, nothing will be rendered before the item.
+     *
      * @see renderBeforeItem
      * @since 2.0.11
      */
@@ -100,14 +104,15 @@ class ListView extends BaseListView
      *
      * The return result of the function will be rendered directly.
      * Note: If the function returns `null`, nothing will be rendered after the item.
+     *
      * @see renderAfterItem
      * @since 2.0.11
      */
     public $afterItem;
 
-
     /**
      * Renders all data models.
+     *
      * @return string the rendering result
      */
     public function renderItems()
@@ -115,8 +120,10 @@ class ListView extends BaseListView
         $models = $this->dataProvider->getModels();
         $keys = $this->dataProvider->getKeys();
         $rows = [];
+
         foreach (array_values($models) as $index => $model) {
             $key = $keys[$index];
+
             if (($before = $this->renderBeforeItem($model, $key, $index)) !== null) {
                 $rows[] = $before;
             }
@@ -136,9 +143,11 @@ class ListView extends BaseListView
      * If [[beforeItem]] is not a closure, `null` will be returned.
      *
      * @param mixed $model the data model to be rendered
-     * @param mixed $key the key value associated with the data model
-     * @param int $index the zero-based index of the data model in the model array returned by [[dataProvider]].
+     * @param mixed $key   the key value associated with the data model
+     * @param int   $index the zero-based index of the data model in the model array returned by [[dataProvider]]
+     *
      * @return string|null [[beforeItem]] call result or `null` when [[beforeItem]] is not a closure
+     *
      * @see beforeItem
      * @since 2.0.11
      */
@@ -156,9 +165,11 @@ class ListView extends BaseListView
      * If [[afterItem]] is not a closure, `null` will be returned.
      *
      * @param mixed $model the data model to be rendered
-     * @param mixed $key the key value associated with the data model
-     * @param int $index the zero-based index of the data model in the model array returned by [[dataProvider]].
+     * @param mixed $key   the key value associated with the data model
+     * @param int   $index the zero-based index of the data model in the model array returned by [[dataProvider]]
+     *
      * @return string|null [[afterItem]] call result or `null` when [[afterItem]] is not a closure
+     *
      * @see afterItem
      * @since 2.0.11
      */
@@ -173,9 +184,11 @@ class ListView extends BaseListView
 
     /**
      * Renders a single data model.
+     *
      * @param mixed $model the data model to be rendered
-     * @param mixed $key the key value associated with the data model
-     * @param int $index the zero-based index of the data model in the model array returned by [[dataProvider]].
+     * @param mixed $key   the key value associated with the data model
+     * @param int   $index the zero-based index of the data model in the model array returned by [[dataProvider]]
+     *
      * @return string the rendering result
      */
     public function renderItem($model, $key, $index)
@@ -192,6 +205,7 @@ class ListView extends BaseListView
         } else {
             $content = call_user_func($this->itemView, $model, $key, $index, $this);
         }
+
         if ($this->itemOptions instanceof Closure) {
             $options = call_user_func($this->itemOptions, $model, $key, $index, $this);
         } else {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -14,6 +15,7 @@ namespace yii\helpers;
  * For more details and usage information on ArrayHelper, see the [guide article on array helpers](guide:helper-array).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class ArrayHelper extends BaseArrayHelper

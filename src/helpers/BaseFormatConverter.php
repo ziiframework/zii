@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -17,13 +18,14 @@ use Yii;
  *
  * @author Carsten Brandt <mail@cebe.cc>
  * @author Enrica Ruedin <e.ruedin@guggach.com>
+ *
  * @since 2.0
  */
 class BaseFormatConverter
 {
     /**
      * @var array the php fallback definition to use for the ICU short patterns `short`, `medium`, `long` and `full`.
-     * This is used as fallback when the intl extension is not installed.
+     *            This is used as fallback when the intl extension is not installed.
      */
     public static $phpFallbackDatePatterns = [
         'short' => [
@@ -49,7 +51,7 @@ class BaseFormatConverter
     ];
     /**
      * @var array the jQuery UI fallback definition to use for the ICU short patterns `short`, `medium`, `long` and `full`.
-     * This is used as fallback when the intl extension is not installed.
+     *            This is used as fallback when the intl extension is not installed.
      */
     public static $juiFallbackDatePatterns = [
         'short' => [
@@ -81,7 +83,6 @@ class BaseFormatConverter
         'full' => 0, // IntlDateFormatter::FULL,
     ];
 
-
     /**
      * Converts a date format pattern from [ICU format][] to [php date() function format][].
      *
@@ -94,11 +95,12 @@ class BaseFormatConverter
      * [php date() function format]: https://www.php.net/manual/en/function.date.php
      * [ICU format]: http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax
      *
-     * @param string $pattern date format pattern in ICU format.
-     * @param string $type 'date', 'time', or 'datetime'.
-     * @param string $locale the locale to use for converting ICU short patterns `short`, `medium`, `long` and `full`.
-     * If not given, `Yii::$app->language` will be used.
-     * @return string The converted date format pattern.
+     * @param string $pattern date format pattern in ICU format
+     * @param string $type    'date', 'time', or 'datetime'
+     * @param string $locale  the locale to use for converting ICU short patterns `short`, `medium`, `long` and `full`.
+     *                        If not given, `Yii::$app->language` will be used.
+     *
+     * @return string the converted date format pattern
      */
     public static function convertDateIcuToPhp($pattern, $type = 'date', $locale = null)
     {
@@ -107,6 +109,7 @@ class BaseFormatConverter
                 if ($locale === null) {
                     $locale = Yii::$app->language;
                 }
+
                 if ($type === 'date') {
                     $formatter = new IntlDateFormatter($locale, self::$_icuShortFormats[$pattern], IntlDateFormatter::NONE);
                 } elseif ($type === 'time') {
@@ -122,6 +125,7 @@ class BaseFormatConverter
         // http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax
         // escaped text
         $escaped = [];
+
         if (preg_match_all('/(?<!\')\'(.*?[^\'])\'(?!\')/', $pattern, $matches, PREG_SET_ORDER)) {
             foreach ($matches as $match) {
                 $match[1] = str_replace('\'\'', '\'', $match[1]);
@@ -243,8 +247,9 @@ class BaseFormatConverter
      *
      * Since 2.0.13 it handles escaped characters correctly.
      *
-     * @param string $pattern date format pattern in php date()-function format.
-     * @return string The converted date format pattern.
+     * @param string $pattern date format pattern in php date()-function format
+     *
+     * @return string the converted date format pattern
      */
     public static function convertDatePhpToIcu($pattern)
     {
@@ -351,11 +356,12 @@ class BaseFormatConverter
      * [jQuery UI date format]: http://api.jqueryui.com/datepicker/#utility-formatDate
      * [ICU format]: http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax
      *
-     * @param string $pattern date format pattern in ICU format.
-     * @param string $type 'date', 'time', or 'datetime'.
-     * @param string $locale the locale to use for converting ICU short patterns `short`, `medium`, `long` and `full`.
-     * If not given, `Yii::$app->language` will be used.
-     * @return string The converted date format pattern.
+     * @param string $pattern date format pattern in ICU format
+     * @param string $type    'date', 'time', or 'datetime'
+     * @param string $locale  the locale to use for converting ICU short patterns `short`, `medium`, `long` and `full`.
+     *                        If not given, `Yii::$app->language` will be used.
+     *
+     * @return string the converted date format pattern
      */
     public static function convertDateIcuToJui($pattern, $type = 'date', $locale = null)
     {
@@ -364,6 +370,7 @@ class BaseFormatConverter
                 if ($locale === null) {
                     $locale = Yii::$app->language;
                 }
+
                 if ($type === 'date') {
                     $formatter = new IntlDateFormatter($locale, self::$_icuShortFormats[$pattern], IntlDateFormatter::NONE);
                 } elseif ($type === 'time') {
@@ -379,6 +386,7 @@ class BaseFormatConverter
         // http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax
         // escaped text
         $escaped = [];
+
         if (preg_match_all('/(?<!\')\'.*?[^\']\'(?!\')/', $pattern, $matches)) {
             foreach ($matches[0] as $match) {
                 $escaped[$match] = $match;
@@ -500,8 +508,9 @@ class BaseFormatConverter
      * [php date() function format]: https://www.php.net/manual/en/function.date.php
      * [jQuery UI date format]: http://api.jqueryui.com/datepicker/#utility-formatDate
      *
-     * @param string $pattern date format pattern in php date()-function format.
-     * @return string The converted date format pattern.
+     * @param string $pattern date format pattern in php date()-function format
+     *
+     * @return string the converted date format pattern
      */
     public static function convertDatePhpToJui($pattern)
     {

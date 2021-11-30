@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,7 @@
 
 namespace yii\validators;
 
+use Closure;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\Html;
@@ -29,35 +31,40 @@ use yii\helpers\Html;
  * to [[TYPE_NUMBER]] to enable numeric comparison.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class CompareValidator extends Validator
 {
     /**
      * Constant for specifying the comparison [[type]] by numeric values.
+     *
      * @since 2.0.11
      * @see type
      */
-    const TYPE_STRING = 'string';
+    public const TYPE_STRING = 'string';
     /**
      * Constant for specifying the comparison [[type]] by numeric values.
+     *
      * @since 2.0.11
      * @see type
      */
-    const TYPE_NUMBER = 'number';
+    public const TYPE_NUMBER = 'number';
 
     /**
      * @var string the name of the attribute to be compared with. When both this property
-     * and [[compareValue]] are set, the latter takes precedence. If neither is set,
-     * it assumes the comparison is against another attribute whose name is formed by
-     * appending '_repeat' to the attribute being validated. For example, if 'password' is
-     * being validated, then the attribute to be compared would be 'password_repeat'.
+     *             and [[compareValue]] are set, the latter takes precedence. If neither is set,
+     *             it assumes the comparison is against another attribute whose name is formed by
+     *             appending '_repeat' to the attribute being validated. For example, if 'password' is
+     *             being validated, then the attribute to be compared would be 'password_repeat'.
+     *
      * @see compareValue
      */
     public $compareAttribute;
     /**
      * @var mixed the constant value to be compared with. When both this property
-     * and [[compareAttribute]] are set, this property takes precedence.
+     *            and [[compareAttribute]] are set, this property takes precedence.
+     *
      * @see compareAttribute
      */
     public $compareValue;
@@ -85,7 +92,7 @@ class CompareValidator extends Validator
     public $operator = '==';
     /**
      * @var string the user-defined error message. It may contain the following placeholders which
-     * will be replaced accordingly by the validator:
+     *             will be replaced accordingly by the validator:
      *
      * - `{attribute}`: the label of the attribute being validated
      * - `{value}`: the value of the attribute being validated
@@ -95,35 +102,42 @@ class CompareValidator extends Validator
      */
     public $message;
 
-
     /**
      * {@inheritdoc}
      */
     public function init()
     {
         parent::init();
+
         if ($this->message === null) {
             switch ($this->operator) {
                 case '==':
                 case '===':
                     $this->message = Yii::t('yii', '{attribute} must be equal to "{compareValueOrAttribute}".');
+
                     break;
                 case '!=':
                 case '!==':
                     $this->message = Yii::t('yii', '{attribute} must not be equal to "{compareValueOrAttribute}".');
+
                     break;
                 case '>':
                     $this->message = Yii::t('yii', '{attribute} must be greater than "{compareValueOrAttribute}".');
+
                     break;
                 case '>=':
                     $this->message = Yii::t('yii', '{attribute} must be greater than or equal to "{compareValueOrAttribute}".');
+
                     break;
                 case '<':
                     $this->message = Yii::t('yii', '{attribute} must be less than "{compareValueOrAttribute}".');
+
                     break;
                 case '<=':
                     $this->message = Yii::t('yii', '{attribute} must be less than or equal to "{compareValueOrAttribute}".');
+
                     break;
+
                 default:
                     throw new InvalidConfigException("Unknown operator: {$this->operator}");
             }
@@ -136,13 +150,15 @@ class CompareValidator extends Validator
     public function validateAttribute($model, $attribute)
     {
         $value = $model->$attribute;
+
         if (is_array($value)) {
             $this->addError($model, $attribute, Yii::t('yii', '{attribute} is invalid.'));
 
             return;
         }
+
         if ($this->compareValue !== null) {
-            if ($this->compareValue instanceof \Closure) {
+            if ($this->compareValue instanceof Closure) {
                 $this->compareValue = call_user_func($this->compareValue);
             }
             $compareLabel = $compareValue = $compareValueOrAttribute = $this->compareValue;
@@ -169,9 +185,11 @@ class CompareValidator extends Validator
         if ($this->compareValue === null) {
             throw new InvalidConfigException('CompareValidator::compareValue must be set.');
         }
-        if ($this->compareValue instanceof \Closure) {
+
+        if ($this->compareValue instanceof Closure) {
             $this->compareValue = call_user_func($this->compareValue);
         }
+
         if (!$this->compareValues($this->operator, $this->type, $value, $this->compareValue)) {
             return [$this->message, [
                 'compareAttribute' => $this->compareValue,
@@ -185,11 +203,13 @@ class CompareValidator extends Validator
 
     /**
      * Compares two values with the specified operator.
-     * @param string $operator the comparison operator
-     * @param string $type the type of the values being compared
-     * @param mixed $value the value being compared
-     * @param mixed $compareValue another value being compared
-     * @return bool whether the comparison using the specified operator is true.
+     *
+     * @param string $operator     the comparison operator
+     * @param string $type         the type of the values being compared
+     * @param mixed  $value        the value being compared
+     * @param mixed  $compareValue another value being compared
+     *
+     * @return bool whether the comparison using the specified operator is true
      */
     protected function compareValues($operator, $type, $value, $compareValue)
     {
@@ -200,6 +220,7 @@ class CompareValidator extends Validator
             $value = (string) $value;
             $compareValue = (string) $compareValue;
         }
+
         switch ($operator) {
             case '==':
                 return $value == $compareValue;
@@ -217,6 +238,7 @@ class CompareValidator extends Validator
                 return $value < $compareValue;
             case '<=':
                 return $value <= $compareValue;
+
             default:
                 return false;
         }
@@ -227,7 +249,7 @@ class CompareValidator extends Validator
      */
     public function clientValidateAttribute($model, $attribute, $view)
     {
-        if ($this->compareValue != null && $this->compareValue instanceof \Closure) {
+        if ($this->compareValue != null && $this->compareValue instanceof Closure) {
             $this->compareValue = call_user_func($this->compareValue);
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -13,7 +14,7 @@ use yii\db\Query;
 
 /**
  * Class BetweenColumnCondition represents a `BETWEEN` condition where
- * values is between two columns. For example:
+ * values is between two columns. For example:.
  *
  * ```php
  * new BetweenColumnsCondition(42, 'BETWEEN', 'min_value', 'max_value')
@@ -36,12 +37,13 @@ use yii\db\Query;
  * ```
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ *
  * @since 2.0.14
  */
 class BetweenColumnsCondition implements ConditionInterface
 {
     /**
-     * @var string $operator the operator to use (e.g. `BETWEEN` or `NOT BETWEEN`)
+     * @var string the operator to use (e.g. `BETWEEN` or `NOT BETWEEN`)
      */
     private $operator;
     /**
@@ -57,14 +59,13 @@ class BetweenColumnsCondition implements ConditionInterface
      */
     private $intervalEndColumn;
 
-
     /**
      * Creates a condition with the `BETWEEN` operator.
      *
      * @param mixed the value to compare against
-     * @param string $operator the operator to use (e.g. `BETWEEN` or `NOT BETWEEN`)
+     * @param string                     $operator            the operator to use (e.g. `BETWEEN` or `NOT BETWEEN`)
      * @param string|ExpressionInterface $intervalStartColumn the column name or expression that is a beginning of the interval
-     * @param string|ExpressionInterface $intervalEndColumn the column name or expression that is an end of the interval
+     * @param string|ExpressionInterface $intervalEndColumn   the column name or expression that is an end of the interval
      */
     public function __construct($value, $operator, $intervalStartColumn, $intervalEndColumn)
     {
@@ -108,7 +109,8 @@ class BetweenColumnsCondition implements ConditionInterface
 
     /**
      * {@inheritdoc}
-     * @throws InvalidArgumentException if wrong number of operands have been given.
+     *
+     * @throws InvalidArgumentException if wrong number of operands have been given
      */
     public static function fromArrayDefinition($operator, $operands)
     {

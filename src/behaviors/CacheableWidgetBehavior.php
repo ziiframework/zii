@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -42,25 +43,26 @@ use yii\di\Instance;
  * ```
  *
  * @author Nikolay Oleynikov <oleynikovny@mail.ru>
+ *
  * @since 2.0.14
  */
 class CacheableWidgetBehavior extends Behavior
 {
     /**
      * @var CacheInterface|string|array a cache object or a cache component ID
-     * or a configuration array for creating a cache object.
-     * Defaults to the `cache` application component.
+     *                                  or a configuration array for creating a cache object.
+     *                                  Defaults to the `cache` application component.
      */
     public $cache = 'cache';
     /**
      * @var int cache duration in seconds.
-     * Set to `0` to indicate that the cached data will never expire.
-     * Defaults to 60 seconds or 1 minute.
+     *          Set to `0` to indicate that the cached data will never expire.
+     *          Defaults to 60 seconds or 1 minute.
      */
     public $cacheDuration = 60;
     /**
      * @var Dependency|array|null a cache dependency or a configuration array
-     * for creating a cache dependency or `null` meaning no cache dependency.
+     *                            for creating a cache dependency or `null` meaning no cache dependency.
      *
      * For example,
      *
@@ -77,7 +79,7 @@ class CacheableWidgetBehavior extends Behavior
     public $cacheDependency;
     /**
      * @var string[]|string an array of strings or a single string which would cause
-     * the variation of the content being cached (e.g. an application language, a GET parameter).
+     *                      the variation of the content being cached (e.g. an application language, a GET parameter).
      *
      * The following variation setting will cause the content to be cached in different versions
      * according to the current application language:
@@ -91,15 +93,14 @@ class CacheableWidgetBehavior extends Behavior
     public $cacheKeyVariations = [];
     /**
      * @var bool whether to enable caching or not. Allows to turn the widget caching
-     * on and off according to specific conditions.
-     * The following configuration will disable caching when a special GET parameter is passed:
+     *           on and off according to specific conditions.
+     *           The following configuration will disable caching when a special GET parameter is passed:
      *
      * ```php
      * empty(Yii::$app->request->get('disable-caching'))
      * ```
      */
     public $cacheEnabled = true;
-
 
     /**
      * {@inheritdoc}
@@ -115,7 +116,7 @@ class CacheableWidgetBehavior extends Behavior
      * Begins fragment caching. Prevents owner widget from execution
      * if its contents can be retrieved from the cache.
      *
-     * @param WidgetEvent $event `Widget::EVENT_BEFORE_RUN` event.
+     * @param widgetEvent $event `Widget::EVENT_BEFORE_RUN` event
      */
     public function beforeRun($event)
     {
@@ -130,7 +131,7 @@ class CacheableWidgetBehavior extends Behavior
     /**
      * Outputs widget contents and ends fragment caching.
      *
-     * @param WidgetEvent $event `Widget::EVENT_AFTER_RUN` event.
+     * @param widgetEvent $event `Widget::EVENT_AFTER_RUN` event
      */
     public function afterRun($event)
     {
@@ -152,27 +153,26 @@ class CacheableWidgetBehavior extends Behavior
     /**
      * Returns the cache instance.
      *
-     * @return CacheInterface cache instance.
-     * @throws InvalidConfigException if cache instance instantiation fails.
+     * @return CacheInterface cache instance
+     *
+     * @throws InvalidConfigException if cache instance instantiation fails
      */
     private function getCacheInstance()
     {
         $cacheInterface = 'yii\caching\CacheInterface';
+
         return Instance::ensure($this->cache, $cacheInterface);
     }
 
     /**
      * Returns the widget cache key.
      *
-     * @return string[] an array of strings representing the cache key.
+     * @return string[] an array of strings representing the cache key
      */
     private function getCacheKey()
     {
         // `$cacheKeyVariations` may be a `string` and needs to be cast to an `array`.
-        $cacheKey = array_merge(
-            (array)get_class($this->owner),
-            (array)$this->cacheKeyVariations
-        );
+        $cacheKey = array_merge((array) get_class($this->owner), (array) $this->cacheKeyVariations);
 
         return $cacheKey;
     }
@@ -180,7 +180,7 @@ class CacheableWidgetBehavior extends Behavior
     /**
      * Returns a fragment cache widget configuration array.
      *
-     * @return array a fragment cache widget configuration array.
+     * @return array a fragment cache widget configuration array
      */
     private function getFragmentCacheConfiguration()
     {
