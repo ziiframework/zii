@@ -151,7 +151,7 @@ RESULT;
         $data[] = [$var, $expectedResult];
 
         $var = static function () {return 2; };
-        $expectedResult = 'function () {return 2;}';
+        $expectedResult = 'function () {return 2; }';
         $data[] = [$var, $expectedResult];
 
         return $data;
