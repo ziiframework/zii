@@ -143,14 +143,14 @@ trait ArrayableTrait
                     $attribute = $attribute->jsonSerialize();
                 } elseif (is_array($attribute)) {
                     $attribute = array_map(static function ($item) use ($nestedFields, $nestedExpand) {
-                            if ($item instanceof Arrayable) {
-                                return $item->toArray($nestedFields, $nestedExpand);
-                            } elseif ($item instanceof JsonSerializable) {
-                                return $item->jsonSerialize();
-                            }
+                        if ($item instanceof Arrayable) {
+                            return $item->toArray($nestedFields, $nestedExpand);
+                        } elseif ($item instanceof JsonSerializable) {
+                            return $item->jsonSerialize();
+                        }
 
-                            return $item;
-                        }, $attribute);
+                        return $item;
+                    }, $attribute);
                 }
             }
             $data[$field] = $attribute;
