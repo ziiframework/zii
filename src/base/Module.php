@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -183,7 +181,7 @@ class Module extends ServiceLocator
      * @param Module|null $instance the currently requested instance of this module class.
      * If it is `null`, the instance of the calling class will be removed, if any.
      */
-    public static function setInstance($instance): void
+    public static function setInstance($instance)
     {
         if ($instance === null) {
             unset(Yii::$app->loadedModules[get_called_class()]);
@@ -201,7 +199,7 @@ class Module extends ServiceLocator
      *
      * If you override this method, please make sure you call the parent implementation.
      */
-    public function init(): void
+    public function init()
     {
         if ($this->controllerNamespace === null) {
             $class = get_class($this);
@@ -247,7 +245,7 @@ class Module extends ServiceLocator
      *
      * @throws InvalidArgumentException if the directory does not exist.
      */
-    public function setBasePath($path): void
+    public function setBasePath($path)
     {
         $path = Yii::getAlias($path);
         $p = strncmp($path, 'phar://', 7) === 0 ? $path : realpath($path);
@@ -294,7 +292,7 @@ class Module extends ServiceLocator
      *
      * @throws InvalidArgumentException if the directory is invalid.
      */
-    public function setViewPath($path): void
+    public function setViewPath($path)
     {
         $this->_viewPath = Yii::getAlias($path);
     }
@@ -320,7 +318,7 @@ class Module extends ServiceLocator
      *
      * @throws InvalidArgumentException if the directory is invalid
      */
-    public function setLayoutPath($path): void
+    public function setLayoutPath($path)
     {
         $this->_layoutPath = Yii::getAlias($path);
     }
@@ -361,7 +359,7 @@ class Module extends ServiceLocator
      *
      * @since 2.0.11
      */
-    public function setVersion($version): void
+    public function setVersion($version)
     {
         $this->_version = $version;
     }
@@ -403,7 +401,7 @@ class Module extends ServiceLocator
      * ]
      * ```
      */
-    public function setAliases($aliases): void
+    public function setAliases($aliases)
     {
         foreach ($aliases as $name => $alias) {
             Yii::setAlias($name, $alias);
@@ -480,7 +478,7 @@ class Module extends ServiceLocator
      *   will be used to instantiate the sub-module
      * - `null`: the named sub-module will be removed from this module
      */
-    public function setModule($id, $module): void
+    public function setModule($id, $module)
     {
         if ($module === null) {
             unset($this->_modules[$id]);
@@ -543,7 +541,7 @@ class Module extends ServiceLocator
      *
      * @param array $modules modules (id => module configuration or instances).
      */
-    public function setModules($modules): void
+    public function setModules($modules)
     {
         foreach ($modules as $id => $module) {
             $this->_modules[$id] = $module;
@@ -692,7 +690,9 @@ class Module extends ServiceLocator
             return null;
         }
 
-        $className = preg_replace_callback('%-([a-z0-9_])%i', static fn ($matches) => ucfirst($matches[1]), ucfirst($className)) . 'Controller';
+        $className = preg_replace_callback('%-([a-z0-9_])%i', static function ($matches) {
+            return ucfirst($matches[1]);
+        }, ucfirst($className)) . 'Controller';
         $className = ltrim($this->controllerNamespace . '\\' . str_replace('/', '\\', $prefix) . $className, '\\');
 
         if (strpos($className, '-') !== false || !class_exists($className)) {

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -88,7 +86,7 @@ class ActiveDataProvider extends BaseDataProvider
      *
      * @throws InvalidConfigException if [[db]] is invalid.
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
 
@@ -184,7 +182,7 @@ class ActiveDataProvider extends BaseDataProvider
     /**
      * {@inheritdoc}
      */
-    public function setSort($value): void
+    public function setSort($value)
     {
         parent::setSort($value);
 

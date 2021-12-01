@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -214,7 +212,7 @@ class IpValidator extends Validator
     /**
      * {@inheritdoc}
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
 
@@ -284,7 +282,7 @@ class IpValidator extends Validator
      * In this example, access is allowed for all the IPv4 and IPv6 addresses excluding the `192.168.10.0/24` subnet.
      * IPv4 address `192.168.10.128` is also allowed, because it is listed before the restriction.
      */
-    public function setRanges($ranges): void
+    public function setRanges($ranges)
     {
         $this->_ranges = $this->prepareRanges((array) $ranges);
     }
@@ -316,7 +314,7 @@ class IpValidator extends Validator
     /**
      * {@inheritdoc}
      */
-    public function validateAttribute($model, $attribute): void
+    public function validateAttribute($model, $attribute)
     {
         $value = $model->$attribute;
 

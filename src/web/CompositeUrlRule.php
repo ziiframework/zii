@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -47,7 +45,7 @@ abstract class CompositeUrlRule extends BaseObject implements UrlRuleInterface
     /**
      * {@inheritdoc}
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
         $this->rules = $this->createRules();

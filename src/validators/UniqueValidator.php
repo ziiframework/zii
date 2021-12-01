@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -107,7 +105,7 @@ class UniqueValidator extends Validator
     /**
      * {@inheritdoc}
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
 
@@ -130,7 +128,7 @@ class UniqueValidator extends Validator
     /**
      * {@inheritdoc}
      */
-    public function validateAttribute($model, $attribute): void
+    public function validateAttribute($model, $attribute)
     {
         /* @var $targetClass ActiveRecordInterface */
         $targetClass = $this->getTargetClass($model);
@@ -152,7 +150,7 @@ class UniqueValidator extends Validator
         $modelExists = false;
 
         if ($this->forceMasterDb && method_exists($db, 'useMaster')) {
-            $db->useMaster(function () use ($targetClass, $conditions, $model, &$modelExists): void {
+            $db->useMaster(function () use ($targetClass, $conditions, $model, &$modelExists) {
                 $modelExists = $this->modelExists($targetClass, $conditions, $model);
             });
         } else {
@@ -304,7 +302,7 @@ class UniqueValidator extends Validator
      * @param \yii\base\Model $model the data model.
      * @param string $attribute the name of the attribute.
      */
-    private function addComboNotUniqueError($model, $attribute): void
+    private function addComboNotUniqueError($model, $attribute)
     {
         $attributeCombo = [];
         $valueCombo = [];

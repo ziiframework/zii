@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -242,7 +240,7 @@ class Validator extends Component
     /**
      * {@inheritdoc}
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
         $this->attributes = (array) $this->attributes;
@@ -258,7 +256,7 @@ class Validator extends Component
      * Note that if an attribute is not associated with the validator - it will be
      * ignored. If this parameter is null, every attribute listed in [[attributes]] will be validated.
      */
-    public function validateAttributes($model, $attributes = null): void
+    public function validateAttributes($model, $attributes = null)
     {
         $attributes = $this->getValidationAttributes($attributes);
 
@@ -317,7 +315,7 @@ class Validator extends Component
      * @param \yii\base\Model $model the data model to be validated
      * @param string $attribute the name of the attribute to be validated.
      */
-    public function validateAttribute($model, $attribute): void
+    public function validateAttribute($model, $attribute)
     {
         $result = $this->validateValue($model->$attribute);
 
@@ -471,7 +469,7 @@ class Validator extends Component
      * @param string $message the error message
      * @param array $params values for the placeholders in the error message
      */
-    public function addError($model, $attribute, $message, $params = []): void
+    public function addError($model, $attribute, $message, $params = [])
     {
         $params['attribute'] = $model->getAttributeLabel($attribute);
 
@@ -541,6 +539,8 @@ class Validator extends Component
      */
     public function getAttributeNames()
     {
-        return array_map(static fn ($attribute) => ltrim($attribute, '!'), $this->attributes);
+        return array_map(static function ($attribute) {
+            return ltrim($attribute, '!');
+        }, $this->attributes);
     }
 }

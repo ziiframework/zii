@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -73,7 +71,7 @@ class InputWidget extends Widget
      * Initializes the widget.
      * If you override this method, make sure you call the parent implementation first.
      */
-    public function init(): void
+    public function init()
     {
         if ($this->name === null && !$this->hasModel()) {
             throw new InvalidConfigException("Either 'name', or 'model' and 'attribute' properties must be specified.");

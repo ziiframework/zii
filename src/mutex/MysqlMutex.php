@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -44,7 +42,7 @@ class MysqlMutex extends DbMutex
      *
      * @throws InvalidConfigException if [[db]] is not MySQL connection.
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
 

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -57,7 +55,7 @@ class Spaceless extends Widget
     /**
      * Starts capturing an output to be cleaned from whitespace characters between HTML tags.
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
         ob_start();
@@ -68,7 +66,7 @@ class Spaceless extends Widget
      * Marks the end of content to be cleaned from whitespace characters between HTML tags.
      * Stops capturing an output and echoes cleaned result.
      */
-    public function run(): void
+    public function run()
     {
         echo trim(preg_replace('/>\s+</', '><', ob_get_clean()));
     }

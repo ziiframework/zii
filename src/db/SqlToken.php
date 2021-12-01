@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -120,7 +118,7 @@ class SqlToken extends BaseObject implements ArrayAccess
      * @param int|null $offset child token offset.
      * @param SqlToken $token token to be added.
      */
-    public function offsetSet($offset, $token): void
+    public function offsetSet($offset, $token)
     {
         $token->parent = $this;
 
@@ -139,7 +137,7 @@ class SqlToken extends BaseObject implements ArrayAccess
      *
      * @param int $offset child token offset.
      */
-    public function offsetUnset($offset): void
+    public function offsetUnset($offset)
     {
         $offset = $this->calculateOffset($offset);
 
@@ -164,7 +162,7 @@ class SqlToken extends BaseObject implements ArrayAccess
      *
      * @param SqlToken[] $children child tokens.
      */
-    public function setChildren($children): void
+    public function setChildren($children)
     {
         $this->_children = [];
 
@@ -326,7 +324,7 @@ class SqlToken extends BaseObject implements ArrayAccess
     /**
      * Updates token SQL code start and end offsets based on its children.
      */
-    private function updateCollectionOffsets(): void
+    private function updateCollectionOffsets()
     {
         if (!empty($this->_children)) {
             $this->startOffset = reset($this->_children)->startOffset;

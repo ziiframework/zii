@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -313,7 +311,7 @@ class Request extends \yii\base\Request
      *
      * @since 2.0.13
      */
-    protected function filterHeaders(HeaderCollection $headerCollection): void
+    protected function filterHeaders(HeaderCollection $headerCollection)
     {
         $trustedHeaders = $this->getTrustedHeaders();
 
@@ -581,7 +579,7 @@ class Request extends \yii\base\Request
      *
      * @param string $rawBody the request body
      */
-    public function setRawBody($rawBody): void
+    public function setRawBody($rawBody)
     {
         $this->_rawBody = $rawBody;
     }
@@ -656,7 +654,7 @@ class Request extends \yii\base\Request
      * @see getBodyParam()
      * @see getBodyParams()
      */
-    public function setBodyParams($values): void
+    public function setBodyParams($values)
     {
         $this->_bodyParams = $values;
     }
@@ -734,7 +732,7 @@ class Request extends \yii\base\Request
      * @see getQueryParam()
      * @see getQueryParams()
      */
-    public function setQueryParams($values): void
+    public function setQueryParams($values)
     {
         $this->_queryParams = $values;
     }
@@ -842,7 +840,7 @@ class Request extends \yii\base\Request
      *
      * @see getHostInfo() for security related notes on this property.
      */
-    public function setHostInfo($value): void
+    public function setHostInfo($value)
     {
         $this->_hostName = null;
         $this->_hostInfo = $value === null ? null : rtrim($value, '/');
@@ -896,7 +894,7 @@ class Request extends \yii\base\Request
      *
      * @param string $value the relative URL for the application
      */
-    public function setBaseUrl($value): void
+    public function setBaseUrl($value)
     {
         $this->_baseUrl = $value;
     }
@@ -942,7 +940,7 @@ class Request extends \yii\base\Request
      *
      * @param string $value the relative URL for the application entry script.
      */
-    public function setScriptUrl($value): void
+    public function setScriptUrl($value)
     {
         $this->_scriptUrl = $value === null ? null : '/' . trim($value, '/');
     }
@@ -978,7 +976,7 @@ class Request extends \yii\base\Request
      *
      * @param string $value the entry script file path.
      */
-    public function setScriptFile($value): void
+    public function setScriptFile($value)
     {
         $this->_scriptFile = $value;
     }
@@ -1010,7 +1008,7 @@ class Request extends \yii\base\Request
      *
      * @param string $value the path info of the current request
      */
-    public function setPathInfo($value): void
+    public function setPathInfo($value)
     {
         $this->_pathInfo = $value === null ? null : ltrim($value, '/');
     }
@@ -1141,7 +1139,7 @@ break;
      *
      * @param string $value the request URI to be set
      */
-    public function setUrl($value): void
+    public function setUrl($value)
     {
         $this->_url = $value;
     }
@@ -1472,7 +1470,9 @@ break;
         $auth_token = $this->getHeaders()->get('Authorization');
 
         if ($auth_token !== null && strncasecmp($auth_token, 'basic', 5) === 0) {
-            $parts = array_map(static fn ($value) => strlen($value) === 0 ? null : $value, explode(':', base64_decode(mb_substr($auth_token, 6)), 2));
+            $parts = array_map(static function ($value) {
+                return strlen($value) === 0 ? null : $value;
+            }, explode(':', base64_decode(mb_substr($auth_token, 6)), 2));
 
             if (count($parts) < 2) {
                 return [$parts[0], null];
@@ -1512,7 +1512,7 @@ break;
      *
      * @param int $value port number.
      */
-    public function setPort($value): void
+    public function setPort($value)
     {
         if ($value != $this->_port) {
             $this->_port = (int) $value;
@@ -1548,7 +1548,7 @@ break;
      *
      * @param int $value port number.
      */
-    public function setSecurePort($value): void
+    public function setSecurePort($value)
     {
         if ($value != $this->_securePort) {
             $this->_securePort = (int) $value;
@@ -1602,7 +1602,7 @@ break;
      * @see getAcceptableContentTypes()
      * @see parseAcceptHeader()
      */
-    public function setAcceptableContentTypes($value): void
+    public function setAcceptableContentTypes($value)
     {
         $this->_contentTypes = $value;
     }
@@ -1655,7 +1655,7 @@ break;
      * @param array $value the languages that are acceptable by the end user. They should
      * be ordered by the preference level.
      */
-    public function setAcceptableLanguages($value): void
+    public function setAcceptableLanguages($value)
     {
         $this->_languages = $value;
     }
@@ -2078,7 +2078,9 @@ break;
         }
         $validator->setRanges($trustedHosts);
 
-        return array_filter($this->getSecureForwardedHeaderParts(), static fn ($headerPart) => isset($headerPart['for']) ? !$validator->validate($headerPart['for']) : true);
+        return array_filter($this->getSecureForwardedHeaderParts(), static function ($headerPart) use ($validator) {
+            return isset($headerPart['for']) ? !$validator->validate($headerPart['for']) : true;
+        });
     }
 
     private $_secureForwardedHeaderParts;

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -45,7 +43,7 @@ class m170907_052038_rbac_add_index_on_auth_assignment_user_id extends Migration
     /**
      * {@inheritdoc}
      */
-    public function up(): void
+    public function up()
     {
         $authManager = $this->getAuthManager();
         $this->db = $authManager->db;
@@ -56,7 +54,7 @@ class m170907_052038_rbac_add_index_on_auth_assignment_user_id extends Migration
     /**
      * {@inheritdoc}
      */
-    public function down(): void
+    public function down()
     {
         $authManager = $this->getAuthManager();
         $this->db = $authManager->db;

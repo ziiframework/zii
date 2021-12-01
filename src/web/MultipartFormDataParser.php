@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -102,7 +100,7 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
     /**
      * @param int $uploadFileMaxSize upload file max size in bytes.
      */
-    public function setUploadFileMaxSize($uploadFileMaxSize): void
+    public function setUploadFileMaxSize($uploadFileMaxSize)
     {
         $this->_uploadFileMaxSize = $uploadFileMaxSize;
     }
@@ -122,7 +120,7 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
     /**
      * @param int $uploadFileMaxCount maximum upload files count.
      */
-    public function setUploadFileMaxCount($uploadFileMaxCount): void
+    public function setUploadFileMaxCount($uploadFileMaxCount)
     {
         $this->_uploadFileMaxCount = $uploadFileMaxCount;
     }
@@ -268,7 +266,7 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
      * @param string $name input name specification.
      * @param mixed $value value to be added.
      */
-    private function addValue(&$array, $name, $value): void
+    private function addValue(&$array, $name, $value)
     {
         $nameParts = preg_split('/\\]\\[|\\[/s', $name);
         $current = &$array;
@@ -298,7 +296,7 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
      * @param string $name input name specification.
      * @param array $info file info.
      */
-    private function addFile(&$files, $name, $info): void
+    private function addFile(&$files, $name, $info)
     {
         if (strpos($name, '[') === false) {
             $files[$name] = $info;

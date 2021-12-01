@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -232,7 +230,9 @@ class QueryBuilder extends \yii\db\QueryBuilder
 
             if ($value === null) {
                 $key = $this->db->quoteColumnName(reset($table->primaryKey));
-                $value = $this->db->useMaster(static fn (Connection $db) => $db->createCommand("SELECT MAX($key) FROM $tableName")->queryScalar());
+                $value = $this->db->useMaster(static function (Connection $db) use ($key, $tableName) {
+                    return $db->createCommand("SELECT MAX($key) FROM $tableName")->queryScalar();
+                });
             } else {
                 $value = (int) $value - 1;
             }
@@ -423,7 +423,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      *
      * @throws NotSupportedException this is not supported by SQLite.
      */
-    public function addUnique($name, $table, $columns): void
+    public function addUnique($name, $table, $columns)
     {
         throw new NotSupportedException(__METHOD__ . ' is not supported by SQLite.');
     }
@@ -433,7 +433,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      *
      * @throws NotSupportedException this is not supported by SQLite.
      */
-    public function dropUnique($name, $table): void
+    public function dropUnique($name, $table)
     {
         throw new NotSupportedException(__METHOD__ . ' is not supported by SQLite.');
     }
@@ -443,7 +443,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      *
      * @throws NotSupportedException this is not supported by SQLite.
      */
-    public function addCheck($name, $table, $expression): void
+    public function addCheck($name, $table, $expression)
     {
         throw new NotSupportedException(__METHOD__ . ' is not supported by SQLite.');
     }
@@ -453,7 +453,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      *
      * @throws NotSupportedException this is not supported by SQLite.
      */
-    public function dropCheck($name, $table): void
+    public function dropCheck($name, $table)
     {
         throw new NotSupportedException(__METHOD__ . ' is not supported by SQLite.');
     }
@@ -463,7 +463,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      *
      * @throws NotSupportedException this is not supported by SQLite.
      */
-    public function addDefaultValue($name, $table, $column, $value): void
+    public function addDefaultValue($name, $table, $column, $value)
     {
         throw new NotSupportedException(__METHOD__ . ' is not supported by SQLite.');
     }
@@ -473,7 +473,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      *
      * @throws NotSupportedException this is not supported by SQLite.
      */
-    public function dropDefaultValue($name, $table): void
+    public function dropDefaultValue($name, $table)
     {
         throw new NotSupportedException(__METHOD__ . ' is not supported by SQLite.');
     }
@@ -485,7 +485,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      *
      * @since 2.0.8
      */
-    public function addCommentOnColumn($table, $column, $comment): void
+    public function addCommentOnColumn($table, $column, $comment)
     {
         throw new NotSupportedException(__METHOD__ . ' is not supported by SQLite.');
     }
@@ -497,7 +497,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      *
      * @since 2.0.8
      */
-    public function addCommentOnTable($table, $comment): void
+    public function addCommentOnTable($table, $comment)
     {
         throw new NotSupportedException(__METHOD__ . ' is not supported by SQLite.');
     }
@@ -509,7 +509,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      *
      * @since 2.0.8
      */
-    public function dropCommentFromColumn($table, $column): void
+    public function dropCommentFromColumn($table, $column)
     {
         throw new NotSupportedException(__METHOD__ . ' is not supported by SQLite.');
     }
@@ -521,7 +521,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      *
      * @since 2.0.8
      */
-    public function dropCommentFromTable($table): void
+    public function dropCommentFromTable($table)
     {
         throw new NotSupportedException(__METHOD__ . ' is not supported by SQLite.');
     }

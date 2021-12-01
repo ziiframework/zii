@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -146,7 +144,7 @@ class GettextMoFile extends GettextFile
      *
      * @throws Exception if unable to save the MO file
      */
-    public function save($filePath, $messages): void
+    public function save($filePath, $messages)
     {
         if (false === ($fileHandle = @fopen($filePath, 'wb'))) {
             throw new Exception('Unable to write file "' . $filePath . '".');

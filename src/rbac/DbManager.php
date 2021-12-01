@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -116,7 +114,7 @@ class DbManager extends BaseManager
      * Initializes the application component.
      * This method overrides the parent implementation by establishing the database connection.
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
         $this->db = Instance::ensure($this->db, Connection::className());
@@ -523,7 +521,9 @@ class DbManager extends BaseManager
 
         $roles = [$roleName => $role];
 
-        $roles += array_filter($this->getRoles(), static fn (Role $roleItem) => array_key_exists($roleItem->name, $result));
+        $roles += array_filter($this->getRoles(), static function (Role $roleItem) use ($result) {
+            return array_key_exists($roleItem->name, $result);
+        });
 
         return $roles;
     }
@@ -658,7 +658,7 @@ class DbManager extends BaseManager
      * @param array $childrenList the child list built via [[getChildrenList()]]
      * @param array $result the children and grand children (in array keys)
      */
-    protected function getChildrenRecursive($name, $childrenList, &$result): void
+    protected function getChildrenRecursive($name, $childrenList, &$result)
     {
         if (isset($childrenList[$name])) {
             foreach ($childrenList[$name] as $child) {
@@ -944,7 +944,7 @@ class DbManager extends BaseManager
     /**
      * {@inheritdoc}
      */
-    public function removeAll(): void
+    public function removeAll()
     {
         $this->removeAllAssignments();
         $this->db->createCommand()->delete($this->itemChildTable)->execute();
@@ -956,7 +956,7 @@ class DbManager extends BaseManager
     /**
      * {@inheritdoc}
      */
-    public function removeAllPermissions(): void
+    public function removeAllPermissions()
     {
         $this->removeAllItems(Item::TYPE_PERMISSION);
     }
@@ -964,7 +964,7 @@ class DbManager extends BaseManager
     /**
      * {@inheritdoc}
      */
-    public function removeAllRoles(): void
+    public function removeAllRoles()
     {
         $this->removeAllItems(Item::TYPE_ROLE);
     }
@@ -974,7 +974,7 @@ class DbManager extends BaseManager
      *
      * @param int $type the auth item type (either Item::TYPE_PERMISSION or Item::TYPE_ROLE)
      */
-    protected function removeAllItems($type): void
+    protected function removeAllItems($type)
     {
         if (!$this->supportsCascadeUpdate()) {
             $names = (new Query())
@@ -1004,7 +1004,7 @@ class DbManager extends BaseManager
     /**
      * {@inheritdoc}
      */
-    public function removeAllRules(): void
+    public function removeAllRules()
     {
         if (!$this->supportsCascadeUpdate()) {
             $this->db->createCommand()
@@ -1020,13 +1020,13 @@ class DbManager extends BaseManager
     /**
      * {@inheritdoc}
      */
-    public function removeAllAssignments(): void
+    public function removeAllAssignments()
     {
         $this->checkAccessAssignments = [];
         $this->db->createCommand()->delete($this->assignmentTable)->execute();
     }
 
-    public function invalidateCache(): void
+    public function invalidateCache()
     {
         if ($this->cache !== null) {
             $this->cache->delete($this->cacheKey);
@@ -1037,7 +1037,7 @@ class DbManager extends BaseManager
         $this->checkAccessAssignments = [];
     }
 
-    public function loadFromCache(): void
+    public function loadFromCache()
     {
         if ($this->items !== null || !$this->cache instanceof CacheInterface) {
             return;

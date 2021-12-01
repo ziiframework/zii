@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -92,7 +90,7 @@ class Captcha extends InputWidget
     /**
      * Initializes the widget.
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
 
@@ -106,7 +104,7 @@ class Captcha extends InputWidget
     /**
      * Renders the widget.
      */
-    public function run(): void
+    public function run()
     {
         $this->registerClientScript();
         $input = $this->renderInputHtml('text');
@@ -127,7 +125,7 @@ class Captcha extends InputWidget
     /**
      * Registers the needed JavaScript.
      */
-    public function registerClientScript(): void
+    public function registerClientScript()
     {
         $options = $this->getClientOptions();
         $options = empty($options) ? '' : Json::htmlEncode($options);

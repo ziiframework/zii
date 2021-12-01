@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -65,7 +63,7 @@ class m200409_110543_rbac_update_mssql_trigger extends Migration
     /**
      * {@inheritdoc}
      */
-    public function up(): void
+    public function up()
     {
         if ($this->isMSSQL()) {
             $authManager = $this->getAuthManager();
@@ -118,7 +116,7 @@ class m200409_110543_rbac_update_mssql_trigger extends Migration
     /**
      * {@inheritdoc}
      */
-    public function down(): void
+    public function down()
     {
         if ($this->isMSSQL()) {
             $authManager = $this->getAuthManager();

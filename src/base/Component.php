@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -186,7 +184,7 @@ class Component extends BaseObject
      *
      * @see __get()
      */
-    public function __set($name, $value): void
+    public function __set($name, $value)
     {
         $setter = 'set' . $name;
 
@@ -281,7 +279,7 @@ class Component extends BaseObject
      *
      * @see https://www.php.net/manual/en/function.unset.php
      */
-    public function __unset($name): void
+    public function __unset($name)
     {
         $setter = 'set' . $name;
 
@@ -558,7 +556,7 @@ class Component extends BaseObject
      *
      * @see off()
      */
-    public function on($name, $handler, $data = null, $append = true): void
+    public function on($name, $handler, $data = null, $append = true)
     {
         $this->ensureBehaviors();
 
@@ -655,7 +653,7 @@ class Component extends BaseObject
      * @param string $name the event name
      * @param Event $event the event parameter. If not set, a default [[Event]] object will be created.
      */
-    public function trigger($name, Event $event = null): void
+    public function trigger($name, Event $event = null)
     {
         $this->ensureBehaviors();
 
@@ -755,7 +753,7 @@ class Component extends BaseObject
      *
      * @see attachBehavior()
      */
-    public function attachBehaviors($behaviors): void
+    public function attachBehaviors($behaviors)
     {
         $this->ensureBehaviors();
 
@@ -790,7 +788,7 @@ class Component extends BaseObject
     /**
      * Detaches all behaviors from the component.
      */
-    public function detachBehaviors(): void
+    public function detachBehaviors()
     {
         $this->ensureBehaviors();
 
@@ -802,7 +800,7 @@ class Component extends BaseObject
     /**
      * Makes sure that the behaviors declared in [[behaviors()]] are attached to this component.
      */
-    public function ensureBehaviors(): void
+    public function ensureBehaviors()
     {
         if ($this->_behaviors === null) {
             $this->_behaviors = [];

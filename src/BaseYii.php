@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -228,7 +226,7 @@ class BaseYii
      *
      * @see getAlias()
      */
-    public static function setAlias($alias, $path): void
+    public static function setAlias($alias, $path)
     {
         if (strncmp($alias, '@', 1)) {
             $alias = '@' . $alias;
@@ -291,7 +289,7 @@ class BaseYii
      *
      * @throws UnknownClassException if the class does not exist in the class file
      */
-    public static function autoload($className): void
+    public static function autoload($className)
     {
         if (isset(static::$classMap[$className])) {
             $classFile = static::$classMap[$className];
@@ -410,7 +408,7 @@ class BaseYii
      *
      * @param Logger $logger the logger object.
      */
-    public static function setLogger($logger): void
+    public static function setLogger($logger)
     {
         self::$_logger = $logger;
     }
@@ -427,7 +425,7 @@ class BaseYii
      *
      * @since 2.0.14
      */
-    public static function debug($message, $category = 'application'): void
+    public static function debug($message, $category = 'application')
     {
         if (YII_DEBUG) {
             static::getLogger()->log($message, Logger::LEVEL_TRACE, $category);
@@ -443,7 +441,7 @@ class BaseYii
      *
      * @deprecated since 2.0.14. Use [[debug()]] instead.
      */
-    public static function trace($message, $category = 'application'): void
+    public static function trace($message, $category = 'application')
     {
         static::debug($message, $category);
     }
@@ -457,7 +455,7 @@ class BaseYii
      * complex data structure, such as an array.
      * @param string $category the category of the message.
      */
-    public static function error($message, $category = 'application'): void
+    public static function error($message, $category = 'application')
     {
         static::getLogger()->log($message, Logger::LEVEL_ERROR, $category);
     }
@@ -471,7 +469,7 @@ class BaseYii
      * complex data structure, such as an array.
      * @param string $category the category of the message.
      */
-    public static function warning($message, $category = 'application'): void
+    public static function warning($message, $category = 'application')
     {
         static::getLogger()->log($message, Logger::LEVEL_WARNING, $category);
     }
@@ -485,7 +483,7 @@ class BaseYii
      * complex data structure, such as an array.
      * @param string $category the category of the message.
      */
-    public static function info($message, $category = 'application'): void
+    public static function info($message, $category = 'application')
     {
         static::getLogger()->log($message, Logger::LEVEL_INFO, $category);
     }
@@ -510,7 +508,7 @@ class BaseYii
      *
      * @see endProfile()
      */
-    public static function beginProfile($token, $category = 'application'): void
+    public static function beginProfile($token, $category = 'application')
     {
         static::getLogger()->log($token, Logger::LEVEL_PROFILE_BEGIN, $category);
     }
@@ -524,7 +522,7 @@ class BaseYii
      *
      * @see beginProfile()
      */
-    public static function endProfile($token, $category = 'application'): void
+    public static function endProfile($token, $category = 'application')
     {
         static::getLogger()->log($token, Logger::LEVEL_PROFILE_END, $category);
     }

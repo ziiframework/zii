@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -206,7 +204,7 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
      *
      * @throws NotSupportedException if this method is called.
      */
-    protected function loadTableDefaultValues($tableName): void
+    protected function loadTableDefaultValues($tableName)
     {
         throw new NotSupportedException('SQLite does not support default value constraints.');
     }
@@ -270,7 +268,7 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
      *
      * @param TableSchema $table the table metadata
      */
-    protected function findConstraints($table): void
+    protected function findConstraints($table)
     {
         $sql = 'PRAGMA foreign_key_list(' . $this->quoteSimpleTableName($table->name) . ')';
         $keys = $this->db->createCommand($sql)->queryAll();
@@ -397,7 +395,7 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
      *
      * @see http://www.sqlite.org/pragma.html#pragma_read_uncommitted
      */
-    public function setTransactionIsolationLevel($level): void
+    public function setTransactionIsolationLevel($level)
     {
         switch ($level) {
             case Transaction::SERIALIZABLE:

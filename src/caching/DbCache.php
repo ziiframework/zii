@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -98,7 +96,7 @@ class DbCache extends Cache
      *
      * @throws InvalidConfigException if [[db]] is invalid.
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
         $this->db = Instance::ensure($this->db, Connection::className());
@@ -220,7 +218,7 @@ class DbCache extends Cache
     protected function setValue($key, $value, $duration)
     {
         try {
-            $this->db->noCache(function (Connection $db) use ($key, $value, $duration): void {
+            $this->db->noCache(function (Connection $db) use ($key, $value, $duration) {
                 $db->createCommand()->upsert($this->cacheTable, [
                     'id' => $key,
                     'expire' => $duration > 0 ? $duration + time() : 0,
@@ -253,7 +251,7 @@ class DbCache extends Cache
         $this->gc();
 
         try {
-            $this->db->noCache(function (Connection $db) use ($key, $value, $duration): void {
+            $this->db->noCache(function (Connection $db) use ($key, $value, $duration) {
                 $db->createCommand()
                     ->insert($this->cacheTable, [
                         'id' => $key,
@@ -280,7 +278,7 @@ class DbCache extends Cache
      */
     protected function deleteValue($key)
     {
-        $this->db->noCache(function (Connection $db) use ($key): void {
+        $this->db->noCache(function (Connection $db) use ($key) {
             $db->createCommand()
                 ->delete($this->cacheTable, ['id' => $key])
                 ->execute();
@@ -295,7 +293,7 @@ class DbCache extends Cache
      * @param bool $force whether to enforce the garbage collection regardless of [[gcProbability]].
      * Defaults to false, meaning the actual deletion happens with the probability as specified by [[gcProbability]].
      */
-    public function gc($force = false): void
+    public function gc($force = false)
     {
         if ($force || random_int(0, 1000000) < $this->gcProbability) {
             $this->db->createCommand()

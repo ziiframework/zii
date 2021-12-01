@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -118,7 +116,7 @@ class CaptchaAction extends Action
      *
      * @throws InvalidConfigException if the font file does not exist.
      */
-    public function init(): void
+    public function init()
     {
         $this->fontFile = Yii::getAlias($this->fontFile);
 
@@ -380,7 +378,7 @@ class CaptchaAction extends Action
     /**
      * Sets the HTTP headers needed by image response.
      */
-    protected function setHttpHeaders(): void
+    protected function setHttpHeaders()
     {
         Yii::$app->getResponse()->getHeaders()
             ->set('Pragma', 'public')

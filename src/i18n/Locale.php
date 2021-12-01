@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -35,7 +33,7 @@ class Locale extends Component
     /**
      * {@inheritdoc}
      */
-    public function init(): void
+    public function init()
     {
         if (!extension_loaded('intl')) {
             throw new InvalidConfigException('Locale component requires PHP intl extension to be installed.');

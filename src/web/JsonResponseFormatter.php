@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -107,7 +105,7 @@ class JsonResponseFormatter extends Component implements ResponseFormatterInterf
      *
      * @param Response $response the response to be formatted.
      */
-    public function format($response): void
+    public function format($response)
     {
         if ($this->contentType === null) {
             $this->contentType = $this->useJsonp
@@ -130,7 +128,7 @@ class JsonResponseFormatter extends Component implements ResponseFormatterInterf
      *
      * @param Response $response
      */
-    protected function formatJson($response): void
+    protected function formatJson($response)
     {
         if ($response->data !== null) {
             $options = $this->encodeOptions;
@@ -159,7 +157,7 @@ class JsonResponseFormatter extends Component implements ResponseFormatterInterf
      *
      * @param Response $response
      */
-    protected function formatJsonp($response): void
+    protected function formatJsonp($response)
     {
         if (is_array($response->data)
             && isset($response->data['data'], $response->data['callback'])

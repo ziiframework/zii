@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -99,7 +97,7 @@ class AccessControl extends ActionFilter
     /**
      * Initializes the [[rules]] array by instantiating rule objects from configurations.
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
 
@@ -161,7 +159,7 @@ class AccessControl extends ActionFilter
      *
      * @throws ForbiddenHttpException if the user is already logged in or in case of detached User component.
      */
-    protected function denyAccess($user): void
+    protected function denyAccess($user)
     {
         if ($user !== false && $user->getIsGuest()) {
             $user->loginRequired();

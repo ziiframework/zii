@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -56,7 +54,7 @@ class SyslogTarget extends Target
     /**
      * {@inheritdoc}
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
 
@@ -71,7 +69,7 @@ class SyslogTarget extends Target
      *
      * @throws LogRuntimeException
      */
-    public function export(): void
+    public function export()
     {
         openlog($this->identity, $this->options, $this->facility);
 

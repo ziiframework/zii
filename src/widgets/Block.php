@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -51,7 +49,7 @@ class Block extends Widget
     /**
      * Starts recording a block.
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
 
@@ -63,7 +61,7 @@ class Block extends Widget
      * Ends recording a block.
      * This method stops output buffering and saves the rendering result as a named block in the view.
      */
-    public function run(): void
+    public function run()
     {
         $block = ob_get_clean();
 

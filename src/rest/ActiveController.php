@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -63,7 +61,7 @@ class ActiveController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
 
@@ -138,7 +136,7 @@ class ActiveController extends Controller
      *
      * @throws ForbiddenHttpException if the user does not have access
      */
-    public function checkAccess($action, $model = null, $params = []): void
+    public function checkAccess($action, $model = null, $params = [])
     {
     }
 }

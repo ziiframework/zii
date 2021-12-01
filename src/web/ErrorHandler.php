@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -95,7 +93,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
      *
      * @param \Exception|Error $exception the exception to be rendered.
      */
-    protected function renderException($exception): void
+    protected function renderException($exception)
     {
         if (Yii::$app->has('response')) {
             $response = Yii::$app->getResponse();

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -195,7 +193,7 @@ class AttributeTypecastBehavior extends Behavior
      * Clears internal static cache of auto detected [[attributeTypes]] values
      * over all affected owner classes.
      */
-    public static function clearAutoDetectedAttributeTypes(): void
+    public static function clearAutoDetectedAttributeTypes()
     {
         self::$autoDetectedAttributeTypes = [];
     }
@@ -203,7 +201,7 @@ class AttributeTypecastBehavior extends Behavior
     /**
      * {@inheritdoc}
      */
-    public function attach($owner): void
+    public function attach($owner)
     {
         parent::attach($owner);
 
@@ -224,7 +222,7 @@ class AttributeTypecastBehavior extends Behavior
      * If this parameter is empty, it means any attribute listed in the [[attributeTypes]]
      * should be type-casted.
      */
-    public function typecastAttributes($attributeNames = null): void
+    public function typecastAttributes($attributeNames = null)
     {
         $attributeTypes = [];
 
@@ -349,7 +347,7 @@ class AttributeTypecastBehavior extends Behavior
      *
      * @param \yii\base\Event $event event instance.
      */
-    public function afterValidate($event): void
+    public function afterValidate($event)
     {
         if (!$this->owner->hasErrors()) {
             $this->typecastAttributes();
@@ -361,7 +359,7 @@ class AttributeTypecastBehavior extends Behavior
      *
      * @param \yii\base\Event $event event instance.
      */
-    public function beforeSave($event): void
+    public function beforeSave($event)
     {
         $this->typecastAttributes();
     }
@@ -373,7 +371,7 @@ class AttributeTypecastBehavior extends Behavior
      *
      * @since 2.0.14
      */
-    public function afterSave($event): void
+    public function afterSave($event)
     {
         $this->typecastAttributes();
     }
@@ -383,7 +381,7 @@ class AttributeTypecastBehavior extends Behavior
      *
      * @param \yii\base\Event $event event instance.
      */
-    public function afterFind($event): void
+    public function afterFind($event)
     {
         $this->typecastAttributes();
     }

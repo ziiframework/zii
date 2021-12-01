@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -146,7 +144,7 @@ class LinkPager extends Widget
     /**
      * Initializes the pager.
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
 
@@ -159,7 +157,7 @@ class LinkPager extends Widget
      * Executes the widget.
      * This overrides the parent implementation by displaying the generated page buttons.
      */
-    public function run(): void
+    public function run()
     {
         if ($this->registerLinkTags) {
             $this->registerLinkTags();
@@ -173,7 +171,7 @@ class LinkPager extends Widget
      *
      * @see http://www.w3.org/TR/html401/struct/links.html#h-12.1.2
      */
-    protected function registerLinkTags(): void
+    protected function registerLinkTags()
     {
         $view = $this->getView();
 

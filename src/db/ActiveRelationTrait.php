@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -211,7 +209,7 @@ trait ActiveRelationTrait
      *
      * @since 2.0.9
      */
-    private function addInverseRelations(&$result): void
+    private function addInverseRelations(&$result)
     {
         if ($this->inverseOf === null) {
             return;
@@ -361,7 +359,7 @@ trait ActiveRelationTrait
      * @param string $primaryName the primary relation name
      * @param string $name the relation name
      */
-    private function populateInverseRelation(&$primaryModels, $models, $primaryName, $name): void
+    private function populateInverseRelation(&$primaryModels, $models, $primaryName, $name)
     {
         if (empty($models) || empty($primaryModels)) {
             return;
@@ -561,7 +559,7 @@ trait ActiveRelationTrait
     /**
      * @param array $models
      */
-    private function filterByModels($models): void
+    private function filterByModels($models)
     {
         $attributes = array_keys($this->link);
 

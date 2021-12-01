@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -283,7 +281,7 @@ class GridView extends BaseListView
      * Initializes the grid view.
      * This method will initialize required property values and instantiate [[columns]] objects.
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
 
@@ -307,7 +305,7 @@ class GridView extends BaseListView
     /**
      * Runs the widget.
      */
-    public function run(): void
+    public function run()
     {
         $view = $this->getView();
         GridViewAsset::register($view);
@@ -577,7 +575,7 @@ class GridView extends BaseListView
     /**
      * Creates column objects and initializes them.
      */
-    protected function initColumns(): void
+    protected function initColumns()
     {
         if (empty($this->columns)) {
             $this->guessColumns();
@@ -630,7 +628,7 @@ class GridView extends BaseListView
      * This function tries to guess the columns to show from the given data
      * if [[columns]] are not explicitly specified.
      */
-    protected function guessColumns(): void
+    protected function guessColumns()
     {
         $models = $this->dataProvider->getModels();
         $model = reset($models);

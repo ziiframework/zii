@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -93,7 +91,7 @@ class TableSchema extends BaseObject
      *
      * @throws InvalidArgumentException if the specified key cannot be found in the table.
      */
-    public function fixPrimaryKey($keys): void
+    public function fixPrimaryKey($keys)
     {
         $keys = (array) $keys;
         $this->primaryKey = $keys;

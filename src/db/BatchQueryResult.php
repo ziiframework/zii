@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -107,7 +105,7 @@ class BatchQueryResult extends Component implements Iterator
      * Resets the batch query.
      * This method will clean up the existing batch query so that a new batch query can be performed.
      */
-    public function reset(): void
+    public function reset()
     {
         if ($this->_dataReader !== null) {
             $this->_dataReader->close();
@@ -123,7 +121,7 @@ class BatchQueryResult extends Component implements Iterator
      * Resets the iterator to the initial state.
      * This method is required by the interface [[\Iterator]].
      */
-    public function rewind(): void
+    public function rewind()
     {
         $this->reset();
         $this->next();
@@ -133,7 +131,7 @@ class BatchQueryResult extends Component implements Iterator
      * Moves the internal pointer to the next dataset.
      * This method is required by the interface [[\Iterator]].
      */
-    public function next(): void
+    public function next()
     {
         if ($this->_batch === null || !$this->each || $this->each && next($this->_batch) === false) {
             $this->_batch = $this->fetchData();
@@ -271,7 +269,7 @@ class BatchQueryResult extends Component implements Iterator
      * @see https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-15148
      * @since 2.0.38
      */
-    public function __wakeup(): void
+    public function __wakeup()
     {
         throw new BadMethodCallException('Cannot unserialize ' . __CLASS__);
     }

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -38,7 +36,7 @@ abstract class DbMutex extends Mutex
      *
      * @throws InvalidConfigException if [[db]] is invalid.
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
         $this->db = Instance::ensure($this->db, Connection::className());

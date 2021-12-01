@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -61,7 +59,7 @@ class ActiveFixture extends BaseActiveFixture
     /**
      * {@inheritdoc}
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
 
@@ -83,7 +81,7 @@ class ActiveFixture extends BaseActiveFixture
      * If you override this method, you should consider calling the parent implementation
      * so that the data returned by [[getData()]] can be populated into the table.
      */
-    public function load(): void
+    public function load()
     {
         $this->data = [];
         $table = $this->getTableSchema();
@@ -123,7 +121,7 @@ class ActiveFixture extends BaseActiveFixture
     /**
      * {@inheritdoc}
      */
-    public function unload(): void
+    public function unload()
     {
         $this->resetTable();
         parent::unload();
@@ -133,7 +131,7 @@ class ActiveFixture extends BaseActiveFixture
      * Removes all existing data from the specified table and resets sequence number to 1 (if any).
      * This method is called before populating fixture data into the table associated with this fixture.
      */
-    protected function resetTable(): void
+    protected function resetTable()
     {
         $table = $this->getTableSchema();
         $this->db->createCommand()->delete($table->fullName)->execute();

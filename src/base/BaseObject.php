@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -120,7 +118,7 @@ class BaseObject implements Configurable
      * This method is invoked at the end of the constructor after the object is initialized with the
      * given configuration.
      */
-    public function init(): void
+    public function init()
     {
     }
 
@@ -166,7 +164,7 @@ class BaseObject implements Configurable
      *
      * @see __get()
      */
-    public function __set($name, $value): void
+    public function __set($name, $value)
     {
         $setter = 'set' . $name;
 
@@ -219,7 +217,7 @@ class BaseObject implements Configurable
      *
      * @see https://www.php.net/manual/en/function.unset.php
      */
-    public function __unset($name): void
+    public function __unset($name)
     {
         $setter = 'set' . $name;
 

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -64,7 +62,7 @@ class Action extends \yii\base\Action
     /**
      * {@inheritdoc}
      */
-    public function init(): void
+    public function init()
     {
         if ($this->modelClass === null) {
             throw new InvalidConfigException(get_class($this) . '::$modelClass must be set.');

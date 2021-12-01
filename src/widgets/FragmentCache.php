@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -82,7 +80,7 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
     /**
      * Initializes the FragmentCache object.
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
 
@@ -101,7 +99,7 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
      * will be captured and saved in cache.
      * This method does nothing if valid content is already found in cache.
      */
-    public function run(): void
+    public function run()
     {
         if (($content = $this->getCachedContent()) !== false) {
             echo $content;

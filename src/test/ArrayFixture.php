@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -41,7 +39,7 @@ class ArrayFixture extends Fixture implements IteratorAggregate, ArrayAccess, Co
      * The default implementation simply stores the data returned by [[getData()]] in [[data]].
      * You should usually override this method by putting the data into the underlying database.
      */
-    public function load(): void
+    public function load()
     {
         $this->data = $this->getData();
     }
@@ -64,7 +62,7 @@ class ArrayFixture extends Fixture implements IteratorAggregate, ArrayAccess, Co
     /**
      * {@inheritdoc}
      */
-    public function unload(): void
+    public function unload()
     {
         parent::unload();
         $this->data = [];

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -102,7 +100,7 @@ class ExistValidator extends Validator
     /**
      * {@inheritdoc}
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
 
@@ -114,7 +112,7 @@ class ExistValidator extends Validator
     /**
      * {@inheritdoc}
      */
-    public function validateAttribute($model, $attribute): void
+    public function validateAttribute($model, $attribute)
     {
         if (!empty($this->targetRelation)) {
             $this->checkTargetRelationExistence($model, $attribute);
@@ -129,7 +127,7 @@ class ExistValidator extends Validator
      * @param \yii\db\ActiveRecord $model the data model to be validated
      * @param string $attribute the name of the attribute to be validated.
      */
-    private function checkTargetRelationExistence($model, $attribute): void
+    private function checkTargetRelationExistence($model, $attribute)
     {
         $exists = false;
         /** @var ActiveQuery $relationQuery */
@@ -144,7 +142,9 @@ class ExistValidator extends Validator
         $connection = $model::getDb();
 
         if ($this->forceMasterDb && method_exists($connection, 'useMaster')) {
-            $exists = $connection->useMaster(static fn () => $relationQuery->exists());
+            $exists = $connection->useMaster(static function () use ($relationQuery) {
+                return $relationQuery->exists();
+            });
         } else {
             $exists = $relationQuery->exists();
         }
@@ -160,7 +160,7 @@ class ExistValidator extends Validator
      * @param \yii\base\Model $model the data model to be validated
      * @param string $attribute the name of the attribute to be validated.
      */
-    private function checkTargetAttributeExistence($model, $attribute): void
+    private function checkTargetAttributeExistence($model, $attribute)
     {
         $targetAttribute = $this->targetAttribute === null ? $attribute : $this->targetAttribute;
         $params = $this->prepareConditions($targetAttribute, $model, $attribute);
@@ -276,7 +276,9 @@ class ExistValidator extends Validator
         $exists = false;
 
         if ($this->forceMasterDb && method_exists($db, 'useMaster')) {
-            $exists = $db->useMaster(fn () => $this->queryValueExists($query, $value));
+            $exists = $db->useMaster(function () use ($query, $value) {
+                return $this->queryValueExists($query, $value);
+            });
         } else {
             $exists = $this->queryValueExists($query, $value);
         }

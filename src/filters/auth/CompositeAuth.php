@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -87,7 +85,7 @@ class CompositeAuth extends AuthMethod
     /**
      * {@inheritdoc}
      */
-    public function challenge($response): void
+    public function challenge($response)
     {
         foreach ($this->authMethods as $method) {
             /* @var $method AuthInterface */

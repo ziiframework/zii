@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -43,7 +41,7 @@ class ApcCache extends Cache
      * Initializes this application component.
      * It checks if extension required is loaded.
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
         $extension = $this->useApcu ? 'apcu' : 'apc';

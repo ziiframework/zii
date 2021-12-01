@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -119,7 +117,7 @@ class MemCache extends Cache
      * Initializes this application component.
      * It creates the memcache instance and adds memcache servers.
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
         $this->addServers($this->getMemcache(), $this->getServers());
@@ -133,7 +131,7 @@ class MemCache extends Cache
      *
      * @throws InvalidConfigException
      */
-    protected function addServers($cache, $servers): void
+    protected function addServers($cache, $servers)
     {
         if (empty($servers)) {
             $servers = [new MemCacheServer([
@@ -162,7 +160,7 @@ class MemCache extends Cache
      * @param Memcached $cache
      * @param MemCacheServer[] $servers
      */
-    protected function addMemcachedServers($cache, $servers): void
+    protected function addMemcachedServers($cache, $servers)
     {
         $existingServers = [];
 
@@ -186,7 +184,7 @@ class MemCache extends Cache
      * @param \Memcache $cache
      * @param MemCacheServer[] $servers
      */
-    protected function addMemcacheServers($cache, $servers): void
+    protected function addMemcacheServers($cache, $servers)
     {
         $class = new ReflectionClass($cache);
         $paramCount = $class->getMethod('addServer')->getNumberOfParameters();
@@ -255,7 +253,7 @@ class MemCache extends Cache
      * @see https://www.php.net/manual/en/memcache.addserver.php
      * @see https://www.php.net/manual/en/memcached.addserver.php
      */
-    public function setServers($config): void
+    public function setServers($config)
     {
         foreach ($config as $c) {
             $this->_servers[] = new MemCacheServer($c);

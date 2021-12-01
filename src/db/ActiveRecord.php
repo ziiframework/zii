@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -231,7 +229,9 @@ class ActiveRecord extends BaseActiveRecord
 
         $aliases = array_diff(array_keys($tables), $tables);
 
-        return array_map(static fn ($alias) => preg_replace('/{{([\w]+)}}/', '$1', $alias), array_values($aliases));
+        return array_map(static function ($alias) {
+            return preg_replace('/{{([\w]+)}}/', '$1', $alias);
+        }, array_values($aliases));
     }
 
     /**
@@ -541,7 +541,7 @@ class ActiveRecord extends BaseActiveRecord
     /**
      * {@inheritdoc}
      */
-    public static function populateRecord($record, $row): void
+    public static function populateRecord($record, $row)
     {
         $columns = static::getTableSchema()->columns;
 

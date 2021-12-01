@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -79,7 +77,7 @@ trait ArrayAccessTrait
      * @param int $offset the offset to set element
      * @param mixed $item the element value
      */
-    public function offsetSet($offset, $item): void
+    public function offsetSet($offset, $item)
     {
         $this->data[$offset] = $item;
     }
@@ -89,7 +87,7 @@ trait ArrayAccessTrait
      *
      * @param mixed $offset the offset to unset element
      */
-    public function offsetUnset($offset): void
+    public function offsetUnset($offset)
     {
         unset($this->data[$offset]);
     }

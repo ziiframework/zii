@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -116,7 +114,7 @@ class Pjax extends Widget
     /**
      * {@inheritdoc}
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
 
@@ -152,7 +150,7 @@ class Pjax extends Widget
     /**
      * {@inheritdoc}
      */
-    public function run(): void
+    public function run()
     {
         if (!$this->requiresPjax()) {
             echo Html::endTag(ArrayHelper::remove($this->options, 'tag', 'div'));
@@ -192,7 +190,7 @@ class Pjax extends Widget
     /**
      * Registers the needed JavaScript.
      */
-    public function registerClientScript(): void
+    public function registerClientScript()
     {
         $id = $this->options['id'];
         $this->clientOptions['push'] = $this->enablePushState;

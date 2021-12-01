@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -127,7 +125,7 @@ class Transaction extends \yii\base\BaseObject
      * @throws NotSupportedException if the DBMS does not support nested transactions
      * @throws Exception if DB connection fails
      */
-    public function begin($isolationLevel = null): void
+    public function begin($isolationLevel = null)
     {
         if ($this->db === null) {
             throw new InvalidConfigException('Transaction::db must be set.');
@@ -168,7 +166,7 @@ class Transaction extends \yii\base\BaseObject
      *
      * @throws Exception if the transaction is not active
      */
-    public function commit(): void
+    public function commit()
     {
         if (!$this->getIsActive()) {
             throw new Exception('Failed to commit transaction: transaction was inactive.');
@@ -203,7 +201,7 @@ class Transaction extends \yii\base\BaseObject
     /**
      * Rolls back a transaction.
      */
-    public function rollBack(): void
+    public function rollBack()
     {
         if (!$this->getIsActive()) {
             // do nothing if transaction is not active: this could be the transaction is committed
@@ -252,7 +250,7 @@ class Transaction extends \yii\base\BaseObject
      *
      * @see http://en.wikipedia.org/wiki/Isolation_%28database_systems%29#Isolation_levels
      */
-    public function setIsolationLevel($level): void
+    public function setIsolationLevel($level)
     {
         if (!$this->getIsActive()) {
             throw new Exception('Failed to set isolation level: transaction was inactive.');

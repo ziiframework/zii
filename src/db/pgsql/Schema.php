@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -289,7 +287,7 @@ SQL;
      *
      * @throws NotSupportedException if this method is called.
      */
-    protected function loadTableDefaultValues($tableName): void
+    protected function loadTableDefaultValues($tableName)
     {
         throw new NotSupportedException('PostgreSQL does not support default value constraints.');
     }
@@ -310,7 +308,7 @@ SQL;
      * @param TableSchema $table the table metadata object
      * @param string $name the table name
      */
-    protected function resolveTableNames($table, $name): void
+    protected function resolveTableNames($table, $name)
     {
         $parts = explode('.', str_replace('"', '', $name));
 
@@ -349,7 +347,7 @@ SQL;
      *
      * @param TableSchema $table the table metadata
      */
-    protected function findConstraints($table): void
+    protected function findConstraints($table)
     {
         $tableName = $this->quoteValue($table->name);
         $tableSchema = $this->quoteValue($table->schemaName);

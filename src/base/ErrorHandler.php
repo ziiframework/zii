@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -69,7 +67,7 @@ abstract class ErrorHandler extends Component
      */
     private $_registered = false;
 
-    public function init(): void
+    public function init()
     {
         $this->silentExitOnException = $this->silentExitOnException !== null ? $this->silentExitOnException : YII_ENV_TEST;
         parent::init();
@@ -80,7 +78,7 @@ abstract class ErrorHandler extends Component
      *
      * @since 2.0.32 this will not do anything if the error handler was already registered
      */
-    public function register(): void
+    public function register()
     {
         if (!$this->_registered) {
             ini_set('display_errors', false);
@@ -105,7 +103,7 @@ abstract class ErrorHandler extends Component
      *
      * @since 2.0.32 this will not do anything if the error handler was not registered
      */
-    public function unregister(): void
+    public function unregister()
     {
         if ($this->_registered) {
             restore_error_handler();
@@ -121,7 +119,7 @@ abstract class ErrorHandler extends Component
      *
      * @param \Exception $exception the exception that is not caught
      */
-    public function handleException($exception): void
+    public function handleException($exception)
     {
         if ($exception instanceof ExitException) {
             return;
@@ -174,7 +172,7 @@ abstract class ErrorHandler extends Component
      *
      * @since 2.0.11
      */
-    protected function handleFallbackExceptionMessage($exception, $previousException): void
+    protected function handleFallbackExceptionMessage($exception, $previousException)
     {
         $msg = "An Error occurred while handling another error:\n";
         $msg .= (string) $exception;
@@ -287,7 +285,7 @@ abstract class ErrorHandler extends Component
     /**
      * Handles fatal PHP errors.
      */
-    public function handleFatalError(): void
+    public function handleFatalError()
     {
         unset($this->_memoryReserve);
 
@@ -339,7 +337,7 @@ abstract class ErrorHandler extends Component
      *
      * @since 2.0.3 this method is now public.
      */
-    public function logException($exception): void
+    public function logException($exception)
     {
         $category = get_class($exception);
 
@@ -354,7 +352,7 @@ abstract class ErrorHandler extends Component
     /**
      * Removes all output echoed before calling this method.
      */
-    public function clearOutput(): void
+    public function clearOutput()
     {
         // the following manual level counting is to deal with zlib.output_compression set to On
         for ($level = ob_get_level(); $level > 0; --$level) {
@@ -372,7 +370,7 @@ abstract class ErrorHandler extends Component
      *
      * @param \Exception|Throwable $exception the exception to convert to a PHP error.
      */
-    public static function convertExceptionToError($exception): void
+    public static function convertExceptionToError($exception)
     {
         trigger_error(static::convertExceptionToString($exception), E_USER_ERROR);
     }

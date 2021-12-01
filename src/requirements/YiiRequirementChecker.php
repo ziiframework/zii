@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -163,7 +161,7 @@ class YiiRequirementChecker
      * Renders the requirements check result.
      * The output will vary depending is a script running from web or from console.
      */
-    public function render(): void
+    public function render()
     {
         if (!isset($this->result)) {
             $this->usageError('Nothing to render!');
@@ -412,7 +410,7 @@ class YiiRequirementChecker
      *
      * @param string $message the error message
      */
-    public function usageError($message): void
+    public function usageError($message)
     {
         echo "Error: $message\n\n";
 

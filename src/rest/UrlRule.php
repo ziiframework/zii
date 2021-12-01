@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -150,7 +148,7 @@ class UrlRule extends CompositeUrlRule
     /**
      * {@inheritdoc}
      */
-    public function init(): void
+    public function init()
     {
         if (empty($this->controller)) {
             throw new InvalidConfigException('"controller" must be set.');

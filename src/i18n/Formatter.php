@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -405,7 +403,7 @@ class Formatter extends Component
     /**
      * {@inheritdoc}
      */
-    public function init(): void
+    public function init()
     {
         if ($this->timeZone === null) {
             $this->timeZone = Yii::$app->timeZone;
@@ -1950,7 +1948,7 @@ class Formatter extends Component
      * @param string $source
      * @param string $alternative
      */
-    private function setFormatterTextAttribute($formatter, $attribute, $value, $source, $alternative): void
+    private function setFormatterTextAttribute($formatter, $attribute, $value, $source, $alternative)
     {
         if (!is_int($attribute)) {
             throw new InvalidArgumentException("The $source array keys must be integers recognizable by NumberFormatter::setTextAttribute(). \"" . gettype($attribute) . '" provided instead.');
@@ -1972,7 +1970,7 @@ class Formatter extends Component
      * @param mixed $value
      * @param string $source
      */
-    private function setFormatterSymbol($formatter, $symbol, $value, $source): void
+    private function setFormatterSymbol($formatter, $symbol, $value, $source)
     {
         if (!is_int($symbol)) {
             throw new InvalidArgumentException("The $source array keys must be integers recognizable by NumberFormatter::setSymbol(). \"" . gettype($symbol) . '" provided instead.');
@@ -1991,7 +1989,7 @@ class Formatter extends Component
      * @param string $source
      * @param string $alternative
      */
-    private function setFormatterIntAttribute($formatter, $attribute, $value, $source, $alternative): void
+    private function setFormatterIntAttribute($formatter, $attribute, $value, $source, $alternative)
     {
         if (!is_int($attribute)) {
             throw new InvalidArgumentException("The $source array keys must be integers recognizable by NumberFormatter::setAttribute(). \"" . gettype($attribute) . '" provided instead.');

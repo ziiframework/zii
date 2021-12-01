@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -48,7 +46,7 @@ class HttpBearerAuth extends HttpHeaderAuth
     /**
      * {@inheritdoc}
      */
-    public function challenge($response): void
+    public function challenge($response)
     {
         $response->getHeaders()->set('WWW-Authenticate', "Bearer realm=\"{$this->realm}\"");
     }

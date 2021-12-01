@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -130,7 +128,7 @@ class Serializer extends Component
     /**
      * {@inheritdoc}
      */
-    public function init(): void
+    public function init()
     {
         if ($this->request === null) {
             $this->request = Yii::$app->getRequest();
@@ -258,7 +256,7 @@ class Serializer extends Component
      *
      * @param Pagination $pagination
      */
-    protected function addPaginationHeaders($pagination): void
+    protected function addPaginationHeaders($pagination)
     {
         $links = [];
 

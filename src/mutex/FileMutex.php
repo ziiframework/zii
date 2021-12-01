@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -85,7 +83,7 @@ class FileMutex extends Mutex
      *
      * @throws InvalidConfigException
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
         $this->mutexPath = Yii::getAlias($this->mutexPath);

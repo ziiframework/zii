@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -262,7 +260,7 @@ class Response extends \yii\base\Response
     /**
      * Initializes this component.
      */
-    public function init(): void
+    public function init()
     {
         if ($this->version === null) {
             if (isset($_SERVER['SERVER_PROTOCOL']) && $_SERVER['SERVER_PROTOCOL'] === 'HTTP/1.0') {
@@ -357,7 +355,7 @@ class Response extends \yii\base\Response
     /**
      * Sends the response to the client.
      */
-    public function send(): void
+    public function send()
     {
         if ($this->isSent) {
             return;
@@ -374,7 +372,7 @@ class Response extends \yii\base\Response
     /**
      * Clears the headers, cookies, content, status code of the response.
      */
-    public function clear(): void
+    public function clear()
     {
         $this->_headers = null;
         $this->_cookies = null;
@@ -389,7 +387,7 @@ class Response extends \yii\base\Response
     /**
      * Sends the response headers to the client.
      */
-    protected function sendHeaders(): void
+    protected function sendHeaders()
     {
         if (headers_sent($file, $line)) {
             throw new HeadersAlreadySentException($file, $line);
@@ -415,7 +413,7 @@ class Response extends \yii\base\Response
     /**
      * Sends the cookies to the client.
      */
-    protected function sendCookies(): void
+    protected function sendCookies()
     {
         if ($this->_cookies === null) {
             return;
@@ -461,7 +459,7 @@ class Response extends \yii\base\Response
     /**
      * Sends the response content to the client.
      */
-    protected function sendContent(): void
+    protected function sendContent()
     {
         if ($this->stream === null) {
             echo $this->content;
@@ -1135,7 +1133,7 @@ class Response extends \yii\base\Response
      * @see https://tools.ietf.org/html/rfc7231#page-53
      * @see https://tools.ietf.org/html/rfc7232#page-18
      */
-    protected function prepare(): void
+    protected function prepare()
     {
         if (in_array($this->getStatusCode(), [204, 304])) {
             // A 204/304 response cannot contain a message body according to rfc7231/rfc7232

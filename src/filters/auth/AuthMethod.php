@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -81,14 +79,14 @@ abstract class AuthMethod extends ActionFilter implements AuthInterface
     /**
      * {@inheritdoc}
      */
-    public function challenge($response): void
+    public function challenge($response)
     {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function handleFailure($response): void
+    public function handleFailure($response)
     {
         throw new UnauthorizedHttpException('Your request was made with invalid credentials.');
     }

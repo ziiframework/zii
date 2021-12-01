@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -50,7 +48,7 @@ class Request extends \yii\base\Request
      *
      * @param array $params the command line arguments
      */
-    public function setParams($params): void
+    public function setParams($params)
     {
         $this->_params = $params;
     }

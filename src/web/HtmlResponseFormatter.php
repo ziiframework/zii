@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -33,7 +31,7 @@ class HtmlResponseFormatter extends Component implements ResponseFormatterInterf
      *
      * @param Response $response the response to be formatted.
      */
-    public function format($response): void
+    public function format($response)
     {
         if (stripos($this->contentType, 'charset') === false) {
             $this->contentType .= '; charset=' . $response->charset;

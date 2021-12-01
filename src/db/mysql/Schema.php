@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -205,7 +203,7 @@ SQL;
      *
      * @throws NotSupportedException if this method is called.
      */
-    protected function loadTableChecks($tableName): void
+    protected function loadTableChecks($tableName)
     {
         throw new NotSupportedException('MySQL does not support check constraints.');
     }
@@ -215,7 +213,7 @@ SQL;
      *
      * @throws NotSupportedException if this method is called.
      */
-    protected function loadTableDefaultValues($tableName): void
+    protected function loadTableDefaultValues($tableName)
     {
         throw new NotSupportedException('MySQL does not support default value constraints.');
     }
@@ -236,7 +234,7 @@ SQL;
      * @param TableSchema $table the table metadata object
      * @param string $name the table name
      */
-    protected function resolveTableNames($table, $name): void
+    protected function resolveTableNames($table, $name)
     {
         $parts = explode('.', str_replace('`', '', $name));
 
@@ -403,7 +401,7 @@ SQL;
      *
      * @throws \Exception
      */
-    protected function findConstraints($table): void
+    protected function findConstraints($table)
     {
         $sql = <<<'SQL'
 SELECT

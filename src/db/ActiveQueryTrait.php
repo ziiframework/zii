@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -146,7 +144,7 @@ trait ActiveQueryTrait
      * refer to [[with()]] for details about specifying this parameter.
      * @param array|ActiveRecord[] $models the primary models (can be either AR instances or arrays)
      */
-    public function findWith($with, &$models): void
+    public function findWith($with, &$models)
     {
         $primaryModel = reset($models);
 

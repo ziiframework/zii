@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -65,7 +63,7 @@ class BaseConsole
      *
      * @param int $rows number of rows the cursor should be moved up
      */
-    public static function moveCursorUp($rows = 1): void
+    public static function moveCursorUp($rows = 1)
     {
         echo "\033[" . (int) $rows . 'A';
     }
@@ -76,7 +74,7 @@ class BaseConsole
      *
      * @param int $rows number of rows the cursor should be moved down
      */
-    public static function moveCursorDown($rows = 1): void
+    public static function moveCursorDown($rows = 1)
     {
         echo "\033[" . (int) $rows . 'B';
     }
@@ -87,7 +85,7 @@ class BaseConsole
      *
      * @param int $steps number of steps the cursor should be moved forward
      */
-    public static function moveCursorForward($steps = 1): void
+    public static function moveCursorForward($steps = 1)
     {
         echo "\033[" . (int) $steps . 'C';
     }
@@ -98,7 +96,7 @@ class BaseConsole
      *
      * @param int $steps number of steps the cursor should be moved backward
      */
-    public static function moveCursorBackward($steps = 1): void
+    public static function moveCursorBackward($steps = 1)
     {
         echo "\033[" . (int) $steps . 'D';
     }
@@ -108,7 +106,7 @@ class BaseConsole
      *
      * @param int $lines number of lines the cursor should be moved down
      */
-    public static function moveCursorNextLine($lines = 1): void
+    public static function moveCursorNextLine($lines = 1)
     {
         echo "\033[" . (int) $lines . 'E';
     }
@@ -118,7 +116,7 @@ class BaseConsole
      *
      * @param int $lines number of lines the cursor should be moved up
      */
-    public static function moveCursorPrevLine($lines = 1): void
+    public static function moveCursorPrevLine($lines = 1)
     {
         echo "\033[" . (int) $lines . 'F';
     }
@@ -129,7 +127,7 @@ class BaseConsole
      * @param int $column 1-based column number, 1 is the left edge of the screen.
      * @param int|null $row 1-based row number, 1 is the top edge of the screen. if not set, will move cursor only in current line.
      */
-    public static function moveCursorTo($column, $row = null): void
+    public static function moveCursorTo($column, $row = null)
     {
         if ($row === null) {
             echo "\033[" . (int) $column . 'G';
@@ -144,7 +142,7 @@ class BaseConsole
      *
      * @param int $lines number of lines to scroll up
      */
-    public static function scrollUp($lines = 1): void
+    public static function scrollUp($lines = 1)
     {
         echo "\033[" . (int) $lines . 'S';
     }
@@ -155,7 +153,7 @@ class BaseConsole
      *
      * @param int $lines number of lines to scroll down
      */
-    public static function scrollDown($lines = 1): void
+    public static function scrollDown($lines = 1)
     {
         echo "\033[" . (int) $lines . 'T';
     }
@@ -164,7 +162,7 @@ class BaseConsole
      * Saves the current cursor position by sending ANSI control code SCP to the terminal.
      * Position can then be restored with [[restoreCursorPosition()]].
      */
-    public static function saveCursorPosition(): void
+    public static function saveCursorPosition()
     {
         echo "\033[s";
     }
@@ -172,7 +170,7 @@ class BaseConsole
     /**
      * Restores the cursor position saved with [[saveCursorPosition()]] by sending ANSI control code RCP to the terminal.
      */
-    public static function restoreCursorPosition(): void
+    public static function restoreCursorPosition()
     {
         echo "\033[u";
     }
@@ -182,7 +180,7 @@ class BaseConsole
      * Use [[showCursor()]] to bring it back.
      * Do not forget to show cursor when your application exits. Cursor might stay hidden in terminal after exit.
      */
-    public static function hideCursor(): void
+    public static function hideCursor()
     {
         echo "\033[?25l";
     }
@@ -190,7 +188,7 @@ class BaseConsole
     /**
      * Will show a cursor again when it has been hidden by [[hideCursor()]]  by sending ANSI DECTCEM code ?25h to the terminal.
      */
-    public static function showCursor(): void
+    public static function showCursor()
     {
         echo "\033[?25h";
     }
@@ -200,7 +198,7 @@ class BaseConsole
      * Cursor position will not be changed.
      * **Note:** ANSI.SYS implementation used in windows will reset cursor position to upper left corner of the screen.
      */
-    public static function clearScreen(): void
+    public static function clearScreen()
     {
         echo "\033[2J";
     }
@@ -209,7 +207,7 @@ class BaseConsole
      * Clears text from cursor to the beginning of the screen by sending ANSI control code ED with argument 1 to the terminal.
      * Cursor position will not be changed.
      */
-    public static function clearScreenBeforeCursor(): void
+    public static function clearScreenBeforeCursor()
     {
         echo "\033[1J";
     }
@@ -218,7 +216,7 @@ class BaseConsole
      * Clears text from cursor to the end of the screen by sending ANSI control code ED with argument 0 to the terminal.
      * Cursor position will not be changed.
      */
-    public static function clearScreenAfterCursor(): void
+    public static function clearScreenAfterCursor()
     {
         echo "\033[0J";
     }
@@ -227,7 +225,7 @@ class BaseConsole
      * Clears the line, the cursor is currently on by sending ANSI control code EL with argument 2 to the terminal.
      * Cursor position will not be changed.
      */
-    public static function clearLine(): void
+    public static function clearLine()
     {
         echo "\033[2K";
     }
@@ -236,7 +234,7 @@ class BaseConsole
      * Clears text from cursor position to the beginning of the line by sending ANSI control code EL with argument 1 to the terminal.
      * Cursor position will not be changed.
      */
-    public static function clearLineBeforeCursor(): void
+    public static function clearLineBeforeCursor()
     {
         echo "\033[1K";
     }
@@ -245,7 +243,7 @@ class BaseConsole
      * Clears text from cursor position to the end of the line by sending ANSI control code EL with argument 0 to the terminal.
      * Cursor position will not be changed.
      */
-    public static function clearLineAfterCursor(): void
+    public static function clearLineAfterCursor()
     {
         echo "\033[0K";
     }
@@ -274,7 +272,7 @@ class BaseConsole
      * @see ansiFormatCode()
      * @see endAnsiFormat()
      */
-    public static function beginAnsiFormat($format): void
+    public static function beginAnsiFormat($format)
     {
         echo "\033[" . implode(';', $format) . 'm';
     }
@@ -288,7 +286,7 @@ class BaseConsole
      * echo Console::ansiFormatCode([Console::RESET])
      * ```
      */
-    public static function endAnsiFormat(): void
+    public static function endAnsiFormat()
     {
         echo "\033[0m";
     }
@@ -1068,7 +1066,7 @@ class BaseConsole
      * @see updateProgress
      * @see endProgress
      */
-    public static function startProgress($done, $total, $prefix = '', $width = null): void
+    public static function startProgress($done, $total, $prefix = '', $width = null)
     {
         self::$_progressStart = time();
         self::$_progressWidth = $width;
@@ -1092,7 +1090,7 @@ class BaseConsole
      * @see startProgress
      * @see endProgress
      */
-    public static function updateProgress($done, $total, $prefix = null): void
+    public static function updateProgress($done, $total, $prefix = null)
     {
         if ($prefix === null) {
             $prefix = self::$_progressPrefix;
@@ -1175,7 +1173,7 @@ class BaseConsole
      * @see updateProgress
      * @since 2.0.14
      */
-    private static function setETA($done, $total): void
+    private static function setETA($done, $total)
     {
         if ($done > $total || $done == 0) {
             self::$_progressEta = null;
@@ -1204,7 +1202,7 @@ class BaseConsole
      * @see startProgress
      * @see updateProgress
      */
-    public static function endProgress($remove = false, $keepPrefix = true): void
+    public static function endProgress($remove = false, $keepPrefix = true)
     {
         if ($remove === false) {
             static::stdout(PHP_EOL);

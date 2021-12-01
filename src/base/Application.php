@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -230,7 +228,7 @@ abstract class Application extends Module
      *
      * @throws InvalidConfigException if either [[id]] or [[basePath]] configuration is missing.
      */
-    public function preInit(&$config): void
+    public function preInit(&$config)
     {
         if (!isset($config['id'])) {
             throw new InvalidConfigException('The "id" configuration for the Application is required.');
@@ -285,7 +283,7 @@ abstract class Application extends Module
     /**
      * {@inheritdoc}
      */
-    public function init(): void
+    public function init()
     {
         $this->state = self::STATE_INIT;
         $this->bootstrap();
@@ -296,7 +294,7 @@ abstract class Application extends Module
      * This method is called by [[init()]] after the application has been fully configured.
      * If you override this method, make sure you also call the parent implementation.
      */
-    protected function bootstrap(): void
+    protected function bootstrap()
     {
         if ($this->extensions === null) {
             $file = Yii::getAlias('@vendor/ziiframework/extensions.php');
@@ -359,7 +357,7 @@ abstract class Application extends Module
      *
      * @param array $config application config
      */
-    protected function registerErrorHandler(&$config): void
+    protected function registerErrorHandler(&$config)
     {
         if (YII_ENABLE_ERROR_HANDLER) {
             if (!isset($config['components']['errorHandler']['class'])) {
@@ -394,7 +392,7 @@ abstract class Application extends Module
      *
      * @throws InvalidArgumentException if the directory does not exist.
      */
-    public function setBasePath($path): void
+    public function setBasePath($path)
     {
         parent::setBasePath($path);
         Yii::setAlias('@app', $this->getBasePath());
@@ -465,7 +463,7 @@ abstract class Application extends Module
      *
      * @param string $path the directory that stores runtime files.
      */
-    public function setRuntimePath($path): void
+    public function setRuntimePath($path)
     {
         $this->_runtimePath = Yii::getAlias($path);
         Yii::setAlias('@runtime', $this->_runtimePath);
@@ -493,7 +491,7 @@ abstract class Application extends Module
      *
      * @param string $path the directory that stores vendor files.
      */
-    public function setVendorPath($path): void
+    public function setVendorPath($path)
     {
         $this->_vendorPath = Yii::getAlias($path);
         Yii::setAlias('@vendor', $this->_vendorPath);
@@ -525,7 +523,7 @@ abstract class Application extends Module
      *
      * @see https://www.php.net/manual/en/function.date-default-timezone-set.php
      */
-    public function setTimeZone($value): void
+    public function setTimeZone($value)
     {
         date_default_timezone_set($value);
     }
@@ -708,7 +706,7 @@ abstract class Application extends Module
      *
      * @throws ExitException if the application is in testing mode
      */
-    public function end($status = 0, $response = null): void
+    public function end($status = 0, $response = null)
     {
         if ($this->state === self::STATE_BEFORE_REQUEST || $this->state === self::STATE_HANDLING_REQUEST) {
             $this->state = self::STATE_AFTER_REQUEST;
@@ -735,7 +733,7 @@ abstract class Application extends Module
      *
      * @since 2.0.11
      */
-    public function setContainer($config): void
+    public function setContainer($config)
     {
         Yii::configure(Yii::$container, $config);
     }

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -312,7 +310,7 @@ abstract class Schema extends BaseObject
      * This method cleans up all cached table schemas so that they can be re-created later
      * to reflect the database schema change.
      */
-    public function refresh(): void
+    public function refresh()
     {
         /* @var $cache CacheInterface */
         $cache = is_string($this->db->schemaCache) ? Yii::$app->get($this->db->schemaCache, false) : $this->db->schemaCache;
@@ -333,7 +331,7 @@ abstract class Schema extends BaseObject
      *
      * @since 2.0.6
      */
-    public function refreshTableSchema($name): void
+    public function refreshTableSchema($name)
     {
         $rawName = $this->getRawTableName($name);
         unset($this->_tableMetadata[$rawName]);
@@ -433,7 +431,7 @@ abstract class Schema extends BaseObject
      *
      * @param string $name the savepoint name
      */
-    public function createSavepoint($name): void
+    public function createSavepoint($name)
     {
         $this->db->createCommand("SAVEPOINT $name")->execute();
     }
@@ -443,7 +441,7 @@ abstract class Schema extends BaseObject
      *
      * @param string $name the savepoint name
      */
-    public function releaseSavepoint($name): void
+    public function releaseSavepoint($name)
     {
         $this->db->createCommand("RELEASE SAVEPOINT $name")->execute();
     }
@@ -453,7 +451,7 @@ abstract class Schema extends BaseObject
      *
      * @param string $name the savepoint name
      */
-    public function rollBackSavepoint($name): void
+    public function rollBackSavepoint($name)
     {
         $this->db->createCommand("ROLLBACK TO SAVEPOINT $name")->execute();
     }
@@ -468,7 +466,7 @@ abstract class Schema extends BaseObject
      *
      * @see http://en.wikipedia.org/wiki/Isolation_%28database_systems%29#Isolation_levels
      */
-    public function setTransactionIsolationLevel($level): void
+    public function setTransactionIsolationLevel($level)
     {
         $this->db->createCommand("SET TRANSACTION ISOLATION LEVEL $level")->execute();
     }
@@ -917,7 +915,7 @@ abstract class Schema extends BaseObject
      *
      * @since 2.0.13
      */
-    protected function setTableMetadata($name, $type, $data): void
+    protected function setTableMetadata($name, $type, $data)
     {
         $this->_tableMetadata[$this->getRawTableName($name)][$type] = $data;
     }
@@ -939,7 +937,9 @@ abstract class Schema extends BaseObject
         }
 
         if ($multiple) {
-            return array_map(static fn (array $row) => array_change_key_case($row, CASE_LOWER), $row);
+            return array_map(static function (array $row) {
+                return array_change_key_case($row, CASE_LOWER);
+            }, $row);
         }
 
         return array_change_key_case($row, CASE_LOWER);
@@ -951,7 +951,7 @@ abstract class Schema extends BaseObject
      * @param Cache|null $cache
      * @param string $name
      */
-    private function loadTableMetadataFromCache($cache, $name): void
+    private function loadTableMetadataFromCache($cache, $name)
     {
         if ($cache === null) {
             $this->_tableMetadata[$name] = [];
@@ -977,7 +977,7 @@ abstract class Schema extends BaseObject
      * @param Cache|null $cache
      * @param string $name
      */
-    private function saveTableMetadataToCache($cache, $name): void
+    private function saveTableMetadataToCache($cache, $name)
     {
         if ($cache === null) {
             return;

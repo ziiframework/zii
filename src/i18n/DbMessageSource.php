@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -100,7 +98,7 @@ class DbMessageSource extends MessageSource
      *
      * @throws InvalidConfigException if [[db]] is invalid or [[cache]] is invalid.
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
         $this->db = Instance::ensure($this->db, Connection::className());

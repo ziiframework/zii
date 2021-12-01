@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -100,7 +98,7 @@ class ColumnSchema extends \yii\db\ColumnSchema
             }
 
             if (is_array($value)) {
-                array_walk_recursive($value, function (&$val, $key): void {
+                array_walk_recursive($value, function (&$val, $key) {
                     $val = $this->phpTypecastValue($val);
                 });
             } elseif ($value === null) {

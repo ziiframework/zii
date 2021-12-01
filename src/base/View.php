@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -121,7 +119,7 @@ class View extends Component implements DynamicContentAwareInterface
     /**
      * Initializes the view component.
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
 
@@ -337,7 +335,7 @@ class View extends Component implements DynamicContentAwareInterface
      * @param string $output the rendering result of the view file. Updates to this parameter
      * will be passed back and returned by [[renderFile()]].
      */
-    public function afterRender($viewFile, $params, &$output): void
+    public function afterRender($viewFile, $params, &$output)
     {
         if ($this->hasEventHandlers(self::EVENT_AFTER_RENDER)) {
             $event = new ViewEvent([
@@ -436,7 +434,7 @@ class View extends Component implements DynamicContentAwareInterface
     /**
      * {@inheritdoc}
      */
-    public function setDynamicPlaceholders($placeholders): void
+    public function setDynamicPlaceholders($placeholders)
     {
         $this->dynamicPlaceholders = $placeholders;
     }
@@ -444,7 +442,7 @@ class View extends Component implements DynamicContentAwareInterface
     /**
      * {@inheritdoc}
      */
-    public function addDynamicPlaceholder($placeholder, $statements): void
+    public function addDynamicPlaceholder($placeholder, $statements)
     {
         foreach ($this->cacheStack as $cache) {
             if ($cache instanceof DynamicContentAwareInterface) {
@@ -490,7 +488,7 @@ class View extends Component implements DynamicContentAwareInterface
      *
      * @since 2.0.14
      */
-    public function pushDynamicContent(DynamicContentAwareInterface $instance): void
+    public function pushDynamicContent(DynamicContentAwareInterface $instance)
     {
         $this->cacheStack[] = $instance;
     }
@@ -501,7 +499,7 @@ class View extends Component implements DynamicContentAwareInterface
      *
      * @since 2.0.14
      */
-    public function popDynamicContent(): void
+    public function popDynamicContent()
     {
         array_pop($this->cacheStack);
     }
@@ -529,7 +527,7 @@ class View extends Component implements DynamicContentAwareInterface
     /**
      * Ends recording a block.
      */
-    public function endBlock(): void
+    public function endBlock()
     {
         Block::end();
     }
@@ -566,7 +564,7 @@ class View extends Component implements DynamicContentAwareInterface
     /**
      * Ends the rendering of content.
      */
-    public function endContent(): void
+    public function endContent()
     {
         ContentDecorator::end();
     }
@@ -611,7 +609,7 @@ class View extends Component implements DynamicContentAwareInterface
     /**
      * Ends fragment caching.
      */
-    public function endCache(): void
+    public function endCache()
     {
         FragmentCache::end();
     }
@@ -619,7 +617,7 @@ class View extends Component implements DynamicContentAwareInterface
     /**
      * Marks the beginning of a page.
      */
-    public function beginPage(): void
+    public function beginPage()
     {
         ob_start();
         ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
@@ -630,7 +628,7 @@ class View extends Component implements DynamicContentAwareInterface
     /**
      * Marks the ending of a page.
      */
-    public function endPage(): void
+    public function endPage()
     {
         $this->trigger(self::EVENT_END_PAGE);
         ob_end_flush();

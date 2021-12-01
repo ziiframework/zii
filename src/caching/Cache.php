@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -94,7 +92,7 @@ abstract class Cache extends Component implements CacheInterface
     /**
      * {@inheritdoc}
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
         $this->_igbinaryAvailable = extension_loaded('igbinary');
@@ -612,7 +610,7 @@ abstract class Cache extends Component implements CacheInterface
      * @param string $key the key identifying the value to be cached
      * @param mixed $value the value to be cached
      */
-    public function offsetSet($key, $value): void
+    public function offsetSet($key, $value)
     {
         $this->set($key, $value);
     }
@@ -623,7 +621,7 @@ abstract class Cache extends Component implements CacheInterface
      *
      * @param string $key the key of the value to be deleted
      */
-    public function offsetUnset($key): void
+    public function offsetUnset($key)
     {
         $this->delete($key);
     }

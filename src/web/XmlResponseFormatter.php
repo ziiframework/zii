@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -84,7 +82,7 @@ class XmlResponseFormatter extends Component implements ResponseFormatterInterfa
      *
      * @param Response $response the response to be formatted.
      */
-    public function format($response): void
+    public function format($response)
     {
         $charset = $this->encoding === null ? $response->charset : $this->encoding;
 
@@ -117,7 +115,7 @@ class XmlResponseFormatter extends Component implements ResponseFormatterInterfa
      * @param DOMElement|DOMDocument $element current element
      * @param mixed $data content of the current element
      */
-    protected function buildXml($element, $data): void
+    protected function buildXml($element, $data)
     {
         if (is_array($data) ||
             ($data instanceof Traversable && $this->useTraversableAsArray && !$data instanceof Arrayable)

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -85,7 +83,7 @@ class CheckboxColumn extends Column
      *
      * @throws \yii\base\InvalidConfigException if [[name]] is not set.
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
 
@@ -171,7 +169,7 @@ class CheckboxColumn extends Column
      *
      * @since 2.0.8
      */
-    public function registerClientScript(): void
+    public function registerClientScript()
     {
         $id = $this->grid->options['id'];
         $options = Json::encode([

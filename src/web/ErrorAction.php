@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -90,7 +88,7 @@ class ErrorAction extends Action
     /**
      * {@inheritdoc}
      */
-    public function init(): void
+    public function init()
     {
         $this->exception = $this->findException();
 

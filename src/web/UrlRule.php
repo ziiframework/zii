@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -201,7 +199,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
     /**
      * Initializes this rule.
      */
-    public function init(): void
+    public function init()
     {
         if ($this->pattern === null) {
             throw new InvalidConfigException('UrlRule::pattern must be set.');
@@ -240,7 +238,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
     /**
      * Process [[$pattern]] on rule initialization.
      */
-    private function preparePattern(): void
+    private function preparePattern()
     {
         $this->pattern = $this->trimSlashes($this->pattern);
         $this->route = trim($this->route, '/');
@@ -285,7 +283,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
      * If `false` slash will be placed at the beginning of param pattern. If `true` slash position will be detected
      * depending on non-optional pattern part.
      */
-    private function translatePattern($allowAppendSlash): void
+    private function translatePattern($allowAppendSlash)
     {
         $tr = [
             '.' => '\\.',

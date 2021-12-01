@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -146,7 +144,11 @@ class Table extends Widget
      */
     public function setRows(array $rows)
     {
-        $this->rows = array_map(static fn ($row) => array_map(static fn ($value) => empty($value) && !is_numeric($value) ? ' ' : $value, array_values($row)), $rows);
+        $this->rows = array_map(static function ($row) {
+            return array_map(static function ($value) {
+                return empty($value) && !is_numeric($value) ? ' ' : $value;
+            }, array_values($row));
+        }, $rows);
 
         return $this;
     }
@@ -320,7 +322,7 @@ class Table extends Widget
      *
      * @see \yii\console\widgets\Table::render()
      */
-    protected function calculateRowsSize(): void
+    protected function calculateRowsSize()
     {
         $this->columnWidths = $columns = [];
         $totalWidth = 0;

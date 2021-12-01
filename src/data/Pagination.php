@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -192,7 +190,7 @@ class Pagination extends BaseObject implements Linkable
      * @param bool $validatePage whether to validate the page number. Note that in order
      * to validate the page number, both [[validatePage]] and this parameter must be true.
      */
-    public function setPage($value, $validatePage = false): void
+    public function setPage($value, $validatePage = false)
     {
         if ($value === null) {
             $this->_page = null;
@@ -243,7 +241,7 @@ class Pagination extends BaseObject implements Linkable
      * @param int $value the number of items per page.
      * @param bool $validatePageSize whether to validate page size.
      */
-    public function setPageSize($value, $validatePageSize = false): void
+    public function setPageSize($value, $validatePageSize = false)
     {
         if ($value === null) {
             $this->_pageSize = null;

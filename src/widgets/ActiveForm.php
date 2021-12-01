@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -215,7 +213,7 @@ class ActiveForm extends Widget
      * Initializes the widget.
      * This renders the form open tag.
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
 
@@ -256,7 +254,7 @@ class ActiveForm extends Widget
      *
      * @since 2.0.12
      */
-    public function registerClientScript(): void
+    public function registerClientScript()
     {
         $id = $this->options['id'];
         $options = Json::htmlEncode($this->getClientOptions());

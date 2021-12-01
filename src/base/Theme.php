@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -100,7 +98,7 @@ class Theme extends Component
      * @param string $url the base URL or [path alias](guide:concept-aliases) for this theme. All resources of this theme are considered
      * to be under this base URL.
      */
-    public function setBaseUrl($url): void
+    public function setBaseUrl($url)
     {
         $this->_baseUrl = $url === null ? null : rtrim(Yii::getAlias($url), '/');
     }
@@ -123,7 +121,7 @@ class Theme extends Component
      *
      * @see pathMap
      */
-    public function setBasePath($path): void
+    public function setBasePath($path)
     {
         $this->_basePath = Yii::getAlias($path);
     }

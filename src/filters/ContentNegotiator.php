@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -138,7 +136,7 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
     /**
      * {@inheritdoc}
      */
-    public function bootstrap($app): void
+    public function bootstrap($app)
     {
         $this->negotiate();
     }
@@ -156,7 +154,7 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
     /**
      * Negotiates the response format and application language.
      */
-    public function negotiate(): void
+    public function negotiate()
     {
         $request = $this->request ?: Yii::$app->getRequest();
         $response = $this->response ?: Yii::$app->getResponse();
@@ -185,7 +183,7 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
      * @throws BadRequestHttpException if an array received for GET parameter [[formatParam]].
      * @throws NotAcceptableHttpException if none of the requested content types is accepted.
      */
-    protected function negotiateContentType($request, $response): void
+    protected function negotiateContentType($request, $response)
     {
         if (!empty($this->formatParam) && ($format = $request->get($this->formatParam)) !== null) {
             if (is_array($format)) {

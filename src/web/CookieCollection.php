@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -143,7 +141,7 @@ class CookieCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      *
      * @throws InvalidCallException if the cookie collection is read only
      */
-    public function add($cookie): void
+    public function add($cookie)
     {
         if ($this->readOnly) {
             throw new InvalidCallException('The cookie collection is read only.');
@@ -161,7 +159,7 @@ class CookieCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      *
      * @throws InvalidCallException if the cookie collection is read only
      */
-    public function remove($cookie, $removeFromBrowser = true): void
+    public function remove($cookie, $removeFromBrowser = true)
     {
         if ($this->readOnly) {
             throw new InvalidCallException('The cookie collection is read only.');
@@ -190,7 +188,7 @@ class CookieCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      *
      * @throws InvalidCallException if the cookie collection is read only
      */
-    public function removeAll(): void
+    public function removeAll()
     {
         if ($this->readOnly) {
             throw new InvalidCallException('The cookie collection is read only.');
@@ -216,7 +214,7 @@ class CookieCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      *
      * @since 2.0.3
      */
-    public function fromArray(array $array): void
+    public function fromArray(array $array)
     {
         $this->_cookies = $array;
     }
@@ -259,7 +257,7 @@ class CookieCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      * @param string $name the cookie name
      * @param Cookie $cookie the cookie to be added
      */
-    public function offsetSet($name, $cookie): void
+    public function offsetSet($name, $cookie)
     {
         $this->add($cookie);
     }
@@ -272,7 +270,7 @@ class CookieCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      *
      * @param string $name the cookie name
      */
-    public function offsetUnset($name): void
+    public function offsetUnset($name)
     {
         $this->remove($name);
     }

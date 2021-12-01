@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -88,7 +86,7 @@ trait FixtureTrait
      * @param Fixture[] $fixtures the fixtures to be loaded. If this parameter is not specified,
      * the return value of [[getFixtures()]] will be used.
      */
-    public function loadFixtures($fixtures = null): void
+    public function loadFixtures($fixtures = null)
     {
         if ($fixtures === null) {
             $fixtures = $this->getFixtures();
@@ -115,7 +113,7 @@ trait FixtureTrait
      * @param Fixture[] $fixtures the fixtures to be loaded. If this parameter is not specified,
      * the return value of [[getFixtures()]] will be used.
      */
-    public function unloadFixtures($fixtures = null): void
+    public function unloadFixtures($fixtures = null)
     {
         if ($fixtures === null) {
             $fixtures = $this->getFixtures();
@@ -141,7 +139,7 @@ trait FixtureTrait
      *
      * @since 2.0.12
      */
-    public function initFixtures(): void
+    public function initFixtures()
     {
         $this->unloadFixtures();
         $this->loadFixtures();

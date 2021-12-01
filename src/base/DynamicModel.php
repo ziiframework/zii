@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -105,7 +103,7 @@ class DynamicModel extends Model
     /**
      * {@inheritdoc}
      */
-    public function __set($name, $value): void
+    public function __set($name, $value)
     {
         if ($this->hasAttribute($name)) {
             $this->_attributes[$name] = $value;
@@ -129,7 +127,7 @@ class DynamicModel extends Model
     /**
      * {@inheritdoc}
      */
-    public function __unset($name): void
+    public function __unset($name)
     {
         if ($this->hasAttribute($name)) {
             unset($this->_attributes[$name]);
@@ -174,7 +172,7 @@ class DynamicModel extends Model
      * @param string $name the attribute name
      * @param mixed $value the attribute value
      */
-    public function defineAttribute($name, $value = null): void
+    public function defineAttribute($name, $value = null)
     {
         $this->_attributes[$name] = $value;
     }
@@ -184,7 +182,7 @@ class DynamicModel extends Model
      *
      * @param string $name the attribute name
      */
-    public function undefineAttribute($name): void
+    public function undefineAttribute($name)
     {
         unset($this->_attributes[$name]);
     }

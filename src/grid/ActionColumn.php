@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -155,7 +153,7 @@ class ActionColumn extends Column
     /**
      * {@inheritdoc}
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
         $this->initDefaultButtons();
@@ -164,7 +162,7 @@ class ActionColumn extends Column
     /**
      * Initializes the default button rendering callbacks.
      */
-    protected function initDefaultButtons(): void
+    protected function initDefaultButtons()
     {
         $this->initDefaultButton('view', 'eye-open');
         $this->initDefaultButton('update', 'pencil');
@@ -183,7 +181,7 @@ class ActionColumn extends Column
      *
      * @since 2.0.11
      */
-    protected function initDefaultButton($name, $iconName, $additionalOptions = []): void
+    protected function initDefaultButton($name, $iconName, $additionalOptions = [])
     {
         if (!isset($this->buttons[$name]) && strpos($this->template, '{' . $name . '}') !== false) {
             $this->buttons[$name] = function ($url, $model, $key) use ($name, $iconName, $additionalOptions) {

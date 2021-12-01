@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -115,7 +113,7 @@ class MaskedInput extends InputWidget
      *
      * @throws InvalidConfigException if the "mask" property is not set.
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
 
@@ -127,7 +125,7 @@ class MaskedInput extends InputWidget
     /**
      * {@inheritdoc}
      */
-    public function run(): void
+    public function run()
     {
         $this->registerClientScript();
         echo $this->renderInputHtml($this->type);
@@ -146,7 +144,7 @@ class MaskedInput extends InputWidget
      *
      * @author [Thiago Talma](https://github.com/thiagotalma)
      */
-    protected function hashPluginOptions($view): void
+    protected function hashPluginOptions($view)
     {
         $encOptions = empty($this->clientOptions) ? '{}' : Json::htmlEncode($this->clientOptions);
         $this->_hashVar = self::PLUGIN_NAME . '_' . hash('crc32', $encOptions);
@@ -157,7 +155,7 @@ class MaskedInput extends InputWidget
     /**
      * Initializes client options.
      */
-    protected function initClientOptions(): void
+    protected function initClientOptions()
     {
         $options = $this->clientOptions;
 
@@ -178,7 +176,7 @@ class MaskedInput extends InputWidget
     /**
      * Registers the needed client script and options.
      */
-    public function registerClientScript(): void
+    public function registerClientScript()
     {
         $js = '';
         $view = $this->getView();

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -48,7 +46,7 @@ abstract class Dependency extends \yii\base\BaseObject
      *
      * @param CacheInterface $cache the cache component that is currently evaluating this dependency
      */
-    public function evaluateDependency($cache): void
+    public function evaluateDependency($cache)
     {
         if ($this->reusable) {
             $hash = $this->generateReusableHash();
@@ -104,7 +102,7 @@ abstract class Dependency extends \yii\base\BaseObject
     /**
      * Resets all cached data for reusable dependencies.
      */
-    public static function resetReusableData(): void
+    public static function resetReusableData()
     {
         self::$_reusableData = [];
     }

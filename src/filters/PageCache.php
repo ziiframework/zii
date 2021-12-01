@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -144,7 +142,7 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
     /**
      * {@inheritdoc}
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
 
@@ -214,7 +212,7 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
      *
      * @since 2.0.11
      */
-    public function afterRestoreResponse($data): void
+    public function afterRestoreResponse($data)
     {
     }
 
@@ -226,7 +224,7 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
      *
      * @since 2.0.3
      */
-    protected function restoreResponse($response, $data): void
+    protected function restoreResponse($response, $data)
     {
         foreach (['format', 'version', 'statusCode', 'statusText', 'content'] as $name) {
             $response->{$name} = $data[$name];
@@ -249,7 +247,7 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
      *
      * @since 2.0.3
      */
-    public function cacheResponse(): void
+    public function cacheResponse()
     {
         $this->view->popDynamicContent();
         $beforeCacheResponseResult = $this->beforeCacheResponse();
@@ -291,7 +289,7 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
      * @param string $collectionName currently it's `headers` or `cookies`.
      * @param array $data the cache data.
      */
-    private function insertResponseCollectionIntoData(Response $response, $collectionName, array &$data): void
+    private function insertResponseCollectionIntoData(Response $response, $collectionName, array &$data)
     {
         $property = 'cache' . ucfirst($collectionName);
 

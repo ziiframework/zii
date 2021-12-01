@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -25,7 +23,7 @@ interface ConditionInterface extends ExpressionInterface
 {
     /**
      * Creates object by array-definition as described in
-     * [Query Builder – Operator format](guide:db-query-builder#operator-format) guide article.
+     * [Query Builder – Operator format](guide:db-query-builder#operator-format) guide article.
      *
      * @param string $operator operator in uppercase.
      * @param array $operands array of corresponding operands

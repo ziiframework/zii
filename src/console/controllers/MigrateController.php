@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -278,7 +276,7 @@ class MigrateController extends BaseMigrateController
     /**
      * Creates the migration history table.
      */
-    protected function createMigrationHistoryTable(): void
+    protected function createMigrationHistoryTable()
     {
         $tableName = $this->db->schema->getRawTableName($this->migrationTable);
         $this->stdout("Creating migration history table \"$tableName\"...", Console::FG_YELLOW);
@@ -296,7 +294,7 @@ class MigrateController extends BaseMigrateController
     /**
      * {@inheritdoc}
      */
-    protected function addMigrationHistory($version): void
+    protected function addMigrationHistory($version)
     {
         $command = $this->db->createCommand();
         $command->insert($this->migrationTable, [
@@ -310,7 +308,7 @@ class MigrateController extends BaseMigrateController
      *
      * @since 2.0.13
      */
-    protected function truncateDatabase(): void
+    protected function truncateDatabase()
     {
         $db = $this->db;
         $schemas = $db->schema->getTableSchemas();
@@ -365,7 +363,7 @@ class MigrateController extends BaseMigrateController
     /**
      * {@inheritdoc}
      */
-    protected function removeMigrationHistory($version): void
+    protected function removeMigrationHistory($version)
     {
         $command = $this->db->createCommand();
         $command->delete($this->migrationTable, [
@@ -630,7 +628,7 @@ class MigrateController extends BaseMigrateController
      *
      * @since 2.0.7
      */
-    protected function addDefaultPrimaryKey(&$fields): void
+    protected function addDefaultPrimaryKey(&$fields)
     {
         foreach ($fields as $field) {
             if ($field['property'] === 'id' || false !== strripos($field['decorators'], 'primarykey()')) {

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -153,7 +151,7 @@ class ArrayExpression implements ExpressionInterface, ArrayAccess, Countable, It
      *
      * @since 2.0.14
      */
-    public function offsetSet($offset, $value): void
+    public function offsetSet($offset, $value)
     {
         $this->value[$offset] = $value;
     }
@@ -171,7 +169,7 @@ class ArrayExpression implements ExpressionInterface, ArrayAccess, Countable, It
      *
      * @since 2.0.14
      */
-    public function offsetUnset($offset): void
+    public function offsetUnset($offset)
     {
         unset($this->value[$offset]);
     }

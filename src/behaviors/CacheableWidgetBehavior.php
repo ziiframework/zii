@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -107,7 +105,7 @@ class CacheableWidgetBehavior extends Behavior
     /**
      * {@inheritdoc}
      */
-    public function attach($owner): void
+    public function attach($owner)
     {
         parent::attach($owner);
 
@@ -120,7 +118,7 @@ class CacheableWidgetBehavior extends Behavior
      *
      * @param WidgetEvent $event `Widget::EVENT_BEFORE_RUN` event.
      */
-    public function beforeRun($event): void
+    public function beforeRun($event)
     {
         $cacheKey = $this->getCacheKey();
         $fragmentCacheConfiguration = $this->getFragmentCacheConfiguration();
@@ -135,7 +133,7 @@ class CacheableWidgetBehavior extends Behavior
      *
      * @param WidgetEvent $event `Widget::EVENT_AFTER_RUN` event.
      */
-    public function afterRun($event): void
+    public function afterRun($event)
     {
         echo $event->result;
         $event->result = null;
@@ -146,7 +144,7 @@ class CacheableWidgetBehavior extends Behavior
     /**
      * Initializes widget event handlers.
      */
-    private function initializeEventHandlers(): void
+    private function initializeEventHandlers()
     {
         $this->owner->on(Widget::EVENT_BEFORE_RUN, [$this, 'beforeRun']);
         $this->owner->on(Widget::EVENT_AFTER_RUN, [$this, 'afterRun']);

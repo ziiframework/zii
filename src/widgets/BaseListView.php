@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -119,7 +117,7 @@ abstract class BaseListView extends Widget
     /**
      * Initializes the view.
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
 
@@ -139,7 +137,7 @@ abstract class BaseListView extends Widget
     /**
      * Runs the widget.
      */
-    public function run(): void
+    public function run()
     {
         if ($this->showOnEmpty || $this->dataProvider->getCount() > 0) {
             $content = preg_replace_callback('/{\\w+}/', function ($matches) {

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -110,7 +108,7 @@ class Controller extends Component implements ViewContextInterface
      *
      * @since 2.0.36
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
         $this->request = Instance::ensure($this->request, Request::className());
@@ -522,7 +520,7 @@ class Controller extends Component implements ViewContextInterface
      *
      * @param View|\yii\web\View $view the view object that can be used to render views or view files.
      */
-    public function setView($view): void
+    public function setView($view)
     {
         $this->_view = $view;
     }
@@ -552,7 +550,7 @@ class Controller extends Component implements ViewContextInterface
      *
      * @since 2.0.7
      */
-    public function setViewPath($path): void
+    public function setViewPath($path)
     {
         $this->_viewPath = Yii::getAlias($path);
     }
@@ -623,7 +621,7 @@ class Controller extends Component implements ViewContextInterface
      *
      * @since 2.0.36
      */
-    final protected function bindInjectedParams(ReflectionType $type, $name, &$args, &$requestedParams): void
+    final protected function bindInjectedParams(ReflectionType $type, $name, &$args, &$requestedParams)
     {
         // Since it is not a builtin type it must be DI injection.
         $typeName = $type->getName();

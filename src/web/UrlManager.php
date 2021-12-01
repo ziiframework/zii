@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -175,7 +173,7 @@ class UrlManager extends Component
     /**
      * Initializes UrlManager.
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
 
@@ -208,7 +206,7 @@ class UrlManager extends Component
      * Please refer to [[rules]] for the acceptable rule format.
      * @param bool $append whether to add the new rules by appending them to the end of the existing rules.
      */
-    public function addRules($rules, $append = true): void
+    public function addRules($rules, $append = true)
     {
         if (!$this->enablePrettyUrl) {
             return;
@@ -575,7 +573,7 @@ class UrlManager extends Component
      *
      * @since 2.0.8
      */
-    protected function setRuleToCache($cacheKey, UrlRuleInterface $rule): void
+    protected function setRuleToCache($cacheKey, UrlRuleInterface $rule)
     {
         $this->_ruleCache[$cacheKey][] = $rule;
     }
@@ -646,7 +644,7 @@ class UrlManager extends Component
      *
      * @param string $value the base URL that is used by [[createUrl()]] to prepend to created URLs.
      */
-    public function setBaseUrl($value): void
+    public function setBaseUrl($value)
     {
         $this->_baseUrl = $value === null ? null : rtrim(Yii::getAlias($value), '/');
     }
@@ -681,7 +679,7 @@ class UrlManager extends Component
      *
      * @param string $value the entry script URL that is used by [[createUrl()]] to prepend to created URLs.
      */
-    public function setScriptUrl($value): void
+    public function setScriptUrl($value)
     {
         $this->_scriptUrl = $value;
     }
@@ -713,7 +711,7 @@ class UrlManager extends Component
      *
      * @param string $value the host info (e.g. "http://www.example.com") that is used by [[createAbsoluteUrl()]] to prepend to created URLs.
      */
-    public function setHostInfo($value): void
+    public function setHostInfo($value)
     {
         $this->_hostInfo = $value === null ? null : rtrim($value, '/');
     }

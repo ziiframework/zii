@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -43,7 +41,7 @@ trait DynamicContentAwareTrait
     /**
      * {@inheritdoc}
      */
-    public function setDynamicPlaceholders($placeholders): void
+    public function setDynamicPlaceholders($placeholders)
     {
         $this->_dynamicPlaceholders = $placeholders;
     }
@@ -51,7 +49,7 @@ trait DynamicContentAwareTrait
     /**
      * {@inheritdoc}
      */
-    public function addDynamicPlaceholder($name, $statements): void
+    public function addDynamicPlaceholder($name, $statements)
     {
         $this->_dynamicPlaceholders[$name] = $statements;
     }
