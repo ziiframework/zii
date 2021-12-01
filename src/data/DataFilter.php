@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -277,7 +279,7 @@ class DataFilter extends Model
     /**
      * @param mixed $filter raw filter value.
      */
-    public function setFilter($filter)
+    public function setFilter($filter): void
     {
         $this->_filter = $filter;
     }
@@ -306,7 +308,7 @@ class DataFilter extends Model
      *
      * @throws InvalidConfigException on invalid configuration.
      */
-    public function setSearchModel($model)
+    public function setSearchModel($model): void
     {
         if (is_object($model) && !$model instanceof Model && !$model instanceof Closure) {
             throw new InvalidConfigException('`' . get_class($this) . '::$searchModel` should be an instance of `' . Model::className() . '` or its DI compatible configuration.');
@@ -329,7 +331,7 @@ class DataFilter extends Model
     /**
      * @param array|null $searchAttributeTypes search attribute type map.
      */
-    public function setSearchAttributeTypes($searchAttributeTypes)
+    public function setSearchAttributeTypes($searchAttributeTypes): void
     {
         $this->_searchAttributeTypes = $searchAttributeTypes;
     }
@@ -425,7 +427,7 @@ class DataFilter extends Model
      *
      * @param array|Closure $errorMessages error messages in `[errorKey => message]` format, or a PHP callback returning them.
      */
-    public function setErrorMessages($errorMessages)
+    public function setErrorMessages($errorMessages): void
     {
         if (is_array($errorMessages)) {
             $errorMessages = array_merge($this->defaultErrorMessages(), $errorMessages);
@@ -520,7 +522,7 @@ class DataFilter extends Model
     /**
      * Validates filter attribute value to match filer condition specification.
      */
-    public function validateFilter()
+    public function validateFilter(): void
     {
         $value = $this->getFilter();
 
@@ -534,7 +536,7 @@ class DataFilter extends Model
      *
      * @param mixed $condition raw filter condition.
      */
-    protected function validateCondition($condition)
+    protected function validateCondition($condition): void
     {
         if (!is_array($condition)) {
             $this->addError($this->filterAttributeName, $this->parseErrorMessage('invalidFilter'));
@@ -567,7 +569,7 @@ class DataFilter extends Model
      * @param string $operator raw operator control keyword.
      * @param mixed $condition raw condition.
      */
-    protected function validateConjunctionCondition($operator, $condition)
+    protected function validateConjunctionCondition($operator, $condition): void
     {
         if (!is_array($condition) || !ArrayHelper::isIndexed($condition)) {
             $this->addError($this->filterAttributeName, $this->parseErrorMessage('operatorRequireMultipleOperands', ['operator' => $operator]));
@@ -587,7 +589,7 @@ class DataFilter extends Model
      * @param string $operator raw operator control keyword.
      * @param mixed $condition raw condition.
      */
-    protected function validateBlockCondition($operator, $condition)
+    protected function validateBlockCondition($operator, $condition): void
     {
         $this->validateCondition($condition);
     }
@@ -598,7 +600,7 @@ class DataFilter extends Model
      * @param string $attribute search attribute name.
      * @param mixed $condition search condition.
      */
-    protected function validateAttributeCondition($attribute, $condition)
+    protected function validateAttributeCondition($attribute, $condition): void
     {
         $attributeTypes = $this->getSearchAttributeTypes();
 
@@ -642,7 +644,7 @@ class DataFilter extends Model
      * @param mixed $condition attribute condition.
      * @param string $attribute attribute name.
      */
-    protected function validateOperatorCondition($operator, $condition, $attribute = null)
+    protected function validateOperatorCondition($operator, $condition, $attribute = null): void
     {
         if ($attribute === null) {
             // absence of an attribute indicates that operator has been placed in a wrong position
@@ -688,7 +690,7 @@ class DataFilter extends Model
      * @param string $attribute attribute name.
      * @param mixed $value attribute value.
      */
-    protected function validateAttributeValue($attribute, $value)
+    protected function validateAttributeValue($attribute, $value): void
     {
         $model = $this->getSearchModel();
 
@@ -862,7 +864,7 @@ class DataFilter extends Model
     /**
      * {@inheritdoc}
      */
-    public function __set($name, $value)
+    public function __set($name, $value): void
     {
         if ($name === $this->filterAttributeName) {
             $this->setFilter($value);
@@ -886,7 +888,7 @@ class DataFilter extends Model
     /**
      * {@inheritdoc}
      */
-    public function __unset($name)
+    public function __unset($name): void
     {
         if ($name === $this->filterAttributeName) {
             $this->setFilter(null);

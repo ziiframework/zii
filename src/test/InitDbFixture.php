@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -47,7 +49,7 @@ class InitDbFixture extends DbFixture
     /**
      * {@inheritdoc}
      */
-    public function beforeLoad()
+    public function beforeLoad(): void
     {
         $this->checkIntegrity(false);
     }
@@ -55,7 +57,7 @@ class InitDbFixture extends DbFixture
     /**
      * {@inheritdoc}
      */
-    public function afterLoad()
+    public function afterLoad(): void
     {
         $this->checkIntegrity(true);
     }
@@ -63,7 +65,7 @@ class InitDbFixture extends DbFixture
     /**
      * {@inheritdoc}
      */
-    public function load()
+    public function load(): void
     {
         $file = Yii::getAlias($this->initScript);
 
@@ -75,7 +77,7 @@ class InitDbFixture extends DbFixture
     /**
      * {@inheritdoc}
      */
-    public function beforeUnload()
+    public function beforeUnload(): void
     {
         $this->checkIntegrity(false);
     }
@@ -83,7 +85,7 @@ class InitDbFixture extends DbFixture
     /**
      * {@inheritdoc}
      */
-    public function afterUnload()
+    public function afterUnload(): void
     {
         $this->checkIntegrity(true);
     }
@@ -93,7 +95,7 @@ class InitDbFixture extends DbFixture
      *
      * @param bool $check whether to turn on or off the integrity check.
      */
-    public function checkIntegrity($check)
+    public function checkIntegrity($check): void
     {
         if (!$this->db instanceof \yii\db\Connection) {
             return;

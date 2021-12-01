@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -53,7 +55,7 @@ class UrlValidator extends Validator
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -69,7 +71,7 @@ class UrlValidator extends Validator
     /**
      * {@inheritdoc}
      */
-    public function validateAttribute($model, $attribute)
+    public function validateAttribute($model, $attribute): void
     {
         $value = $model->$attribute;
         $result = $this->validateValue($value);
@@ -99,9 +101,7 @@ class UrlValidator extends Validator
             }
 
             if ($this->enableIDN) {
-                $value = preg_replace_callback('/:\/\/([^\/]+)/', function ($matches) {
-                    return '://' . $this->idnToAscii($matches[1]);
-                }, $value);
+                $value = preg_replace_callback('/:\/\/([^\/]+)/', fn ($matches) => '://' . $this->idnToAscii($matches[1]), $value);
             }
 
             if (preg_match($pattern, $value)) {

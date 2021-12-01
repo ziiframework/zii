@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -40,7 +42,7 @@ class SessionIterator implements Iterator
      * Rewinds internal array pointer.
      * This method is required by the interface [[\Iterator]].
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->_key = reset($this->_keys);
     }
@@ -71,7 +73,7 @@ class SessionIterator implements Iterator
      * Moves the internal pointer to the next array element.
      * This method is required by the interface [[\Iterator]].
      */
-    public function next()
+    public function next(): void
     {
         do {
             $this->_key = next($this->_keys);

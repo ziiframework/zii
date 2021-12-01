@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -78,7 +80,7 @@ class TagDependency extends Dependency
      * @param CacheInterface $cache the cache component that caches the data items
      * @param string|array $tags
      */
-    public static function invalidate($cache, $tags)
+    public static function invalidate($cache, $tags): void
     {
         $keys = [];
 

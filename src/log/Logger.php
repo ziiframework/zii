@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -133,10 +135,10 @@ class Logger extends Component
     /**
      * Initializes the logger by registering [[flush()]] as a shutdown function.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
-        register_shutdown_function(function () {
+        register_shutdown_function(function (): void {
             // make regular flush before other shutdown functions, which allows session data collection and so on
             $this->flush();
             // make sure log entries written by shutdown functions are also flushed
@@ -157,7 +159,7 @@ class Logger extends Component
      * `Logger::LEVEL_PROFILE_BEGIN`, `Logger::LEVEL_PROFILE_END`.
      * @param string $category the category of the message.
      */
-    public function log($message, $level, $category = 'application')
+    public function log($message, $level, $category = 'application'): void
     {
         $time = microtime(true);
         $traces = [];
@@ -196,7 +198,7 @@ class Logger extends Component
      *
      * @param bool $final whether this is a final call during a request.
      */
-    public function flush($final = false)
+    public function flush($final = false): void
     {
         if ($this->profilingAware) {
             $keep = [];

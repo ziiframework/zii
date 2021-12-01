@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -269,7 +271,7 @@ class Command extends Component
      *
      * @throws Exception if there is any DB error
      */
-    public function prepare($forRead = null)
+    public function prepare($forRead = null): void
     {
         if ($this->pdoStatement) {
             $this->bindPendingParams();
@@ -313,7 +315,7 @@ class Command extends Component
      * Cancels the execution of the SQL statement.
      * This method mainly sets [[pdoStatement]] to be null.
      */
-    public function cancel()
+    public function cancel(): void
     {
         $this->pdoStatement = null;
     }
@@ -358,7 +360,7 @@ class Command extends Component
      * Binds pending parameters that were registered via [[bindValue()]] and [[bindValues()]].
      * Note that this method requires an active [[pdoStatement]].
      */
-    protected function bindPendingParams()
+    protected function bindPendingParams(): void
     {
         foreach ($this->pendingParams as $name => $value) {
             $this->pdoStatement->bindValue($name, $value[0], $value[1]);
@@ -568,9 +570,7 @@ class Command extends Component
     public function batchInsert($table, $columns, $rows)
     {
         $table = $this->db->quoteSql($table);
-        $columns = array_map(function ($column) {
-            return $this->db->quoteSql($column);
-        }, $columns);
+        $columns = array_map(fn ($column) => $this->db->quoteSql($column), $columns);
 
         $params = [];
         $sql = $this->db->getQueryBuilder()->batchInsert($table, $columns, $rows, $params);
@@ -1381,7 +1381,7 @@ class Command extends Component
      *
      * @since 2.0.6
      */
-    protected function refreshTableSchema()
+    protected function refreshTableSchema(): void
     {
         if ($this->_refreshTableName !== null) {
             $this->db->getSchema()->refreshTableSchema($this->_refreshTableName);
@@ -1444,7 +1444,7 @@ class Command extends Component
      *
      * @since 2.0.14
      */
-    protected function internalExecute($rawSql)
+    protected function internalExecute($rawSql): void
     {
         $attempt = 0;
 
@@ -1455,7 +1455,7 @@ class Command extends Component
                     && $this->_isolationLevel !== false
                     && $this->db->getTransaction() === null
                 ) {
-                    $this->db->transaction(function () use ($rawSql) {
+                    $this->db->transaction(function () use ($rawSql): void {
                         $this->internalExecute($rawSql);
                     }, $this->_isolationLevel);
                 } else {
@@ -1479,7 +1479,7 @@ class Command extends Component
      *
      * @since 2.0.13
      */
-    protected function reset()
+    protected function reset(): void
     {
         $this->_sql = null;
         $this->pendingParams = [];

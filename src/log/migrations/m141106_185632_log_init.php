@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -63,7 +65,7 @@ class m141106_185632_log_init extends Migration
         return $this->dbTargets;
     }
 
-    public function up()
+    public function up(): void
     {
         foreach ($this->getDbTargets() as $target) {
             $this->db = $target->db;
@@ -89,7 +91,7 @@ class m141106_185632_log_init extends Migration
         }
     }
 
-    public function down()
+    public function down(): void
     {
         foreach ($this->getDbTargets() as $target) {
             $this->db = $target->db;

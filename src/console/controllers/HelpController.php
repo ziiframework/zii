@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -86,7 +88,7 @@ class HelpController extends Controller
      *
      * @since 2.0.11
      */
-    public function actionList()
+    public function actionList(): void
     {
         foreach ($this->getCommandDescriptions() as $command => $description) {
             $result = Yii::$app->createController($command);
@@ -113,7 +115,7 @@ class HelpController extends Controller
      *
      * @since 2.0.11
      */
-    public function actionListActionOptions($action)
+    public function actionListActionOptions($action): void
     {
         $result = Yii::$app->createController($action);
 
@@ -149,7 +151,7 @@ class HelpController extends Controller
      *
      * @since 2.0.11
      */
-    public function actionUsage($action)
+    public function actionUsage($action): void
     {
         $result = Yii::$app->createController($action);
 
@@ -329,7 +331,7 @@ class HelpController extends Controller
     /**
      * Displays all available commands.
      */
-    protected function getDefaultHelp()
+    protected function getDefaultHelp(): void
     {
         $commands = $this->getCommandDescriptions();
         $this->stdout($this->getDefaultHelpHeader());
@@ -399,7 +401,7 @@ class HelpController extends Controller
      *
      * @param Controller $controller the controller instance
      */
-    protected function getCommandHelp($controller)
+    protected function getCommandHelp($controller): void
     {
         $controller->color = $this->color;
 
@@ -453,7 +455,7 @@ class HelpController extends Controller
      *
      * @throws Exception if the action does not exist
      */
-    protected function getSubCommandHelp($controller, $actionID)
+    protected function getSubCommandHelp($controller, $actionID): void
     {
         $action = $controller->createAction($actionID);
 

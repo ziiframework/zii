@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -149,7 +151,7 @@ abstract class Target extends Component
      * of each message.
      * @param bool $final whether this method is called at the end of the current application
      */
-    public function collect($messages, $final)
+    public function collect($messages, $final): void
     {
         $this->messages = array_merge($this->messages, static::filterMessages($messages, $this->getLevels(), $this->categories, $this->except));
         $count = count($this->messages);
@@ -222,7 +224,7 @@ abstract class Target extends Component
      *
      * @throws InvalidConfigException if $levels value is not correct.
      */
-    public function setLevels($levels)
+    public function setLevels($levels): void
     {
         static $levelMap = [
             'error' => Logger::LEVEL_ERROR,
@@ -243,9 +245,7 @@ abstract class Target extends Component
                 }
             }
         } else {
-            $bitmapValues = array_reduce($levelMap, static function ($carry, $item) {
-                return $carry | $item;
-            });
+            $bitmapValues = array_reduce($levelMap, static fn ($carry, $item) => $carry | $item);
 
             if (!($bitmapValues & $levels) && $levels !== 0) {
                 throw new InvalidConfigException("Incorrect $levels value");
@@ -395,7 +395,7 @@ abstract class Target extends Component
      * }
      * ```
      */
-    public function setEnabled($value)
+    public function setEnabled($value): void
     {
         $this->_enabled = $value;
     }

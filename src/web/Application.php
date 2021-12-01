@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -62,7 +64,7 @@ class Application extends \yii\base\Application
     /**
      * {@inheritdoc}
      */
-    protected function bootstrap()
+    protected function bootstrap(): void
     {
         $request = $this->getRequest();
         Yii::setAlias('@webroot', dirname($request->getScriptFile()));
@@ -146,7 +148,7 @@ class Application extends \yii\base\Application
     /**
      * @param string $value the homepage URL
      */
-    public function setHomeUrl($value)
+    public function setHomeUrl($value): void
     {
         $this->_homeUrl = $value;
     }

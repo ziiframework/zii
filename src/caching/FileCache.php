@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -75,7 +77,7 @@ class FileCache extends Cache
     /**
      * Initializes this component by ensuring the existence of the cache path.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->cachePath = Yii::getAlias($this->cachePath);
@@ -264,7 +266,7 @@ class FileCache extends Cache
      * @param bool $expiredOnly whether to removed expired cache files only.
      * If false, all cache files under [[cachePath]] will be removed.
      */
-    public function gc($force = false, $expiredOnly = true)
+    public function gc($force = false, $expiredOnly = true): void
     {
         if ($force || random_int(0, 1000000) < $this->gcProbability) {
             $this->gcRecursive($this->cachePath, $expiredOnly);
@@ -279,7 +281,7 @@ class FileCache extends Cache
      * @param bool $expiredOnly whether to only remove expired cache files. If false, all files
      * under `$path` will be removed.
      */
-    protected function gcRecursive($path, $expiredOnly)
+    protected function gcRecursive($path, $expiredOnly): void
     {
         if (($handle = opendir($path)) !== false) {
             while (($file = readdir($handle)) !== false) {

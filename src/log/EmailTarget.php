@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -62,7 +64,7 @@ class EmailTarget extends Target
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -78,7 +80,7 @@ class EmailTarget extends Target
      *
      * @throws LogRuntimeException
      */
-    public function export()
+    public function export(): void
     {
         // moved initialization of subject here because of the following issue
         // https://github.com/yiisoft/yii2/issues/1446

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -209,7 +211,7 @@ class AssetManager extends Component
      *
      * @throws InvalidConfigException if [[basePath]] does not exist.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->basePath = Yii::getAlias($this->basePath);
@@ -225,7 +227,7 @@ class AssetManager extends Component
      *
      * @since 2.0.40
      */
-    public function checkBasePathPermission()
+    public function checkBasePathPermission(): void
     {
         // if the check is been done already, skip further checks
         if ($this->_isBasePathPermissionChecked) {
@@ -423,7 +425,7 @@ class AssetManager extends Component
      * an object implementing the [[AssetConverterInterface]], or a configuration
      * array that can be used to create the asset converter object.
      */
-    public function setConverter($value)
+    public function setConverter($value): void
     {
         $this->_converter = $value;
     }
@@ -595,9 +597,7 @@ class AssetManager extends Component
                 if ($this->beforeCopy !== null) {
                     $opts['beforeCopy'] = $this->beforeCopy;
                 } else {
-                    $opts['beforeCopy'] = static function ($from, $to) {
-                        return strncmp(basename($from), '.', 1) !== 0;
-                    };
+                    $opts['beforeCopy'] = static fn ($from, $to) => strncmp(basename($from), '.', 1) !== 0;
                 }
             }
 

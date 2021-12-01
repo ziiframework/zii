@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -200,7 +202,7 @@ class Sort extends BaseObject
     /**
      * Normalizes the [[attributes]] property.
      */
-    public function init()
+    public function init(): void
     {
         $attributes = [];
 
@@ -342,7 +344,7 @@ class Sort extends BaseObject
      *
      * @since 2.0.10
      */
-    public function setAttributeOrders($attributeOrders, $validate = true)
+    public function setAttributeOrders($attributeOrders, $validate = true): void
     {
         if ($attributeOrders === null || !$validate) {
             $this->_attributeOrders = $attributeOrders;

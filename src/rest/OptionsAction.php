@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -35,7 +37,7 @@ class OptionsAction extends \yii\base\Action
      *
      * @param string $id
      */
-    public function run($id = null)
+    public function run($id = null): void
     {
         if (Yii::$app->getRequest()->getMethod() !== 'OPTIONS') {
             Yii::$app->getResponse()->setStatusCode(405);

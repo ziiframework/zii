@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -29,7 +31,7 @@ class DeleteAction extends Action
      *
      * @throws ServerErrorHttpException on failure.
      */
-    public function run($id)
+    public function run($id): void
     {
         $model = $this->findModel($id);
 

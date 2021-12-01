@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -219,9 +221,7 @@ SQL;
     {
         $metadata = [];
         $methodName = 'getTable' . ucfirst($type);
-        $tableNames = array_map(function ($table) {
-            return $this->quoteSimpleTableName($table);
-        }, $this->getTableNames($schema, $refresh));
+        $tableNames = array_map(fn ($table) => $this->quoteSimpleTableName($table), $this->getTableNames($schema, $refresh));
 
         foreach ($tableNames as $name) {
             if ($schema !== '') {
@@ -320,7 +320,7 @@ SQL;
     /**
      * {@inheritdoc}
      */
-    public function createSavepoint($name)
+    public function createSavepoint($name): void
     {
         $this->db->createCommand("SAVE TRANSACTION $name")->execute();
     }
@@ -328,7 +328,7 @@ SQL;
     /**
      * {@inheritdoc}
      */
-    public function releaseSavepoint($name)
+    public function releaseSavepoint($name): void
     {
         // does nothing as MSSQL does not support this
     }
@@ -336,7 +336,7 @@ SQL;
     /**
      * {@inheritdoc}
      */
-    public function rollBackSavepoint($name)
+    public function rollBackSavepoint($name): void
     {
         $this->db->createCommand("ROLLBACK TRANSACTION $name")->execute();
     }
@@ -357,7 +357,7 @@ SQL;
      * @param TableSchema $table the table metadata object
      * @param string $name the table name
      */
-    protected function resolveTableNames($table, $name)
+    protected function resolveTableNames($table, $name): void
     {
         $parts = $this->getTableNameParts($name);
         $partCount = count($parts);
@@ -582,7 +582,7 @@ SQL;
      *
      * @param TableSchema $table the table metadata
      */
-    protected function findPrimaryKeys($table)
+    protected function findPrimaryKeys($table): void
     {
         $result = [];
 
@@ -597,7 +597,7 @@ SQL;
      *
      * @param TableSchema $table the table metadata
      */
-    protected function findForeignKeys($table)
+    protected function findForeignKeys($table): void
     {
         $object = $table->name;
 

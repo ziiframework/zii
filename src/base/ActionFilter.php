@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -49,7 +51,7 @@ class ActionFilter extends Behavior
     /**
      * {@inheritdoc}
      */
-    public function attach($owner)
+    public function attach($owner): void
     {
         $this->owner = $owner;
         $owner->on(Controller::EVENT_BEFORE_ACTION, [$this, 'beforeFilter']);
@@ -58,7 +60,7 @@ class ActionFilter extends Behavior
     /**
      * {@inheritdoc}
      */
-    public function detach()
+    public function detach(): void
     {
         if ($this->owner) {
             $this->owner->off(Controller::EVENT_BEFORE_ACTION, [$this, 'beforeFilter']);
@@ -70,7 +72,7 @@ class ActionFilter extends Behavior
     /**
      * @param ActionEvent $event
      */
-    public function beforeFilter($event)
+    public function beforeFilter($event): void
     {
         if (!$this->isActive($event->action)) {
             return;
@@ -90,7 +92,7 @@ class ActionFilter extends Behavior
     /**
      * @param ActionEvent $event
      */
-    public function afterFilter($event)
+    public function afterFilter($event): void
     {
         $event->result = $this->afterAction($event->action, $event->result);
         $this->owner->off(Controller::EVENT_AFTER_ACTION, [$this, 'afterFilter']);

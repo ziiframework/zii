@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -171,7 +173,7 @@ class HostControl extends ActionFilter
      *
      * @throws NotFoundHttpException
      */
-    protected function denyAccess($action)
+    protected function denyAccess($action): void
     {
         $exception = new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
 

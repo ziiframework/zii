@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -45,7 +47,7 @@ class m140506_102106_rbac_init extends \yii\db\Migration
     /**
      * {@inheritdoc}
      */
-    public function up()
+    public function up(): void
     {
         $authManager = $this->getAuthManager();
         $this->db = $authManager->db;
@@ -140,7 +142,7 @@ class m140506_102106_rbac_init extends \yii\db\Migration
     /**
      * {@inheritdoc}
      */
-    public function down()
+    public function down(): void
     {
         $authManager = $this->getAuthManager();
         $this->db = $authManager->db;

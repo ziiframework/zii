@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -115,7 +117,7 @@ class QueryBuilder extends \yii\base\BaseObject
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -189,7 +191,7 @@ class QueryBuilder extends \yii\base\BaseObject
      * @since 2.0.14
      * @see expressionBuilders
      */
-    public function setExpressionBuilders($builders)
+    public function setExpressionBuilders($builders): void
     {
         $this->expressionBuilders = array_merge($this->expressionBuilders, $builders);
     }
@@ -206,7 +208,7 @@ class QueryBuilder extends \yii\base\BaseObject
      * @since 2.0.14.2
      * @see conditionClasses
      */
-    public function setConditionClasses($classes)
+    public function setConditionClasses($classes): void
     {
         $this->conditionClasses = array_merge($this->conditionClasses, $classes);
     }
@@ -1159,7 +1161,7 @@ class QueryBuilder extends \yii\base\BaseObject
      *
      * @since 2.0.16
      */
-    public function executeResetSequence($table, $value = null)
+    public function executeResetSequence($table, $value = null): void
     {
         $this->db->createCommand()->resetSequence($table, $value)->execute();
     }
@@ -1255,7 +1257,7 @@ class QueryBuilder extends \yii\base\BaseObject
     {
         if ($subQuery instanceof Query) {
             [$rawQuery, $params] = $this->build($subQuery);
-            array_walk($params, function (&$param) {
+            array_walk($params, function (&$param): void {
                 $param = $this->db->quoteValue($param);
             });
             $subQuery = strtr($rawQuery, $params);

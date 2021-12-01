@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -888,7 +890,7 @@ abstract class BaseMigrateController extends Controller
      *
      * @since 2.0.12
      */
-    protected function includeMigrationFile($class)
+    protected function includeMigrationFile($class): void
     {
         $class = trim($class, '\\');
 
@@ -1063,7 +1065,7 @@ abstract class BaseMigrateController extends Controller
      *
      * @since 2.0.13
      */
-    protected function truncateDatabase()
+    protected function truncateDatabase(): void
     {
         throw new NotSupportedException('This command is not implemented in ' . get_class($this));
     }

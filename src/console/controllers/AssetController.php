@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -181,7 +183,7 @@ class AssetController extends Controller
      *
      * @throws \yii\console\Exception on invalid argument type.
      */
-    public function setAssetManager($assetManager)
+    public function setAssetManager($assetManager): void
     {
         if (is_scalar($assetManager)) {
             throw new Exception('"' . get_class($this) . '::assetManager" should be either object or array - "' . gettype($assetManager) . '" given.');
@@ -197,7 +199,7 @@ class AssetController extends Controller
      * @param string $configFile configuration file name.
      * @param string $bundleFile output asset bundles configuration file name.
      */
-    public function actionCompress($configFile, $bundleFile)
+    public function actionCompress($configFile, $bundleFile): void
     {
         $this->loadConfiguration($configFile);
         $bundles = $this->loadBundles($this->bundles);
@@ -231,7 +233,7 @@ class AssetController extends Controller
      *
      * @throws \yii\console\Exception on failure.
      */
-    protected function loadConfiguration($configFile)
+    protected function loadConfiguration($configFile): void
     {
         $this->stdout("Loading configuration from '{$configFile}'...\n");
         $config = require $configFile;
@@ -280,7 +282,7 @@ class AssetController extends Controller
      *
      * @throws Exception on failure.
      */
-    protected function loadDependency($bundle, &$result)
+    protected function loadDependency($bundle, &$result): void
     {
         $am = $this->getAssetManager();
 
@@ -377,7 +379,7 @@ class AssetController extends Controller
      *
      * @throws Exception on failure.
      */
-    protected function buildTarget($target, $type, $bundles)
+    protected function buildTarget($target, $type, $bundles): void
     {
         $inputFiles = [];
 
@@ -478,7 +480,7 @@ class AssetController extends Controller
      *
      * @throws Exception if circular dependency is detected.
      */
-    protected function registerBundle($bundles, $name, &$registered)
+    protected function registerBundle($bundles, $name, &$registered): void
     {
         if (!isset($registered[$name])) {
             $registered[$name] = false;
@@ -502,7 +504,7 @@ class AssetController extends Controller
      *
      * @throws \yii\console\Exception on failure.
      */
-    protected function saveTargets($targets, $bundleFile)
+    protected function saveTargets($targets, $bundleFile): void
     {
         $array = [];
 
@@ -556,7 +558,7 @@ EOD;
      *
      * @throws \yii\console\Exception on failure
      */
-    protected function compressJsFiles($inputFiles, $outputFile)
+    protected function compressJsFiles($inputFiles, $outputFile): void
     {
         if (empty($inputFiles)) {
             return;
@@ -589,7 +591,7 @@ EOD;
      *
      * @throws \yii\console\Exception on failure
      */
-    protected function compressCssFiles($inputFiles, $outputFile)
+    protected function compressCssFiles($inputFiles, $outputFile): void
     {
         if (empty($inputFiles)) {
             return;
@@ -622,7 +624,7 @@ EOD;
      *
      * @throws \yii\console\Exception on failure.
      */
-    public function combineJsFiles($inputFiles, $outputFile)
+    public function combineJsFiles($inputFiles, $outputFile): void
     {
         $content = '';
 
@@ -652,7 +654,7 @@ EOD;
      *
      * @throws \yii\console\Exception on failure.
      */
-    public function combineCssFiles($inputFiles, $outputFile)
+    public function combineCssFiles($inputFiles, $outputFile): void
     {
         $content = '';
         $outputFilePath = dirname($this->findRealPath($outputFile));
@@ -907,7 +909,7 @@ EOD;
      *
      * @since 2.0.10
      */
-    private function deletePublishedAssets($bundles)
+    private function deletePublishedAssets($bundles): void
     {
         $this->stdout("Deleting source files...\n");
 

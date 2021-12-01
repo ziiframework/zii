@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -55,7 +57,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -169,7 +171,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      *
      * @throws NotSupportedException this is not supported by MySQL.
      */
-    public function addCheck($name, $table, $expression)
+    public function addCheck($name, $table, $expression): void
     {
         throw new NotSupportedException(__METHOD__ . ' is not supported by MySQL.');
     }
@@ -179,7 +181,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      *
      * @throws NotSupportedException this is not supported by MySQL.
      */
-    public function dropCheck($name, $table)
+    public function dropCheck($name, $table): void
     {
         throw new NotSupportedException(__METHOD__ . ' is not supported by MySQL.');
     }

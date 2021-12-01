@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -1502,7 +1504,7 @@ class BaseHtml
      * @param string $attribute the attribute name or expression.
      * @param array $options the tag options in terms of name-value pairs.
      */
-    private static function normalizeMaxLength($model, $attribute, &$options)
+    private static function normalizeMaxLength($model, $attribute, &$options): void
     {
         if (isset($options['maxlength']) && $options['maxlength'] === true) {
             unset($options['maxlength']);
@@ -1556,7 +1558,7 @@ class BaseHtml
      *
      * @since 2.0.14
      */
-    protected static function setActivePlaceholder($model, $attribute, &$options = [])
+    protected static function setActivePlaceholder($model, $attribute, &$options = []): void
     {
         if (isset($options['placeholder']) && $options['placeholder'] === true) {
             $attribute = static::getAttributeName($attribute);
@@ -2179,7 +2181,7 @@ class BaseHtml
      *
      * @see removeCssClass()
      */
-    public static function addCssClass(&$options, $class)
+    public static function addCssClass(&$options, $class): void
     {
         if (isset($options['class'])) {
             if (is_array($options['class'])) {
@@ -2225,7 +2227,7 @@ class BaseHtml
      *
      * @see addCssClass()
      */
-    public static function removeCssClass(&$options, $class)
+    public static function removeCssClass(&$options, $class): void
     {
         if (isset($options['class'])) {
             if (is_array($options['class'])) {
@@ -2272,7 +2274,7 @@ class BaseHtml
      * @see cssStyleFromArray()
      * @see cssStyleToArray()
      */
-    public static function addCssStyle(&$options, $style, $overwrite = true)
+    public static function addCssStyle(&$options, $style, $overwrite = true): void
     {
         if (!empty($options['style'])) {
             $oldStyle = is_array($options['style']) ? $options['style'] : static::cssStyleToArray($options['style']);
@@ -2305,7 +2307,7 @@ class BaseHtml
      *
      * @see addCssStyle()
      */
-    public static function removeCssStyle(&$options, $properties)
+    public static function removeCssStyle(&$options, $properties): void
     {
         if (!empty($options['style'])) {
             $style = is_array($options['style']) ? $options['style'] : static::cssStyleToArray($options['style']);

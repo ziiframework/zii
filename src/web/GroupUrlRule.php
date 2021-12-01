@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -77,7 +79,7 @@ class GroupUrlRule extends CompositeUrlRule
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         $this->prefix = trim($this->prefix, '/');
         $this->routePrefix = $this->routePrefix === null ? $this->prefix : trim($this->routePrefix, '/');

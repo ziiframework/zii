@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -85,7 +87,7 @@ class OptimisticLockBehavior extends AttributeBehavior
     /**
      * {@inheritdoc}
      */
-    public function attach($owner)
+    public function attach($owner): void
     {
         parent::attach($owner);
 
@@ -166,7 +168,7 @@ class OptimisticLockBehavior extends AttributeBehavior
      *
      * @since 2.0.16
      */
-    public function upgrade()
+    public function upgrade(): void
     {
         /* @var $owner BaseActiveRecord */
         $owner = $this->owner;

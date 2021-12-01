@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -79,7 +81,7 @@ class FileTarget extends Target
      * Initializes the route.
      * This method is invoked after the route is created by the route manager.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -105,7 +107,7 @@ class FileTarget extends Target
      * @throws InvalidConfigException if unable to open the log file for writing
      * @throws LogRuntimeException if unable to write complete log to file
      */
-    public function export()
+    public function export(): void
     {
         if (strpos($this->logFile, '://') === false || strncmp($this->logFile, 'file://', 7) === 0) {
             $logPath = dirname($this->logFile);
@@ -166,7 +168,7 @@ class FileTarget extends Target
     /**
      * Rotates log files.
      */
-    protected function rotateFiles()
+    protected function rotateFiles(): void
     {
         $file = $this->logFile;
 
@@ -195,7 +197,7 @@ class FileTarget extends Target
      * Clear log file without closing any other process open handles
      * @param string $rotateFile
      */
-    private function clearLogFile($rotateFile)
+    private function clearLogFile($rotateFile): void
     {
         if ($filePointer = @fopen($rotateFile, 'ab')) {
             @ftruncate($filePointer, 0);
@@ -208,7 +210,7 @@ class FileTarget extends Target
      * @param string $rotateFile
      * @param string $newFile
      */
-    private function rotateByCopy($rotateFile, $newFile)
+    private function rotateByCopy($rotateFile, $newFile): void
     {
         @copy($rotateFile, $newFile);
 
@@ -223,7 +225,7 @@ class FileTarget extends Target
      * @param string $rotateFile
      * @param string $newFile
      */
-    private function rotateByRename($rotateFile, $newFile)
+    private function rotateByRename($rotateFile, $newFile): void
     {
         @rename($rotateFile, $newFile);
     }

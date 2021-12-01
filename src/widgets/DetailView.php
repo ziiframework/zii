@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -128,7 +130,7 @@ class DetailView extends Widget
      * Initializes the detail view.
      * This method will initialize required property values.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -156,7 +158,7 @@ class DetailView extends Widget
      * Renders the detail view.
      * This is the main entry of the whole detail view rendering.
      */
-    public function run()
+    public function run(): void
     {
         $rows = [];
         $i = 0;
@@ -200,7 +202,7 @@ class DetailView extends Widget
      *
      * @throws InvalidConfigException
      */
-    protected function normalizeAttributes()
+    protected function normalizeAttributes(): void
     {
         if ($this->attributes === null) {
             if ($this->model instanceof Model) {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -49,11 +51,11 @@ abstract class Mutex extends Component
     /**
      * Initializes the Mutex component.
      */
-    public function init()
+    public function init(): void
     {
         if ($this->autoRelease) {
             $locks = &$this->_locks;
-            register_shutdown_function(function () use (&$locks) {
+            register_shutdown_function(function () use (&$locks): void {
                 foreach ($locks as $lock) {
                     $this->release($lock);
                 }

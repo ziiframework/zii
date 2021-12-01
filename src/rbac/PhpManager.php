@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -88,7 +90,7 @@ class PhpManager extends BaseManager
      * This method overrides parent implementation by loading the authorization data
      * from PHP script.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->itemFile = Yii::getAlias($this->itemFile);
@@ -440,9 +442,7 @@ class PhpManager extends BaseManager
 
         $roles = [$roleName => $role];
 
-        $roles += array_filter($this->getRoles(), static function (Role $roleItem) use ($result) {
-            return array_key_exists($roleItem->name, $result);
-        });
+        $roles += array_filter($this->getRoles(), static fn (Role $roleItem) => array_key_exists($roleItem->name, $result));
 
         return $roles;
     }
@@ -475,7 +475,7 @@ class PhpManager extends BaseManager
      * @param string $name the name of the item whose children are to be looked for.
      * @param array $result the children and grand children (in array keys)
      */
-    protected function getChildrenRecursive($name, &$result)
+    protected function getChildrenRecursive($name, &$result): void
     {
         if (isset($this->children[$name])) {
             foreach ($this->children[$name] as $child) {
@@ -564,7 +564,7 @@ class PhpManager extends BaseManager
     /**
      * {@inheritdoc}
      */
-    public function removeAll()
+    public function removeAll(): void
     {
         $this->children = [];
         $this->items = [];
@@ -576,7 +576,7 @@ class PhpManager extends BaseManager
     /**
      * {@inheritdoc}
      */
-    public function removeAllPermissions()
+    public function removeAllPermissions(): void
     {
         $this->removeAllItems(Item::TYPE_PERMISSION);
     }
@@ -584,7 +584,7 @@ class PhpManager extends BaseManager
     /**
      * {@inheritdoc}
      */
-    public function removeAllRoles()
+    public function removeAllRoles(): void
     {
         $this->removeAllItems(Item::TYPE_ROLE);
     }
@@ -594,7 +594,7 @@ class PhpManager extends BaseManager
      *
      * @param int $type the auth item type (either Item::TYPE_PERMISSION or Item::TYPE_ROLE)
      */
-    protected function removeAllItems($type)
+    protected function removeAllItems($type): void
     {
         $names = [];
 
@@ -636,7 +636,7 @@ class PhpManager extends BaseManager
     /**
      * {@inheritdoc}
      */
-    public function removeAllRules()
+    public function removeAllRules(): void
     {
         foreach ($this->items as $item) {
             $item->ruleName = null;
@@ -648,7 +648,7 @@ class PhpManager extends BaseManager
     /**
      * {@inheritdoc}
      */
-    public function removeAllAssignments()
+    public function removeAllAssignments(): void
     {
         $this->assignments = [];
         $this->saveAssignments();
@@ -753,7 +753,7 @@ class PhpManager extends BaseManager
     /**
      * Loads authorization data from persistent storage.
      */
-    protected function load()
+    protected function load(): void
     {
         $this->children = [];
         $this->rules = [];
@@ -807,7 +807,7 @@ class PhpManager extends BaseManager
     /**
      * Saves authorization data into persistent storage.
      */
-    protected function save()
+    protected function save(): void
     {
         $this->saveItems();
         $this->saveAssignments();
@@ -840,7 +840,7 @@ class PhpManager extends BaseManager
      *
      * @see loadFromFile()
      */
-    protected function saveToFile($data, $file)
+    protected function saveToFile($data, $file): void
     {
         file_put_contents($file, "<?php\n\nreturn " . VarDumper::export($data) . ";\n", LOCK_EX);
         $this->invalidateScriptCache($file);
@@ -853,7 +853,7 @@ class PhpManager extends BaseManager
      *
      * @since 2.0.9
      */
-    protected function invalidateScriptCache($file)
+    protected function invalidateScriptCache($file): void
     {
         if (function_exists('opcache_invalidate')) {
             opcache_invalidate($file, true);
@@ -867,7 +867,7 @@ class PhpManager extends BaseManager
     /**
      * Saves items data into persistent storage.
      */
-    protected function saveItems()
+    protected function saveItems(): void
     {
         $items = [];
 
@@ -893,7 +893,7 @@ class PhpManager extends BaseManager
     /**
      * Saves assignments data into persistent storage.
      */
-    protected function saveAssignments()
+    protected function saveAssignments(): void
     {
         $assignmentData = [];
 
@@ -909,7 +909,7 @@ class PhpManager extends BaseManager
     /**
      * Saves rules data into persistent storage.
      */
-    protected function saveRules()
+    protected function saveRules(): void
     {
         $rules = [];
 

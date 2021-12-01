@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -353,7 +355,7 @@ class ColumnSchemaBuilder extends BaseObject
      *
      * @since 2.0.43
      */
-    public function setCategoryMap($categoryMap)
+    public function setCategoryMap($categoryMap): void
     {
         static::$typeCategoryMap = $categoryMap;
     }

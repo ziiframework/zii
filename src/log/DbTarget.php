@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -53,7 +55,7 @@ class DbTarget extends Target
      *
      * @throws InvalidConfigException if [[db]] is invalid.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->db = Instance::ensure($this->db, Connection::className());
@@ -66,7 +68,7 @@ class DbTarget extends Target
      * @throws Exception
      * @throws LogRuntimeException
      */
-    public function export()
+    public function export(): void
     {
         if ($this->db->getTransaction()) {
             // create new database connection, if there is an open transaction

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -338,7 +340,7 @@ class Container extends Component
      *
      * @param string $class class name, interface name or alias name
      */
-    public function clear($class)
+    public function clear($class): void
     {
         unset($this->_definitions[$class], $this->_singletons[$class]);
     }
@@ -480,7 +482,7 @@ class Container extends Component
      *
      * @throws InvalidConfigException
      */
-    private function validateDependencies($parameters)
+    private function validateDependencies($parameters): void
     {
         $hasStringParameter = false;
         $hasIntParameter = false;
@@ -819,7 +821,7 @@ class Container extends Component
      * @see set() to know more about possible values of definitions
      * @since 2.0.11
      */
-    public function setDefinitions(array $definitions)
+    public function setDefinitions(array $definitions): void
     {
         foreach ($definitions as $class => $definition) {
             if (is_array($definition) && count($definition) === 2 && array_values($definition) === $definition && is_array($definition[1])) {
@@ -842,7 +844,7 @@ class Container extends Component
      * @see setSingleton() to know more about possible values of definitions
      * @since 2.0.11
      */
-    public function setSingletons(array $singletons)
+    public function setSingletons(array $singletons): void
     {
         foreach ($singletons as $class => $definition) {
             if (is_array($definition) && count($definition) === 2 && array_values($definition) === $definition) {
@@ -860,7 +862,7 @@ class Container extends Component
      *
      * @since 2.0.37
      */
-    public function setResolveArrays($value)
+    public function setResolveArrays($value): void
     {
         $this->_resolveArrays = (bool) $value;
     }

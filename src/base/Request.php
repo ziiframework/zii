@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -49,7 +51,7 @@ abstract class Request extends Component
      *
      * @param bool $value the value indicating whether the current request is made via command line
      */
-    public function setIsConsoleRequest($value)
+    public function setIsConsoleRequest($value): void
     {
         $this->_isConsoleRequest = $value;
     }
@@ -84,7 +86,7 @@ abstract class Request extends Component
      *
      * @throws InvalidConfigException if the provided entry script file path is invalid.
      */
-    public function setScriptFile($value)
+    public function setScriptFile($value): void
     {
         $scriptFile = realpath(Yii::getAlias($value));
 

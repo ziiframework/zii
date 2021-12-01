@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -176,7 +178,7 @@ class UploadedFile extends BaseObject
      * Cleans up the loaded UploadedFile instances.
      * This method is mainly used by test scripts to set up a fixture.
      */
-    public static function reset()
+    public static function reset(): void
     {
         self::$_files = null;
     }
@@ -292,7 +294,7 @@ class UploadedFile extends BaseObject
      * @param mixed $sizes file sizes provided by PHP
      * @param mixed $errors uploading issues provided by PHP
      */
-    private static function loadFilesRecursive($key, $names, $tempNames, $types, $sizes, $errors, $tempResources)
+    private static function loadFilesRecursive($key, $names, $tempNames, $types, $sizes, $errors, $tempResources): void
     {
         if (is_array($names)) {
             foreach ($names as $i => $name) {

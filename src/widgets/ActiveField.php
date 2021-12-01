@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -855,7 +857,7 @@ class ActiveField extends Component
      *
      * @param array $options the input options.
      */
-    protected function adjustLabelFor($options)
+    protected function adjustLabelFor($options): void
     {
         if (!isset($options['id'])) {
             return;
@@ -993,7 +995,7 @@ class ActiveField extends Component
      *
      * @since 2.0.11
      */
-    protected function addAriaAttributes(&$options)
+    protected function addAriaAttributes(&$options): void
     {
         // Get proper attribute name when attribute name is tabular.
         $attributeName = Html::getAttributeName($this->attribute);
@@ -1017,7 +1019,7 @@ class ActiveField extends Component
      *
      * @since 2.0.16
      */
-    protected function addRoleAttributes(&$options, $role)
+    protected function addRoleAttributes(&$options, $role): void
     {
         if (!isset($options['role'])) {
             $options['role'] = $role;
@@ -1031,7 +1033,7 @@ class ActiveField extends Component
      *
      * @since 2.0.14
      */
-    protected function addErrorClassIfNeeded(&$options)
+    protected function addErrorClassIfNeeded(&$options): void
     {
         // Get proper attribute name when attribute name is tabular.
         $attributeName = Html::getAttributeName($this->attribute);

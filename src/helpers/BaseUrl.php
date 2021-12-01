@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -308,7 +310,7 @@ class BaseUrl
      * @see previous()
      * @see \yii\web\User::setReturnUrl()
      */
-    public static function remember($url = '', $name = null)
+    public static function remember($url = '', $name = null): void
     {
         $url = static::to($url);
 

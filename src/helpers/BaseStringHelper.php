@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -326,18 +328,14 @@ class BaseStringHelper
             if ($trim === true) {
                 $trim = 'trim';
             } elseif (!is_callable($trim)) {
-                $trim = static function ($v) use ($trim) {
-                    return trim($v, $trim);
-                };
+                $trim = static fn ($v) => trim($v, $trim);
             }
             $result = array_map($trim, $result);
         }
 
         if ($skipEmpty) {
             // Wrapped with array_values to make array keys sequential after empty values removing
-            $result = array_values(array_filter($result, static function ($value) {
-                return $value !== '';
-            }));
+            $result = array_values(array_filter($result, static fn ($value) => $value !== ''));
         }
 
         return $result;

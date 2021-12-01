@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -301,7 +303,7 @@ class BaseArrayHelper
      *
      * @since 2.0.13
      */
-    public static function setValue(&$array, $path, $value)
+    public static function setValue(&$array, $path, $value): void
     {
         if ($path === null) {
             $array = $value;
@@ -691,7 +693,7 @@ class BaseArrayHelper
      * @throws InvalidArgumentException if the $direction or $sortFlag parameters do not have
      * correct number of elements as that of $key.
      */
-    public static function multisort(&$array, $key, $direction = SORT_ASC, $sortFlag = SORT_REGULAR)
+    public static function multisort(&$array, $key, $direction = SORT_ASC, $sortFlag = SORT_REGULAR): void
     {
         $keys = is_array($key) ? $key : [$key];
 

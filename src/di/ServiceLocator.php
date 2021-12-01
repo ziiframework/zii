@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -196,7 +198,7 @@ class ServiceLocator extends Component
      *
      * @throws InvalidConfigException if the definition is an invalid configuration array
      */
-    public function set($id, $definition)
+    public function set($id, $definition): void
     {
         unset($this->_components[$id]);
 
@@ -230,7 +232,7 @@ class ServiceLocator extends Component
      *
      * @param string $id the component ID
      */
-    public function clear($id)
+    public function clear($id): void
     {
         unset($this->_definitions[$id], $this->_components[$id]);
     }
@@ -274,7 +276,7 @@ class ServiceLocator extends Component
      *
      * @param array $components component definitions or instances
      */
-    public function setComponents($components)
+    public function setComponents($components): void
     {
         foreach ($components as $id => $component) {
             $this->set($id, $component);

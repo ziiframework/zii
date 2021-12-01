@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -212,9 +214,7 @@ abstract class SqlTokenizer extends Component
         }
 
         if (!is_array(reset($with))) {
-            usort($with, static function ($string1, $string2) {
-                return mb_strlen($string2, 'UTF-8') - mb_strlen($string1, 'UTF-8');
-            });
+            usort($with, static fn ($string1, $string2) => mb_strlen($string2, 'UTF-8') - mb_strlen($string1, 'UTF-8'));
             $map = [];
 
             foreach ($with as $string) {
@@ -399,7 +399,7 @@ abstract class SqlTokenizer extends Component
     /**
      * Determines a type of text in the buffer, tokenizes it and adds it to the token children.
      */
-    private function addTokenFromBuffer()
+    private function addTokenFromBuffer(): void
     {
         if ($this->_buffer === '') {
             return;
@@ -422,7 +422,7 @@ abstract class SqlTokenizer extends Component
      *
      * @throws InvalidArgumentException
      */
-    private function advance($length)
+    private function advance($length): void
     {
         if ($length <= 0) {
             throw new InvalidArgumentException('Length must be greater than 0.');

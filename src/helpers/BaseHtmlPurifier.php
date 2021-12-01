@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -73,7 +75,7 @@ class BaseHtmlPurifier
      *
      * @since 2.0.3
      */
-    protected static function configure($config)
+    protected static function configure($config): void
     {
     }
 }

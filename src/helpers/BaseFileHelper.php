@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -333,7 +335,7 @@ class BaseFileHelper
      *
      * @throws InvalidArgumentException if unable to open directory
      */
-    public static function copyDirectory($src, $dst, $options = [])
+    public static function copyDirectory($src, $dst, $options = []): void
     {
         $src = static::normalizePath($src);
         $dst = static::normalizePath($dst);
@@ -410,7 +412,7 @@ class BaseFileHelper
      *
      * @throws ErrorException in case of failure
      */
-    public static function removeDirectory($dir, $options = [])
+    public static function removeDirectory($dir, $options = []): void
     {
         if (!is_dir($dir)) {
             return;
@@ -994,7 +996,7 @@ class BaseFileHelper
      *
      * @since 2.0.43
      */
-    public static function changeOwnership($path, $ownership, $mode = null)
+    public static function changeOwnership($path, $ownership, $mode = null): void
     {
         if (!file_exists($path)) {
             throw new InvalidArgumentException('Unable to change ownerhip, "' . $path . '" is not a file or directory.');

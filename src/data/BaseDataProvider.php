@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -56,7 +58,7 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -101,7 +103,7 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
      *
      * @param bool $forcePrepare whether to force data preparation even if it has been done before.
      */
-    public function prepare($forcePrepare = false)
+    public function prepare($forcePrepare = false): void
     {
         if ($forcePrepare || $this->_models === null) {
             $this->_models = $this->prepareModels();
@@ -129,7 +131,7 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
      *
      * @param array $models the models in the current page
      */
-    public function setModels($models)
+    public function setModels($models): void
     {
         $this->_models = $models;
     }
@@ -152,7 +154,7 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
      *
      * @param array $keys the list of key values corresponding to [[models]].
      */
-    public function setKeys($keys)
+    public function setKeys($keys): void
     {
         $this->_keys = $keys;
     }
@@ -190,7 +192,7 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
      *
      * @param int $value the total number of data models.
      */
-    public function setTotalCount($value)
+    public function setTotalCount($value): void
     {
         $this->_totalCount = $value;
     }
@@ -224,7 +226,7 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
      *
      * @throws InvalidArgumentException
      */
-    public function setPagination($value)
+    public function setPagination($value): void
     {
         if (is_array($value)) {
             $config = ['class' => Pagination::className()];
@@ -268,7 +270,7 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
      *
      * @throws InvalidArgumentException
      */
-    public function setSort($value)
+    public function setSort($value): void
     {
         if (is_array($value)) {
             $config = ['class' => Sort::className()];
@@ -289,7 +291,7 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
      * After calling this method, if [[getModels()]], [[getKeys()]] or [[getTotalCount()]] is called again,
      * they will re-execute the query and return the latest data available.
      */
-    public function refresh()
+    public function refresh(): void
     {
         $this->_totalCount = null;
         $this->_models = null;

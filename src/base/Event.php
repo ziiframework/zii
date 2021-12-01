@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -103,7 +105,7 @@ class Event extends BaseObject
      *
      * @see off()
      */
-    public static function on($class, $name, $handler, $data = null, $append = true)
+    public static function on($class, $name, $handler, $data = null, $append = true): void
     {
         $class = ltrim($class, '\\');
 
@@ -208,7 +210,7 @@ class Event extends BaseObject
      * @see off()
      * @since 2.0.10
      */
-    public static function offAll()
+    public static function offAll(): void
     {
         self::$_events = [];
         self::$_eventWildcards = [];
@@ -276,7 +278,7 @@ class Event extends BaseObject
      * @param string $name the event name.
      * @param Event $event the event parameter. If not set, a default [[Event]] object will be created.
      */
-    public static function trigger($class, $name, $event = null)
+    public static function trigger($class, $name, $event = null): void
     {
         $wildcardEventHandlers = [];
 

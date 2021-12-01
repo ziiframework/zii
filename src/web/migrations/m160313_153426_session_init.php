@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -20,7 +22,7 @@ class m160313_153426_session_init extends Migration
     /**
      * {@inheritdoc}
      */
-    public function up()
+    public function up(): void
     {
         $dataType = $this->binary();
         $tableOptions = null;
@@ -50,7 +52,7 @@ class m160313_153426_session_init extends Migration
     /**
      * {@inheritdoc}
      */
-    public function down()
+    public function down(): void
     {
         $this->dropTable('{{%session}}');
     }

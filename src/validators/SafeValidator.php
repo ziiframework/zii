@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -30,14 +32,14 @@ class SafeValidator extends Validator
     /**
      * {@inheritdoc}
      */
-    public function validateAttributes($model, $attributes = null)
+    public function validateAttributes($model, $attributes = null): void
     {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function validateAttribute($model, $attribute)
+    public function validateAttribute($model, $attribute): void
     {
     }
 }

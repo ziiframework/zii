@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -238,7 +240,7 @@ abstract class BaseManager extends Component implements ManagerInterface
      *
      * @since 2.0.14
      */
-    public function setDefaultRoles($roles)
+    public function setDefaultRoles($roles): void
     {
         if (is_array($roles)) {
             $this->defaultRoles = $roles;
