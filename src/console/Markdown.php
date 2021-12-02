@@ -25,9 +25,9 @@ use yii\helpers\Console;
  */
 class Markdown extends \cebe\markdown\Parser
 {
-    use FencedCodeTrait;
     use CodeTrait;
     use EmphStrongTrait;
+    use FencedCodeTrait;
     use StrikeoutTrait;
 
     /**

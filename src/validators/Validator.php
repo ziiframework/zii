@@ -383,7 +383,7 @@ class Validator extends Component
      */
     protected function validateValue($value)
     {
-        throw new NotSupportedException(get_class($this) . ' does not support validateValue().');
+        throw new NotSupportedException(static::class . ' does not support validateValue().');
     }
 
     /**

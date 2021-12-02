@@ -96,7 +96,7 @@ class Widget extends Component implements ViewContextInterface
      */
     public static function begin($config = [])
     {
-        $config['class'] = get_called_class();
+        $config['class'] = static::class;
         /* @var $widget Widget */
         $widget = Yii::createObject($config);
         self::$stack[] = $widget;
@@ -119,7 +119,7 @@ class Widget extends Component implements ViewContextInterface
         if (!empty(self::$stack)) {
             $widget = array_pop(self::$stack);
 
-            if (get_class($widget) === get_called_class()) {
+            if (get_class($widget) === static::class) {
                 /* @var $widget Widget */
                 if ($widget->beforeRun()) {
                     $result = $widget->run();
@@ -130,10 +130,10 @@ class Widget extends Component implements ViewContextInterface
                 return $widget;
             }
 
-            throw new InvalidCallException('Expecting end() of ' . get_class($widget) . ', found ' . get_called_class());
+            throw new InvalidCallException('Expecting end() of ' . get_class($widget) . ', found ' . static::class);
         }
 
-        throw new InvalidCallException('Unexpected ' . get_called_class() . '::end() call. A matching begin() is not found.');
+        throw new InvalidCallException('Unexpected ' . static::class . '::end() call. A matching begin() is not found.');
     }
 
     /**
@@ -153,7 +153,7 @@ class Widget extends Component implements ViewContextInterface
 
         try {
             /* @var $widget Widget */
-            $config['class'] = get_called_class();
+            $config['class'] = static::class;
             $widget = Yii::createObject($config);
             $out = '';
 

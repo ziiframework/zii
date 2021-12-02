@@ -827,7 +827,7 @@ class Model extends Component implements StaticInstanceInterface, IteratorAggreg
     public function onUnsafeAttribute($name, $value): void
     {
         if (YII_DEBUG) {
-            Yii::debug("Failed to set unsafe attribute '$name' in '" . get_class($this) . "'.", __METHOD__);
+            Yii::debug("Failed to set unsafe attribute '$name' in '" . static::class . "'.", __METHOD__);
         }
     }
 

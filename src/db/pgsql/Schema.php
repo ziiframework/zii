@@ -31,8 +31,8 @@ use yii\helpers\ArrayHelper;
  */
 class Schema extends \yii\db\Schema implements ConstraintFinderInterface
 {
-    use ViewFinderTrait;
     use ConstraintFinderTrait;
+    use ViewFinderTrait;
 
     public const TYPE_JSONB = 'jsonb';
 

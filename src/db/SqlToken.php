@@ -233,7 +233,7 @@ class SqlToken extends BaseObject implements ArrayAccess
      *
      * @return bool whether this token matches the pattern SQL code.
      */
-    public function matches(SqlToken $patternToken, $offset = 0, &$firstMatchIndex = null, &$lastMatchIndex = null)
+    public function matches(self $patternToken, $offset = 0, &$firstMatchIndex = null, &$lastMatchIndex = null)
     {
         if (!$patternToken->getHasChildren()) {
             return false;
@@ -253,7 +253,7 @@ class SqlToken extends BaseObject implements ArrayAccess
      *
      * @return bool
      */
-    private function tokensMatch(SqlToken $patternToken, SqlToken $token, $offset = 0, &$firstMatchIndex = null, &$lastMatchIndex = null)
+    private function tokensMatch(self $patternToken, self $token, $offset = 0, &$firstMatchIndex = null, &$lastMatchIndex = null)
     {
         if (
             $patternToken->getIsCollection() !== $token->getIsCollection()

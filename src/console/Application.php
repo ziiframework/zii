@@ -13,9 +13,9 @@ use yii\base\InvalidRouteException;
 
 // define STDIN, STDOUT and STDERR if the PHP SAPI did not define them (e.g. creating console application in web env)
 // https://www.php.net/manual/en/features.commandline.io-streams.php
-defined('STDIN') or define('STDIN', fopen('php://stdin', 'rb'));
-defined('STDOUT') or define('STDOUT', fopen('php://stdout', 'wb'));
-defined('STDERR') or define('STDERR', fopen('php://stderr', 'wb'));
+defined('STDIN') || define('STDIN', fopen('php://stdin', 'rb'));
+defined('STDOUT') || define('STDOUT', fopen('php://stdout', 'wb'));
+defined('STDERR') || define('STDERR', fopen('php://stderr', 'wb'));
 
 /**
  * Application represents a console application.

@@ -319,7 +319,7 @@ class QueryBuilder extends \yii\base\BaseObject
             }
 
             if (!isset($this->expressionBuilders[$className])) {
-                throw new InvalidArgumentException('Expression of class ' . $className . ' can not be built in ' . get_class($this));
+                throw new InvalidArgumentException('Expression of class ' . $className . ' can not be built in ' . static::class);
             }
         }
 

@@ -202,7 +202,7 @@ class ActiveRecord extends BaseActiveRecord
                 // if condition is scalar, search for a single primary key, if it is array, search for multiple primary key values
                 $condition = [$pk => is_array($condition) ? array_values($condition) : $condition];
             } else {
-                throw new InvalidConfigException('"' . get_called_class() . '" must have a primary key.');
+                throw new InvalidConfigException('"' . static::class . '" must have a primary key.');
             }
         } elseif (is_array($condition)) {
             $aliases = static::filterValidAliases($query);
@@ -438,7 +438,7 @@ class ActiveRecord extends BaseActiveRecord
      */
     public static function find()
     {
-        return Yii::createObject(ActiveQuery::className(), [get_called_class()]);
+        return Yii::createObject(ActiveQuery::className(), [static::class]);
     }
 
     /**
@@ -452,7 +452,7 @@ class ActiveRecord extends BaseActiveRecord
      */
     public static function tableName()
     {
-        return '{{%' . Inflector::camel2id(StringHelper::basename(get_called_class()), '_') . '}}';
+        return '{{%' . Inflector::camel2id(StringHelper::basename(static::class), '_') . '}}';
     }
 
     /**

@@ -1065,7 +1065,7 @@ abstract class BaseMigrateController extends Controller
      */
     protected function truncateDatabase(): void
     {
-        throw new NotSupportedException('This command is not implemented in ' . get_class($this));
+        throw new NotSupportedException('This command is not implemented in ' . static::class);
     }
 
     /**

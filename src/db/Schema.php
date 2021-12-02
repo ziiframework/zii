@@ -146,7 +146,7 @@ abstract class Schema extends BaseObject
      */
     protected function resolveTableName($name)
     {
-        throw new NotSupportedException(get_class($this) . ' does not support resolving table names.');
+        throw new NotSupportedException(static::class . ' does not support resolving table names.');
     }
 
     /**
@@ -162,7 +162,7 @@ abstract class Schema extends BaseObject
      */
     protected function findSchemaNames()
     {
-        throw new NotSupportedException(get_class($this) . ' does not support fetching all schema names.');
+        throw new NotSupportedException(static::class . ' does not support fetching all schema names.');
     }
 
     /**
@@ -178,7 +178,7 @@ abstract class Schema extends BaseObject
      */
     protected function findTableNames($schema = '')
     {
-        throw new NotSupportedException(get_class($this) . ' does not support fetching all table names.');
+        throw new NotSupportedException(static::class . ' does not support fetching all table names.');
     }
 
     /**
@@ -395,7 +395,7 @@ abstract class Schema extends BaseObject
      */
     public function findUniqueIndexes($table)
     {
-        throw new NotSupportedException(get_class($this) . ' does not support getting unique indexes information.');
+        throw new NotSupportedException(static::class . ' does not support getting unique indexes information.');
     }
 
     /**
