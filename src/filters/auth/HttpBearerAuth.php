@@ -46,7 +46,7 @@ class HttpBearerAuth extends HttpHeaderAuth
     /**
      * {@inheritdoc}
      */
-    public function challenge($response)
+    public function challenge($response): void
     {
         $response->getHeaders()->set('WWW-Authenticate', "Bearer realm=\"{$this->realm}\"");
     }

@@ -40,7 +40,7 @@ class m180523_151638_rbac_updates_indexes_without_prefix extends Migration
     /**
      * {@inheritdoc}
      */
-    public function up()
+    public function up(): void
     {
         $authManager = $this->getAuthManager();
         $this->db = $authManager->db;
@@ -55,7 +55,7 @@ class m180523_151638_rbac_updates_indexes_without_prefix extends Migration
     /**
      * {@inheritdoc}
      */
-    public function down()
+    public function down(): void
     {
         $authManager = $this->getAuthManager();
         $this->db = $authManager->db;

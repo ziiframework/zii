@@ -69,7 +69,7 @@ class RadioButtonColumn extends Column
      *
      * @throws \yii\base\InvalidConfigException if [[name]] is not set.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 

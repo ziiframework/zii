@@ -41,7 +41,7 @@ class ApcCache extends Cache
      * Initializes this application component.
      * It checks if extension required is loaded.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
         $extension = $this->useApcu ? 'apcu' : 'apc';

@@ -52,7 +52,7 @@ class CacheController extends Controller
     /**
      * Lists the caches that can be flushed.
      */
-    public function actionIndex()
+    public function actionIndex(): void
     {
         $caches = $this->findCaches();
 
@@ -186,7 +186,7 @@ class CacheController extends Controller
      *
      * @param array $caches array of cache component classes
      */
-    private function notifyCachesCanBeFlushed($caches)
+    private function notifyCachesCanBeFlushed($caches): void
     {
         $this->stdout("The following caches were found in the system:\n\n", Console::FG_YELLOW);
 
@@ -204,7 +204,7 @@ class CacheController extends Controller
     /**
      * Notifies user that there was not found any cache in the system.
      */
-    private function notifyNoCachesFound()
+    private function notifyNoCachesFound(): void
     {
         $this->stdout("No cache components were found in the system.\n", Console::FG_RED);
     }
@@ -214,7 +214,7 @@ class CacheController extends Controller
      *
      * @param array $cachesNames
      */
-    private function notifyNotFoundCaches($cachesNames)
+    private function notifyNotFoundCaches($cachesNames): void
     {
         $this->stdout("The following cache components were NOT found:\n\n", Console::FG_RED);
 
@@ -228,7 +228,7 @@ class CacheController extends Controller
     /**
      * @param array $caches
      */
-    private function notifyFlushed($caches)
+    private function notifyFlushed($caches): void
     {
         $this->stdout("The following cache components were processed:\n\n", Console::FG_YELLOW);
 

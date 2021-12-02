@@ -90,7 +90,7 @@ class Captcha extends InputWidget
     /**
      * Initializes the widget.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -104,7 +104,7 @@ class Captcha extends InputWidget
     /**
      * Renders the widget.
      */
-    public function run()
+    public function run(): void
     {
         $this->registerClientScript();
         $input = $this->renderInputHtml('text');
@@ -125,7 +125,7 @@ class Captcha extends InputWidget
     /**
      * Registers the needed JavaScript.
      */
-    public function registerClientScript()
+    public function registerClientScript(): void
     {
         $options = $this->getClientOptions();
         $options = empty($options) ? '' : Json::htmlEncode($options);

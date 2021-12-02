@@ -133,7 +133,7 @@ class SluggableBehavior extends AttributeBehavior
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 

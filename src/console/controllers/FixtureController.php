@@ -238,7 +238,7 @@ class FixtureController extends Controller
      *
      * @param array $fixturesInput
      */
-    private function printHelpMessage()
+    private function printHelpMessage(): void
     {
         $this->stdout($this->getHelpSummary() . "\n");
 
@@ -251,7 +251,7 @@ class FixtureController extends Controller
      *
      * @param array $fixtures
      */
-    private function notifyLoaded($fixtures)
+    private function notifyLoaded($fixtures): void
     {
         $this->stdout("Fixtures were successfully loaded from namespace:\n", Console::FG_YELLOW);
         $this->stdout("\t\"" . Yii::getAlias($this->namespace) . "\"\n\n", Console::FG_GREEN);
@@ -264,7 +264,7 @@ class FixtureController extends Controller
      * @param array $foundFixtures array of found fixtures
      * @param array $except array of names of fixtures that should not be loaded
      */
-    public function notifyNothingToLoad($foundFixtures, $except)
+    public function notifyNothingToLoad($foundFixtures, $except): void
     {
         $this->stdout("Fixtures to load could not be found according given conditions:\n\n", Console::FG_RED);
         $this->stdout("Fixtures namespace is: \n", Console::FG_YELLOW);
@@ -287,7 +287,7 @@ class FixtureController extends Controller
      * @param array $foundFixtures array of found fixtures
      * @param array $except array of names of fixtures that should not be loaded
      */
-    public function notifyNothingToUnload($foundFixtures, $except)
+    public function notifyNothingToUnload($foundFixtures, $except): void
     {
         $this->stdout("Fixtures to unload could not be found according to given conditions:\n\n", Console::FG_RED);
         $this->stdout("Fixtures namespace is: \n", Console::FG_YELLOW);
@@ -309,7 +309,7 @@ class FixtureController extends Controller
      *
      * @param array $fixtures
      */
-    private function notifyUnloaded($fixtures)
+    private function notifyUnloaded($fixtures): void
     {
         $this->stdout("\nFixtures were successfully unloaded from namespace: ", Console::FG_YELLOW);
         $this->stdout(Yii::getAlias($this->namespace) . "\"\n\n", Console::FG_GREEN);
@@ -321,7 +321,7 @@ class FixtureController extends Controller
      *
      * @param array $fixtures
      */
-    private function notifyNotFound($fixtures)
+    private function notifyNotFound($fixtures): void
     {
         $this->stdout("Some fixtures were not found under path:\n", Console::BG_RED);
         $this->stdout("\t" . $this->getFixturePath() . "\n\n", Console::FG_GREEN);
@@ -400,7 +400,7 @@ class FixtureController extends Controller
      *
      * @param array $data
      */
-    private function outputList($data)
+    private function outputList($data): void
     {
         foreach ($data as $index => $item) {
             $this->stdout("\t" . ($index + 1) . ". {$item}\n", Console::FG_GREEN);

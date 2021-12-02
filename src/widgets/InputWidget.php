@@ -71,7 +71,7 @@ class InputWidget extends Widget
      * Initializes the widget.
      * If you override this method, make sure you call the parent implementation first.
      */
-    public function init()
+    public function init(): void
     {
         if ($this->name === null && !$this->hasModel()) {
             throw new InvalidConfigException("Either 'name', or 'model' and 'attribute' properties must be specified.");

@@ -353,7 +353,7 @@ class ColumnSchemaBuilder extends BaseObject
      *
      * @since 2.0.43
      */
-    public function setCategoryMap($categoryMap)
+    public function setCategoryMap($categoryMap): void
     {
         static::$typeCategoryMap = $categoryMap;
     }

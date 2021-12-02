@@ -88,7 +88,7 @@ class ErrorAction extends Action
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         $this->exception = $this->findException();
 

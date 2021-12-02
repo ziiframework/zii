@@ -123,7 +123,7 @@ class HttpBasicAuth extends AuthMethod
     /**
      * {@inheritdoc}
      */
-    public function challenge($response)
+    public function challenge($response): void
     {
         $response->getHeaders()->set('WWW-Authenticate', "Basic realm=\"{$this->realm}\"");
     }

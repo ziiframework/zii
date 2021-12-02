@@ -334,7 +334,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      * @param string $name property name
      * @param mixed $value property value
      */
-    public function __set($name, $value)
+    public function __set($name, $value): void
     {
         if ($this->hasAttribute($name)) {
             if (
@@ -375,7 +375,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      *
      * @param string $name the property name or the event name
      */
-    public function __unset($name)
+    public function __unset($name): void
     {
         if ($this->hasAttribute($name)) {
             unset($this->_attributes[$name]);
@@ -496,7 +496,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      *
      * @see getRelation()
      */
-    public function populateRelation($name, $records)
+    public function populateRelation($name, $records): void
     {
         foreach ($this->_relationsDependencies as &$relationNames) {
             unset($relationNames[$name]);
@@ -569,7 +569,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      *
      * @see hasAttribute()
      */
-    public function setAttribute($name, $value)
+    public function setAttribute($name, $value): void
     {
         if ($this->hasAttribute($name)) {
             if (
@@ -601,7 +601,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      * @param array|null $values old attribute values to be set.
      * If set to `null` this record is considered to be [[isNewRecord|new]].
      */
-    public function setOldAttributes($values)
+    public function setOldAttributes($values): void
     {
         $this->_oldAttributes = $values;
     }
@@ -633,7 +633,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      *
      * @see hasAttribute()
      */
-    public function setOldAttribute($name, $value)
+    public function setOldAttribute($name, $value): void
     {
         if (isset($this->_oldAttributes[$name]) || $this->hasAttribute($name)) {
             $this->_oldAttributes[$name] = $value;
@@ -649,7 +649,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      *
      * @param string $name the attribute name
      */
-    public function markAttributeDirty($name)
+    public function markAttributeDirty($name): void
     {
         unset($this->_oldAttributes[$name]);
     }
@@ -1001,7 +1001,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      *
      * @see getIsNewRecord()
      */
-    public function setIsNewRecord($value)
+    public function setIsNewRecord($value): void
     {
         $this->_oldAttributes = $value ? null : $this->_attributes;
     }
@@ -1011,7 +1011,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      * This method is called at the end of the constructor.
      * The default implementation will trigger an [[EVENT_INIT]] event.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->trigger(self::EVENT_INIT);
@@ -1023,7 +1023,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      * When overriding this method, make sure you call the parent implementation to ensure the
      * event is triggered.
      */
-    public function afterFind()
+    public function afterFind(): void
     {
         $this->trigger(self::EVENT_AFTER_FIND);
     }
@@ -1080,7 +1080,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      * [[\yii\behaviors\AttributeTypecastBehavior]] to facilitate attribute typecasting.
      * See http://www.yiiframework.com/doc-2.0/guide-db-active-record.html#attributes-typecasting.
      */
-    public function afterSave($insert, $changedAttributes)
+    public function afterSave($insert, $changedAttributes): void
     {
         $this->trigger($insert ? self::EVENT_AFTER_INSERT : self::EVENT_AFTER_UPDATE, new AfterSaveEvent([
             'changedAttributes' => $changedAttributes,
@@ -1121,7 +1121,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      * You may override this method to do postprocessing after the record is deleted.
      * Make sure you call the parent implementation so that the event is raised properly.
      */
-    public function afterDelete()
+    public function afterDelete(): void
     {
         $this->trigger(self::EVENT_AFTER_DELETE);
     }
@@ -1178,7 +1178,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      *
      * @since 2.0.8
      */
-    public function afterRefresh()
+    public function afterRefresh(): void
     {
         $this->trigger(self::EVENT_AFTER_REFRESH);
     }
@@ -1288,7 +1288,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      * created by [[instantiate()]] beforehand.
      * @param array $row attribute values (name => value)
      */
-    public static function populateRecord($record, $row)
+    public static function populateRecord($record, $row): void
     {
         $columns = array_flip($record->attributes());
 
@@ -1411,7 +1411,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      *
      * @throws InvalidCallException if the method is unable to link two models.
      */
-    public function link($name, $model, $extraColumns = [])
+    public function link($name, $model, $extraColumns = []): void
     {
         /* @var $relation ActiveQueryInterface|ActiveQuery */
         $relation = $this->getRelation($name);
@@ -1515,7 +1515,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      * @throws Exception
      * @throws StaleObjectException
      */
-    public function unlink($name, $model, $delete = false)
+    public function unlink($name, $model, $delete = false): void
     {
         /* @var $relation ActiveQueryInterface|ActiveQuery */
         $relation = $this->getRelation($name);
@@ -1625,7 +1625,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      * If you need [[EVENT_BEFORE_DELETE]] or [[EVENT_AFTER_DELETE]] to be triggered, you need to [[find()|find]] the models first
      * and then call [[delete()]] on each of them.
      */
-    public function unlinkAll($name, $delete = false)
+    public function unlinkAll($name, $delete = false): void
     {
         /* @var $relation ActiveQueryInterface|ActiveQuery */
         $relation = $this->getRelation($name);
@@ -1717,7 +1717,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      *
      * @throws InvalidCallException
      */
-    private function bindModels($link, $foreignModel, $primaryModel)
+    private function bindModels($link, $foreignModel, $primaryModel): void
     {
         foreach ($link as $fk => $pk) {
             $value = $primaryModel->$pk;
@@ -1880,7 +1880,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      *
      * @param mixed $offset the offset to unset element
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         if (property_exists($this, $offset)) {
             $this->$offset = null;
@@ -1894,7 +1894,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      *
      * @param string $attribute The changed attribute name.
      */
-    private function resetDependentRelations($attribute)
+    private function resetDependentRelations($attribute): void
     {
         foreach ($this->_relationsDependencies[$attribute] as $relation) {
             unset($this->_related[$relation]);
@@ -1909,7 +1909,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      * @param ActiveQueryInterface $relation relation instance
      * @param string|null $viaRelationName intermediate relation
      */
-    private function setRelationDependencies($name, $relation, $viaRelationName = null)
+    private function setRelationDependencies($name, $relation, $viaRelationName = null): void
     {
         if (empty($relation->via) && $relation->link) {
             foreach ($relation->link as $attribute) {

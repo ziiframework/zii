@@ -193,7 +193,7 @@ class AttributeTypecastBehavior extends Behavior
      * Clears internal static cache of auto detected [[attributeTypes]] values
      * over all affected owner classes.
      */
-    public static function clearAutoDetectedAttributeTypes()
+    public static function clearAutoDetectedAttributeTypes(): void
     {
         self::$autoDetectedAttributeTypes = [];
     }
@@ -201,7 +201,7 @@ class AttributeTypecastBehavior extends Behavior
     /**
      * {@inheritdoc}
      */
-    public function attach($owner)
+    public function attach($owner): void
     {
         parent::attach($owner);
 
@@ -222,7 +222,7 @@ class AttributeTypecastBehavior extends Behavior
      * If this parameter is empty, it means any attribute listed in the [[attributeTypes]]
      * should be type-casted.
      */
-    public function typecastAttributes($attributeNames = null)
+    public function typecastAttributes($attributeNames = null): void
     {
         $attributeTypes = [];
 
@@ -347,7 +347,7 @@ class AttributeTypecastBehavior extends Behavior
      *
      * @param \yii\base\Event $event event instance.
      */
-    public function afterValidate($event)
+    public function afterValidate($event): void
     {
         if (!$this->owner->hasErrors()) {
             $this->typecastAttributes();
@@ -359,7 +359,7 @@ class AttributeTypecastBehavior extends Behavior
      *
      * @param \yii\base\Event $event event instance.
      */
-    public function beforeSave($event)
+    public function beforeSave($event): void
     {
         $this->typecastAttributes();
     }
@@ -371,7 +371,7 @@ class AttributeTypecastBehavior extends Behavior
      *
      * @since 2.0.14
      */
-    public function afterSave($event)
+    public function afterSave($event): void
     {
         $this->typecastAttributes();
     }
@@ -381,7 +381,7 @@ class AttributeTypecastBehavior extends Behavior
      *
      * @param \yii\base\Event $event event instance.
      */
-    public function afterFind($event)
+    public function afterFind($event): void
     {
         $this->typecastAttributes();
     }

@@ -28,14 +28,14 @@ class Response extends Component
     /**
      * Sends the response to client.
      */
-    public function send()
+    public function send(): void
     {
     }
 
     /**
      * Removes all existing output buffers.
      */
-    public function clearOutputBuffers()
+    public function clearOutputBuffers(): void
     {
         // the following manual level counting is to deal with zlib.output_compression set to On
         for ($level = ob_get_level(); $level > 0; --$level) {

@@ -39,7 +39,7 @@ class BaseVarDumper
      * @param int $depth maximum depth that the dumper should go into the variable. Defaults to 10.
      * @param bool $highlight whether the result should be syntax-highlighted
      */
-    public static function dump($var, $depth = 10, $highlight = false)
+    public static function dump($var, $depth = 10, $highlight = false): void
     {
         echo static::dumpAsString($var, $depth, $highlight);
     }
@@ -74,7 +74,7 @@ class BaseVarDumper
      * @param mixed $var variable to be dumped
      * @param int $level depth level
      */
-    private static function dumpInternal($var, $level)
+    private static function dumpInternal($var, $level): void
     {
         switch (gettype($var)) {
             case 'boolean':
@@ -187,7 +187,7 @@ class BaseVarDumper
      * @param mixed $var variable to be exported
      * @param int $level depth level
      */
-    private static function exportInternal($var, $level)
+    private static function exportInternal($var, $level): void
     {
         switch (gettype($var)) {
             case 'NULL':

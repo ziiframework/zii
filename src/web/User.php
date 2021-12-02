@@ -170,7 +170,7 @@ class User extends Component
     /**
      * Initializes the application component.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -238,7 +238,7 @@ class User extends Component
      *
      * @throws InvalidValueException if `$identity` object does not implement [[IdentityInterface]].
      */
-    public function setIdentity($identity)
+    public function setIdentity($identity): void
     {
         if ($identity instanceof IdentityInterface) {
             $this->_identity = $identity;
@@ -297,7 +297,7 @@ class User extends Component
      *
      * @since 2.0.14.2
      */
-    protected function regenerateCsrfToken()
+    protected function regenerateCsrfToken(): void
     {
         $request = Yii::$app->getRequest();
 
@@ -338,7 +338,7 @@ class User extends Component
      * This method attempts to log in a user using the ID and authKey information
      * provided by the [[identityCookie|identity cookie]].
      */
-    protected function loginByCookie()
+    protected function loginByCookie(): void
     {
         $data = $this->getIdentityAndDurationFromCookie();
 
@@ -452,7 +452,7 @@ class User extends Component
      * ['admin/index', 'ref' => 1]
      * ```
      */
-    public function setReturnUrl($url)
+    public function setReturnUrl($url): void
     {
         Yii::$app->getSession()->set($this->returnUrlParam, $url);
     }
@@ -539,7 +539,7 @@ class User extends Component
      * @param int $duration number of seconds that the user can remain in logged-in status.
      * If 0, it means login till the user closes the browser or the session is manually destroyed.
      */
-    protected function afterLogin($identity, $cookieBased, $duration)
+    protected function afterLogin($identity, $cookieBased, $duration): void
     {
         $this->trigger(self::EVENT_AFTER_LOGIN, new UserEvent([
             'identity' => $identity,
@@ -576,7 +576,7 @@ class User extends Component
      *
      * @param IdentityInterface $identity the user identity information
      */
-    protected function afterLogout($identity)
+    protected function afterLogout($identity): void
     {
         $this->trigger(self::EVENT_AFTER_LOGOUT, new UserEvent([
             'identity' => $identity,
@@ -588,7 +588,7 @@ class User extends Component
      * This method will set the expiration time of the identity cookie to be the current time
      * plus the originally specified cookie duration.
      */
-    protected function renewIdentityCookie()
+    protected function renewIdentityCookie(): void
     {
         $name = $this->identityCookie['name'];
         $value = Yii::$app->getRequest()->getCookies()->getValue($name);
@@ -618,7 +618,7 @@ class User extends Component
      *
      * @see loginByCookie()
      */
-    protected function sendIdentityCookie($identity, $duration)
+    protected function sendIdentityCookie($identity, $duration): void
     {
         $cookie = Yii::createObject(array_merge($this->identityCookie, [
             'class' => 'yii\web\Cookie',
@@ -679,7 +679,7 @@ class User extends Component
      *
      * @since 2.0.9
      */
-    protected function removeIdentityCookie()
+    protected function removeIdentityCookie(): void
     {
         Yii::$app->getResponse()->getCookies()->remove(Yii::createObject(array_merge($this->identityCookie, [
             'class' => 'yii\web\Cookie',
@@ -700,7 +700,7 @@ class User extends Component
      * @param int $duration number of seconds that the user can remain in logged-in status.
      * This parameter is used only when `$identity` is not null.
      */
-    public function switchIdentity($identity, $duration = 0)
+    public function switchIdentity($identity, $duration = 0): void
     {
         $this->setIdentity($identity);
 
@@ -750,7 +750,7 @@ class User extends Component
      * If the user identity cannot be determined by session, this method will try to [[loginByCookie()|login by cookie]]
      * if [[enableAutoLogin]] is true.
      */
-    protected function renewAuthStatus()
+    protected function renewAuthStatus(): void
     {
         $session = Yii::$app->getSession();
         $id = $session->getHasSessionId() || $session->getIsActive() ? $session->get($this->idParam) : null;

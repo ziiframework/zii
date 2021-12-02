@@ -80,7 +80,7 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
     /**
      * Initializes the FragmentCache object.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -99,7 +99,7 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
      * will be captured and saved in cache.
      * This method does nothing if valid content is already found in cache.
      */
-    public function run()
+    public function run(): void
     {
         if (($content = $this->getCachedContent()) !== false) {
             echo $content;

@@ -55,7 +55,7 @@ class Spaceless extends Widget
     /**
      * Starts capturing an output to be cleaned from whitespace characters between HTML tags.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
         ob_start();
@@ -66,7 +66,7 @@ class Spaceless extends Widget
      * Marks the end of content to be cleaned from whitespace characters between HTML tags.
      * Stops capturing an output and echoes cleaned result.
      */
-    public function run()
+    public function run(): void
     {
         echo trim(preg_replace('/>\s+</', '><', ob_get_clean()));
     }

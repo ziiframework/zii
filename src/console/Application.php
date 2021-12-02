@@ -125,7 +125,7 @@ class Application extends \yii\base\Application
     /**
      * Initialize the application.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 

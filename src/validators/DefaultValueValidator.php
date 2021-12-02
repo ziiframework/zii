@@ -44,7 +44,7 @@ class DefaultValueValidator extends Validator
     /**
      * {@inheritdoc}
      */
-    public function validateAttribute($model, $attribute)
+    public function validateAttribute($model, $attribute): void
     {
         if ($this->isEmpty($model->$attribute)) {
             if ($this->value instanceof Closure) {

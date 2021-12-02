@@ -306,7 +306,7 @@ EOD;
      *
      * @throws Exception on failure.
      */
-    public function actionExtract($configFile = null)
+    public function actionExtract($configFile = null): void
     {
         $this->initConfig($configFile);
 
@@ -356,7 +356,7 @@ EOD;
      * @param array $languages
      * @param bool $markUnused
      */
-    protected function saveMessagesToDb($messages, $db, $sourceMessageTable, $messageTable, $removeUnused, $languages, $markUnused)
+    protected function saveMessagesToDb($messages, $db, $sourceMessageTable, $messageTable, $removeUnused, $languages, $markUnused): void
     {
         $currentMessages = [];
         $rows = (new Query())->select(['id', 'category', 'message'])->from($sourceMessageTable)->all($db);
@@ -692,7 +692,7 @@ EOD;
      * @param bool $sort if translations should be sorted
      * @param bool $markUnused if obsolete translations should be marked
      */
-    protected function saveMessagesToPHP($messages, $dirName, $overwrite, $removeUnused, $sort, $markUnused)
+    protected function saveMessagesToPHP($messages, $dirName, $overwrite, $removeUnused, $sort, $markUnused): void
     {
         foreach ($messages as $category => $msgs) {
             $file = str_replace('\\', '/', "$dirName/$category.php");
@@ -813,7 +813,7 @@ EOD;
      * @param string $catalog message catalog
      * @param bool $markUnused if obsolete translations should be marked
      */
-    protected function saveMessagesToPO($messages, $dirName, $overwrite, $removeUnused, $sort, $catalog, $markUnused)
+    protected function saveMessagesToPO($messages, $dirName, $overwrite, $removeUnused, $sort, $catalog, $markUnused): void
     {
         $file = str_replace('\\', '/', "$dirName/$catalog.po");
         FileHelper::createDirectory(dirname($file));
@@ -914,7 +914,7 @@ EOD;
      *
      * @since 2.0.6
      */
-    protected function saveMessagesToPOT($messages, $dirName, $catalog)
+    protected function saveMessagesToPOT($messages, $dirName, $catalog): void
     {
         $file = str_replace('\\', '/', "$dirName/$catalog.pot");
         FileHelper::createDirectory(dirname($file));
@@ -947,7 +947,7 @@ EOD;
         }
     }
 
-    private function deleteUnusedPhpMessageFiles($existingCategories, $dirName)
+    private function deleteUnusedPhpMessageFiles($existingCategories, $dirName): void
     {
         $messageFiles = FileHelper::findFiles($dirName);
 
@@ -970,7 +970,7 @@ EOD;
      *
      * @since 2.0.13
      */
-    protected function initConfig($configFile)
+    protected function initConfig($configFile): void
     {
         $configFileContent = [];
 

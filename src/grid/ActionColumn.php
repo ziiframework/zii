@@ -153,7 +153,7 @@ class ActionColumn extends Column
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->initDefaultButtons();
@@ -162,7 +162,7 @@ class ActionColumn extends Column
     /**
      * Initializes the default button rendering callbacks.
      */
-    protected function initDefaultButtons()
+    protected function initDefaultButtons(): void
     {
         $this->initDefaultButton('view', 'eye-open');
         $this->initDefaultButton('update', 'pencil');
@@ -181,7 +181,7 @@ class ActionColumn extends Column
      *
      * @since 2.0.11
      */
-    protected function initDefaultButton($name, $iconName, $additionalOptions = [])
+    protected function initDefaultButton($name, $iconName, $additionalOptions = []): void
     {
         if (!isset($this->buttons[$name]) && strpos($this->template, '{' . $name . '}') !== false) {
             $this->buttons[$name] = function ($url, $model, $key) use ($name, $iconName, $additionalOptions) {

@@ -79,14 +79,14 @@ abstract class AuthMethod extends ActionFilter implements AuthInterface
     /**
      * {@inheritdoc}
      */
-    public function challenge($response)
+    public function challenge($response): void
     {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function handleFailure($response)
+    public function handleFailure($response): void
     {
         throw new UnauthorizedHttpException('Your request was made with invalid credentials.');
     }

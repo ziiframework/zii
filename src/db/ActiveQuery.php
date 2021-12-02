@@ -119,7 +119,7 @@ class ActiveQuery extends Query implements ActiveQueryInterface
      * an [[EVENT_INIT]] event. If you override this method, make sure you call the parent implementation at the end
      * to ensure triggering of the event.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->trigger(self::EVENT_INIT);
@@ -454,7 +454,7 @@ class ActiveQuery extends Query implements ActiveQueryInterface
                 // relation is defined with an alias, adjust callback to apply alias
                 [, $relation, $alias] = $matches;
                 $name = $relation;
-                $callback = static function ($query) use ($callback, $alias) {
+                $callback = static function ($query) use ($callback, $alias): void {
                     /* @var $query ActiveQuery */
                     $query->alias($alias);
 
@@ -475,7 +475,7 @@ class ActiveQuery extends Query implements ActiveQueryInterface
         return $this;
     }
 
-    private function buildJoinWith()
+    private function buildJoinWith(): void
     {
         $join = $this->join;
         $this->join = [];
@@ -560,7 +560,7 @@ class ActiveQuery extends Query implements ActiveQueryInterface
      * @param array $with the relations to be joined
      * @param string|array $joinType the join type
      */
-    private function joinWithRelations($model, $with, $joinType)
+    private function joinWithRelations($model, $with, $joinType): void
     {
         $relations = [];
 
@@ -667,7 +667,7 @@ class ActiveQuery extends Query implements ActiveQueryInterface
      * @param ActiveQuery $child
      * @param string $joinType
      */
-    private function joinWithRelation($parent, $child, $joinType)
+    private function joinWithRelation($parent, $child, $joinType): void
     {
         $via = $child->via;
         $child->via = null;

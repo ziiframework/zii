@@ -75,7 +75,7 @@ class Widget extends Component implements ViewContextInterface
      * This method is called at the end of the constructor.
      * The default implementation will trigger an [[EVENT_INIT]] event.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->trigger(self::EVENT_INIT);
@@ -196,7 +196,7 @@ class Widget extends Component implements ViewContextInterface
      *
      * @param string $value id of the widget.
      */
-    public function setId($value)
+    public function setId($value): void
     {
         $this->_id = $value;
     }
@@ -225,7 +225,7 @@ class Widget extends Component implements ViewContextInterface
      *
      * @param View $view the view object that can be used to render views or view files.
      */
-    public function setView($view)
+    public function setView($view): void
     {
         $this->_view = $view;
     }

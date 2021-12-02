@@ -171,7 +171,7 @@ class HostControl extends ActionFilter
      *
      * @throws NotFoundHttpException
      */
-    protected function denyAccess($action)
+    protected function denyAccess($action): void
     {
         $exception = new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
 

@@ -96,7 +96,7 @@ class ImageValidator extends FileValidator
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 

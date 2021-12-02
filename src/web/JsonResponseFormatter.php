@@ -105,7 +105,7 @@ class JsonResponseFormatter extends Component implements ResponseFormatterInterf
      *
      * @param Response $response the response to be formatted.
      */
-    public function format($response)
+    public function format($response): void
     {
         if ($this->contentType === null) {
             $this->contentType = $this->useJsonp
@@ -128,7 +128,7 @@ class JsonResponseFormatter extends Component implements ResponseFormatterInterf
      *
      * @param Response $response
      */
-    protected function formatJson($response)
+    protected function formatJson($response): void
     {
         if ($response->data !== null) {
             $options = $this->encodeOptions;
@@ -157,7 +157,7 @@ class JsonResponseFormatter extends Component implements ResponseFormatterInterf
      *
      * @param Response $response
      */
-    protected function formatJsonp($response)
+    protected function formatJsonp($response): void
     {
         if (is_array($response->data)
             && isset($response->data['data'], $response->data['callback'])

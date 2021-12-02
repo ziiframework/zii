@@ -41,7 +41,7 @@ trait DynamicContentAwareTrait
     /**
      * {@inheritdoc}
      */
-    public function setDynamicPlaceholders($placeholders)
+    public function setDynamicPlaceholders($placeholders): void
     {
         $this->_dynamicPlaceholders = $placeholders;
     }
@@ -49,7 +49,7 @@ trait DynamicContentAwareTrait
     /**
      * {@inheritdoc}
      */
-    public function addDynamicPlaceholder($name, $statements)
+    public function addDynamicPlaceholder($name, $statements): void
     {
         $this->_dynamicPlaceholders[$name] = $statements;
     }

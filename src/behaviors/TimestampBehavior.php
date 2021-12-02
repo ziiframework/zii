@@ -94,7 +94,7 @@ class TimestampBehavior extends AttributeBehavior
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -132,7 +132,7 @@ class TimestampBehavior extends AttributeBehavior
      *
      * @throws InvalidCallException if owner is a new record (since version 2.0.6).
      */
-    public function touch($attribute)
+    public function touch($attribute): void
     {
         /* @var $owner BaseActiveRecord */
         $owner = $this->owner;

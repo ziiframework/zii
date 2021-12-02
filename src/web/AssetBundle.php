@@ -133,7 +133,7 @@ class AssetBundle extends BaseObject
      * Initializes the bundle.
      * If you override this method, make sure you call the parent implementation in the last.
      */
-    public function init()
+    public function init(): void
     {
         if ($this->sourcePath !== null) {
             $this->sourcePath = rtrim(Yii::getAlias($this->sourcePath), '/\\');
@@ -153,7 +153,7 @@ class AssetBundle extends BaseObject
      *
      * @param \yii\web\View $view the view that the asset files are to be registered with.
      */
-    public function registerAssetFiles($view)
+    public function registerAssetFiles($view): void
     {
         $manager = $view->getAssetManager();
 
@@ -185,7 +185,7 @@ class AssetBundle extends BaseObject
      *
      * @param AssetManager $am the asset manager to perform the asset publishing
      */
-    public function publish($am)
+    public function publish($am): void
     {
         if ($this->sourcePath !== null && !isset($this->basePath, $this->baseUrl)) {
             [$this->basePath, $this->baseUrl] = $am->publish($this->sourcePath, $this->publishOptions);

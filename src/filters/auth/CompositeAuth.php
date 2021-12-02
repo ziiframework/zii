@@ -85,7 +85,7 @@ class CompositeAuth extends AuthMethod
     /**
      * {@inheritdoc}
      */
-    public function challenge($response)
+    public function challenge($response): void
     {
         foreach ($this->authMethods as $method) {
             /* @var $method AuthInterface */

@@ -36,7 +36,7 @@ abstract class DbMutex extends Mutex
      *
      * @throws InvalidConfigException if [[db]] is invalid.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->db = Instance::ensure($this->db, Connection::className());

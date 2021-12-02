@@ -92,7 +92,7 @@ class DbSession extends MultiFieldSession
      *
      * @throws InvalidConfigException if [[db]] is invalid.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->db = Instance::ensure($this->db, Connection::className());
@@ -125,7 +125,7 @@ class DbSession extends MultiFieldSession
     /**
      * {@inheritdoc}
      */
-    public function regenerateID($deleteOldSession = false)
+    public function regenerateID($deleteOldSession = false): void
     {
         $oldID = session_id();
 
@@ -174,7 +174,7 @@ class DbSession extends MultiFieldSession
      *
      * @since 2.0.17
      */
-    public function close()
+    public function close(): void
     {
         if ($this->getIsActive()) {
             // prepare writeCallback fields before session closes

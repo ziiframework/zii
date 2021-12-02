@@ -118,7 +118,7 @@ class BaseObject implements Configurable
      * This method is invoked at the end of the constructor after the object is initialized with the
      * given configuration.
      */
-    public function init()
+    public function init(): void
     {
     }
 
@@ -164,7 +164,7 @@ class BaseObject implements Configurable
      *
      * @see __get()
      */
-    public function __set($name, $value)
+    public function __set($name, $value): void
     {
         $setter = 'set' . $name;
 
@@ -217,7 +217,7 @@ class BaseObject implements Configurable
      *
      * @see https://www.php.net/manual/en/function.unset.php
      */
-    public function __unset($name)
+    public function __unset($name): void
     {
         $setter = 'set' . $name;
 

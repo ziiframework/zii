@@ -121,7 +121,7 @@ class Action extends Component
      * This method is called right after `run()` is executed.
      * You may override this method to do post-processing work for the action run.
      */
-    protected function afterRun()
+    protected function afterRun(): void
     {
     }
 }

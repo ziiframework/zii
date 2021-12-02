@@ -133,7 +133,7 @@ class DataColumn extends Column
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 

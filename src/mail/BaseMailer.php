@@ -117,7 +117,7 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
      *
      * @throws InvalidConfigException on invalid argument.
      */
-    public function setView($view)
+    public function setView($view): void
     {
         if (!is_array($view) && !is_object($view)) {
             throw new InvalidConfigException('"' . get_class($this) . '::view" should be either object or configuration array, "' . gettype($view) . '" given.');
@@ -387,7 +387,7 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
      * @param string $path the directory that contains the view files for composing mail messages
      * This can be specified as an absolute path or a [path alias](guide:concept-aliases).
      */
-    public function setViewPath($path)
+    public function setViewPath($path): void
     {
         $this->_viewPath = Yii::getAlias($path);
     }
@@ -417,7 +417,7 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
      * @param MessageInterface $message
      * @param bool $isSuccessful
      */
-    public function afterSend($message, $isSuccessful)
+    public function afterSend($message, $isSuccessful): void
     {
         $event = new MailEvent(['message' => $message, 'isSuccessful' => $isSuccessful]);
         $this->trigger(self::EVENT_AFTER_SEND, $event);

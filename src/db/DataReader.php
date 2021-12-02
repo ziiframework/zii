@@ -90,7 +90,7 @@ class DataReader extends \yii\base\BaseObject implements Iterator, Countable
      *
      * @see https://www.php.net/manual/en/function.PDOStatement-bindColumn.php
      */
-    public function bindColumn($column, &$value, $dataType = null)
+    public function bindColumn($column, &$value, $dataType = null): void
     {
         if ($dataType === null) {
             $this->_statement->bindColumn($column, $value);
@@ -106,7 +106,7 @@ class DataReader extends \yii\base\BaseObject implements Iterator, Countable
      *
      * @see https://www.php.net/manual/en/function.PDOStatement-setFetchMode.php
      */
-    public function setFetchMode($mode)
+    public function setFetchMode($mode): void
     {
         $params = func_get_args();
         call_user_func_array([$this->_statement, 'setFetchMode'], $params);
@@ -179,7 +179,7 @@ class DataReader extends \yii\base\BaseObject implements Iterator, Countable
      * This frees up the resources allocated for executing this SQL statement.
      * Read attempts after this method call are unpredictable.
      */
-    public function close()
+    public function close(): void
     {
         $this->_statement->closeCursor();
         $this->_closed = true;
@@ -237,7 +237,7 @@ class DataReader extends \yii\base\BaseObject implements Iterator, Countable
      *
      * @throws InvalidCallException if this method is invoked twice
      */
-    public function rewind()
+    public function rewind(): void
     {
         if ($this->_index < 0) {
             $this->_row = $this->_statement->fetch();
@@ -273,7 +273,7 @@ class DataReader extends \yii\base\BaseObject implements Iterator, Countable
      * Moves the internal pointer to the next row.
      * This method is required by the interface [[\Iterator]].
      */
-    public function next()
+    public function next(): void
     {
         $this->_row = $this->_statement->fetch();
         ++$this->_index;

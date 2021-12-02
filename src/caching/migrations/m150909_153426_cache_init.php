@@ -38,7 +38,7 @@ class m150909_153426_cache_init extends Migration
     /**
      * {@inheritdoc}
      */
-    public function up()
+    public function up(): void
     {
         $cache = $this->getCache();
         $this->db = $cache->db;
@@ -61,7 +61,7 @@ class m150909_153426_cache_init extends Migration
     /**
      * {@inheritdoc}
      */
-    public function down()
+    public function down(): void
     {
         $cache = $this->getCache();
         $this->db = $cache->db;

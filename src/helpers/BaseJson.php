@@ -84,7 +84,7 @@ class BaseJson
     {
         $expressions = [];
         $value = static::processData($value, $expressions, uniqid('', true));
-        set_error_handler(static function () {
+        set_error_handler(static function (): void {
             static::handleJsonError(JSON_ERROR_SYNTAX);
         }, E_WARNING);
 
@@ -156,7 +156,7 @@ class BaseJson
      *
      * @since 2.0.6
      */
-    protected static function handleJsonError($lastError)
+    protected static function handleJsonError($lastError): void
     {
         if ($lastError === JSON_ERROR_NONE) {
             return;

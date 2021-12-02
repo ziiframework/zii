@@ -203,7 +203,7 @@ SQL;
      *
      * @throws NotSupportedException if this method is called.
      */
-    protected function loadTableChecks($tableName)
+    protected function loadTableChecks($tableName): void
     {
         throw new NotSupportedException('MySQL does not support check constraints.');
     }
@@ -213,7 +213,7 @@ SQL;
      *
      * @throws NotSupportedException if this method is called.
      */
-    protected function loadTableDefaultValues($tableName)
+    protected function loadTableDefaultValues($tableName): void
     {
         throw new NotSupportedException('MySQL does not support default value constraints.');
     }
@@ -234,7 +234,7 @@ SQL;
      * @param TableSchema $table the table metadata object
      * @param string $name the table name
      */
-    protected function resolveTableNames($table, $name)
+    protected function resolveTableNames($table, $name): void
     {
         $parts = explode('.', str_replace('`', '', $name));
 
@@ -401,7 +401,7 @@ SQL;
      *
      * @throws \Exception
      */
-    protected function findConstraints($table)
+    protected function findConstraints($table): void
     {
         $sql = <<<'SQL'
 SELECT

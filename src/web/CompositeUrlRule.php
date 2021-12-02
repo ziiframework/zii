@@ -45,7 +45,7 @@ abstract class CompositeUrlRule extends BaseObject implements UrlRuleInterface
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->rules = $this->createRules();

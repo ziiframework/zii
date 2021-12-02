@@ -62,7 +62,7 @@ class Action extends \yii\base\Action
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         if ($this->modelClass === null) {
             throw new InvalidConfigException(get_class($this) . '::$modelClass must be set.');

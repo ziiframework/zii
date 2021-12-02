@@ -46,7 +46,7 @@ class LikeCondition extends SimpleCondition
      * should be applied. Note that when using an escape mapping (or the third operand is not provided),
      * the values will be automatically enclosed within a pair of percentage characters.
      */
-    public function setEscapingReplacements($escapingReplacements)
+    public function setEscapingReplacements($escapingReplacements): void
     {
         $this->escapingReplacements = $escapingReplacements;
     }

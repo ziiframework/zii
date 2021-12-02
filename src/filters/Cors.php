@@ -124,7 +124,7 @@ class Cors extends ActionFilter
      *
      * @param \yii\base\Action $action the action settings to override
      */
-    public function overrideDefaultSettings($action)
+    public function overrideDefaultSettings($action): void
     {
         if (isset($this->actions[$action->id])) {
             $actionParams = $this->actions[$action->id];
@@ -221,7 +221,7 @@ class Cors extends ActionFilter
      * @param array $requestHeaders CORS headers request by client
      * @param array $responseHeaders CORS response headers sent to the client
      */
-    protected function prepareAllowHeaders($type, $requestHeaders, &$responseHeaders)
+    protected function prepareAllowHeaders($type, $requestHeaders, &$responseHeaders): void
     {
         $requestHeaderField = 'Access-Control-Request-' . $type;
         $responseHeaderField = 'Access-Control-Allow-' . $type;
@@ -248,7 +248,7 @@ class Cors extends ActionFilter
      * @param Response $response
      * @param array $headers CORS headers which have been computed
      */
-    public function addCorsHeaders($response, $headers)
+    public function addCorsHeaders($response, $headers): void
     {
         if (empty($headers) === false) {
             $responseHeaders = $response->getHeaders();
@@ -273,9 +273,7 @@ class Cors extends ActionFilter
     protected function headerize($string)
     {
         $headers = preg_split('/[\\s,]+/', $string, -1, PREG_SPLIT_NO_EMPTY);
-        $headers = array_map(static function ($element) {
-            return str_replace(' ', '-', ucwords(strtolower(str_replace(['_', '-'], [' ', ' '], $element))));
-        }, $headers);
+        $headers = array_map(static fn ($element) => str_replace(' ', '-', ucwords(strtolower(str_replace(['_', '-'], [' ', ' '], $element)))), $headers);
 
         return implode(', ', $headers);
     }

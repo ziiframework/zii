@@ -173,7 +173,7 @@ class UrlManager extends Component
     /**
      * Initializes UrlManager.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -206,7 +206,7 @@ class UrlManager extends Component
      * Please refer to [[rules]] for the acceptable rule format.
      * @param bool $append whether to add the new rules by appending them to the end of the existing rules.
      */
-    public function addRules($rules, $append = true)
+    public function addRules($rules, $append = true): void
     {
         if (!$this->enablePrettyUrl) {
             return;
@@ -573,7 +573,7 @@ class UrlManager extends Component
      *
      * @since 2.0.8
      */
-    protected function setRuleToCache($cacheKey, UrlRuleInterface $rule)
+    protected function setRuleToCache($cacheKey, UrlRuleInterface $rule): void
     {
         $this->_ruleCache[$cacheKey][] = $rule;
     }
@@ -644,7 +644,7 @@ class UrlManager extends Component
      *
      * @param string $value the base URL that is used by [[createUrl()]] to prepend to created URLs.
      */
-    public function setBaseUrl($value)
+    public function setBaseUrl($value): void
     {
         $this->_baseUrl = $value === null ? null : rtrim(Yii::getAlias($value), '/');
     }
@@ -679,7 +679,7 @@ class UrlManager extends Component
      *
      * @param string $value the entry script URL that is used by [[createUrl()]] to prepend to created URLs.
      */
-    public function setScriptUrl($value)
+    public function setScriptUrl($value): void
     {
         $this->_scriptUrl = $value;
     }
@@ -711,7 +711,7 @@ class UrlManager extends Component
      *
      * @param string $value the host info (e.g. "http://www.example.com") that is used by [[createAbsoluteUrl()]] to prepend to created URLs.
      */
-    public function setHostInfo($value)
+    public function setHostInfo($value): void
     {
         $this->_hostInfo = $value === null ? null : rtrim($value, '/');
     }

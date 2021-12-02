@@ -29,7 +29,7 @@ class DeleteAction extends Action
      *
      * @throws ServerErrorHttpException on failure.
      */
-    public function run($id)
+    public function run($id): void
     {
         $model = $this->findModel($id);
 

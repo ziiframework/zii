@@ -114,7 +114,7 @@ class Pjax extends Widget
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -150,7 +150,7 @@ class Pjax extends Widget
     /**
      * {@inheritdoc}
      */
-    public function run()
+    public function run(): void
     {
         if (!$this->requiresPjax()) {
             echo Html::endTag(ArrayHelper::remove($this->options, 'tag', 'div'));
@@ -190,7 +190,7 @@ class Pjax extends Widget
     /**
      * Registers the needed JavaScript.
      */
-    public function registerClientScript()
+    public function registerClientScript(): void
     {
         $id = $this->options['id'];
         $this->clientOptions['push'] = $this->enablePushState;

@@ -86,7 +86,7 @@ trait FixtureTrait
      * @param Fixture[] $fixtures the fixtures to be loaded. If this parameter is not specified,
      * the return value of [[getFixtures()]] will be used.
      */
-    public function loadFixtures($fixtures = null)
+    public function loadFixtures($fixtures = null): void
     {
         if ($fixtures === null) {
             $fixtures = $this->getFixtures();
@@ -113,7 +113,7 @@ trait FixtureTrait
      * @param Fixture[] $fixtures the fixtures to be loaded. If this parameter is not specified,
      * the return value of [[getFixtures()]] will be used.
      */
-    public function unloadFixtures($fixtures = null)
+    public function unloadFixtures($fixtures = null): void
     {
         if ($fixtures === null) {
             $fixtures = $this->getFixtures();
@@ -139,7 +139,7 @@ trait FixtureTrait
      *
      * @since 2.0.12
      */
-    public function initFixtures()
+    public function initFixtures(): void
     {
         $this->unloadFixtures();
         $this->loadFixtures();

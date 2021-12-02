@@ -45,7 +45,7 @@ class MessageSource extends Component
     /**
      * Initializes this component.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 

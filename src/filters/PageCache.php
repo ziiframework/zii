@@ -142,7 +142,7 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -212,7 +212,7 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
      *
      * @since 2.0.11
      */
-    public function afterRestoreResponse($data)
+    public function afterRestoreResponse($data): void
     {
     }
 
@@ -224,7 +224,7 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
      *
      * @since 2.0.3
      */
-    protected function restoreResponse($response, $data)
+    protected function restoreResponse($response, $data): void
     {
         foreach (['format', 'version', 'statusCode', 'statusText', 'content'] as $name) {
             $response->{$name} = $data[$name];
@@ -247,7 +247,7 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
      *
      * @since 2.0.3
      */
-    public function cacheResponse()
+    public function cacheResponse(): void
     {
         $this->view->popDynamicContent();
         $beforeCacheResponseResult = $this->beforeCacheResponse();
@@ -289,7 +289,7 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
      * @param string $collectionName currently it's `headers` or `cookies`.
      * @param array $data the cache data.
      */
-    private function insertResponseCollectionIntoData(Response $response, $collectionName, array &$data)
+    private function insertResponseCollectionIntoData(Response $response, $collectionName, array &$data): void
     {
         $property = 'cache' . ucfirst($collectionName);
 

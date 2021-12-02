@@ -141,7 +141,7 @@ class CookieCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      *
      * @throws InvalidCallException if the cookie collection is read only
      */
-    public function add($cookie)
+    public function add($cookie): void
     {
         if ($this->readOnly) {
             throw new InvalidCallException('The cookie collection is read only.');
@@ -159,7 +159,7 @@ class CookieCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      *
      * @throws InvalidCallException if the cookie collection is read only
      */
-    public function remove($cookie, $removeFromBrowser = true)
+    public function remove($cookie, $removeFromBrowser = true): void
     {
         if ($this->readOnly) {
             throw new InvalidCallException('The cookie collection is read only.');
@@ -188,7 +188,7 @@ class CookieCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      *
      * @throws InvalidCallException if the cookie collection is read only
      */
-    public function removeAll()
+    public function removeAll(): void
     {
         if ($this->readOnly) {
             throw new InvalidCallException('The cookie collection is read only.');
@@ -214,7 +214,7 @@ class CookieCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      *
      * @since 2.0.3
      */
-    public function fromArray(array $array)
+    public function fromArray(array $array): void
     {
         $this->_cookies = $array;
     }
@@ -257,7 +257,7 @@ class CookieCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      * @param string $name the cookie name
      * @param Cookie $cookie the cookie to be added
      */
-    public function offsetSet($name, $cookie)
+    public function offsetSet($name, $cookie): void
     {
         $this->add($cookie);
     }
@@ -270,7 +270,7 @@ class CookieCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      *
      * @param string $name the cookie name
      */
-    public function offsetUnset($name)
+    public function offsetUnset($name): void
     {
         $this->remove($name);
     }
