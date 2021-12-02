@@ -53,7 +53,7 @@ class LinkSorter extends Widget
     /**
      * Initializes the sorter.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -66,7 +66,7 @@ class LinkSorter extends Widget
      * Executes the widget.
      * This method renders the sort links.
      */
-    public function run()
+    public function run(): void
     {
         echo $this->renderSortLinks();
     }

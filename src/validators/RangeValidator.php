@@ -56,7 +56,7 @@ class RangeValidator extends Validator
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -96,7 +96,7 @@ class RangeValidator extends Validator
     /**
      * {@inheritdoc}
      */
-    public function validateAttribute($model, $attribute)
+    public function validateAttribute($model, $attribute): void
     {
         if ($this->range instanceof Closure) {
             $this->range = call_user_func($this->range, $model, $attribute);

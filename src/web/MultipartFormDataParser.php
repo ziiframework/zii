@@ -100,7 +100,7 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
     /**
      * @param int $uploadFileMaxSize upload file max size in bytes.
      */
-    public function setUploadFileMaxSize($uploadFileMaxSize)
+    public function setUploadFileMaxSize($uploadFileMaxSize): void
     {
         $this->_uploadFileMaxSize = $uploadFileMaxSize;
     }
@@ -120,7 +120,7 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
     /**
      * @param int $uploadFileMaxCount maximum upload files count.
      */
-    public function setUploadFileMaxCount($uploadFileMaxCount)
+    public function setUploadFileMaxCount($uploadFileMaxCount): void
     {
         $this->_uploadFileMaxCount = $uploadFileMaxCount;
     }
@@ -266,7 +266,7 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
      * @param string $name input name specification.
      * @param mixed $value value to be added.
      */
-    private function addValue(&$array, $name, $value)
+    private function addValue(&$array, $name, $value): void
     {
         $nameParts = preg_split('/\\]\\[|\\[/s', $name);
         $current = &$array;
@@ -296,7 +296,7 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
      * @param string $name input name specification.
      * @param array $info file info.
      */
-    private function addFile(&$files, $name, $info)
+    private function addFile(&$files, $name, $info): void
     {
         if (strpos($name, '[') === false) {
             $files[$name] = $info;

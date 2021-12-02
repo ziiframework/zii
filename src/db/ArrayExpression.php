@@ -151,7 +151,7 @@ class ArrayExpression implements ExpressionInterface, ArrayAccess, Countable, It
      *
      * @since 2.0.14
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->value[$offset] = $value;
     }
@@ -169,7 +169,7 @@ class ArrayExpression implements ExpressionInterface, ArrayAccess, Countable, It
      *
      * @since 2.0.14
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->value[$offset]);
     }

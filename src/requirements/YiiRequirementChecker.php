@@ -161,7 +161,7 @@ class YiiRequirementChecker
      * Renders the requirements check result.
      * The output will vary depending is a script running from web or from console.
      */
-    public function render()
+    public function render(): void
     {
         if (!isset($this->result)) {
             $this->usageError('Nothing to render!');
@@ -410,7 +410,7 @@ class YiiRequirementChecker
      *
      * @param string $message the error message
      */
-    public function usageError($message)
+    public function usageError($message): void
     {
         echo "Error: $message\n\n";
 

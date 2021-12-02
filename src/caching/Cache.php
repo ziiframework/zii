@@ -92,7 +92,7 @@ abstract class Cache extends Component implements CacheInterface
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->_igbinaryAvailable = extension_loaded('igbinary');
@@ -613,7 +613,7 @@ abstract class Cache extends Component implements CacheInterface
      * @param string $key the key identifying the value to be cached
      * @param mixed $value the value to be cached
      */
-    public function offsetSet($key, $value)
+    public function offsetSet($key, $value): void
     {
         $this->set($key, $value);
     }
@@ -624,7 +624,7 @@ abstract class Cache extends Component implements CacheInterface
      *
      * @param string $key the key of the value to be deleted
      */
-    public function offsetUnset($key)
+    public function offsetUnset($key): void
     {
         $this->delete($key);
     }

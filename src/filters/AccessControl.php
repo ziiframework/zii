@@ -97,7 +97,7 @@ class AccessControl extends ActionFilter
     /**
      * Initializes the [[rules]] array by instantiating rule objects from configurations.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -159,7 +159,7 @@ class AccessControl extends ActionFilter
      *
      * @throws ForbiddenHttpException if the user is already logged in or in case of detached User component.
      */
-    protected function denyAccess($user)
+    protected function denyAccess($user): void
     {
         if ($user !== false && $user->getIsGuest()) {
             $user->loginRequired();

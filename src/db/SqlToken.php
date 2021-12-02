@@ -118,7 +118,7 @@ class SqlToken extends BaseObject implements ArrayAccess
      * @param int|null $offset child token offset.
      * @param SqlToken $token token to be added.
      */
-    public function offsetSet($offset, $token)
+    public function offsetSet($offset, $token): void
     {
         $token->parent = $this;
 
@@ -137,7 +137,7 @@ class SqlToken extends BaseObject implements ArrayAccess
      *
      * @param int $offset child token offset.
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         $offset = $this->calculateOffset($offset);
 
@@ -162,7 +162,7 @@ class SqlToken extends BaseObject implements ArrayAccess
      *
      * @param SqlToken[] $children child tokens.
      */
-    public function setChildren($children)
+    public function setChildren($children): void
     {
         $this->_children = [];
 
@@ -324,7 +324,7 @@ class SqlToken extends BaseObject implements ArrayAccess
     /**
      * Updates token SQL code start and end offsets based on its children.
      */
-    private function updateCollectionOffsets()
+    private function updateCollectionOffsets(): void
     {
         if (!empty($this->_children)) {
             $this->startOffset = reset($this->_children)->startOffset;

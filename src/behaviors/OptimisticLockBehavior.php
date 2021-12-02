@@ -85,7 +85,7 @@ class OptimisticLockBehavior extends AttributeBehavior
     /**
      * {@inheritdoc}
      */
-    public function attach($owner)
+    public function attach($owner): void
     {
         parent::attach($owner);
 
@@ -166,7 +166,7 @@ class OptimisticLockBehavior extends AttributeBehavior
      *
      * @since 2.0.16
      */
-    public function upgrade()
+    public function upgrade(): void
     {
         /* @var $owner BaseActiveRecord */
         $owner = $this->owner;

@@ -83,7 +83,7 @@ class FileMutex extends Mutex
      *
      * @throws InvalidConfigException
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->mutexPath = Yii::getAlias($this->mutexPath);

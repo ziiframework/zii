@@ -103,7 +103,7 @@ class DynamicModel extends Model
     /**
      * {@inheritdoc}
      */
-    public function __set($name, $value)
+    public function __set($name, $value): void
     {
         if ($this->hasAttribute($name)) {
             $this->_attributes[$name] = $value;
@@ -127,7 +127,7 @@ class DynamicModel extends Model
     /**
      * {@inheritdoc}
      */
-    public function __unset($name)
+    public function __unset($name): void
     {
         if ($this->hasAttribute($name)) {
             unset($this->_attributes[$name]);
@@ -172,7 +172,7 @@ class DynamicModel extends Model
      * @param string $name the attribute name
      * @param mixed $value the attribute value
      */
-    public function defineAttribute($name, $value = null)
+    public function defineAttribute($name, $value = null): void
     {
         $this->_attributes[$name] = $value;
     }
@@ -182,7 +182,7 @@ class DynamicModel extends Model
      *
      * @param string $name the attribute name
      */
-    public function undefineAttribute($name)
+    public function undefineAttribute($name): void
     {
         unset($this->_attributes[$name]);
     }

@@ -46,7 +46,7 @@ abstract class Dependency extends \yii\base\BaseObject
      *
      * @param CacheInterface $cache the cache component that is currently evaluating this dependency
      */
-    public function evaluateDependency($cache)
+    public function evaluateDependency($cache): void
     {
         if ($this->reusable) {
             $hash = $this->generateReusableHash();
@@ -102,7 +102,7 @@ abstract class Dependency extends \yii\base\BaseObject
     /**
      * Resets all cached data for reusable dependencies.
      */
-    public static function resetReusableData()
+    public static function resetReusableData(): void
     {
         self::$_reusableData = [];
     }

@@ -54,7 +54,7 @@ class SyslogTarget extends Target
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -69,7 +69,7 @@ class SyslogTarget extends Target
      *
      * @throws LogRuntimeException
      */
-    public function export()
+    public function export(): void
     {
         openlog($this->identity, $this->options, $this->facility);
 

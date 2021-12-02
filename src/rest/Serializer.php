@@ -128,7 +128,7 @@ class Serializer extends Component
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         if ($this->request === null) {
             $this->request = Yii::$app->getRequest();
@@ -256,7 +256,7 @@ class Serializer extends Component
      *
      * @param Pagination $pagination
      */
-    protected function addPaginationHeaders($pagination)
+    protected function addPaginationHeaders($pagination): void
     {
         $links = [];
 

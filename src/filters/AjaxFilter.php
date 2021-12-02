@@ -46,7 +46,7 @@ class AjaxFilter extends ActionFilter
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         if ($this->request === null) {
             $this->request = Yii::$app->getRequest();

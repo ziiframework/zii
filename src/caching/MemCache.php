@@ -117,7 +117,7 @@ class MemCache extends Cache
      * Initializes this application component.
      * It creates the memcache instance and adds memcache servers.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->addServers($this->getMemcache(), $this->getServers());
@@ -131,7 +131,7 @@ class MemCache extends Cache
      *
      * @throws InvalidConfigException
      */
-    protected function addServers($cache, $servers)
+    protected function addServers($cache, $servers): void
     {
         if (empty($servers)) {
             $servers = [new MemCacheServer([
@@ -160,7 +160,7 @@ class MemCache extends Cache
      * @param Memcached $cache
      * @param MemCacheServer[] $servers
      */
-    protected function addMemcachedServers($cache, $servers)
+    protected function addMemcachedServers($cache, $servers): void
     {
         $existingServers = [];
 
@@ -184,7 +184,7 @@ class MemCache extends Cache
      * @param \Memcache $cache
      * @param MemCacheServer[] $servers
      */
-    protected function addMemcacheServers($cache, $servers)
+    protected function addMemcacheServers($cache, $servers): void
     {
         $class = new ReflectionClass($cache);
         $paramCount = $class->getMethod('addServer')->getNumberOfParameters();
@@ -253,7 +253,7 @@ class MemCache extends Cache
      * @see https://www.php.net/manual/en/memcache.addserver.php
      * @see https://www.php.net/manual/en/memcached.addserver.php
      */
-    public function setServers($config)
+    public function setServers($config): void
     {
         foreach ($config as $c) {
             $this->_servers[] = new MemCacheServer($c);

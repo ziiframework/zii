@@ -204,7 +204,7 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
      *
      * @throws NotSupportedException if this method is called.
      */
-    protected function loadTableDefaultValues($tableName)
+    protected function loadTableDefaultValues($tableName): void
     {
         throw new NotSupportedException('SQLite does not support default value constraints.');
     }
@@ -268,7 +268,7 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
      *
      * @param TableSchema $table the table metadata
      */
-    protected function findConstraints($table)
+    protected function findConstraints($table): void
     {
         $sql = 'PRAGMA foreign_key_list(' . $this->quoteSimpleTableName($table->name) . ')';
         $keys = $this->db->createCommand($sql)->queryAll();
@@ -395,7 +395,7 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
      *
      * @see http://www.sqlite.org/pragma.html#pragma_read_uncommitted
      */
-    public function setTransactionIsolationLevel($level)
+    public function setTransactionIsolationLevel($level): void
     {
         switch ($level) {
             case Transaction::SERIALIZABLE:

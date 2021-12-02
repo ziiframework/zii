@@ -80,7 +80,7 @@ class StringValidator extends Validator
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -119,7 +119,7 @@ class StringValidator extends Validator
     /**
      * {@inheritdoc}
      */
-    public function validateAttribute($model, $attribute)
+    public function validateAttribute($model, $attribute): void
     {
         $value = $model->$attribute;
 

@@ -98,7 +98,7 @@ class DbMessageSource extends MessageSource
      *
      * @throws InvalidConfigException if [[db]] is invalid or [[cache]] is invalid.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->db = Instance::ensure($this->db, Connection::className());

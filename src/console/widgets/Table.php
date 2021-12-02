@@ -144,11 +144,7 @@ class Table extends Widget
      */
     public function setRows(array $rows)
     {
-        $this->rows = array_map(static function ($row) {
-            return array_map(static function ($value) {
-                return empty($value) && !is_numeric($value) ? ' ' : $value;
-            }, array_values($row));
-        }, $rows);
+        $this->rows = array_map(static fn ($row) => array_map(static fn ($value) => empty($value) && !is_numeric($value) ? ' ' : $value, array_values($row)), $rows);
 
         return $this;
     }
@@ -322,7 +318,7 @@ class Table extends Widget
      *
      * @see \yii\console\widgets\Table::render()
      */
-    protected function calculateRowsSize()
+    protected function calculateRowsSize(): void
     {
         $this->columnWidths = $columns = [];
         $totalWidth = 0;

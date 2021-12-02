@@ -137,9 +137,7 @@ class UnknownCommandException extends Exception
         }, array_combine($actions, $actions));
 
         // we assume a typo if the levensthein distance is no more than 3, i.e. 3 replacements needed
-        $relevantTypos = array_filter($distances, static function ($distance) {
-            return $distance <= 3;
-        });
+        $relevantTypos = array_filter($distances, static fn ($distance) => $distance <= 3);
         asort($relevantTypos);
         $alternatives = array_merge($alternatives, array_flip($relevantTypos));
 

@@ -411,7 +411,7 @@ class Model extends Component implements StaticInstanceInterface, IteratorAggreg
      * You may override this method to do postprocessing after validation.
      * Make sure the parent implementation is invoked so that the event can be raised.
      */
-    public function afterValidate()
+    public function afterValidate(): void
     {
         $this->trigger(self::EVENT_AFTER_VALIDATE);
     }
@@ -705,7 +705,7 @@ class Model extends Component implements StaticInstanceInterface, IteratorAggreg
      * @param string $attribute attribute name
      * @param string $error new error message
      */
-    public function addError($attribute, $error = '')
+    public function addError($attribute, $error = ''): void
     {
         $this->_errors[$attribute][] = $error;
     }
@@ -720,7 +720,7 @@ class Model extends Component implements StaticInstanceInterface, IteratorAggreg
      *
      * @since 2.0.2
      */
-    public function addErrors(array $items)
+    public function addErrors(array $items): void
     {
         foreach ($items as $attribute => $errors) {
             if (is_array($errors)) {
@@ -738,7 +738,7 @@ class Model extends Component implements StaticInstanceInterface, IteratorAggreg
      *
      * @param string|null $attribute attribute name. Use null to remove errors for all attributes.
      */
-    public function clearErrors($attribute = null)
+    public function clearErrors($attribute = null): void
     {
         if ($attribute === null) {
             $this->_errors = [];
@@ -801,7 +801,7 @@ class Model extends Component implements StaticInstanceInterface, IteratorAggreg
      * @see safeAttributes()
      * @see attributes()
      */
-    public function setAttributes($values, $safeOnly = true)
+    public function setAttributes($values, $safeOnly = true): void
     {
         if (is_array($values)) {
             $attributes = array_flip($safeOnly ? $this->safeAttributes() : $this->attributes());
@@ -824,7 +824,7 @@ class Model extends Component implements StaticInstanceInterface, IteratorAggreg
      * @param string $name the unsafe attribute name
      * @param mixed $value the attribute value
      */
-    public function onUnsafeAttribute($name, $value)
+    public function onUnsafeAttribute($name, $value): void
     {
         if (YII_DEBUG) {
             Yii::debug("Failed to set unsafe attribute '$name' in '" . get_class($this) . "'.", __METHOD__);
@@ -851,7 +851,7 @@ class Model extends Component implements StaticInstanceInterface, IteratorAggreg
      *
      * @param string $value the scenario that this model is in.
      */
-    public function setScenario($value)
+    public function setScenario($value): void
     {
         $this->_scenario = $value;
     }
@@ -1126,7 +1126,7 @@ class Model extends Component implements StaticInstanceInterface, IteratorAggreg
      * @param string $offset the offset to set element
      * @param mixed $value the element value
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->$offset = $value;
     }
@@ -1138,7 +1138,7 @@ class Model extends Component implements StaticInstanceInterface, IteratorAggreg
      *
      * @param string $offset the offset to unset element
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         $this->$offset = null;
     }

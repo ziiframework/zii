@@ -129,7 +129,7 @@ class Breadcrumbs extends Widget
     /**
      * Renders the widget.
      */
-    public function run()
+    public function run(): void
     {
         if (empty($this->links)) {
             return;

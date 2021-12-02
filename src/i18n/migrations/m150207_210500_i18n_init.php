@@ -17,7 +17,7 @@ use yii\db\Migration;
  */
 class m150207_210500_i18n_init extends Migration
 {
-    public function up()
+    public function up(): void
     {
         $tableOptions = null;
 
@@ -50,7 +50,7 @@ class m150207_210500_i18n_init extends Migration
         $this->createIndex('idx_message_language', '{{%message}}', 'language');
     }
 
-    public function down()
+    public function down(): void
     {
         $this->dropForeignKey('fk_message_source_message', '{{%message}}');
         $this->dropTable('{{%message}}');

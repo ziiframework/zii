@@ -44,7 +44,7 @@ class PgsqlMutex extends DbMutex
      *
      * @throws InvalidConfigException if [[db]] is not PgSQL connection.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 

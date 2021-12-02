@@ -42,7 +42,7 @@ class MysqlMutex extends DbMutex
      *
      * @throws InvalidConfigException if [[db]] is not MySQL connection.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 

@@ -32,7 +32,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
      *
      * @param \Exception $exception the exception to be rendered.
      */
-    protected function renderException($exception)
+    protected function renderException($exception): void
     {
         $previous = $exception->getPrevious();
 

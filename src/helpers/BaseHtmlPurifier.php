@@ -73,7 +73,7 @@ class BaseHtmlPurifier
      *
      * @since 2.0.3
      */
-    protected static function configure($config)
+    protected static function configure($config): void
     {
     }
 }

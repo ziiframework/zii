@@ -98,7 +98,7 @@ class Theme extends Component
      * @param string $url the base URL or [path alias](guide:concept-aliases) for this theme. All resources of this theme are considered
      * to be under this base URL.
      */
-    public function setBaseUrl($url)
+    public function setBaseUrl($url): void
     {
         $this->_baseUrl = $url === null ? null : rtrim(Yii::getAlias($url), '/');
     }
@@ -121,7 +121,7 @@ class Theme extends Component
      *
      * @see pathMap
      */
-    public function setBasePath($path)
+    public function setBasePath($path): void
     {
         $this->_basePath = Yii::getAlias($path);
     }

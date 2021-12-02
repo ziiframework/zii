@@ -45,7 +45,7 @@ class ColumnSchemaBuilder extends AbstractColumnSchemaBuilder
     /**
      * Changes default format string to MSSQL ALTER COMMAND.
      */
-    public function setAlterColumnFormat()
+    public function setAlterColumnFormat(): void
     {
         $this->format = '{type}{length}{notnull}{append}';
     }

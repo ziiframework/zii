@@ -148,7 +148,7 @@ class UrlRule extends CompositeUrlRule
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         if (empty($this->controller)) {
             throw new InvalidConfigException('"controller" must be set.');

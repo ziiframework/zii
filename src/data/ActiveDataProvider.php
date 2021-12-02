@@ -86,7 +86,7 @@ class ActiveDataProvider extends BaseDataProvider
      *
      * @throws InvalidConfigException if [[db]] is invalid.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -182,7 +182,7 @@ class ActiveDataProvider extends BaseDataProvider
     /**
      * {@inheritdoc}
      */
-    public function setSort($value)
+    public function setSort($value): void
     {
         parent::setSort($value);
 

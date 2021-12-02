@@ -168,7 +168,7 @@ class FileValidator extends Validator
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -220,7 +220,7 @@ class FileValidator extends Validator
     /**
      * {@inheritdoc}
      */
-    public function validateAttribute($model, $attribute)
+    public function validateAttribute($model, $attribute): void
     {
         if ($this->maxFiles != 1 || $this->minFiles > 1) {
             $rawFiles = $model->$attribute;

@@ -184,7 +184,7 @@ class Component extends BaseObject
      *
      * @see __get()
      */
-    public function __set($name, $value)
+    public function __set($name, $value): void
     {
         $setter = 'set' . $name;
 
@@ -279,7 +279,7 @@ class Component extends BaseObject
      *
      * @see https://www.php.net/manual/en/function.unset.php
      */
-    public function __unset($name)
+    public function __unset($name): void
     {
         $setter = 'set' . $name;
 
@@ -556,7 +556,7 @@ class Component extends BaseObject
      *
      * @see off()
      */
-    public function on($name, $handler, $data = null, $append = true)
+    public function on($name, $handler, $data = null, $append = true): void
     {
         $this->ensureBehaviors();
 
@@ -653,7 +653,7 @@ class Component extends BaseObject
      * @param string $name the event name
      * @param Event $event the event parameter. If not set, a default [[Event]] object will be created.
      */
-    public function trigger($name, Event $event = null)
+    public function trigger($name, Event $event = null): void
     {
         $this->ensureBehaviors();
 
@@ -753,7 +753,7 @@ class Component extends BaseObject
      *
      * @see attachBehavior()
      */
-    public function attachBehaviors($behaviors)
+    public function attachBehaviors($behaviors): void
     {
         $this->ensureBehaviors();
 
@@ -788,7 +788,7 @@ class Component extends BaseObject
     /**
      * Detaches all behaviors from the component.
      */
-    public function detachBehaviors()
+    public function detachBehaviors(): void
     {
         $this->ensureBehaviors();
 
@@ -800,7 +800,7 @@ class Component extends BaseObject
     /**
      * Makes sure that the behaviors declared in [[behaviors()]] are attached to this component.
      */
-    public function ensureBehaviors()
+    public function ensureBehaviors(): void
     {
         if ($this->_behaviors === null) {
             $this->_behaviors = [];

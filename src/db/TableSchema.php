@@ -91,7 +91,7 @@ class TableSchema extends BaseObject
      *
      * @throws InvalidArgumentException if the specified key cannot be found in the table.
      */
-    public function fixPrimaryKey($keys)
+    public function fixPrimaryKey($keys): void
     {
         $keys = (array) $keys;
         $this->primaryKey = $keys;

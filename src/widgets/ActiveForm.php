@@ -213,7 +213,7 @@ class ActiveForm extends Widget
      * Initializes the widget.
      * This renders the form open tag.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -254,7 +254,7 @@ class ActiveForm extends Widget
      *
      * @since 2.0.12
      */
-    public function registerClientScript()
+    public function registerClientScript(): void
     {
         $id = $this->options['id'];
         $options = Json::htmlEncode($this->getClientOptions());

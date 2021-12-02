@@ -643,7 +643,7 @@ class Connection extends Component
      *
      * @throws Exception if connection fails
      */
-    public function open()
+    public function open(): void
     {
         if ($this->pdo !== null) {
             return;
@@ -696,7 +696,7 @@ class Connection extends Component
      * Closes the currently active DB connection.
      * It does nothing if the connection is already closed.
      */
-    public function close()
+    public function close(): void
     {
         if ($this->_master) {
             if ($this->pdo === $this->_master->pdo) {
@@ -781,7 +781,7 @@ class Connection extends Component
      * if [[emulatePrepare]] is true, and sets the database [[charset]] if it is not empty.
      * It then triggers an [[EVENT_AFTER_OPEN]] event.
      */
-    protected function initConnection()
+    protected function initConnection(): void
     {
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -900,7 +900,7 @@ class Connection extends Component
      * @param Transaction $transaction Transaction object given from [[beginTransaction()]].
      * @param int $level Transaction level just after [[beginTransaction()]] call.
      */
-    private function rollbackTransactionOnLevel($transaction, $level)
+    private function rollbackTransactionOnLevel($transaction, $level): void
     {
         if ($transaction->isActive && $transaction->level === $level) {
             // https://github.com/yiisoft/yii2/pull/13347
@@ -958,7 +958,7 @@ class Connection extends Component
      *
      * @since 2.0.14
      */
-    public function setQueryBuilder($value)
+    public function setQueryBuilder($value): void
     {
         Yii::configure($this->getQueryBuilder(), $value);
         $this->_queryBuilderConfigurations[] = $value;
@@ -967,7 +967,7 @@ class Connection extends Component
     /**
      * Restores custom QueryBuilder configuration after the connection close/open cycle.
      */
-    private function restoreQueryBuilderConfiguration()
+    private function restoreQueryBuilderConfiguration(): void
     {
         if ($this->_queryBuilderConfigurations === []) {
             return;
@@ -1107,7 +1107,7 @@ class Connection extends Component
      *
      * @param string $driverName name of the DB driver
      */
-    public function setDriverName($driverName)
+    public function setDriverName($driverName): void
     {
         $this->_driverName = strtolower($driverName);
     }

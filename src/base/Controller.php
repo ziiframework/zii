@@ -108,7 +108,7 @@ class Controller extends Component implements ViewContextInterface
      *
      * @since 2.0.36
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->request = Instance::ensure($this->request, Request::className());
@@ -520,7 +520,7 @@ class Controller extends Component implements ViewContextInterface
      *
      * @param View|\yii\web\View $view the view object that can be used to render views or view files.
      */
-    public function setView($view)
+    public function setView($view): void
     {
         $this->_view = $view;
     }
@@ -550,7 +550,7 @@ class Controller extends Component implements ViewContextInterface
      *
      * @since 2.0.7
      */
-    public function setViewPath($path)
+    public function setViewPath($path): void
     {
         $this->_viewPath = Yii::getAlias($path);
     }
@@ -621,7 +621,7 @@ class Controller extends Component implements ViewContextInterface
      *
      * @since 2.0.36
      */
-    final protected function bindInjectedParams(ReflectionType $type, $name, &$args, &$requestedParams)
+    final protected function bindInjectedParams(ReflectionType $type, $name, &$args, &$requestedParams): void
     {
         // Since it is not a builtin type it must be DI injection.
         $typeName = $type->getName();

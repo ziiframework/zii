@@ -63,7 +63,7 @@ class m200409_110543_rbac_update_mssql_trigger extends Migration
     /**
      * {@inheritdoc}
      */
-    public function up()
+    public function up(): void
     {
         if ($this->isMSSQL()) {
             $authManager = $this->getAuthManager();
@@ -116,7 +116,7 @@ class m200409_110543_rbac_update_mssql_trigger extends Migration
     /**
      * {@inheritdoc}
      */
-    public function down()
+    public function down(): void
     {
         if ($this->isMSSQL()) {
             $authManager = $this->getAuthManager();

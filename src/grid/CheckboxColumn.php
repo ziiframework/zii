@@ -83,7 +83,7 @@ class CheckboxColumn extends Column
      *
      * @throws \yii\base\InvalidConfigException if [[name]] is not set.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -169,7 +169,7 @@ class CheckboxColumn extends Column
      *
      * @since 2.0.8
      */
-    public function registerClientScript()
+    public function registerClientScript(): void
     {
         $id = $this->grid->options['id'];
         $options = Json::encode([

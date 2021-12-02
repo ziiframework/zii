@@ -58,7 +58,7 @@ class GettextPoFile extends GettextFile
      * translated messages: source message => translated message. Note if the message has a context,
      * the message ID must be prefixed with the context with chr(4) as the separator.
      */
-    public function save($filePath, $messages)
+    public function save($filePath, $messages): void
     {
         $language = str_replace('-', '_', basename(dirname($filePath)));
         $headers = [

@@ -194,7 +194,7 @@ class HttpCache extends ActionFilter
      *
      * @see cacheControlHeader
      */
-    protected function sendCacheControlHeader()
+    protected function sendCacheControlHeader(): void
     {
         if ($this->sessionCacheLimiter !== null) {
             if ($this->sessionCacheLimiter === '' && !headers_sent() && Yii::$app->getSession()->getIsActive()) {

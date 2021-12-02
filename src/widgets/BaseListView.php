@@ -117,7 +117,7 @@ abstract class BaseListView extends Widget
     /**
      * Initializes the view.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -137,7 +137,7 @@ abstract class BaseListView extends Widget
     /**
      * Runs the widget.
      */
-    public function run()
+    public function run(): void
     {
         if ($this->showOnEmpty || $this->dataProvider->getCount() > 0) {
             $content = preg_replace_callback('/{\\w+}/', function ($matches) {

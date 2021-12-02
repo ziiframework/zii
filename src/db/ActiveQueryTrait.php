@@ -144,7 +144,7 @@ trait ActiveQueryTrait
      * refer to [[with()]] for details about specifying this parameter.
      * @param array|ActiveRecord[] $models the primary models (can be either AR instances or arrays)
      */
-    public function findWith($with, &$models)
+    public function findWith($with, &$models): void
     {
         $primaryModel = reset($models);
 

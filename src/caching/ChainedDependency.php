@@ -41,7 +41,7 @@ class ChainedDependency extends Dependency
      *
      * @param CacheInterface $cache the cache component that is currently evaluating this dependency
      */
-    public function evaluateDependency($cache)
+    public function evaluateDependency($cache): void
     {
         foreach ($this->dependencies as $dependency) {
             $dependency->evaluateDependency($cache);

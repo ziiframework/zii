@@ -78,7 +78,7 @@ class TagDependency extends Dependency
      * @param CacheInterface $cache the cache component that caches the data items
      * @param string|array $tags
      */
-    public static function invalidate($cache, $tags)
+    public static function invalidate($cache, $tags): void
     {
         $keys = [];
 

@@ -77,7 +77,7 @@ trait ArrayAccessTrait
      * @param int $offset the offset to set element
      * @param mixed $item the element value
      */
-    public function offsetSet($offset, $item)
+    public function offsetSet($offset, $item): void
     {
         $this->data[$offset] = $item;
     }
@@ -87,7 +87,7 @@ trait ArrayAccessTrait
      *
      * @param mixed $offset the offset to unset element
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->data[$offset]);
     }

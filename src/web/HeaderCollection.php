@@ -181,7 +181,7 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
     /**
      * Removes all headers.
      */
-    public function removeAll()
+    public function removeAll(): void
     {
         $this->_headers = [];
     }
@@ -204,7 +204,7 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      *
      * @since 2.0.3
      */
-    public function fromArray(array $array)
+    public function fromArray(array $array): void
     {
         $this->_headers = array_change_key_case($array, CASE_LOWER);
     }
@@ -247,7 +247,7 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      * @param string $name the header name
      * @param string $value the header value to be added
      */
-    public function offsetSet($name, $value)
+    public function offsetSet($name, $value): void
     {
         $this->set($name, $value);
     }
@@ -260,7 +260,7 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      *
      * @param string $name the header name
      */
-    public function offsetUnset($name)
+    public function offsetUnset($name): void
     {
         $this->remove($name);
     }

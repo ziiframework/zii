@@ -116,7 +116,7 @@ class CaptchaAction extends Action
      *
      * @throws InvalidConfigException if the font file does not exist.
      */
-    public function init()
+    public function init(): void
     {
         $this->fontFile = Yii::getAlias($this->fontFile);
 
@@ -378,7 +378,7 @@ class CaptchaAction extends Action
     /**
      * Sets the HTTP headers needed by image response.
      */
-    protected function setHttpHeaders()
+    protected function setHttpHeaders(): void
     {
         Yii::$app->getResponse()->getHeaders()
             ->set('Pragma', 'public')

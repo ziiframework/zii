@@ -59,7 +59,7 @@ class ActiveFixture extends BaseActiveFixture
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -81,7 +81,7 @@ class ActiveFixture extends BaseActiveFixture
      * If you override this method, you should consider calling the parent implementation
      * so that the data returned by [[getData()]] can be populated into the table.
      */
-    public function load()
+    public function load(): void
     {
         $this->data = [];
         $table = $this->getTableSchema();
@@ -121,7 +121,7 @@ class ActiveFixture extends BaseActiveFixture
     /**
      * {@inheritdoc}
      */
-    public function unload()
+    public function unload(): void
     {
         $this->resetTable();
         parent::unload();
@@ -131,7 +131,7 @@ class ActiveFixture extends BaseActiveFixture
      * Removes all existing data from the specified table and resets sequence number to 1 (if any).
      * This method is called before populating fixture data into the table associated with this fixture.
      */
-    protected function resetTable()
+    protected function resetTable(): void
     {
         $table = $this->getTableSchema();
         $this->db->createCommand()->delete($table->fullName)->execute();

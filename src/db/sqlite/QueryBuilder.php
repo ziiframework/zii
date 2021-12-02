@@ -230,9 +230,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
 
             if ($value === null) {
                 $key = $this->db->quoteColumnName(reset($table->primaryKey));
-                $value = $this->db->useMaster(static function (Connection $db) use ($key, $tableName) {
-                    return $db->createCommand("SELECT MAX($key) FROM $tableName")->queryScalar();
-                });
+                $value = $this->db->useMaster(static fn (Connection $db) => $db->createCommand("SELECT MAX($key) FROM $tableName")->queryScalar());
             } else {
                 $value = (int) $value - 1;
             }
@@ -423,7 +421,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      *
      * @throws NotSupportedException this is not supported by SQLite.
      */
-    public function addUnique($name, $table, $columns)
+    public function addUnique($name, $table, $columns): void
     {
         throw new NotSupportedException(__METHOD__ . ' is not supported by SQLite.');
     }
@@ -433,7 +431,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      *
      * @throws NotSupportedException this is not supported by SQLite.
      */
-    public function dropUnique($name, $table)
+    public function dropUnique($name, $table): void
     {
         throw new NotSupportedException(__METHOD__ . ' is not supported by SQLite.');
     }
@@ -443,7 +441,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      *
      * @throws NotSupportedException this is not supported by SQLite.
      */
-    public function addCheck($name, $table, $expression)
+    public function addCheck($name, $table, $expression): void
     {
         throw new NotSupportedException(__METHOD__ . ' is not supported by SQLite.');
     }
@@ -453,7 +451,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      *
      * @throws NotSupportedException this is not supported by SQLite.
      */
-    public function dropCheck($name, $table)
+    public function dropCheck($name, $table): void
     {
         throw new NotSupportedException(__METHOD__ . ' is not supported by SQLite.');
     }
@@ -463,7 +461,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      *
      * @throws NotSupportedException this is not supported by SQLite.
      */
-    public function addDefaultValue($name, $table, $column, $value)
+    public function addDefaultValue($name, $table, $column, $value): void
     {
         throw new NotSupportedException(__METHOD__ . ' is not supported by SQLite.');
     }
@@ -473,7 +471,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      *
      * @throws NotSupportedException this is not supported by SQLite.
      */
-    public function dropDefaultValue($name, $table)
+    public function dropDefaultValue($name, $table): void
     {
         throw new NotSupportedException(__METHOD__ . ' is not supported by SQLite.');
     }
@@ -485,7 +483,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      *
      * @since 2.0.8
      */
-    public function addCommentOnColumn($table, $column, $comment)
+    public function addCommentOnColumn($table, $column, $comment): void
     {
         throw new NotSupportedException(__METHOD__ . ' is not supported by SQLite.');
     }
@@ -497,7 +495,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      *
      * @since 2.0.8
      */
-    public function addCommentOnTable($table, $comment)
+    public function addCommentOnTable($table, $comment): void
     {
         throw new NotSupportedException(__METHOD__ . ' is not supported by SQLite.');
     }
@@ -509,7 +507,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      *
      * @since 2.0.8
      */
-    public function dropCommentFromColumn($table, $column)
+    public function dropCommentFromColumn($table, $column): void
     {
         throw new NotSupportedException(__METHOD__ . ' is not supported by SQLite.');
     }
@@ -521,7 +519,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      *
      * @since 2.0.8
      */
-    public function dropCommentFromTable($table)
+    public function dropCommentFromTable($table): void
     {
         throw new NotSupportedException(__METHOD__ . ' is not supported by SQLite.');
     }

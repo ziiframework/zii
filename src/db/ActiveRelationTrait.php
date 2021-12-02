@@ -209,7 +209,7 @@ trait ActiveRelationTrait
      *
      * @since 2.0.9
      */
-    private function addInverseRelations(&$result)
+    private function addInverseRelations(&$result): void
     {
         if ($this->inverseOf === null) {
             return;
@@ -359,7 +359,7 @@ trait ActiveRelationTrait
      * @param string $primaryName the primary relation name
      * @param string $name the relation name
      */
-    private function populateInverseRelation(&$primaryModels, $models, $primaryName, $name)
+    private function populateInverseRelation(&$primaryModels, $models, $primaryName, $name): void
     {
         if (empty($models) || empty($primaryModels)) {
             return;
@@ -559,7 +559,7 @@ trait ActiveRelationTrait
     /**
      * @param array $models
      */
-    private function filterByModels($models)
+    private function filterByModels($models): void
     {
         $attributes = array_keys($this->link);
 

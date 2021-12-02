@@ -48,7 +48,7 @@ class Request extends \yii\base\Request
      *
      * @param array $params the command line arguments
      */
-    public function setParams($params)
+    public function setParams($params): void
     {
         $this->_params = $params;
     }
