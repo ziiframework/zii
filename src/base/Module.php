@@ -170,7 +170,7 @@ class Module extends ServiceLocator
      */
     public static function getInstance()
     {
-        $class = get_called_class();
+        $class = static::class;
 
         return Yii::$app->loadedModules[$class] ?? null;
     }
@@ -184,7 +184,7 @@ class Module extends ServiceLocator
     public static function setInstance($instance): void
     {
         if ($instance === null) {
-            unset(Yii::$app->loadedModules[get_called_class()]);
+            unset(Yii::$app->loadedModules[static::class]);
         } else {
             Yii::$app->loadedModules[get_class($instance)] = $instance;
         }
@@ -202,7 +202,7 @@ class Module extends ServiceLocator
     public function init(): void
     {
         if ($this->controllerNamespace === null) {
-            $class = get_class($this);
+            $class = static::class;
 
             if (($pos = strrpos($class, '\\')) !== false) {
                 $this->controllerNamespace = substr($class, 0, $pos) . '\\controllers';

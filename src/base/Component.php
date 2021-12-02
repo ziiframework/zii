@@ -157,10 +157,10 @@ class Component extends BaseObject
         }
 
         if (method_exists($this, 'set' . $name)) {
-            throw new InvalidCallException('Getting write-only property: ' . get_class($this) . '::' . $name);
+            throw new InvalidCallException('Getting write-only property: ' . static::class . '::' . $name);
         }
 
-        throw new UnknownPropertyException('Getting unknown property: ' . get_class($this) . '::' . $name);
+        throw new UnknownPropertyException('Getting unknown property: ' . static::class . '::' . $name);
     }
 
     /**
@@ -218,10 +218,10 @@ class Component extends BaseObject
         }
 
         if (method_exists($this, 'get' . $name)) {
-            throw new InvalidCallException('Setting read-only property: ' . get_class($this) . '::' . $name);
+            throw new InvalidCallException('Setting read-only property: ' . static::class . '::' . $name);
         }
 
-        throw new UnknownPropertyException('Setting unknown property: ' . get_class($this) . '::' . $name);
+        throw new UnknownPropertyException('Setting unknown property: ' . static::class . '::' . $name);
     }
 
     /**
@@ -300,7 +300,7 @@ class Component extends BaseObject
             }
         }
 
-        throw new InvalidCallException('Unsetting an unknown or read-only property: ' . get_class($this) . '::' . $name);
+        throw new InvalidCallException('Unsetting an unknown or read-only property: ' . static::class . '::' . $name);
     }
 
     /**
@@ -329,7 +329,7 @@ class Component extends BaseObject
             }
         }
 
-        throw new UnknownMethodException('Calling unknown method: ' . get_class($this) . "::$name()");
+        throw new UnknownMethodException('Calling unknown method: ' . static::class . "::$name()");
     }
 
     /**

@@ -1299,7 +1299,7 @@ class Connection extends Component
         }
 
         if (!isset($sharedConfig['class'])) {
-            $sharedConfig['class'] = get_class($this);
+            $sharedConfig['class'] = static::class;
         }
 
         $cache = is_string($this->serverStatusCache) ? Yii::$app->get($this->serverStatusCache, false) : $this->serverStatusCache;

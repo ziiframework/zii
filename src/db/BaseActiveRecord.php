@@ -152,7 +152,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
                 // if condition is scalar, search for a single primary key, if it is array, search for multiple primary key values
                 $condition = [$primaryKey[0] => is_array($condition) ? array_values($condition) : $condition];
             } else {
-                throw new InvalidConfigException('"' . get_called_class() . '" must have a primary key.');
+                throw new InvalidConfigException('"' . static::class . '" must have a primary key.');
             }
         }
 
@@ -580,7 +580,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
             }
             $this->_attributes[$name] = $value;
         } else {
-            throw new InvalidArgumentException(get_class($this) . ' has no attribute named "' . $name . '".');
+            throw new InvalidArgumentException(static::class . ' has no attribute named "' . $name . '".');
         }
     }
 
@@ -638,7 +638,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
         if (isset($this->_oldAttributes[$name]) || $this->hasAttribute($name)) {
             $this->_oldAttributes[$name] = $value;
         } else {
-            throw new InvalidArgumentException(get_class($this) . ' has no attribute named "' . $name . '".');
+            throw new InvalidArgumentException(static::class . ' has no attribute named "' . $name . '".');
         }
     }
 
@@ -1198,7 +1198,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
             return false;
         }
 
-        return get_class($this) === get_class($record) && $this->getPrimaryKey() === $record->getPrimaryKey();
+        return static::class === get_class($record) && $this->getPrimaryKey() === $record->getPrimaryKey();
     }
 
     /**
@@ -1258,7 +1258,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
         $keys = static::primaryKey();
 
         if (empty($keys)) {
-            throw new Exception(get_class($this) . ' does not have a primary key. You should either define a primary key for the corresponding table or override the primaryKey() method.');
+            throw new Exception(static::class . ' does not have a primary key. You should either define a primary key for the corresponding table or override the primaryKey() method.');
         }
 
         if (!$asArray && count($keys) === 1) {
@@ -1359,7 +1359,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
             $relation = $this->$getter();
         } catch (UnknownMethodException $e) {
             if ($throwException) {
-                throw new InvalidArgumentException(get_class($this) . ' has no relation named "' . $name . '".', 0, $e);
+                throw new InvalidArgumentException(static::class . ' has no relation named "' . $name . '".', 0, $e);
             }
 
             return null;
@@ -1367,7 +1367,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
 
         if (!$relation instanceof ActiveQueryInterface) {
             if ($throwException) {
-                throw new InvalidArgumentException(get_class($this) . ' has no relation named "' . $name . '".');
+                throw new InvalidArgumentException(static::class . ' has no relation named "' . $name . '".');
             }
 
             return null;
@@ -1380,7 +1380,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
 
             if ($realName !== $name) {
                 if ($throwException) {
-                    throw new InvalidArgumentException('Relation names are case sensitive. ' . get_class($this) . " has a relation named \"$realName\" instead of \"$name\".");
+                    throw new InvalidArgumentException('Relation names are case sensitive. ' . static::class . " has a relation named \"$realName\" instead of \"$name\".");
                 }
 
                 return null;

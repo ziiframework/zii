@@ -408,7 +408,7 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
                 break;
 
             default:
-                throw new NotSupportedException(get_class($this) . ' only supports transaction isolation levels READ UNCOMMITTED and SERIALIZABLE.');
+                throw new NotSupportedException(static::class . ' only supports transaction isolation levels READ UNCOMMITTED and SERIALIZABLE.');
         }
     }
 

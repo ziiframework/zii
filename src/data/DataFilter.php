@@ -293,7 +293,7 @@ class DataFilter extends Model
             $model = Yii::createObject($this->_searchModel);
 
             if (!$model instanceof Model) {
-                throw new InvalidConfigException('`' . get_class($this) . '::$searchModel` should be an instance of `' . Model::className() . '` or its DI compatible configuration.');
+                throw new InvalidConfigException('`' . static::class . '::$searchModel` should be an instance of `' . Model::className() . '` or its DI compatible configuration.');
             }
             $this->_searchModel = $model;
         }
@@ -309,7 +309,7 @@ class DataFilter extends Model
     public function setSearchModel($model): void
     {
         if (is_object($model) && !$model instanceof Model && !$model instanceof Closure) {
-            throw new InvalidConfigException('`' . get_class($this) . '::$searchModel` should be an instance of `' . Model::className() . '` or its DI compatible configuration.');
+            throw new InvalidConfigException('`' . static::class . '::$searchModel` should be an instance of `' . Model::className() . '` or its DI compatible configuration.');
         }
         $this->_searchModel = $model;
     }

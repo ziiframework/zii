@@ -80,7 +80,7 @@ class DbQueryDependency extends Dependency
         }
 
         if (!$this->query instanceof QueryInterface) {
-            throw new InvalidConfigException('"' . get_class($this) . '::$query" should be an instance of "yii\db\QueryInterface".');
+            throw new InvalidConfigException('"' . static::class . '::$query" should be an instance of "yii\db\QueryInterface".');
         }
 
         if (!empty($db->enableQueryCache)) {

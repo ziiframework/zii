@@ -1225,18 +1225,18 @@ class Command extends Component
         $this->prepare(false);
 
         try {
-            $profile and Yii::beginProfile($rawSql, __METHOD__);
+            $profile && Yii::beginProfile($rawSql, __METHOD__);
 
             $this->internalExecute($rawSql);
             $n = $this->pdoStatement->rowCount();
 
-            $profile and Yii::endProfile($rawSql, __METHOD__);
+            $profile && Yii::endProfile($rawSql, __METHOD__);
 
             $this->refreshTableSchema();
 
             return $n;
         } catch (Exception $e) {
-            $profile and Yii::endProfile($rawSql, __METHOD__);
+            $profile && Yii::endProfile($rawSql, __METHOD__);
 
             throw $e;
         }
@@ -1302,7 +1302,7 @@ class Command extends Component
         $this->prepare(true);
 
         try {
-            $profile and Yii::beginProfile($rawSql, 'yii\db\Command::query');
+            $profile && Yii::beginProfile($rawSql, 'yii\db\Command::query');
 
             $this->internalExecute($rawSql);
 
@@ -1316,9 +1316,9 @@ class Command extends Component
                 $this->pdoStatement->closeCursor();
             }
 
-            $profile and Yii::endProfile($rawSql, 'yii\db\Command::query');
+            $profile && Yii::endProfile($rawSql, 'yii\db\Command::query');
         } catch (Exception $e) {
-            $profile and Yii::endProfile($rawSql, 'yii\db\Command::query');
+            $profile && Yii::endProfile($rawSql, 'yii\db\Command::query');
 
             throw $e;
         }

@@ -802,7 +802,7 @@ PATTERN;
         $result = [];
 
         foreach ($columns as $columnAlias => $columnDefinition) {
-            if (!$columnDefinition instanceof Query) {
+            if (!$columnDefinition instanceof self) {
                 if (is_string($columnAlias)) {
                     $existsInSelect = isset($this->select[$columnAlias]) && $this->select[$columnAlias] === $columnDefinition;
 

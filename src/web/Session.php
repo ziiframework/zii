@@ -193,7 +193,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
             }
 
             if (!$this->handler instanceof SessionHandlerInterface) {
-                throw new InvalidConfigException('"' . get_class($this) . '::handler" must implement the SessionHandlerInterface.');
+                throw new InvalidConfigException('"' . static::class . '::handler" must implement the SessionHandlerInterface.');
             }
             YII_DEBUG ? session_set_save_handler($this->handler, false) : @session_set_save_handler($this->handler, false);
         } elseif ($this->getUseCustomStorage()) {

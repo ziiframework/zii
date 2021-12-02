@@ -35,7 +35,7 @@ trait StaticInstanceTrait
      */
     public static function instance($refresh = false)
     {
-        $className = get_called_class();
+        $className = static::class;
 
         if ($refresh || !isset(self::$_instances[$className])) {
             self::$_instances[$className] = Yii::createObject($className);

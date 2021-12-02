@@ -60,7 +60,7 @@ class HttpHeaderAuth extends AuthMethod
                 }
             }
 
-            $identity = $user->loginByAccessToken($authHeader, get_class($this));
+            $identity = $user->loginByAccessToken($authHeader, static::class);
 
             if ($identity === null) {
                 $this->challenge($response);

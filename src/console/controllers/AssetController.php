@@ -184,7 +184,7 @@ class AssetController extends Controller
     public function setAssetManager($assetManager): void
     {
         if (is_scalar($assetManager)) {
-            throw new Exception('"' . get_class($this) . '::assetManager" should be either object or array - "' . gettype($assetManager) . '" given.');
+            throw new Exception('"' . static::class . '::assetManager" should be either object or array - "' . gettype($assetManager) . '" given.');
         }
         $this->_assetManager = $assetManager;
     }
