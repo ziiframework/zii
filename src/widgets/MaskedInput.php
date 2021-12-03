@@ -127,7 +127,7 @@ class MaskedInput extends InputWidget
     /**
      * {@inheritdoc}
      */
-    public function run(): void
+    public function run()
     {
         $this->registerClientScript();
         echo $this->renderInputHtml($this->type);
