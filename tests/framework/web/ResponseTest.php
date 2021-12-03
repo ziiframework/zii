@@ -208,7 +208,7 @@ class ResponseTest extends \yiiunit\TestCase
      */
     public function testNonSeekableStream(): void
     {
-        $stream = fopen('php://output', 'r+');
+        $stream = fopen('php://output', 'r+b');
         ob_start();
         $this->response
             ->sendStreamAsFile($stream, 'test-stream')

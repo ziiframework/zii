@@ -36,9 +36,9 @@ class ConsoleTest extends TestCase
      */
     protected function setupStreams(): void
     {
-        ConsoleStub::$inputStream = fopen('php://memory', 'w+');
-        ConsoleStub::$outputStream = fopen('php://memory', 'w+');
-        ConsoleStub::$errorStream = fopen('php://memory', 'w+');
+        ConsoleStub::$inputStream = fopen('php://memory', 'w+b');
+        ConsoleStub::$outputStream = fopen('php://memory', 'w+b');
+        ConsoleStub::$errorStream = fopen('php://memory', 'w+b');
     }
 
     /**

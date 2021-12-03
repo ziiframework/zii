@@ -446,7 +446,7 @@ class NumberValidatorTest extends TestCase
     public function testValidateResource(): void
     {
         $val = new NumberValidator();
-        $fp = fopen('php://stdin', 'r');
+        $fp = fopen('php://stdin', 'rb');
         $this->assertFalse($val->validate($fp));
 
         $model = new FakedValidationModel();

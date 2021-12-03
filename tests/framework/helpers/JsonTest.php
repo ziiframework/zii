@@ -223,7 +223,7 @@ class JsonTest extends TestCase
 
         // unsupported type since PHP 5.5
         try {
-            $fp = fopen('php://stdin', 'r');
+            $fp = fopen('php://stdin', 'rb');
             $data = ['a' => $fp];
             Json::encode($data);
             fclose($fp);
