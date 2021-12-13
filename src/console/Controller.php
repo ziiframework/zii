@@ -757,16 +757,16 @@ class Controller extends \yii\base\Controller
     {
         $comment = $reflection->getDocComment();
 
-        $comment = "@description \n" . strtr(
+        $comment = "@description \n" . str_replace(
+                "\r",
+                '',
                 trim(
                     preg_replace(
                         '/^\s*\**( |\t)?/m',
                         '',
                         trim($comment, '/')
                     )
-                ),
-                "\r",
-                ''
+                )
             );
 
         $parts = preg_split('/^\s*@/m', $comment, -1, PREG_SPLIT_NO_EMPTY);
