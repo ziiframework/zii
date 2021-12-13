@@ -804,6 +804,12 @@ class Controller extends \yii\base\Controller
      */
     protected function parseDocCommentDetail($reflection)
     {
+        $docComment = $reflection->getDocComment();
+
+        if ($docComment === false) {
+            return '';
+        }
+
         $comment = str_replace(
             "\r",
             '',
@@ -811,7 +817,7 @@ class Controller extends \yii\base\Controller
                 preg_replace(
                     '/^\s*\**( |\t)?/m',
                     '',
-                    trim($reflection->getDocComment(), '/')
+                    trim($docComment, '/')
                 )
             )
         );
