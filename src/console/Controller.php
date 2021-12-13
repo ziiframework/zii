@@ -757,6 +757,10 @@ class Controller extends \yii\base\Controller
     {
         $comment = $reflection->getDocComment();
 
+        if ($comment === false) {
+            $comment = '';
+        }
+
         $comment = "@description \n" . str_replace(
                 "\r",
                 '',
