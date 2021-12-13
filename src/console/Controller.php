@@ -804,16 +804,16 @@ class Controller extends \yii\base\Controller
      */
     protected function parseDocCommentDetail($reflection)
     {
-        $comment = strtr(
+        $comment = str_replace(
+            "\r",
+            '',
             trim(
                 preg_replace(
                     '/^\s*\**( |\t)?/m',
                     '',
                     trim($reflection->getDocComment(), '/')
                 )
-            ),
-            "\r",
-            ''
+            )
         );
 
         if (preg_match('/^\s*@\w+/m', $comment, $matches, PREG_OFFSET_CAPTURE)) {
