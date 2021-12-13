@@ -615,7 +615,7 @@ class Request extends \yii\base\Request
 
             $rawContentType = $this->getContentType();
 
-            if (($pos = strpos($rawContentType, ';')) !== false) {
+            if (($rawContentType !== null) && ($pos = strpos($rawContentType, ';')) !== false) {
                 // e.g. text/html; charset=UTF-8
                 $contentType = substr($rawContentType, 0, $pos);
             } else {
@@ -1614,7 +1614,7 @@ break;
      * media type that would have been sent had the request been a GET.
      * For the MIME-types the user expects in response, see [[acceptableContentTypes]].
      *
-     * @return string request content-type. Null is returned if this information is not available.
+     * @return string|null request content-type. Null is returned if this information is not available.
      *
      * @link https://tools.ietf.org/html/rfc2616#section-14.17
      * HTTP 1.1 header field definitions
