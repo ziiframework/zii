@@ -962,7 +962,13 @@ class Formatter extends Component
         }
         $timestamp = $this->normalizeDatetimeValue($value);
 
-        return number_format($timestamp->format('U'), 0, '.', '');
+        $format_U = $timestamp->format('U');
+
+        if (is_string($format_U) && preg_match('/^\d+$/', $format_U) && !str_starts_with($format_U, '0')) {
+            $format_U = (float)$format_U;
+        }
+
+        return number_format($format_U, 0, '.', '');
     }
 
     /**
