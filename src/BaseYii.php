@@ -300,7 +300,7 @@ class BaseYii
         if (isset(static::$classMap[$className])) {
             $classFile = static::$classMap[$className];
 
-            if (strncmp($classFile, '@', 1) === 0) {
+            if (str_starts_with($classFile, '@')) {
                 $classFile = static::getAlias($classFile);
             }
         } elseif (strpos($className, '\\') !== false) {
