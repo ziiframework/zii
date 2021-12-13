@@ -118,7 +118,7 @@ class ColumnSchema extends \yii\db\ColumnSchema
     /**
      * Casts $value after retrieving from the DBMS to PHP representation.
      *
-     * @param string|null $value
+     * @param string|bool|null $value
      *
      * @return bool|mixed|null
      */
@@ -130,6 +130,10 @@ class ColumnSchema extends \yii\db\ColumnSchema
 
         switch ($this->type) {
             case Schema::TYPE_BOOLEAN:
+                if (is_bool($value)) {
+                    return $value;
+                }
+
                 switch (strtolower($value)) {
                     case 't':
                     case 'true':
