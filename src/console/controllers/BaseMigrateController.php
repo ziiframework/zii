@@ -600,6 +600,10 @@ abstract class BaseMigrateController extends Controller
             }
 
             foreach ($migrations as $version => $time) {
+                if (is_string($time) && preg_match('/^\d+$/', $time) && !str_starts_with($time, '0')) {
+                    $time = (int)$time;
+                }
+
                 $this->stdout("\t(" . date('Y-m-d H:i:s', $time) . ') ' . $version . "\n");
             }
         }
