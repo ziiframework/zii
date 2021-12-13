@@ -77,6 +77,10 @@ class BaseIpHelper
         [$ip, $mask] = array_pad(explode('/', $subnet), 2, null);
         [$net, $netMask] = array_pad(explode('/', $range), 2, null);
 
+        if (is_string($netMask) && preg_match('/^\d+$/', $netMask) && !str_starts_with($netMask, '0')) {
+            $netMask = (int)$netMask;
+        }
+
         $ipVersion = static::getIpVersion($ip);
         $netVersion = static::getIpVersion($net);
 
