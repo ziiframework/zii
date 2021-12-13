@@ -178,7 +178,12 @@ class BaseFileHelper
 
             throw new InvalidConfigException('The fileinfo PHP extension is not installed.');
         }
-        $info = finfo_open(FILEINFO_MIME_TYPE, $magicFile);
+
+        if ($magicFile !== null) {
+            $info = finfo_open(FILEINFO_MIME_TYPE, $magicFile);
+        } else {
+            $info = finfo_open(FILEINFO_MIME_TYPE);
+        }
 
         if ($info) {
             $result = finfo_file($info, $file);
