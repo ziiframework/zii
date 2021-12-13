@@ -756,7 +756,19 @@ class Controller extends \yii\base\Controller
     protected function parseDocCommentTags($reflection)
     {
         $comment = $reflection->getDocComment();
-        $comment = "@description \n" . strtr(trim(preg_replace('/^\s*\**( |\t)?/m', '', trim($comment, '/'))), "\r", '');
+
+        $comment = "@description \n" . strtr(
+                trim(
+                    preg_replace(
+                        '/^\s*\**( |\t)?/m',
+                        '',
+                        trim($comment, '/')
+                    )
+                ),
+                "\r",
+                ''
+            );
+
         $parts = preg_split('/^\s*@/m', $comment, -1, PREG_SPLIT_NO_EMPTY);
         $tags = [];
 
