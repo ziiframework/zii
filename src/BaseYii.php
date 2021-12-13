@@ -141,7 +141,11 @@ class BaseYii
      */
     public static function getAlias($alias, $throwException = true)
     {
-        if (strncmp($alias, '@', 1) !== 0) {
+        if ($alias === null) {
+            return null;
+        }
+
+        if (!str_starts_with($alias, '@')) {
             // not an alias
             return $alias;
         }
