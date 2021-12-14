@@ -408,9 +408,9 @@ class MessageFormatter extends Component
                 if (is_numeric($arg) && ($format === null || $format === 'integer')) {
                     $number = number_format($arg);
 
-                    if ($format === null && ($pos = strpos($arg, '.')) !== false) {
+                    if ($format === null && ($pos = strpos((string) $arg, '.')) !== false) {
                         // add decimals with unknown length
-                        $number .= '.' . substr($arg, $pos + 1);
+                        $number .= '.' . substr((string) $arg, $pos + 1);
                     }
 
                     return $number;
