@@ -539,7 +539,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
                 }
             }
 
-            if (strcmp($params[$name], $value) === 0) { // strcmp will do string conversion automatically
+            if (strcmp(is_int($params[$name]) ? (string) $params[$name] : $params[$name], $value) === 0) { // strcmp will do string conversion automatically
                 unset($params[$name]);
 
                 if (isset($this->_paramRules[$name])) {
@@ -554,7 +554,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
 
         // match params in the pattern
         foreach ($this->_paramRules as $name => $rule) {
-            if (isset($params[$name]) && !is_array($params[$name]) && ($rule === '' || preg_match($rule, $params[$name]))) {
+            if (isset($params[$name]) && !is_array($params[$name]) && ($rule === '' || preg_match($rule, is_int($params[$name]) ? (string) $params[$name] : $params[$name]))) {
                 $tr["<$name>"] = $this->encodeParams ? urlencode($params[$name]) : $params[$name];
                 unset($params[$name]);
             } elseif (!isset($this->defaults[$name]) || isset($params[$name])) {
