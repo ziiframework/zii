@@ -83,7 +83,7 @@ abstract class ErrorHandler extends Component
     public function register(): void
     {
         if (!$this->_registered) {
-            ini_set('display_errors', false);
+            ini_set('display_errors', '0');
             set_exception_handler([$this, 'handleException']);
 
             if (defined('HHVM_VERSION')) {
