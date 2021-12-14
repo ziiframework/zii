@@ -555,7 +555,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
         // match params in the pattern
         foreach ($this->_paramRules as $name => $rule) {
             if (isset($params[$name]) && !is_array($params[$name]) && ($rule === '' || preg_match($rule, is_int($params[$name]) ? (string) $params[$name] : $params[$name]))) {
-                $tr["<$name>"] = $this->encodeParams ? urlencode($params[$name]) : $params[$name];
+                $tr["<$name>"] = $this->encodeParams ? urlencode(is_int($params[$name]) ? (string) $params[$name] : $params[$name]) : $params[$name];
                 unset($params[$name]);
             } elseif (!isset($this->defaults[$name]) || isset($params[$name])) {
                 $this->createStatus = self::CREATE_STATUS_PARAMS_MISMATCH;
