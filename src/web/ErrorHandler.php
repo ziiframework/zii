@@ -130,7 +130,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
                 // if there is an error during error rendering it's useful to
                 // display PHP error in debug mode instead of a blank screen
                 if (YII_DEBUG) {
-                    ini_set('display_errors', 1);
+                    ini_set('display_errors', '1');
                 }
                 $file = $useErrorView ? $this->errorView : $this->exceptionView;
                 $response->data = $this->renderFile($file, [
