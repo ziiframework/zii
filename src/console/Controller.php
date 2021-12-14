@@ -802,7 +802,13 @@ class Controller extends \yii\base\Controller
      */
     protected function parseDocCommentSummary($reflection)
     {
-        $docLines = preg_split('~\R~u', $reflection->getDocComment());
+        $docComment = $reflection->getDocComment();
+
+        if ($docComment === false) {
+            $docComment = '';
+        }
+
+        $docLines = preg_split('~\R~u', $docComment);
 
         if (isset($docLines[1])) {
             return trim($docLines[1], "\t *");
