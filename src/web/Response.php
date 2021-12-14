@@ -492,7 +492,7 @@ class Response extends \yii\base\Response
 
             // only seek if stream is seekable
             if ($this->isSeekable($handle)) {
-                if (is_string($begin) && preg_match('/^\d+$/', $begin) && !str_starts_with($begin, '0')) {
+                if (is_string($begin) && is_numeric($begin)) {
                     fseek($handle, (int) $begin);
                 } else {
                     fseek($handle, $begin);

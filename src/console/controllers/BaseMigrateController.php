@@ -600,7 +600,7 @@ abstract class BaseMigrateController extends Controller
             }
 
             foreach ($migrations as $version => $time) {
-                if (is_string($time) && preg_match('/^\d+$/', $time) && !str_starts_with($time, '0')) {
+                if (is_string($time) && is_numeric($time)) {
                     $time = (int)$time;
                 }
 

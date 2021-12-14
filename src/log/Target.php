@@ -430,8 +430,8 @@ abstract class Target extends Component
     {
         $parts = explode('.', sprintf('%F', $timestamp));
 
-        if (preg_match('/^\d+$/', $parts[0]) && !str_starts_with($parts[0], '0')) {
-            $parts[0] = (int)$parts[0];
+        if (is_numeric($parts[0])) {
+            $parts[0] = (int) $parts[0];
         }
 
         return date('Y-m-d H:i:s', $parts[0]) . ($this->microtime ? ('.' . $parts[1]) : '');
