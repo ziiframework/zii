@@ -2079,7 +2079,7 @@ class BaseHtml
 
                 if (!array_key_exists('selected', $attrs)) {
                     $attrs['selected'] = $selection !== null && (
-                            (!ArrayHelper::isTraversable($selection) && !strcmp((string) $key, $selection))
+                            (!ArrayHelper::isTraversable($selection) && !strcmp((string) $key, is_int($selection) ? (string) $selection : $selection))
                             ||
                             (ArrayHelper::isTraversable($selection) && ArrayHelper::isIn((string) $key, $selection, $strict))
                         );
