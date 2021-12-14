@@ -560,10 +560,14 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
     }
 
     /**
-     * @param int $value the number of seconds after which data will be seen as 'garbage' and cleaned up
+     * @param string|int $value the number of seconds after which data will be seen as 'garbage' and cleaned up
      */
     public function setTimeout($value): void
     {
+        if (is_int($value)) {
+            $value = (string) $value;
+        }
+
         $this->freeze();
         ini_set('session.gc_maxlifetime', $value);
         $this->unfreeze();
