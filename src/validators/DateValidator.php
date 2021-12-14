@@ -425,7 +425,7 @@ class DateValidator extends Validator
         // There should not be a warning thrown by parse() but this seems to be the case on windows so we suppress it here
         // See https://github.com/yiisoft/yii2/issues/5962 and https://bugs.php.net/bug.php?id=68528
         $parsePos = 0;
-        $parsedDate = @$formatter->parse($value, $parsePos);
+        $parsedDate = @$formatter->parse(is_int($value) ? (string) $value : $value, $parsePos);
         $valueLength = mb_strlen($value, Yii::$app ? Yii::$app->charset : 'UTF-8');
 
         if ($parsedDate === false || $parsePos !== $valueLength || ($this->strictDateFormat && $formatter->format($parsedDate) !== $value)) {
