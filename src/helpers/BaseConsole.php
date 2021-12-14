@@ -353,7 +353,7 @@ class BaseConsole
      */
     public static function stripAnsiFormat($string)
     {
-        return preg_replace(self::ansiCodesPattern(), '', $string);
+        return preg_replace(self::ansiCodesPattern(), '', $string ?? '');
     }
 
     /**
