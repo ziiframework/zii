@@ -1003,7 +1003,7 @@ class BaseFileHelper
      */
     public static function changeOwnership($path, $ownership, $mode = null): void
     {
-        if (!file_exists($path)) {
+        if ($path === null || !file_exists($path)) {
             throw new InvalidArgumentException('Unable to change ownerhip, "' . $path . '" is not a file or directory.');
         }
 
