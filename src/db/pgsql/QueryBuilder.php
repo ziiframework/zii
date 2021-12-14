@@ -285,7 +285,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
 
         // https://github.com/yiisoft/yii2/issues/4492
         // http://www.postgresql.org/docs/9.1/static/sql-altertable.html
-        if (preg_match('/^(DROP|SET|RESET)\s+/i', ($type instanceof ColumnSchemaBuilder) ? (string) $type : $type)) {
+        if (preg_match('/^(DROP|SET|RESET)\s+/i', ($type instanceof ColumnSchemaBuilder) ? $type->__toString() : $type)) {
             return "ALTER TABLE {$tableName} ALTER COLUMN {$columnName} {$type}";
         }
 
