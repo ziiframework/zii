@@ -91,13 +91,8 @@ class BaseIpHelper
         $binIp = static::ip2bin($ip);
         $binNet = static::ip2bin($net);
 
-        if (is_string($netMask)) {
-            if (is_numeric($netMask)) {
-                $netMask = (int) $netMask;
-            } else {
-                var_dump($netMask);
-                throw new \Exception("netMask: [$netMask]");
-            }
+        if (is_string($netMask) && is_numeric($netMask)) {
+            $netMask = (int) $netMask;
         }
 
         return substr($binIp, 0, $netMask) === substr($binNet, 0, $netMask) && $mask >= $netMask;
