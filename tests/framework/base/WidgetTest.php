@@ -10,8 +10,10 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\base;
 
+use Yii;
 use yii\base\Widget;
 use yii\base\WidgetEvent;
+use yii\di\Container;
 use yiiunit\TestCase;
 
 /**
@@ -43,6 +45,30 @@ class WidgetTest extends TestCase
         $widget = TestWidget::begin(['id' => 'test']);
         $this->assertTrue($widget instanceof TestWidget);
         TestWidget::end();
+
+        $output = ob_get_clean();
+
+        $this->assertSame('<run-test>', $output);
+    }
+
+    /**
+     * @see https://github.com/yiisoft/yii2/issues/19030
+     */
+    public function testDependencyInjection()
+    {
+        Yii::$container = new Container();
+        Yii::$container->setDefinitions([
+            TestWidgetB::className() => [
+                'class' => TestWidget::className()
+            ]
+        ]);
+
+        ob_start();
+        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
+
+        $widget = TestWidgetB::begin(['id' => 'test']);
+        $this->assertTrue($widget instanceof TestWidget);
+        TestWidgetB::end();
 
         $output = ob_get_clean();
 
