@@ -1196,7 +1196,14 @@ break;
      */
     public function getIsSecureConnection()
     {
-        if (isset($_SERVER['HTTPS']) && (strcasecmp($_SERVER['HTTPS'], 'on') === 0 || $_SERVER['HTTPS'] == 1)) {
+        if (
+            isset($_SERVER['HTTPS'])
+            && (
+                (is_string($_SERVER['HTTPS']) && strcasecmp($_SERVER['HTTPS'], 'on') === 0)
+                ||
+                in_array($_SERVER['HTTPS'], [1, '1', true], true)
+            )
+        ) {
             return true;
         }
 
