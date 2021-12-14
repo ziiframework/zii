@@ -539,7 +539,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
                 }
             }
 
-            if (strcmp(is_int($params[$name]) ? (string) $params[$name] : $params[$name], $value) === 0) { // strcmp will do string conversion automatically
+            if (strcmp(is_int($params[$name]) ? (string) $params[$name] : $params[$name], is_int($value) ? (string) $value : $value) === 0) { // strcmp will do string conversion automatically
                 unset($params[$name]);
 
                 if (isset($this->_paramRules[$name])) {
