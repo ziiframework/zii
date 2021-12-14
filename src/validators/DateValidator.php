@@ -485,7 +485,7 @@ class DateValidator extends Validator
         $hasTimeInfo = strpbrk($format, 'HhGgisU') !== false;
         // if no time was provided in the format string set timezone to default one to match yii\i18n\Formatter::formatDateTimeValue()
         $timezone = $hasTimeInfo ? $this->timeZone : $this->defaultTimeZone;
-        $date = DateTime::createFromFormat($format, $value, new DateTimeZone($timezone));
+        $date = DateTime::createFromFormat($format, is_int($value) ? (string) $value : $value, new DateTimeZone($timezone));
         $errors = DateTime::getLastErrors();
 
         if ($date === false || $errors['error_count'] || $errors['warning_count'] || ($this->strictDateFormat && $date->format($format) !== $value)) {
