@@ -77,10 +77,6 @@ class BaseIpHelper
         [$ip, $mask] = array_pad(explode('/', $subnet), 2, null);
         [$net, $netMask] = array_pad(explode('/', $range), 2, null);
 
-        if (is_string($netMask) && preg_match('/^\d+$/', $netMask) && !str_starts_with($netMask, '0')) {
-            $netMask = (int)$netMask;
-        }
-
         $ipVersion = static::getIpVersion($ip);
         $netVersion = static::getIpVersion($net);
 
@@ -94,6 +90,10 @@ class BaseIpHelper
 
         $binIp = static::ip2bin($ip);
         $binNet = static::ip2bin($net);
+
+        if (is_string($netMask) && is_numeric($netMask)) {
+            $netMask = (int) $netMask;
+        }
 
         return substr($binIp, 0, $netMask) === substr($binNet, 0, $netMask) && $mask >= $netMask;
     }
