@@ -401,7 +401,7 @@ class BaseConsole
 
         $textItems = preg_split(self::ansiCodesPattern(), $string ?? '');
 
-        preg_match_all(self::ansiCodesPattern(), $string, $colors);
+        preg_match_all(self::ansiCodesPattern(), $string ?? '', $colors);
         $colors = count($colors) ? $colors[0] : [];
         array_unshift($colors, '');
 
