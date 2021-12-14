@@ -109,7 +109,13 @@ class BaseIpHelper
      */
     public static function expandIPv6($ip)
     {
-        $hex = unpack('H*hex', inet_pton($ip));
+        $addr = inet_pton($ip);
+
+        if ($addr === false) {
+            $addr = '';
+        }
+
+        $hex = unpack('H*hex', $addr);
 
         return substr(preg_replace('/([a-f0-9]{4})/i', '$1:', $hex['hex']), 0, -1);
     }
