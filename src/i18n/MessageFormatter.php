@@ -482,7 +482,7 @@ class MessageFormatter extends Component
                         strncmp($selector, '=', 1) === 0 && (int) mb_substr($selector, 1, mb_strlen($selector, $charset), $charset) === $arg ||
                         $selector === 'one' && $arg - $offset == 1
                     ) {
-                        $message = implode(',', str_replace('#', $arg - $offset, $plural[$i]));
+                        $message = implode(',', str_replace('#', (string) ($arg - $offset), $plural[$i]));
                     }
                 }
 
