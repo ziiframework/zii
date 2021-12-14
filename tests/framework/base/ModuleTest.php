@@ -49,7 +49,7 @@ class ModuleTest extends TestCase
         $this->assertEquals($controllerPath, str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $module->getControllerPath()));
     }
 
-    public function testSetControllerPath()
+    public function testSetControllerPath(): void
     {
         $module = new TestModule('test');
         $controllerPath = __DIR__ . DIRECTORY_SEPARATOR . 'controllers';

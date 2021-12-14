@@ -1198,11 +1198,9 @@ break;
     {
         if (
             isset($_SERVER['HTTPS'])
-            && (
-                (is_string($_SERVER['HTTPS']) && strcasecmp($_SERVER['HTTPS'], 'on') === 0)
+            && ((is_string($_SERVER['HTTPS']) && strcasecmp($_SERVER['HTTPS'], 'on') === 0)
                 ||
-                in_array($_SERVER['HTTPS'], [1, '1', true], true)
-            )
+                in_array($_SERVER['HTTPS'], [1, '1', true], true))
         ) {
             return true;
         }

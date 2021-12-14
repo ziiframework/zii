@@ -612,6 +612,7 @@ class Controller extends \yii\base\Controller
         $tags = $this->parseDocCommentTags($method);
         $tags['param'] = isset($tags['param']) ? (array) $tags['param'] : [];
         $phpDocParams = [];
+
         foreach ($tags['param'] as $i => $tag) {
             if (preg_match('/^(?<type>\S+)(\s+\$(?<name>\w+))?(?<comment>.*)/us', $tag, $matches) === 1) {
                 $key = empty($matches['name']) ? $i : $matches['name'];
@@ -622,14 +623,17 @@ class Controller extends \yii\base\Controller
 
         $args = [];
 
-        /** @var \ReflectionParameter $parameter */
+        /** @var ReflectionParameter $parameter */
         foreach ($method->getParameters() as $i => $parameter) {
             $type = null;
             $comment = '';
+
             if (PHP_MAJOR_VERSION > 5 && $parameter->hasType()) {
                 $reflectionType = $parameter->getType();
+
                 if (PHP_VERSION_ID >= 70100) {
                     $types = method_exists($reflectionType, 'getTypes') ? $reflectionType->getTypes() : [$reflectionType];
+
                     foreach ($types as $key => $reflectionType) {
                         $types[$key] = $reflectionType->getName();
                     }
@@ -640,8 +644,10 @@ class Controller extends \yii\base\Controller
             }
             // find PhpDoc tag by property name or position
             $key = isset($phpDocParams[$parameter->name]) ? $parameter->name : (isset($phpDocParams[$i]) ? $i : null);
+
             if ($key !== null) {
                 $comment = $phpDocParams[$key]['comment'];
+
                 if ($type === null && !empty($phpDocParams[$key]['type'])) {
                     $type = $phpDocParams[$key]['type'];
                 }
@@ -768,17 +774,7 @@ class Controller extends \yii\base\Controller
             $comment = '';
         }
 
-        $comment = "@description \n" . str_replace(
-                "\r",
-                '',
-                trim(
-                    preg_replace(
-                        '/^\s*\**( |\t)?/m',
-                        '',
-                        trim($comment, '/')
-                    )
-                )
-            );
+        $comment = "@description \n" . str_replace("\r", '', trim(preg_replace('/^\s*\**( |\t)?/m', '', trim($comment, '/'))));
 
         $parts = preg_split('/^\s*@/m', $comment, -1, PREG_SPLIT_NO_EMPTY);
         $tags = [];
@@ -839,17 +835,7 @@ class Controller extends \yii\base\Controller
             return '';
         }
 
-        $comment = str_replace(
-            "\r",
-            '',
-            trim(
-                preg_replace(
-                    '/^\s*\**( |\t)?/m',
-                    '',
-                    trim($docComment, '/')
-                )
-            )
-        );
+        $comment = str_replace("\r", '', trim(preg_replace('/^\s*\**( |\t)?/m', '', trim($docComment, '/'))));
 
         if (preg_match('/^\s*@\w+/m', $comment, $matches, PREG_OFFSET_CAPTURE)) {
             $comment = trim(substr($comment, 0, $matches[0][1]));

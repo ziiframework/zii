@@ -121,7 +121,8 @@ class Widget extends Component implements ViewContextInterface
         if (!empty(self::$stack)) {
             $widget = array_pop(self::$stack);
 
-            $calledClass = get_called_class();
+            $calledClass = static::class;
+
             if (Yii::$container->has($calledClass) && isset(Yii::$container->getDefinitions()[$calledClass]['class'])) {
                 $calledClass = Yii::$container->getDefinitions()[$calledClass]['class'];
             }

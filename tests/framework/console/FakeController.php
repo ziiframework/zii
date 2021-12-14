@@ -66,6 +66,7 @@ class FakeController extends Controller
 
     /**
      * @param string $value the string value
+     *
      * @return array
      */
     public function actionAksi2(array $values, $value)

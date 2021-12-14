@@ -965,7 +965,7 @@ class Formatter extends Component
         $format_U = $timestamp->format('U');
 
         if (is_string($format_U) && is_numeric($format_U)) {
-            $format_U = (float)$format_U;
+            $format_U = (float) $format_U;
         }
 
         return number_format($format_U, 0, '.', '');

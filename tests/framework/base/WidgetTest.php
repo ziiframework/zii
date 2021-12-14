@@ -54,13 +54,13 @@ class WidgetTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/19030
      */
-    public function testDependencyInjection()
+    public function testDependencyInjection(): void
     {
         Yii::$container = new Container();
         Yii::$container->setDefinitions([
             TestWidgetB::className() => [
-                'class' => TestWidget::className()
-            ]
+                'class' => TestWidget::className(),
+            ],
         ]);
 
         ob_start();

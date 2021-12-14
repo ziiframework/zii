@@ -601,7 +601,7 @@ abstract class BaseMigrateController extends Controller
 
             foreach ($migrations as $version => $time) {
                 if (is_string($time) && is_numeric($time)) {
-                    $time = (int)$time;
+                    $time = (int) $time;
                 }
 
                 $this->stdout("\t(" . date('Y-m-d H:i:s', $time) . ') ' . $version . "\n");

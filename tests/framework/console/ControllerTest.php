@@ -297,12 +297,13 @@ class ControllerTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/19028
      */
-    public function testGetActionArgsHelp()
+    public function testGetActionArgsHelp(): void
     {
         $controller = new FakeController('fake', Yii::$app);
         $help = $controller->getActionArgsHelp($controller->createAction('aksi2'));
 
         $this->assertArrayHasKey('values', $help);
+
         if (PHP_MAJOR_VERSION > 5) {
             // declared type
             $this->assertEquals('array', $help['values']['type']);

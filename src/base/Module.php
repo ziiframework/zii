@@ -283,11 +283,14 @@ class Module extends ServiceLocator
 
     /**
      * Sets the directory that contains the controller classes.
+     *
      * @param string $path the root directory that contains the controller classes.
+     *
      * @throws InvalidArgumentException if the directory is invalid.
+     *
      * @since 2.0.44
      */
-    public function setControllerPath($path)
+    public function setControllerPath($path): void
     {
         $this->_controllerPath = Yii::getAlias($path);
     }

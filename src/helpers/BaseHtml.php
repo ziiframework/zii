@@ -124,7 +124,7 @@ class BaseHtml
         }
 
         if (is_int($content)) {
-            $content = (string)$content;
+            $content = (string) $content;
         }
 
         return htmlspecialchars($content, ENT_QUOTES | ENT_SUBSTITUTE, Yii::$app ? Yii::$app->charset : 'UTF-8', $doubleEncode);
@@ -1082,11 +1082,9 @@ class BaseHtml
         $index = 0;
 
         foreach ($items as $value => $label) {
-            $checked = $selection !== null && (
-                    (!ArrayHelper::isTraversable($selection) && !strcmp((string)$value, is_int($selection) ? (string) $selection : $selection))
+            $checked = $selection !== null && ((!ArrayHelper::isTraversable($selection) && !strcmp((string) $value, is_int($selection) ? (string) $selection : $selection))
                     ||
-                    (ArrayHelper::isTraversable($selection) && ArrayHelper::isIn((string)$value, $selection, $strict))
-                );
+                    (ArrayHelper::isTraversable($selection) && ArrayHelper::isIn((string) $value, $selection, $strict)));
 
             if ($formatter !== null) {
                 $lines[] = call_user_func($formatter, $index, $label, $name, $checked, $value);
@@ -1190,11 +1188,9 @@ class BaseHtml
         $index = 0;
 
         foreach ($items as $value => $label) {
-            $checked = $selection !== null && (
-                    (!ArrayHelper::isTraversable($selection) && !strcmp((string)$value, is_int($selection) ? (string) $selection : $selection))
+            $checked = $selection !== null && ((!ArrayHelper::isTraversable($selection) && !strcmp((string) $value, is_int($selection) ? (string) $selection : $selection))
                     ||
-                    (ArrayHelper::isTraversable($selection) && ArrayHelper::isIn((string)$value, $selection, $strict))
-                );
+                    (ArrayHelper::isTraversable($selection) && ArrayHelper::isIn((string) $value, $selection, $strict)));
 
             if ($formatter !== null) {
                 $lines[] = call_user_func($formatter, $index, $label, $name, $checked, $value);
@@ -2078,11 +2074,9 @@ class BaseHtml
                 $attrs['value'] = (string) $key;
 
                 if (!array_key_exists('selected', $attrs)) {
-                    $attrs['selected'] = $selection !== null && (
-                            (!ArrayHelper::isTraversable($selection) && !strcmp((string) $key, is_int($selection) ? (string) $selection : $selection))
+                    $attrs['selected'] = $selection !== null && ((!ArrayHelper::isTraversable($selection) && !strcmp((string) $key, is_int($selection) ? (string) $selection : $selection))
                             ||
-                            (ArrayHelper::isTraversable($selection) && ArrayHelper::isIn((string) $key, $selection, $strict))
-                        );
+                            (ArrayHelper::isTraversable($selection) && ArrayHelper::isIn((string) $key, $selection, $strict)));
                 }
                 $text = $encode ? static::encode($value) : $value;
 
