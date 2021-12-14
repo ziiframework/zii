@@ -898,6 +898,10 @@ class Model extends Component implements StaticInstanceInterface, IteratorAggreg
         $attributes = array_keys(array_flip($scenarios[$scenario]));
 
         foreach ($attributes as $i => $attribute) {
+            if (is_int($attribute)) {
+                $attribute = (string) $attribute;
+            }
+
             if (strncmp($attribute, '!', 1) === 0) {
                 $attributes[$i] = substr($attribute, 1);
             }
