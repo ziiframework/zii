@@ -399,7 +399,7 @@ class BaseConsole
             return '';
         }
 
-        $textItems = preg_split(self::ansiCodesPattern(), $string);
+        $textItems = preg_split(self::ansiCodesPattern(), $string ?? '');
 
         preg_match_all(self::ansiCodesPattern(), $string, $colors);
         $colors = count($colors) ? $colors[0] : [];
