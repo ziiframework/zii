@@ -109,6 +109,10 @@ class MessageFormatter extends Component
         $pattern = $this->replaceNamedArguments($pattern, $params, $newParams);
         $params = $newParams;
 
+        if ($pattern === false) {
+            return false;
+        }
+
         try {
             $formatter = new \MessageFormatter($language, $pattern);
 
