@@ -530,7 +530,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
             if (!isset($params[$name])) {
                 // allow omit empty optional params
                 // @see https://github.com/yiisoft/yii2/issues/10970
-                if (in_array($name, $this->placeholders) && strcmp($value, '') === 0) {
+                if (in_array($name, $this->placeholders) && strcmp(is_int($value) ? (string) $value : $value, '') === 0) {
                     $params[$name] = '';
                 } else {
                     $this->createStatus = self::CREATE_STATUS_PARAMS_MISMATCH;
