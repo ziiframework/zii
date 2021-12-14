@@ -1189,9 +1189,9 @@ class BaseHtml
 
         foreach ($items as $value => $label) {
             $checked = $selection !== null && (
-                    !ArrayHelper::isTraversable($selection) && !strcmp((string) $value, $selection)
+                    (!ArrayHelper::isTraversable($selection) && !strcmp((string)$value, $selection))
                     ||
-                    ArrayHelper::isTraversable($selection) && ArrayHelper::isIn((string) $value, $selection, $strict)
+                    (ArrayHelper::isTraversable($selection) && ArrayHelper::isIn((string)$value, $selection, $strict))
                 );
 
             if ($formatter !== null) {
