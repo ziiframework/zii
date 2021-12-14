@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -1460,7 +1462,7 @@ class QueryBuilder extends \yii\base\BaseObject
                     $table = $this->db->quoteTableName($table);
                 }
                 $tables[$i] = "$table " . $this->db->quoteTableName($i);
-            } elseif (strpos($table, '(') === false) {
+            } elseif (strpos(is_string($table) ? $table : (string) $table, '(') === false) {
                 if ($tableWithAlias = $this->extractAlias($table)) { // with alias
                     $tables[$i] = $this->db->quoteTableName($tableWithAlias[1]) . ' ' . $this->db->quoteTableName($tableWithAlias[2]);
                 } else {

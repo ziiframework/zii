@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -351,7 +353,7 @@ class BaseConsole
      */
     public static function stripAnsiFormat($string)
     {
-        return preg_replace(self::ansiCodesPattern(), '', $string);
+        return preg_replace(self::ansiCodesPattern(), '', $string ?? '');
     }
 
     /**
@@ -397,9 +399,9 @@ class BaseConsole
             return '';
         }
 
-        $textItems = preg_split(self::ansiCodesPattern(), $string);
+        $textItems = preg_split(self::ansiCodesPattern(), $string ?? '');
 
-        preg_match_all(self::ansiCodesPattern(), $string, $colors);
+        preg_match_all(self::ansiCodesPattern(), $string ?? '', $colors);
         $colors = count($colors) ? $colors[0] : [];
         array_unshift($colors, '');
 

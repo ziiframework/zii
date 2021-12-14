@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -522,8 +524,8 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
 
         if ($value >= 0 && $value <= 100) {
             // percent * 21474837 / 2147483647 ≈ percent * 0.01
-            ini_set('session.gc_probability', floor($value * 21474836.47));
-            ini_set('session.gc_divisor', 2147483647);
+            ini_set('session.gc_probability', (string) floor($value * 21474836.47));
+            ini_set('session.gc_divisor', '2147483647');
         } else {
             throw new InvalidArgumentException('GCProbability must be a value between 0 and 100.');
         }
@@ -558,10 +560,14 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
     }
 
     /**
-     * @param int $value the number of seconds after which data will be seen as 'garbage' and cleaned up
+     * @param string|int $value the number of seconds after which data will be seen as 'garbage' and cleaned up
      */
     public function setTimeout($value): void
     {
+        if (is_int($value)) {
+            $value = (string) $value;
+        }
+
         $this->freeze();
         ini_set('session.gc_maxlifetime', $value);
         $this->unfreeze();

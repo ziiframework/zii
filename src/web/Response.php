@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -490,7 +492,11 @@ class Response extends \yii\base\Response
 
             // only seek if stream is seekable
             if ($this->isSeekable($handle)) {
-                fseek($handle, $begin);
+                if (is_string($begin) && is_numeric($begin)) {
+                    fseek($handle, (int) $begin);
+                } else {
+                    fseek($handle, $begin);
+                }
             }
 
             while (!feof($handle) && ($pos = ftell($handle)) <= $end) {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -139,6 +141,10 @@ class BaseYii
      */
     public static function getAlias($alias, $throwException = true)
     {
+        if ($alias === null) {
+            return null;
+        }
+
         if (strncmp($alias, '@', 1) !== 0) {
             // not an alias
             return $alias;

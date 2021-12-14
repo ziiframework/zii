@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -106,6 +108,10 @@ class MessageFormatter extends Component
         $newParams = [];
         $pattern = $this->replaceNamedArguments($pattern, $params, $newParams);
         $params = $newParams;
+
+        if ($pattern === false) {
+            return false;
+        }
 
         try {
             $formatter = new \MessageFormatter($language, $pattern);
@@ -406,9 +412,9 @@ class MessageFormatter extends Component
                 if (is_numeric($arg) && ($format === null || $format === 'integer')) {
                     $number = number_format($arg);
 
-                    if ($format === null && ($pos = strpos($arg, '.')) !== false) {
+                    if ($format === null && ($pos = strpos((string) $arg, '.')) !== false) {
                         // add decimals with unknown length
-                        $number .= '.' . substr($arg, $pos + 1);
+                        $number .= '.' . substr((string) $arg, $pos + 1);
                     }
 
                     return $number;
@@ -476,7 +482,7 @@ class MessageFormatter extends Component
                         strncmp($selector, '=', 1) === 0 && (int) mb_substr($selector, 1, mb_strlen($selector, $charset), $charset) === $arg ||
                         $selector === 'one' && $arg - $offset == 1
                     ) {
-                        $message = implode(',', str_replace('#', $arg - $offset, $plural[$i]));
+                        $message = implode(',', str_replace('#', (string) ($arg - $offset), $plural[$i]));
                     }
                 }
 

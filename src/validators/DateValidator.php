@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -423,8 +425,8 @@ class DateValidator extends Validator
         // There should not be a warning thrown by parse() but this seems to be the case on windows so we suppress it here
         // See https://github.com/yiisoft/yii2/issues/5962 and https://bugs.php.net/bug.php?id=68528
         $parsePos = 0;
-        $parsedDate = @$formatter->parse($value, $parsePos);
-        $valueLength = mb_strlen($value, Yii::$app ? Yii::$app->charset : 'UTF-8');
+        $parsedDate = @$formatter->parse(is_int($value) ? (string) $value : $value, $parsePos);
+        $valueLength = mb_strlen(is_int($value) ? (string) $value : $value, Yii::$app ? Yii::$app->charset : 'UTF-8');
 
         if ($parsedDate === false || $parsePos !== $valueLength || ($this->strictDateFormat && $formatter->format($parsedDate) !== $value)) {
             return false;
@@ -483,7 +485,7 @@ class DateValidator extends Validator
         $hasTimeInfo = strpbrk($format, 'HhGgisU') !== false;
         // if no time was provided in the format string set timezone to default one to match yii\i18n\Formatter::formatDateTimeValue()
         $timezone = $hasTimeInfo ? $this->timeZone : $this->defaultTimeZone;
-        $date = DateTime::createFromFormat($format, $value, new DateTimeZone($timezone));
+        $date = DateTime::createFromFormat($format, is_int($value) ? (string) $value : $value, new DateTimeZone($timezone));
         $errors = DateTime::getLastErrors();
 
         if ($date === false || $errors['error_count'] || $errors['warning_count'] || ($this->strictDateFormat && $date->format($format) !== $value)) {

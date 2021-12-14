@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -960,7 +962,13 @@ class Formatter extends Component
         }
         $timestamp = $this->normalizeDatetimeValue($value);
 
-        return number_format($timestamp->format('U'), 0, '.', '');
+        $format_U = $timestamp->format('U');
+
+        if (is_string($format_U) && is_numeric($format_U)) {
+            $format_U = (float)$format_U;
+        }
+
+        return number_format($format_U, 0, '.', '');
     }
 
     /**

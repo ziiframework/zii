@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -89,6 +91,10 @@ class BaseIpHelper
         $binIp = static::ip2bin($ip);
         $binNet = static::ip2bin($net);
 
+        if (is_string($netMask) && is_numeric($netMask)) {
+            $netMask = (int) $netMask;
+        }
+
         return substr($binIp, 0, $netMask) === substr($binNet, 0, $netMask) && $mask >= $netMask;
     }
 
@@ -103,7 +109,13 @@ class BaseIpHelper
      */
     public static function expandIPv6($ip)
     {
-        $hex = unpack('H*hex', inet_pton($ip));
+        $addr = inet_pton($ip);
+
+        if ($addr === false) {
+            $addr = '';
+        }
+
+        $hex = unpack('H*hex', $addr);
 
         return substr(preg_replace('/([a-f0-9]{4})/i', '$1:', $hex['hex']), 0, -1);
     }

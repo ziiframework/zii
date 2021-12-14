@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -427,6 +429,10 @@ abstract class Target extends Component
     protected function getTime($timestamp)
     {
         $parts = explode('.', sprintf('%F', $timestamp));
+
+        if (is_numeric($parts[0])) {
+            $parts[0] = (int) $parts[0];
+        }
 
         return date('Y-m-d H:i:s', $parts[0]) . ($this->microtime ? ('.' . $parts[1]) : '');
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /* @var $this YiiRequirementChecker */
 /* @var $summary array */
 /* @var $requirements array[] */

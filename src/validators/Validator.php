@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -539,6 +541,6 @@ class Validator extends Component
      */
     public function getAttributeNames()
     {
-        return array_map(static fn ($attribute) => ltrim($attribute, '!'), $this->attributes);
+        return array_map(static fn ($attribute) => ltrim(is_int($attribute) ? (string) $attribute : $attribute, '!'), $this->attributes);
     }
 }

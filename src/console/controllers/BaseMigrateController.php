@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -598,6 +600,10 @@ abstract class BaseMigrateController extends Controller
             }
 
             foreach ($migrations as $version => $time) {
+                if (is_string($time) && is_numeric($time)) {
+                    $time = (int)$time;
+                }
+
                 $this->stdout("\t(" . date('Y-m-d H:i:s', $time) . ') ' . $version . "\n");
             }
         }

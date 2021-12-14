@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -542,6 +544,10 @@ abstract class Schema extends BaseObject
      */
     public function quoteTableName($name)
     {
+        if (is_int($name)) {
+            $name = (string) $name;
+        }
+
         if (strncmp($name, '(', 1) === 0 && strpos($name, ')') === strlen($name) - 1) {
             return $name;
         }

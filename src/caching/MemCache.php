@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -382,7 +384,7 @@ class MemCache extends Cache
      *
      * @return int
      */
-    protected function normalizeDuration($duration)
+    protected function normalizeDuration(int $duration): int
     {
         if ($duration < 0) {
             return 0;

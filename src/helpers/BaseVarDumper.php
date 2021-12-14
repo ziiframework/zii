@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -147,7 +149,7 @@ class BaseVarDumper
                     }
 
                     foreach ($dumpValues as $key => $value) {
-                        $keyDisplay = strtr(trim($key), "\0", ':');
+                        $keyDisplay = strtr(trim(is_int($key) ? (string) $key : $key), "\0", ':');
                         self::$_output .= "\n" . $spaces . "    [$keyDisplay] => ";
                         self::dumpInternal($value, $level + 1);
                     }
