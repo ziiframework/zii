@@ -34,6 +34,7 @@ Yii Framework 2 Change Log
 - Bug #19030: Add DI container usage to `yii\base\Widget::end()` (papppeter)
 - Bug #19031: Fix displaying console help for parameters with declared types (WinterSilence)
 - Enh #19005: Add `yii\base\Module::setControllerPath()` (WinterSilence)
+- Bug #19096: Fix `Request::getIsConsoleRequest()` may return erroneously when testing a Web application in Codeception (WinterSilence)
 
 
 2.0.43 August 09, 2021
