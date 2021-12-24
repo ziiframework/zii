@@ -209,16 +209,16 @@
         },
         {
             "name": "ziiframework/composer",
-            "version": "3.3.0",
+            "version": "3.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ziiframework/composer.git",
-                "reference": "f0336a2e84783265ae946dad1a516012b9b86f60"
+                "reference": "a79ea4056831deccf89e4d182644911e224ecccd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ziiframework/composer/zipball/f0336a2e84783265ae946dad1a516012b9b86f60",
-                "reference": "f0336a2e84783265ae946dad1a516012b9b86f60",
+                "url": "https://api.github.com/repos/ziiframework/composer/zipball/a79ea4056831deccf89e4d182644911e224ecccd",
+                "reference": "a79ea4056831deccf89e4d182644911e224ecccd",
                 "shasum": ""
             },
             "require": {
@@ -263,7 +263,7 @@
                 "issues": "https://github.com/ziiframework/composer/issues",
                 "source": "https://github.com/ziiframework/composer"
             },
-            "time": "2021-11-21T14:17:02+00:00"
+            "time": "2021-12-24T06:10:20+00:00"
         }
     ],
     "packages-dev": [
@@ -387,9 +387,6 @@
             },
             "require": {
                 "php": "^7.1 || ^8.0"
-            },
-            "replace": {
-                "myclabs/deep-copy": "self.version"
             },
             "require-dev": {
                 "doctrine/collections": "^1.0",
@@ -2413,5 +2410,5 @@
     "platform-overrides": {
         "php": "7.4"
     },
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.2.0"
 }
