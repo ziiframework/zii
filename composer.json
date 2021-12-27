@@ -30,7 +30,7 @@
         "ext-mbstring": "*",
         "lib-pcre": "*",
         "cebe/markdown": "^1.0",
-        "ezyang/htmlpurifier": "^4.13",
+        "ezyang/htmlpurifier": "^4.14",
         "symfony/polyfill-php80": "^1.23",
         "ziiframework/composer": "~3.3.0"
     },
