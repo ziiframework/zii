@@ -1,6 +1,9 @@
 Yii Framework 2 Change Log
 ==========================
 
+Upstream Changes: [655786b...master](https://github.com/yiisoft/yii2/compare/655786b...master)
+
+
 2.0.44 December 30, 2021
 ------------------------
 
