@@ -52,8 +52,7 @@ use yii\base\InvalidConfigException;
  *
  * For more details and usage information on Session, see the [guide article on sessions](guide:runtime-sessions-cookies).
  *
- * @property-read array $allFlashes Flash messages (key => message or key => [message1, message2]). This
- * property is read-only.
+ * @property-read array $allFlashes Flash messages (key => message or key => [message1, message2]).
  * @property-read string $cacheLimiter Current cache limiter. This property is read-only.
  * @property-read array $cookieParams The session cookie parameters. This property is read-only.
  * @property-read int $count The number of session variables. This property is read-only.
@@ -65,8 +64,7 @@ use yii\base\InvalidConfigException;
  * @property bool $hasSessionId Whether the current request has sent the session ID.
  * @property string $id The current session ID.
  * @property-read bool $isActive Whether the session has started. This property is read-only.
- * @property-read SessionIterator $iterator An iterator for traversing the session variables. This property is
- * read-only.
+ * @property-read SessionIterator $iterator An iterator for traversing the session variables.
  * @property string $name The current session name.
  * @property string $savePath The current session save path, defaults to '/tmp'.
  * @property int $timeout The number of seconds after which data will be seen as 'garbage' and cleaned up. The

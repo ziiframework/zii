@@ -55,12 +55,10 @@ use yii\validators\IpValidator;
  * @property string|null $hostInfo Schema and hostname part (with port number if needed) of the request URL
  * (e.g. `http://www.yiiframework.com`), null if can't be obtained from `$_SERVER` and wasn't set. See
  * [[getHostInfo()]] for security related notes on this property.
- * @property-read string|null $hostName Hostname part of the request URL (e.g. `www.yiiframework.com`). This
- * property is read-only.
+ * @property-read string|null $hostName Hostname part of the request URL (e.g. `www.yiiframework.com`).
  * @property-read bool $isAjax Whether this is an AJAX (XMLHttpRequest) request. This property is read-only.
  * @property-read bool $isDelete Whether this is a DELETE request. This property is read-only.
- * @property-read bool $isFlash Whether this is an Adobe Flash or Adobe Flex request. This property is
- * read-only.
+ * @property-read bool $isFlash Whether this is an Adobe Flash or Adobe Flex request.
  * @property-read bool $isGet Whether this is a GET request. This property is read-only.
  * @property-read bool $isHead Whether this is a HEAD request. This property is read-only.
  * @property-read bool $isOptions Whether this is a OPTIONS request. This property is read-only.
@@ -68,24 +66,19 @@ use yii\validators\IpValidator;
  * @property-read bool $isPjax Whether this is a PJAX request. This property is read-only.
  * @property-read bool $isPost Whether this is a POST request. This property is read-only.
  * @property-read bool $isPut Whether this is a PUT request. This property is read-only.
- * @property-read bool $isSecureConnection If the request is sent via secure channel (https). This property is
- * read-only.
+ * @property-read bool $isSecureConnection If the request is sent via secure channel (https).
  * @property-read string $method Request method, such as GET, POST, HEAD, PUT, PATCH, DELETE. The value
  * returned is turned into upper case. This property is read-only.
- * @property-read string|null $origin URL origin of a CORS request, `null` if not available. This property is
- * read-only.
+ * @property-read string|null $origin URL origin of a CORS request, `null` if not available.
  * @property string $pathInfo Part of the request URL that is after the entry script and before the question
  * mark. Note, the returned path info is already URL-decoded.
  * @property int $port Port number for insecure requests.
  * @property array $queryParams The request GET parameter values.
- * @property-read string $queryString Part of the request URL that is after the question mark. This property
- * is read-only.
+ * @property-read string $queryString Part of the request URL that is after the question mark.
  * @property string $rawBody The request body.
  * @property-read string|null $referrer URL referrer, null if not available. This property is read-only.
- * @property-read string|null $remoteHost Remote host name, `null` if not available. This property is
- * read-only.
- * @property-read string|null $remoteIP Remote IP address, `null` if not available. This property is
- * read-only.
+ * @property-read string|null $remoteHost Remote host name, `null` if not available.
+ * @property-read string|null $remoteIP Remote IP address, `null` if not available.
  * @property string $scriptFile The entry script file path.
  * @property string $scriptUrl The relative URL of the entry script.
  * @property int $securePort Port number for secure requests.

@@ -1,7 +1,7 @@
 Yii Framework 2 Change Log
 ==========================
 
-2.0.44 under development
+2.0.44 December 30, 2021
 ------------------------
 
 - Enh #13105: Add yiiActiveForm validate_only property for skipping form auto-submission (ptolomaues)

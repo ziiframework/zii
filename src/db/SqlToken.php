@@ -18,8 +18,7 @@ use yii\base\BaseObject;
  *
  * @property SqlToken[] $children Child tokens.
  * @property-read bool $hasChildren Whether the token has children. This property is read-only.
- * @property-read bool $isCollection Whether the token represents a collection of tokens. This property is
- * read-only.
+ * @property-read bool $isCollection Whether the token represents a collection of tokens.
  * @property-read string $sql SQL code. This property is read-only.
  *
  * @author Sergey Makinen <sergey@makinen.ru>

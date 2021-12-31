@@ -24,8 +24,7 @@ use yii\base\InvalidCallException;
  * For more details and usage information on CookieCollection, see the [guide article on handling cookies](guide:runtime-sessions-cookies).
  *
  * @property-read int $count The number of cookies in the collection. This property is read-only.
- * @property-read ArrayIterator $iterator An iterator for traversing the cookies in the collection. This
- * property is read-only.
+ * @property-read ArrayIterator $iterator An iterator for traversing the cookies in the collection.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  *

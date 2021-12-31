@@ -19,8 +19,7 @@ use yii\helpers\Url;
  *
  * For more details and usage information on Application, see the [guide article on applications](guide:structure-applications).
  *
- * @property-read ErrorHandler $errorHandler The error handler application component. This property is
- * read-only.
+ * @property-read ErrorHandler $errorHandler The error handler application component.
  * @property string $homeUrl The homepage URL.
  * @property-read Request $request The request component. This property is read-only.
  * @property-read Response $response The response component. This property is read-only.

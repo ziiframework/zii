@@ -53,8 +53,7 @@ defined('STDERR') || define('STDERR', fopen('php://stderr', 'wb'));
  * yii help
  * ```
  *
- * @property-read ErrorHandler $errorHandler The error handler application component. This property is
- * read-only.
+ * @property-read ErrorHandler $errorHandler The error handler application component.
  * @property-read Request $request The request component. This property is read-only.
  * @property-read Response $response The response component. This property is read-only.
  *
