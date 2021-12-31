@@ -37,6 +37,7 @@ Yii Framework 2 Change Log
 - Bug #19096: Fix `Request::getIsConsoleRequest()` may return erroneously when testing a Web application in Codeception (WinterSilence)
 - Enh #19108: Optimize `Component::hasEventHandlers()` and `Component::trigger()` (WinterSilence)
 - Bug #18660: Check name if backslash appears (iridance)
+- Enh #19098: Add `yii\helper\BaseHtml::$normalizeClassAttribute` to fix duplicate classes (WinterSilence)
 
 
 2.0.43 August 09, 2021
