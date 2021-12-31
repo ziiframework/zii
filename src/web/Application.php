@@ -21,10 +21,10 @@ use yii\helpers\Url;
  *
  * @property-read ErrorHandler $errorHandler The error handler application component.
  * @property string $homeUrl The homepage URL.
- * @property-read Request $request The request component. This property is read-only.
- * @property-read Response $response The response component. This property is read-only.
- * @property-read Session $session The session component. This property is read-only.
- * @property-read User $user The user component. This property is read-only.
+ * @property-read Request $request The request component.
+ * @property-read Response $response The response component.
+ * @property-read Session $session The session component.
+ * @property-read User $user The user component.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  *

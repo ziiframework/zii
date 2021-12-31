@@ -48,7 +48,7 @@ use yii\helpers\ArrayHelper;
  *
  * A more detailed usage guide on how to work with Query can be found in the [guide article on Query Builder](guide:db-query-builder).
  *
- * @property-read string[] $tablesUsedInFrom Table names indexed by aliases. This property is read-only.
+ * @property-read string[] $tablesUsedInFrom Table names indexed by aliases.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @author Carsten Brandt <mail@cebe.cc>

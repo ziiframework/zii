@@ -37,7 +37,7 @@ use yii\web\Response;
  *    to be validated by the 'captcha' validator.
  * 3. In the controller view, insert a [[Captcha]] widget in the form.
  *
- * @property-read string $verifyCode The verification code. This property is read-only.
+ * @property-read string $verifyCode The verification code.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  *

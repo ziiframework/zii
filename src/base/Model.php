@@ -42,7 +42,7 @@ use yii\validators\Validator;
  * For more details and usage information on Model, see the [guide article on models](guide:structure-models).
  *
  * @property-read \yii\validators\Validator[] $activeValidators The validators applicable to the current
- * [[scenario]]. This property is read-only.
+ * [[scenario]].
  * @property array $attributes Attribute values (name => value).
  * @property-read array $errors An array of errors for all attributes. Empty array is returned if no error.
  * The result is a two-dimensional array. See [[getErrors()]] for detailed description.
@@ -51,7 +51,7 @@ use yii\validators\Validator;
  * @property-read ArrayIterator $iterator An iterator for traversing the items in the list.
  * @property string $scenario The scenario that this model is in. Defaults to [[SCENARIO_DEFAULT]].
  * @property-read ArrayObject|\yii\validators\Validator[] $validators All the validators declared in the
- * model. This property is read-only.
+ * model.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  *

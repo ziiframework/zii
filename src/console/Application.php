@@ -54,8 +54,8 @@ defined('STDERR') || define('STDERR', fopen('php://stderr', 'wb'));
  * ```
  *
  * @property-read ErrorHandler $errorHandler The error handler application component.
- * @property-read Request $request The request component. This property is read-only.
- * @property-read Response $response The response component. This property is read-only.
+ * @property-read Request $request The request component.
+ * @property-read Response $response The response component.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  *

@@ -101,7 +101,7 @@ use yii\helpers\ArrayHelper;
  * For more details and usage information on Container, see the [guide article on di-containers](guide:concept-di-container).
  *
  * @property-read array $definitions The list of the object definitions or the loaded shared objects (type or
- * ID => definition or instance). This property is read-only.
+ * ID => definition or instance).
  * @property-write bool $resolveArrays Whether to attempt to resolve elements in array dependencies. This
  * property is write-only.
  *
