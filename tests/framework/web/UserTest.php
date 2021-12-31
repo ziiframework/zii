@@ -60,8 +60,8 @@ class UserTest extends TestCase
                 'authManager' => [
                     'class' => PhpManager::className(),
                     'itemFile' => '@runtime/user_test_rbac_items.php',
-                     'assignmentFile' => '@runtime/user_test_rbac_assignments.php',
-                     'ruleFile' => '@runtime/user_test_rbac_rules.php',
+                    'assignmentFile' => '@runtime/user_test_rbac_assignments.php',
+                    'ruleFile' => '@runtime/user_test_rbac_rules.php',
                 ],
             ],
         ];
@@ -174,6 +174,7 @@ class UserTest extends TestCase
         ];
 
         $this->mockWebApplication($appConfig);
+        $id1 = Yii::$app->session->id;
         Yii::$app->session->removeAll();
 
         $cookie = new Cookie(Yii::$app->user->identityCookie);
@@ -181,16 +182,21 @@ class UserTest extends TestCase
         $cookiesMock->add($cookie);
         Yii::$app->user->getIdentity();
         $this->assertEquals(strlen($cookiesMock->getValue(Yii::$app->user->identityCookie['name'])), 0);
+        $this->assertSame($id1, Yii::$app->session->id);
 
         Yii::$app->user->login(UserIdentity::findIdentity('user1'), 3600);
         $this->assertFalse(Yii::$app->user->isGuest);
         $this->assertSame(Yii::$app->user->id, 'user1');
         $this->assertNotEquals(strlen($cookiesMock->getValue(Yii::$app->user->identityCookie['name'])), 0);
+        $id2 = Yii::$app->session->id;
+        $this->assertNotSame($id1, $id2);
 
         Yii::$app->user->login(UserIdentity::findIdentity('user2'), 0);
         $this->assertFalse(Yii::$app->user->isGuest);
         $this->assertSame(Yii::$app->user->id, 'user2');
         $this->assertEquals(strlen($cookiesMock->getValue(Yii::$app->user->identityCookie['name'])), 0);
+        $id3 = Yii::$app->session->id;
+        $this->assertNotSame($id2, $id3);
     }
 
     /**
@@ -232,6 +238,8 @@ class UserTest extends TestCase
         ];
         $this->mockWebApplication($appConfig);
 
+        $id = Yii::$app->session->id;
+
         $user = Yii::$app->user;
 
         $this->reset();
@@ -239,6 +247,7 @@ class UserTest extends TestCase
         $user->loginRequired();
         $this->assertEquals('normal', $user->getReturnUrl());
         $this->assertTrue(Yii::$app->response->getIsRedirection());
+        $this->assertSame($id, Yii::$app->session->id);
 
         $this->reset();
         Yii::$app->request->setUrl('ajax');
@@ -246,12 +255,13 @@ class UserTest extends TestCase
 
         $user->loginRequired();
         $this->assertEquals(Yii::$app->getHomeUrl(), $user->getReturnUrl());
-        // AJAX requests don't update returnUrl but they do cause redirection.
+        // AJAX requests don't update returnUrl, but they do cause redirection.
         $this->assertTrue(Yii::$app->response->getIsRedirection());
 
         $user->loginRequired(false);
         $this->assertEquals('ajax', $user->getReturnUrl());
         $this->assertTrue(Yii::$app->response->getIsRedirection());
+        $this->assertSame($id, Yii::$app->session->id);
 
         $this->reset();
         Yii::$app->request->setUrl('json-only');
@@ -259,6 +269,7 @@ class UserTest extends TestCase
         $user->loginRequired(true, false);
         $this->assertEquals('json-only', $user->getReturnUrl());
         $this->assertTrue(Yii::$app->response->getIsRedirection());
+        $this->assertSame($id, Yii::$app->session->id);
 
         $this->reset();
         Yii::$app->request->setUrl('json-only');
@@ -266,6 +277,7 @@ class UserTest extends TestCase
         $user->loginRequired(true, false);
         $this->assertEquals('json-only', $user->getReturnUrl());
         $this->assertTrue(Yii::$app->response->getIsRedirection());
+        $this->assertSame($id, Yii::$app->session->id);
 
         $this->reset();
         Yii::$app->request->setUrl('accept-all');
@@ -273,16 +285,17 @@ class UserTest extends TestCase
         $user->loginRequired();
         $this->assertEquals('accept-all', $user->getReturnUrl());
         $this->assertTrue(Yii::$app->response->getIsRedirection());
+        $this->assertSame($id, Yii::$app->session->id);
 
         $this->reset();
         Yii::$app->request->setUrl('json-and-accept-all');
         $_SERVER['HTTP_ACCEPT'] = 'text/json, */*; q=0.1';
-
         try {
             $user->loginRequired();
         } catch (ForbiddenHttpException $e) {
         }
         $this->assertFalse(Yii::$app->response->getIsRedirection());
+        $this->assertSame($id, Yii::$app->session->id);
 
         $this->reset();
         Yii::$app->request->setUrl('accept-html-json');
@@ -290,6 +303,7 @@ class UserTest extends TestCase
         $user->loginRequired();
         $this->assertEquals('accept-html-json', $user->getReturnUrl());
         $this->assertTrue(Yii::$app->response->getIsRedirection());
+        $this->assertSame($id, Yii::$app->session->id);
 
         $this->reset();
         Yii::$app->request->setUrl('accept-html-json');
@@ -297,6 +311,7 @@ class UserTest extends TestCase
         $user->loginRequired();
         $this->assertEquals('accept-html-json', $user->getReturnUrl());
         $this->assertTrue(Yii::$app->response->getIsRedirection());
+        $this->assertSame($id, Yii::$app->session->id);
 
         $this->reset();
         $_SERVER['REQUEST_METHOD'] = 'POST';
@@ -304,6 +319,7 @@ class UserTest extends TestCase
         Yii::$app->getSession()->set($user->returnUrlParam, null);
         $user->loginRequired();
         $this->assertNull(Yii::$app->getSession()->get($user->returnUrlParam));
+        $this->assertSame($id, Yii::$app->session->id);
 
         $this->reset();
         $_SERVER['REQUEST_METHOD'] = 'GET';
@@ -311,22 +327,24 @@ class UserTest extends TestCase
         Yii::$app->getSession()->set($user->returnUrlParam, null);
         $user->loginRequired();
         $this->assertEquals('set-return-url-on-get-request', Yii::$app->getSession()->get($user->returnUrlParam));
+        $this->assertSame($id, Yii::$app->session->id);
 
         // Confirm that returnUrl is not set.
         $this->reset();
         Yii::$app->request->setUrl('json-only');
         $_SERVER['HTTP_ACCEPT'] = 'text/json;q=0.1';
-
         try {
             $user->loginRequired();
         } catch (ForbiddenHttpException $e) {
         }
         $this->assertNotEquals('json-only', $user->getReturnUrl());
+        $this->assertSame($id, Yii::$app->session->id);
 
         $this->reset();
         $_SERVER['HTTP_ACCEPT'] = 'text/json;q=0.1';
         $this->expectException('yii\\web\\ForbiddenHttpException');
         $user->loginRequired();
+        $this->assertSame($id, Yii::$app->session->id);
     }
 
     public function testLoginRequiredException1(): void
@@ -489,8 +507,10 @@ class UserTest extends TestCase
         $this->mockWebApplication($appConfig);
 
         Yii::$app->session->set('__id', 'user1');
+        $id = Yii::$app->session->id;
 
         $this->assertNotNull(Yii::$app->user->getIdentity());
+        $this->assertSame($id, Yii::$app->session->id);
     }
 
     public function testSessionAuthWithInvalidKey(): void
@@ -504,11 +524,13 @@ class UserTest extends TestCase
         ];
 
         $this->mockWebApplication($appConfig);
+        $id = Yii::$app->session->id;
 
         Yii::$app->session->set('__id', 'user1');
         Yii::$app->session->set('__authKey', 'invalid');
 
         $this->assertNull(Yii::$app->user->getIdentity());
+        $this->assertSame($id, Yii::$app->session->id);
     }
 
     public function testSessionAuthWithValidKey(): void
@@ -522,11 +544,33 @@ class UserTest extends TestCase
         ];
 
         $this->mockWebApplication($appConfig);
+        $id = Yii::$app->session->id;
 
         Yii::$app->session->set('__id', 'user1');
         Yii::$app->session->set('__authKey', 'ABCD1234');
 
         $this->assertNotNull(Yii::$app->user->getIdentity());
+        $this->assertSame($id, Yii::$app->session->id);
+    }
+
+    public function testSessionAuthWhenIdentityReturnsNull()
+    {
+        $appConfig = [
+            'components' => [
+                'user' => [
+                    'identityClass' => UserIdentity::className(),
+                ],
+            ],
+        ];
+
+        $this->mockWebApplication($appConfig);
+        $id = Yii::$app->session->id;
+
+        Yii::$app->session->set('__id', 'user999999');
+        Yii::$app->session->set('__authKey', 'ABCD1234');
+
+        $this->assertNull(Yii::$app->user->getIdentity());
+        $this->assertNotSame($id, Yii::$app->session->id);
     }
 }
 
