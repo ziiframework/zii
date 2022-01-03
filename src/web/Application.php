@@ -21,6 +21,7 @@ use yii\helpers\Url;
  *
  * @property-read ErrorHandler $errorHandler The error handler application component.
  * @property string $homeUrl The homepage URL.
+ * @property-read array $missingTranslations The missing translations.
  * @property-read Request $request The request component.
  * @property-read Response $response The response component.
  * @property-read Session $session The session component.
@@ -150,6 +151,18 @@ class Application extends \yii\base\Application
     public function setHomeUrl($value): void
     {
         $this->_homeUrl = $value;
+    }
+
+    private array $_missingTranslations = [];
+
+    public function getMissingTranslations(): array
+    {
+        return $this->_missingTranslations;
+    }
+
+    public function putMissingTranslations(string $category, string $text): void
+    {
+        $this->_missingTranslations[$category][] = $text;
     }
 
     /**
