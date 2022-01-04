@@ -397,7 +397,7 @@ class Security extends Component
      */
     public function pbkdf2($algo, $password, $salt, $iterations, $length = 0)
     {
-        if (function_exists('hash_pbkdf2') && PHP_VERSION_ID >= 50500) {
+        if (function_exists('hash_pbkdf2')) {
             $outputKey = hash_pbkdf2($algo, $password, $salt, $iterations, $length, true);
 
             if ($outputKey === false) {

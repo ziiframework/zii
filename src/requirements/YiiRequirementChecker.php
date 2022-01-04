@@ -8,12 +8,6 @@ declare(strict_types=1);
  * @license https://www.yiiframework.com/license/
  */
 
-if (version_compare(PHP_VERSION, '4.3', '<')) {
-    echo 'At least PHP 4.3 is required to run this script!';
-
-    exit(1);
-}
-
 /**
  * YiiRequirementChecker allows checking, if current system meets the requirements for running the Yii application.
  * This class allows rendering of the check report for the web and console application interface.
