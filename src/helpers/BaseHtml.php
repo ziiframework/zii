@@ -106,6 +106,7 @@ class BaseHtml
 
     /**
      * @var bool whether to removes duplicate class names in tag attribute `class`
+     *
      * @see mergeCssClasses()
      * @see renderTagAttributes()
      * @since 2.0.44
@@ -2162,6 +2163,7 @@ class BaseHtml
                     if (empty($value)) {
                         continue;
                     }
+
                     if (static::$normalizeClassAttribute === true && count($value) > 1) {
                         // removes duplicate classes
                         $value = explode(' ', implode(' ', $value));
