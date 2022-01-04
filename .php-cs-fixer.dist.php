@@ -102,4 +102,6 @@ return (new PhpCsFixer\Config())
             ->exclude('tests/data/views')
             ->notName('add_columns_fk.php')
             ->notName('DetailViewTest.php')
+            ->notName('VarDumperTest.php')
+            ->notName('MaskedInput.php')
     );
