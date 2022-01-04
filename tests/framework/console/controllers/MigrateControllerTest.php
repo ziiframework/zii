@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 /**
- * @link https://www.yiiframework.com/
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license https://www.yiiframework.com/license/
+ * @license http://www.yiiframework.com/license/
  */
 
 namespace yiiunit\framework\console\controllers;
@@ -84,17 +84,16 @@ class MigrateControllerTest extends TestCase
     }
 
     /**
-     * Check config namespace but without input namespace.
-     *
+     * Check config namespace but without input namespace
      * @param mixed $expectedFile
      * @param mixed $migrationName
      * @param mixed $table
      * @param array $params
      */
-    protected function assertCommandCreatedFileWithoutNamespaceInput($expectedFile, $migrationName, $table, $params = []): void
+    protected function assertCommandCreatedFileWithoutNamespaceInput($expectedFile, $migrationName, $table, $params = [])
     {
         $params[0] = $migrationName;
-        [$config, $namespace, $class] = $this->prepareMigrationNameData($this->migrationNamespace . '\\' . $migrationName);
+        list($config, $namespace, $class) = $this->prepareMigrationNameData($this->migrationNamespace . '\\' . $migrationName);
 
         $this->runMigrateControllerAction('create', $params, $config);
         $this->assertFileContent($expectedFile, $class, $table, $namespace);
@@ -120,17 +119,16 @@ class MigrateControllerTest extends TestCase
     }
 
     /**
-     * Check config namespace but without input namespace.
-     *
+     * Check config namespace but without input namespace
      * @param mixed $expectedFile
      * @param mixed $migrationName
      * @param mixed $junctionTable
      * @param mixed $firstTable
      * @param mixed $secondTable
      */
-    protected function assertCommandCreatedJunctionFileWithoutNamespaceInput($expectedFile, $migrationName, $junctionTable, $firstTable, $secondTable): void
+    protected function assertCommandCreatedJunctionFileWithoutNamespaceInput($expectedFile, $migrationName, $junctionTable, $firstTable, $secondTable)
     {
-        [$config, $namespace, $class] = $this->prepareMigrationNameData($this->migrationNamespace . '\\' . $migrationName);
+        list($config, $namespace, $class) = $this->prepareMigrationNameData($this->migrationNamespace . '\\' . $migrationName);
 
         $this->runMigrateControllerAction('create', [$migrationName], $config);
         $this->assertSame(ExitCode::OK, $this->getExitCode());
@@ -390,7 +388,13 @@ class MigrateControllerTest extends TestCase
 
         $this->assertCommandCreatedJunctionFile('junction_test', $migrationName, $junctionTable, $firstTable, $secondTable);
         $this->assertCommandCreatedJunctionFile('junction_test', $this->migrationNamespace . '\\' . $migrationName, $junctionTable, $firstTable, $secondTable);
-        $this->assertCommandCreatedJunctionFileWithoutNamespaceInput('junction_test', $migrationName, $junctionTable, $firstTable, $secondTable);
+        $this->assertCommandCreatedJunctionFileWithoutNamespaceInput(
+            'junction_test',
+            $migrationName,
+            $junctionTable,
+            $firstTable,
+            $secondTable
+        );
     }
 
     public function testUpdatingLongNamedMigration(): void

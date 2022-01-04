@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 /**
- * @link https://www.yiiframework.com/
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license https://www.yiiframework.com/license/
+ * @license http://www.yiiframework.com/license/
  */
 
 namespace yiiunit\framework\helpers;
@@ -152,7 +152,7 @@ RESULT;
         $expectedResult = "unserialize('" . serialize($var) . "')";
         $data[] = [$var, $expectedResult];
 
-        $var = static fn () => 2;
+        $var = function () {return 2; };
         $expectedResult = 'function () {return 2; }';
         $data[] = [$var, $expectedResult];
 
@@ -178,7 +178,7 @@ RESULT;
     public function testExportObjectFallback(): void
     {
         $var = new StdClass();
-        $var->testFunction = static fn () => 2;
+        $var->testFunction = function () {return 2; };
         $exportResult = VarDumper::export($var);
         $this->assertNotEmpty($exportResult);
 
@@ -186,7 +186,7 @@ RESULT;
         $slave = new StdClass();
         $master->slave = $slave;
         $slave->master = $master;
-        $master->function = static fn () => true;
+        $master->function = function () {return true; };
 
         $exportResult = VarDumper::export($master);
         $this->assertNotEmpty($exportResult);

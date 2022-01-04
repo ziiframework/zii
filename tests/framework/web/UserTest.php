@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 /**
- * @link https://www.yiiframework.com/
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license https://www.yiiframework.com/license/
+ * @license http://www.yiiframework.com/license/
  */
 
 namespace yii\web;
@@ -290,7 +290,6 @@ class UserTest extends TestCase
         $this->reset();
         Yii::$app->request->setUrl('json-and-accept-all');
         $_SERVER['HTTP_ACCEPT'] = 'text/json, */*; q=0.1';
-
         try {
             $user->loginRequired();
         } catch (ForbiddenHttpException $e) {
@@ -334,7 +333,6 @@ class UserTest extends TestCase
         $this->reset();
         Yii::$app->request->setUrl('json-only');
         $_SERVER['HTTP_ACCEPT'] = 'text/json;q=0.1';
-
         try {
             $user->loginRequired();
         } catch (ForbiddenHttpException $e) {
@@ -555,7 +553,7 @@ class UserTest extends TestCase
         $this->assertSame($id, Yii::$app->session->id);
     }
 
-    public function testSessionAuthWhenIdentityReturnsNull(): void
+    public function testSessionAuthWhenIdentityReturnsNull()
     {
         $appConfig = [
             'components' => [
