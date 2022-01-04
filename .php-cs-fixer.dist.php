@@ -83,7 +83,7 @@ return (new PhpCsFixer\Config())
             'call_type' => 'this',
         ],
         'native_constant_invocation' => false,
-        'native_function_casing' => false,
+        'native_function_casing' => true,
         'native_function_invocation' => false,
         'native_function_type_declaration_casing' => true,
         'fopen_flags' => ['b_mode' => true],
