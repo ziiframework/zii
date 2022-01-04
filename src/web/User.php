@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\web;
@@ -53,7 +53,6 @@ use yii\rbac\CheckAccessInterface;
  * ```
  *
  * @property-read string|int $id The unique identifier for the user. If `null`, it means the user is a guest.
- *
  * @property IdentityInterface|null $identity The identity object associated with the currently logged-in
  * user. `null` is returned if the user is not logged in (not authenticated).
  * @property-read bool $isGuest Whether the current user is a guest.
@@ -761,6 +760,7 @@ class User extends Component
             /* @var $class IdentityInterface */
             $class = $this->identityClass;
             $identity = $class::findIdentity($id);
+
             if ($identity === null) {
                 $this->switchIdentity(null);
             }

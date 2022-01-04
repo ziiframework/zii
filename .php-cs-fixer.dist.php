@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 $header_comment_block = <<<'EOF'
-@link http://www.yiiframework.com/
+@link https://www.yiiframework.com/
 @copyright Copyright (c) 2008 Yii Software LLC
-@license http://www.yiiframework.com/license/
+@license https://www.yiiframework.com/license/
 EOF;
 
 return (new PhpCsFixer\Config())
@@ -96,6 +96,7 @@ return (new PhpCsFixer\Config())
             ->notName('*Exception.php')
             ->in(__DIR__)
             ->exclude('vendor')
+            ->exclude('tests')
             ->exclude('src/views')
             ->exclude('tests/framework/di/stubs')
             ->exclude('tests/data/console/migrate_create')

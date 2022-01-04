@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\helpers;
@@ -106,6 +106,7 @@ class BaseHtml
 
     /**
      * @var bool whether to removes duplicate class names in tag attribute `class`
+     *
      * @see mergeCssClasses()
      * @see renderTagAttributes()
      * @since 2.0.44
@@ -2162,6 +2163,7 @@ class BaseHtml
                     if (empty($value)) {
                         continue;
                     }
+
                     if (static::$normalizeClassAttribute === true && count($value) > 1) {
                         // removes duplicate classes
                         $value = explode(' ', implode(' ', $value));
