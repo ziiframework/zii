@@ -31,7 +31,7 @@
         "lib-pcre": "*",
         "cebe/markdown": "^1.0",
         "ezyang/htmlpurifier": "^4.13",
-        "symfony/polyfill-php80": "^1.23",
+        "symfony/polyfill-php80": "^1.24",
         "ziiframework/composer": ">=3.5.0"
     },
     "require-dev": {
