@@ -95,6 +95,7 @@ class JsonExpression implements ExpressionInterface, JsonSerializable
      *
      * @throws InvalidConfigException when JsonExpression contains QueryInterface object
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         $value = $this->getValue();

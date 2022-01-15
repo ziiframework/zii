@@ -1464,6 +1464,7 @@ class ArrayAccessibleObject implements ArrayAccess
         $this->container = $container;
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value): void
     {
         if (is_null($offset)) {
@@ -1473,16 +1474,19 @@ class ArrayAccessibleObject implements ArrayAccess
         }
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return array_key_exists($offset, $this->container);
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset): void
     {
         unset($this->container[$offset]);
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->offsetExists($offset) ? $this->container[$offset] : null;
@@ -1507,26 +1511,31 @@ class TraversableArrayAccessibleObject extends ArrayAccessibleObject implements 
         return array_key_exists($keyIndex, $keys) ? $keys[$keyIndex] : false;
     }
 
+    #[\ReturnTypeWillChange]
     public function rewind(): void
     {
         $this->position = 0;
     }
 
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->offsetGet($this->getContainerKey($this->position));
     }
 
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->getContainerKey($this->position);
     }
 
+    #[\ReturnTypeWillChange]
     public function next(): void
     {
         ++$this->position;
     }
 
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         $key = $this->getContainerKey($this->position);

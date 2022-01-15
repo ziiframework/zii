@@ -481,7 +481,7 @@ class BaseStringHelper
             $pattern .= 'i';
         }
 
-        return preg_match($pattern, $string) === 1;
+        return preg_match($pattern, $string ?? '') === 1;
     }
 
     /**

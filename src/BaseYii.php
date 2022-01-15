@@ -145,7 +145,7 @@ class BaseYii
             return null;
         }
 
-        if (strncmp($alias, '@', 1) !== 0) {
+        if (strncmp((string)$alias, '@', 1) !== 0) {
             // not an alias
             return $alias;
         }

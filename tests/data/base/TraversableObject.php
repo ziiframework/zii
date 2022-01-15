@@ -38,6 +38,7 @@ class TraversableObject implements Iterator, Countable
      *
      * @since 5.1.0
      */
+    #[\ReturnTypeWillChange]
     public function count(): void
     {
         throw new Exception('Count called on object that should only be traversed.');
@@ -46,6 +47,7 @@ class TraversableObject implements Iterator, Countable
     /**
      * {@inheritdoc}
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->data[$this->position];
@@ -54,6 +56,7 @@ class TraversableObject implements Iterator, Countable
     /**
      * {@inheritdoc}
      */
+    #[\ReturnTypeWillChange]
     public function next(): void
     {
         ++$this->position;
@@ -62,6 +65,7 @@ class TraversableObject implements Iterator, Countable
     /**
      * {@inheritdoc}
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->position;
@@ -70,6 +74,7 @@ class TraversableObject implements Iterator, Countable
     /**
      * {@inheritdoc}
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return array_key_exists($this->position, $this->data);
@@ -78,6 +83,7 @@ class TraversableObject implements Iterator, Countable
     /**
      * {@inheritdoc}
      */
+    #[\ReturnTypeWillChange]
     public function rewind(): void
     {
         $this->position = 0;

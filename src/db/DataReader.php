@@ -217,6 +217,7 @@ class DataReader extends \yii\base\BaseObject implements Iterator, Countable
      *
      * @return int number of rows contained in the result.
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return $this->getRowCount();
@@ -239,6 +240,7 @@ class DataReader extends \yii\base\BaseObject implements Iterator, Countable
      *
      * @throws InvalidCallException if this method is invoked twice
      */
+    #[\ReturnTypeWillChange]
     public function rewind(): void
     {
         if ($this->_index < 0) {
@@ -255,6 +257,7 @@ class DataReader extends \yii\base\BaseObject implements Iterator, Countable
      *
      * @return int the index of the current row.
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->_index;
@@ -266,6 +269,7 @@ class DataReader extends \yii\base\BaseObject implements Iterator, Countable
      *
      * @return mixed the current row.
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->_row;
@@ -275,6 +279,7 @@ class DataReader extends \yii\base\BaseObject implements Iterator, Countable
      * Moves the internal pointer to the next row.
      * This method is required by the interface [[\Iterator]].
      */
+    #[\ReturnTypeWillChange]
     public function next(): void
     {
         $this->_row = $this->_statement->fetch();
@@ -287,6 +292,7 @@ class DataReader extends \yii\base\BaseObject implements Iterator, Countable
      *
      * @return bool whether there is a row of data at current position.
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return $this->_row !== false;

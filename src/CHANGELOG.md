@@ -8,6 +8,7 @@ upstream changes: [be051d6...master](https://github.com/yiisoft/yii2/compare/655
 ------------------------
 
 - Bug #19138: Allow digits in language code (ntesic)
+- Bug #19041: Fix PHP 8.1 issues (longthanhtran, samdark, pamparam83, sartor, githubjeka)
 
 
 2.0.44 December 30, 2021
