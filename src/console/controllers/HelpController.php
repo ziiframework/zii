@@ -532,8 +532,8 @@ class HelpController extends Controller
      */
     protected function formatOptionHelp($name, $required, $type, $defaultValue, $comment)
     {
-        $comment = trim((string)$comment);
-        $type = trim((string)$type);
+        $comment = trim($comment ?? '');
+        $type = trim($type ?? '');
 
         if (strncmp($type, 'bool', 4) === 0) {
             $type = 'boolean, 0 or 1';
