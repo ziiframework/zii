@@ -18,6 +18,7 @@ use yii\db\ColumnSchema;
 use yii\db\TableSchema;
 use yii\helpers\Console;
 use yii\helpers\Inflector;
+use yii\web\IdentityInterface;
 
 /**
  * Generate model by analyzing db schema.
@@ -207,8 +208,8 @@ class ModelController extends Controller
         $this->_targetClass->setFinal();
 
         if ($tableName === $this->identityTable) {
-            $this->_targetNamespace->addUse(yii\web\IdentityInterface::class);
-            $this->_targetClass->addImplement(yii\web\IdentityInterface::class);
+            $this->_targetNamespace->addUse(IdentityInterface::class);
+            $this->_targetClass->addImplement(IdentityInterface::class);
         }
 
         // Table Struct
@@ -287,7 +288,8 @@ class ModelController extends Controller
         // identity interface implement
         if ($tableName === $this->identityTable) {
             $this->_targetClass->addMethod('findIdentity')
-                ->setReturnType('?IdentityInterface')
+                ->setReturnType(IdentityInterface::class)
+                ->setReturnNullable()
                 ->setStatic()
                 // ->addComment('@inheritdoc')
                 ->setBody("return static::findOne(['id' => \$id]);")
@@ -295,7 +297,8 @@ class ModelController extends Controller
                     (new Parameter('id'))->setType('int'),
                 ]);
             $this->_targetClass->addMethod('findIdentityByAccessToken')
-                ->setReturnType('?IdentityInterface')
+                ->setReturnType(IdentityInterface::class)
+                ->setReturnNullable()
                 ->setStatic()
                 // ->addComment('@inheritdoc')
                 ->setBody("return static::findOne(['access_token' => \$token]);")
@@ -469,7 +472,8 @@ class ModelController extends Controller
         if (!empty($this->_ruleString) || !empty($this->_ruleRange)) {
             $closure = new Closure();
             $closure->setBody('return pf_str_or_null($value);')
-                ->setReturnType('?string')
+                ->setReturnType('string')
+                ->setReturnNullable()
                 ->addParameter('value');
 
             $rules[] = [
@@ -503,7 +507,8 @@ class ModelController extends Controller
             foreach ($groupByFormat as $format => $names) {
                 $closure = new Closure();
                 $closure->setBody("return zff_date_or_null(\$value, '$format');")
-                    ->setReturnType('?string')
+                    ->setReturnType('string')
+                    ->setReturnNullable()
                     ->addParameter('value');
                 $rules[] = [
                     $this->arrayOrString($names),
@@ -604,7 +609,8 @@ class ModelController extends Controller
                 ]));
                 // Table Relations
                 $this->_targetClass->addMethod("getDb{$item['targetClassName']}")
-                    ->setReturnType('?ActiveQuery')
+                    ->setReturnType(ActiveQuery::class)
+                    ->setReturnNullable()
                     // ->addComment("关联{$item['targetClassComment']}")
                     ->addComment("@return null|ActiveQuery|{$item['targetClassName']}")
                     ->setBody("return \$this->hasOne({$item['targetClassName']}::class, ['id' => '" . lcfirst($item['targetClassName']) . "_id']);");
@@ -686,20 +692,20 @@ class ModelController extends Controller
 
         switch ($dbType) {
             case Schema::TYPE_TINYINT:
-                $max = $column->size >= 3 ? 127 : str_repeat('9', $column->size);
+                $max = $column->size === null || $column->size >= 3 ? 127 : str_repeat('9', $column->size);
                 break;
             case Schema::TYPE_SMALLINT:
-                $max = $column->size >= 5 ? 32767 : str_repeat('9', $column->size);
+                $max = $column->size === null || $column->size >= 5 ? 32767 : str_repeat('9', $column->size);
                 break;
             case 'mediumint':
-                $max = $column->size >= 7 ? 8388607 : str_repeat('9', $column->size);
+                $max = $column->size === null || $column->size >= 7 ? 8388607 : str_repeat('9', $column->size);
                 break;
             case 'int':
             case Schema::TYPE_INTEGER:
-                $max = $column->size >= 10 ? 2147483647 : str_repeat('9', $column->size);
+                $max = $column->size === null || $column->size >= 10 ? 2147483647 : str_repeat('9', $column->size);
                 break;
             case Schema::TYPE_BIGINT:
-                $max = $column->size >= 19 ? 9223372036854775807 : str_repeat('9', $column->size);
+                $max = $column->size === null || $column->size >= 19 ? 9223372036854775807 : str_repeat('9', $column->size);
                 break;
             default:
                 $max = null;
