@@ -36,7 +36,7 @@ use yii\helpers\Inflector;
  */
 class ModelController extends Controller
 {
-    public string $modelNamespace = 'Zpp\\Models';
+    public string $modelNamespace = '\\Zpp\\Models';
     public string $modelExtends = '\\Zpp\\Models\\BaseModel';
     public string $modelDir = '@app/src/Models';
 
