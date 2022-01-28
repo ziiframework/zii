@@ -12,6 +12,7 @@ use Nette\PhpGenerator\Parameter;
 use Nette\PhpGenerator\PhpNamespace;
 use yii\behaviors\AttributeTypecastBehavior;
 use yii\db\ActiveQuery;
+use yii\db\Exception;
 use yii\db\Schema;
 use yii\db\ColumnSchema;
 use yii\db\TableSchema;
@@ -501,7 +502,7 @@ class ModelController extends Controller
             }
             foreach ($groupByFormat as $format => $names) {
                 $closure = new Closure();
-                $closure->setBody("return zff_date_or_null(\$value, '{$format}');")
+                $closure->setBody("return zff_date_or_null(\$value, '$format');")
                     ->setReturnType('?string')
                     ->addParameter('value');
                 $rules[] = [
@@ -519,7 +520,7 @@ class ModelController extends Controller
             }
             foreach ($groupBySize as $size => $names) {
                 $max_size = (int)$size;
-                $min_size = $max_size === 65535 || $max_size >= 60000 ? 0 : 1;
+                $min_size = $max_size >= 60000 ? 0 : 1;
 
                 $rules[] = [
                     $this->arrayOrString($names),
@@ -652,7 +653,7 @@ class ModelController extends Controller
 
         try {
             $query = $command->queryOne();
-        } catch (\yii\db\Exception $e) {
+        } catch (Exception $e) {
         }
 
         return $query['Comment'] ?? null;
@@ -665,7 +666,7 @@ class ModelController extends Controller
 
         try {
             return $command->queryAll();
-        } catch (\yii\db\Exception $e) {
+        } catch (Exception $e) {
             return [];
         }
     }
