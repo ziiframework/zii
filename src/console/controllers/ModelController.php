@@ -355,7 +355,7 @@ class ModelController extends Controller
         if ($this->fieldTypeCast($column->dbType) === 'tinyint') {
             // $column->size === 1
             // Warning: #1681 Integer display width is deprecated and will be removed in a future release.
-            if (preg_match('/^(is|has|can|enable)_/', $column->name)) {
+            if (preg_match('/^(is|has|can|enable|use)_/', $column->name)) {
                 $this->_typeCastAttributes[$column->name] = AttributeTypecastBehavior::TYPE_BOOLEAN;
                 $this->_ruleBoolean[] = ['name' => $column->name];
             } else {
