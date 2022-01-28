@@ -80,6 +80,7 @@ class FilterValidator extends Validator
         $value = $model->$attribute;
 
         if (!$this->skipOnArray || !is_array($value)) {
+            $value = $value ?? '';
             $model->$attribute = call_user_func($this->filter, $value);
         }
     }

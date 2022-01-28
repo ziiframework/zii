@@ -66,7 +66,7 @@ use yii\web\UrlRuleInterface;
 class UrlRule extends CompositeUrlRule
 {
     /**
-     * @var string the common prefix string shared by all patterns.
+     * @var string|null the common prefix string shared by all patterns.
      */
     public $prefix;
     /**

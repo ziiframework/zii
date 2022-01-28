@@ -30,7 +30,7 @@ class Column extends BaseObject
      */
     public $grid;
     /**
-     * @var string the header cell content. Note that it will not be HTML-encoded.
+     * @var string|null the header cell content. Note that it will not be HTML-encoded.
      */
     public $header;
     /**
@@ -162,7 +162,7 @@ class Column extends BaseObject
      */
     protected function renderFooterCellContent()
     {
-        return trim($this->footer) !== '' ? $this->footer : $this->grid->emptyCell;
+        return trim($this->footer ?? '') !== '' ? $this->footer : $this->grid->emptyCell;
     }
 
     /**

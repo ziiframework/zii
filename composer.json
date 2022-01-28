@@ -28,6 +28,7 @@
         "ext-dom": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
+        "ext-pdo": "*",
         "lib-pcre": "*",
         "cebe/markdown": "^1.0",
         "ezyang/htmlpurifier": "^4.13",
