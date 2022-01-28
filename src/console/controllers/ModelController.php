@@ -37,6 +37,7 @@ class ModelController extends Controller
 {
     public string $modelNamespace = 'Zpp\\Models';
     public string $modelExtends = '\\Zpp\\Models\\BaseModel';
+    public string $modelDir = '@app/src/Models';
 
     public string $identityTable = 'user';
 
@@ -221,7 +222,7 @@ class ModelController extends Controller
 
         // Table Indexes
         foreach ($this->getTableIndexes($tableName) as $index) {
-            $this->_indexes[$index['Column_name']] = (bool)($index['Non_unique'] * 1) ? 'indexed' : 'unique';
+            $this->_indexes[$index['Column_name']] = $index['Non_unique'] * 1 ? 'indexed' : 'unique';
         }
 
         foreach ($_schema->columns as $column) {
@@ -231,10 +232,10 @@ class ModelController extends Controller
 
             // Field Comment
             $varType = $column->phpType;
-            if (mb_stripos($column->dbType, 'decimal') !== false) {
+            if (str_contains($column->dbType, 'decimal')) {
                 $varType = 'float';
             }
-            if (mb_stripos($column->dbType, 'tinyint') !== false && preg_match('/^(is|has|can|enable)_/', $column->name)) {
+            if (str_contains($column->dbType, 'tinyint') && preg_match('/^(is|has|can|enable|use)_/', $column->name)) {
                 $varType = 'bool';
             }
 
@@ -316,7 +317,7 @@ class ModelController extends Controller
                 ->addParameter('identity_secret');
         }
 
-        $file = ZDIR_ROOT . '/src/Models/' . Inflector::camelize($tableName) . '.php';
+        $file = Yii::getAlias($this->modelDir) . '/' . Inflector::camelize($tableName) . '.php';
         if ($overwrite === true || !file_exists($file)) {
             $objectBody = str_replace(
                 array_keys(self::$_codeReplacements),
