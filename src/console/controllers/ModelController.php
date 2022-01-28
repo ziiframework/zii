@@ -67,9 +67,9 @@ class ModelController extends Controller
 
     public string $identityTable = 'user';
 
-    private PhpNamespace $_namespace;
+    private PhpNamespace $_targetNamespace;
 
-    private ClassType $_class;
+    private ClassType $_targetClass;
 
     private array $_indexes = [];
 
@@ -218,18 +218,16 @@ class ModelController extends Controller
 
     public function actionIndex(string $tableName, bool $overwrite = false): void
     {
-        clearstatcache();
-
         $this->resetAttributes();
 
-        $this->_namespace = new PhpNamespace($this->modelNamespace);
-        $this->_class = $this->_namespace->addClass(Inflector::camelize($tableName));
-        $this->_class->setExtends($this->modelExtends);
-        $this->_class->setFinal();
+        $this->_targetNamespace = new PhpNamespace($this->modelNamespace);
+        $this->_targetClass = $this->_targetNamespace->addClass(Inflector::camelize($tableName));
+        $this->_targetClass->setExtends($this->modelExtends);
+        $this->_targetClass->setFinal();
         if ($tableName === $this->identityTable) {
             // $this->_namespace->addUse('Yii');
-            $this->_namespace->addUse(yii\web\IdentityInterface::class);
-            $this->_class->addImplement(yii\web\IdentityInterface::class);
+            $this->_targetNamespace->addUse(yii\web\IdentityInterface::class);
+            $this->_targetClass->addImplement(yii\web\IdentityInterface::class);
         }
 
         // Table Struct
@@ -240,7 +238,7 @@ class ModelController extends Controller
         }
 
         // Table Comment
-        $this->_class->addComment(DbSupport::getTableComment($tableName). "\n");
+        $this->_targetClass->addComment(DbSupport::getTableComment($tableName). "\n");
 
         // Table Indexes
         foreach (DbSupport::getTableIndexes($tableName) as $index) {
@@ -261,7 +259,7 @@ class ModelController extends Controller
                 $varType = 'bool';
             }
 
-            $this->_class->addComment(implode(' ', [
+            $this->_targetClass->addComment(implode(' ', [
                 '@property',
                 $varType,
                 '$' . $column->name,
@@ -275,7 +273,7 @@ class ModelController extends Controller
         }
 
         // public function attributeLabels
-        $this->_class->addMethod('attributeLabels')
+        $this->_targetClass->addMethod('attributeLabels')
             ->setReturnType('array')
             // ->addComment('@inheritdoc')
             ->setBody('return array_merge(parent::attributeLabels(), ?);', [
@@ -290,7 +288,7 @@ class ModelController extends Controller
             ]);
 
         // public function extraFields
-        $this->_class->addMethod('extraFields')
+        $this->_targetClass->addMethod('extraFields')
             ->setReturnType('array')
             // ->addComment('@inheritdoc')
             ->setBody('return array_merge(parent::extraFields(), ?);', [
@@ -300,14 +298,14 @@ class ModelController extends Controller
             ]);
 
         // rules
-        $this->_class->addMethod('rules')
+        $this->_targetClass->addMethod('rules')
             ->setReturnType('array')
             // ->addComment('@inheritdoc')
             ->setBody('return array_merge(parent::rules(), ?);', [$this->generateRules()]);
 
         // identity interface implement
         if ($tableName === $this->identityTable) {
-            $this->_class->addMethod('findIdentity')
+            $this->_targetClass->addMethod('findIdentity')
                 ->setReturnType('?IdentityInterface')
                 ->setStatic()
                 // ->addComment('@inheritdoc')
@@ -315,7 +313,7 @@ class ModelController extends Controller
                 ->setParameters([
                     (new Parameter('id'))->setType('int'),
                 ]);
-            $this->_class->addMethod('findIdentityByAccessToken')
+            $this->_targetClass->addMethod('findIdentityByAccessToken')
                 ->setReturnType('?IdentityInterface')
                 ->setStatic()
                 // ->addComment('@inheritdoc')
@@ -324,15 +322,15 @@ class ModelController extends Controller
                     (new Parameter('token'))->setType('string'),
                     (new Parameter('type'))->setType('string')->setDefaultValue(null),
                 ]);
-            $this->_class->addMethod('getId')
+            $this->_targetClass->addMethod('getId')
                 ->setReturnType('int')
                 // ->addComment('@inheritdoc')
                 ->setBody('return $this->getPrimaryKey();');
-            $this->_class->addMethod('getAuthKey')
+            $this->_targetClass->addMethod('getAuthKey')
                 ->setReturnType('string')
                 // ->addComment('@inheritdoc')
                 ->setBody('return $this->identity_secret;');
-            $this->_class->addMethod('validateAuthKey')
+            $this->_targetClass->addMethod('validateAuthKey')
                 ->setReturnType('bool')
                 // ->addComment('@inheritdoc')
                 ->setBody('return $this->getAuthKey() === $identity_secret;')
@@ -344,7 +342,7 @@ class ModelController extends Controller
             $objectBody = str_replace(
                 array_keys(self::$_codeReplacements),
                 array_values(self::$_codeReplacements),
-                $this->_namespace
+                $this->_targetNamespace
             );
             $objectBody = preg_replace('/["]([^$"]+)["]/u', "'$1'", $objectBody);
             $objectBody = preg_replace('/["](\s+)(\d+)(\s+)["]/u', "'$1$2$3'", $objectBody);
@@ -486,7 +484,7 @@ class ModelController extends Controller
     {
         $rules = [];
 
-        $this->_namespace->addUse(RuleSupport::class);
+        $this->_targetNamespace->addUse(RuleSupport::class);
         // Rule String
         if (!empty($this->_ruleString) || !empty($this->_ruleRange)) {
             $closure = new Closure();
@@ -608,7 +606,7 @@ class ModelController extends Controller
         }
         // Exist Type
         if (!empty($this->_ruleExist)) {
-            $this->_namespace->addUse(ActiveQuery::class);
+            $this->_targetNamespace->addUse(ActiveQuery::class);
             foreach ($this->_ruleExist as $item) {
                 $rules[] = [
                     $this->arrayOrString($item['name']),
@@ -618,14 +616,14 @@ class ModelController extends Controller
                     'message' => '%"{attribute}" . " " . zii_t("不存在")%',
                 ];
                 // Class Comment
-                $this->_class->addComment(implode(' ', [
+                $this->_targetClass->addComment(implode(' ', [
                     '@property',
                     $item['targetClassName'],
                     '$db' . ucfirst($item['targetClassName']),
                     // '关联' . str_replace('表', '', $item['targetClassComment']) . '[ActiveRecord].',
                 ]));
                 // Table Relations
-                $this->_class->addMethod("getDb{$item['targetClassName']}")
+                $this->_targetClass->addMethod("getDb{$item['targetClassName']}")
                     ->setReturnType('?ActiveQuery')
                     // ->addComment("关联{$item['targetClassComment']}")
                     ->addComment("@return null|ActiveQuery|{$item['targetClassName']}")
