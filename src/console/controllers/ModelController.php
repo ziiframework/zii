@@ -36,7 +36,7 @@ use yii\helpers\Inflector;
  */
 class ModelController extends Controller
 {
-    public string $modelNamespace = '\\Zpp\\Models';
+    public string $modelNamespace = 'Zpp\\Models';
     public string $modelExtends = '\\Zpp\\Models\\BaseModel';
     public string $modelDir = '@app/src/Models';
 
@@ -323,7 +323,7 @@ class ModelController extends Controller
             $objectBody = str_replace(
                 array_keys(self::$_codeReplacements),
                 array_values(self::$_codeReplacements),
-                $this->_targetNamespace
+                (string)$this->_targetNamespace
             );
             $objectBody = preg_replace('/["]([^$"]+)["]/u', "'$1'", $objectBody);
             $objectBody = preg_replace('/["](\s+)(\d+)(\s+)["]/u', "'$1$2$3'", $objectBody);
