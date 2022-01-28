@@ -464,11 +464,10 @@ class ModelController extends Controller
     {
         $rules = [];
 
-        $this->_targetNamespace->addUse(RuleSupport::class);
         // Rule String
         if (!empty($this->_ruleString) || !empty($this->_ruleRange)) {
             $closure = new Closure();
-            $closure->setBody('return RuleSupport::strOrNull($value);')
+            $closure->setBody('return pf_str_or_null($value);')
                 ->setReturnType('?string')
                 ->addParameter('value');
 
@@ -484,7 +483,7 @@ class ModelController extends Controller
         // Rule Text
         if (!empty($this->_ruleText)) {
             $closure = new Closure();
-            $closure->setBody('return RuleSupport::strOrEmpty($value);')
+            $closure->setBody('return pf_str_or_null($value) ?? \'\';')
                 ->setReturnType('string')
                 ->addParameter('value');
 
@@ -502,7 +501,7 @@ class ModelController extends Controller
             }
             foreach ($groupByFormat as $format => $names) {
                 $closure = new Closure();
-                $closure->setBody("return RuleSupport::dateOrNull(\$value, '{$format}');")
+                $closure->setBody("return zff_date_or_null(\$value, '{$format}');")
                     ->setReturnType('?string')
                     ->addParameter('value');
                 $rules[] = [
