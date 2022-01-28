@@ -2,61 +2,34 @@
 
 declare(strict_types=1);
 
-/**
- * @link https://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license https://www.yiiframework.com/license/
- */
-
 namespace yii\console\controllers;
 
 use Yii;
-use yii\caching\ApcCache;
-use yii\caching\CacheInterface;
 use yii\console\Controller;
-use yii\console\Exception;
-use yii\console\ExitCode;
-use yii\helpers\Console;
-
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\Closure;
 use Nette\PhpGenerator\Parameter;
 use Nette\PhpGenerator\PhpNamespace;
 use yii\behaviors\AttributeTypecastBehavior;
 use yii\db\ActiveQuery;
+use yii\db\Schema;
 use yii\db\ColumnSchema;
 use yii\db\TableSchema;
+use yii\helpers\Console;
 use yii\helpers\Inflector;
-use Zii\Util\Supports\DbSupport;
-use Zii\Util\Supports\RuleSupport;
 
 /**
- * Allows you to flush cache.
+ * Generate model by analyzing db schema.
  *
- * see list of available components to flush:
+ * see the description of this command:
  *
- *     yii cache
+ *     yii model
  *
- * flush particular components specified by their names:
+ * generate a model by its schema:
  *
- *     yii cache/flush first second third
+ *     yii model/generate first second
  *
- * flush all cache components that can be found in the system
- *
- *     yii cache/flush-all
- *
- * Note that the command uses cache components defined in your console application configuration file. If components
- * configured are different from web application, web application cache won't be cleared. In order to fix it please
- * duplicate web application cache components in console config. You can use any component names.
- *
- * APC is not shared between PHP processes so flushing cache from command line has no effect on web.
- * Flushing web cache could be either done by:
- *
- * - Putting a php file under web root and calling it via HTTP
- * - Using [Cachetool](http://gordalina.github.io/cachetool/)
- *
- * @author Alexander Makarov <sam@rmcreative.ru>
- * @author Mark Jebri <mark.github@yandex.ru>
+ * @author charescape <charescape@outlook.com>
  *
  * @since 2.0
  */
@@ -216,16 +189,22 @@ class ModelController extends Controller
         $this->_typeCastAttributes = [];
     }
 
-    public function actionIndex(string $tableName, bool $overwrite = false): void
+    public function actionIndex(): void
+    {
+        $this->stdout("Use php yii model/generate to generate a model.\n", Console::FG_RED);
+    }
+
+    public function actionGenerate(string $tableName, bool $overwrite = false): void
     {
         $this->resetAttributes();
 
         $this->_targetNamespace = new PhpNamespace($this->modelNamespace);
+
         $this->_targetClass = $this->_targetNamespace->addClass(Inflector::camelize($tableName));
         $this->_targetClass->setExtends($this->modelExtends);
         $this->_targetClass->setFinal();
+
         if ($tableName === $this->identityTable) {
-            // $this->_namespace->addUse('Yii');
             $this->_targetNamespace->addUse(yii\web\IdentityInterface::class);
             $this->_targetClass->addImplement(yii\web\IdentityInterface::class);
         }
@@ -238,10 +217,10 @@ class ModelController extends Controller
         }
 
         // Table Comment
-        $this->_targetClass->addComment(DbSupport::getTableComment($tableName). "\n");
+        $this->_targetClass->addComment($this->getTableComment($tableName). "\n");
 
         // Table Indexes
-        foreach (DbSupport::getTableIndexes($tableName) as $index) {
+        foreach ($this->getTableIndexes($tableName) as $index) {
             $this->_indexes[$index['Column_name']] = (bool)($index['Non_unique'] * 1) ? 'indexed' : 'unique';
         }
 
@@ -371,7 +350,7 @@ class ModelController extends Controller
         }
 
         // tinyint
-        if (DbSupport::castDataType($column->dbType) === 'tinyint') {
+        if ($this->fieldTypeCast($column->dbType) === 'tinyint') {
             // $column->size === 1
             // Warning: #1681 Integer display width is deprecated and will be removed in a future release.
             if (preg_match('/^(is|has|can|enable)_/', $column->name)) {
@@ -381,44 +360,44 @@ class ModelController extends Controller
                 $this->_typeCastAttributes[$column->name] = AttributeTypecastBehavior::TYPE_INTEGER;
                 $this->_ruleInteger[] = [
                     'name' => $column->name,
-                    'max' => DbSupport::getColumnMaxValue($column),
+                    'max' => $this->getColumnMaximumValue($column),
                 ];
             }
         }
 
         // int
-        if (in_array(DbSupport::castDataType($column->dbType), ['smallint', 'mediumint', 'int', 'integer', 'bigint'], true)) {
+        if (in_array($this->fieldTypeCast($column->dbType), ['smallint', 'mediumint', 'int', 'integer', 'bigint'], true)) {
             $this->_ruleInteger[] = [
                 'name' => $column->name,
-                'max' => DbSupport::getColumnMaxValue($column),
+                'max' => $this->getColumnMaximumValue($column),
             ];
         }
 
         // double、float、decimal TODO
-        if (DbSupport::castDataType($column->dbType) === 'double') {
+        if ($this->fieldTypeCast($column->dbType) === 'double') {
             $this->_ruleInteger[] = [
                 'name' => $column->name,
-                'max' => DbSupport::getColumnMaxValue($column),
+                'max' => $this->getColumnMaximumValue($column),
             ];
             $this->_typeCastAttributes[$column->name] = AttributeTypecastBehavior::TYPE_INTEGER;
         }
-        if (DbSupport::castDataType($column->dbType) === 'float') {
+        if ($this->fieldTypeCast($column->dbType) === 'float') {
             $this->_ruleInteger[] = [
                 'name' => $column->name,
-                'max' => DbSupport::getColumnMaxValue($column),
+                'max' => $this->getColumnMaximumValue($column),
             ];
             $this->_typeCastAttributes[$column->name] = AttributeTypecastBehavior::TYPE_INTEGER;
         }
-        if (DbSupport::castDataType($column->dbType) === 'decimal') {
+        if ($this->fieldTypeCast($column->dbType) === 'decimal') {
             $this->_ruleInteger[] = [
                 'name' => $column->name,
-                'max' => DbSupport::getColumnMaxValue($column),
+                'max' => $this->getColumnMaximumValue($column),
             ];
             $this->_typeCastAttributes[$column->name] = AttributeTypecastBehavior::TYPE_INTEGER;
         }
 
         // varchar
-        if (DbSupport::castDataType($column->dbType) === 'varchar') {
+        if ($this->fieldTypeCast($column->dbType) === 'varchar') {
             $this->_ruleString[] = [
                 'name' => $column->name,
                 'size' => $column->size,
@@ -426,7 +405,7 @@ class ModelController extends Controller
         }
 
         // text
-        if (DbSupport::castDataType($column->dbType) === 'text') {
+        if ($this->fieldTypeCast($column->dbType) === 'text') {
             $this->_ruleText[] = ['name' => $column->name];
 
             $this->_ruleString[] = [
@@ -436,7 +415,7 @@ class ModelController extends Controller
         }
 
         // enum
-        if (DbSupport::castDataType($column->dbType) === 'enum') {
+        if ($this->fieldTypeCast($column->dbType) === 'enum') {
             $this->_ruleRange[] = [
                 'name' => $column->name,
                 'range' => $column->enumValues,
@@ -444,7 +423,7 @@ class ModelController extends Controller
         }
 
         // set
-        if (DbSupport::castDataType($column->dbType) === 'set') {
+        if ($this->fieldTypeCast($column->dbType) === 'set') {
             $isMatch = preg_match('/^([\w ]+)(?:\(([^)]+)\))?$/', $column->dbType, $matches);
             if ($isMatch !== false && !empty($matches[2])) {
                 $values = preg_split('/\s*,\s*/', $matches[2]);
@@ -460,16 +439,16 @@ class ModelController extends Controller
         }
 
         // year、date、time、timestamp、datetime
-        if (isset(self::$_dateFormat[DbSupport::castDataType($column->dbType)])) {
+        if (isset(self::$_dateFormat[$this->fieldTypeCast($column->dbType)])) {
             $this->_ruleYmdHis[] = [
                 'name' => $column->name,
-                'format' => self::$_dateFormat[DbSupport::castDataType($column->dbType)],
+                'format' => self::$_dateFormat[$this->fieldTypeCast($column->dbType)],
             ];
         }
 
         // xxx_id
         if (preg_match('/^([a-z0-9]+)_id$/', $column->name, $matches)) {
-            $getTableComment = DbSupport::getTableComment($matches[1]);
+            $getTableComment = $this->getTableComment($matches[1]);
             if ($getTableComment !== null) {
                 $this->_ruleExist[] = [
                     'name' => $column->name,
@@ -650,14 +629,6 @@ class ModelController extends Controller
         return $rules;
     }
 
-    /**
-     * 优先返回一个字符串，用于规则中的目标字段
-     * 以下情况将返回字符串：
-     * 1. 参数是索引数组，且数组中只有一个元素.
-     *
-     * @param mixed $value
-     * @return mixed
-     */
     private function arrayOrString($value)
     {
         if (is_string($value)) {
@@ -672,5 +643,68 @@ class ModelController extends Controller
         }
 
         return $value;
+    }
+
+    private function getTableComment(string $tableName): ?string
+    {
+        $sql = "SHOW TABLE STATUS WHERE Name = '$tableName'";
+        $command = Yii::$app->db->createCommand($sql);
+
+        try {
+            $query = $command->queryOne();
+        } catch (\yii\db\Exception $e) {
+        }
+
+        return $query['Comment'] ?? null;
+    }
+
+    private function getTableIndexes(string $tableName): array
+    {
+        $sql = 'SHOW INDEX FROM ' . Yii::$app->db->schema->getRawTableName($tableName);
+        $command = Yii::$app->db->createCommand($sql);
+
+        try {
+            return $command->queryAll();
+        } catch (\yii\db\Exception $e) {
+            return [];
+        }
+    }
+
+    private function fieldTypeCast(string $dbType): string
+    {
+        if (strpos($dbType, '(') === false) {
+            return $dbType;
+        }
+
+        return explode('(', $dbType)[0];
+    }
+
+    private function getColumnMaximumValue(ColumnSchema $column): ?int
+    {
+        $dbType = $this->fieldTypeCast($column->dbType);
+
+        switch ($dbType) {
+            case Schema::TYPE_TINYINT:
+                $max = $column->size >= 3 ? 127 : str_repeat('9', $column->size);
+                break;
+            case Schema::TYPE_SMALLINT:
+                $max = $column->size >= 5 ? 32767 : str_repeat('9', $column->size);
+                break;
+            case 'mediumint':
+                $max = $column->size >= 7 ? 8388607 : str_repeat('9', $column->size);
+                break;
+            case 'int':
+            case Schema::TYPE_INTEGER:
+                $max = $column->size >= 10 ? 2147483647 : str_repeat('9', $column->size);
+                break;
+            case Schema::TYPE_BIGINT:
+                $max = $column->size >= 19 ? 9223372036854775807 : str_repeat('9', $column->size);
+                break;
+            default:
+                $max = null;
+                break;
+        }
+
+        return (int)$max;
     }
 }
