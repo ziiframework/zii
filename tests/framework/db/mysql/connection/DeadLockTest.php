@@ -212,11 +212,11 @@ class DeadLockTest extends \yiiunit\framework\db\mysql\ConnectionTest
 
             return 1;
         } catch (\Exception $e) {
-            $this->log('child 1: ! exit <<' . $e::class . ' #' . $e->getCode() . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString() . '>>');
+            $this->log('child 1: ! exit <<' . get_class($e) . ' #' . $e->getCode() . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString() . '>>');
 
             return 1;
         } catch (Throwable $e) {
-            $this->log('child 1: ! exit <<' . $e::class . ' #' . $e->getCode() . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString() . '>>');
+            $this->log('child 1: ! exit <<' . get_class($e) . ' #' . $e->getCode() . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString() . '>>');
 
             return 1;
         }
@@ -281,11 +281,11 @@ class DeadLockTest extends \yiiunit\framework\db\mysql\ConnectionTest
 
             return 1;
         } catch (\Exception $e) {
-            $this->log('child 2: ! exit <<' . $e::class . ' #' . $e->getCode() . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString() . '>>');
+            $this->log('child 2: ! exit <<' . get_class($e) . ' #' . $e->getCode() . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString() . '>>');
 
             return 1;
         } catch (Throwable $e) {
-            $this->log('child 2: ! exit <<' . $e::class . ' #' . $e->getCode() . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString() . '>>');
+            $this->log('child 2: ! exit <<' . get_class($e) . ' #' . $e->getCode() . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString() . '>>');
 
             return 1;
         }

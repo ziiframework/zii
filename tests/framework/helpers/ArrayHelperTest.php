@@ -64,7 +64,7 @@ class ArrayHelperTest extends TestCase
             '_content' => 'test',
             'length' => 4,
         ], ArrayHelper::toArray($object, [
-            $object::className() => [
+            get_class($object)Name() => [
                 'id', 'secret',
                 '_content' => 'content',
                 'length' => static fn ($post) => strlen($post->content),
@@ -91,11 +91,11 @@ class ArrayHelperTest extends TestCase
                 'id_plus_1' => 124,
             ],
         ], ArrayHelper::toArray($object, [
-            $object::className() => [
+            get_class($object)Name() => [
                 'id', 'subObject',
                 'id_plus_1' => static fn ($post) => $post->id + 1,
             ],
-            $subObject::className() => [
+            get_class($subObject)Name() => [
                 'id',
                 'id_plus_1' => static fn ($post) => $post->id + 1,
             ],
@@ -109,7 +109,7 @@ class ArrayHelperTest extends TestCase
                 'id_plus_1' => 124,
             ],
         ], ArrayHelper::toArray($object, [
-            $subObject::className() => [
+            get_class($subObject)Name() => [
                 'id',
                 'id_plus_1' => static fn ($post) => $post->id + 1,
             ],

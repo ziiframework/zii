@@ -233,7 +233,7 @@ class CompareValidatorTest extends TestCase
         } catch (InvalidConfigException $e) {
             return;
         } catch (Exception $e) {
-            $this->fail('InvalidConfigException expected' . $e::class . 'received');
+            $this->fail('InvalidConfigException expected' . get_class($e) . 'received');
 
             return;
         }

@@ -221,7 +221,7 @@ HTML
     public function testBeforeAndAfterItem(): void
     {
         $before = static function ($model, $key, $index, $widget) {
-            $widget = $widget::class;
+            $widget = get_class($widget);
 
             return "<!-- before: {$model['id']}, key: $key, index: $index, widget: $widget -->";
         };
@@ -229,7 +229,7 @@ HTML
             if ($model['id'] === 1) {
                 return null;
             }
-            $widget = $widget::class;
+            $widget = get_class($widget);
 
             return "<!-- after: {$model['id']}, key: $key, index: $index, widget: $widget -->";
         };
