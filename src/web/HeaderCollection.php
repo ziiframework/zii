@@ -29,9 +29,14 @@ use yii\base\BaseObject;
 class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAccess, Countable
 {
     /**
-     * @var array the headers in this collection (indexed by the header names)
+     * @var array the headers in this collection (indexed by the normalized header names)
      */
     private $_headers = [];
+
+    /**
+     * @var array the original names of the headers (indexed by the normalized header names)
+     */
+    private $_originalHeaderNames = [];
 
     /**
      * Returns an iterator for traversing the headers in the collection.
@@ -82,10 +87,10 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      */
     public function get($name, $default = null, $first = true)
     {
-        $name = strtolower($name);
+        $normalizedName = strtolower($name);
 
-        if (isset($this->_headers[$name])) {
-            return $first ? reset($this->_headers[$name]) : $this->_headers[$name];
+        if (isset($this->_headers[$normalizedName])) {
+            return $first ? reset($this->_headers[$normalizedName]) : $this->_headers[$normalizedName];
         }
 
         return $default;
@@ -102,8 +107,9 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      */
     public function set($name, $value = '')
     {
-        $name = strtolower($name);
-        $this->_headers[$name] = (array) $value;
+        $normalizedName = strtolower($name);
+        $this->_headers[$normalizedName] = (array) $value;
+        $this->_originalHeaderNames[$normalizedName] = $name;
 
         return $this;
     }
@@ -120,8 +126,11 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      */
     public function add($name, $value)
     {
-        $name = strtolower($name);
-        $this->_headers[$name][] = $value;
+        $normalizedName = strtolower($name);
+        $this->_headers[$normalizedName][] = $value;
+        if (!\array_key_exists($normalizedName, $this->_originalHeaderNames)) {
+            $this->_originalHeaderNames[$normalizedName] = $name;
+        }
 
         return $this;
     }
@@ -137,10 +146,11 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      */
     public function setDefault($name, $value)
     {
-        $name = strtolower($name);
+        $normalizedName = strtolower($name);
 
-        if (empty($this->_headers[$name])) {
-            $this->_headers[$name][] = $value;
+        if (empty($this->_headers[$normalizedName])) {
+            $this->_headers[$normalizedName][] = $value;
+            $this->_originalHeaderNames[$normalizedName] = $name;
         }
 
         return $this;
@@ -155,9 +165,7 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      */
     public function has($name)
     {
-        $name = strtolower($name);
-
-        return isset($this->_headers[$name]);
+        return isset($this->_headers[strtolower($name)]);
     }
 
     /**
@@ -169,11 +177,11 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      */
     public function remove($name)
     {
-        $name = strtolower($name);
+        $normalizedName = strtolower($name);
 
-        if (isset($this->_headers[$name])) {
-            $value = $this->_headers[$name];
-            unset($this->_headers[$name]);
+        if (isset($this->_headers[$normalizedName])) {
+            $value = $this->_headers[$normalizedName];
+            unset($this->_headers[$normalizedName], $this->_originalHeaderNames[$normalizedName]);
 
             return $value;
         }
@@ -187,6 +195,7 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
     public function removeAll(): void
     {
         $this->_headers = [];
+        $this->_originalHeaderNames = [];
     }
 
     /**
@@ -201,6 +210,19 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
     }
 
     /**
+     * Returns the collection as a PHP array but instead of using normalized header names as keys (like [[toArray()]])
+     * it uses original header names (case-sensitive).
+     * @return array the array representation of the collection.
+     * @since 2.0.45
+     */
+    public function toOriginalArray()
+    {
+        return \array_map(function ($normalizedName) {
+            return $this->_headers[$normalizedName];
+        }, \array_flip($this->_originalHeaderNames));
+    }
+
+    /**
      * Populates the header collection from an array.
      *
      * @param array $array the headers to populate from
@@ -209,7 +231,9 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      */
     public function fromArray(array $array): void
     {
-        $this->_headers = array_change_key_case($array, CASE_LOWER);
+        foreach ($array as $name => $value) {
+            $this->set($name, $value);
+        }
     }
 
     /**
