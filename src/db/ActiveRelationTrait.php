@@ -319,7 +319,12 @@ trait ActiveRelationTrait
         }
 
         foreach ($primaryModels as $i => $primaryModel) {
-            if ($this->multiple && count($link) === 1 && is_array($keys = $primaryModel[reset($link)])) {
+            $keys = null;
+            if ($this->multiple && count($link) === 1) {
+                $primaryModelKey = reset($link);
+                $keys = $primaryModel[$primaryModelKey] ?? null;
+            }
+            if (is_array($keys)) {
                 $value = [];
 
                 foreach ($keys as $key) {
@@ -574,7 +579,8 @@ trait ActiveRelationTrait
             $attribute = reset($this->link);
 
             foreach ($models as $model) {
-                if (($value = $model[$attribute]) !== null) {
+                $value = $model[$attribute] ?? null;
+                if ($value !== null) {
                     if (is_array($value)) {
                         $values = array_merge($values, $value);
                     } elseif ($value instanceof ArrayExpression && $value->getDimension() === 1) {
@@ -631,14 +637,16 @@ trait ActiveRelationTrait
      * @param ActiveRecordInterface|array $model
      * @param array $attributes
      *
-     * @return string
+     * @return string|false
      */
     private function getModelKey($model, $attributes)
     {
         $key = [];
 
         foreach ($attributes as $attribute) {
-            $key[] = $this->normalizeModelKey($model[$attribute]);
+            if (isset($model[$attribute])) {
+                $key[] = $this->normalizeModelKey($model[$attribute]);
+            }
         }
 
         if (count($key) > 1) {

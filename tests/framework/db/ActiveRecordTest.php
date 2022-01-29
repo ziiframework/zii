@@ -1537,6 +1537,29 @@ abstract class ActiveRecordTest extends DatabaseTestCase
         ];
         $this->assertEquals($expected, $aggregation);
 
+        // tests with single pk asArray with eager loading
+        $aggregation = Customer::find()
+            ->select(['{{customer}}.[[status]]', 'SUM({{order}}.[[total]]) AS [[sumtotal]]'])
+            ->joinWith('ordersPlain')
+            ->groupBy('{{customer}}.[[status]]')
+            ->orderBy('status')
+            ->asArray()
+            ->all();
+
+        $expected = [
+            [
+                'status' => 1,
+                'sumtotal' => 183,
+                'ordersPlain' => [],
+            ],
+            [
+                'status' => 2,
+                'sumtotal' => 0,
+                'ordersPlain' => [],
+            ],
+        ];
+        $this->assertEquals($expected, $aggregation);
+
         // tests with single pk with Models
         $aggregation = Customer::find()
             ->select(['{{customer}}.[[status]]', 'SUM({{order}}.[[total]]) AS [[sumTotal]]'])

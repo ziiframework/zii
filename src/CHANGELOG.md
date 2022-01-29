@@ -8,6 +8,7 @@ upstream changes: [be051d6...master](https://github.com/yiisoft/yii2/compare/655
 ------------------------
 
 - Bug #19138: Allow digits in language code (ntesic)
+- Bug #19148: Fix undefined array key errors in `yii\db\ActiveRelationTrait` (stevekr)
 - Bug #19041: Fix PHP 8.1 issues (longthanhtran, samdark, pamparam83, sartor, githubjeka)
 
 
