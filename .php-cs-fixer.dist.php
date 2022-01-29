@@ -68,6 +68,7 @@ return (new PhpCsFixer\Config())
                 'if',
                 'include',
                 'include_once',
+                'phpdoc',
                 'require',
                 'require_once',
                 'return',
@@ -87,6 +88,7 @@ return (new PhpCsFixer\Config())
         'native_function_invocation' => false,
         'native_function_type_declaration_casing' => true,
         'fopen_flags' => ['b_mode' => true],
+        'get_class_to_class_keyword' => true,
     ])
     ->setFinder(
         PhpCsFixer\Finder::create()
