@@ -11,6 +11,7 @@ upstream changes: [be051d6...master](https://github.com/yiisoft/yii2/compare/655
 - Bug #19148: Fix undefined array key errors in `yii\db\ActiveRelationTrait` (stevekr)
 - Bug #19041: Fix PHP 8.1 issues (longthanhtran, samdark, pamparam83, sartor, githubjeka)
 - Enh #19171: Added `$pagination` and `$sort` to `\yii\rest\IndexAction` for easy configuration (rhertogh)
+- Bug #19191: Change `\Exception` to `\Throwable` in `BadRequestHttpException` and `HttpException` (Dmitrijlin)
 
 
 2.0.44 December 30, 2021
