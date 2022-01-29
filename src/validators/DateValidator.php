@@ -47,6 +47,7 @@ class DateValidator extends Validator
      * @see type
      */
     public const TYPE_DATE = 'date';
+
     /**
      * Constant for specifying the validation [[type]] as a datetime value, used for validation with intl short format.
      *
@@ -54,6 +55,7 @@ class DateValidator extends Validator
      * @see type
      */
     public const TYPE_DATETIME = 'datetime';
+
     /**
      * Constant for specifying the validation [[type]] as a time value, used for validation with intl short format.
      *
@@ -78,6 +80,7 @@ class DateValidator extends Validator
      * @since 2.0.8
      */
     public $type = self::TYPE_DATE;
+
     /**
      * @var string the date format that the value being validated should follow.
      * This can be a date time pattern as described in the [ICU manual](http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax).
@@ -110,6 +113,7 @@ class DateValidator extends Validator
      * If you need to use the IntlDateFormatter you can avoid this problem by specifying a [[min|minimum date]].
      */
     public $format;
+
     /**
      * @var string the locale ID that is used to localize the date parsing.
      * This is only effective when the [PHP intl extension](https://www.php.net/manual/en/book.intl.php) is installed.
@@ -117,6 +121,7 @@ class DateValidator extends Validator
      * See also [[\yii\i18n\Formatter::locale]].
      */
     public $locale;
+
     /**
      * @var string the timezone to use for parsing date and time values.
      * This can be any value that may be passed to [date_default_timezone_set()](https://www.php.net/manual/en/function.date-default-timezone-set.php)
@@ -125,6 +130,7 @@ class DateValidator extends Validator
      * If this property is not set, [[\yii\base\Application::timeZone]] will be used.
      */
     public $timeZone;
+
     /**
      * @var string the name of the attribute to receive the parsing result.
      * When this property is not null and the validation is successful, the named attribute will
@@ -143,6 +149,7 @@ class DateValidator extends Validator
      * @see timestampAttributeTimeZone
      */
     public $timestampAttribute;
+
     /**
      * @var string the format to use when populating the [[timestampAttribute]].
      * The format can be specified in the same way as for [[format]].
@@ -155,6 +162,7 @@ class DateValidator extends Validator
      * @since 2.0.4
      */
     public $timestampAttributeFormat;
+
     /**
      * @var string the timezone to use when populating the [[timestampAttribute]] with [[timestampAttributeFormat]]. Defaults to `UTC`.
      *
@@ -168,6 +176,7 @@ class DateValidator extends Validator
      * @since 2.0.4
      */
     public $timestampAttributeTimeZone = 'UTC';
+
     /**
      * @var int|string upper limit of the date. Defaults to null, meaning no upper limit.
      * This can be a unix timestamp or a string representing a date time value.
@@ -177,6 +186,7 @@ class DateValidator extends Validator
      * @since 2.0.4
      */
     public $max;
+
     /**
      * @var int|string lower limit of the date. Defaults to null, meaning no lower limit.
      * This can be a unix timestamp or a string representing a date time value.
@@ -186,18 +196,21 @@ class DateValidator extends Validator
      * @since 2.0.4
      */
     public $min;
+
     /**
      * @var string user-defined error message used when the value is bigger than [[max]].
      *
      * @since 2.0.4
      */
     public $tooBig;
+
     /**
      * @var string user-defined error message used when the value is smaller than [[min]].
      *
      * @since 2.0.4
      */
     public $tooSmall;
+
     /**
      * @var string user friendly value of upper limit to display in the error message.
      * If this property is null, the value of [[max]] will be used (before parsing).
@@ -205,6 +218,7 @@ class DateValidator extends Validator
      * @since 2.0.4
      */
     public $maxString;
+
     /**
      * @var string user friendly value of lower limit to display in the error message.
      * If this property is null, the value of [[min]] will be used (before parsing).
@@ -212,6 +226,7 @@ class DateValidator extends Validator
      * @since 2.0.4
      */
     public $minString;
+
     /**
      * @var bool set this parameter to true if you need strict date format validation (e.g. only such dates pass
      * validation for the following format 'yyyy-MM-dd': '0011-03-25', '2019-04-30' etc. and not '18-05-15',
@@ -220,6 +235,7 @@ class DateValidator extends Validator
      * @since 2.0.22
      */
     public $strictDateFormat = false;
+
     /**
      * @var string the default timezone used for parsing when no time parts are provided in the format.
      * See [[timestampAttributeTimeZone]] for more description.

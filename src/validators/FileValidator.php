@@ -41,11 +41,13 @@ class FileValidator extends Validator
      * @see wrongExtension for the customized message for wrong file type.
      */
     public $extensions;
+
     /**
      * @var bool whether to check file type (extension) with mime-type. If extension produced by
      * file mime-type check differs from uploaded file extension, the file will be considered as invalid.
      */
     public $checkExtensionByMimeType = true;
+
     /**
      * @var array|string a list of file MIME types that are allowed to be uploaded.
      * This can be either an array or a string consisting of file MIME types
@@ -57,6 +59,7 @@ class FileValidator extends Validator
      * @see wrongMimeType for the customized message for wrong MIME type.
      */
     public $mimeTypes;
+
     /**
      * @var int the minimum number of bytes required for the uploaded file.
      * Defaults to null, meaning no limit.
@@ -64,6 +67,7 @@ class FileValidator extends Validator
      * @see tooSmall for the customized message for a file that is too small.
      */
     public $minSize;
+
     /**
      * @var int the maximum number of bytes required for the uploaded file.
      * Defaults to null, meaning no limit.
@@ -76,6 +80,7 @@ class FileValidator extends Validator
      * @see tooBig for the customized message for a file that is too big.
      */
     public $maxSize;
+
     /**
      * @var int the maximum file count the given attribute can hold.
      * Defaults to 1, meaning single file upload. By defining a higher number,
@@ -89,6 +94,7 @@ class FileValidator extends Validator
      * @see tooMany for the customized message when too many files are uploaded.
      */
     public $maxFiles = 1;
+
     /**
      * @var int the minimum file count the given attribute can hold.
      * Defaults to 0. Higher value means at least that number of files should be uploaded.
@@ -97,16 +103,19 @@ class FileValidator extends Validator
      * @since 2.0.14
      */
     public $minFiles = 0;
+
     /**
      * @var string the error message used when a file is not uploaded correctly.
      */
     public $message;
+
     /**
      * @var string the error message used when no file is uploaded.
      * Note that this is the text of the validation error message. To make uploading files required,
      * you have to set [[skipOnEmpty]] to `false`.
      */
     public $uploadRequired;
+
     /**
      * @var string the error message used when the uploaded file is too large.
      * You may use the following tokens in the message:
@@ -118,6 +127,7 @@ class FileValidator extends Validator
      *   with [[\yii\i18n\Formatter::asShortSize()|Formatter::asShortSize()]]
      */
     public $tooBig;
+
     /**
      * @var string the error message used when the uploaded file is too small.
      * You may use the following tokens in the message:
@@ -129,6 +139,7 @@ class FileValidator extends Validator
      *   with [[\yii\i18n\Formatter::asShortSize()|Formatter::asShortSize()]
      */
     public $tooSmall;
+
     /**
      * @var string the error message used if the count of multiple uploads exceeds limit.
      * You may use the following tokens in the message:
@@ -137,6 +148,7 @@ class FileValidator extends Validator
      * - {limit}: the value of [[maxFiles]]
      */
     public $tooMany;
+
     /**
      * @var string the error message used if the count of multiple uploads less that minFiles.
      * You may use the following tokens in the message:
@@ -147,6 +159,7 @@ class FileValidator extends Validator
      * @since 2.0.14
      */
     public $tooFew;
+
     /**
      * @var string the error message used when the uploaded file has an extension name
      * that is not listed in [[extensions]]. You may use the following tokens in the message:
@@ -156,6 +169,7 @@ class FileValidator extends Validator
      * - {extensions}: the list of the allowed extensions.
      */
     public $wrongExtension;
+
     /**
      * @var string the error message used when the file has an mime type
      * that is not allowed by [[mimeTypes]] property.

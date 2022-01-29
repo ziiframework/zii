@@ -48,6 +48,7 @@ class AssetBundle extends BaseObject
      * @see publishOptions
      */
     public $sourcePath;
+
     /**
      * @var string the Web-accessible directory that contains the asset files in this bundle.
      *
@@ -57,6 +58,7 @@ class AssetBundle extends BaseObject
      * You can use either a directory or an alias of the directory.
      */
     public $basePath;
+
     /**
      * @var string the base URL for the relative asset files listed in [[js]] and [[css]].
      *
@@ -66,6 +68,7 @@ class AssetBundle extends BaseObject
      * You can use either a URL or an alias of the URL.
      */
     public $baseUrl;
+
     /**
      * @var array list of bundle class names that this bundle depends on.
      *
@@ -79,6 +82,7 @@ class AssetBundle extends BaseObject
      * ```
      */
     public $depends = [];
+
     /**
      * @var array list of JavaScript files that this bundle contains. Each JavaScript file can be
      * specified in one of the following formats:
@@ -96,6 +100,7 @@ class AssetBundle extends BaseObject
      * Note that only a forward slash "/" should be used as directory separator.
      */
     public $js = [];
+
     /**
      * @var array list of CSS files that this bundle contains. Each CSS file can be specified
      * in one of the three formats as explained in [[js]].
@@ -103,16 +108,19 @@ class AssetBundle extends BaseObject
      * Note that only a forward slash "/" should be used as directory separator.
      */
     public $css = [];
+
     /**
      * @var array the options that will be passed to [[View::registerJsFile()]]
      * when registering the JS files in this bundle.
      */
     public $jsOptions = [];
+
     /**
      * @var array the options that will be passed to [[View::registerCssFile()]]
      * when registering the CSS files in this bundle.
      */
     public $cssOptions = [];
+
     /**
      * @var array the options to be passed to [[AssetManager::publish()]] when the asset bundle
      * is being published. This property is used only when [[sourcePath]] is set.

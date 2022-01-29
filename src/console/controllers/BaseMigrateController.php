@@ -40,6 +40,7 @@ abstract class BaseMigrateController extends Controller
      * @var string the default command action.
      */
     public $defaultAction = 'up';
+
     /**
      * @var string|array|null the directory containing the migration classes. This can be either
      * a [path alias](guide:concept-aliases) or a directory path.
@@ -61,6 +62,7 @@ abstract class BaseMigrateController extends Controller
      * @see migrationNamespaces
      */
     public $migrationPath = ['@app/migrations'];
+
     /**
      * @var array list of namespaces containing the migration classes.
      *
@@ -82,12 +84,14 @@ abstract class BaseMigrateController extends Controller
      * @see migrationPath
      */
     public $migrationNamespaces = [];
+
     /**
      * @var string the template file for generating new migrations.
      * This can be either a [path alias](guide:concept-aliases) (e.g. "@app/migrations/template.php")
      * or a file path.
      */
     public $templateFile;
+
     /**
      * @var int the permission to be set for newly generated migration files.
      * This value will be used by PHP chmod() function. No umask will be applied.
@@ -96,6 +100,7 @@ abstract class BaseMigrateController extends Controller
      * @since 2.0.43
      */
     public $newFileMode;
+
     /**
      * @var string|int the user and/or group ownership to be set for newly generated migration files.
      * If not set, the ownership will be determined by the current environment.
@@ -104,6 +109,7 @@ abstract class BaseMigrateController extends Controller
      * @see FileHelper::changeOwnership()
      */
     public $newFileOwnership;
+
     /**
      * @var bool indicates whether the console output should be compacted.
      * If this is set to true, the individual commands ran within the migration will not be output to the console.

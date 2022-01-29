@@ -99,6 +99,7 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
      * @see formats
      */
     public $formatParam = '_format';
+
     /**
      * @var string the name of the GET parameter that specifies the [[\yii\base\Application::$language|application language]].
      * Note that if the specified language does not match any of [[languages]], the first language in [[languages]]
@@ -108,6 +109,7 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
      * @see languages
      */
     public $languageParam = '_lang';
+
     /**
      * @var array list of supported response formats. The keys are MIME types (e.g. `application/json`)
      * while the values are the corresponding formats (e.g. `html`, `json`) which must be supported
@@ -116,6 +118,7 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
      * If this property is empty or not set, response format negotiation will be skipped.
      */
     public $formats;
+
     /**
      * @var array a list of supported languages. The array keys are the supported language variants (e.g. `en-GB`, `en-US`),
      * while the array values are the corresponding language codes (e.g. `en`, `de`) recognized by the application.
@@ -126,10 +129,12 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
      * If this property is empty or not set, language negotiation will be skipped.
      */
     public $languages;
+
     /**
      * @var Request the current request. If not set, the `request` application component will be used.
      */
     public $request;
+
     /**
      * @var Response the response to be sent. If not set, the `response` application component will be used.
      */

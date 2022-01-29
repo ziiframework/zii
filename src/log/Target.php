@@ -51,6 +51,7 @@ abstract class Target extends Component
      * categories starting with 'yii\db\', such as 'yii\db\Connection'.
      */
     public $categories = [];
+
     /**
      * @var array list of message categories that this target is NOT interested in. Defaults to empty, meaning no uninteresting messages.
      * If this property is not empty, then any category listed here will be excluded from [[categories]].
@@ -61,6 +62,7 @@ abstract class Target extends Component
      * @see categories
      */
     public $except = [];
+
     /**
      * @var array list of the PHP predefined variables that should be logged in a message.
      * Note that a variable must be accessible via `$GLOBALS`. Otherwise it won't be logged.
@@ -87,6 +89,7 @@ abstract class Target extends Component
         '_SESSION',
         '_SERVER',
     ];
+
     /**
      * @var array list of the PHP predefined variables that should NOT be logged "as is" and should always be replaced
      * with a mask `***` before logging, when exist.
@@ -105,6 +108,7 @@ abstract class Target extends Component
         '_SERVER.PHP_AUTH_USER',
         '_SERVER.PHP_AUTH_PW',
     ];
+
     /**
      * @var callable a PHP callable that returns a string to be prefixed to every exported message.
      *
@@ -114,17 +118,20 @@ abstract class Target extends Component
      * The signature of the callable should be `function ($message)`.
      */
     public $prefix;
+
     /**
      * @var int how many messages should be accumulated before they are exported.
      * Defaults to 1000. Note that messages will always be exported when the application terminates.
      * Set this property to be 0 if you don't want to export messages until the application terminates.
      */
     public $exportInterval = 1000;
+
     /**
      * @var array the messages that are retrieved from the logger so far by this log target.
      * Please refer to [[Logger::messages]] for the details about the message structure.
      */
     public $messages = [];
+
     /**
      * @var bool whether to log time with microseconds.
      * Defaults to false.

@@ -41,10 +41,12 @@ class ErrorHandler extends \yii\base\ErrorHandler
      * @var int maximum number of source code lines to be displayed. Defaults to 19.
      */
     public $maxSourceLines = 19;
+
     /**
      * @var int maximum number of trace source code lines to be displayed. Defaults to 13.
      */
     public $maxTraceSourceLines = 13;
+
     /**
      * @var string the route (e.g. `site/error`) to the controller action that will be used
      * to display external errors. Inside the action, it can retrieve the error information
@@ -52,22 +54,27 @@ class ErrorHandler extends \yii\base\ErrorHandler
      * will handle the error display.
      */
     public $errorAction;
+
     /**
      * @var string the path of the view file for rendering exceptions without call stack information.
      */
     public $errorView = '@yii/views/errorHandler/error.php';
+
     /**
      * @var string the path of the view file for rendering exceptions.
      */
     public $exceptionView = '@yii/views/errorHandler/exception.php';
+
     /**
      * @var string the path of the view file for rendering exceptions and errors call stack element.
      */
     public $callStackItemView = '@yii/views/errorHandler/callStackItem.php';
+
     /**
      * @var string the path of the view file for rendering previous exceptions.
      */
     public $previousExceptionView = '@yii/views/errorHandler/previousException.php';
+
     /**
      * @var array list of the PHP predefined variables that should be displayed on the error page.
      * Note that a variable must be accessible via `$GLOBALS`. Otherwise it won't be displayed.
@@ -77,6 +84,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
      * @since 2.0.7
      */
     public $displayVars = ['_GET', '_POST', '_FILES', '_COOKIE', '_SESSION'];
+
     /**
      * @var string trace line with placeholders to be be substituted.
      * The placeholders are {file}, {line} and {text} and the string should be as follows.
@@ -170,7 +178,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
         }
 
         if (YII_DEBUG) {
-            $array['type'] = get_class($exception);
+            $array['type'] = $exception::class;
 
             if (!$exception instanceof UserException) {
                 $array['file'] = $exception->getFile();
@@ -505,7 +513,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
             }
 
             if (is_object($value)) {
-                $args[$key] = '<span class="title">' . $this->htmlEncode(get_class($value)) . '</span>';
+                $args[$key] = '<span class="title">' . $this->htmlEncode($value::class) . '</span>';
             } elseif (is_bool($value)) {
                 $args[$key] = '<span class="keyword">' . ($value ? 'true' : 'false') . '</span>';
             } elseif (is_string($value)) {

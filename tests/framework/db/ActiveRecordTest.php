@@ -1749,6 +1749,7 @@ abstract class ActiveRecordTest extends DatabaseTestCase
     {
         /** @var Category $categoryClass */
         $categoryClass = $this->getCategoryClass();
+
         /** @var Item $itemClass */
         $itemClass = $this->getItemClass();
 
@@ -1780,6 +1781,7 @@ abstract class ActiveRecordTest extends DatabaseTestCase
     {
         /** @var Order $orderClass */
         $orderClass = $this->getOrderClass();
+
         /** @var Item $itemClass */
         $itemClass = $this->getItemClass();
 
@@ -1968,6 +1970,7 @@ abstract class ActiveRecordTest extends DatabaseTestCase
     {
         $this->expectException('yii\base\InvalidArgumentException');
         $this->expectExceptionMessageMatches('/^Key "(.+)?" is not a column name and can not be used as a filter$/');
+
         /** @var Query $query */
         $query = $this->invokeMethod(Yii::createObject($modelClassName), 'findByCondition', $filterWithInjection);
         Customer::getDb()->queryBuilder->build($query);

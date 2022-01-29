@@ -44,6 +44,7 @@ class ListView extends BaseListView
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $itemOptions = [];
+
     /**
      * @var string|callable the name of the view for rendering each data item, or a callback (e.g. an anonymous function)
      * for rendering each data item. If it specifies a view name, the following variables will
@@ -63,15 +64,18 @@ class ListView extends BaseListView
      * ```
      */
     public $itemView;
+
     /**
      * @var array additional parameters to be passed to [[itemView]] when it is being rendered.
      * This property is used only when [[itemView]] is a string representing a view name.
      */
     public $viewParams = [];
+
     /**
      * @var string the HTML code to be displayed between any two consecutive items.
      */
     public $separator = "\n";
+
     /**
      * @var array the HTML attributes for the container tag of the list view.
      * The "tag" element specifies the tag name of the container element and defaults to "div".
@@ -79,6 +83,7 @@ class ListView extends BaseListView
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $options = ['class' => 'list-view'];
+
     /**
      * @var Closure an anonymous function that is called once BEFORE rendering each data model.
      * It should have the following signature:
@@ -99,6 +104,7 @@ class ListView extends BaseListView
      * @since 2.0.11
      */
     public $beforeItem;
+
     /**
      * @var Closure an anonymous function that is called once AFTER rendering each data model.
      *

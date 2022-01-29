@@ -30,6 +30,7 @@ class ImageValidator extends FileValidator
      * - {file}: the uploaded file name
      */
     public $notImage;
+
     /**
      * @var int the minimum width in pixels.
      * Defaults to null, meaning no limit.
@@ -37,6 +38,7 @@ class ImageValidator extends FileValidator
      * @see underWidth for the customized message used when image width is too small.
      */
     public $minWidth;
+
     /**
      * @var int the maximum width in pixels.
      * Defaults to null, meaning no limit.
@@ -44,6 +46,7 @@ class ImageValidator extends FileValidator
      * @see overWidth for the customized message used when image width is too big.
      */
     public $maxWidth;
+
     /**
      * @var int the minimum height in pixels.
      * Defaults to null, meaning no limit.
@@ -51,6 +54,7 @@ class ImageValidator extends FileValidator
      * @see underHeight for the customized message used when image height is too small.
      */
     public $minHeight;
+
     /**
      * @var int the maximum width in pixels.
      * Defaults to null, meaning no limit.
@@ -58,6 +62,7 @@ class ImageValidator extends FileValidator
      * @see overHeight for the customized message used when image height is too big.
      */
     public $maxHeight;
+
     /**
      * @var string the error message used when the image is under [[minWidth]].
      * You may use the following tokens in the message:
@@ -67,6 +72,7 @@ class ImageValidator extends FileValidator
      * - {limit}: the value of [[minWidth]]
      */
     public $underWidth;
+
     /**
      * @var string the error message used when the image is over [[maxWidth]].
      * You may use the following tokens in the message:
@@ -76,6 +82,7 @@ class ImageValidator extends FileValidator
      * - {limit}: the value of [[maxWidth]]
      */
     public $overWidth;
+
     /**
      * @var string the error message used when the image is under [[minHeight]].
      * You may use the following tokens in the message:
@@ -85,6 +92,7 @@ class ImageValidator extends FileValidator
      * - {limit}: the value of [[minHeight]]
      */
     public $underHeight;
+
     /**
      * @var string the error message used when the image is over [[maxHeight]].
      * You may use the following tokens in the message:

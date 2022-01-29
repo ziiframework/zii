@@ -46,11 +46,13 @@ class QueryBuilder extends \yii\base\BaseObject
      * @var Connection the database connection.
      */
     public $db;
+
     /**
      * @var string the separator between different fragments of a SQL statement.
      * Defaults to an empty space. This is mainly used by [[build()]] when generating a SQL statement.
      */
     public $separator = ' ';
+
     /**
      * @var array the abstract column types mapped to physical column types.
      * This is mainly used to support creating/modifying tables using DB-independent data type specifications.
@@ -65,6 +67,7 @@ class QueryBuilder extends \yii\base\BaseObject
      * @deprecated since 2.0.14. Is not used, will be dropped in 2.1.0.
      */
     protected $conditionBuilders = [];
+
     /**
      * @var array map of condition aliases to condition classes. For example:
      *
@@ -84,6 +87,7 @@ class QueryBuilder extends \yii\base\BaseObject
      * @since 2.0.14
      */
     protected $conditionClasses = [];
+
     /**
      * @var string[]|ExpressionBuilderInterface[] maps expression class to expression builder class.
      * For example:
@@ -309,7 +313,7 @@ class QueryBuilder extends \yii\base\BaseObject
      */
     public function getExpressionBuilder(ExpressionInterface $expression)
     {
-        $className = get_class($expression);
+        $className = $expression::class;
 
         if (!isset($this->expressionBuilders[$className])) {
             foreach (array_reverse($this->expressionBuilders) as $expressionClass => $builderClass) {

@@ -14,6 +14,7 @@ use ArrayAccess;
 use ArrayIterator;
 use Countable;
 use IteratorAggregate;
+use ReturnTypeWillChange;
 use Traversable;
 use yii\base\InvalidConfigException;
 
@@ -43,11 +44,13 @@ class ArrayExpression implements ExpressionInterface, ArrayAccess, Countable, It
      * SQL error will be raised.
      */
     private $type;
+
     /**
      * @var array|QueryInterface the array's content.
      * In can be represented as an array of values or a [[Query]] that returns these values.
      */
     private $value;
+
     /**
      * @var int the number of indices needed to select an element
      */
@@ -114,7 +117,7 @@ class ArrayExpression implements ExpressionInterface, ArrayAccess, Countable, It
      *
      * @since 2.0.14
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return isset($this->value[$offset]);
@@ -133,7 +136,7 @@ class ArrayExpression implements ExpressionInterface, ArrayAccess, Countable, It
      *
      * @since 2.0.14
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->value[$offset];
@@ -153,7 +156,7 @@ class ArrayExpression implements ExpressionInterface, ArrayAccess, Countable, It
      *
      * @since 2.0.14
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetSet($offset, $value): void
     {
         $this->value[$offset] = $value;
@@ -170,7 +173,7 @@ class ArrayExpression implements ExpressionInterface, ArrayAccess, Countable, It
      *
      * @since 2.0.14
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetUnset($offset): void
     {
         unset($this->value[$offset]);
@@ -188,7 +191,7 @@ class ArrayExpression implements ExpressionInterface, ArrayAccess, Countable, It
      *
      * @since 2.0.14
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function count()
     {
         return count($this->value);
@@ -206,7 +209,7 @@ class ArrayExpression implements ExpressionInterface, ArrayAccess, Countable, It
      *
      * @throws InvalidConfigException when ArrayExpression contains QueryInterface object
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function getIterator()
     {
         $value = $this->getValue();

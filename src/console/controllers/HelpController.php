@@ -92,6 +92,7 @@ class HelpController extends Controller
     {
         foreach ($this->getCommandDescriptions() as $command => $description) {
             $result = Yii::$app->createController($command);
+
             /** @var $controller Controller */
             [$controller, $actionID] = $result;
             $actions = $this->getActions($controller);
@@ -220,6 +221,7 @@ class HelpController extends Controller
 
         foreach ($this->getCommands() as $command) {
             $result = Yii::$app->createController($command);
+
             /** @var Controller $controller */
             [$controller, $actionID] = $result;
             $descriptions[$command] = $controller->getHelpSummary();
@@ -347,6 +349,7 @@ class HelpController extends Controller
 
         foreach ($commands as $command => $description) {
             $result = Yii::$app->createController($command);
+
             /** @var $controller Controller */
             [$controller, $actionID] = $result;
             $actions = $this->getActions($controller);

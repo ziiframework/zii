@@ -70,6 +70,7 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
      * A route consists of the requested controller ID and action ID. Defaults to `true`.
      */
     public $varyByRoute = true;
+
     /**
      * @var CacheInterface|array|string the cache object or the application component ID of the cache object.
      * After the PageCache object is created, if you want to change this property,
@@ -77,11 +78,13 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
      * Starting from version 2.0.2, this can also be a configuration array for creating the object.
      */
     public $cache = 'cache';
+
     /**
      * @var int number of seconds that the data can remain valid in cache.
      * Use `0` to indicate that the cached data will never expire.
      */
     public $duration = 60;
+
     /**
      * @var array|Dependency the dependency that the cached content depends on.
      * This can be either a [[Dependency]] object or a configuration array for creating the dependency object.
@@ -101,6 +104,7 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
      * This is because the cookies and headers are currently stored separately from the actual page content, causing the dependency to be evaluated twice.
      */
     public $dependency;
+
     /**
      * @var string[]|string list of factors that would cause the variation of the content being cached.
      * Each factor is a string representing a variation (e.g. the language, a GET parameter).
@@ -114,16 +118,19 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
      * ```
      */
     public $variations;
+
     /**
      * @var bool whether to enable the page cache. You may use this property to turn on and off
      * the page cache according to specific setting (e.g. enable page cache only for GET requests).
      */
     public $enabled = true;
+
     /**
      * @var \yii\base\View the view component to use for caching. If not set, the default application view component
      * [[\yii\web\Application::view]] will be used.
      */
     public $view;
+
     /**
      * @var bool|array a boolean value indicating whether to cache all cookies, or an array of
      * cookie names indicating which cookies can be cached. Be very careful with caching cookies, because
@@ -132,6 +139,7 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
      * @since 2.0.4
      */
     public $cacheCookies = false;
+
     /**
      * @var bool|array a boolean value indicating whether to cache all HTTP headers, or an array of
      * HTTP header names (case-sensitive) indicating which HTTP headers can be cached.
@@ -290,15 +298,17 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
      * @param Response $response the response.
      * @param array $data the cache data.
      */
-    private function insertResponseCookieCollectionIntoData(Response $response, array &$data)
+    private function insertResponseCookieCollectionIntoData(Response $response, array &$data): void
     {
         if ($this->cacheCookies === false) {
             return;
         }
 
         $all = $response->cookies->toArray();
+
         if (is_array($this->cacheCookies)) {
             $filtered = [];
+
             foreach ($this->cacheCookies as $name) {
                 if (isset($all[$name])) {
                     $filtered[$name] = $all[$name];
@@ -311,18 +321,21 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
 
     /**
      * Inserts (or filters/ignores according to config) response headers into a cache data array.
+     *
      * @param Response $response the response.
      * @param array $data the cache data.
      */
-    private function insertResponseHeaderCollectionIntoData(Response $response, array &$data)
+    private function insertResponseHeaderCollectionIntoData(Response $response, array &$data): void
     {
         if ($this->cacheHeaders === false) {
             return;
         }
 
         $all = $response->headers->toOriginalArray();
+
         if (is_array($this->cacheHeaders)) {
             $filtered = [];
+
             foreach ($this->cacheHeaders as $name) {
                 if (isset($all[$name])) {
                     $filtered[$name] = $all[$name];

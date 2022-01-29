@@ -104,11 +104,13 @@ class Validator extends Component
         'url' => 'yii\validators\UrlValidator',
         'ip' => 'yii\validators\IpValidator',
     ];
+
     /**
      * @var array|string attributes to be validated by this validator. For multiple attributes,
      * please specify them as an array; for single attribute, you may use either a string or an array.
      */
     public $attributes = [];
+
     /**
      * @var string the user-defined error message. It may contain the following placeholders which
      * will be replaced accordingly by the validator:
@@ -122,26 +124,31 @@ class Validator extends Component
      * used when the most important validation condition is not met.
      */
     public $message;
+
     /**
      * @var array|string scenarios that the validator can be applied to. For multiple scenarios,
      * please specify them as an array; for single scenario, you may use either a string or an array.
      */
     public $on = [];
+
     /**
      * @var array|string scenarios that the validator should not be applied to. For multiple scenarios,
      * please specify them as an array; for single scenario, you may use either a string or an array.
      */
     public $except = [];
+
     /**
      * @var bool whether this validation rule should be skipped if the attribute being validated
      * already has some validation error according to some previous rules. Defaults to true.
      */
     public $skipOnError = true;
+
     /**
      * @var bool whether this validation rule should be skipped if the attribute value
      * is null or an empty string. This property is used only when validating [[yii\base\Model]].
      */
     public $skipOnEmpty = true;
+
     /**
      * @var bool whether to enable client-side validation for this validator.
      * The actual client-side validation is done via the JavaScript code returned
@@ -149,6 +156,7 @@ class Validator extends Component
      * is true, no client-side validation will be done by this validator.
      */
     public $enableClientValidation = true;
+
     /**
      * @var callable a PHP callable that replaces the default implementation of [[isEmpty()]].
      * If not set, [[isEmpty()]] will be used to check if a value is empty. The signature
@@ -156,6 +164,7 @@ class Validator extends Component
      * whether the value is empty.
      */
     public $isEmpty;
+
     /**
      * @var callable a PHP callable whose return value determines whether this validator should be applied.
      * The signature of the callable should be `function ($model, $attribute)`, where `$model` and `$attribute`
@@ -175,6 +184,7 @@ class Validator extends Component
      * @see whenClient
      */
     public $when;
+
     /**
      * @var string a JavaScript function name whose return value determines whether this validator should be applied
      * on the client-side. The signature of the function should be `function (attribute, value)`, where

@@ -38,11 +38,13 @@ trait ActiveRelationTrait
      * If false, only the first row of the results will be retrieved using [[Query::one()|one()]].
      */
     public $multiple;
+
     /**
      * @var ActiveRecord the primary model of a relational query.
      * This is used only in lazy loading with dynamic query options.
      */
     public $primaryModel;
+
     /**
      * @var array the columns of the primary and foreign tables that establish a relation.
      * The array keys must be columns of the table for this relation, and the array values
@@ -51,6 +53,7 @@ trait ActiveRelationTrait
      * This property is only used in relational context.
      */
     public $link;
+
     /**
      * @var array|object the query associated with the junction table. Please call [[via()]]
      * to set this property instead of directly setting it.
@@ -59,6 +62,7 @@ trait ActiveRelationTrait
      * @see via()
      */
     public $via;
+
     /**
      * @var string the name of the relation that is the inverse of this relation.
      * For example, an order has a customer, which means the inverse of the "customer" relation
@@ -197,7 +201,7 @@ trait ActiveRelationTrait
             $realName = lcfirst(substr($method->getName(), 3));
 
             if ($realName !== $name) {
-                throw new InvalidArgumentException('Relation names are case sensitive. ' . get_class($model) . " has a relation named \"$realName\" instead of \"$name\".");
+                throw new InvalidArgumentException('Relation names are case sensitive. ' . $model::class . " has a relation named \"$realName\" instead of \"$name\".");
             }
         }
 
@@ -320,10 +324,12 @@ trait ActiveRelationTrait
 
         foreach ($primaryModels as $i => $primaryModel) {
             $keys = null;
+
             if ($this->multiple && count($link) === 1) {
                 $primaryModelKey = reset($link);
                 $keys = $primaryModel[$primaryModelKey] ?? null;
             }
+
             if (is_array($keys)) {
                 $value = [];
 
@@ -580,6 +586,7 @@ trait ActiveRelationTrait
 
             foreach ($models as $model) {
                 $value = $model[$attribute] ?? null;
+
                 if ($value !== null) {
                     if (is_array($value)) {
                         $values = array_merge($values, $value);

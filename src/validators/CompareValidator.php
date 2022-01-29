@@ -45,6 +45,7 @@ class CompareValidator extends Validator
      * @see type
      */
     public const TYPE_STRING = 'string';
+
     /**
      * Constant for specifying the comparison [[type]] by numeric values.
      *
@@ -63,6 +64,7 @@ class CompareValidator extends Validator
      * @see compareValue
      */
     public $compareAttribute;
+
     /**
      * @var mixed the constant value to be compared with. When both this property
      * and [[compareAttribute]] are set, this property takes precedence.
@@ -70,6 +72,7 @@ class CompareValidator extends Validator
      * @see compareAttribute
      */
     public $compareValue;
+
     /**
      * @var string the type of the values being compared. The follow types are supported:
      *
@@ -77,6 +80,7 @@ class CompareValidator extends Validator
      * - [[TYPE_NUMBER|number]]: the values are being compared as numbers. String values will be converted into numbers before comparison.
      */
     public $type = self::TYPE_STRING;
+
     /**
      * @var string the operator for comparison. The following operators are supported:
      *
@@ -92,6 +96,7 @@ class CompareValidator extends Validator
      * When you want to compare numbers, make sure to also set [[type]] to `number`.
      */
     public $operator = '==';
+
     /**
      * @var string the user-defined error message. It may contain the following placeholders which
      * will be replaced accordingly by the validator:

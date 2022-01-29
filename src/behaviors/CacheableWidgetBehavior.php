@@ -56,12 +56,14 @@ class CacheableWidgetBehavior extends Behavior
      * Defaults to the `cache` application component.
      */
     public $cache = 'cache';
+
     /**
      * @var int cache duration in seconds.
      * Set to `0` to indicate that the cached data will never expire.
      * Defaults to 60 seconds or 1 minute.
      */
     public $cacheDuration = 60;
+
     /**
      * @var Dependency|array|null a cache dependency or a configuration array
      * for creating a cache dependency or `null` meaning no cache dependency.
@@ -79,6 +81,7 @@ class CacheableWidgetBehavior extends Behavior
      * If any post has its modification time changed, the cached content would be invalidated.
      */
     public $cacheDependency;
+
     /**
      * @var string[]|string an array of strings or a single string which would cause
      * the variation of the content being cached (e.g. an application language, a GET parameter).
@@ -93,6 +96,7 @@ class CacheableWidgetBehavior extends Behavior
      * ```
      */
     public $cacheKeyVariations = [];
+
     /**
      * @var bool whether to enable caching or not. Allows to turn the widget caching
      * on and off according to specific conditions.

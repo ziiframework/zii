@@ -53,6 +53,7 @@ class UniqueValidator extends Validator
      * @see targetAttribute
      */
     public $targetClass;
+
     /**
      * @var string|array the name of the [[\yii\db\ActiveRecord|ActiveRecord]] attribute that should be used to
      * validate the uniqueness of the current attribute value. If not set, it will use the name
@@ -61,6 +62,7 @@ class UniqueValidator extends Validator
      * used to validate the uniqueness, while the array keys are the attributes whose values are to be validated.
      */
     public $targetAttribute;
+
     /**
      * @var string|array|Closure additional filter to be applied to the DB query used to check the uniqueness of the attribute value.
      * This can be a string or an array representing the additional query condition (refer to [[\yii\db\Query::where()]]
@@ -68,6 +70,7 @@ class UniqueValidator extends Validator
      * is the [[\yii\db\Query|Query]] object that you can modify in the function.
      */
     public $filter;
+
     /**
      * @var string the user-defined error message.
      *
@@ -83,6 +86,7 @@ class UniqueValidator extends Validator
      * - `{values}`: the values of the attributes being validated.
      */
     public $message;
+
     /**
      * @var string
      *
@@ -91,12 +95,14 @@ class UniqueValidator extends Validator
      * to setup custom message for multiple target attributes.
      */
     public $comboNotUnique;
+
     /**
      * @var string and|or define how target attributes are related
      *
      * @since 2.0.11
      */
     public $targetAttributeJunction = 'and';
+
     /**
      * @var bool whether this validator is forced to always use master DB
      *
@@ -175,7 +181,7 @@ class UniqueValidator extends Validator
      */
     private function getTargetClass($model)
     {
-        return $this->targetClass === null ? get_class($model) : $this->targetClass;
+        return $this->targetClass === null ? $model::class : $this->targetClass;
     }
 
     /**

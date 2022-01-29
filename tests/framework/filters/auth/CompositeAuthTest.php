@@ -133,6 +133,7 @@ class CompositeAuthTest extends \yiiunit\TestCase
     public function testCompositeAuth(): void
     {
         Yii::$app->request->headers->set('Authorization', base64_encode('foo:bar'));
+
         /** @var TestAuthController $controller */
         $controller = Yii::$app->createController('test')[0];
         $controller->authMethods = [

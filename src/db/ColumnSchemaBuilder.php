@@ -39,47 +39,56 @@ class ColumnSchemaBuilder extends BaseObject
      * @var string the column type definition such as INTEGER, VARCHAR, DATETIME, etc.
      */
     protected $type;
+
     /**
      * @var int|string|array column size or precision definition. This is what goes into the parenthesis after
      * the column type. This can be either a string, an integer or an array. If it is an array, the array values will
      * be joined into a string separated by comma.
      */
     protected $length;
+
     /**
      * @var bool|null whether the column is or not nullable. If this is `true`, a `NOT NULL` constraint will be added.
      * If this is `false`, a `NULL` constraint will be added.
      */
     protected $isNotNull;
+
     /**
      * @var bool whether the column values should be unique. If this is `true`, a `UNIQUE` constraint will be added.
      */
     protected $isUnique = false;
+
     /**
      * @var string the `CHECK` constraint for the column.
      */
     protected $check;
+
     /**
      * @var mixed default value of the column.
      */
     protected $default;
+
     /**
      * @var mixed SQL string to be appended to column schema definition.
      *
      * @since 2.0.9
      */
     protected $append;
+
     /**
      * @var bool whether the column values should be unsigned. If this is `true`, an `UNSIGNED` keyword will be added.
      *
      * @since 2.0.7
      */
     protected $isUnsigned = false;
+
     /**
      * @var string the column after which this column will be added.
      *
      * @since 2.0.8
      */
     protected $after;
+
     /**
      * @var bool whether this column is to be inserted at the beginning of the table.
      *
@@ -115,6 +124,7 @@ class ColumnSchemaBuilder extends BaseObject
         Schema::TYPE_BOOLEAN => self::CATEGORY_NUMERIC,
         Schema::TYPE_MONEY => self::CATEGORY_NUMERIC,
     ];
+
     /**
      * @var \yii\db\Connection the current database connection. It is used mainly to escape strings
      * safely when building the final column schema string.
@@ -122,6 +132,7 @@ class ColumnSchemaBuilder extends BaseObject
      * @since 2.0.8
      */
     public $db;
+
     /**
      * @var string comment value of the column.
      *

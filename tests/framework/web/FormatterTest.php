@@ -19,6 +19,7 @@ abstract class FormatterTest extends \yiiunit\TestCase
      * @var Response
      */
     public $response;
+
     /**
      * @var ResponseFormatterInterface
      */

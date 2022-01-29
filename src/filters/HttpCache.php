@@ -63,6 +63,7 @@ class HttpCache extends ActionFilter
      * @see http://tools.ietf.org/html/rfc7232#section-2.2
      */
     public $lastModified;
+
     /**
      * @var callable a PHP callback that generates the ETag seed string.
      * The callback's signature should be:
@@ -76,6 +77,7 @@ class HttpCache extends ActionFilter
      * as the seed for generating an ETag.
      */
     public $etagSeed;
+
     /**
      * @var bool whether to generate weak ETags.
      *
@@ -85,16 +87,19 @@ class HttpCache extends ActionFilter
      * @see http://tools.ietf.org/html/rfc7232#section-2.3
      */
     public $weakEtag = false;
+
     /**
      * @var mixed additional parameters that should be passed to the [[lastModified]] and [[etagSeed]] callbacks.
      */
     public $params;
+
     /**
      * @var string the value of the `Cache-Control` HTTP header. If null, the header will not be sent.
      *
      * @see http://tools.ietf.org/html/rfc2616#section-14.9
      */
     public $cacheControlHeader = 'public, max-age=3600';
+
     /**
      * @var string the name of the cache limiter to be set when [session_cache_limiter()](https://www.php.net/manual/en/function.session-cache-limiter.php)
      * is called. The default value is an empty string, meaning turning off automatic sending of cache headers entirely.
@@ -106,6 +111,7 @@ class HttpCache extends ActionFilter
      * PHP will send headers according to the `session.cache_limiter` PHP ini setting.
      */
     public $sessionCacheLimiter = '';
+
     /**
      * @var bool a value indicating whether this filter should be enabled.
      */

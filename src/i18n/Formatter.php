@@ -67,22 +67,27 @@ class Formatter extends Component
      * @since 2.0.13
      */
     public const UNIT_SYSTEM_METRIC = 'metric';
+
     /**
      * @since 2.0.13
      */
     public const UNIT_SYSTEM_IMPERIAL = 'imperial';
+
     /**
      * @since 2.0.13
      */
     public const FORMAT_WIDTH_LONG = 'long';
+
     /**
      * @since 2.0.13
      */
     public const FORMAT_WIDTH_SHORT = 'short';
+
     /**
      * @since 2.0.13
      */
     public const UNIT_LENGTH = 'length';
+
     /**
      * @since 2.0.13
      */
@@ -94,6 +99,7 @@ class Formatter extends Component
      * will be translated according to [[locale]].
      */
     public $nullDisplay;
+
     /**
      * @var array the text to be displayed when formatting a boolean value. The first element corresponds
      * to the text displayed for `false`, the second element for `true`.
@@ -101,6 +107,7 @@ class Formatter extends Component
      * will be translated according to [[locale]].
      */
     public $booleanFormat;
+
     /**
      * @var string the locale ID that is used to localize the date and number formatting.
      * For number and date formatting this is only effective when the
@@ -108,6 +115,7 @@ class Formatter extends Component
      * If not set, [[\yii\base\Application::language]] will be used.
      */
     public $locale;
+
     /**
      * @var string the language code (e.g. `en-US`, `en`) that is used to translate internal messages.
      * If not set, [[locale]] will be used (without the `@calendar` param, if included).
@@ -115,6 +123,7 @@ class Formatter extends Component
      * @since 2.0.28
      */
     public $language;
+
     /**
      * @var string the time zone to use for formatting time and date values.
      *
@@ -127,6 +136,7 @@ class Formatter extends Component
      * If you store your data in a different time zone in the database, you have to adjust [[defaultTimeZone]] accordingly.
      */
     public $timeZone;
+
     /**
      * @var string the time zone that is assumed for input values if they do not include a time zone explicitly.
      *
@@ -141,6 +151,7 @@ class Formatter extends Component
      * @since 2.0.1
      */
     public $defaultTimeZone = 'UTC';
+
     /**
      * @var string the default format string to be used to format a [[asDate()|date]].
      * This can be "short", "medium", "long", or "full", which represents a preset format of different lengths.
@@ -157,6 +168,7 @@ class Formatter extends Component
      * ```
      */
     public $dateFormat = 'medium';
+
     /**
      * @var string the default format string to be used to format a [[asTime()|time]].
      * This can be "short", "medium", "long", or "full", which represents a preset format of different lengths.
@@ -173,6 +185,7 @@ class Formatter extends Component
      * ```
      */
     public $timeFormat = 'medium';
+
     /**
      * @var string the default format string to be used to format a [[asDatetime()|date and time]].
      * This can be "short", "medium", "long", or "full", which represents a preset format of different lengths.
@@ -190,6 +203,7 @@ class Formatter extends Component
      * ```
      */
     public $datetimeFormat = 'medium';
+
     /**
      * @var IntlCalendar|int|null the calendar to be used for date formatting. The value of this property will be directly
      * passed to the [constructor of the `IntlDateFormatter` class](https://www.php.net/manual/en/intldateformatter.create.php).
@@ -221,12 +235,14 @@ class Formatter extends Component
      * @since 2.0.7
      */
     public $calendar;
+
     /**
      * @var string|null the character displayed as the decimal point when formatting a number.
      * If not set, the decimal separator corresponding to [[locale]] will be used.
      * If [PHP intl extension](https://www.php.net/manual/en/book.intl.php) is not available, the default value is '.'.
      */
     public $decimalSeparator;
+
     /**
      * @var string the character displayed as the decimal point when formatting a currency.
      * If not set, the currency decimal separator corresponding to [[locale]] will be used.
@@ -235,12 +251,14 @@ class Formatter extends Component
      * @since 2.0.35
      */
     public $currencyDecimalSeparator;
+
     /**
      * @var string|null the character displayed as the thousands separator (also called grouping separator) character when formatting a number.
      * If not set, the thousand separator corresponding to [[locale]] will be used.
      * If [PHP intl extension](https://www.php.net/manual/en/book.intl.php) is not available, the default value is ','.
      */
     public $thousandSeparator;
+
     /**
      * @var array a list of name value pairs that are passed to the
      * intl [NumberFormatter::setAttribute()](https://www.php.net/manual/en/numberformatter.setattribute.php) method of all
@@ -260,6 +278,7 @@ class Formatter extends Component
      * ```
      */
     public $numberFormatterOptions = [];
+
     /**
      * @var array a list of name value pairs that are passed to the
      * intl [NumberFormatter::setTextAttribute()](https://www.php.net/manual/en/numberformatter.settextattribute.php) method of all
@@ -278,6 +297,7 @@ class Formatter extends Component
      * ```
      */
     public $numberFormatterTextOptions = [];
+
     /**
      * @var array a list of name value pairs that are passed to the
      * intl [NumberFormatter::setSymbol()](https://www.php.net/manual/en/numberformatter.setsymbol.php) method of all
@@ -298,6 +318,7 @@ class Formatter extends Component
      * @since 2.0.4
      */
     public $numberFormatterSymbols = [];
+
     /**
      * @var string|null the 3-letter ISO 4217 currency code indicating the default currency to use for [[asCurrency]].
      * If not set, the currency code corresponding to [[locale]] will be used.
@@ -305,11 +326,13 @@ class Formatter extends Component
      * is not possible to determine the default currency.
      */
     public $currencyCode;
+
     /**
      * @var int the base at which a kilobyte is calculated (1000 or 1024 bytes per kilobyte), used by [[asSize]] and [[asShortSize]].
      * Defaults to 1024.
      */
     public $sizeFormatBase = 1024;
+
     /**
      * @var string default system of measure units. Defaults to [[UNIT_SYSTEM_METRIC]].
      * Possible values:
@@ -321,6 +344,7 @@ class Formatter extends Component
      * @since 2.0.13
      */
     public $systemOfUnits = self::UNIT_SYSTEM_METRIC;
+
     /**
      * @var array configuration of weight and length measurement units.
      * This array contains the most usable measurement units, but you can change it
@@ -373,6 +397,7 @@ class Formatter extends Component
             ],
         ],
     ];
+
     /**
      * @var array The base units that are used as multipliers for smallest possible unit from [[measureUnits]].
      *
@@ -393,10 +418,12 @@ class Formatter extends Component
      * @var bool whether the [PHP intl extension](https://www.php.net/manual/en/book.intl.php) is loaded.
      */
     private $_intlLoaded = false;
+
     /**
      * @var ResourceBundle cached ResourceBundle object used to read unit translations
      */
     private $_resourceBundle;
+
     /**
      * @var array cached unit translation patterns
      */

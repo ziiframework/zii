@@ -13,6 +13,7 @@ namespace yii\web;
 use ArrayAccess;
 use Countable;
 use IteratorAggregate;
+use ReturnTypeWillChange;
 use SessionHandlerInterface;
 use Yii;
 use yii\base\Component;
@@ -86,14 +87,17 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
      * restored when a Session component without custom handler is used after one that has.
      */
     protected static $_originalSessionModule = null;
+
     /**
      * Polyfill for ini directive session.use-strict-mode for PHP < 5.5.2.
      */
     private static $_useStrictModePolyfill = false;
+
     /**
      * @var string the name of the session variable that stores the flash message data.
      */
     public $flashParam = '__flash';
+
     /**
      * @var SessionHandlerInterface|array an object implementing the SessionHandlerInterface or a configuration array. If set, will be used to provide persistency instead of build-in methods.
      */
@@ -111,6 +115,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
      * @see https://www.php.net/manual/en/function.session-set-cookie-params.php
      */
     private $_cookieParams = ['httponly' => true];
+
     /**
      * @var array|null is used for saving session between recreations due to session parameters update.
      */
@@ -687,7 +692,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
      *
      * @return SessionIterator an iterator for traversing the session variables.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function getIterator()
     {
         $this->open();
@@ -713,7 +718,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
      *
      * @return int number of items in the session.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function count()
     {
         return $this->getCount();
@@ -1029,7 +1034,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
      *
      * @return bool
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         $this->open();
@@ -1044,7 +1049,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
      *
      * @return mixed the element at the offset, null if no element is found at the offset
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         $this->open();
@@ -1058,7 +1063,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
      * @param int|string $offset the offset to set element
      * @param mixed $item the element value
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetSet($offset, $item): void
     {
         $this->open();
@@ -1070,7 +1075,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
      *
      * @param int|string $offset the offset to unset element
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetUnset($offset): void
     {
         $this->open();

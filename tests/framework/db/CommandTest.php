@@ -1042,6 +1042,7 @@ SQL;
         $db = $this->getConnection(false);
         $tableName = 'test_pk';
         $name = 'test_pk_constraint';
+
         /** @var \yii\db\pgsql\Schema $schema */
         $schema = $db->getSchema();
 
@@ -1069,6 +1070,7 @@ SQL;
         $db = $this->getConnection(false);
         $tableName = 'test_fk';
         $name = 'test_fk_constraint';
+
         /** @var \yii\db\pgsql\Schema $schema */
         $schema = $db->getSchema();
 
@@ -1102,6 +1104,7 @@ SQL;
         $db = $this->getConnection(false);
         $tableName = 'test_idx';
         $name = 'test_idx_constraint';
+
         /** @var \yii\db\pgsql\Schema $schema */
         $schema = $db->getSchema();
 
@@ -1146,6 +1149,7 @@ SQL;
         $db = $this->getConnection(false);
         $tableName = 'test_uq';
         $name = 'test_uq_constraint';
+
         /** @var \yii\db\pgsql\Schema $schema */
         $schema = $db->getSchema();
 
@@ -1173,6 +1177,7 @@ SQL;
         $db = $this->getConnection(false);
         $tableName = 'test_ck';
         $name = 'test_ck_constraint';
+
         /** @var \yii\db\pgsql\Schema $schema */
         $schema = $db->getSchema();
 

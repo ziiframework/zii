@@ -74,6 +74,7 @@ class OptimisticLockBehavior extends AttributeBehavior
      * In case of `null` value it will be directly parsed from [[\yii\web\Request::getBodyParam()|getBodyParam()]] or set to 0.
      */
     public $value;
+
     /**
      * {@inheritdoc}
      */

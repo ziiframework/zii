@@ -49,6 +49,7 @@ class PhpManager extends BaseManager
      * @see saveToFile()
      */
     public $itemFile = '@app/rbac/items.php';
+
     /**
      * @var string the path of the PHP script that contains the authorization assignments.
      * This can be either a file path or a [path alias](guide:concept-aliases) to the file.
@@ -58,6 +59,7 @@ class PhpManager extends BaseManager
      * @see saveToFile()
      */
     public $assignmentFile = '@app/rbac/assignments.php';
+
     /**
      * @var string the path of the PHP script that contains the authorization rules.
      * This can be either a file path or a [path alias](guide:concept-aliases) to the file.
@@ -72,14 +74,17 @@ class PhpManager extends BaseManager
      * @var Item[]
      */
     protected $items = []; // itemName => item
+
     /**
      * @var array
      */
     protected $children = []; // itemName, childName => child
+
     /**
      * @var array
      */
     protected $assignments = []; // userId, itemName => assignment
+
     /**
      * @var Rule[]
      */

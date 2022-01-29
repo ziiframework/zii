@@ -52,6 +52,7 @@ class DbSession extends MultiFieldSession
      * Starting from version 2.0.2, this can also be a configuration array for creating the object.
      */
     public $db = 'db';
+
     /**
      * @var string the name of the DB table that stores the session data.
      * The table should be pre-created as follows:

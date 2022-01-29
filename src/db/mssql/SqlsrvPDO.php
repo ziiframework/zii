@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace yii\db\mssql;
 
 use PDO;
+use ReturnTypeWillChange;
 
 /**
  * This is an extension of the default PDO class of SQLSRV driver.
@@ -34,7 +35,7 @@ class SqlsrvPDO extends PDO
      *
      * @return int last inserted ID value.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function lastInsertId($sequence = null)
     {
         return !$sequence ? parent::lastInsertId() : parent::lastInsertId($sequence);

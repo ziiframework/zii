@@ -48,12 +48,14 @@ class JsonResponseFormatter extends Component implements ResponseFormatterInterf
      * @since 2.0.14
      */
     public const CONTENT_TYPE_JSONP = 'application/javascript; charset=UTF-8';
+
     /**
      * JSONP Content Type.
      *
      * @since 2.0.14
      */
     public const CONTENT_TYPE_JSON = 'application/json; charset=UTF-8';
+
     /**
      * HAL JSON Content Type.
      *
@@ -68,12 +70,14 @@ class JsonResponseFormatter extends Component implements ResponseFormatterInterf
      * @since 2.0.14
      */
     public $contentType;
+
     /**
      * @var bool whether to use JSONP response format. When this is true, the [[Response::data|response data]]
      * must be an array consisting of `data` and `callback` members. The latter should be a JavaScript
      * function name while the former will be passed to this function as a parameter.
      */
     public $useJsonp = false;
+
     /**
      * @var int the encoding options passed to [[Json::encode()]]. For more details please refer to
      * <https://www.php.net/manual/en/function.json-encode.php>.
@@ -83,6 +87,7 @@ class JsonResponseFormatter extends Component implements ResponseFormatterInterf
      * @since 2.0.7
      */
     public $encodeOptions = 320;
+
     /**
      * @var bool whether to format the output in a readable "pretty" format. This can be useful for debugging purpose.
      * If this is true, `JSON_PRETTY_PRINT` will be added to [[encodeOptions]].

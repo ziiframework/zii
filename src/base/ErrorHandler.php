@@ -37,6 +37,7 @@ abstract class ErrorHandler extends Component
      * @var bool whether to discard any existing page output before error display. Defaults to true.
      */
     public $discardExistingOutput = true;
+
     /**
      * @var int the size of the reserved memory. A portion of memory is pre-allocated so that
      * when an out-of-memory issue occurs, the error handler is able to handle the error with
@@ -44,10 +45,12 @@ abstract class ErrorHandler extends Component
      * Defaults to 256KB.
      */
     public $memoryReserveSize = 262144;
+
     /**
      * @var \Exception|null the exception that is being handled currently.
      */
     public $exception;
+
     /**
      * @var bool if true - `handleException()` will finish script with `ExitCode::OK`.
      * false - `ExitCode::UNSPECIFIED_ERROR`.
@@ -60,10 +63,12 @@ abstract class ErrorHandler extends Component
      * @var string Used to reserve memory for fatal error handler.
      */
     private $_memoryReserve;
+
     /**
      * @var \Exception from HHVM error that stores backtrace
      */
     private $_hhvmException;
+
     /**
      * @var bool whether this instance has been registered using `register()`
      */
@@ -323,7 +328,7 @@ abstract class ErrorHandler extends Component
      */
     public function logException($exception): void
     {
-        $category = get_class($exception);
+        $category = $exception::class;
 
         if ($exception instanceof HttpException) {
             $category = 'yii\\web\\HttpException:' . $exception->statusCode;
@@ -397,7 +402,7 @@ abstract class ErrorHandler extends Component
         } else {
             $message = 'Exception';
         }
-        $message .= " '" . get_class($exception) . "' with message '{$exception->getMessage()}' \n\nin "
+        $message .= " '" . $exception::class . "' with message '{$exception->getMessage()}' \n\nin "
             . $exception->getFile() . ':' . $exception->getLine() . "\n\n"
             . "Stack trace:\n" . $exception->getTraceAsString();
 

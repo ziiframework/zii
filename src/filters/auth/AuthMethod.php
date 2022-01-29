@@ -32,14 +32,17 @@ abstract class AuthMethod extends ActionFilter implements AuthInterface
      * @var User the user object representing the user authentication status. If not set, the `user` application component will be used.
      */
     public $user;
+
     /**
      * @var Request the current request. If not set, the `request` application component will be used.
      */
     public $request;
+
     /**
      * @var Response the response to be sent. If not set, the `response` application component will be used.
      */
     public $response;
+
     /**
      * @var array list of action IDs that this filter will be applied to, but auth failure will not lead to error.
      * It may be used for actions, that are allowed for public, but return some additional data for authenticated users.

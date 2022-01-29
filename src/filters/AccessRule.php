@@ -33,11 +33,13 @@ class AccessRule extends Component
      * @var bool whether this is an 'allow' rule or 'deny' rule.
      */
     public $allow;
+
     /**
      * @var array list of action IDs that this rule applies to. The comparison is case-sensitive.
      * If not set or empty, it means this rule applies to all actions.
      */
     public $actions;
+
     /**
      * @var array list of the controller IDs that this rule applies to.
      *
@@ -53,6 +55,7 @@ class AccessRule extends Component
      * Since version 2.0.12 controller IDs can be specified as wildcards, e.g. `module/*`.
      */
     public $controllers;
+
     /**
      * @var array list of roles that this rule applies to (requires properly configured User component).
      * Two special roles are recognized, and they are checked via [[User::isGuest]]:
@@ -71,6 +74,7 @@ class AccessRule extends Component
      * @see roleParams
      */
     public $roles;
+
     /**
      * @var array list of RBAC (Role-Based Access Control) permissions that this rules applies to.
      * [[User::can()]] will be called to check access.
@@ -82,6 +86,7 @@ class AccessRule extends Component
      * @see roleParams
      */
     public $permissions;
+
     /**
      * @var array|Closure parameters to pass to the [[User::can()]] function for evaluating
      * user permissions in [[$roles]].
@@ -116,6 +121,7 @@ class AccessRule extends Component
      * @since 2.0.12
      */
     public $roleParams = [];
+
     /**
      * @var array list of user IP addresses that this rule applies to. An IP address
      * can contain the wildcard `*` at the end so that it matches IP addresses with the same prefix.
@@ -128,6 +134,7 @@ class AccessRule extends Component
      * @see IpHelper::inRange
      */
     public $ips;
+
     /**
      * @var array list of request methods (e.g. `GET`, `POST`) that this rule applies to.
      * If not set or empty, it means this rule applies to all request methods.
@@ -135,6 +142,7 @@ class AccessRule extends Component
      * @see \yii\web\Request::method
      */
     public $verbs;
+
     /**
      * @var callable a callback that will be called to determine if the rule should be applied.
      * The signature of the callback should be as follows:
@@ -147,6 +155,7 @@ class AccessRule extends Component
      * The callback should return a boolean value indicating whether this rule should be applied.
      */
     public $matchCallback;
+
     /**
      * @var callable a callback that will be called if this rule determines the access to
      * the current action should be denied. This is the case when this rule matches

@@ -34,6 +34,7 @@ class ExpressionDependency extends Dependency
      * please refer to the [php manual](https://www.php.net/manual/en/language.expressions.php).
      */
     public $expression = 'true';
+
     /**
      * @var mixed custom parameters associated with this dependency. You may get the value
      * of this property in [[expression]] using `$this->params`.

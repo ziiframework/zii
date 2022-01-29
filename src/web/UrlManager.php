@@ -60,6 +60,7 @@ class UrlManager extends Component
      * "/index.php?r=news%2Fview&id=100".
      */
     public $enablePrettyUrl = false;
+
     /**
      * @var bool whether to enable strict parsing. If strict parsing is enabled, the incoming
      * requested URL must match at least one of the [[rules]] in order to be treated as a valid request.
@@ -67,6 +68,7 @@ class UrlManager extends Component
      * This property is used only when [[enablePrettyUrl]] is `true`.
      */
     public $enableStrictParsing = false;
+
     /**
      * @var array the rules for creating and parsing URLs when [[enablePrettyUrl]] is `true`.
      * This property is used only if [[enablePrettyUrl]] is `true`. Each element in the array
@@ -107,21 +109,25 @@ class UrlManager extends Component
      * you populate the array with rule objects instead of rule configurations.
      */
     public $rules = [];
+
     /**
      * @var string the URL suffix used when [[enablePrettyUrl]] is `true`.
      * For example, ".html" can be used so that the URL looks like pointing to a static HTML page.
      * This property is used only if [[enablePrettyUrl]] is `true`.
      */
     public $suffix;
+
     /**
      * @var bool whether to show entry script name in the constructed URL. Defaults to `true`.
      * This property is used only if [[enablePrettyUrl]] is `true`.
      */
     public $showScriptName = true;
+
     /**
      * @var string the GET parameter name for route. This property is used only if [[enablePrettyUrl]] is `false`.
      */
     public $routeParam = 'r';
+
     /**
      * @var CacheInterface|array|string|bool the cache object or the application component ID of the cache object.
      * This can also be an array that is used to create a [[CacheInterface]] instance in case you do not want to use
@@ -137,11 +143,13 @@ class UrlManager extends Component
      * change frequently.
      */
     public $cache = 'cache';
+
     /**
      * @var array the default configuration of URL rules. Individual rule configurations
      * specified via [[rules]] will take precedence when the same property of the rule is configured.
      */
     public $ruleConfig = ['class' => 'yii\web\UrlRule'];
+
     /**
      * @var UrlNormalizer|array|string|false the configuration for [[UrlNormalizer]] used by this UrlManager.
      * The default value is `false`, which means normalization will be skipped.
@@ -347,7 +355,7 @@ class UrlManager extends Component
 
                 if (YII_DEBUG) {
                     Yii::debug([
-                        'rule' => method_exists($rule, '__toString') ? $rule->__toString() : get_class($rule),
+                        'rule' => method_exists($rule, '__toString') ? $rule->__toString() : $rule::class,
                         'match' => $result !== false,
                         'parent' => null,
                     ], __METHOD__);

@@ -12,7 +12,6 @@ namespace yiiunit\framework\di;
 
 use function defined;
 use Exception;
-use function get_class;
 use Yii;
 use yii\di\Container;
 use yii\di\Instance;
@@ -178,7 +177,7 @@ class ContainerTest extends TestCase
         $result = Yii::$container->invoke($callback, ['MDM', 'not_default']);
         $this->assertEquals(['MDM', true, 'independent', 'not_default'], $result);
 
-        $myFunc = static fn ($a, NumberValidator $b, $c = 'default') => [$a, get_class($b), $c];
+        $myFunc = static fn ($a, NumberValidator $b, $c = 'default') => [$a, $b::class, $c];
         $result = Yii::$container->invoke($myFunc, ['a']);
         $this->assertEquals(['a', 'yii\validators\NumberValidator', 'default'], $result);
 

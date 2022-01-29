@@ -44,10 +44,12 @@ class InlineValidator extends Validator
      * - `$validator` is a reference to related [[InlineValidator]] object. This parameter is available since version 2.0.11.
      */
     public $method;
+
     /**
      * @var mixed additional parameters that are passed to the validation method
      */
     public $params;
+
     /**
      * @var string|Closure an anonymous function or the name of a model class method that returns the client validation code.
      * The signature of the method should be like the following:
@@ -64,6 +66,7 @@ class InlineValidator extends Validator
      * Please refer to [[clientValidateAttribute()]] for details on how to return client validation code.
      */
     public $clientValidate;
+
     /**
      * @var mixed the value of attribute being currently validated.
      *

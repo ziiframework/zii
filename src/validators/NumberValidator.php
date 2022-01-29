@@ -34,34 +34,41 @@ class NumberValidator extends Validator
      * @since 2.0.42
      */
     public $allowArray = false;
+
     /**
      * @var bool whether the attribute value can only be an integer. Defaults to false.
      */
     public $integerOnly = false;
+
     /**
      * @var int|float upper limit of the number. Defaults to null, meaning no upper limit.
      *
      * @see tooBig for the customized message used when the number is too big.
      */
     public $max;
+
     /**
      * @var int|float lower limit of the number. Defaults to null, meaning no lower limit.
      *
      * @see tooSmall for the customized message used when the number is too small.
      */
     public $min;
+
     /**
      * @var string user-defined error message used when the value is bigger than [[max]].
      */
     public $tooBig;
+
     /**
      * @var string user-defined error message used when the value is smaller than [[min]].
      */
     public $tooSmall;
+
     /**
      * @var string the regular expression for matching integers.
      */
     public $integerPattern = '/^[+-]?\d+$/';
+
     /**
      * @var string the regular expression for matching numbers. It defaults to a pattern
      * that matches floating numbers with optional exponential part (e.g. -1.23e-10).

@@ -45,6 +45,7 @@ class ActiveFixture extends BaseActiveFixture
      * @see modelClass
      */
     public $tableName;
+
     /**
      * @var string|bool the file path or [path alias](guide:concept-aliases) of the data file that contains the fixture data
      * to be returned by [[getData()]]. If this is not set, it will default to `FixturePath/data/TableName.php`,
@@ -69,6 +70,7 @@ class ActiveFixture extends BaseActiveFixture
             if ($this->modelClass === null) {
                 throw new InvalidConfigException('Either "modelClass" or "tableName" must be set.');
             }
+
             /** @var ActiveRecord $modelClass */
             $modelClass = $this->modelClass;
             $this->db = $modelClass::getDb();

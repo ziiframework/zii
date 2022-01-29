@@ -77,14 +77,17 @@ class Cors extends ActionFilter
      * @var Request the current request. If not set, the `request` application component will be used.
      */
     public $request;
+
     /**
      * @var Response the response to be sent. If not set, the `response` application component will be used.
      */
     public $response;
+
     /**
      * @var array define specific CORS rules for specific actions
      */
     public $actions = [];
+
     /**
      * @var array Basic headers handled for the CORS requests.
      */

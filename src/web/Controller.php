@@ -36,6 +36,7 @@ class Controller extends \yii\base\Controller
      * CSRF validation is enabled only when both this property and [[\yii\web\Request::enableCsrfValidation]] are true.
      */
     public $enableCsrfValidation = true;
+
     /**
      * @var array the parameters bound to the current action.
      */

@@ -69,22 +69,26 @@ class Command extends Component
      * @var Connection the DB connection that this command is associated with
      */
     public $db;
+
     /**
      * @var PDOStatement the PDOStatement object that this command is associated with
      */
     public $pdoStatement;
+
     /**
      * @var int the default fetch mode for this command.
      *
      * @see https://www.php.net/manual/en/pdostatement.setfetchmode.php
      */
     public $fetchMode = PDO::FETCH_ASSOC;
+
     /**
      * @var array the parameters (name => value) that are bound to the current PDO statement.
      * This property is maintained by methods such as [[bindValue()]]. It is mainly provided for logging purpose
      * and is used to generate [[rawSql]]. Do not modify it directly.
      */
     public $params = [];
+
     /**
      * @var int the default number of seconds that query results can remain valid in cache.
      * Use 0 to indicate that the cached data will never expire. And use a negative number to indicate
@@ -93,6 +97,7 @@ class Command extends Component
      * @see cache()
      */
     public $queryCacheDuration;
+
     /**
      * @var \yii\caching\Dependency the dependency to be associated with the cached query result for this command
      *
@@ -111,15 +116,18 @@ class Command extends Component
      * @var string the SQL statement that this command represents
      */
     private $_sql;
+
     /**
      * @var string name of the table, which schema, should be refreshed after command execution.
      */
     private $_refreshTableName;
+
     /**
      * @var string|false|null the isolation level to use for this transaction.
      * See [[Transaction::begin()]] for details.
      */
     private $_isolationLevel = false;
+
     /**
      * @var callable a callable (e.g. anonymous function) that is called when [[\yii\db\Exception]] is thrown
      * when executing the command.

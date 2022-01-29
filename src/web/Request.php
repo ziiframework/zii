@@ -101,6 +101,7 @@ class Request extends \yii\base\Request
      * The name of the HTTP header for sending CSRF token.
      */
     public const CSRF_HEADER = 'X-CSRF-Token';
+
     /**
      * The length of the CSRF token mask.
      *
@@ -125,30 +126,36 @@ class Request extends \yii\base\Request
      * @see http://en.wikipedia.org/wiki/Cross-site_request_forgery
      */
     public $enableCsrfValidation = true;
+
     /**
      * @var string the name of the token used to prevent CSRF. Defaults to '_csrf'.
      * This property is used only when [[enableCsrfValidation]] is true.
      */
     public $csrfParam = '_csrf';
+
     /**
      * @var array the configuration for creating the CSRF [[Cookie|cookie]]. This property is used only when
      * both [[enableCsrfValidation]] and [[enableCsrfCookie]] are true.
      */
     public $csrfCookie = ['httpOnly' => true];
+
     /**
      * @var bool whether to use cookie to persist CSRF token. If false, CSRF token will be stored
      * in session under the name of [[csrfParam]]. Note that while storing CSRF tokens in session increases
      * security, it requires starting a session for every page, which will degrade your site performance.
      */
     public $enableCsrfCookie = true;
+
     /**
      * @var bool whether cookies should be validated to ensure they are not tampered. Defaults to true.
      */
     public $enableCookieValidation = true;
+
     /**
      * @var string a secret key used for cookie validation. This property must be set if [[enableCookieValidation]] is true.
      */
     public $cookieValidationKey;
+
     /**
      * @var string the name of the POST parameter that is used to indicate if a request is a PUT, PATCH or DELETE
      * request tunneled through POST. Defaults to '_method'.
@@ -157,6 +164,7 @@ class Request extends \yii\base\Request
      * @see getBodyParams()
      */
     public $methodParam = '_method';
+
     /**
      * @var array the parsers for converting the raw HTTP request body into [[bodyParams]].
      * The array keys are the request `Content-Types`, and the array values are the
@@ -177,6 +185,7 @@ class Request extends \yii\base\Request
      * @see getBodyParams()
      */
     public $parsers = [];
+
     /**
      * @var array the configuration for trusted security related headers.
      *
@@ -214,6 +223,7 @@ class Request extends \yii\base\Request
      * @since 2.0.13
      */
     public $trustedHosts = [];
+
     /**
      * @var array lists of headers that are, by default, subject to the trusted host configuration.
      * These headers will be filtered unless explicitly allowed in [[trustedHosts]].
@@ -238,6 +248,7 @@ class Request extends \yii\base\Request
         // ngrok:
         'X-Original-Host',
     ];
+
     /**
      * @var string[] List of headers where proxies store the real client IP.
      * It's not advisable to put insecure headers here.
@@ -251,6 +262,7 @@ class Request extends \yii\base\Request
     public $ipHeaders = [
         'X-Forwarded-For', // Common
     ];
+
     /**
      * @var array list of headers to check for determining whether the connection is made via HTTPS.
      * The array keys are header names and the array value is a list of header values that indicate a secure connection.
@@ -270,6 +282,7 @@ class Request extends \yii\base\Request
      * @var CookieCollection Collection of request cookies.
      */
     private $_cookies;
+
     /**
      * @var HeaderCollection Collection of request headers.
      */

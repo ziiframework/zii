@@ -36,6 +36,7 @@ class MessageSource extends Component
      * Defaults to false, meaning translation is only performed when source and target languages are different.
      */
     public $forceTranslation = false;
+
     /**
      * @var string the language that the original messages are in. If not set, it will use the value of
      * [[\yii\base\Application::sourceLanguage]].

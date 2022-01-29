@@ -96,6 +96,7 @@ class HostControl extends ActionFilter
      * If this field is not set - no host name check will be performed.
      */
     public $allowedHosts;
+
     /**
      * @var callable a callback that will be called if the current host does not match [[allowedHosts]].
      * If not set, [[denyAccess()]] will be called.
@@ -112,6 +113,7 @@ class HostControl extends ActionFilter
      * host name, creation of absolute URL links, caching page parts and so on.
      */
     public $denyCallback;
+
     /**
      * @var string|null fallback host info (e.g. `http://www.yiiframework.com`) used when [[\yii\web\Request::$hostInfo|Request::$hostInfo]] is invalid.
      * This value will replace [[\yii\web\Request::$hostInfo|Request::$hostInfo]] before [[$denyCallback]] is called to make sure that

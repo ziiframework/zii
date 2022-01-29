@@ -42,6 +42,7 @@ class ActionColumn extends Column
      * {@inheritdoc}
      */
     public $headerOptions = ['class' => 'action-column'];
+
     /**
      * @var string the ID of the controller that should handle the actions specified here.
      * If not set, it will use the currently active controller. This property is mainly used by
@@ -49,6 +50,7 @@ class ActionColumn extends Column
      * to each action name to form the route of the action.
      */
     public $controller;
+
     /**
      * @var string the template used for composing each cell in the action column.
      * Tokens enclosed within curly brackets are treated as controller action IDs (also called *button names*
@@ -65,6 +67,7 @@ class ActionColumn extends Column
      * @see buttons
      */
     public $template = '{view} {update} {delete}';
+
     /**
      * @var array button rendering callbacks. The array keys are the button names (without curly brackets),
      * and the values are the corresponding button rendering callbacks. The callbacks should use the following
@@ -91,6 +94,7 @@ class ActionColumn extends Column
      * ```
      */
     public $buttons = [];
+
     /**
      * @var array button icons. The array keys are the icon names and the values the corresponding html:
      * ```php
@@ -109,6 +113,7 @@ class ActionColumn extends Column
         'pencil' => '<svg aria-hidden="true" style="display:inline-block;font-size:inherit;height:1em;overflow:visible;vertical-align:-.125em;width:1em" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M498 142l-46 46c-5 5-13 5-17 0L324 77c-5-5-5-12 0-17l46-46c19-19 49-19 68 0l60 60c19 19 19 49 0 68zm-214-42L22 362 0 484c-3 16 12 30 28 28l122-22 262-262c5-5 5-13 0-17L301 100c-4-5-12-5-17 0zM124 340c-5-6-5-14 0-20l154-154c6-5 14-5 20 0s5 14 0 20L144 340c-6 5-14 5-20 0zm-36 84h48v36l-64 12-32-31 12-65h36v48z"/></svg>',
         'trash' => '<svg aria-hidden="true" style="display:inline-block;font-size:inherit;height:1em;overflow:visible;vertical-align:-.125em;width:.875em" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M32 464a48 48 0 0048 48h288a48 48 0 0048-48V128H32zm272-256a16 16 0 0132 0v224a16 16 0 01-32 0zm-96 0a16 16 0 0132 0v224a16 16 0 01-32 0zm-96 0a16 16 0 0132 0v224a16 16 0 01-32 0zM432 32H312l-9-19a24 24 0 00-22-13H167a24 24 0 00-22 13l-9 19H16A16 16 0 000 48v32a16 16 0 0016 16h416a16 16 0 0016-16V48a16 16 0 00-16-16z"/></svg>',
     ];
+
     /** @var array visibility conditions for each button. The array keys are the button names (without curly brackets),
      * and the values are the boolean true/false or the anonymous function. When the button name is not specified in
      * this array it will be shown by default.
@@ -131,6 +136,7 @@ class ActionColumn extends Column
      * @since 2.0.7
      */
     public $visibleButtons = [];
+
     /**
      * @var callable a callback that creates a button URL using the specified model information.
      * The signature of the callback should be the same as that of [[createUrl()]]
@@ -145,6 +151,7 @@ class ActionColumn extends Column
      * If this property is not set, button URLs will be created using [[createUrl()]].
      */
     public $urlCreator;
+
     /**
      * @var array html options to be applied to the [[initDefaultButton()|default button]].
      *

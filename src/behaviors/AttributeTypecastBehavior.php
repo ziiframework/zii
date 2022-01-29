@@ -124,6 +124,7 @@ class AttributeTypecastBehavior extends Behavior
      * @var Model|BaseActiveRecord the owner of this behavior.
      */
     public $owner;
+
     /**
      * @var array attribute typecast map in format: attributeName => type.
      * Type can be set via PHP callable, which accept raw value as an argument and should return
@@ -144,12 +145,14 @@ class AttributeTypecastBehavior extends Behavior
      * If not set, attribute type map will be composed automatically from the owner validation rules.
      */
     public $attributeTypes;
+
     /**
      * @var bool whether to skip typecasting of `null` values.
      * If enabled attribute value which equals to `null` will not be type-casted (e.g. `null` remains `null`),
      * otherwise it will be converted according to the type configured at [[attributeTypes]].
      */
     public $skipOnNull = true;
+
     /**
      * @var bool whether to perform typecasting after owner model validation.
      * Note that typecasting will be performed only if validation was successful, e.g.
@@ -157,6 +160,7 @@ class AttributeTypecastBehavior extends Behavior
      * Note that changing this option value will have no effect after this behavior has been attached to the model.
      */
     public $typecastAfterValidate = true;
+
     /**
      * @var bool whether to perform typecasting before saving owner model (insert or update).
      * This option may be disabled in order to achieve better performance.
@@ -165,6 +169,7 @@ class AttributeTypecastBehavior extends Behavior
      * Note that changing this option value will have no effect after this behavior has been attached to the model.
      */
     public $typecastBeforeSave = false;
+
     /**
      * @var bool whether to perform typecasting after saving owner model (insert or update).
      * This option may be disabled in order to achieve better performance.
@@ -175,6 +180,7 @@ class AttributeTypecastBehavior extends Behavior
      * @since 2.0.14
      */
     public $typecastAfterSave = false;
+
     /**
      * @var bool whether to perform typecasting after retrieving owner model data from
      * the database (after find or refresh).

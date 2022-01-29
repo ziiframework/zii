@@ -25,6 +25,7 @@ class SessionIterator implements Iterator
      * @var array list of keys in the map
      */
     private $_keys;
+
     /**
      * @var mixed current key
      */

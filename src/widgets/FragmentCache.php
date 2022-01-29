@@ -39,11 +39,13 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
      * Starting from version 2.0.2, this can also be a configuration array for creating the object.
      */
     public $cache = 'cache';
+
     /**
      * @var int number of seconds that the data can remain valid in cache.
      * Use 0 to indicate that the cached data will never expire.
      */
     public $duration = 60;
+
     /**
      * @var array|Dependency the dependency that the cached content depends on.
      * This can be either a [[Dependency]] object or a configuration array for creating the dependency object.
@@ -60,6 +62,7 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
      * If any post has its modification time changed, the cached content would be invalidated.
      */
     public $dependency;
+
     /**
      * @var string[]|string list of factors that would cause the variation of the content being cached.
      * Each factor is a string representing a variation (e.g. the language, a GET parameter).
@@ -73,6 +76,7 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
      * ```
      */
     public $variations;
+
     /**
      * @var bool whether to enable the fragment cache. You may use this property to turn on and off
      * the fragment cache according to specific setting (e.g. enable fragment cache only for GET requests).

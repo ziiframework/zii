@@ -46,6 +46,7 @@ class BaseMarkdown
             'html5' => true,
         ],
     ];
+
     /**
      * @var string the markdown flavor to use when none is specified explicitly.
      * Defaults to `original`.

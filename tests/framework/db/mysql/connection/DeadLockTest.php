@@ -12,7 +12,6 @@ namespace yiiunit\framework\db\mysql\connection;
 
 use ErrorException;
 use function function_exists;
-use function get_class;
 use RuntimeException;
 use Throwable;
 use yii\db\Connection;
@@ -156,6 +155,7 @@ class DeadLockTest extends \yiiunit\framework\db\mysql\ConnectionTest
     {
         try {
             $this->log('child 1: connect');
+
             /** @var Connection $first */
             $first = $this->getConnection(false, false);
 
@@ -212,11 +212,11 @@ class DeadLockTest extends \yiiunit\framework\db\mysql\ConnectionTest
 
             return 1;
         } catch (\Exception $e) {
-            $this->log('child 1: ! exit <<' . get_class($e) . ' #' . $e->getCode() . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString() . '>>');
+            $this->log('child 1: ! exit <<' . $e::class . ' #' . $e->getCode() . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString() . '>>');
 
             return 1;
         } catch (Throwable $e) {
-            $this->log('child 1: ! exit <<' . get_class($e) . ' #' . $e->getCode() . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString() . '>>');
+            $this->log('child 1: ! exit <<' . $e::class . ' #' . $e->getCode() . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString() . '>>');
 
             return 1;
         }
@@ -254,6 +254,7 @@ class DeadLockTest extends \yiiunit\framework\db\mysql\ConnectionTest
             }
 
             $this->log('child 2: connect');
+
             /** @var Connection $second */
             $second = $this->getConnection(true, false);
             $second->open();
@@ -280,11 +281,11 @@ class DeadLockTest extends \yiiunit\framework\db\mysql\ConnectionTest
 
             return 1;
         } catch (\Exception $e) {
-            $this->log('child 2: ! exit <<' . get_class($e) . ' #' . $e->getCode() . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString() . '>>');
+            $this->log('child 2: ! exit <<' . $e::class . ' #' . $e->getCode() . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString() . '>>');
 
             return 1;
         } catch (Throwable $e) {
-            $this->log('child 2: ! exit <<' . get_class($e) . ' #' . $e->getCode() . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString() . '>>');
+            $this->log('child 2: ! exit <<' . $e::class . ' #' . $e->getCode() . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString() . '>>');
 
             return 1;
         }

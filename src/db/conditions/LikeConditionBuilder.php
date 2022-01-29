@@ -35,6 +35,7 @@ class LikeConditionBuilder implements ExpressionBuilderInterface
         '_' => '\_',
         '\\' => '\\\\',
     ];
+
     /**
      * @var string|null character used to escape special characters in LIKE conditions.
      * By default it's assumed to be `\`.

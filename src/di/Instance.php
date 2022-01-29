@@ -65,6 +65,7 @@ class Instance
      * @var string the component ID, class name, interface name or alias name
      */
     public $id;
+
     /**
      * @var bool if null should be returned instead of throwing an exception
      */
@@ -162,10 +163,10 @@ class Instance
                 return $component;
             }
 
-            throw new InvalidConfigException('"' . $reference->id . '" refers to a ' . get_class($component) . " component. $type is expected.");
+            throw new InvalidConfigException('"' . $reference->id . '" refers to a ' . $component::class . " component. $type is expected.");
         }
 
-        $valueType = is_object($reference) ? get_class($reference) : gettype($reference);
+        $valueType = is_object($reference) ? $reference::class : gettype($reference);
 
         throw new InvalidConfigException("Invalid data type: $valueType. $type is expected.");
     }

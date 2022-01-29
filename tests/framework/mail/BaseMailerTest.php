@@ -109,7 +109,7 @@ class BaseMailerTest extends TestCase
         $mailer = new Mailer();
         $message = $mailer->compose();
         $this->assertIsObject($message, 'Unable to create message instance!');
-        $this->assertEquals($mailer->messageClass, get_class($message), 'Invalid message class!');
+        $this->assertEquals($mailer->messageClass, $message::class, 'Invalid message class!');
     }
 
     /**

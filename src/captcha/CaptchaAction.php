@@ -55,48 +55,59 @@ class CaptchaAction extends Action
      * A value less than or equal to 0 means the test is unlimited (available since version 1.1.2).
      */
     public $testLimit = 3;
+
     /**
      * @var int the width of the generated CAPTCHA image. Defaults to 120.
      */
     public $width = 120;
+
     /**
      * @var int the height of the generated CAPTCHA image. Defaults to 50.
      */
     public $height = 50;
+
     /**
      * @var int padding around the text. Defaults to 2.
      */
     public $padding = 2;
+
     /**
      * @var int the background color. For example, 0x55FF00.
      * Defaults to 0xFFFFFF, meaning white color.
      */
     public $backColor = 0xFFFFFF;
+
     /**
      * @var int the font color. For example, 0x55FF00. Defaults to 0x2040A0 (blue color).
      */
     public $foreColor = 0x2040A0;
+
     /**
      * @var bool whether to use transparent background. Defaults to false.
      */
     public $transparent = false;
+
     /**
      * @var int the minimum length for randomly generated word. Defaults to 6.
      */
     public $minLength = 6;
+
     /**
      * @var int the maximum length for randomly generated word. Defaults to 7.
      */
     public $maxLength = 7;
+
     /**
      * @var int the offset between characters. Defaults to -2. You can adjust this property
      * in order to decrease or increase the readability of the captcha.
      */
     public $offset = -2;
+
     /**
      * @var string the TrueType font file. This can be either a file path or [path alias](guide:concept-aliases).
      */
     public $fontFile = '@yii/captcha/SpicyRice.ttf';
+
     /**
      * @var string the fixed verification code. When this property is set,
      * [[getVerifyCode()]] will always return the value of this property.
@@ -105,6 +116,7 @@ class CaptchaAction extends Action
      * If not set, it means the verification code will be randomly generated.
      */
     public $fixedVerifyCode;
+
     /**
      * @var string the rendering library to use. Currently supported only 'gd' and 'imagick'.
      * If not set, library will be determined automatically.

@@ -72,10 +72,12 @@ class Response extends \yii\base\Response
      * @event \yii\base\Event an event that is triggered at the beginning of [[send()]].
      */
     public const EVENT_BEFORE_SEND = 'beforeSend';
+
     /**
      * @event \yii\base\Event an event that is triggered at the end of [[send()]].
      */
     public const EVENT_AFTER_SEND = 'afterSend';
+
     /**
      * @event \yii\base\Event an event that is triggered right after [[prepare()]] is called in [[send()]].
      * You may respond to this event to filter the response content before it is sent to the client.
@@ -110,17 +112,20 @@ class Response extends \yii\base\Response
      * @see formatters
      */
     public $format = self::FORMAT_HTML;
+
     /**
      * @var string the MIME type (e.g. `application/json`) from the request ACCEPT header chosen for this response.
      * This property is mainly set by [[\yii\filters\ContentNegotiator]].
      */
     public $acceptMimeType;
+
     /**
      * @var array the parameters (e.g. `['q' => 1, 'version' => '1.0']`) associated with the [[acceptMimeType|chosen MIME type]].
      * This is a list of name-value pairs associated with [[acceptMimeType]] from the ACCEPT HTTP header.
      * This property is mainly set by [[\yii\filters\ContentNegotiator]].
      */
     public $acceptParams = [];
+
     /**
      * @var array the formatters for converting data into the response content of the specified [[format]].
      * The array keys are the format names, and the array values are the corresponding configurations
@@ -130,6 +135,7 @@ class Response extends \yii\base\Response
      * @see defaultFormatters
      */
     public $formatters = [];
+
     /**
      * @var mixed the original response data. When this is not null, it will be converted into [[content]]
      * according to [[format]] when the response is being sent out.
@@ -137,6 +143,7 @@ class Response extends \yii\base\Response
      * @see content
      */
     public $data;
+
     /**
      * @var string the response content. When [[data]] is not null, it will be converted into [[content]]
      * according to [[format]] when the response is being sent out.
@@ -144,6 +151,7 @@ class Response extends \yii\base\Response
      * @see data
      */
     public $content;
+
     /**
      * @var resource|array|callable the stream to be sent. This can be a stream handle or an array of stream handle,
      * the begin position and the end position. Alternatively it can be set to a callable, which returns
@@ -153,26 +161,31 @@ class Response extends \yii\base\Response
      * Note that when this property is set, the [[data]] and [[content]] properties will be ignored by [[send()]].
      */
     public $stream;
+
     /**
      * @var string the charset of the text response. If not set, it will use
      * the value of [[Application::charset]].
      */
     public $charset;
+
     /**
      * @var string the HTTP status description that comes together with the status code.
      *
      * @see httpStatuses
      */
     public $statusText = 'OK';
+
     /**
      * @var string the version of the HTTP protocol to use. If not set, it will be determined via `$_SERVER['SERVER_PROTOCOL']`,
      * or '1.1' if that is not available.
      */
     public $version;
+
     /**
      * @var bool whether the response has been sent. If this is true, calling [[send()]] will do nothing.
      */
     public $isSent = false;
+
     /**
      * @var array list of HTTP status codes and the corresponding texts
      */
@@ -250,6 +263,7 @@ class Response extends \yii\base\Response
      * @var int the HTTP status code to send with the response.
      */
     private $_statusCode = 200;
+
     /**
      * @var HeaderCollection
      */
@@ -420,7 +434,7 @@ class Response extends \yii\base\Response
 
         if ($request->enableCookieValidation) {
             if ($request->cookieValidationKey == '') {
-                throw new InvalidConfigException(get_class($request) . '::cookieValidationKey must be configured with a secret key.');
+                throw new InvalidConfigException($request::class . '::cookieValidationKey must be configured with a secret key.');
             }
             $validationKey = $request->cookieValidationKey;
         }

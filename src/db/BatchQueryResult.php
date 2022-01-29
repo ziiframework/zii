@@ -13,6 +13,7 @@ namespace yii\db;
 use BadMethodCallException;
 use Iterator;
 use PDOException;
+use ReturnTypeWillChange;
 use yii\base\Component;
 
 /**
@@ -44,6 +45,7 @@ class BatchQueryResult extends Component implements Iterator
      * @since 2.0.41
      */
     public const EVENT_RESET = 'reset';
+
     /**
      * @event Event an event that is triggered when the last batch has been fetched.
      *
@@ -56,15 +58,18 @@ class BatchQueryResult extends Component implements Iterator
      * If null, the "db" application component will be used.
      */
     public $db;
+
     /**
      * @var Query the query object associated with this batch query.
      * Do not modify this property directly unless after [[reset()]] is called explicitly.
      */
     public $query;
+
     /**
      * @var int the number of rows to be returned in each batch.
      */
     public $batchSize = 100;
+
     /**
      * @var bool whether to return a single row during each iteration.
      * If false, a whole batch of rows will be returned in each iteration.
@@ -75,18 +80,22 @@ class BatchQueryResult extends Component implements Iterator
      * @var DataReader the data reader associated with this batch query.
      */
     private $_dataReader;
+
     /**
      * @var array the data retrieved in the current batch
      */
     private $_batch;
+
     /**
      * @var mixed the value for the current iteration
      */
     private $_value;
+
     /**
      * @var string|int the key for the current iteration
      */
     private $_key;
+
     /**
      * @var int MSSQL error code for exception that is thrown when last batch is size less than specified batch size
      *
@@ -123,7 +132,7 @@ class BatchQueryResult extends Component implements Iterator
      * Resets the iterator to the initial state.
      * This method is required by the interface [[\Iterator]].
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function rewind(): void
     {
         $this->reset();
@@ -134,7 +143,7 @@ class BatchQueryResult extends Component implements Iterator
      * Moves the internal pointer to the next dataset.
      * This method is required by the interface [[\Iterator]].
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function next(): void
     {
         if ($this->_batch === null || !$this->each || $this->each && next($this->_batch) === false) {
@@ -216,7 +225,7 @@ class BatchQueryResult extends Component implements Iterator
      *
      * @return int the index of the current row.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function key()
     {
         return $this->_key;
@@ -228,7 +237,7 @@ class BatchQueryResult extends Component implements Iterator
      *
      * @return mixed the current dataset.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function current()
     {
         return $this->_value;
@@ -240,7 +249,7 @@ class BatchQueryResult extends Component implements Iterator
      *
      * @return bool whether there is a valid dataset at the current position.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function valid()
     {
         return !empty($this->_batch);

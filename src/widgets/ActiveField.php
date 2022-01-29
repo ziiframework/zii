@@ -37,14 +37,17 @@ class ActiveField extends Component
      * @var ActiveForm the form that this field is associated with.
      */
     public $form;
+
     /**
      * @var Model the data model that this field is associated with.
      */
     public $model;
+
     /**
      * @var string the model attribute that this field is associated with.
      */
     public $attribute;
+
     /**
      * @var array the HTML attributes (name-value pairs) for the field container tag.
      * The values will be HTML-encoded using [[Html::encode()]].
@@ -59,11 +62,13 @@ class ActiveField extends Component
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $options = ['class' => 'form-group'];
+
     /**
      * @var string the template that is used to arrange the label, the input field, the error message and the hint text.
      * The following tokens will be replaced when [[render()]] is called: `{label}`, `{input}`, `{error}` and `{hint}`.
      */
     public $template = "{label}\n{input}\n{hint}\n{error}";
+
     /**
      * @var array the default options for the input tags. The parameter passed to individual input methods
      * (e.g. [[textInput()]]) will be merged with this property when rendering the input tag.
@@ -73,6 +78,7 @@ class ActiveField extends Component
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $inputOptions = ['class' => 'form-control'];
+
     /**
      * @var array the default options for the error tags. The parameter passed to [[error()]] will be
      * merged with this property when rendering the error tag.
@@ -87,6 +93,7 @@ class ActiveField extends Component
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $errorOptions = ['class' => 'help-block'];
+
     /**
      * @var array the default options for the label tags. The parameter passed to [[label()]] will be
      * merged with this property when rendering the label tag.
@@ -94,6 +101,7 @@ class ActiveField extends Component
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $labelOptions = ['class' => 'control-label'];
+
     /**
      * @var array the default options for the hint tags. The parameter passed to [[hint()]] will be
      * merged with this property when rendering the hint tag.
@@ -105,26 +113,31 @@ class ActiveField extends Component
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $hintOptions = ['class' => 'hint-block'];
+
     /**
      * @var bool whether to enable client-side data validation.
      * If not set, it will take the value of [[ActiveForm::enableClientValidation]].
      */
     public $enableClientValidation;
+
     /**
      * @var bool whether to enable AJAX-based data validation.
      * If not set, it will take the value of [[ActiveForm::enableAjaxValidation]].
      */
     public $enableAjaxValidation;
+
     /**
      * @var bool whether to perform validation when the value of the input field is changed.
      * If not set, it will take the value of [[ActiveForm::validateOnChange]].
      */
     public $validateOnChange;
+
     /**
      * @var bool whether to perform validation when the input field loses focus.
      * If not set, it will take the value of [[ActiveForm::validateOnBlur]].
      */
     public $validateOnBlur;
+
     /**
      * @var bool whether to perform validation while the user is typing in the input field.
      * If not set, it will take the value of [[ActiveForm::validateOnType]].
@@ -132,12 +145,14 @@ class ActiveField extends Component
      * @see validationDelay
      */
     public $validateOnType;
+
     /**
      * @var int number of milliseconds that the validation should be delayed when the user types in the field
      * and [[validateOnType]] is set `true`.
      * If not set, it will take the value of [[ActiveForm::validationDelay]].
      */
     public $validationDelay;
+
     /**
      * @var array the jQuery selectors for selecting the container, input and error tags.
      * The array keys should be `container`, `input`, and/or `error`, and the array values
@@ -149,6 +164,7 @@ class ActiveField extends Component
      * You normally do not need to set this property as the default selectors should work well for most cases.
      */
     public $selectors = [];
+
     /**
      * @var array different parts of the field (e.g. input, label). This will be used together with
      * [[template]] to generate the final field HTML code. The keys are the token names in [[template]],
@@ -157,6 +173,7 @@ class ActiveField extends Component
      * it is maintained by various methods of this class.
      */
     public $parts = [];
+
     /**
      * @var bool adds aria HTML attributes `aria-required` and `aria-invalid` for inputs
      *
@@ -169,6 +186,7 @@ class ActiveField extends Component
      * `$options` parameters of the `input*` methods.
      */
     private $_inputId;
+
     /**
      * @var bool if "for" field label attribute should be skipped.
      */
@@ -991,8 +1009,6 @@ class ActiveField extends Component
     /**
      * Adds aria attributes to the input options.
      *
-     * @param $options array input options
-     *
      * @since 2.0.11
      */
     protected function addAriaAttributes(&$options): void
@@ -1014,7 +1030,6 @@ class ActiveField extends Component
     /**
      * Add role attributes to the input options.
      *
-     * @param $options array input options
      * @param string $role
      *
      * @since 2.0.16
@@ -1028,8 +1043,6 @@ class ActiveField extends Component
 
     /**
      * Adds validation class to the input options if needed.
-     *
-     * @param $options array input options
      *
      * @since 2.0.14
      */

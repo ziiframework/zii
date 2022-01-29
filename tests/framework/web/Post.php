@@ -21,6 +21,7 @@ class Post extends BaseObject
      * @var int
      */
     public $id;
+
     /**
      * @var string
      */

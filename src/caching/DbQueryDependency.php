@@ -39,11 +39,13 @@ class DbQueryDependency extends Dependency
      * This field can be left blank, allowing query to determine connection automatically.
      */
     public $db;
+
     /**
      * @var QueryInterface the query which result is used to determine if the dependency has been changed.
      * Actual query method to be invoked is determined by [[method]].
      */
     public $query;
+
     /**
      * @var string|callable method which should be invoked in over the [[query]] object.
      *

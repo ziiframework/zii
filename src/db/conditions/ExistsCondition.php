@@ -26,6 +26,7 @@ class ExistsCondition implements ConditionInterface
      * @var string the operator to use (e.g. `EXISTS` or `NOT EXISTS`)
      */
     private $operator;
+
     /**
      * @var Query the [[Query]] object representing the sub-query.
      */

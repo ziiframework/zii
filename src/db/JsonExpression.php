@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace yii\db;
 
 use JsonSerializable;
+use ReturnTypeWillChange;
 use yii\base\InvalidConfigException;
 
 /**
@@ -36,6 +37,7 @@ class JsonExpression implements ExpressionInterface, JsonSerializable
      * The value must be compatible with [\yii\helpers\Json::encode()|Json::encode()]] input requirements.
      */
     protected $value;
+
     /**
      * @var string|null Type of JSON, expression should be casted to. Defaults to `null`, meaning
      * no explicit casting will be performed.
@@ -95,7 +97,7 @@ class JsonExpression implements ExpressionInterface, JsonSerializable
      *
      * @throws InvalidConfigException when JsonExpression contains QueryInterface object
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function jsonSerialize()
     {
         $value = $this->getValue();

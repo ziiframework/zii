@@ -73,10 +73,12 @@ class BaseYii
      * @see autoload()
      */
     public static $classMap = [];
+
     /**
      * @var \yii\console\Application|\yii\web\Application|\yii\base\Application the application instance
      */
     public static $app;
+
     /**
      * @var array registered path aliases
      *
@@ -84,6 +86,7 @@ class BaseYii
      * @see setAlias()
      */
     public static $aliases = ['@yii' => __DIR__];
+
     /**
      * @var Container the dependency injection (DI) container used by [[createObject()]].
      * You may use [[Container::set()]] to set up the needed dependencies of classes and

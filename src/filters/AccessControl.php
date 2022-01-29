@@ -66,6 +66,7 @@ class AccessControl extends ActionFilter
      * Starting from version 2.0.12, you can set it to `false` to explicitly switch this component support off for the filter.
      */
     public $user = 'user';
+
     /**
      * @var callable a callback that will be called if the access should be denied
      * to the current user. This is the case when either no rule matches, or a rule with
@@ -82,11 +83,13 @@ class AccessControl extends ActionFilter
      * `$rule` can be `null` if access is denied because none of the rules matched.
      */
     public $denyCallback;
+
     /**
      * @var array the default configuration of access rules. Individual rule configurations
      * specified via [[rules]] will take precedence when the same property of the rule is configured.
      */
     public $ruleConfig = ['class' => 'yii\filters\AccessRule'];
+
     /**
      * @var array a list of access rule objects or configuration arrays for creating the rule objects.
      * If a rule is specified via a configuration array, it will be merged with [[ruleConfig]] first

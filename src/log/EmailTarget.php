@@ -53,6 +53,7 @@ class EmailTarget extends Target
      * Note that the "to" option must be set, which specifies the destination email address(es).
      */
     public $message = [];
+
     /**
      * @var MailerInterface|array|string the mailer object or the application component ID of the mailer object.
      * After the EmailTarget object is created, if you want to change this property, you should only assign it

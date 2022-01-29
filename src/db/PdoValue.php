@@ -33,6 +33,7 @@ final class PdoValue implements ExpressionInterface
      * @var mixed
      */
     private $value;
+
     /**
      * @var int One of PDO_PARAM_* constants
      *

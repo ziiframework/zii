@@ -25,6 +25,7 @@ class WidgetEvent extends Event
      * @var mixed the widget result. Event handlers may modify this property to change the widget result.
      */
     public $result;
+
     /**
      * @var bool whether to continue running the widget. Event handlers of
      * [[Widget::EVENT_BEFORE_RUN]] may set this property to decide whether

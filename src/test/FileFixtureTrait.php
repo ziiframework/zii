@@ -26,6 +26,7 @@ trait FileFixtureTrait
      * @var string the directory path or [path alias](guide:concept-aliases) that contains the fixture data
      */
     public $dataDirectory;
+
     /**
      * @var string|bool the file path or [path alias](guide:concept-aliases) of the data file that contains the fixture data
      * to be returned by [[getData()]]. You can set this property to be false to prevent loading any data.

@@ -38,6 +38,7 @@ class Controller extends Component implements ViewContextInterface
      * You may set [[ActionEvent::isValid]] to be false to cancel the action execution.
      */
     public const EVENT_BEFORE_ACTION = 'beforeAction';
+
     /**
      * @event ActionEvent an event raised right after executing a controller action.
      */
@@ -47,15 +48,18 @@ class Controller extends Component implements ViewContextInterface
      * @var string the ID of this controller.
      */
     public $id;
+
     /**
      * @var Module the module that this controller belongs to.
      */
     public $module;
+
     /**
      * @var string the ID of the action that is used when the action ID is not specified
      * in the request. Defaults to 'index'.
      */
     public $defaultAction = 'index';
+
     /**
      * @var string|false|null the name of the layout to be applied to this controller's views.
      * This property mainly affects the behavior of [[render()]].
@@ -63,17 +67,20 @@ class Controller extends Component implements ViewContextInterface
      * If false, no layout will be applied.
      */
     public $layout;
+
     /**
      * @var Action|null the action that is currently being executed. This property will be set
      * by [[run()]] when it is called by [[Application]] to run an action.
      */
     public $action;
+
     /**
      * @var Request|array|string The request.
      *
      * @since 2.0.36
      */
     public $request = 'request';
+
     /**
      * @var Response|array|string The response.
      *
@@ -85,6 +92,7 @@ class Controller extends Component implements ViewContextInterface
      * @var View|null the view object that can be used to render views or view files.
      */
     private $_view;
+
     /**
      * @var string|null the root directory that contains view files for this controller.
      */
@@ -627,7 +635,7 @@ class Controller extends Component implements ViewContextInterface
 
         if (($component = $this->module->get($name, false)) instanceof $typeName) {
             $args[] = $component;
-            $requestedParams[$name] = 'Component: ' . get_class($component) . " \$$name";
+            $requestedParams[$name] = 'Component: ' . $component::class . " \$$name";
         } elseif ($this->module->has($typeName) && ($service = $this->module->get($typeName)) instanceof $typeName) {
             $args[] = $service;
             $requestedParams[$name] = 'Module ' . get_class($this->module) . " DI: $typeName \$$name";

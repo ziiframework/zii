@@ -70,14 +70,17 @@ class AssetManager extends Component
      * ```
      */
     public $bundles = [];
+
     /**
      * @var string the root directory storing the published asset files.
      */
     public $basePath = '@webroot/assets';
+
     /**
      * @var string the base URL through which the published asset files can be accessed.
      */
     public $baseUrl = '@web/assets';
+
     /**
      * @var array mapping from source asset files (keys) to target asset files (values).
      *
@@ -109,6 +112,7 @@ class AssetManager extends Component
      * ```
      */
     public $assetMap = [];
+
     /**
      * @var bool whether to use symbolic link to publish asset files. Defaults to false, meaning
      * asset files are copied to [[basePath]]. Using symbolic links has the benefit that the published
@@ -127,12 +131,14 @@ class AssetManager extends Component
      * ```
      */
     public $linkAssets = false;
+
     /**
      * @var int the permission to be set for newly published asset files.
      * This value will be used by PHP chmod() function. No umask will be applied.
      * If not set, the permission will be determined by the current environment.
      */
     public $fileMode;
+
     /**
      * @var int the permission to be set for newly generated asset directories.
      * This value will be used by PHP chmod() function. No umask will be applied.
@@ -140,6 +146,7 @@ class AssetManager extends Component
      * but read-only for other users.
      */
     public $dirMode = 0775;
+
     /**
      * @var callable a PHP callback that is called before copying each sub-directory or file.
      * This option is used only when publishing a directory. If the callback returns false, the copy
@@ -151,6 +158,7 @@ class AssetManager extends Component
      * This is passed as a parameter `beforeCopy` to [[\yii\helpers\FileHelper::copyDirectory()]].
      */
     public $beforeCopy;
+
     /**
      * @var callable a PHP callback that is called after a sub-directory or file is successfully copied.
      * This option is used only when publishing a directory. The signature of the callback is the same as
@@ -158,6 +166,7 @@ class AssetManager extends Component
      * This is passed as a parameter `afterCopy` to [[\yii\helpers\FileHelper::copyDirectory()]].
      */
     public $afterCopy;
+
     /**
      * @var bool whether the directory being published should be copied even if
      * it is found in the target directory. This option is used only when publishing a directory.
@@ -166,6 +175,7 @@ class AssetManager extends Component
      * significantly degrade the performance.
      */
     public $forceCopy = false;
+
     /**
      * @var bool whether to append a timestamp to the URL of every published asset. When this is true,
      * the URL of a published asset may look like `/path/to/asset?v=timestamp`, where `timestamp` is the
@@ -176,6 +186,7 @@ class AssetManager extends Component
      * @since 2.0.3
      */
     public $appendTimestamp = false;
+
     /**
      * @var callable a callback that will be called to produce hash for asset directory generation.
      * The signature of the callback should be as follows:

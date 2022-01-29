@@ -26,15 +26,18 @@ class MissingTranslationEvent extends Event
      * and set [[translatedMessage]] if possible.
      */
     public $message;
+
     /**
      * @var string the translated message. An event handler may overwrite this property
      * with a translated version of [[message]] if possible. If not set (null), it means the message is not translated.
      */
     public $translatedMessage;
+
     /**
      * @var string the category that the message belongs to
      */
     public $category;
+
     /**
      * @var string the language ID (e.g. en-US) that the message is to be translated to
      */

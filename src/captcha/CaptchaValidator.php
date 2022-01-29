@@ -34,10 +34,12 @@ class CaptchaValidator extends Validator
      * @var bool whether to skip this validator if the input is empty.
      */
     public $skipOnEmpty = false;
+
     /**
      * @var bool whether the comparison is case sensitive. Defaults to false.
      */
     public $caseSensitive = false;
+
     /**
      * @var string the route of the controller action that renders the CAPTCHA image.
      */

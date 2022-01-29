@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace yiiunit\framework\models;
 
 use JsonSerializable;
+use ReturnTypeWillChange;
 use yii\base\DynamicModel;
 
 /**
@@ -28,7 +29,7 @@ class JsonModel extends DynamicModel implements JsonSerializable
     /**
      * @return array
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return $this->data;

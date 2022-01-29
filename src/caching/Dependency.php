@@ -29,6 +29,7 @@ abstract class Dependency extends \yii\base\BaseObject
      * latest dependency data.
      */
     public $data;
+
     /**
      * @var bool whether this dependency is reusable or not. True value means that dependent
      * data for this cache dependency will be generated only once per request. This allows you

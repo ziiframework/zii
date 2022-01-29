@@ -74,17 +74,20 @@ class User extends Component
      * @var string the class name of the [[identity]] object.
      */
     public $identityClass;
+
     /**
      * @var bool whether to enable cookie-based login. Defaults to `false`.
      * Note that this property will be ignored if [[enableSession]] is `false`.
      */
     public $enableAutoLogin = false;
+
     /**
      * @var bool whether to use session to persist authentication status across multiple requests.
      * You set this property to be `false` if your application is stateless, which is often the case
      * for RESTful APIs.
      */
     public $enableSession = true;
+
     /**
      * @var string|array the URL for login when [[loginRequired()]] is called.
      * If an array is given, [[UrlManager::createUrl()]] will be called to create the corresponding URL.
@@ -98,12 +101,14 @@ class User extends Component
      * If this property is `null`, a 403 HTTP exception will be raised when [[loginRequired()]] is called.
      */
     public $loginUrl = ['site/login'];
+
     /**
      * @var array the configuration of the identity cookie. This property is used only when [[enableAutoLogin]] is `true`.
      *
      * @see Cookie
      */
     public $identityCookie = ['name' => '_identity', 'httpOnly' => true];
+
     /**
      * @var int the number of seconds in which the user will be logged out automatically if the user
      * remains inactive. If this property is not set, the user will be logged out after
@@ -111,6 +116,7 @@ class User extends Component
      * Note that this will not work if [[enableAutoLogin]] is `true`.
      */
     public $authTimeout;
+
     /**
      * @var CheckAccessInterface|string|array The access checker object to use for checking access or the application
      * component ID of the access checker.
@@ -119,12 +125,14 @@ class User extends Component
      * @since 2.0.9
      */
     public $accessChecker;
+
     /**
      * @var int the number of seconds in which the user will be logged out automatically
      * regardless of activity.
      * Note that this will not work if [[enableAutoLogin]] is `true`.
      */
     public $absoluteAuthTimeout;
+
     /**
      * @var bool whether to automatically renew the identity cookie each time a page is requested.
      * This property is effective only when [[enableAutoLogin]] is `true`.
@@ -135,30 +143,36 @@ class User extends Component
      * @see enableAutoLogin
      */
     public $autoRenewCookie = true;
+
     /**
      * @var string the session variable name used to store the value of [[id]].
      */
     public $idParam = '__id';
+
     /**
      * @var string the session variable name used to store authentication key.
      *
      * @since 2.0.41
      */
     public $authKeyParam = '__authKey';
+
     /**
      * @var string the session variable name used to store the value of expiration timestamp of the authenticated state.
      * This is used when [[authTimeout]] is set.
      */
     public $authTimeoutParam = '__expire';
+
     /**
      * @var string the session variable name used to store the value of absolute expiration timestamp of the authenticated state.
      * This is used when [[absoluteAuthTimeout]] is set.
      */
     public $absoluteAuthTimeoutParam = '__absoluteExpire';
+
     /**
      * @var string the session variable name used to store the value of [[returnUrl]].
      */
     public $returnUrlParam = '__returnUrl';
+
     /**
      * @var array MIME types for which this component should redirect to the [[loginUrl]].
      *

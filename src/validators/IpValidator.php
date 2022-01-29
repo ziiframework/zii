@@ -82,14 +82,17 @@ class IpValidator extends Validator
         'documentation' => ['192.0.2.0/24', '198.51.100.0/24', '203.0.113.0/24', '2001:db8::/32'],
         'system' => ['multicast', 'linklocal', 'localhost', 'documentation'],
     ];
+
     /**
      * @var bool whether the validating value can be an IPv6 address. Defaults to `true`.
      */
     public $ipv6 = true;
+
     /**
      * @var bool whether the validating value can be an IPv4 address. Defaults to `true`.
      */
     public $ipv4 = true;
+
     /**
      * @var bool whether the address can be an IP with CIDR subnet, like `192.168.10.0/24`.
      * The following values are possible:
@@ -99,6 +102,7 @@ class IpValidator extends Validator
      * - `null` - specifying a subnet is optional.
      */
     public $subnet = false;
+
     /**
      * @var bool whether to add the CIDR prefix with the smallest length (32 for IPv4 and 128 for IPv6) to an
      * address without it. Works only when `subnet` is not `false`. For example:
@@ -109,24 +113,29 @@ class IpValidator extends Validator
      * @see subnet
      */
     public $normalize = false;
+
     /**
      * @var bool whether address may have a [[NEGATION_CHAR]] character at the beginning.
      * Defaults to `false`.
      */
     public $negation = false;
+
     /**
      * @var bool whether to expand an IPv6 address to the full notation format.
      * Defaults to `false`.
      */
     public $expandIPv6 = false;
+
     /**
      * @var string Regexp-pattern to validate IPv4 address
      */
     public $ipv4Pattern = '/^(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))$/';
+
     /**
      * @var string Regexp-pattern to validate IPv6 address
      */
     public $ipv6Pattern = '/^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$/';
+
     /**
      * @var string user-defined error message is used when validation fails due to the wrong IP address format.
      *
@@ -136,6 +145,7 @@ class IpValidator extends Validator
      * - `{value}`: the value of the attribute being validated
      */
     public $message;
+
     /**
      * @var string user-defined error message is used when validation fails due to the disabled IPv6 validation.
      *
@@ -147,6 +157,7 @@ class IpValidator extends Validator
      * @see ipv6
      */
     public $ipv6NotAllowed;
+
     /**
      * @var string user-defined error message is used when validation fails due to the disabled IPv4 validation.
      *
@@ -158,6 +169,7 @@ class IpValidator extends Validator
      * @see ipv4
      */
     public $ipv4NotAllowed;
+
     /**
      * @var string user-defined error message is used when validation fails due to the wrong CIDR.
      *
@@ -169,6 +181,7 @@ class IpValidator extends Validator
      * @see subnet
      */
     public $wrongCidr;
+
     /**
      * @var string user-defined error message is used when validation fails due to subnet [[subnet]] set to 'only',
      * but the CIDR prefix is not set.
@@ -181,6 +194,7 @@ class IpValidator extends Validator
      * @see subnet
      */
     public $noSubnet;
+
     /**
      * @var string user-defined error message is used when validation fails
      * due to [[subnet]] is false, but CIDR prefix is present.
@@ -193,6 +207,7 @@ class IpValidator extends Validator
      * @see subnet
      */
     public $hasSubnet;
+
     /**
      * @var string user-defined error message is used when validation fails due to IP address
      * is not not allowed by [[ranges]] check.

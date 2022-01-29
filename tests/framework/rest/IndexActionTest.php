@@ -77,22 +77,13 @@ class IndexActionTest extends TestCase
      * @param array $params
      * @param string $expectedRawSql
      */
-    public function testPrepareDataProviderWithPaginationAndSorting(
-        $pagination,
-        $sort,
-        $expectedPaginationPageSize = null,
-        $expectedPaginationDefaultPageSize = null,
-        $expectedSortOrders = [],
-        $expectedSortDefaultOrder = null
-    ) {
+    public function testPrepareDataProviderWithPaginationAndSorting($pagination, $sort, $expectedPaginationPageSize = null, $expectedPaginationDefaultPageSize = null, $expectedSortOrders = [], $expectedSortDefaultOrder = null): void {
         Yii::$app->getRequest()->setBodyParams([
             'per-page' => 11,
-            'sort' => '-test-sort'
+            'sort' => '-test-sort',
         ]);
 
-        $controller = new RestController(
-            'rest',
-            new Module('rest'), [
+        $controller = new RestController('rest', new Module('rest'), [
             'modelClass' => IndexActionModel::className(),
             'actions' => [
                 'index' => [
@@ -126,6 +117,7 @@ class IndexActionTest extends TestCase
 
     /**
      * Data provider for [[testPrepareDataProviderWithPaginationAndSorting()]].
+     *
      * @return array test data
      */
     public function dataProviderTestPrepareDataProviderWithPaginationAndSorting()
@@ -137,7 +129,7 @@ class IndexActionTest extends TestCase
                 11, // page size set as param in test
                 (new Pagination())->defaultPageSize,
                 [],
-                null
+                null,
             ],
             [ // Default config
                 [],
@@ -147,7 +139,7 @@ class IndexActionTest extends TestCase
                 11, // page size set as param in test
                 (new Pagination())->defaultPageSize,
                 ['test-sort' => SORT_DESC], // test sort set as param in test
-                null
+                null,
             ],
             [ // Config via array
                 [
@@ -163,7 +155,7 @@ class IndexActionTest extends TestCase
                 12,
                 991,
                 ['test-sort' => SORT_DESC], // test sort set as param in test
-                ['created_at_1' => SORT_DESC]
+                ['created_at_1' => SORT_DESC],
             ],
             [ // Config via objects
                 new Pagination([
@@ -178,12 +170,12 @@ class IndexActionTest extends TestCase
                 11, // page size set as param in test
                 992,
                 ['created_at_2' => SORT_DESC], // test sort set as param in test is ignored
-                ['created_at_2' => SORT_DESC]
+                ['created_at_2' => SORT_DESC],
             ],
             [ // Disable pagination and sort
                 false,
                 false,
-            ]
+            ],
         ];
     }
 }

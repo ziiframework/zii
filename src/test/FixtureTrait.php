@@ -215,7 +215,7 @@ trait FixtureTrait
 
         while (($fixture = array_pop($stack)) !== null) {
             if ($fixture instanceof Fixture) {
-                $class = get_class($fixture);
+                $class = $fixture::class;
                 $name = $aliases[$class] ?? $class;
                 unset($instances[$name]);  // unset so that the fixture is added to the last in the next line
                 $instances[$name] = $fixture;

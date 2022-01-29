@@ -40,10 +40,12 @@ class UrlRule extends BaseObject implements UrlRuleInterface
      * Set [[mode]] with this value to mark that this rule is for URL parsing only.
      */
     public const PARSING_ONLY = 1;
+
     /**
      * Set [[mode]] with this value to mark that this rule is for URL creation only.
      */
     public const CREATION_ONLY = 2;
+
     /**
      * Represents the successful URL generation by last [[createUrl()]] call.
      *
@@ -51,6 +53,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
      * @since 2.0.12
      */
     public const CREATE_STATUS_SUCCESS = 0;
+
     /**
      * Represents the unsuccessful URL generation by last [[createUrl()]] call, because rule does not support
      * creating URLs.
@@ -59,6 +62,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
      * @since 2.0.12
      */
     public const CREATE_STATUS_PARSING_ONLY = 1;
+
     /**
      * Represents the unsuccessful URL generation by last [[createUrl()]] call, because of mismatched route.
      *
@@ -66,6 +70,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
      * @since 2.0.12
      */
     public const CREATE_STATUS_ROUTE_MISMATCH = 2;
+
     /**
      * Represents the unsuccessful URL generation by last [[createUrl()]] call, because of mismatched
      * or missing parameters.
@@ -79,6 +84,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
      * @var string the name of this rule. If not set, it will use [[pattern]] as the name.
      */
     public $name;
+
     /**
      * On the rule initialization, the [[pattern]] matching parameters names will be replaced with [[placeholders]].
      *
@@ -88,28 +94,33 @@ class UrlRule extends BaseObject implements UrlRuleInterface
      * @see placeholders
      */
     public $pattern;
+
     /**
      * @var string|null the pattern used to parse and create the host info part of a URL (e.g. `http://example.com`).
      *
      * @see pattern
      */
     public $host;
+
     /**
      * @var string the route to the controller action
      */
     public $route;
+
     /**
      * @var array the default GET parameters (name => value) that this rule provides.
      * When this rule is used to parse the incoming request, the values declared in this property
      * will be injected into $_GET.
      */
     public $defaults = [];
+
     /**
      * @var string the URL suffix used for this rule.
      * For example, ".html" can be used so that the URL looks like pointing to a static HTML page.
      * If not set, the value of [[UrlManager::suffix]] will be used.
      */
     public $suffix;
+
     /**
      * @var string|array the HTTP verb (e.g. GET, POST, DELETE) that this rule should match.
      * Use array to represent multiple verbs that this rule may match.
@@ -117,6 +128,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
      * Note that this property is only used when parsing a request. It is ignored for URL creation.
      */
     public $verb;
+
     /**
      * @var int a value indicating if this rule should be used for both request parsing and URL creation,
      * parsing only, or creation only.
@@ -125,10 +137,12 @@ class UrlRule extends BaseObject implements UrlRuleInterface
      * If it is [[CREATION_ONLY]], the rule is for URL creation only.
      */
     public $mode;
+
     /**
      * @var bool a value indicating if parameters should be url encoded.
      */
     public $encodeParams = true;
+
     /**
      * @var UrlNormalizer|array|false|null the configuration for [[UrlNormalizer]] used by this rule.
      * If `null`, [[UrlManager::normalizer]] will be used, if `false`, normalization will be skipped
@@ -144,6 +158,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
      * @since 2.0.12
      */
     protected $createStatus;
+
     /**
      * @var array list of placeholders for matching parameters names. Used in [[parseRequest()]], [[createUrl()]].
      * On the rule initialization, the [[pattern]] parameters names will be replaced with placeholders.
@@ -160,14 +175,17 @@ class UrlRule extends BaseObject implements UrlRuleInterface
      * @var string the template for generating a new URL. This is derived from [[pattern]] and is used in generating URL.
      */
     private $_template;
+
     /**
      * @var string the regex for matching the route part. This is used in generating URL.
      */
     private $_routeRule;
+
     /**
      * @var array list of regex for matching parameters. This is used in generating URL.
      */
     private $_paramRules = [];
+
     /**
      * @var array list of parameters used in the route.
      */

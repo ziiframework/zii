@@ -32,11 +32,13 @@ class DbDependency extends Dependency
      * @var string the application component ID of the DB connection.
      */
     public $db = 'db';
+
     /**
      * @var string the SQL query whose result is used to determine if the dependency has been changed.
      * Only the first row of the query result will be used.
      */
     public $sql;
+
     /**
      * @var array the parameters (name => value) to be bound to the SQL statement specified by [[sql]].
      */

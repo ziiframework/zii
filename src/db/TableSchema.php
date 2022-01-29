@@ -28,24 +28,29 @@ class TableSchema extends BaseObject
      * @var string the name of the schema that this table belongs to.
      */
     public $schemaName;
+
     /**
      * @var string the name of this table. The schema name is not included. Use [[fullName]] to get the name with schema name prefix.
      */
     public $name;
+
     /**
      * @var string the full name of this table, which includes the schema name prefix, if any.
      * Note that if the schema name is the same as the [[Schema::defaultSchema|default schema name]],
      * the schema name will not be included.
      */
     public $fullName;
+
     /**
      * @var string[] primary keys of this table.
      */
     public $primaryKey = [];
+
     /**
      * @var string sequence name for the primary key. Null if no sequence.
      */
     public $sequenceName;
+
     /**
      * @var array foreign keys of this table. Each array element is of the following structure:
      *
@@ -58,6 +63,7 @@ class TableSchema extends BaseObject
      * ```
      */
     public $foreignKeys = [];
+
     /**
      * @var ColumnSchema[] column metadata of this table. Each array element is a [[ColumnSchema]] object, indexed by column names.
      */

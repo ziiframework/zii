@@ -30,6 +30,7 @@ class ChainedDependency extends Dependency
      * Each array element must be a dependency object.
      */
     public $dependencies = [];
+
     /**
      * @var bool whether this dependency is depending on every dependency in [[dependencies]].
      * Defaults to true, meaning if any of the dependencies has changed, this dependency is considered changed.

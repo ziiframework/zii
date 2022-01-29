@@ -12,6 +12,7 @@ namespace yii\db;
 
 use Closure;
 use ReflectionMethod;
+use ReturnTypeWillChange;
 use Throwable;
 use Yii;
 use yii\base\InvalidArgumentException;
@@ -52,37 +53,45 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      * @event Event an event that is triggered when the record is initialized via [[init()]].
      */
     public const EVENT_INIT = 'init';
+
     /**
      * @event Event an event that is triggered after the record is created and populated with query result.
      */
     public const EVENT_AFTER_FIND = 'afterFind';
+
     /**
      * @event ModelEvent an event that is triggered before inserting a record.
      * You may set [[ModelEvent::isValid]] to be `false` to stop the insertion.
      */
     public const EVENT_BEFORE_INSERT = 'beforeInsert';
+
     /**
      * @event AfterSaveEvent an event that is triggered after a record is inserted.
      */
     public const EVENT_AFTER_INSERT = 'afterInsert';
+
     /**
      * @event ModelEvent an event that is triggered before updating a record.
      * You may set [[ModelEvent::isValid]] to be `false` to stop the update.
      */
     public const EVENT_BEFORE_UPDATE = 'beforeUpdate';
+
     /**
      * @event AfterSaveEvent an event that is triggered after a record is updated.
      */
     public const EVENT_AFTER_UPDATE = 'afterUpdate';
+
     /**
      * @event ModelEvent an event that is triggered before deleting a record.
      * You may set [[ModelEvent::isValid]] to be `false` to stop the deletion.
      */
     public const EVENT_BEFORE_DELETE = 'beforeDelete';
+
     /**
      * @event Event an event that is triggered after a record is deleted.
      */
     public const EVENT_AFTER_DELETE = 'afterDelete';
+
     /**
      * @event Event an event that is triggered after a record is refreshed.
      *
@@ -94,15 +103,18 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      * @var array attribute values indexed by attribute names
      */
     private $_attributes = [];
+
     /**
      * @var array|null old attribute values indexed by attribute names.
      * This is `null` if the record [[isNewRecord|is new]].
      */
     private $_oldAttributes;
+
     /**
      * @var array related models indexed by the relation names
      */
     private $_related = [];
+
     /**
      * @var array relation names indexed by their link attributes
      */
@@ -1198,7 +1210,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
             return false;
         }
 
-        return static::class === get_class($record) && $this->getPrimaryKey() === $record->getPrimaryKey();
+        return static::class === $record::class && $this->getPrimaryKey() === $record->getPrimaryKey();
     }
 
     /**
@@ -1332,7 +1344,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      *
      * @return bool whether there is an element at the specified offset.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return $this->__isset($offset);
@@ -1724,7 +1736,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
             $value = $primaryModel->$pk;
 
             if ($value === null) {
-                throw new InvalidCallException('Unable to link models: the primary key of ' . get_class($primaryModel) . ' is null.');
+                throw new InvalidCallException('Unable to link models: the primary key of ' . $primaryModel::class . ' is null.');
             }
 
             if (is_array($foreignModel->$fk)) { // relation via array valued attribute

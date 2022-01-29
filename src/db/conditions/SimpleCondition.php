@@ -25,10 +25,12 @@ class SimpleCondition implements ConditionInterface
      * @var string the operator to use. Anything could be used e.g. `>`, `<=`, etc.
      */
     private $operator;
+
     /**
      * @var mixed the column name to the left of [[operator]]
      */
     private $column;
+
     /**
      * @var mixed the value to the right of the [[operator]]
      */

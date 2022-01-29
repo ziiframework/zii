@@ -15,6 +15,7 @@ use ArrayObject;
 use DateTime;
 use DateTimeZone;
 use Iterator;
+use ReturnTypeWillChange;
 use stdClass;
 use yii\base\BaseObject;
 use yii\base\Model;
@@ -1445,6 +1446,7 @@ class Post2 extends BaseObject
 class Post3 extends BaseObject
 {
     public $id = 33;
+
     /** @var BaseObject */
     public $subObject;
 
@@ -1464,7 +1466,7 @@ class ArrayAccessibleObject implements ArrayAccess
         $this->container = $container;
     }
 
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetSet($offset, $value): void
     {
         if (is_null($offset)) {
@@ -1474,19 +1476,19 @@ class ArrayAccessibleObject implements ArrayAccess
         }
     }
 
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return array_key_exists($offset, $this->container);
     }
 
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetUnset($offset): void
     {
         unset($this->container[$offset]);
     }
 
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->offsetExists($offset) ? $this->container[$offset] : null;
@@ -1511,31 +1513,31 @@ class TraversableArrayAccessibleObject extends ArrayAccessibleObject implements 
         return array_key_exists($keyIndex, $keys) ? $keys[$keyIndex] : false;
     }
 
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function rewind(): void
     {
         $this->position = 0;
     }
 
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function current()
     {
         return $this->offsetGet($this->getContainerKey($this->position));
     }
 
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function key()
     {
         return $this->getContainerKey($this->position);
     }
 
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function next(): void
     {
         ++$this->position;
     }
 
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function valid()
     {
         $key = $this->getContainerKey($this->position);

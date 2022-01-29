@@ -54,10 +54,12 @@ class FixtureController extends Controller
      * @var string controller default action ID.
      */
     public $defaultAction = 'load';
+
     /**
      * @var string default namespace to search fixtures in
      */
     public $namespace = 'tests\unit\fixtures';
+
     /**
      * @var array global fixtures that should be applied when loading and unloading. By default it is set to `InitDbFixture`
      * that disables and enables integrity check, so your data can be safely loaded.

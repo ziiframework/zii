@@ -89,6 +89,7 @@ class Sort extends BaseObject
      * Defaults to `false`, which means each time the data can only be sorted by one attribute.
      */
     public $enableMultiSort = false;
+
     /**
      * @var array list of attributes that are allowed to be sorted. Its syntax can be
      * described using the following example:
@@ -143,6 +144,7 @@ class Sort extends BaseObject
      * to configure every attribute. Each attribute must include these elements: `asc` and `desc`.
      */
     public $attributes = [];
+
     /**
      * @var string the name of the parameter that specifies which attributes to be sorted
      * in which direction. Defaults to `sort`.
@@ -150,6 +152,7 @@ class Sort extends BaseObject
      * @see params
      */
     public $sortParam = 'sort';
+
     /**
      * @var array the order that should be used when the current request does not specify any order.
      * The array keys are attribute names and the array values are the corresponding sort directions. For example,
@@ -164,15 +167,18 @@ class Sort extends BaseObject
      * @see attributeOrders
      */
     public $defaultOrder;
+
     /**
      * @var string the route of the controller action for displaying the sorted contents.
      * If not set, it means using the currently requested route.
      */
     public $route;
+
     /**
      * @var string the character used to separate different attributes that need to be sorted by.
      */
     public $separator = ',';
+
     /**
      * @var array parameters (name => value) that should be used to obtain the current sort directions
      * and to create new sort URLs. If not set, `$_GET` will be used instead.
@@ -186,11 +192,13 @@ class Sort extends BaseObject
      * @see defaultOrder
      */
     public $params;
+
     /**
      * @var \yii\web\UrlManager the URL manager used for creating sort URLs. If not set,
      * the `urlManager` application component will be used.
      */
     public $urlManager;
+
     /**
      * @var int Allow to control a value of the fourth parameter which will be
      * passed to [[ArrayHelper::multisort()]]

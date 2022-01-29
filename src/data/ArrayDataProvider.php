@@ -64,12 +64,14 @@ class ArrayDataProvider extends BaseDataProvider
      * @see getKeys()
      */
     public $key;
+
     /**
      * @var array the data that is not paginated or sorted. When pagination is enabled,
      * this property usually contains more elements than [[models]].
      * The array elements must use zero-based integer keys.
      */
     public $allModels;
+
     /**
      * @var string the name of the [[\yii\base\Model|Model]] class that will be represented.
      * This property is used to get columns' names.

@@ -33,6 +33,7 @@ class AssetControllerTest extends TestCase
      * @var string path for the test files
      */
     protected $testFilePath = '';
+
     /**
      * @var string test assets path
      */
@@ -206,7 +207,7 @@ class AssetControllerTest extends TestCase
     protected function invokeAssetControllerMethod($methodName, array $args = [])
     {
         $controller = $this->createAssetController();
-        $controllerClassReflection = new ReflectionClass(get_class($controller));
+        $controllerClassReflection = new ReflectionClass($controller::class);
         $methodReflection = $controllerClassReflection->getMethod($methodName);
         $methodReflection->setAccessible(true);
         $result = $methodReflection->invokeArgs($controller, $args);

@@ -50,6 +50,7 @@ class CheckboxColumn extends Column
      * @var string the name of the input checkbox input fields. This will be appended with `[]` to ensure it is an array.
      */
     public $name = 'selection';
+
     /**
      * @var array|Closure the HTML attributes for checkboxes. This can either be an array of
      * attributes or an anonymous function ([[Closure]]) that returns such an array.
@@ -69,10 +70,12 @@ class CheckboxColumn extends Column
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $checkboxOptions = [];
+
     /**
      * @var bool whether it is possible to select multiple rows. Defaults to `true`.
      */
     public $multiple = true;
+
     /**
      * @var string the css class that will be used to find the checkboxes.
      *

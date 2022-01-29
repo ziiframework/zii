@@ -60,6 +60,7 @@ class ExistValidator extends Validator
      * @see targetAttribute
      */
     public $targetClass;
+
     /**
      * @var string|array the name of the ActiveRecord attribute that should be used to
      * validate the existence of the current attribute value. If not set, it will use the name
@@ -68,6 +69,7 @@ class ExistValidator extends Validator
      * the array value is the name of the database field to search.
      */
     public $targetAttribute;
+
     /**
      * @var string the name of the relation that should be used to validate the existence of the current attribute value
      * This param overwrites $targetClass and $targetAttribute
@@ -75,6 +77,7 @@ class ExistValidator extends Validator
      * @since 2.0.14
      */
     public $targetRelation;
+
     /**
      * @var string|array|Closure additional filter to be applied to the DB query used to check the existence of the attribute value.
      * This can be a string or an array representing the additional query condition (refer to [[\yii\db\Query::where()]]
@@ -82,16 +85,19 @@ class ExistValidator extends Validator
      * is the [[\yii\db\Query|Query]] object that you can modify in the function.
      */
     public $filter;
+
     /**
      * @var bool whether to allow array type attribute.
      */
     public $allowArray = false;
+
     /**
      * @var string and|or define how target attributes are related
      *
      * @since 2.0.11
      */
     public $targetAttributeJunction = 'and';
+
     /**
      * @var bool whether this validator is forced to always use master DB
      *
@@ -132,6 +138,7 @@ class ExistValidator extends Validator
     private function checkTargetRelationExistence($model, $attribute): void
     {
         $exists = false;
+
         /** @var ActiveQuery $relationQuery */
         $relationQuery = $model->{'get' . ucfirst($this->targetRelation)}();
 
@@ -236,7 +243,7 @@ class ExistValidator extends Validator
      */
     private function getTargetClass($model)
     {
-        return $this->targetClass === null ? get_class($model) : $this->targetClass;
+        return $this->targetClass === null ? $model::class : $this->targetClass;
     }
 
     /**

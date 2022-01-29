@@ -51,6 +51,7 @@ class ActiveDataFilter extends DataFilter
         'NOT IN' => 'buildOperatorCondition',
         'LIKE' => 'buildOperatorCondition',
     ];
+
     /**
      * @var array map filtering operators to operators used in [[\yii\db\QueryInterface::where()]].
      * The format is: `[filterOperator => queryOperator]`.

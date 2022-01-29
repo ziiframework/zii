@@ -29,14 +29,17 @@ class Column extends BaseObject
      * @var GridView the grid view object that owns this column.
      */
     public $grid;
+
     /**
      * @var string|null the header cell content. Note that it will not be HTML-encoded.
      */
     public $header;
+
     /**
      * @var string the footer cell content. Note that it will not be HTML-encoded.
      */
     public $footer;
+
     /**
      * @var callable This is a callable that will be used to generate the content of each cell.
      * The signature of the function should be the following: `function ($model, $key, $index, $column)`.
@@ -44,22 +47,26 @@ class Column extends BaseObject
      * and `$column` is a reference to the [[Column]] object.
      */
     public $content;
+
     /**
      * @var bool whether this column is visible. Defaults to true.
      */
     public $visible = true;
+
     /**
      * @var array the HTML attributes for the column group tag.
      *
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $options = [];
+
     /**
      * @var array the HTML attributes for the header cell tag.
      *
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $headerOptions = [];
+
     /**
      * @var array|Closure the HTML attributes for the data cell tag. This can either be an array of
      * attributes or an anonymous function ([[Closure]]) that returns such an array.
@@ -71,12 +78,14 @@ class Column extends BaseObject
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $contentOptions = [];
+
     /**
      * @var array the HTML attributes for the footer cell tag.
      *
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $footerOptions = [];
+
     /**
      * @var array the HTML attributes for the filter cell tag.
      *

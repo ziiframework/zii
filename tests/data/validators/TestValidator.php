@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace yiiunit\data\validators;
 
-use function get_class;
 use yii\validators\Validator;
 
 class TestValidator extends Validator
@@ -23,7 +22,7 @@ class TestValidator extends Validator
         $this->markAttributeValidated($attribute);
 
         if ($this->_setErrorOnValidateAttribute == true) {
-            $this->addError($object, $attribute, sprintf('%s##%s', $attribute, get_class($object)));
+            $this->addError($object, $attribute, sprintf('%s##%s', $attribute, $object::class));
         }
     }
 

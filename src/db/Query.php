@@ -66,16 +66,19 @@ class Query extends Component implements QueryInterface, ExpressionInterface
      * @see select()
      */
     public $select;
+
     /**
      * @var string additional option that should be appended to the 'SELECT' keyword. For example,
      * in MySQL, the option 'SQL_CALC_FOUND_ROWS' can be used.
      */
     public $selectOption;
+
     /**
      * @var bool whether to select distinct rows of data only. If this is set true,
      * the SELECT clause would be changed to SELECT DISTINCT.
      */
     public $distinct;
+
     /**
      * @var array the table(s) to be selected from. For example, `['user', 'post']`.
      * This is used to construct the FROM clause in a SQL statement.
@@ -83,11 +86,13 @@ class Query extends Component implements QueryInterface, ExpressionInterface
      * @see from()
      */
     public $from;
+
     /**
      * @var array how to group the query results. For example, `['company', 'department']`.
      * This is used to construct the GROUP BY clause in a SQL statement.
      */
     public $groupBy;
+
     /**
      * @var array how to join with other tables. Each array element represents the specification
      * of one join which has the following structure:
@@ -106,11 +111,13 @@ class Query extends Component implements QueryInterface, ExpressionInterface
      * ```
      */
     public $join;
+
     /**
      * @var string|array|ExpressionInterface the condition to be applied in the GROUP BY clause.
      * It can be either a string or an array. Please refer to [[where()]] on how to specify the condition.
      */
     public $having;
+
     /**
      * @var array this is used to construct the UNION clause(s) in a SQL statement.
      * Each array element is an array of the following structure:
@@ -119,6 +126,7 @@ class Query extends Component implements QueryInterface, ExpressionInterface
      * - `all`: boolean, whether it should be `UNION ALL` or `UNION`
      */
     public $union;
+
     /**
      * @var array this is used to construct the WITH section in a SQL query.
      * Each array element is an array of the following structure:
@@ -131,11 +139,13 @@ class Query extends Component implements QueryInterface, ExpressionInterface
      * @since 2.0.35
      */
     public $withQueries;
+
     /**
      * @var array list of query parameter values indexed by parameter placeholders.
      * For example, `[':name' => 'Dan', ':age' => 31]`.
      */
     public $params = [];
+
     /**
      * @var int|true the default number of seconds that query results can remain valid in cache.
      * Use 0 to indicate that the cached data will never expire.
@@ -146,6 +156,7 @@ class Query extends Component implements QueryInterface, ExpressionInterface
      * @since 2.0.14
      */
     public $queryCacheDuration;
+
     /**
      * @var \yii\caching\Dependency the dependency to be associated with the cached query result for this query
      *

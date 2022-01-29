@@ -78,6 +78,7 @@ class MemCache extends Cache
      * Defaults to false.
      */
     public $useMemcached = false;
+
     /**
      * @var string an ID that identifies a Memcached instance. This property is used only when [[useMemcached]] is true.
      * By default the Memcached instances are destroyed at the end of the request. To create an instance that
@@ -87,18 +88,21 @@ class MemCache extends Cache
      * @see https://www.php.net/manual/en/memcached.construct.php
      */
     public $persistentId;
+
     /**
      * @var array options for Memcached. This property is used only when [[useMemcached]] is true.
      *
      * @see https://www.php.net/manual/en/memcached.setoptions.php
      */
     public $options;
+
     /**
      * @var string memcached sasl username. This property is used only when [[useMemcached]] is true.
      *
      * @see https://www.php.net/manual/en/memcached.setsaslauthdata.php
      */
     public $username;
+
     /**
      * @var string memcached sasl password. This property is used only when [[useMemcached]] is true.
      *
@@ -110,6 +114,7 @@ class MemCache extends Cache
      * @var \Memcache|Memcached the Memcache instance
      */
     private $_cache;
+
     /**
      * @var array list of memcache server configurations
      */

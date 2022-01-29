@@ -41,6 +41,7 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
      * You may set [[MailEvent::isValid]] to be false to cancel the send.
      */
     public const EVENT_BEFORE_SEND = 'beforeSend';
+
     /**
      * @event MailEvent an event raised right after send.
      */
@@ -55,11 +56,13 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
      * - a boolean false: the layout is disabled.
      */
     public $htmlLayout = 'layouts/html';
+
     /**
      * @var string|bool text layout view name. This is the layout used to render TEXT mail body.
      * Please refer to [[htmlLayout]] for possible values that this property can take.
      */
     public $textLayout = 'layouts/text';
+
     /**
      * @var array the configuration that should be applied to any newly created
      * email message instance by [[createMessage()]] or [[compose()]]. Any valid property defined
@@ -76,10 +79,12 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
      * ```
      */
     public $messageConfig = [];
+
     /**
      * @var string the default class name of the new message instances created by [[createMessage()]]
      */
     public $messageClass = 'yii\mail\BaseMessage';
+
     /**
      * @var bool whether to save email messages as files under [[fileTransportPath]] instead of sending them
      * to the actual recipients. This is usually used during development for debugging purpose.
@@ -87,10 +92,12 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
      * @see fileTransportPath
      */
     public $useFileTransport = false;
+
     /**
      * @var string the directory where the email messages are saved when [[useFileTransport]] is true.
      */
     public $fileTransportPath = '@runtime/mail';
+
     /**
      * @var callable a PHP callback that will be called by [[send()]] when [[useFileTransport]] is true.
      * The callback should return a file name which will be used to save the email message.
@@ -108,6 +115,7 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
      * @var \yii\base\View|array view instance or its array configuration.
      */
     private $_view = [];
+
     /**
      * @var string the directory containing view files for composing mail messages.
      */

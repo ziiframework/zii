@@ -472,6 +472,7 @@ class FileValidatorTest extends TestCase
     public function testIssue11012(): void
     {
         $baseName = '飛兒樂團光茫';
+
         /** @var UploadedFile $file */
         $file = $this->createTestFiles([
             ['name' => $baseName . '.txt'],

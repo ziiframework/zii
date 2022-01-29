@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace yiiunit\framework\rest;
 
 use JsonSerializable;
+use ReturnTypeWillChange;
 use Yii;
 use yii\base\Model;
 use yii\data\ArrayDataProvider;
@@ -528,7 +529,7 @@ class TestModel3 extends Model implements JsonSerializable
         return static::$extraFields;
     }
 
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return $this->getAttributes();
@@ -539,7 +540,7 @@ class TestModel4 implements JsonSerializable
     public $field5 = 'test5';
     public $field6 = 'test6';
 
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return [

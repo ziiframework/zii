@@ -68,6 +68,7 @@ class AttributeBehavior extends Behavior
      * ```
      */
     public $attributes = [];
+
     /**
      * @var mixed the value that will be assigned to the current attributes. This can be an anonymous function,
      * callable in array format (e.g. `[$this, 'methodName']`), an [[\yii\db\Expression|Expression]] object representing a DB expression
@@ -83,6 +84,7 @@ class AttributeBehavior extends Behavior
      * ```
      */
     public $value;
+
     /**
      * @var bool whether to skip this behavior when the `$owner` has not been
      * modified
@@ -90,6 +92,7 @@ class AttributeBehavior extends Behavior
      * @since 2.0.8
      */
     public $skipUpdateOnClean = true;
+
     /**
      * @var bool whether to preserve non-empty attribute values.
      *

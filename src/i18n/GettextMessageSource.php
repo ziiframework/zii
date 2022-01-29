@@ -40,14 +40,17 @@ class GettextMessageSource extends MessageSource
      * @var string base directory of messages files
      */
     public $basePath = '@app/messages';
+
     /**
      * @var string sub-directory of messages files
      */
     public $catalog = 'messages';
+
     /**
      * @var bool whether to use generated MO files
      */
     public $useMoFile = true;
+
     /**
      * @var bool whether to use big-endian when reading and writing an integer
      */

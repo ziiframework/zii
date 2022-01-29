@@ -49,22 +49,27 @@ class DbManager extends BaseManager
      * Starting from version 2.0.2, this can also be a configuration array for creating the object.
      */
     public $db = 'db';
+
     /**
      * @var string the name of the table storing authorization items. Defaults to "auth_item".
      */
     public $itemTable = '{{%auth_item}}';
+
     /**
      * @var string the name of the table storing authorization item hierarchy. Defaults to "auth_item_child".
      */
     public $itemChildTable = '{{%auth_item_child}}';
+
     /**
      * @var string the name of the table storing authorization item assignments. Defaults to "auth_assignment".
      */
     public $assignmentTable = '{{%auth_assignment}}';
+
     /**
      * @var string the name of the table storing rules. Defaults to "auth_rule".
      */
     public $ruleTable = '{{%auth_rule}}';
+
     /**
      * @var CacheInterface|array|string the cache used to improve RBAC performance. This can be one of the following:
      *
@@ -85,6 +90,7 @@ class DbManager extends BaseManager
      * @since 2.0.3
      */
     public $cache;
+
     /**
      * @var string the key used to store RBAC data in cache
      *
@@ -97,14 +103,17 @@ class DbManager extends BaseManager
      * @var Item[] all auth items (name => Item)
      */
     protected $items;
+
     /**
      * @var Rule[] all auth rules (name => Rule)
      */
     protected $rules;
+
     /**
      * @var array auth item parent-child relationships (childName => list of parents)
      */
     protected $parents;
+
     /**
      * @var array user assignments (user id => Assignment[])
      *

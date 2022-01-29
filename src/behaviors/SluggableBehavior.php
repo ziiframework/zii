@@ -71,11 +71,13 @@ class SluggableBehavior extends AttributeBehavior
      * @var string the attribute that will receive the slug value
      */
     public $slugAttribute = 'slug';
+
     /**
      * @var string|array|null the attribute or list of attributes whose value will be converted into a slug
      * or `null` meaning that the `$value` property will be used to generate a slug.
      */
     public $attribute;
+
     /**
      * @var callable|string|null the value that will be used as a slug. This can be an anonymous function
      * or an arbitrary value or null. If the former, the return value of the function will be used as a slug.
@@ -90,6 +92,7 @@ class SluggableBehavior extends AttributeBehavior
      * ```
      */
     public $value;
+
     /**
      * @var bool whether to generate a new slug if it has already been generated before.
      * If true, the behavior will not generate a new slug even if [[attribute]] is changed.
@@ -97,12 +100,14 @@ class SluggableBehavior extends AttributeBehavior
      * @since 2.0.2
      */
     public $immutable = false;
+
     /**
      * @var bool whether to ensure generated slug value to be unique among owner class records.
      * If enabled behavior will validate slug uniqueness automatically. If validation fails it will attempt
      * generating unique slug value from based one until success.
      */
     public $ensureUnique = false;
+
     /**
      * @var bool whether to skip slug generation if [[attribute]] is null or an empty string.
      * If true, the behaviour will not generate a new slug if [[attribute]] is null or an empty string.
@@ -110,6 +115,7 @@ class SluggableBehavior extends AttributeBehavior
      * @since 2.0.13
      */
     public $skipOnEmpty = false;
+
     /**
      * @var array configuration for slug uniqueness validator. Parameter 'class' may be omitted - by default
      * [[UniqueValidator]] will be used.
@@ -117,6 +123,7 @@ class SluggableBehavior extends AttributeBehavior
      * @see UniqueValidator
      */
     public $uniqueValidator = [];
+
     /**
      * @var callable slug unique value generator. It is used in case [[ensureUnique]] enabled and generated
      * slug is not unique. This should be a PHP callable with following signature:
