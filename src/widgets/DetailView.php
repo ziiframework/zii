@@ -62,6 +62,7 @@ class DetailView extends Widget
      * public accessible non-static properties.
      */
     public $model;
+
     /**
      * @var array a list of attributes to be displayed in the detail view. Each array element
      * represents the specification for displaying one particular attribute.
@@ -96,6 +97,7 @@ class DetailView extends Widget
      *   Please refer to [[\yii\helpers\BaseHtml::renderTagAttributes()]] for the supported syntax.
      */
     public $attributes;
+
     /**
      * @var string|callable the template used to render a single attribute. If a string, the token `{label}`
      * and `{value}` will be replaced with the label and the value of the corresponding attribute.
@@ -112,6 +114,7 @@ class DetailView extends Widget
      * HTML attributes of HTML container elements for the label and value.
      */
     public $template = '<tr><th{captionOptions}>{label}</th><td{contentOptions}>{value}</td></tr>';
+
     /**
      * @var array the HTML attributes for the container tag of this widget. The `tag` option specifies
      * what container tag should be used. It defaults to `table` if not set.
@@ -119,6 +122,7 @@ class DetailView extends Widget
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $options = ['class' => 'table table-striped table-bordered detail-view'];
+
     /**
      * @var array|Formatter the formatter used to format model attribute values into displayable texts.
      * This can be either an instance of [[Formatter]] or an configuration array for creating the [[Formatter]]

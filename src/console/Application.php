@@ -73,11 +73,13 @@ class Application extends \yii\base\Application
      * meaning the `help` command.
      */
     public $defaultRoute = 'help';
+
     /**
      * @var bool whether to enable the commands provided by the core framework.
      * Defaults to true.
      */
     public $enableCoreCommands = true;
+
     /**
      * @var Controller the currently active controller instance
      */

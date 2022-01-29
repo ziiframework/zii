@@ -38,14 +38,17 @@ class View extends Component implements DynamicContentAwareInterface
      * @event Event an event that is triggered by [[beginPage()]].
      */
     public const EVENT_BEGIN_PAGE = 'beginPage';
+
     /**
      * @event Event an event that is triggered by [[endPage()]].
      */
     public const EVENT_END_PAGE = 'endPage';
+
     /**
      * @event ViewEvent an event that is triggered by [[renderFile()]] right before it renders a view file.
      */
     public const EVENT_BEFORE_RENDER = 'beforeRender';
+
     /**
      * @event ViewEvent an event that is triggered by [[renderFile()]] right after it renders a view file.
      */
@@ -55,10 +58,12 @@ class View extends Component implements DynamicContentAwareInterface
      * @var ViewContextInterface the context under which the [[renderFile()]] method is being invoked.
      */
     public $context;
+
     /**
      * @var array custom parameters that are shared among view templates.
      */
     public $params = [];
+
     /**
      * @var array a list of available renderers indexed by their corresponding supported file extensions.
      * Each renderer may be a view renderer object or the configuration for creating the renderer object.
@@ -75,15 +80,18 @@ class View extends Component implements DynamicContentAwareInterface
      * and rendered via [[renderPhpFile()]].
      */
     public $renderers;
+
     /**
      * @var string the default view file extension. This will be appended to view file names if they don't have file extensions.
      */
     public $defaultExtension = 'php';
+
     /**
      * @var Theme|array|string the theme object or the configuration for creating the theme object.
      * If not set, it means theming is not enabled.
      */
     public $theme;
+
     /**
      * @var array a list of named output blocks. The keys are the block names and the values
      * are the corresponding block content. You can call [[beginBlock()]] and [[endBlock()]]
@@ -91,6 +99,7 @@ class View extends Component implements DynamicContentAwareInterface
      * through this property.
      */
     public $blocks;
+
     /**
      * @var array|DynamicContentAwareInterface[] a list of currently active dynamic content class instances.
      * This property is used internally to implement the dynamic content caching feature. Do not modify it directly.
@@ -101,6 +110,7 @@ class View extends Component implements DynamicContentAwareInterface
      * [[pushDynamicContent()]], [[popDynamicContent()]] instead.
      */
     public $cacheStack = [];
+
     /**
      * @var array a list of placeholders for embedding dynamic contents. This property
      * is used internally to implement the content caching feature. Do not modify it directly.

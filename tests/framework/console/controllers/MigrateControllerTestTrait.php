@@ -30,18 +30,22 @@ trait MigrateControllerTestTrait
      * @var string name of the migration controller class, which is under test
      */
     protected $migrateControllerClass;
+
     /**
      * @var string name of the migration base class
      */
     protected $migrationBaseClass;
+
     /**
      * @var string test migration path
      */
     protected $migrationPath;
+
     /**
      * @var string test migration namespace
      */
     protected $migrationNamespace;
+
     /**
      * @var int|null migration controller exit code
      */

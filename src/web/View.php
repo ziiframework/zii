@@ -52,43 +52,52 @@ class View extends \yii\base\View
      * @event Event an event that is triggered by [[beginBody()]].
      */
     public const EVENT_BEGIN_BODY = 'beginBody';
+
     /**
      * @event Event an event that is triggered by [[endBody()]].
      */
     public const EVENT_END_BODY = 'endBody';
+
     /**
      * The location of registered JavaScript code block or files.
      * This means the location is in the head section.
      */
     public const POS_HEAD = 1;
+
     /**
      * The location of registered JavaScript code block or files.
      * This means the location is at the beginning of the body section.
      */
     public const POS_BEGIN = 2;
+
     /**
      * The location of registered JavaScript code block or files.
      * This means the location is at the end of the body section.
      */
     public const POS_END = 3;
+
     /**
      * The location of registered JavaScript code block.
      * This means the JavaScript code block will be enclosed within `jQuery(document).ready()`.
      */
     public const POS_READY = 4;
+
     /**
      * The location of registered JavaScript code block.
      * This means the JavaScript code block will be enclosed within `jQuery(window).load()`.
      */
     public const POS_LOAD = 5;
+
     /**
      * This is internally used as the placeholder for receiving the content registered for the head section.
      */
     public const PH_HEAD = '<![CDATA[YII-BLOCK-HEAD]]>';
+
     /**
      * This is internally used as the placeholder for receiving the content registered for the beginning of the body section.
      */
     public const PH_BODY_BEGIN = '<![CDATA[YII-BLOCK-BODY-BEGIN]]>';
+
     /**
      * This is internally used as the placeholder for receiving the content registered for the end of the body section.
      */
@@ -101,40 +110,47 @@ class View extends \yii\base\View
      * @see registerAssetBundle()
      */
     public $assetBundles = [];
+
     /**
      * @var string the page title
      */
     public $title;
+
     /**
      * @var array the registered meta tags.
      *
      * @see registerMetaTag()
      */
     public $metaTags = [];
+
     /**
      * @var array the registered link tags.
      *
      * @see registerLinkTag()
      */
     public $linkTags = [];
+
     /**
      * @var array the registered CSS code blocks.
      *
      * @see registerCss()
      */
     public $css = [];
+
     /**
      * @var array the registered CSS files.
      *
      * @see registerCssFile()
      */
     public $cssFiles = [];
+
     /**
      * @var array the registered JS code blocks
      *
      * @see registerJs()
      */
     public $js = [];
+
     /**
      * @var array the registered JS files.
      *

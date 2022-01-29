@@ -30,12 +30,14 @@ class UrlNormalizer extends BaseObject
      * @see https://en.wikipedia.org/wiki/HTTP_301
      */
     public const ACTION_REDIRECT_PERMANENT = 301;
+
     /**
      * Represents temporary redirection during route normalization.
      *
      * @see https://en.wikipedia.org/wiki/HTTP_302
      */
     public const ACTION_REDIRECT_TEMPORARY = 302;
+
     /**
      * Represents showing 404 error page during route normalization.
      *
@@ -48,11 +50,13 @@ class UrlNormalizer extends BaseObject
      * converted into `site/index`
      */
     public $collapseSlashes = true;
+
     /**
      * @var bool whether trailing slash should be normalized according to the suffix settings
      * of the rule
      */
     public $normalizeTrailingSlash = true;
+
     /**
      * @var int|callable|null action to perform during route normalization.
      * Available options are:

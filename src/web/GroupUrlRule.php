@@ -59,17 +59,20 @@ class GroupUrlRule extends CompositeUrlRule
      * @see routePrefix
      */
     public $rules = [];
+
     /**
      * @var string the prefix for the pattern part of every rule declared in [[rules]].
      * The prefix and the pattern will be separated with a slash.
      */
     public $prefix;
+
     /**
      * @var string the prefix for the route part of every rule declared in [[rules]].
      * The prefix and the route will be separated with a slash.
      * If this property is not set, it will take the value of [[prefix]].
      */
     public $routePrefix;
+
     /**
      * @var array the default configuration of URL rules. Individual rule configurations
      * specified via [[rules]] will take precedence when the same property of the rule is configured.

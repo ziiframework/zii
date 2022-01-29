@@ -44,6 +44,7 @@ class DbTarget extends Target
      * Starting from version 2.0.2, this can also be a configuration array for creating the object.
      */
     public $db = 'db';
+
     /**
      * @var string name of the DB table to store cache content. Defaults to "log".
      */

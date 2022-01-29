@@ -60,16 +60,19 @@ class ErrorAction extends Action
      * would be "error", and the corresponding view file would be "views/site/error.php".
      */
     public $view;
+
     /**
      * @var string the name of the error when the exception name cannot be determined.
      * Defaults to "Error".
      */
     public $defaultName;
+
     /**
      * @var string the message to be displayed when the exception message contains sensitive information.
      * Defaults to "An internal server error occurred.".
      */
     public $defaultMessage;
+
     /**
      * @var string|false|null the name of the layout to be applied to this error action view.
      * If not set, the layout configured in the controller will be used.

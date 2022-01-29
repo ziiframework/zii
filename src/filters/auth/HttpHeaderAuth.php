@@ -41,6 +41,7 @@ class HttpHeaderAuth extends AuthMethod
      * @var string the HTTP header name
      */
     public $header = 'X-Api-Key';
+
     /**
      * @var string a pattern to use to extract the HTTP authentication value
      */

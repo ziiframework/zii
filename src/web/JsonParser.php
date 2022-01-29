@@ -37,6 +37,7 @@ class JsonParser implements RequestParserInterface
      * @var bool whether to return objects in terms of associative arrays.
      */
     public $asArray = true;
+
     /**
      * @var bool whether to throw a [[BadRequestHttpException]] if the body is invalid JSON
      */

@@ -48,6 +48,7 @@ abstract class CacheTestCase extends TestCase
      *          Null means normal time() behavior.
      */
     public static $time;
+
     /**
      * @var float virtual time to be returned by mocked microtime() function.
      *            Null means normal microtime() behavior.

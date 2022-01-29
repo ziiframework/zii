@@ -10,10 +10,14 @@ declare(strict_types=1);
 
 namespace yii\web;
 
+use function array_flip;
+use function array_key_exists;
+use function array_map;
 use ArrayAccess;
 use ArrayIterator;
 use Countable;
 use IteratorAggregate;
+use ReturnTypeWillChange;
 use yii\base\BaseObject;
 
 /**
@@ -45,7 +49,7 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      *
      * @return ArrayIterator an iterator for traversing the headers in the collection.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function getIterator()
     {
         return new ArrayIterator($this->_headers);
@@ -58,7 +62,7 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      *
      * @return int the number of headers in the collection.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function count()
     {
         return $this->getCount();
@@ -128,7 +132,8 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
     {
         $normalizedName = strtolower($name);
         $this->_headers[$normalizedName][] = $value;
-        if (!\array_key_exists($normalizedName, $this->_originalHeaderNames)) {
+
+        if (!array_key_exists($normalizedName, $this->_originalHeaderNames)) {
             $this->_originalHeaderNames[$normalizedName] = $name;
         }
 
@@ -212,14 +217,14 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
     /**
      * Returns the collection as a PHP array but instead of using normalized header names as keys (like [[toArray()]])
      * it uses original header names (case-sensitive).
+     *
      * @return array the array representation of the collection.
+     *
      * @since 2.0.45
      */
     public function toOriginalArray()
     {
-        return \array_map(function ($normalizedName) {
-            return $this->_headers[$normalizedName];
-        }, \array_flip($this->_originalHeaderNames));
+        return array_map(fn ($normalizedName) => $this->_headers[$normalizedName], array_flip($this->_originalHeaderNames));
     }
 
     /**
@@ -245,7 +250,7 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      *
      * @return bool whether the named header exists
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetExists($name)
     {
         return $this->has($name);
@@ -261,7 +266,7 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      *
      * @return string the header value with the specified name, null if the named header does not exist.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($name)
     {
         return $this->get($name);
@@ -276,7 +281,7 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      * @param string $name the header name
      * @param string $value the header value to be added
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetSet($name, $value): void
     {
         $this->set($name, $value);
@@ -290,7 +295,7 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      *
      * @param string $name the header name
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetUnset($name): void
     {
         $this->remove($name);

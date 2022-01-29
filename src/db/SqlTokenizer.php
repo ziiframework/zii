@@ -44,6 +44,7 @@ abstract class SqlTokenizer extends Component
      * @var int SQL code string length.
      */
     protected $length;
+
     /**
      * @var int SQL code string current offset.
      */
@@ -53,18 +54,22 @@ abstract class SqlTokenizer extends Component
      * @var SplStack stack of active tokens.
      */
     private $_tokenStack;
+
     /**
      * @var SqlToken active token. It's usually a top of the token stack.
      */
     private $_currentToken;
+
     /**
      * @var string[] cached substrings.
      */
     private $_substrings;
+
     /**
      * @var string current buffer value.
      */
     private $_buffer = '';
+
     /**
      * @var SqlToken resulting token of a last [[tokenize()]] call.
      */

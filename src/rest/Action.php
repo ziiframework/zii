@@ -31,6 +31,7 @@ class Action extends \yii\base\Action
      * This property must be set.
      */
     public $modelClass;
+
     /**
      * @var callable a PHP callable that will be called to return the model corresponding
      * to the specified primary key value. If not set, [[findModel()]] will be used instead.
@@ -47,6 +48,7 @@ class Action extends \yii\base\Action
      * The callable should return the model found, or throw an exception if not found.
      */
     public $findModel;
+
     /**
      * @var callable a PHP callable that will be called when running an action to determine
      * if the current user has the permission to execute the action. If not set, the access

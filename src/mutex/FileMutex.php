@@ -52,12 +52,14 @@ class FileMutex extends Mutex
      * Defaults to the "mutex" subdirectory under the application runtime path.
      */
     public $mutexPath = '@runtime/mutex';
+
     /**
      * @var int the permission to be set for newly created mutex files.
      * This value will be used by PHP chmod() function. No umask will be applied.
      * If not set, the permission will be determined by the current environment.
      */
     public $fileMode;
+
     /**
      * @var int the permission to be set for newly created directories.
      * This value will be used by PHP chmod() function. No umask will be applied.
@@ -65,6 +67,7 @@ class FileMutex extends Mutex
      * but read-only for other users.
      */
     public $dirMode = 0775;
+
     /**
      * @var bool whether file handling should assume a Windows file system.
      * This value will determine how [[releaseLock()]] goes about deleting the lock file.

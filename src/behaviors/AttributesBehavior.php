@@ -100,6 +100,7 @@ class AttributesBehavior extends Behavior
      * ```
      */
     public $attributes = [];
+
     /**
      * @var array list of order of attributes that are to be automatically filled with the event.
      * The array keys are the ActiveRecord events upon which the attributes are to be updated,
@@ -115,10 +116,12 @@ class AttributesBehavior extends Behavior
      * ```
      */
     public $order = [];
+
     /**
      * @var bool whether to skip this behavior when the `$owner` has not been modified
      */
     public $skipUpdateOnClean = true;
+
     /**
      * @var bool whether to preserve non-empty attribute values.
      */

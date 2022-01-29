@@ -21,14 +21,17 @@ class ExposedPhpManager extends PhpManager
      * @var \yii\rbac\Item[]
      */
     public $items = []; // itemName => item
+
     /**
      * @var array
      */
     public $children = []; // itemName, childName => child
+
     /**
      * @var \yii\rbac\Assignment[]
      */
     public $assignments = []; // userId, itemName => assignment
+
     /**
      * @var \yii\rbac\Rule[]
      */

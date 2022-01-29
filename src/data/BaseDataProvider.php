@@ -40,6 +40,7 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
      * @var int Number of data providers on the current page. Used to generate unique IDs.
      */
     private static $counter = 0;
+
     /**
      * @var string an ID that uniquely identifies the data provider among all data providers.
      * Generated automatically the following way in case it is not set:

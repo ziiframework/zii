@@ -61,6 +61,7 @@ class BaseInflector
         '/^$/' => '',
         '/$/' => 's',
     ];
+
     /**
      * @var array the rules for converting a word into its singular form.
      * The keys are the regular expressions and the values are the corresponding replacements.
@@ -107,6 +108,7 @@ class BaseInflector
         '/^(.*us)$/' => '\\1',
         '/s$/i' => '',
     ];
+
     /**
      * @var array the special rules for converting a word between its plural form and singular form.
      * The keys are the special words in singular form, and the values are the corresponding plural form.
@@ -227,6 +229,7 @@ class BaseInflector
         'software' => 'software',
         'hardware' => 'hardware',
     ];
+
     /**
      * @var array fallback map for transliteration used by [[transliterate()]] when intl isn't available.
      */
@@ -242,6 +245,7 @@ class BaseInflector
         'ø' => 'o', 'ù' => 'u', 'ú' => 'u', 'û' => 'u', 'ü' => 'u', 'ű' => 'u', 'ý' => 'y', 'þ' => 'th',
         'ÿ' => 'y',
     ];
+
     /**
      * Shortcut for `Any-Latin; NFKD` transliteration rule.
      *
@@ -258,6 +262,7 @@ class BaseInflector
      * @since 2.0.7
      */
     public const TRANSLITERATE_STRICT = 'Any-Latin; NFKD';
+
     /**
      * Shortcut for `Any-Latin; Latin-ASCII` transliteration rule.
      *
@@ -274,6 +279,7 @@ class BaseInflector
      * @since 2.0.7
      */
     public const TRANSLITERATE_MEDIUM = 'Any-Latin; Latin-ASCII';
+
     /**
      * Shortcut for `Any-Latin; Latin-ASCII; [\u0080-\uffff] remove` transliteration rule.
      *

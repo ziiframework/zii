@@ -46,6 +46,7 @@ class AssetConverter extends Component implements AssetConverterInterface
         'coffee' => ['js', 'coffee -p {from} > {to}'],
         'ts' => ['js', 'tsc --out {to} {from}'],
     ];
+
     /**
      * @var bool whether the source asset file should be converted even if its result already exists.
      * You may want to set this to be `true` during the development stage to make sure the converted

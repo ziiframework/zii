@@ -47,12 +47,14 @@ class ActiveController extends Controller
      * @var string the model class name. This property must be set.
      */
     public $modelClass;
+
     /**
      * @var string the scenario used for updating a model.
      *
      * @see \yii\base\Model::scenarios()
      */
     public $updateScenario = Model::SCENARIO_DEFAULT;
+
     /**
      * @var string the scenario used for creating a model.
      *

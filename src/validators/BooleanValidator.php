@@ -28,10 +28,12 @@ class BooleanValidator extends Validator
      * @var mixed the value representing true status. Defaults to '1'.
      */
     public $trueValue = '1';
+
     /**
      * @var mixed the value representing false status. Defaults to '0'.
      */
     public $falseValue = '0';
+
     /**
      * @var bool whether the comparison to [[trueValue]] and [[falseValue]] is strict.
      * When this is true, the attribute value and type must both match those of [[trueValue]] or [[falseValue]].

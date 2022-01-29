@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace yii\base;
 
 use ArrayIterator;
+use ReturnTypeWillChange;
 
 /**
  * ArrayAccessTrait provides the implementation for [[\IteratorAggregate]], [[\ArrayAccess]] and [[\Countable]].
@@ -33,7 +34,7 @@ trait ArrayAccessTrait
      *
      * @return ArrayIterator an iterator for traversing the cookies in the collection.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function getIterator()
     {
         return new ArrayIterator($this->data);
@@ -45,7 +46,7 @@ trait ArrayAccessTrait
      *
      * @return int number of data elements.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function count()
     {
         return count($this->data);
@@ -58,7 +59,7 @@ trait ArrayAccessTrait
      *
      * @return bool
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return isset($this->data[$offset]);
@@ -71,7 +72,7 @@ trait ArrayAccessTrait
      *
      * @return mixed the element at the offset, null if no element is found at the offset
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->data[$offset] ?? null;
@@ -83,7 +84,7 @@ trait ArrayAccessTrait
      * @param int $offset the offset to set element
      * @param mixed $item the element value
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetSet($offset, $item): void
     {
         $this->data[$offset] = $item;
@@ -94,7 +95,7 @@ trait ArrayAccessTrait
      *
      * @param mixed $offset the offset to unset element
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetUnset($offset): void
     {
         unset($this->data[$offset]);

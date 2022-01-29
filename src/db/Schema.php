@@ -69,6 +69,7 @@ abstract class Schema extends BaseObject
     public const TYPE_BOOLEAN = 'boolean';
     public const TYPE_MONEY = 'money';
     public const TYPE_JSON = 'json';
+
     /**
      * Schema cache version, to detect incompatibilities in cached values when the
      * data format of the cache changes.
@@ -79,10 +80,12 @@ abstract class Schema extends BaseObject
      * @var Connection the database connection
      */
     public $db;
+
     /**
      * @var string the default schema name used for the current session.
      */
     public $defaultSchema;
+
     /**
      * @var array map of DB errors and corresponding exceptions
      * If left part is found in DB error message exception class from the right part is used.
@@ -90,6 +93,7 @@ abstract class Schema extends BaseObject
     public $exceptionMap = [
         'SQLSTATE[23' => 'yii\db\IntegrityException',
     ];
+
     /**
      * @var string|array column schema class or class config
      *
@@ -104,6 +108,7 @@ abstract class Schema extends BaseObject
      * @since 2.0.14
      */
     protected $tableQuoteCharacter = "'";
+
     /**
      * @var string|string[] character used to quote column names.
      * An array of 2 characters can be used in case starting and ending characters are different.
@@ -116,18 +121,22 @@ abstract class Schema extends BaseObject
      * @var array list of ALL schema names in the database, except system schemas
      */
     private $_schemaNames;
+
     /**
      * @var array list of ALL table names in the database
      */
     private $_tableNames = [];
+
     /**
      * @var array list of loaded table metadata (table name => metadata type => metadata).
      */
     private $_tableMetadata = [];
+
     /**
      * @var QueryBuilder the query builder for this database
      */
     private $_builder;
+
     /**
      * @var string server version as a string.
      */

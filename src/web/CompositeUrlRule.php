@@ -30,6 +30,7 @@ abstract class CompositeUrlRule extends BaseObject implements UrlRuleInterface
      * This property is set in [[init()]] by the return value of [[createRules()]].
      */
     protected $rules = [];
+
     /**
      * @var int|null status of the URL creation after the last [[createUrl()]] call.
      *

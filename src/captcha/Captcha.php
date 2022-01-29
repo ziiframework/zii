@@ -70,18 +70,21 @@ class Captcha extends InputWidget
      * Please refer to [[\yii\helpers\Url::toRoute()]] for acceptable formats.
      */
     public $captchaAction = 'site/captcha';
+
     /**
      * @var array HTML attributes to be applied to the CAPTCHA image tag.
      *
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $imageOptions = [];
+
     /**
      * @var string the template for arranging the CAPTCHA image tag and the text input tag.
      * In this template, the token `{image}` will be replaced with the actual image tag,
      * while `{input}` will be replaced with the text input tag.
      */
     public $template = '{image} {input}';
+
     /**
      * @var array the HTML attributes for the input tag.
      *

@@ -37,6 +37,7 @@ class ActiveForm extends Widget
      * @since 2.0.14
      */
     public const VALIDATION_STATE_ON_CONTAINER = 'container';
+
     /**
      * Add validation state class to input tag.
      *
@@ -50,6 +51,7 @@ class ActiveForm extends Widget
      * @see method for specifying the HTTP method for this form.
      */
     public $action = '';
+
     /**
      * @var string the form submission method. This should be either `post` or `get`. Defaults to `post`.
      *
@@ -66,18 +68,21 @@ class ActiveForm extends Widget
      * ```
      */
     public $method = 'post';
+
     /**
      * @var array the HTML attributes (name-value pairs) for the form tag.
      *
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $options = [];
+
     /**
      * @var string the default field class name when calling [[field()]] to create a new field.
      *
      * @see fieldConfig
      */
     public $fieldClass = 'yii\widgets\ActiveField';
+
     /**
      * @var array|Closure the default configuration used by [[field()]] when creating a new field object.
      * This can be either a configuration array or an anonymous function returning a configuration array.
@@ -92,32 +97,39 @@ class ActiveForm extends Widget
      * @see fieldClass
      */
     public $fieldConfig = [];
+
     /**
      * @var bool whether to perform encoding on the error summary.
      */
     public $encodeErrorSummary = true;
+
     /**
      * @var string the default CSS class for the error summary container.
      *
      * @see errorSummary()
      */
     public $errorSummaryCssClass = 'error-summary';
+
     /**
      * @var string the CSS class that is added to a field container when the associated attribute is required.
      */
     public $requiredCssClass = 'required';
+
     /**
      * @var string the CSS class that is added to a field container when the associated attribute has validation error.
      */
     public $errorCssClass = 'has-error';
+
     /**
      * @var string the CSS class that is added to a field container when the associated attribute is successfully validated.
      */
     public $successCssClass = 'has-success';
+
     /**
      * @var string the CSS class that is added to a field container when the associated attribute is being validated.
      */
     public $validatingCssClass = 'validating';
+
     /**
      * @var string where to render validation state class
      * Could be either "container" or "input".
@@ -126,16 +138,19 @@ class ActiveForm extends Widget
      * @since 2.0.14
      */
     public $validationStateOn = self::VALIDATION_STATE_ON_CONTAINER;
+
     /**
      * @var bool whether to enable client-side data validation.
      * If [[ActiveField::enableClientValidation]] is set, its value will take precedence for that input field.
      */
     public $enableClientValidation = true;
+
     /**
      * @var bool whether to enable AJAX-based data validation.
      * If [[ActiveField::enableAjaxValidation]] is set, its value will take precedence for that input field.
      */
     public $enableAjaxValidation = false;
+
     /**
      * @var bool whether to hook up `yii.activeForm` JavaScript plugin.
      * This property must be set `true` if you want to support client validation and/or AJAX validation, or if you
@@ -145,26 +160,31 @@ class ActiveForm extends Widget
      * @see registerClientScript
      */
     public $enableClientScript = true;
+
     /**
      * @var array|string the URL for performing AJAX-based validation. This property will be processed by
      * [[Url::to()]]. Please refer to [[Url::to()]] for more details on how to configure this property.
      * If this property is not set, it will take the value of the form's action attribute.
      */
     public $validationUrl;
+
     /**
      * @var bool whether to perform validation when the form is submitted.
      */
     public $validateOnSubmit = true;
+
     /**
      * @var bool whether to perform validation when the value of an input field is changed.
      * If [[ActiveField::validateOnChange]] is set, its value will take precedence for that input field.
      */
     public $validateOnChange = true;
+
     /**
      * @var bool whether to perform validation when an input field loses focus.
      * If [[ActiveField::$validateOnBlur]] is set, its value will take precedence for that input field.
      */
     public $validateOnBlur = true;
+
     /**
      * @var bool whether to perform validation while the user is typing in an input field.
      * If [[ActiveField::validateOnType]] is set, its value will take precedence for that input field.
@@ -172,32 +192,38 @@ class ActiveForm extends Widget
      * @see validationDelay
      */
     public $validateOnType = false;
+
     /**
      * @var int number of milliseconds that the validation should be delayed when the user types in the field
      * and [[validateOnType]] is set `true`.
      * If [[ActiveField::validationDelay]] is set, its value will take precedence for that input field.
      */
     public $validationDelay = 500;
+
     /**
      * @var string the name of the GET parameter indicating the validation request is an AJAX request.
      */
     public $ajaxParam = 'ajax';
+
     /**
      * @var string the type of data that you're expecting back from the server.
      */
     public $ajaxDataType = 'json';
+
     /**
      * @var bool whether to scroll to the first error after validation.
      *
      * @since 2.0.6
      */
     public $scrollToError = true;
+
     /**
      * @var int offset in pixels that should be added when scrolling to the first error.
      *
      * @since 2.0.11
      */
     public $scrollToErrorOffset = 0;
+
     /**
      * @var array the client validation options for individual attributes. Each element of the array
      * represents the validation options for a particular attribute.

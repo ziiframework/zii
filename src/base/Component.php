@@ -108,12 +108,14 @@ class Component extends BaseObject
      * @var array the attached event handlers (event name => handlers)
      */
     private $_events = [];
+
     /**
      * @var array the event handlers attached for wildcard patterns (event name wildcard => handlers)
      *
      * @since 2.0.14
      */
     private $_eventWildcards = [];
+
     /**
      * @var Behavior[]|null the attached behaviors (behavior name => behavior). This is `null` when not initialized.
      */

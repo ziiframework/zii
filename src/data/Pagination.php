@@ -90,22 +90,26 @@ class Pagination extends BaseObject implements Linkable
      * @see params
      */
     public $pageParam = 'page';
+
     /**
      * @var string name of the parameter storing the page size.
      *
      * @see params
      */
     public $pageSizeParam = 'per-page';
+
     /**
      * @var bool whether to always have the page parameter in the URL created by [[createUrl()]].
      * If false and [[page]] is 0, the page parameter will not be put in the URL.
      */
     public $forcePageParam = true;
+
     /**
      * @var string the route of the controller action for displaying the paged contents.
      * If not set, it means using the currently requested route.
      */
     public $route;
+
     /**
      * @var array parameters (name => value) that should be used to obtain the current page number
      * and to create new pagination URLs. If not set, all parameters from $_GET will be used instead.
@@ -116,11 +120,13 @@ class Pagination extends BaseObject implements Linkable
      * while the element indexed by [[pageSizeParam]] is treated as the page size (defaults to [[defaultPageSize]]).
      */
     public $params;
+
     /**
      * @var \yii\web\UrlManager the URL manager used for creating pagination URLs. If not set,
      * the "urlManager" application component will be used.
      */
     public $urlManager;
+
     /**
      * @var bool whether to check if [[page]] is within valid range.
      * When this property is true, the value of [[page]] will always be between 0 and ([[pageCount]]-1).
@@ -129,15 +135,18 @@ class Pagination extends BaseObject implements Linkable
      * number validation. By doing so, [[page]] will return the value indexed by [[pageParam]] in [[params]].
      */
     public $validatePage = true;
+
     /**
      * @var int total number of items.
      */
     public $totalCount = 0;
+
     /**
      * @var int the default page size. This property will be returned by [[pageSize]] when page size
      * cannot be determined by [[pageSizeParam]] from [[params]].
      */
     public $defaultPageSize = 20;
+
     /**
      * @var array|false the page size limits. The first array element stands for the minimal page size, and the second
      * the maximal page size. If this is false, it means [[pageSize]] should always return the value of [[defaultPageSize]].

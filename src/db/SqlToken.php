@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace yii\db;
 
 use ArrayAccess;
+use ReturnTypeWillChange;
 use yii\base\BaseObject;
 
 /**
@@ -49,18 +50,22 @@ class SqlToken extends BaseObject implements ArrayAccess
      * - [[TYPE_STRING_LITERAL]]
      */
     public $type = self::TYPE_TOKEN;
+
     /**
      * @var string|null token content.
      */
     public $content;
+
     /**
      * @var int original SQL token start position.
      */
     public $startOffset;
+
     /**
      * @var int original SQL token end position.
      */
     public $endOffset;
+
     /**
      * @var SqlToken parent token.
      */
@@ -90,7 +95,7 @@ class SqlToken extends BaseObject implements ArrayAccess
      *
      * @return bool whether the token exists.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return isset($this->_children[$this->calculateOffset($offset)]);
@@ -105,7 +110,7 @@ class SqlToken extends BaseObject implements ArrayAccess
      *
      * @return SqlToken|null the child token at the specified offset, `null` if there's no token.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         $offset = $this->calculateOffset($offset);
@@ -121,7 +126,7 @@ class SqlToken extends BaseObject implements ArrayAccess
      * @param int|null $offset child token offset.
      * @param SqlToken $token token to be added.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetSet($offset, $token): void
     {
         $token->parent = $this;
@@ -141,7 +146,7 @@ class SqlToken extends BaseObject implements ArrayAccess
      *
      * @param int $offset child token offset.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetUnset($offset): void
     {
         $offset = $this->calculateOffset($offset);

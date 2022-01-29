@@ -34,6 +34,7 @@ class FileTarget extends Target
      * The directory containing the log files will be automatically created if not existing.
      */
     public $logFile;
+
     /**
      * @var bool whether log files should be rotated when they reach a certain [[maxFileSize|maximum size]].
      * Log rotation is enabled by default. This property allows you to disable it, when you have configured
@@ -42,20 +43,24 @@ class FileTarget extends Target
      * @since 2.0.3
      */
     public $enableRotation = true;
+
     /**
      * @var int maximum log file size, in kilo-bytes. Defaults to 10240, meaning 10MB.
      */
     public $maxFileSize = 10240; // in KB
+
     /**
      * @var int number of log files used for rotation. Defaults to 5.
      */
     public $maxLogFiles = 5;
+
     /**
      * @var int the permission to be set for newly created log files.
      * This value will be used by PHP chmod() function. No umask will be applied.
      * If not set, the permission will be determined by the current environment.
      */
     public $fileMode;
+
     /**
      * @var int the permission to be set for newly created directories.
      * This value will be used by PHP chmod() function. No umask will be applied.
@@ -63,6 +68,7 @@ class FileTarget extends Target
      * but read-only for other users.
      */
     public $dirMode = 0775;
+
     /**
      * @var bool Whether to rotate log files by copy and truncate in contrast to rotation by
      * renaming files. Defaults to `true` to be more compatible with log tailers and is windows

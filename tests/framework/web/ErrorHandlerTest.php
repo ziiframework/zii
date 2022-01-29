@@ -49,6 +49,7 @@ Exception: yii\web\NotFoundHttpException', $out);
     public function testClearAssetFilesInErrorView(): void
     {
         Yii::$app->getView()->registerJsFile('somefile.js');
+
         /** @var ErrorHandler $handler */
         $handler = Yii::$app->getErrorHandler();
         ob_start(); // suppress response output

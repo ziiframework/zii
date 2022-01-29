@@ -35,10 +35,12 @@ class ServeController extends Controller
      * @var int port to serve on.
      */
     public $port = 8080;
+
     /**
      * @var string path or [path alias](guide:concept-aliases) to directory to serve
      */
     public $docroot = '@app/web';
+
     /**
      * @var string path or [path alias](guide:concept-aliases) to router script.
      * See https://www.php.net/manual/en/features.commandline.webserver.php

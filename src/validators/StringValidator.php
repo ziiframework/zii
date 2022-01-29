@@ -38,39 +38,47 @@ class StringValidator extends Validator
      * @see notEqual for the customized message for a string that does not match desired length.
      */
     public $length;
+
     /**
      * @var int maximum length. If not set, it means no maximum length limit.
      *
      * @see tooLong for the customized message for a too long string.
      */
     public $max;
+
     /**
      * @var int minimum length. If not set, it means no minimum length limit.
      *
      * @see tooShort for the customized message for a too short string.
      */
     public $min;
+
     /**
      * @var string user-defined error message used when the value is not a string.
      */
     public $message;
+
     /**
      * @var string user-defined error message used when the length of the value is smaller than [[min]].
      */
     public $tooShort;
+
     /**
      * @var string user-defined error message used when the length of the value is greater than [[max]].
      */
     public $tooLong;
+
     /**
      * @var string user-defined error message used when the length of the value is not equal to [[length]].
      */
     public $notEqual;
+
     /**
      * @var string the encoding of the string value to be validated (e.g. 'UTF-8').
      * If this property is not set, [[\yii\base\Application::charset]] will be used.
      */
     public $encoding;
+
     /**
      * @var bool whether to require the value to be a string data type.
      * If false any scalar value will be treated as it's string equivalent.

@@ -12,6 +12,7 @@ namespace yii\caching;
 
 use Closure;
 use function extension_loaded;
+use ReturnTypeWillChange;
 use Yii;
 use yii\base\Component;
 use yii\helpers\StringHelper;
@@ -67,6 +68,7 @@ abstract class Cache extends Component implements CacheInterface
      * To ensure interoperability, only alphanumeric characters should be used.
      */
     public $keyPrefix;
+
     /**
      * @var array|false|null the functions used to serialize and unserialize cached data. Defaults to null, meaning
      * using the default PHP `serialize()` and `unserialize()` functions. If you want to use some more efficient
@@ -78,6 +80,7 @@ abstract class Cache extends Component implements CacheInterface
      * implementations of the cache can not correctly save and retrieve data different from a string type.
      */
     public $serializer;
+
     /**
      * @var int default duration in seconds before a cache entry will expire. Default value is 0, meaning infinity.
      * This value is used by [[set()]] if the duration is not explicitly given.
@@ -588,7 +591,7 @@ abstract class Cache extends Component implements CacheInterface
      *
      * @return bool
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetExists($key)
     {
         return $this->get($key) !== false;
@@ -602,7 +605,7 @@ abstract class Cache extends Component implements CacheInterface
      *
      * @return mixed the value stored in cache, false if the value is not in the cache or expired.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($key)
     {
         return $this->get($key);
@@ -617,7 +620,7 @@ abstract class Cache extends Component implements CacheInterface
      * @param string $key the key identifying the value to be cached
      * @param mixed $value the value to be cached
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetSet($key, $value): void
     {
         $this->set($key, $value);
@@ -629,7 +632,7 @@ abstract class Cache extends Component implements CacheInterface
      *
      * @param string $key the key of the value to be deleted
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetUnset($key): void
     {
         $this->delete($key);

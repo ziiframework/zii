@@ -44,6 +44,7 @@ class RadioButtonColumn extends Column
      * @var string the name of the input radio button input fields.
      */
     public $name = 'radioButtonSelection';
+
     /**
      * @var array|Closure the HTML attributes for the radio buttons. This can either be an array of
      * attributes or an anonymous function ([[Closure]]) returning such an array.

@@ -76,12 +76,14 @@ class Table extends Widget
      * @since 2.0.19
      */
     protected $headers = [];
+
     /**
      * @var array table rows
      *
      * @since 2.0.19
      */
     protected $rows = [];
+
     /**
      * @var array table chars
      *
@@ -104,18 +106,21 @@ class Table extends Widget
         self::CHAR_RIGHT_MID => '╢',
         self::CHAR_MIDDLE => '│',
     ];
+
     /**
      * @var array table column widths
      *
      * @since 2.0.19
      */
     protected $columnWidths = [];
+
     /**
      * @var int screen width
      *
      * @since 2.0.19
      */
     protected $screenWidth;
+
     /**
      * @var string list prefix
      *

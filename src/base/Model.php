@@ -16,6 +16,7 @@ use ArrayObject;
 use IteratorAggregate;
 use ReflectionClass;
 use ReflectionProperty;
+use ReturnTypeWillChange;
 use Yii;
 use yii\helpers\Inflector;
 use yii\validators\RequiredValidator;
@@ -66,11 +67,13 @@ class Model extends Component implements StaticInstanceInterface, IteratorAggreg
      * The name of the default scenario.
      */
     public const SCENARIO_DEFAULT = 'default';
+
     /**
      * @event ModelEvent an event raised at the beginning of [[validate()]]. You may set
      * [[ModelEvent::isValid]] to be false to stop the validation.
      */
     public const EVENT_BEFORE_VALIDATE = 'beforeValidate';
+
     /**
      * @event Event an event raised at the end of [[validate()]]
      */
@@ -80,10 +83,12 @@ class Model extends Component implements StaticInstanceInterface, IteratorAggreg
      * @var array validation errors (attribute name => array of errors)
      */
     private $_errors;
+
     /**
      * @var ArrayObject list of validators
      */
     private $_validators;
+
     /**
      * @var string current scenario
      */
@@ -1086,7 +1091,7 @@ class Model extends Component implements StaticInstanceInterface, IteratorAggreg
      *
      * @return ArrayIterator an iterator for traversing the items in the list.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function getIterator()
     {
         $attributes = $this->getAttributes();
@@ -1103,7 +1108,7 @@ class Model extends Component implements StaticInstanceInterface, IteratorAggreg
      *
      * @return bool whether or not an offset exists.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return isset($this->$offset);
@@ -1118,7 +1123,7 @@ class Model extends Component implements StaticInstanceInterface, IteratorAggreg
      *
      * @return mixed the element at the offset, null if no element is found at the offset
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->$offset;
@@ -1132,7 +1137,7 @@ class Model extends Component implements StaticInstanceInterface, IteratorAggreg
      * @param string $offset the offset to set element
      * @param mixed $value the element value
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetSet($offset, $value): void
     {
         $this->$offset = $value;
@@ -1145,7 +1150,7 @@ class Model extends Component implements StaticInstanceInterface, IteratorAggreg
      *
      * @param string $offset the offset to unset element
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetUnset($offset): void
     {
         $this->$offset = null;

@@ -31,6 +31,7 @@ class RegularExpressionValidator extends Validator
      * @var string the regular expression to be matched with
      */
     public $pattern;
+
     /**
      * @var bool whether to invert the validation logic. Defaults to false. If set to true,
      * the regular expression defined via [[pattern]] should NOT match the attribute value.

@@ -23,6 +23,7 @@ class IndexConstraint extends Constraint
      * @var bool whether the index is unique.
      */
     public $isUnique;
+
     /**
      * @var bool whether the index was created for a primary key.
      */

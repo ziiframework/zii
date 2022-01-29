@@ -48,45 +48,54 @@ class MessageController extends \yii\console\Controller
      * @var string controller default action ID.
      */
     public $defaultAction = 'extract';
+
     /**
      * @var string required, root directory of all source files.
      */
     public $sourcePath = '@yii';
+
     /**
      * @var string required, root directory containing message translations.
      */
     public $messagePath = '@yii/messages';
+
     /**
      * @var array required, list of language codes that the extracted messages
      * should be translated to. For example, ['zh-CN', 'de'].
      */
     public $languages = [];
+
     /**
      * @var string|string[] the name of the function for translating messages.
      * This is used as a mark to find the messages to be translated.
      * You may use a string for single function name or an array for multiple function names.
      */
     public $translator = ['Yii::t', '\Yii::t'];
+
     /**
      * @var bool whether to sort messages by keys when merging new messages
      * with the existing ones. Defaults to false, which means the new (untranslated)
      * messages will be separated from the old (translated) ones.
      */
     public $sort = false;
+
     /**
      * @var bool whether the message file should be overwritten with the merged messages
      */
     public $overwrite = true;
+
     /**
      * @var bool whether to remove messages that no longer appear in the source code.
      * Defaults to false, which means these messages will NOT be removed.
      */
     public $removeUnused = false;
+
     /**
      * @var bool whether to mark messages that no longer appear in the source code.
      * Defaults to true, which means each of these messages will be enclosed with a pair of '@@' marks.
      */
     public $markUnused = true;
+
     /**
      * @var array list of patterns that specify which files/directories should NOT be processed.
      * If empty or not set, all files/directories will be processed.
@@ -102,6 +111,7 @@ class MessageController extends \yii\console\Controller
         '/vendor',
         '/BaseYii.php', // contains examples about Yii::t()
     ];
+
     /**
      * @var array list of patterns that specify which files (not directories) should be processed.
      * If empty or not set, all files will be processed.
@@ -109,38 +119,46 @@ class MessageController extends \yii\console\Controller
      * If a file/directory matches both a pattern in "only" and "except", it will NOT be processed.
      */
     public $only = ['*.php'];
+
     /**
      * @var string generated file format. Can be "php", "db", "po" or "pot".
      */
     public $format = 'php';
+
     /**
      * @var string connection component ID for "db" format.
      */
     public $db = 'db';
+
     /**
      * @var string custom name for source message table for "db" format.
      */
     public $sourceMessageTable = '{{%source_message}}';
+
     /**
      * @var string custom name for translation message table for "db" format.
      */
     public $messageTable = '{{%message}}';
+
     /**
      * @var string name of the file that will be used for translations for "po" format.
      */
     public $catalog = 'messages';
+
     /**
      * @var array message categories to ignore. For example, 'yii', 'app*', 'widgets/menu', etc.
      *
      * @see isCategoryIgnored
      */
     public $ignoreCategories = [];
+
     /**
      * @var string File header in generated PHP file with messages. This property is used only if [[$format]] is "php".
      *
      * @since 2.0.13
      */
     public $phpFileHeader = '';
+
     /**
      * @var string|null DocBlock used for messages array in generated PHP file. If `null`, default DocBlock will be used.
      * This property is used only if [[$format]] is "php".

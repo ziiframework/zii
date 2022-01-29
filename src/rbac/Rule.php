@@ -27,10 +27,12 @@ abstract class Rule extends BaseObject
      * @var string name of the rule
      */
     public $name;
+
     /**
      * @var int UNIX timestamp representing the rule creation time
      */
     public $createdAt;
+
     /**
      * @var int UNIX timestamp representing the rule updating time
      */

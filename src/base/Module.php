@@ -50,6 +50,7 @@ class Module extends ServiceLocator
      * You may set [[ActionEvent::isValid]] to be `false` to cancel the action execution.
      */
     public const EVENT_BEFORE_ACTION = 'beforeAction';
+
     /**
      * @event ActionEvent an event raised after executing a controller action.
      */
@@ -59,20 +60,24 @@ class Module extends ServiceLocator
      * @var array custom module parameters (name => value).
      */
     public $params = [];
+
     /**
      * @var string an ID that uniquely identifies this module among other modules which have the same [[module|parent]].
      */
     public $id;
+
     /**
      * @var Module|null the parent module of this module. `null` if this module does not have a parent.
      */
     public $module;
+
     /**
      * @var string|bool|null the layout that should be applied for views within this module. This refers to a view name
      * relative to [[layoutPath]]. If this is not set, it means the layout value of the [[module|parent module]]
      * will be taken. If this is `false`, layout will be disabled within this module.
      */
     public $layout;
+
     /**
      * @var array mapping from controller ID to controller configurations.
      * Each name-value pair specifies the configuration of a single controller.
@@ -93,6 +98,7 @@ class Module extends ServiceLocator
      * ```
      */
     public $controllerMap = [];
+
     /**
      * @var string|null the namespace that controller classes are in.
      * This namespace will be used to load controller classes by prepending it to the controller
@@ -106,6 +112,7 @@ class Module extends ServiceLocator
      * defining namespaces and how classes are loaded.
      */
     public $controllerNamespace;
+
     /**
      * @var string the default route of this module. Defaults to `default`.
      * The route may consist of child module ID, controller ID, and/or action ID.
@@ -119,18 +126,22 @@ class Module extends ServiceLocator
      * @var string the root directory of the module.
      */
     private $_basePath;
+
     /**
      * @var string The root directory that contains the controller classes for this module.
      */
     private $_controllerPath;
+
     /**
      * @var string the root directory that contains view files for this module
      */
     private $_viewPath;
+
     /**
      * @var string the root directory that contains layout view files for this module.
      */
     private $_layoutPath;
+
     /**
      * @var array child modules of this module
      */

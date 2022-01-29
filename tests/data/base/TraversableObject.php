@@ -13,6 +13,7 @@ namespace yiiunit\data\base;
 use Countable;
 use Exception;
 use Iterator;
+use ReturnTypeWillChange;
 
 /**
  * TraversableObject
@@ -38,7 +39,7 @@ class TraversableObject implements Iterator, Countable
      *
      * @since 5.1.0
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function count(): void
     {
         throw new Exception('Count called on object that should only be traversed.');
@@ -47,7 +48,7 @@ class TraversableObject implements Iterator, Countable
     /**
      * {@inheritdoc}
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function current()
     {
         return $this->data[$this->position];
@@ -56,7 +57,7 @@ class TraversableObject implements Iterator, Countable
     /**
      * {@inheritdoc}
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function next(): void
     {
         ++$this->position;
@@ -65,7 +66,7 @@ class TraversableObject implements Iterator, Countable
     /**
      * {@inheritdoc}
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function key()
     {
         return $this->position;
@@ -74,7 +75,7 @@ class TraversableObject implements Iterator, Countable
     /**
      * {@inheritdoc}
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function valid()
     {
         return array_key_exists($this->position, $this->data);
@@ -83,7 +84,7 @@ class TraversableObject implements Iterator, Countable
     /**
      * {@inheritdoc}
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function rewind(): void
     {
         $this->position = 0;

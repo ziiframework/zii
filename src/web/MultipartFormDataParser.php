@@ -82,6 +82,7 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
      * @var int upload file max size in bytes.
      */
     private $_uploadFileMaxSize;
+
     /**
      * @var int maximum upload files count.
      */

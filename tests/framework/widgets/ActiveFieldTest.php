@@ -30,10 +30,12 @@ class ActiveFieldTest extends \yiiunit\TestCase
      * @var ActiveFieldExtend
      */
     private $activeField;
+
     /**
      * @var DynamicModel
      */
     private $helperModel;
+
     /**
      * @var ActiveForm
      */

@@ -25,10 +25,12 @@ class BaseIpHelper
 {
     public const IPV4 = 4;
     public const IPV6 = 6;
+
     /**
      * The length of IPv6 address in bits.
      */
     public const IPV6_ADDRESS_LENGTH = 128;
+
     /**
      * The length of IPv4 address in bits.
      */

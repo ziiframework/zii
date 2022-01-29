@@ -37,6 +37,7 @@ class Event extends BaseObject
      * Event handlers may use this property to check what event it is handling.
      */
     public $name;
+
     /**
      * @var object the sender of this event. If not set, this property will be
      * set as the object whose `trigger()` method is called.
@@ -44,12 +45,14 @@ class Event extends BaseObject
      * class-level event which is triggered in a static context.
      */
     public $sender;
+
     /**
      * @var bool whether the event is handled. Defaults to `false`.
      * When a handler sets this to be `true`, the event processing will stop and
      * ignore the rest of the uninvoked event handlers.
      */
     public $handled = false;
+
     /**
      * @var mixed the data that is passed to [[Component::on()]] when attaching an event handler.
      * Note that this varies according to which event handler is currently executing.
@@ -60,6 +63,7 @@ class Event extends BaseObject
      * @var array contains all globally registered event handlers.
      */
     private static $_events = [];
+
     /**
      * @var array the globally registered event handlers attached for wildcard patterns (event name wildcard => handlers)
      *

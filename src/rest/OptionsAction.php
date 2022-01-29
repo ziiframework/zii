@@ -27,6 +27,7 @@ class OptionsAction extends \yii\base\Action
      * @var array the HTTP verbs that are supported by the collection URL
      */
     public $collectionOptions = ['GET', 'POST', 'HEAD', 'OPTIONS'];
+
     /**
      * @var array the HTTP verbs that are supported by the resource URL
      */

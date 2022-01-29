@@ -71,6 +71,7 @@ class Migration extends Component implements MigrationInterface
      * ```
      */
     public $db = 'db';
+
     /**
      * @var int max number of characters of the SQL outputted. Useful for reduction of long statements and making
      * console output more compact.
@@ -78,6 +79,7 @@ class Migration extends Component implements MigrationInterface
      * @since 2.0.13
      */
     public $maxSqlOutputLength;
+
     /**
      * @var bool indicates whether the console output should be compacted.
      * If this is set to true, the individual commands ran within the migration will not be output to the console.

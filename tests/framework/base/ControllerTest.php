@@ -59,6 +59,7 @@ class ControllerTest extends TestCase
     public function testCreateInlineAction($controllerClass, $actionId, $expectedActionMethod): void
     {
         $this->mockApplication();
+
         /** @var Controller $controller */
         $controller = new $controllerClass('test-controller', Yii::$app);
 

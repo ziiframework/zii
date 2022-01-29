@@ -55,10 +55,12 @@ class AssetController extends Controller
      * @var string controller default action ID.
      */
     public $defaultAction = 'compress';
+
     /**
      * @var array list of asset bundles to be compressed.
      */
     public $bundles = [];
+
     /**
      * @var array list of asset bundles, which represents output compressed files.
      * You can specify the name of the output compressed file using 'css' and 'js' keys:
@@ -106,6 +108,7 @@ class AssetController extends Controller
      * ```
      */
     public $targets = [];
+
     /**
      * @var string|callable JavaScript file compressor.
      * If a string, it is treated as shell command template, which should contain
@@ -117,6 +120,7 @@ class AssetController extends Controller
      * @see https://developers.google.com/closure/compiler/
      */
     public $jsCompressor = 'java -jar compiler.jar --js {from} --js_output_file {to}';
+
     /**
      * @var string|callable CSS file compressor.
      * If a string, it is treated as shell command template, which should contain
@@ -128,6 +132,7 @@ class AssetController extends Controller
      * @see https://github.com/yui/yuicompressor/
      */
     public $cssCompressor = 'java -jar yuicompressor.jar --type css {from} -o {to}';
+
     /**
      * @var bool whether to delete asset source files after compression.
      * This option affects only those bundles, which have [[\yii\web\AssetBundle::sourcePath]] is set.

@@ -27,58 +27,71 @@ class ColumnSchema extends BaseObject
      * @var string name of this column (without quotes).
      */
     public $name;
+
     /**
      * @var bool whether this column can be null.
      */
     public $allowNull;
+
     /**
      * @var string abstract type of this column. Possible abstract types include:
      * char, string, text, boolean, smallint, integer, bigint, float, decimal, datetime,
      * timestamp, time, date, binary, and money.
      */
     public $type;
+
     /**
      * @var string the PHP type of this column. Possible PHP types include:
      * `string`, `boolean`, `integer`, `double`, `array`.
      */
     public $phpType;
+
     /**
      * @var string the DB type of this column. Possible DB types vary according to the type of DBMS.
      */
     public $dbType;
+
     /**
      * @var mixed default value of this column
      */
     public $defaultValue;
+
     /**
      * @var array enumerable values. This is set only if the column is declared to be an enumerable type.
      */
     public $enumValues;
+
     /**
      * @var int display size of the column.
      */
     public $size;
+
     /**
      * @var int precision of the column data, if it is numeric.
      */
     public $precision;
+
     /**
      * @var int scale of the column data, if it is numeric.
      */
     public $scale;
+
     /**
      * @var bool whether this column is a primary key
      */
     public $isPrimaryKey;
+
     /**
      * @var bool whether this column is auto-incremental
      */
     public $autoIncrement = false;
+
     /**
      * @var bool whether this column is unsigned. This is only meaningful
      * when [[type]] is `smallint`, `integer` or `bigint`.
      */
     public $unsigned;
+
     /**
      * @var string comment of this column. Not all DBMS support this.
      */

@@ -38,6 +38,7 @@ class InitDbFixture extends DbFixture
      * no error will be raised.
      */
     public $initScript = '@app/tests/fixtures/initdb.php';
+
     /**
      * @var array list of database schemas that the test tables may reside in. Defaults to
      * `['']`, meaning using the default schema (an empty string refers to the

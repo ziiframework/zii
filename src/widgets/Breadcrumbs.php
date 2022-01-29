@@ -62,16 +62,19 @@ class Breadcrumbs extends Widget
      * @var string the name of the breadcrumb container tag.
      */
     public $tag = 'ul';
+
     /**
      * @var array the HTML attributes for the breadcrumb container tag.
      *
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $options = ['class' => 'breadcrumb'];
+
     /**
      * @var bool whether to HTML-encode the link labels.
      */
     public $encodeLabels = true;
+
     /**
      * @var array the first hyperlink in the breadcrumbs (called home link).
      * Please refer to [[links]] on the format of the link.
@@ -79,6 +82,7 @@ class Breadcrumbs extends Widget
      * with the label 'Home'. If this property is false, the home link will not be rendered.
      */
     public $homeLink;
+
     /**
      * @var array list of links to appear in the breadcrumbs. If this property is empty,
      * the widget will not render anything. Each array element represents a single link in the breadcrumbs
@@ -117,11 +121,13 @@ class Breadcrumbs extends Widget
      * ```
      */
     public $links = [];
+
     /**
      * @var string the template used to render each inactive item in the breadcrumbs. The token `{link}`
      * will be replaced with the actual HTML link for each inactive item.
      */
     public $itemTemplate = "<li>{link}</li>\n";
+
     /**
      * @var string the template used to render each active item in the breadcrumbs. The token `{link}`
      * will be replaced with the actual HTML link for each active item.

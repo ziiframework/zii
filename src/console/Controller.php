@@ -55,6 +55,7 @@ class Controller extends \yii\base\Controller
      * @deprecated since 2.0.13. Use [[ExitCode::OK]] instead.
      */
     public const EXIT_CODE_NORMAL = 0;
+
     /**
      * @deprecated since 2.0.13. Use [[ExitCode::UNSPECIFIED_ERROR]] instead.
      */
@@ -64,17 +65,20 @@ class Controller extends \yii\base\Controller
      * @var bool whether to run the command interactively.
      */
     public $interactive = true;
+
     /**
      * @var bool|null whether to enable ANSI color in the output.
      * If not set, ANSI color will only be enabled for terminals that support it.
      */
     public $color;
+
     /**
      * @var bool whether to display help information about current command.
      *
      * @since 2.0.10
      */
     public $help = false;
+
     /**
      * @var bool|null if true - script finish with `ExitCode::OK` in case of exception.
      * false - `ExitCode::UNSPECIFIED_ERROR`.

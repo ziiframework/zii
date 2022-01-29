@@ -38,15 +38,18 @@ class FileCache extends Cache
      * To ensure interoperability, only alphanumeric characters should be used.
      */
     public $keyPrefix = '';
+
     /**
      * @var string the directory to store cache files. You may use [path alias](guide:concept-aliases) here.
      * If not set, it will use the "cache" subdirectory under the application runtime path.
      */
     public $cachePath = '@runtime/cache';
+
     /**
      * @var string cache file suffix. Defaults to '.bin'.
      */
     public $cacheFileSuffix = '.bin';
+
     /**
      * @var int the level of sub-directories to store cache files. Defaults to 1.
      * If the system has huge number of cache files (e.g. one million), you may use a bigger value
@@ -54,18 +57,21 @@ class FileCache extends Cache
      * is not over burdened with a single directory having too many files.
      */
     public $directoryLevel = 1;
+
     /**
      * @var int the probability (parts per million) that garbage collection (GC) should be performed
      * when storing a piece of data in the cache. Defaults to 10, meaning 0.001% chance.
      * This number should be between 0 and 1000000. A value 0 means no GC will be performed at all.
      */
     public $gcProbability = 10;
+
     /**
      * @var int the permission to be set for newly created cache files.
      * This value will be used by PHP chmod() function. No umask will be applied.
      * If not set, the permission will be determined by the current environment.
      */
     public $fileMode;
+
     /**
      * @var int the permission to be set for newly created directories.
      * This value will be used by PHP chmod() function. No umask will be applied.

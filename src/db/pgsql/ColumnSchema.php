@@ -25,6 +25,7 @@ class ColumnSchema extends \yii\db\ColumnSchema
      * @var int the dimension of array. Defaults to 0, means this column is not an array.
      */
     public $dimension = 0;
+
     /**
      * @var bool whether the column schema should OMIT using JSON support feature.
      * You can use this property to make upgrade to Yii 2.0.14 easier.
@@ -34,6 +35,7 @@ class ColumnSchema extends \yii\db\ColumnSchema
      * @deprecated Since 2.0.14.1 and will be removed in 2.1.
      */
     public $disableJsonSupport = false;
+
     /**
      * @var bool whether the column schema should OMIT using PgSQL Arrays support feature.
      * You can use this property to make upgrade to Yii 2.0.14 easier.
@@ -43,6 +45,7 @@ class ColumnSchema extends \yii\db\ColumnSchema
      * @deprecated Since 2.0.14.1 and will be removed in 2.1.
      */
     public $disableArraySupport = false;
+
     /**
      * @var bool whether the Array column value should be unserialized to an [[ArrayExpression]] object.
      * You can use this property to make upgrade to Yii 2.0.14 easier.
@@ -52,6 +55,7 @@ class ColumnSchema extends \yii\db\ColumnSchema
      * @deprecated Since 2.0.14.1 and will be removed in 2.1.
      */
     public $deserializeArrayColumnToArrayExpression = true;
+
     /**
      * @var string name of associated sequence if column is auto-incremental
      *

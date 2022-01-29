@@ -104,6 +104,7 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
         $db = $this->getConnection(false);
         $tableName = 'test_def';
         $name = 'test_def_constraint';
+
         /** @var \yii\db\pgsql\Schema $schema */
         $schema = $db->getSchema();
 

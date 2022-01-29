@@ -59,6 +59,7 @@ class DbMessageSource extends MessageSource
      * Starting from version 2.0.2, this can also be a configuration array for creating the object.
      */
     public $db = 'db';
+
     /**
      * @var CacheInterface|array|string the cache object or the application component ID of the cache object.
      * The messages data will be cached using this cache object.
@@ -73,14 +74,17 @@ class DbMessageSource extends MessageSource
      * @see enableCaching
      */
     public $cache = 'cache';
+
     /**
      * @var string the name of the source message table.
      */
     public $sourceMessageTable = '{{%source_message}}';
+
     /**
      * @var string the name of the translated message table.
      */
     public $messageTable = '{{%message}}';
+
     /**
      * @var int the time in seconds that the messages can remain valid in cache.
      * Use 0 to indicate that the cached data will never expire.
@@ -88,6 +92,7 @@ class DbMessageSource extends MessageSource
      * @see enableCaching
      */
     public $cachingDuration = 0;
+
     /**
      * @var bool whether to enable caching translated messages
      */

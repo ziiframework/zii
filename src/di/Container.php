@@ -115,23 +115,28 @@ class Container extends Component
      * @var array singleton objects indexed by their types
      */
     private $_singletons = [];
+
     /**
      * @var array object definitions indexed by their types
      */
     private $_definitions = [];
+
     /**
      * @var array constructor parameters indexed by object types
      */
     private $_params = [];
+
     /**
      * @var array cached ReflectionClass objects indexed by class/interface names
      */
     private $_reflections = [];
+
     /**
      * @var array cached dependencies indexed by class/interface names. Each class name
      * is associated with a list of constructor parameter types or default values.
      */
     private $_dependencies = [];
+
     /**
      * @var bool whether to attempt to resolve elements in array dependencies
      */

@@ -49,11 +49,13 @@ class FilterValidator extends Validator
      * ```
      */
     public $filter;
+
     /**
      * @var bool whether the filter should be skipped if an array input is given.
      * If true and an array input is given, the filter will not be applied.
      */
     public $skipOnArray = false;
+
     /**
      * @var bool this property is overwritten to be false so that this validator will
      * be applied when the value being validated is empty.
@@ -80,7 +82,7 @@ class FilterValidator extends Validator
         $value = $model->$attribute;
 
         if (!$this->skipOnArray || !is_array($value)) {
-            $value = $value ?? '';
+            $value ??= '';
             $model->$attribute = call_user_func($this->filter, $value);
         }
     }

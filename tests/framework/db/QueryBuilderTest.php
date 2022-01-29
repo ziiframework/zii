@@ -37,6 +37,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
      * @var string ` ESCAPE 'char'` part of a LIKE condition SQL
      */
     protected $likeEscapeCharSql = '';
+
     /**
      * @var array map of values to their replacements in LIKE query params
      */

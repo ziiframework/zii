@@ -24,10 +24,12 @@ trait ActiveQueryTrait
      * @var string the name of the ActiveRecord class.
      */
     public $modelClass;
+
     /**
      * @var array a list of relations that this query should be performed with
      */
     public $with;
+
     /**
      * @var bool whether to return each record as an array. If false (default), an object
      * of [[modelClass]] will be created to represent each record.

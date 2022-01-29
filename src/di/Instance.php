@@ -65,6 +65,7 @@ class Instance
      * @var string the component ID, class name, interface name or alias name
      */
     public $id;
+
     /**
      * @var bool if null should be returned instead of throwing an exception
      */

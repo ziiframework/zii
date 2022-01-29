@@ -34,6 +34,7 @@ abstract class BaseActiveFixture extends DbFixture implements IteratorAggregate,
      * @var string the AR model class associated with this fixture.
      */
     public $modelClass;
+
     /**
      * @var array the data rows. Each array element represents one row of data (column name => column value).
      */

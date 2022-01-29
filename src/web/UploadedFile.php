@@ -40,22 +40,26 @@ class UploadedFile extends BaseObject
      * @var string the original name of the file being uploaded
      */
     public $name;
+
     /**
      * @var string the path of the uploaded file on the server.
      * Note, this is a temporary file which will be automatically deleted by PHP
      * after the current request is processed.
      */
     public $tempName;
+
     /**
      * @var string the MIME-type of the uploaded file (such as "image/gif").
      * Since this MIME type is not checked on the server-side, do not take this value for granted.
      * Instead, use [[\yii\helpers\FileHelper::getMimeType()]] to determine the exact MIME type.
      */
     public $type;
+
     /**
      * @var int the actual size of the uploaded file in bytes
      */
     public $size;
+
     /**
      * @var int an error code describing the status of this file uploading.
      *

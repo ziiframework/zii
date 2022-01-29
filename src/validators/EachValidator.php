@@ -60,12 +60,14 @@ class EachValidator extends Validator
      * Please refer to [[\yii\base\Model::rules()]] for more details.
      */
     public $rule;
+
     /**
      * @var bool whether to use error message composed by validator declared via [[rule]] if its validation fails.
      * If enabled, error message specified for this validator itself will appear only if attribute value is not an array.
      * If disabled, own error message value will be used always.
      */
     public $allowMessageFromRule = true;
+
     /**
      * @var bool whether to stop validation once first error among attribute value elements is detected.
      * When enabled validation will produce single error message on attribute, when disabled - multiple

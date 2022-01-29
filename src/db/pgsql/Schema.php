@@ -42,10 +42,12 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
      * @var string the default schema used for the current session.
      */
     public $defaultSchema = 'public';
+
     /**
      * {@inheritdoc}
      */
     public $columnSchemaClass = 'yii\db\pgsql\ColumnSchema';
+
     /**
      * @var array mapping from physical column types (keys) to abstract
      * column types (values)

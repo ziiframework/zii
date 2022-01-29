@@ -55,34 +55,42 @@ abstract class Application extends Module
      * @event Event an event raised before the application starts to handle a request.
      */
     public const EVENT_BEFORE_REQUEST = 'beforeRequest';
+
     /**
      * @event Event an event raised after the application successfully handles a request (before the response is sent out).
      */
     public const EVENT_AFTER_REQUEST = 'afterRequest';
+
     /**
      * Application state used by [[state]]: application just started.
      */
     public const STATE_BEGIN = 0;
+
     /**
      * Application state used by [[state]]: application is initializing.
      */
     public const STATE_INIT = 1;
+
     /**
      * Application state used by [[state]]: application is triggering [[EVENT_BEFORE_REQUEST]].
      */
     public const STATE_BEFORE_REQUEST = 2;
+
     /**
      * Application state used by [[state]]: application is handling the request.
      */
     public const STATE_HANDLING_REQUEST = 3;
+
     /**
      * Application state used by [[state]]: application is triggering [[EVENT_AFTER_REQUEST]]..
      */
     public const STATE_AFTER_REQUEST = 4;
+
     /**
      * Application state used by [[state]]: application is about to send response.
      */
     public const STATE_SENDING_RESPONSE = 5;
+
     /**
      * Application state used by [[state]]: application has ended.
      */
@@ -96,14 +104,17 @@ abstract class Application extends Module
      * Please refer to the [guide about class autoloading](guide:concept-autoloading.md) for more details.
      */
     public $controllerNamespace = 'app\\controllers';
+
     /**
      * @var string the application name.
      */
     public $name = 'My Application';
+
     /**
      * @var string the charset currently used for the application.
      */
     public $charset = 'UTF-8';
+
     /**
      * @var string the language that is meant to be used for end users. It is recommended that you
      * use [IETF language tags](http://en.wikipedia.org/wiki/IETF_language_tag). For example, `en` stands
@@ -112,6 +123,7 @@ abstract class Application extends Module
      * @see sourceLanguage
      */
     public $language = 'en-US';
+
     /**
      * @var string the language that the application is written in. This mainly refers to
      * the language that the messages and view files are written in.
@@ -119,27 +131,33 @@ abstract class Application extends Module
      * @see language
      */
     public $sourceLanguage = 'en-US';
+
     /**
      * @var Controller the currently active controller instance
      */
     public $controller;
+
     /**
      * @var string|bool the layout that should be applied for views in this application. Defaults to 'main'.
      * If this is false, layout will be disabled.
      */
     public $layout = 'main';
+
     /**
      * @var string the requested route
      */
     public $requestedRoute;
+
     /**
      * @var Action the requested Action. If null, it means the request cannot be resolved into an action.
      */
     public $requestedAction;
+
     /**
      * @var array the parameters supplied to the requested action.
      */
     public $requestedParams;
+
     /**
      * @var array list of installed Yii extensions. Each array element represents a single extension
      * with the following structure:
@@ -164,6 +182,7 @@ abstract class Application extends Module
      * `@vendor/ziiframework/extensions.php`.
      */
     public $extensions;
+
     /**
      * @var array list of components that should be run during the application [[bootstrap()|bootstrapping process]].
      *
@@ -180,11 +199,13 @@ abstract class Application extends Module
      * will be also be called.
      */
     public $bootstrap = [];
+
     /**
      * @var int the current application state during a request handling life cycle.
      * This property is managed by the application. Do not modify this property.
      */
     public $state;
+
     /**
      * @var array list of loaded modules indexed by their class names.
      */

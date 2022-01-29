@@ -25,6 +25,7 @@ class RequiredValidator extends Validator
      * @var bool whether to skip this validator if the value being validated is empty.
      */
     public $skipOnEmpty = false;
+
     /**
      * @var mixed the desired value that the attribute must have.
      * If this is null, the validator will validate that the specified attribute is not empty.
@@ -35,6 +36,7 @@ class RequiredValidator extends Validator
      * @see strict
      */
     public $requiredValue;
+
     /**
      * @var bool whether the comparison between the attribute value and [[requiredValue]] is strict.
      * When this is true, both the values and types must match.
@@ -46,6 +48,7 @@ class RequiredValidator extends Validator
      * - In non-strict mode validation will fail
      */
     public $strict = false;
+
     /**
      * @var string the user-defined error message. It may contain the following placeholders which
      * will be replaced accordingly by the validator:

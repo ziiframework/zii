@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace yii\db\mssql;
 
 use PDOException;
+use ReturnTypeWillChange;
 
 /**
  * This is an extension of the default PDO class of MSSQL and DBLIB drivers.
@@ -29,7 +30,7 @@ class PDO extends \PDO
      *
      * @return int last inserted ID value.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function lastInsertId($sequence = null)
     {
         return $this->query('SELECT CAST(COALESCE(SCOPE_IDENTITY(), @@IDENTITY) AS bigint)')->fetchColumn();
@@ -41,7 +42,7 @@ class PDO extends \PDO
      *
      * @return bool the result of a transaction start.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function beginTransaction()
     {
         $this->exec('BEGIN TRANSACTION');
@@ -55,7 +56,7 @@ class PDO extends \PDO
      *
      * @return bool the result of a transaction commit.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function commit()
     {
         $this->exec('COMMIT TRANSACTION');
@@ -69,7 +70,7 @@ class PDO extends \PDO
      *
      * @return bool the result of a transaction roll back.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function rollBack()
     {
         $this->exec('ROLLBACK TRANSACTION');
@@ -88,7 +89,7 @@ class PDO extends \PDO
      * @return mixed A successful call returns the value of the requested PDO attribute.
      * An unsuccessful call returns null.
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function getAttribute($attribute)
     {
         try {

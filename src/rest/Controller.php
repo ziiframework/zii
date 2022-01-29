@@ -40,6 +40,7 @@ class Controller extends \yii\web\Controller
      * @var string|array the configuration for creating the serializer that formats the response data.
      */
     public $serializer = 'yii\rest\Serializer';
+
     /**
      * {@inheritdoc}
      */

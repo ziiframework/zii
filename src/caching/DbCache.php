@@ -52,6 +52,7 @@ class DbCache extends Cache
      * Starting from version 2.0.2, this can also be a configuration array for creating the object.
      */
     public $db = 'db';
+
     /**
      * @var string name of the DB table to store cache content.
      * The table should be pre-created as follows:
@@ -83,6 +84,7 @@ class DbCache extends Cache
      * column in the cache table to improve the performance.
      */
     public $cacheTable = '{{%cache}}';
+
     /**
      * @var int the probability (parts per million) that garbage collection (GC) should be performed
      * when storing a piece of data in the cache. Defaults to 100, meaning 0.01% chance.

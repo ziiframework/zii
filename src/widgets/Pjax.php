@@ -58,6 +58,7 @@ class Pjax extends Widget
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $options = [];
+
     /**
      * @var string|false the jQuery selector of the links that should trigger pjax requests.
      * If not set, all links within the enclosed content of Pjax will trigger pjax requests.
@@ -65,6 +66,7 @@ class Pjax extends Widget
      * Note that if the response to the pjax request is a full page, a normal request will be sent again.
      */
     public $linkSelector;
+
     /**
      * @var string|false the jQuery selector of the forms whose submissions should trigger pjax requests.
      * If not set, all forms with `data-pjax` attribute within the enclosed content of Pjax will trigger pjax requests.
@@ -72,42 +74,50 @@ class Pjax extends Widget
      * Note that if the response to the pjax request is a full page, a normal request will be sent again.
      */
     public $formSelector;
+
     /**
      * @var string The jQuery event that will trigger form handler. Defaults to "submit".
      *
      * @since 2.0.9
      */
     public $submitEvent = 'submit';
+
     /**
      * @var bool whether to enable push state.
      */
     public $enablePushState = true;
+
     /**
      * @var bool whether to enable replace state.
      */
     public $enableReplaceState = false;
+
     /**
      * @var int pjax timeout setting (in milliseconds). This timeout is used when making AJAX requests.
      * Use a bigger number if your server is slow. If the server does not respond within the timeout,
      * a full page load will be triggered.
      */
     public $timeout = 1000;
+
     /**
      * @var bool|int how to scroll the page when pjax response is received. If false, no page scroll will be made.
      * Use a number if you want to scroll to a particular place.
      */
     public $scrollTo = false;
+
     /**
      * @var array additional options to be passed to the pjax JS plugin. Please refer to the
      * [pjax project page](https://github.com/yiisoft/jquery-pjax) for available options.
      */
     public $clientOptions;
+
     /**
      * {@inheritdoc}
      *
      * @internal
      */
     public static $counter = 0;
+
     /**
      * {@inheritdoc}
      */

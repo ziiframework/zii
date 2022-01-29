@@ -33,6 +33,7 @@ class AssetControllerTest extends TestCase
      * @var string path for the test files
      */
     protected $testFilePath = '';
+
     /**
      * @var string test assets path
      */

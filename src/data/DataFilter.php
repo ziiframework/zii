@@ -144,11 +144,13 @@ class DataFilter extends Model
      * The name is used to load data via [[load()]] method.
      */
     public $filterAttributeName = 'filter';
+
     /**
      * @var string label for the filter attribute specified via [[filterAttributeName]].
      * It will be used during error messages composition.
      */
     public $filterAttributeLabel;
+
     /**
      * @var array keywords or expressions that could be used in a filter.
      * Array keys are the expressions used in raw filter value obtained from user request.
@@ -189,6 +191,7 @@ class DataFilter extends Model
         'nin' => 'NOT IN',
         'like' => 'LIKE',
     ];
+
     /**
      * @var array maps filter condition keywords to validation methods.
      * These methods are used by [[validateCondition()]] to validate raw filter conditions.
@@ -207,6 +210,7 @@ class DataFilter extends Model
         'NOT IN' => 'validateOperatorCondition',
         'LIKE' => 'validateOperatorCondition',
     ];
+
     /**
      * @var array specifies the list of supported search attribute types per each operator.
      * This field should be in format: 'operatorKeyword' => ['type1', 'type2' ...].
@@ -224,6 +228,7 @@ class DataFilter extends Model
         'NOT IN' => '*',
         'LIKE' => [self::TYPE_STRING],
     ];
+
     /**
      * @var array list of operators keywords, which should accept multiple values.
      */
@@ -231,6 +236,7 @@ class DataFilter extends Model
         'IN',
         'NOT IN',
     ];
+
     /**
      * @var array actual attribute names to be used in searched condition, in format: [filterAttribute => actualAttribute].
      * For example, in case of using table joins in the search query, attribute map may look like the following:
@@ -244,6 +250,7 @@ class DataFilter extends Model
      * Attribute map will be applied to filter condition in [[normalize()]] method.
      */
     public $attributeMap = [];
+
     /**
      * @var string representation of `null` instead of literal `null` in case the latter cannot be used.
      *
@@ -255,14 +262,17 @@ class DataFilter extends Model
      * @var array|Closure list of error messages responding to invalid filter structure, in format: `[errorKey => message]`.
      */
     private $_errorMessages;
+
     /**
      * @var mixed raw filter specification.
      */
     private $_filter;
+
     /**
      * @var Model|array|string|callable model to be used for filter attributes validation.
      */
     private $_searchModel;
+
     /**
      * @var array list of search attribute types in format: attributeName => type
      */

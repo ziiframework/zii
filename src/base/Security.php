@@ -40,6 +40,7 @@ class Security extends Component
      * @var string The cipher to use for encryption and decryption.
      */
     public $cipher = 'AES-128-CBC';
+
     /**
      * @var array[] Look-up table of block sizes and key sizes for each supported OpenSSL cipher.
      *
@@ -57,29 +58,34 @@ class Security extends Component
         'AES-192-CBC' => [16, 24],
         'AES-256-CBC' => [16, 32],
     ];
+
     /**
      * @var string Hash algorithm for key derivation. Recommend sha256, sha384 or sha512.
      *
      * @see [hash_algos()](https://www.php.net/manual/en/function.hash-algos.php)
      */
     public $kdfHash = 'sha256';
+
     /**
      * @var string Hash algorithm for message authentication. Recommend sha256, sha384 or sha512.
      *
      * @see [hash_algos()](https://www.php.net/manual/en/function.hash-algos.php)
      */
     public $macHash = 'sha256';
+
     /**
      * @var string HKDF info value for derivation of message authentication key.
      *
      * @see hkdf()
      */
     public $authKeyInfo = 'AuthorizationKey';
+
     /**
      * @var int derivation iterations count.
      * Set as high as possible to hinder dictionary password attacks.
      */
     public $derivationIterations = 100000;
+
     /**
      * @var string strategy, which should be used to generate password hash.
      * Available strategies:
@@ -91,6 +97,7 @@ class Security extends Component
      * uses `password_hash()` when available or `crypt()` when not.
      */
     public $passwordHashStrategy;
+
     /**
      * @var int Default cost used for password hashing.
      * Allowed value is between 4 and 31.

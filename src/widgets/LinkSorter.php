@@ -32,11 +32,13 @@ class LinkSorter extends Widget
      * @var Sort the sort definition
      */
     public $sort;
+
     /**
      * @var array list of the attributes that support sorting. If not set, it will be determined
      * using [[Sort::attributes]].
      */
     public $attributes;
+
     /**
      * @var array HTML attributes for the sorter container tag.
      *
@@ -44,6 +46,7 @@ class LinkSorter extends Widget
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $options = ['class' => 'sorter'];
+
     /**
      * @var array HTML attributes for the link in a sorter container tag which are passed to [[Sort::link()]].
      *

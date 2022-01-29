@@ -91,10 +91,12 @@ class MigrateController extends BaseMigrateController
      * @var string the name of the table for keeping applied migration information.
      */
     public $migrationTable = '{{%migration}}';
+
     /**
      * {@inheritdoc}
      */
     public $templateFile = '@yii/views/migration.php';
+
     /**
      * @var array a set of template paths for generating migration code automatically.
      *
@@ -114,6 +116,7 @@ class MigrateController extends BaseMigrateController
         'drop_column' => '@yii/views/dropColumnMigration.php',
         'create_junction' => '@yii/views/createTableMigration.php',
     ];
+
     /**
      * @var bool indicates whether the table names generated should consider
      * the `tablePrefix` setting of the DB connection. For example, if the table
@@ -122,6 +125,7 @@ class MigrateController extends BaseMigrateController
      * @since 2.0.8
      */
     public $useTablePrefix = true;
+
     /**
      * @var array column definition strings used for creating migration code.
      *
@@ -136,12 +140,14 @@ class MigrateController extends BaseMigrateController
      * @since 2.0.7
      */
     public $fields = [];
+
     /**
      * @var Connection|array|string the DB connection object or the application component ID of the DB connection to use
      * when applying migrations. Starting from version 2.0.3, this can also be a configuration array
      * for creating the object.
      */
     public $db = 'db';
+
     /**
      * @var string the comment for the table being created.
      *

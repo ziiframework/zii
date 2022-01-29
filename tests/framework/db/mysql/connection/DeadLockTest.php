@@ -156,6 +156,7 @@ class DeadLockTest extends \yiiunit\framework\db\mysql\ConnectionTest
     {
         try {
             $this->log('child 1: connect');
+
             /** @var Connection $first */
             $first = $this->getConnection(false, false);
 
@@ -254,6 +255,7 @@ class DeadLockTest extends \yiiunit\framework\db\mysql\ConnectionTest
             }
 
             $this->log('child 2: connect');
+
             /** @var Connection $second */
             $second = $this->getConnection(true, false);
             $second->open();

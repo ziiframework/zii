@@ -89,6 +89,7 @@ class ActiveQuery extends Query implements ActiveQueryInterface
      * This is set by [[ActiveRecord::findBySql()]].
      */
     public $sql;
+
     /**
      * @var string|array the join condition to be used when this query is used in a relational context.
      * The condition will be used in the ON part when [[ActiveQuery::joinWith()]] is called.
@@ -98,6 +99,7 @@ class ActiveQuery extends Query implements ActiveQueryInterface
      * @see onCondition()
      */
     public $on;
+
     /**
      * @var array a list of relations that this query should be joined with
      */

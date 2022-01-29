@@ -31,26 +31,32 @@ class Link extends BaseObject
      * URI template [RFC6570](https://tools.ietf.org/html/rfc6570). This property is required.
      */
     public $href;
+
     /**
      * @var string a secondary key for selecting Link Objects which share the same relation type
      */
     public $name;
+
     /**
      * @var string a hint to indicate the media type expected when dereferencing the target resource
      */
     public $type;
+
     /**
      * @var bool a value indicating whether [[href]] refers to a URI or URI template.
      */
     public $templated = false;
+
     /**
      * @var string a URI that hints about the profile of the target resource.
      */
     public $profile;
+
     /**
      * @var string a label describing the link
      */
     public $title;
+
     /**
      * @var string the language of the target resource
      */

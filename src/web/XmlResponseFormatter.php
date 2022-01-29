@@ -33,14 +33,17 @@ class XmlResponseFormatter extends Component implements ResponseFormatterInterfa
      * @var string the Content-Type header for the response
      */
     public $contentType = 'application/xml';
+
     /**
      * @var string the XML version
      */
     public $version = '1.0';
+
     /**
      * @var string the XML encoding. If not set, it will use the value of [[Response::charset]].
      */
     public $encoding;
+
     /**
      * @var string|string[]|false the name of the root element. If set to false, null or is empty then no root tag
      * should be added.
@@ -48,10 +51,12 @@ class XmlResponseFormatter extends Component implements ResponseFormatterInterfa
      * Since 2.0.44 URI namespace could be specified by passing `[namespace, tag name]` array.
      */
     public $rootTag = 'response';
+
     /**
      * @var string the name of the elements that represent the array elements with numeric keys.
      */
     public $itemTag = 'item';
+
     /**
      * @var bool whether to interpret objects implementing the [[\Traversable]] interface as arrays.
      * Defaults to `true`.
@@ -59,12 +64,14 @@ class XmlResponseFormatter extends Component implements ResponseFormatterInterfa
      * @since 2.0.7
      */
     public $useTraversableAsArray = true;
+
     /**
      * @var bool if object class names should be used as tag names
      *
      * @since 2.0.11
      */
     public $useObjectTags = true;
+
     /**
      * @var bool if true, converts object tags to lowercase, `$useObjectTags` must be enabled
      *

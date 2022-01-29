@@ -75,14 +75,17 @@ class SqlDataProvider extends BaseDataProvider
      * Starting from version 2.0.2, this can also be a configuration array for creating the object.
      */
     public $db = 'db';
+
     /**
      * @var string the SQL statement to be used for fetching data rows.
      */
     public $sql;
+
     /**
      * @var array parameters (name=>value) to be bound to the SQL statement.
      */
     public $params = [];
+
     /**
      * @var string|callable the column that is used as the key of the data models.
      * This can be either a column name, or a callable that returns the key value of a given data model.

@@ -103,6 +103,7 @@ abstract class UniqueValidatorTest extends DatabaseTestCase
         $m = ValidatorTestMainModel::find()->one();
         $val->validateAttribute($m, 'id');
         $this->assertFalse($m->hasErrors('id'));
+
         /** @var ValidatorTestRefModel $m */
         $m = ValidatorTestRefModel::findOne(1);
         $val->validateAttribute($m, 'ref');
@@ -138,6 +139,7 @@ abstract class UniqueValidatorTest extends DatabaseTestCase
     public function testValidateNonDatabaseAttribute(): void
     {
         $val = new UniqueValidator(['targetClass' => ValidatorTestRefModel::className(), 'targetAttribute' => 'ref']);
+
         /** @var ValidatorTestMainModel $m */
         $m = ValidatorTestMainModel::findOne(1);
         $val->validateAttribute($m, 'testMainVal');

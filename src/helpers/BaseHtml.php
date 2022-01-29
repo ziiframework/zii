@@ -36,6 +36,7 @@ class BaseHtml
      * @since 2.0.12
      */
     public static $attributeRegex = '/(^|.*\])([\w\.\+]+)(\[.*|$)/u';
+
     /**
      * @var array list of void elements (element name => 1)
      *
@@ -59,6 +60,7 @@ class BaseHtml
         'track' => 1,
         'wbr' => 1,
     ];
+
     /**
      * @var array the preferred order of attributes in a tag. This mainly affects the order of the attributes
      * that are rendered by [[renderTagAttributes()]].
@@ -95,6 +97,7 @@ class BaseHtml
         'rel',
         'media',
     ];
+
     /**
      * @var array list of tag attributes that should be specially handled when their values are of array type.
      * In particular, if the value of the `data` attribute is `['name' => 'xyz', 'age' => 13]`, two attributes

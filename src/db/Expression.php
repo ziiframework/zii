@@ -38,6 +38,7 @@ class Expression extends \yii\base\BaseObject implements ExpressionInterface
      * @var string the DB expression
      */
     public $expression;
+
     /**
      * @var array list of parameters that should be bound for this expression.
      * The keys are placeholders appearing in [[expression]] and the values

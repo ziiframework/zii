@@ -25,14 +25,17 @@ class BetweenCondition implements ConditionInterface
      * @var string the operator to use (e.g. `BETWEEN` or `NOT BETWEEN`)
      */
     private $operator;
+
     /**
      * @var mixed the column name to the left of [[operator]]
      */
     private $column;
+
     /**
      * @var mixed beginning of the interval
      */
     private $intervalStart;
+
     /**
      * @var mixed end of the interval
      */

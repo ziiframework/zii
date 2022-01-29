@@ -63,6 +63,7 @@ class ActiveDataProvider extends BaseDataProvider
      * @var QueryInterface|null the query that is used to fetch data models and [[totalCount]] if it is not explicitly set.
      */
     public $query;
+
     /**
      * @var string|callable|null the column that is used as the key of the data models.
      * This can be either a column name, or a callable that returns the key value of a given data model.
@@ -75,6 +76,7 @@ class ActiveDataProvider extends BaseDataProvider
      * @see getKeys()
      */
     public $key;
+
     /**
      * @var Connection|array|string|null the DB connection object or the application component ID of the DB connection.
      * If set it overrides [[query]] default DB connection.

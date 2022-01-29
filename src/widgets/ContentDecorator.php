@@ -51,6 +51,7 @@ class ContentDecorator extends Widget
      * This can be specified as either the view file path or [path alias](guide:concept-aliases).
      */
     public $viewFile;
+
     /**
      * @var array the parameters (name => value) to be extracted and made available in the decorative view.
      */

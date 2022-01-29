@@ -20,10 +20,12 @@ use yiiunit\TestCase;
 abstract class DatabaseTestCase extends TestCase
 {
     protected $database;
+
     /**
      * @var string the driver name of this test class. Must be set by a subclass.
      */
     protected $driverName;
+
     /**
      * @var Connection
      */

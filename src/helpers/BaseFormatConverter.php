@@ -51,6 +51,7 @@ class BaseFormatConverter
             'datetime' => 'l, F j, Y g:i:sA T',
         ],
     ];
+
     /**
      * @var array the jQuery UI fallback definition to use for the ICU short patterns `short`, `medium`, `long` and `full`.
      * This is used as fallback when the intl extension is not installed.

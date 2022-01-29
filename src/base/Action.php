@@ -45,6 +45,7 @@ class Action extends Component
      * @var string ID of the action
      */
     public $id;
+
     /**
      * @var Controller|\yii\web\Controller|\yii\console\Controller the controller that owns this action
      */
