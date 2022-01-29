@@ -2517,7 +2517,7 @@ class BaseHtml
             return $formName . $prefix . "[$attribute]" . $suffix;
         }
 
-        throw new InvalidArgumentException($model::class . '::formName() cannot be empty for tabular inputs.');
+        throw new InvalidArgumentException(get_class($model) . '::formName() cannot be empty for tabular inputs.');
     }
 
     /**

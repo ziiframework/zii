@@ -70,7 +70,7 @@ class CompositeAuth extends AuthMethod
                 $this->authMethods[$i] = $auth = Yii::createObject($auth);
 
                 if (!$auth instanceof AuthInterface) {
-                    throw new InvalidConfigException($auth::class . ' must implement yii\filters\auth\AuthInterface');
+                    throw new InvalidConfigException(get_class($auth) . ' must implement yii\filters\auth\AuthInterface');
                 }
             }
 

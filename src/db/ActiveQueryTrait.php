@@ -132,7 +132,7 @@ trait ActiveQueryTrait
 
             foreach ($rows as $row) {
                 $model = $class::instantiate($row);
-                $modelClass = $model::class;
+                $modelClass = get_class($model);
                 $modelClass::populateRecord($model, $row);
                 $models[] = $model;
             }

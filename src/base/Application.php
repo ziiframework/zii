@@ -327,10 +327,10 @@ abstract class Application extends Module
                 $component = Yii::createObject($extension['bootstrap']);
 
                 if ($component instanceof BootstrapInterface) {
-                    Yii::debug('Bootstrap with ' . $component::class . '::bootstrap()', __METHOD__);
+                    Yii::debug('Bootstrap with ' . get_class($component) . '::bootstrap()', __METHOD__);
                     $component->bootstrap($this);
                 } else {
-                    Yii::debug('Bootstrap with ' . $component::class, __METHOD__);
+                    Yii::debug('Bootstrap with ' . get_class($component), __METHOD__);
                 }
             }
         }
@@ -359,10 +359,10 @@ abstract class Application extends Module
             }
 
             if ($component instanceof BootstrapInterface) {
-                Yii::debug('Bootstrap with ' . $component::class . '::bootstrap()', __METHOD__);
+                Yii::debug('Bootstrap with ' . get_class($component) . '::bootstrap()', __METHOD__);
                 $component->bootstrap($this);
             } else {
-                Yii::debug('Bootstrap with ' . $component::class, __METHOD__);
+                Yii::debug('Bootstrap with ' . get_class($component), __METHOD__);
             }
         }
     }

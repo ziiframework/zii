@@ -203,7 +203,7 @@ class Module extends ServiceLocator
         if ($instance === null) {
             unset(Yii::$app->loadedModules[static::class]);
         } else {
-            Yii::$app->loadedModules[$instance::class] = $instance;
+            Yii::$app->loadedModules[get_class($instance)] = $instance;
         }
     }
 
@@ -735,7 +735,7 @@ class Module extends ServiceLocator
         if (is_subclass_of($className, 'yii\base\Controller')) {
             $controller = Yii::createObject($className, [$id, $this]);
 
-            return $controller::class === $className ? $controller : null;
+            return get_class($controller) === $className ? $controller : null;
         } elseif (YII_DEBUG) {
             throw new InvalidConfigException('Controller class must extend from \\yii\\base\\Controller.');
         }

@@ -181,7 +181,7 @@ class UniqueValidator extends Validator
      */
     private function getTargetClass($model)
     {
-        return $this->targetClass === null ? $model::class : $this->targetClass;
+        return $this->targetClass === null ? get_class($model) : $this->targetClass;
     }
 
     /**
@@ -199,7 +199,7 @@ class UniqueValidator extends Validator
         /** @var ActiveRecordInterface|\yii\base\BaseObject $targetClass $query */
         $query = $this->prepareQuery($targetClass, $conditions);
 
-        if (!$model instanceof ActiveRecordInterface || $model->getIsNewRecord() || $model->className() !== $targetClass::className()) {
+        if (!$model instanceof ActiveRecordInterface || $model->getIsNewRecord() || $model->className() !== get_class($targetClass)Name()) {
             // if current $model isn't in the database yet then it's OK just to call exists()
             // also there's no need to run check based on primary keys, when $targetClass is not the same as $model's class
             $exists = $query->exists();

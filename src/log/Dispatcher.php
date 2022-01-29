@@ -231,7 +231,7 @@ class Dispatcher extends Component
     protected function generateTargetFailErrorMessage($target, $throwable, $method)
     {
         return [
-            'Unable to send log via ' . $target::class . ': ' . ErrorHandler::convertExceptionToVerboseString($throwable),
+            'Unable to send log via ' . get_class($target) . ': ' . ErrorHandler::convertExceptionToVerboseString($throwable),
             Logger::LEVEL_WARNING,
             $method,
             microtime(true),

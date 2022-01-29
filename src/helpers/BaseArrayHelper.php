@@ -82,7 +82,7 @@ class BaseArrayHelper
             return (array) $object;
         } elseif (is_object($object)) {
             if (!empty($properties)) {
-                $className = $object::class;
+                $className = get_class($object);
 
                 if (!empty($properties[$className])) {
                     $result = [];

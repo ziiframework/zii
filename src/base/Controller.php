@@ -635,7 +635,7 @@ class Controller extends Component implements ViewContextInterface
 
         if (($component = $this->module->get($name, false)) instanceof $typeName) {
             $args[] = $component;
-            $requestedParams[$name] = 'Component: ' . $component::class . " \$$name";
+            $requestedParams[$name] = 'Component: ' . get_class($component) . " \$$name";
         } elseif ($this->module->has($typeName) && ($service = $this->module->get($typeName)) instanceof $typeName) {
             $args[] = $service;
             $requestedParams[$name] = 'Module ' . get_class($this->module) . " DI: $typeName \$$name";
