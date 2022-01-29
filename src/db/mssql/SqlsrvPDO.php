@@ -34,6 +34,7 @@ class SqlsrvPDO extends PDO
      *
      * @return int last inserted ID value.
      */
+    #[\ReturnTypeWillChange]
     public function lastInsertId($sequence = null)
     {
         return !$sequence ? parent::lastInsertId() : parent::lastInsertId($sequence);

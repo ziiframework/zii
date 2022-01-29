@@ -30,6 +30,7 @@ class DBLibPDO extends PDO
      *
      * @return int last inserted ID value.
      */
+    #[\ReturnTypeWillChange]
     public function lastInsertId($name = null)
     {
         return $this->query('SELECT CAST(COALESCE(SCOPE_IDENTITY(), @@IDENTITY) AS bigint)')->fetchColumn();
@@ -46,6 +47,7 @@ class DBLibPDO extends PDO
      * @return mixed A successful call returns the value of the requested PDO attribute.
      * An unsuccessful call returns null.
      */
+    #[\ReturnTypeWillChange]
     public function getAttribute($attribute)
     {
         try {
