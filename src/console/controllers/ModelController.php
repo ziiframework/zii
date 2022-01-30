@@ -265,19 +265,18 @@ class ModelController extends Controller
 
         // public function behaviors(): array
         if (!empty($this->_typeCastAttributes)) {
+            $this->_targetNamespace->addUse(AttributeTypecastBehavior::class);
             $this->_targetClass->addMethod('behaviors')
                 ->setReturnType('array')
                 // ->addComment('@inheritdoc')
                 ->setBody(implode("\n", array_merge(
                     [
                         '$behaviors = parent::behaviors();',
-                        "\n",
                     ],
                     array_map(function (string $k, string $v): string {
                         return "\$behaviors['typecast']['attributeTypes']['$k'] = AttributeTypecastBehavior::$v;";
                     }, array_keys($this->_typeCastAttributes), array_values($this->_typeCastAttributes)),
                     [
-                        "\n",
                         'return $behaviors;',
                     ]
                 )));
