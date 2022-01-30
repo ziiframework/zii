@@ -138,9 +138,9 @@ class ModelController extends Controller
     /**
      * typeCast eg:
      * [
-     *   attr => targetClass,
-     *   attr => targetClass,
-     *   attr => targetClass,
+     *   'is_success' => 'TYPE_BOOLEAN',
+     *   'is_success' => 'TYPE_BOOLEAN',
+     *   'is_success' => 'TYPE_BOOLEAN',
      * ].
      */
     private array $_typeCastAttributes = [];
@@ -263,6 +263,26 @@ class ModelController extends Controller
             ++$this->_columnIdx;
         }
 
+        // public function behaviors(): array
+        if (!empty($this->_typeCastAttributes)) {
+            $this->_targetClass->addMethod('behaviors')
+                ->setReturnType('array')
+                // ->addComment('@inheritdoc')
+                ->setBody(implode("\n", array_merge(
+                    [
+                        '$behaviors = parent::behaviors();',
+                        "\n",
+                    ],
+                    array_map(function (string $k, string $v): string {
+                        return "\$behaviors['typecast']['attributeTypes']['$k'] = AttributeTypecastBehavior::$v;";
+                    }, array_keys($this->_typeCastAttributes), array_values($this->_typeCastAttributes)),
+                    [
+                        "\n",
+                        'return $behaviors;',
+                    ]
+                )));
+        }
+
         // public function attributeLabels
         $this->_targetClass->addMethod('attributeLabels')
             ->setReturnType('array')
@@ -360,10 +380,10 @@ class ModelController extends Controller
             // $column->size === 1
             // Warning: #1681 Integer display width is deprecated and will be removed in a future release.
             if (preg_match('/^(is|has|can|enable|use)_/', $column->name)) {
-                $this->_typeCastAttributes[$column->name] = AttributeTypecastBehavior::TYPE_BOOLEAN;
+                $this->_typeCastAttributes[$column->name] = 'TYPE_BOOLEAN';
                 $this->_ruleBoolean[] = ['name' => $column->name];
             } else {
-                $this->_typeCastAttributes[$column->name] = AttributeTypecastBehavior::TYPE_INTEGER;
+                $this->_typeCastAttributes[$column->name] = 'TYPE_INTEGER';
                 $this->_ruleInteger[] = [
                     'name' => $column->name,
                     'max' => $this->getColumnMaximumValue($column),
@@ -385,7 +405,6 @@ class ModelController extends Controller
                 'name' => $column->name,
                 'max' => $this->getColumnMaximumValue($column),
             ];
-            $this->_typeCastAttributes[$column->name] = AttributeTypecastBehavior::TYPE_INTEGER;
         }
 
         if ($this->fieldTypeCast($column->dbType) === 'float') {
@@ -393,7 +412,6 @@ class ModelController extends Controller
                 'name' => $column->name,
                 'max' => $this->getColumnMaximumValue($column),
             ];
-            $this->_typeCastAttributes[$column->name] = AttributeTypecastBehavior::TYPE_INTEGER;
         }
 
         if ($this->fieldTypeCast($column->dbType) === 'decimal') {
@@ -401,7 +419,6 @@ class ModelController extends Controller
                 'name' => $column->name,
                 'max' => $this->getColumnMaximumValue($column),
             ];
-            $this->_typeCastAttributes[$column->name] = AttributeTypecastBehavior::TYPE_INTEGER;
         }
 
         // varchar
