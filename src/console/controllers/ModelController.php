@@ -43,6 +43,9 @@ use yii\web\IdentityInterface;
  */
 class ModelController extends Controller
 {
+    private const EDGE_MAX = 'max';
+    private const EDGE_MIN = 'min';
+
     public string $modelNamespace = 'Zpp\\Models';
     public string $modelExtends = '\\Zpp\\Models\\BaseModel';
     public string $modelDir = '@app/src/Models';
@@ -94,6 +97,15 @@ class ModelController extends Controller
      * ].
      */
     private array $_ruleInteger = [];
+
+    /**
+     * [
+     *   ['name' => NAME, 'min' => MIN, 'max' => MAX],
+     *   ['name' => NAME, 'min' => MIN, 'max' => MAX],
+     *   ['name' => NAME, 'min' => MIN, 'max' => MAX],
+     * ].
+     */
+    private array $_ruleDecimal = [];
 
     /**
      * String eg:
@@ -385,7 +397,7 @@ class ModelController extends Controller
                 $this->_typeCastAttributes[$column->name] = 'TYPE_INTEGER';
                 $this->_ruleInteger[] = [
                     'name' => $column->name,
-                    'max' => $this->getColumnMaximumValue($column),
+                    'max' => $this->getColumnEdge($column),
                 ];
             }
         }
@@ -394,7 +406,7 @@ class ModelController extends Controller
         if (in_array($this->fieldTypeCast($column->dbType), ['smallint', 'mediumint', 'int', 'integer', 'bigint'], true)) {
             $this->_ruleInteger[] = [
                 'name' => $column->name,
-                'max' => $this->getColumnMaximumValue($column),
+                'max' => $this->getColumnEdge($column),
             ];
         }
 
@@ -403,7 +415,7 @@ class ModelController extends Controller
             dump($column);
             $this->_ruleInteger[] = [
                 'name' => $column->name,
-                'max' => $this->getColumnMaximumValue($column),
+                'max' => $this->getColumnEdge($column),
             ];
         }
 
@@ -411,15 +423,15 @@ class ModelController extends Controller
             dump($column);
             $this->_ruleInteger[] = [
                 'name' => $column->name,
-                'max' => $this->getColumnMaximumValue($column),
+                'max' => $this->getColumnEdge($column),
             ];
         }
 
         if ($this->fieldTypeCast($column->dbType) === 'decimal') {
-            dump($column);
-            $this->_ruleInteger[] = [
+            $this->_ruleDecimal[] = [
                 'name' => $column->name,
-                'max' => $this->getColumnMaximumValue($column),
+                'max' => $this->getColumnEdge($column),
+                'min' => $this->getColumnEdge($column, self::EDGE_MIN),
             ];
         }
 
@@ -585,6 +597,32 @@ class ModelController extends Controller
                 ];
             }
         }
+        // Decimal Type & Length
+        if (!empty($this->_ruleDecimal)) {
+            $groupBySize = [];
+
+            foreach ($this->_ruleDecimal as $column) {
+                $groupBySize["{$column['min']}--{$column['max']}"][] = $column['name'];
+            }
+
+            foreach ($groupBySize as $scale => $names) {
+                $scale0 = explode('--', $scale)[0];
+                $scale1 = explode('--', $scale)[1];
+                $scaleLength = mb_strlen(explode('.', $scale1)[1]);
+                $scaleLengthSC = ['一', '两', '三', '四', '五', '六', '七'][$scaleLength - 1];
+
+                $rules[] = [
+                    $this->arrayOrString($names),
+                    'double',
+                    'min' => '%' . $scale0 . '%',
+                    'max' => '%' . $scale1 . '%',
+                    'numberPattern' => '#^\d+\.\d{' . $scaleLength . '}$#',
+                    'message' =>  '%"{attribute}" . " " . zii_t("必须是小数点后保留' . $scaleLengthSC . '位的数字")%',
+                    'tooSmall' => '%"{attribute}" . " " . zii_t("不能大于") . ' . "\" $scale0\"%",
+                    'tooBig' =>   '%"{attribute}" . " " . zii_t("不能大于") . ' . "\" $scale1\"%",
+                ];
+            }
+        }
         // Boolean Type
         if (!empty($this->_ruleBoolean)) {
             $rules[] = [
@@ -718,7 +756,12 @@ class ModelController extends Controller
         return explode('(', $dbType)[0];
     }
 
-    private function getColumnMaximumValue(ColumnSchema $column): ?int
+    /**
+     * @param ColumnSchema $column
+     * @param string $edge
+     * @return int|string|null
+     */
+    private function getColumnEdge(ColumnSchema $column, string $edge = self::EDGE_MAX)
     {
         $dbType = $this->fieldTypeCast($column->dbType);
 
@@ -744,7 +787,17 @@ class ModelController extends Controller
                 $max = $column->size === null || $column->size >= 19 ? 9223372036854775807 : str_repeat('9', $column->size);
 
                 break;
+            case Schema::TYPE_DECIMAL:
+                $precision = $column->precision === null || $column->precision >= 9 ? 9 : $column->precision;
+                $scale = $column->scale === null ? 0 : $column->scale;
 
+                if ($edge === self::EDGE_MAX) {
+                    return str_repeat('9', $precision - $scale) . '.' . str_repeat('9', $scale);
+                }
+                if ($edge === self::EDGE_MIN) {
+                    return '0.' . str_repeat('0', $scale);
+                }
+                return null;
             default:
                 $max = null;
 
