@@ -400,6 +400,7 @@ class ModelController extends Controller
 
         // double、float、decimal TODO
         if ($this->fieldTypeCast($column->dbType) === 'double') {
+            dump($column);
             $this->_ruleInteger[] = [
                 'name' => $column->name,
                 'max' => $this->getColumnMaximumValue($column),
@@ -407,6 +408,7 @@ class ModelController extends Controller
         }
 
         if ($this->fieldTypeCast($column->dbType) === 'float') {
+            dump($column);
             $this->_ruleInteger[] = [
                 'name' => $column->name,
                 'max' => $this->getColumnMaximumValue($column),
@@ -414,6 +416,7 @@ class ModelController extends Controller
         }
 
         if ($this->fieldTypeCast($column->dbType) === 'decimal') {
+            dump($column);
             $this->_ruleInteger[] = [
                 'name' => $column->name,
                 'max' => $this->getColumnMaximumValue($column),
@@ -473,7 +476,7 @@ class ModelController extends Controller
         }
 
         // xxx_id
-        if (preg_match('/^([a-z0-9]+)_id$/', $column->name, $matches)) {
+        if (preg_match('/^([a-z0-9_]+)_id$/', $column->name, $matches)) {
             $getTableComment = $this->getTableComment($matches[1]);
 
             if ($getTableComment !== null) {
