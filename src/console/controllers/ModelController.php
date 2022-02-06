@@ -310,7 +310,7 @@ class ModelController extends Controller
             ->setReturnType('array')
             // ->addComment('@inheritdoc')
             ->setBody('return array_merge(parent::extraFields(), ?);', [
-                array_map(static fn (string $f): string => 'db' . ucfirst($f), array_column($this->_ruleExist, 'targetClassName')),
+                array_map(fn (string $targetClassName): string => 'db' . $targetClassName, array_column($this->_ruleExist, 'targetClassName')),
             ]);
 
         // rules
@@ -494,7 +494,7 @@ class ModelController extends Controller
             if ($getTableComment !== null) {
                 $this->_ruleExist[] = [
                     'name' => $column->name,
-                    'targetClassName' => ucfirst($matches[1]),
+                    'targetClassName' => Inflector::camelize($matches[1]),
                     'targetClassComment' => $getTableComment,
                 ];
             }
