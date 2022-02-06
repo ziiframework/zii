@@ -283,13 +283,13 @@ class ModelController extends Controller
                 // ->addComment('@inheritdoc')
                 ->setBody(implode("\n", array_merge(
                     [
-                        '$behaviors = parent::behaviors();',
+                        '$behaviors = parent::behaviors();' . "\n",
                     ],
                     array_map(function (string $k, string $v): string {
                         return "\$behaviors['typecast']['attributeTypes']['$k'] = AttributeTypecastBehavior::$v;";
                     }, array_keys($this->_typeCastAttributes), array_values($this->_typeCastAttributes)),
                     [
-                        'return $behaviors;',
+                        "\n" . 'return $behaviors;',
                     ]
                 )));
         }
@@ -618,7 +618,7 @@ class ModelController extends Controller
                     'max' => '%' . $scale1 . '%',
                     'numberPattern' => '#^\d+\.\d{' . $scaleLength . '}$#',
                     'message' =>  '%"{attribute}" . " " . zii_t("必须是小数点后保留' . $scaleLengthSC . '位的数字")%',
-                    'tooSmall' => '%"{attribute}" . " " . zii_t("不能大于") . ' . "\" $scale0\"%",
+                    'tooSmall' => '%"{attribute}" . " " . zii_t("不能小于") . ' . "\" $scale0\"%",
                     'tooBig' =>   '%"{attribute}" . " " . zii_t("不能大于") . ' . "\" $scale1\"%",
                 ];
             }
