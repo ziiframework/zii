@@ -680,7 +680,7 @@ class ModelController extends Controller
                     ->setReturnNullable()
                     // ->addComment("关联{$item['targetClassComment']}")
                     ->addComment("@return null|ActiveQuery|{$item['targetClassName']}")
-                    ->setBody("return \$this->hasOne({$item['targetClassName']}::class, ['id' => '" . lcfirst($item['targetClassName']) . "_id']);");
+                    ->setBody("return \$this->hasOne({$item['targetClassName']}::class, ['id' => '" . $item['name'] . "']);");
             }
         }
         // Unique Index
