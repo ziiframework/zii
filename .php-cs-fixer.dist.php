@@ -56,7 +56,8 @@ return (new PhpCsFixer\Config())
         'blank_line_after_namespace' => true,
         'blank_line_before_statement' => [
             'statements' => [
-                'break',
+                'case',
+                // 'break',
                 'continue',
                 'declare',
                 'default',
