@@ -214,7 +214,7 @@ class ModelController extends Controller
         $this->stdout("Use php yii model/generate to generate a model.\n", Console::FG_RED);
     }
 
-    public function actionGenerate(string $tableName, bool $overwrite = false): void
+    public function actionGii(string $tableName, bool $overwrite = false): void
     {
         $this->resetAttributes();
 
