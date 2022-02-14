@@ -1536,12 +1536,16 @@ class Formatter extends Component
             switch ($position) {
                 case 0:
                     return Yii::t('yii', '{nFormatted} B', $params, $this->language);
+
                 case 1:
                     return Yii::t('yii', '{nFormatted} KiB', $params, $this->language);
+
                 case 2:
                     return Yii::t('yii', '{nFormatted} MiB', $params, $this->language);
+
                 case 3:
                     return Yii::t('yii', '{nFormatted} GiB', $params, $this->language);
+
                 case 4:
                     return Yii::t('yii', '{nFormatted} TiB', $params, $this->language);
 
@@ -1552,12 +1556,16 @@ class Formatter extends Component
             switch ($position) {
                 case 0:
                     return Yii::t('yii', '{nFormatted} B', $params, $this->language);
+
                 case 1:
                     return Yii::t('yii', '{nFormatted} kB', $params, $this->language);
+
                 case 2:
                     return Yii::t('yii', '{nFormatted} MB', $params, $this->language);
+
                 case 3:
                     return Yii::t('yii', '{nFormatted} GB', $params, $this->language);
+
                 case 4:
                     return Yii::t('yii', '{nFormatted} TB', $params, $this->language);
 
@@ -1597,12 +1605,16 @@ class Formatter extends Component
             switch ($position) {
                 case 0:
                     return Yii::t('yii', '{nFormatted} {n, plural, =1{byte} other{bytes}}', $params, $this->language);
+
                 case 1:
                     return Yii::t('yii', '{nFormatted} {n, plural, =1{kibibyte} other{kibibytes}}', $params, $this->language);
+
                 case 2:
                     return Yii::t('yii', '{nFormatted} {n, plural, =1{mebibyte} other{mebibytes}}', $params, $this->language);
+
                 case 3:
                     return Yii::t('yii', '{nFormatted} {n, plural, =1{gibibyte} other{gibibytes}}', $params, $this->language);
+
                 case 4:
                     return Yii::t('yii', '{nFormatted} {n, plural, =1{tebibyte} other{tebibytes}}', $params, $this->language);
 
@@ -1613,12 +1625,16 @@ class Formatter extends Component
             switch ($position) {
                 case 0:
                     return Yii::t('yii', '{nFormatted} {n, plural, =1{byte} other{bytes}}', $params, $this->language);
+
                 case 1:
                     return Yii::t('yii', '{nFormatted} {n, plural, =1{kilobyte} other{kilobytes}}', $params, $this->language);
+
                 case 2:
                     return Yii::t('yii', '{nFormatted} {n, plural, =1{megabyte} other{megabytes}}', $params, $this->language);
+
                 case 3:
                     return Yii::t('yii', '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}', $params, $this->language);
+
                 case 4:
                     return Yii::t('yii', '{nFormatted} {n, plural, =1{terabyte} other{terabytes}}', $params, $this->language);
 

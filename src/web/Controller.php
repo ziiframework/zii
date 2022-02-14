@@ -179,10 +179,12 @@ class Controller extends \yii\base\Controller
                                 $params[$name] = filter_var($params[$name], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
 
                                 break;
+
                             case 'float':
                                 $params[$name] = filter_var($params[$name], FILTER_VALIDATE_FLOAT, FILTER_NULL_ON_FAILURE);
 
                                 break;
+
                             case 'bool':
                                 $params[$name] = filter_var($params[$name], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 

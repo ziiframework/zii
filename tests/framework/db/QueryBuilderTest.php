@@ -65,10 +65,13 @@ abstract class QueryBuilderTest extends DatabaseTestCase
         switch ($this->driverName) {
             case 'mysql':
                 return new MysqlQueryBuilder($connection);
+
             case 'sqlite':
                 return new SqliteQueryBuilder($connection);
+
             case 'sqlsrv':
                 return new MssqlQueryBuilder($connection);
+
             case 'pgsql':
                 return new PgsqlQueryBuilder($connection);
         }

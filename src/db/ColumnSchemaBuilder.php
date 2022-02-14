@@ -256,6 +256,7 @@ class ColumnSchemaBuilder extends BaseObject
                 $this->type = Schema::TYPE_UPK;
 
                 break;
+
             case Schema::TYPE_BIGPK:
                 $this->type = Schema::TYPE_UBIGPK;
 
@@ -433,10 +434,12 @@ class ColumnSchemaBuilder extends BaseObject
                 $defaultValue = StringHelper::floatToString($this->default);
 
                 break;
+
             case 'boolean':
                 $defaultValue = $this->default ? 'TRUE' : 'FALSE';
 
                 break;
+
             case 'integer':
             case 'object':
                 $defaultValue = (string) $this->default;

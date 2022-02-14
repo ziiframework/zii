@@ -142,12 +142,14 @@ class ColumnSchema extends \yii\db\ColumnSchema
                     case 't':
                     case 'true':
                         return true;
+
                     case 'f':
                     case 'false':
                         return false;
                 }
 
                 return (bool) $value;
+
             case Schema::TYPE_JSON:
                 return $this->disableJsonSupport ? $value : json_decode($value, true);
         }

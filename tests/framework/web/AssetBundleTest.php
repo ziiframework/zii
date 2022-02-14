@@ -325,6 +325,7 @@ EOF;
 EOF;
 
             break;
+
             case View::POS_BEGIN:
                 $expected = <<<'EOF'
 1<link href="/files/cssFile.css" rel="stylesheet">2<script src="/js/jquery.js"></script>

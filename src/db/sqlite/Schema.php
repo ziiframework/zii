@@ -406,6 +406,7 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
                 $this->db->createCommand('PRAGMA read_uncommitted = False;')->execute();
 
                 break;
+
             case Transaction::READ_UNCOMMITTED:
                 $this->db->createCommand('PRAGMA read_uncommitted = True;')->execute();
 

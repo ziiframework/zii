@@ -755,6 +755,7 @@ SQL;
                         ]);
 
                         break;
+
                     case 'f':
                         $result['foreignKeys'][] = new ForeignKeyConstraint([
                             'name' => $name,
@@ -767,6 +768,7 @@ SQL;
                         ]);
 
                         break;
+
                     case 'u':
                         $result['uniques'][] = new Constraint([
                             'name' => $name,
@@ -774,6 +776,7 @@ SQL;
                         ]);
 
                         break;
+
                     case 'c':
                         $result['checks'][] = new CheckConstraint([
                             'name' => $name,

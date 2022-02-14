@@ -608,8 +608,10 @@ class BaseInflector
         switch ($number % 10) {
             case 1:
                 return $number . 'st';
+
             case 2:
                 return $number . 'nd';
+
             case 3:
                 return $number . 'rd';
 
@@ -661,8 +663,10 @@ class BaseInflector
         switch (count($words)) {
             case 0:
                 return '';
+
             case 1:
                 return reset($words);
+
             case 2:
                 return implode($twoWordsConnector, $words);
 

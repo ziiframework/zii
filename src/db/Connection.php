@@ -792,10 +792,12 @@ class Connection extends Component
                     $pdoClass = 'yii\db\mssql\PDO';
 
                     break;
+
                 case 'dblib':
                     $pdoClass = 'yii\db\mssql\DBLibPDO';
 
                     break;
+
                 case 'sqlsrv':
                     $pdoClass = 'yii\db\mssql\SqlsrvPDO';
 

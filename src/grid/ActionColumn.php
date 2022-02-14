@@ -199,10 +199,12 @@ class ActionColumn extends Column
                         $title = Yii::t('yii', 'View');
 
                         break;
+
                     case 'update':
                         $title = Yii::t('yii', 'Update');
 
                         break;
+
                     case 'delete':
                         $title = Yii::t('yii', 'Delete');
 

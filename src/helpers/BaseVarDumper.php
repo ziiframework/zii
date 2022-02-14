@@ -83,30 +83,37 @@ class BaseVarDumper
                 self::$_output .= $var ? 'true' : 'false';
 
                 break;
+
             case 'integer':
                 self::$_output .= (string) $var;
 
                 break;
+
             case 'double':
                 self::$_output .= (string) $var;
 
                 break;
+
             case 'string':
                 self::$_output .= "'" . addslashes($var) . "'";
 
                 break;
+
             case 'resource':
                 self::$_output .= '{resource}';
 
                 break;
+
             case 'NULL':
                 self::$_output .= 'null';
 
                 break;
+
             case 'unknown type':
                 self::$_output .= '{unknown}';
 
                 break;
+
             case 'array':
                 if (self::$_depth <= $level) {
                     self::$_output .= '[...]';
@@ -127,6 +134,7 @@ class BaseVarDumper
                 }
 
                 break;
+
             case 'object':
                 if (($id = array_search($var, self::$_objects, true)) !== false) {
                     self::$_output .= get_class($var) . '#' . ($id + 1) . '(...)';
@@ -196,6 +204,7 @@ class BaseVarDumper
                 self::$_output .= 'null';
 
                 break;
+
             case 'array':
                 if (empty($var)) {
                     self::$_output .= '[]';
@@ -219,6 +228,7 @@ class BaseVarDumper
                 }
 
                 break;
+
             case 'object':
                 if ($var instanceof Closure) {
                     self::$_output .= self::exportClosure($var);

@@ -336,6 +336,7 @@ class FileValidator extends Validator
                 }
 
                 return null;
+
             case UPLOAD_ERR_INI_SIZE:
             case UPLOAD_ERR_FORM_SIZE:
                 return [$this->tooBig, [
@@ -343,18 +344,22 @@ class FileValidator extends Validator
                     'limit' => $this->getSizeLimit(),
                     'formattedLimit' => Yii::$app->formatter->asShortSize($this->getSizeLimit()),
                 ]];
+
             case UPLOAD_ERR_PARTIAL:
                 Yii::warning('File was only partially uploaded: ' . $value->name, __METHOD__);
 
                 break;
+
             case UPLOAD_ERR_NO_TMP_DIR:
                 Yii::warning('Missing the temporary folder to store the uploaded file: ' . $value->name, __METHOD__);
 
                 break;
+
             case UPLOAD_ERR_CANT_WRITE:
                 Yii::warning('Failed to write the uploaded file to disk: ' . $value->name, __METHOD__);
 
                 break;
+
             case UPLOAD_ERR_EXTENSION:
                 Yii::warning('File upload was stopped by some PHP extension: ' . $value->name, __METHOD__);
 
@@ -426,9 +431,11 @@ class FileValidator extends Validator
             case 'M':
             case 'm':
                 return (int) $sizeStr * 1048576;
+
             case 'K':
             case 'k':
                 return (int) $sizeStr * 1024;
+
             case 'G':
             case 'g':
                 return (int) $sizeStr * 1073741824;

@@ -1094,14 +1094,12 @@ class Request extends \yii\base\Request
         for ($i = $len >> 1, $j = 0; $i < $len; ++$i, ++$j) {
             switch (true) {
                 case $s[$i] < "\x80": $s[$j] = $s[$i];
-
 break;
-                case $s[$i] < "\xC0": $s[$j] = "\xC2"; $s[++$j] = $s[$i];
 
+                case $s[$i] < "\xC0": $s[$j] = "\xC2"; $s[++$j] = $s[$i];
 break;
 
                 default: $s[$j] = "\xC3"; $s[++$j] = chr(ord($s[$i]) - 64);
-
 break;
             }
         }

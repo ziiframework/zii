@@ -39,6 +39,7 @@ class ColumnSchemaBuilder extends AbstractColumnSchemaBuilder
                 $format = '{type}{check}{append}';
 
                 break;
+
             case self::CATEGORY_NUMERIC:
                 $format = '{type}{length}{unsigned}{notnull}{unique}{check}{default}{append}';
 

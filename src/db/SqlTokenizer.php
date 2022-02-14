@@ -357,6 +357,7 @@ abstract class SqlTokenizer extends Component
                 $this->_currentToken = $this->_tokenStack->top();
 
                 break;
+
             case ')':
                 $this->_tokenStack->pop();
                 $this->_currentToken = $this->_tokenStack->top();
@@ -368,6 +369,7 @@ abstract class SqlTokenizer extends Component
                 ]);
 
                 break;
+
             case ';':
                 if (!$this->_currentToken->getHasChildren()) {
                     break;

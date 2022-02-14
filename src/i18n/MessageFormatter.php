@@ -406,6 +406,7 @@ class MessageFormatter extends Component
             case 'choice':
             case 'selectordinal':
                 throw new NotSupportedException("Message format '$type' is not supported. You have to install PHP intl extension to use this feature.");
+
             case 'number':
                 $format = isset($token[2]) ? trim($token[2]) : null;
 
@@ -421,8 +422,10 @@ class MessageFormatter extends Component
                 }
 
                 throw new NotSupportedException("Message format 'number' is only supported for integer values. You have to install PHP intl extension to use this feature.");
+
             case 'none':
                 return $arg;
+
             case 'select':
                 /* http://icu-project.org/apiref/icu4c/classicu_1_1SelectFormat.html
                 selectStyle = (selector '{' message '}')+
@@ -450,6 +453,7 @@ class MessageFormatter extends Component
                 }
 
                 break;
+
             case 'plural':
                 /* http://icu-project.org/apiref/icu4c/classicu_1_1PluralFormat.html
                 pluralStyle = [offsetValue] (selector '{' message '}')+

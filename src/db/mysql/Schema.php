@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace yii\db\mysql;
 
+use Exception;
 use PDO;
 use PDOException;
 use yii\base\NotSupportedException;
@@ -331,7 +332,7 @@ SQL;
      *
      * @return bool whether the table exists in the database
      *
-     * @throws \Exception if DB query fails
+     * @throws Exception if DB query fails
      */
     protected function findColumns($table)
     {
@@ -339,7 +340,7 @@ SQL;
 
         try {
             $columns = $this->db->createCommand($sql)->queryAll();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $previous = $e->getPrevious();
 
             if ($previous instanceof PDOException && strpos($previous->getMessage(), 'SQLSTATE[42S02') !== false) {
@@ -396,7 +397,7 @@ SQL;
      *
      * @param TableSchema $table the table metadata
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function findConstraints($table): void
     {
@@ -432,7 +433,7 @@ SQL;
             foreach ($constraints as $name => $constraint) {
                 $table->foreignKeys[$name] = array_merge([$constraint['referenced_table_name']], $constraint['columns']);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $previous = $e->getPrevious();
 
             if (!$previous instanceof PDOException || strpos($previous->getMessage(), 'SQLSTATE[42S02') === false) {
@@ -584,6 +585,7 @@ SQL;
                         ]);
 
                         break;
+
                     case 'FOREIGN KEY':
                         $result['foreignKeys'][] = new ForeignKeyConstraint([
                             'name' => $name,
@@ -596,6 +598,7 @@ SQL;
                         ]);
 
                         break;
+
                     case 'UNIQUE':
                         $result['uniques'][] = new Constraint([
                             'name' => $name,

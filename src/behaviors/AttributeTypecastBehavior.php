@@ -273,10 +273,13 @@ class AttributeTypecastBehavior extends Behavior
             switch ($type) {
                 case self::TYPE_INTEGER:
                     return (int) $value;
+
                 case self::TYPE_FLOAT:
                     return (float) $value;
+
                 case self::TYPE_BOOLEAN:
                     return (bool) $value;
+
                 case self::TYPE_STRING:
                     if (is_float($value)) {
                         return StringHelper::floatToString($value);

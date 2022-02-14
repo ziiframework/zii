@@ -386,9 +386,11 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
             case 'kb':
             case 'k':
                 return $size * 1024;
+
             case 'mb':
             case 'm':
                 return $size * 1024 * 1024;
+
             case 'gb':
             case 'g':
                 return $size * 1024 * 1024 * 1024;

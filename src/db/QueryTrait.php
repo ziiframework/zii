@@ -300,6 +300,7 @@ trait QueryTrait
                 }
 
                 break;
+
             case 'BETWEEN':
             case 'NOT BETWEEN':
                 if (array_key_exists(1, $condition) && array_key_exists(2, $condition)) {

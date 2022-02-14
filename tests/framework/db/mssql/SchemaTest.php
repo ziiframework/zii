@@ -71,12 +71,14 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
                         $expectedDbType = 'char(100)';
 
                         break;
+
                     case 'char_col2':
                         $expectedType = 'string';
                         $expectedSize = 100;
                         $expectedDbType = 'varchar(100)';
 
                         break;
+
                     case 'char_col3':
                         $expectedType = 'text';
                         $expectedSize = null;

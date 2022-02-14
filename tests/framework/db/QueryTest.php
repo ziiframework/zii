@@ -437,6 +437,7 @@ abstract class QueryTest extends DatabaseTestCase
                 $selectExpression = "(customer.name || ' in ' || p.description) AS name";
 
                 break;
+
             case 'cubird':
             case 'mysql':
                 $selectExpression = "concat(customer.name,' in ', p.description) name";

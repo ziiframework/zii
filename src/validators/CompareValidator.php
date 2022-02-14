@@ -123,23 +123,28 @@ class CompareValidator extends Validator
                     $this->message = Yii::t('yii', '{attribute} must be equal to "{compareValueOrAttribute}".');
 
                     break;
+
                 case '!=':
                 case '!==':
                     $this->message = Yii::t('yii', '{attribute} must not be equal to "{compareValueOrAttribute}".');
 
                     break;
+
                 case '>':
                     $this->message = Yii::t('yii', '{attribute} must be greater than "{compareValueOrAttribute}".');
 
                     break;
+
                 case '>=':
                     $this->message = Yii::t('yii', '{attribute} must be greater than or equal to "{compareValueOrAttribute}".');
 
                     break;
+
                 case '<':
                     $this->message = Yii::t('yii', '{attribute} must be less than "{compareValueOrAttribute}".');
 
                     break;
+
                 case '<=':
                     $this->message = Yii::t('yii', '{attribute} must be less than or equal to "{compareValueOrAttribute}".');
 
@@ -231,18 +236,25 @@ class CompareValidator extends Validator
         switch ($operator) {
             case '==':
                 return $value == $compareValue;
+
             case '===':
                 return $value === $compareValue;
+
             case '!=':
                 return $value != $compareValue;
+
             case '!==':
                 return $value !== $compareValue;
+
             case '>':
                 return $value > $compareValue;
+
             case '>=':
                 return $value >= $compareValue;
+
             case '<':
                 return $value < $compareValue;
+
             case '<=':
                 return $value <= $compareValue;
 

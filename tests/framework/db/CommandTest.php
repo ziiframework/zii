@@ -621,14 +621,17 @@ SQL;
                 $expression = "EXTRACT(YEAR FROM TIMESTAMP 'now')";
 
                 break;
+
             case 'mysql':
                 $expression = 'YEAR(NOW())';
 
                 break;
+
             case 'sqlite':
                 $expression = "strftime('%Y')";
 
                 break;
+
             case 'sqlsrv':
                 $expression = 'YEAR(GETDATE())';
         }

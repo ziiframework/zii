@@ -77,7 +77,8 @@ class IndexActionTest extends TestCase
      * @param array $params
      * @param string $expectedRawSql
      */
-    public function testPrepareDataProviderWithPaginationAndSorting($pagination, $sort, $expectedPaginationPageSize = null, $expectedPaginationDefaultPageSize = null, $expectedSortOrders = [], $expectedSortDefaultOrder = null): void {
+    public function testPrepareDataProviderWithPaginationAndSorting($pagination, $sort, $expectedPaginationPageSize = null, $expectedPaginationDefaultPageSize = null, $expectedSortOrders = [], $expectedSortDefaultOrder = null): void
+    {
         Yii::$app->getRequest()->setBodyParams([
             'per-page' => 11,
             'sort' => '-test-sort',

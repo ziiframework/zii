@@ -64,8 +64,10 @@ class ArrayParser
                     $result[] = $this->parseArray($value, $i);
 
                     break;
+
                 case '}':
                     break 2;
+
                 case $this->delimiter:
                     if (empty($result)) { // `{}` case
                         $result[] = null;
