@@ -1,7 +1,7 @@
 Yii Framework 2 Change Log
 ==========================
 
-upstream changes: [be051d6...master](https://github.com/yiisoft/yii2/compare/655786b...master)
+upstream changes: [dbb157f...master](https://github.com/yiisoft/yii2/compare/655786b...master)
 
 
 2.0.45 under development
