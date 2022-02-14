@@ -56,6 +56,8 @@ class ModelController extends Controller
 
     private ClassType $_targetClass;
 
+    private array $_primaryKeys = [];
+
     private array $_indexes = [];
 
     /**
@@ -198,6 +200,7 @@ class ModelController extends Controller
 
     private function resetAttributes(): void
     {
+        $this->_primaryKeys = [];
         $this->_indexes = [];
         $this->_ruleRequired = [];
         $this->_ruleRange = [];
@@ -247,6 +250,10 @@ class ModelController extends Controller
         }
 
         foreach ($_schema->columns as $column) {
+            if ($column->isPrimaryKey) {
+                $this->_primaryKeys[] = $column->name;
+            }
+
             if (in_array($column->name, ['id', 'client_ip', 'created_at', 'updated_at'], true)) {
                 continue;
             }
@@ -262,13 +269,22 @@ class ModelController extends Controller
                 $varType = 'bool';
             }
 
-            $this->_targetClass->addComment(implode(' ', [
-                '@property',
-                $varType,
-                '$' . $column->name,
-                $column->comment . "[$column->dbType]" . ($column->allowNull ? '.' : '[NOT NULL].'),
-                isset($this->_indexes[$column->name]) && $this->_indexes[$column->name] ? "This property is {$this->_indexes[$column->name]}." : '',
-            ]));
+            if ($column->isPrimaryKey) {
+                $this->_targetClass->addComment(implode(' ', [
+                    '@property',
+                    $varType,
+                    '$' . $column->name,
+                    "This property is PrimaryKey.",
+                ]));
+            } else {
+                $this->_targetClass->addComment(implode(' ', [
+                    '@property',
+                    $varType,
+                    '$' . $column->name,
+                    $column->comment . "[$column->dbType]" . ($column->allowNull ? '.' : '[NOT NULL].'),
+                    isset($this->_indexes[$column->name]) && $this->_indexes[$column->name] ? "This property is {$this->_indexes[$column->name]}." : '',
+                ]));
+            }
 
             // Column Cast
             $this->castColumn($column);
@@ -294,16 +310,27 @@ class ModelController extends Controller
                 )));
         }
 
-        // public function attributeLabels
+        // public static function primaryKey()
+        $this->_targetClass->addMethod('primaryKey')
+            ->setStatic()
+            ->setReturnType('array')
+            ->setBody('return ?;', $this->_primaryKeys);
+
+        // public function attributeLabels()
+        $_allColumnNames = array_column($_schema->columns, 'name');
         $this->_targetClass->addMethod('attributeLabels')
             ->setReturnType('array')
-            // ->addComment('@inheritdoc')
-            ->setBody('return array_merge(parent::attributeLabels(), ?);', [
-                array_diff_key(array_combine(array_column($_schema->columns, 'name'), array_map(static fn (string $value): string => "%zii_t(\"$value\")%", array_column($_schema->columns, 'comment'))), [
-                    'id' => 'ID',
-                    'created_at' => '%zii_t("创建时间")%',
-                ]),
-            ]);
+            ->setBody(
+                "\$attributeLabels = parent::attributeLabels();\n\n"
+                . (!in_array('id', $_allColumnNames, true) ? "unset(\$attributeLabels['id']);\n" : "")
+                . (!in_array('created_at', $_allColumnNames, true) ? "unset(\$attributeLabels['created_at']);\n" : "")
+                . "\n return array_merge(\$attributeLabels, ?);", [
+                    array_diff_key(array_combine($_allColumnNames, array_map(static fn(string $value): string => "%zii_t(\"$value\")%", array_column($_schema->columns, 'comment'))), [
+                        'id' => 'ID',
+                        'created_at' => '%zii_t("创建时间")%',
+                    ]),
+                ]
+            );
 
         // public function extraFields
         $this->_targetClass->addMethod('extraFields')
