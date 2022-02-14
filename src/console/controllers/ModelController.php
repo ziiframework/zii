@@ -274,6 +274,7 @@ class ModelController extends Controller
                     '@property',
                     $varType,
                     '$' . $column->name,
+                    $column->comment . "[$column->dbType]",
                     "This property is PrimaryKey.",
                 ]));
             } else {
