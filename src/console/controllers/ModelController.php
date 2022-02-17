@@ -375,12 +375,12 @@ class ModelController extends Controller
             $this->_targetClass->addMethod('getAuthKey')
                 ->setReturnType('string')
                 // ->addComment('@inheritdoc')
-                ->setBody('return $this->identity_secret;');
+                ->setBody('return $this->session_secret;');
             $this->_targetClass->addMethod('validateAuthKey')
                 ->setReturnType('bool')
                 // ->addComment('@inheritdoc')
-                ->setBody('return $this->getAuthKey() === $identity_secret;')
-                ->addParameter('identity_secret');
+                ->setBody('return $this->getAuthKey() === $session_secret;')
+                ->addParameter('session_secret');
         }
 
         $file = Yii::getAlias($this->modelDir) . '/' . Inflector::camelize($tableName) . '.php';
