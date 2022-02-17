@@ -315,7 +315,7 @@ class ModelController extends Controller
         $this->_targetClass->addMethod('primaryKey')
             ->setStatic()
             ->setReturnType('array')
-            ->setBody('return ?;', $this->_primaryKeys);
+            ->setBody('return ?;', [$this->_primaryKeys]);
 
         // public function attributeLabels()
         $_allColumnNames = array_column($_schema->columns, 'name');
