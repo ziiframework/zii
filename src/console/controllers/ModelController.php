@@ -242,7 +242,7 @@ class ModelController extends Controller
         }
 
         // Table Comment
-        $this->_targetClass->addComment($this->getTableComment($tableName) . "\n");
+        $this->_targetClass->addComment($this->getTableComment($tableName) . ".\n");
 
         // Table Indexes
         foreach ($this->getTableIndexes($tableName) as $index) {
@@ -711,7 +711,7 @@ class ModelController extends Controller
                     ->setReturnType(ActiveQuery::class)
                     ->setReturnNullable()
                     // ->addComment("关联{$item['targetClassComment']}")
-                    ->addComment("@return null|ActiveQuery|{$item['targetClassName']}")
+                    ->addComment("@return {$item['targetClassName']}|ActiveQuery|null")
                     ->setBody("return \$this->hasOne({$item['targetClassName']}::class, ['id' => '" . $item['name'] . "']);");
             }
         }
