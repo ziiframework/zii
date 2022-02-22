@@ -261,6 +261,10 @@ class ModelController extends Controller
             // Field Comment
             $varType = $column->phpType;
 
+            if ($varType === 'integer') {
+                $varType = 'int';
+            }
+
             if (str_contains($column->dbType, 'decimal')) {
                 $varType = 'float';
             }
