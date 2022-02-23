@@ -515,7 +515,7 @@ class User extends Component
             }
         }
 
-        throw new ForbiddenHttpException(Yii::t('yii', 'Login Required'));
+        throw new LoginRequiredException(Yii::t('yii', 'Login Required'));
     }
 
     /**

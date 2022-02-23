@@ -28,7 +28,7 @@ use yii\rbac\CheckAccessInterface;
 use yii\rbac\PhpManager;
 use yii\web\Cookie;
 use yii\web\CookieCollection;
-use yii\web\ForbiddenHttpException;
+use yii\web\LoginRequiredException;
 use yiiunit\TestCase;
 
 /**
@@ -293,7 +293,7 @@ class UserTest extends TestCase
 
         try {
             $user->loginRequired();
-        } catch (ForbiddenHttpException $e) {
+        } catch (LoginRequiredException $e) {
         }
         $this->assertFalse(Yii::$app->response->getIsRedirection());
         $this->assertSame($id, Yii::$app->session->id);
@@ -337,14 +337,14 @@ class UserTest extends TestCase
 
         try {
             $user->loginRequired();
-        } catch (ForbiddenHttpException $e) {
+        } catch (LoginRequiredException $e) {
         }
         $this->assertNotEquals('json-only', $user->getReturnUrl());
         $this->assertSame($id, Yii::$app->session->id);
 
         $this->reset();
         $_SERVER['HTTP_ACCEPT'] = 'text/json;q=0.1';
-        $this->expectException('yii\\web\\ForbiddenHttpException');
+        $this->expectException('yii\\web\\LoginRequiredException');
         $user->loginRequired();
         $this->assertSame($id, Yii::$app->session->id);
     }
@@ -368,7 +368,7 @@ class UserTest extends TestCase
         $this->mockWebApplication($appConfig);
         $this->reset();
         $_SERVER['HTTP_ACCEPT'] = 'text/json,q=0.1';
-        $this->expectException('yii\\web\\ForbiddenHttpException');
+        $this->expectException('yii\\web\\LoginRequiredException');
         Yii::$app->user->loginRequired();
     }
 
