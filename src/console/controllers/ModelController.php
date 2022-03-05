@@ -223,9 +223,9 @@ class ModelController extends Controller
 
         $this->_targetNamespace = new PhpNamespace($this->modelNamespace);
 
-        $this->_targetClass = $this->_targetNamespace->addClass(Inflector::camelize($tableName));
+        $this->_targetClass = $this->_targetNamespace->addClass('Base' . Inflector::camelize($tableName));
         $this->_targetClass->setExtends($this->modelExtends);
-        $this->_targetClass->setFinal();
+        // $this->_targetClass->setFinal();
 
         if ($tableName === $this->identityTable) {
             $this->_targetNamespace->addUse(IdentityInterface::class);
@@ -252,10 +252,6 @@ class ModelController extends Controller
         foreach ($_schema->columns as $column) {
             if ($column->isPrimaryKey) {
                 $this->_primaryKeys[] = $column->name;
-            }
-
-            if (in_array($column->name, ['id', 'client_ip', 'created_at', 'updated_at'], true)) {
-                continue;
             }
 
             // Field Comment
@@ -289,6 +285,10 @@ class ModelController extends Controller
                     $column->comment . "[$column->dbType]" . ($column->allowNull ? '.' : '[NOT NULL].'),
                     isset($this->_indexes[$column->name]) && $this->_indexes[$column->name] ? "This property is {$this->_indexes[$column->name]}." : '',
                 ]));
+            }
+
+            if (in_array($column->name, ['client_ip', 'created_at', 'updated_at'], true)) {
+                continue;
             }
 
             // Column Cast
@@ -387,7 +387,7 @@ class ModelController extends Controller
                 ->addParameter('session_secret');
         }
 
-        $file = Yii::getAlias($this->modelDir) . '/' . Inflector::camelize($tableName) . '.php';
+        $file = Yii::getAlias($this->modelDir) . '/Base' . Inflector::camelize($tableName) . '.php';
 
         if ($overwrite === true || !file_exists($file)) {
             $objectBody = str_replace(array_keys(self::$_codeReplacements), array_values(self::$_codeReplacements), (string) $this->_targetNamespace);
@@ -713,7 +713,7 @@ class ModelController extends Controller
                     ->setReturnNullable()
                     // ->addComment("关联{$item['targetClassComment']}")
                     ->addComment("@return {$item['targetClassName']}|ActiveQuery|null")
-                    ->setBody("return \$this->hasOne({$item['targetClassName']}::class, ['id' => '" . $item['name'] . "']);");
+                    ->setBody("return \$this->hasOne({$item['targetClassName']}::class, ['{$item['targetAttribute']}' => '" . $item['name'] . "']);");
             }
         }
         // Unique Index
