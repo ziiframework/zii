@@ -519,14 +519,15 @@ class ModelController extends Controller
             ];
         }
 
-        // xxx_id
-        if (preg_match('/^([a-z0-9_]+)_id$/', $column->name, $matches)) {
+        // xxx_id, xxx_hashtag
+        if (preg_match('/^([a-z0-9_]+)_(id|hashtag)$/', $column->name, $matches)) {
             $getTableComment = $this->getTableComment($matches[1]);
 
             if ($getTableComment !== null) {
                 $this->_ruleExist[] = [
                     'name' => $column->name,
                     'targetClassName' => Inflector::camelize($matches[1]),
+                    'targetAttribute' => $matches[2],
                     'targetClassComment' => $getTableComment,
                 ];
             }
@@ -696,7 +697,7 @@ class ModelController extends Controller
                     $this->arrayOrString($item['name']),
                     'exist',
                     'targetClass' => '%' . $item['targetClassName'] . '::class%',
-                    'targetAttribute' => 'id',
+                    'targetAttribute' => $item['targetAttribute'],
                     'message' => '%"{attribute}" . " " . zii_t("不存在")%',
                 ];
                 // Class Comment
