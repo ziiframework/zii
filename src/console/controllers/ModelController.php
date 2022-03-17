@@ -330,16 +330,22 @@ class ModelController extends Controller
             ->setBody('return ?;', [$this->_primaryKeys]);
 
         // public function attributeLabels()
-        $_allColumnNames = array_column($_schema->columns, 'name');
+        $_fields = array_column($_schema->columns, 'name');
+        $_comments = array_column($_schema->columns, 'comment');
+
+        // for field without comment
+        foreach ($_comments as $_ci => $_c) {
+            if (!is_string($_c) || trim($_c) === '') {
+                $_comments[$_ci] = strtoupper($_fields[$_ci]);
+            }
+        }
+
         $this->_targetClass->addMethod('attributeLabels')
             ->setReturnType('array')
             ->setBody('return array_merge(parent::attributeLabels(), ?);', [
-                    array_diff_key(
-                        array_combine(
-                            $_allColumnNames,
-                            array_map(static fn(string $value): string => "%zii_t(\"$value\")%", array_column($_schema->columns, 'comment'))
-                        ),
-                        self::$specialKeys
+                    array_combine(
+                        $_fields,
+                        array_map(static fn(string $value): string => "%zii_t(\"$value\")%", $_comments)
                     ),
                 ]
             );
