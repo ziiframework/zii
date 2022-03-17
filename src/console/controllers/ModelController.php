@@ -52,6 +52,14 @@ class ModelController extends Controller
 
     public string $identityTable = 'user';
 
+    public static array $specialKeys = [
+        'id' => 'ID',
+        'client_ip' => '%zii_t("客户端IP")%',
+        'created_at_microtime' => '%zii_t("创建时间戳")%',
+        'created_at' => '%zii_t("创建时间")%',
+        'updated_at' => '%zii_t("更新时间")%',
+    ];
+
     private PhpNamespace $_targetNamespace;
 
     private ClassType $_targetClass;
@@ -287,7 +295,7 @@ class ModelController extends Controller
                 ]));
             }
 
-            if (in_array($column->name, ['client_ip', 'created_at', 'updated_at'], true)) {
+            if (in_array($column->name, array_keys(self::$specialKeys), true)) {
                 continue;
             }
 
@@ -325,17 +333,27 @@ class ModelController extends Controller
         $_allColumnNames = array_column($_schema->columns, 'name');
         $this->_targetClass->addMethod('attributeLabels')
             ->setReturnType('array')
-            ->setBody(
-                "\$attributeLabels = parent::attributeLabels();\n\n"
-                . (!in_array('id', $_allColumnNames, true) ? "unset(\$attributeLabels['id']);\n" : "")
-                . (!in_array('created_at', $_allColumnNames, true) ? "unset(\$attributeLabels['created_at']);\n" : "")
-                . "\n return array_merge(\$attributeLabels, ?);", [
-                    array_diff_key(array_combine($_allColumnNames, array_map(static fn(string $value): string => "%zii_t(\"$value\")%", array_column($_schema->columns, 'comment'))), [
-                        'id' => 'ID',
-                        'created_at' => '%zii_t("创建时间")%',
-                    ]),
+            ->setBody('return array_merge(parent::attributeLabels(), ?);', [
+                    array_diff_key(
+                        array_combine(
+                            $_allColumnNames,
+                            array_map(static fn(string $value): string => "%zii_t(\"$value\")%", array_column($_schema->columns, 'comment'))
+                        ),
+                        self::$specialKeys
+                    ),
                 ]
             );
+//            ->setBody(
+//                "\$attributeLabels = parent::attributeLabels();\n\n"
+//                . (!in_array('id', $_allColumnNames, true) ? "unset(\$attributeLabels['id']);\n" : "")
+//                . (!in_array('created_at', $_allColumnNames, true) ? "unset(\$attributeLabels['created_at']);\n" : "")
+//                . "\n return array_merge(\$attributeLabels, ?);", [
+//                    array_diff_key(array_combine($_allColumnNames, array_map(static fn(string $value): string => "%zii_t(\"$value\")%", array_column($_schema->columns, 'comment'))), [
+//                        'id' => 'ID',
+//                        'created_at' => '%zii_t("创建时间")%',
+//                    ]),
+//                ]
+//            );
 
         // public function extraFields
         $this->_targetClass->addMethod('extraFields')
@@ -399,13 +417,13 @@ class ModelController extends Controller
                 $fileContent = file_get_contents($file);
                 $fileContent = str_replace(': \\?', ': ?', $fileContent);
                 file_put_contents($file, $fileContent);
-                echo '✔ Successfully created model ' . Inflector::camelize($tableName);
+                echo '✔ Successfully created model Base' . Inflector::camelize($tableName);
             } else {
-                echo '✘ Failed to create model ' . Inflector::camelize($tableName);
+                echo '✘ Failed to create model Base' . Inflector::camelize($tableName);
             }
             echo "\n";
         } else {
-            echo '✘ Create model ' . Inflector::camelize($tableName) . " aborted, file $file already exists\n";
+            echo '✘ Create model Base' . Inflector::camelize($tableName) . " aborted, file $file already exists\n";
         }
     }
 
