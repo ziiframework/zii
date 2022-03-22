@@ -52,7 +52,7 @@ class SessionTest extends TestCase
         $newUseTransparentSession = $session->getUseTransparentSessionID();
         $this->assertNotEquals($oldUseTransparentSession, $newUseTransparentSession);
         $this->assertTrue($newUseTransparentSession);
-        //without this line phpunit will complain about risky tests due to unclosed buffer
+        // without this line phpunit will complain about risky tests due to unclosed buffer
         $session->setUseTransparentSessionID(false);
 
         $oldTimeout = $session->getTimeout();
@@ -103,7 +103,7 @@ class SessionTest extends TestCase
 
     public function testUseStrictMode(): void
     {
-        //Manual garbage collection since native storage module might not support removing data via Session::destroySession()
+        // Manual garbage collection since native storage module might not support removing data via Session::destroySession()
         $sessionSavePath = session_save_path() ?: sys_get_temp_dir();
         // Only perform garbage collection if "N argument" is not used,
         // see https://www.php.net/manual/en/session.configuration.php#ini.session.save-path

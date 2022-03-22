@@ -95,7 +95,7 @@ class DataColumnTest extends \yiiunit\TestCase
                 ],
             ],
         ]);
-        //print_r($grid->columns);exit();
+        // print_r($grid->columns);exit();
         $dataColumn = $grid->columns[0];
         $method = new ReflectionMethod($dataColumn, 'renderFilterCellContent');
         $method->setAccessible(true);

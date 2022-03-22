@@ -1634,7 +1634,7 @@ break;
             return $_SERVER['CONTENT_TYPE'];
         }
 
-        //fix bug https://bugs.php.net/bug.php?id=66606
+        // fix bug https://bugs.php.net/bug.php?id=66606
         return $this->headers->get('Content-Type') ?? '';
     }
 

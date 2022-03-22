@@ -107,7 +107,7 @@ class BreadcrumbsTest extends \yiiunit\TestCase
 
         $this->assertEquals("<li>My-&lt;br&gt;Test-Label</li>\n", $encodedValue);
 
-        //without encodeLabels
+        // without encodeLabels
         $this->breadcrumbs->encodeLabels = false;
         $unencodedValue = $method->invoke($this->breadcrumbs, $link, $this->breadcrumbs->itemTemplate);
 
@@ -122,7 +122,7 @@ class BreadcrumbsTest extends \yiiunit\TestCase
 
         $this->assertEquals("<li>My-<br>Test-Label</li>\n", $result);
 
-        //without encodeLabels
+        // without encodeLabels
         $this->breadcrumbs->encodeLabels = false;
         $unencodedValue = $method->invoke($this->breadcrumbs, $link, $this->breadcrumbs->itemTemplate);
 

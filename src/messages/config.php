@@ -65,5 +65,5 @@ return [
     // Generated file format. Can be "php", "db" or "po".
     'format' => 'php',
     // Connection component ID for "db" format.
-    //'db' => 'db',
+    // 'db' => 'db',
 ];

@@ -205,11 +205,11 @@ class BaseStringHelper
         $truncated = [];
 
         foreach ($tokens as $token) {
-            if ($token instanceof HTMLPurifier_Token_Start) { //Tag begins
+            if ($token instanceof HTMLPurifier_Token_Start) { // Tag begins
                 $openTokens[$depth] = $token->name;
                 $truncated[] = $token;
                 ++$depth;
-            } elseif ($token instanceof HTMLPurifier_Token_Text && $totalCount <= $count) { //Text
+            } elseif ($token instanceof HTMLPurifier_Token_Text && $totalCount <= $count) { // Text
                 if (false === $encoding) {
                     preg_match('/^(\s*)/um', $token->data, $prefixSpace) ?: $prefixSpace = ['', ''];
                     $token->data = $prefixSpace[1] . self::truncateWords(ltrim($token->data), $count - $totalCount, '');
@@ -220,13 +220,13 @@ class BaseStringHelper
                 }
                 $totalCount += $currentCount;
                 $truncated[] = $token;
-            } elseif ($token instanceof HTMLPurifier_Token_End) { //Tag ends
+            } elseif ($token instanceof HTMLPurifier_Token_End) { // Tag ends
                 if ($token->name === $openTokens[$depth - 1]) {
                     --$depth;
                     unset($openTokens[$depth]);
                     $truncated[] = $token;
                 }
-            } elseif ($token instanceof HTMLPurifier_Token_Empty) { //Self contained tags, i.e. <img/> etc.
+            } elseif ($token instanceof HTMLPurifier_Token_Empty) { // Self contained tags, i.e. <img/> etc.
                 $truncated[] = $token;
             }
 

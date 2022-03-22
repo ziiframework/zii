@@ -217,7 +217,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
                     'sqlite' => 'char(1)',
                 ],
             ],
-            //[
+            // [
             //    Schema::TYPE_DATE . " CHECK (value BETWEEN '2011-01-01' AND '2013-01-01')",
             //    $this->date()->check("value BETWEEN '2011-01-01' AND '2013-01-01'"),
             //    [
@@ -226,7 +226,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
             //        'sqlite' => ,
             //        'sqlsrv' => ,
             //    ],
-            //],
+            // ],
             [
                 Schema::TYPE_DATE . ' NOT NULL',
                 $this->date()->notNull(),
@@ -247,7 +247,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
                     'sqlsrv' => 'date',
                 ],
             ],
-            //[
+            // [
             //    Schema::TYPE_DATETIME . " CHECK (value BETWEEN '2011-01-01' AND '2013-01-01')",
             //    $this->dateTime()->check("value BETWEEN '2011-01-01' AND '2013-01-01'"),
             //    [
@@ -256,7 +256,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
             //        'sqlite' => ,
             //        'sqlsrv' => ,
             //    ],
-            //],
+            // ],
             [
                 Schema::TYPE_DATETIME . ' NOT NULL',
                 $this->dateTime()->notNull(),
@@ -745,7 +745,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
                     'sqlsrv' => 'nvarchar(max)',
                 ],
             ],
-            //[
+            // [
             //    Schema::TYPE_TIME . " CHECK (value BETWEEN '12:00:00' AND '13:01:01')",
             //    $this->time()->check("value BETWEEN '12:00:00' AND '13:01:01'"),
             //    [
@@ -754,7 +754,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
             //        'sqlite' => ,
             //        'sqlsrv' => ,
             //    ],
-            //],
+            // ],
             [
                 Schema::TYPE_TIME . ' NOT NULL',
                 $this->time()->notNull(),
@@ -773,7 +773,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
                     'sqlsrv' => 'time',
                 ],
             ],
-            //[
+            // [
             //    Schema::TYPE_TIMESTAMP . " CHECK (value BETWEEN '2011-01-01' AND '2013-01-01')",
             //    $this->timestamp()->check("value BETWEEN '2011-01-01' AND '2013-01-01'"),
             //    [
@@ -782,7 +782,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
             //        'sqlite' => ,
             //        'sqlsrv' => ,
             //    ],
-            //],
+            // ],
             [
                 Schema::TYPE_TIMESTAMP . ' NOT NULL',
                 $this->timestamp()->notNull(),
@@ -1042,15 +1042,15 @@ abstract class QueryBuilderTest extends DatabaseTestCase
 
             [['in', 'id', new TraversableObject([1, 2, 3])], '[[id]] IN (:qp0, :qp1, :qp2)', [':qp0' => 1, ':qp1' => 2, ':qp2' => 3]],
 
-            //in using array objects containing null value
+            // in using array objects containing null value
             [['in', 'id', new TraversableObject([1, null])], '[[id]]=:qp0 OR [[id]] IS NULL', [':qp0' => 1]],
             [['in', 'id', new TraversableObject([1, 2, null])], '[[id]] IN (:qp0, :qp1) OR [[id]] IS NULL', [':qp0' => 1, ':qp1' => 2]],
 
-            //not in using array object containing null value
+            // not in using array object containing null value
             [['not in', 'id', new TraversableObject([1, null])], '[[id]]<>:qp0 AND [[id]] IS NOT NULL', [':qp0' => 1]],
             [['not in', 'id', new TraversableObject([1, 2, null])], '[[id]] NOT IN (:qp0, :qp1) AND [[id]] IS NOT NULL', [':qp0' => 1, ':qp1' => 2]],
 
-            //in using array object containing only null value
+            // in using array object containing only null value
             [['in', 'id', new TraversableObject([null])], '[[id]] IS NULL', []],
             [['not in', 'id', new TraversableObject([null])], '[[id]] IS NOT NULL', []],
 
@@ -1108,8 +1108,8 @@ abstract class QueryBuilderTest extends DatabaseTestCase
                 $conditions = array_merge($conditions, [
                     [['in', ['id', 'name'], [['id' => 1, 'name' => 'foo'], ['id' => 2, 'name' => 'bar']]], '(([[id]] = :qp0 AND [[name]] = :qp1) OR ([[id]] = :qp2 AND [[name]] = :qp3))', [':qp0' => 1, ':qp1' => 'foo', ':qp2' => 2, ':qp3' => 'bar']],
                     [['not in', ['id', 'name'], [['id' => 1, 'name' => 'foo'], ['id' => 2, 'name' => 'bar']]], '(([[id]] != :qp0 OR [[name]] != :qp1) AND ([[id]] != :qp2 OR [[name]] != :qp3))', [':qp0' => 1, ':qp1' => 'foo', ':qp2' => 2, ':qp3' => 'bar']],
-                    //[ ['in', ['id', 'name'], (new Query())->select(['id', 'name'])->from('users')->where(['active' => 1])], 'EXISTS (SELECT 1 FROM (SELECT [[id]], [[name]] FROM [[users]] WHERE [[active]]=:qp0) AS a WHERE a.[[id]] = [[id AND a.]]name[[ = ]]name`)', [':qp0' => 1] ],
-                    //[ ['not in', ['id', 'name'], (new Query())->select(['id', 'name'])->from('users')->where(['active' => 1])], 'NOT EXISTS (SELECT 1 FROM (SELECT [[id]], [[name]] FROM [[users]] WHERE [[active]]=:qp0) AS a WHERE a.[[id]] = [[id]] AND a.[[name = ]]name`)', [':qp0' => 1] ],
+                    // [ ['in', ['id', 'name'], (new Query())->select(['id', 'name'])->from('users')->where(['active' => 1])], 'EXISTS (SELECT 1 FROM (SELECT [[id]], [[name]] FROM [[users]] WHERE [[active]]=:qp0) AS a WHERE a.[[id]] = [[id AND a.]]name[[ = ]]name`)', [':qp0' => 1] ],
+                    // [ ['not in', ['id', 'name'], (new Query())->select(['id', 'name'])->from('users')->where(['active' => 1])], 'NOT EXISTS (SELECT 1 FROM (SELECT [[id]], [[name]] FROM [[users]] WHERE [[active]]=:qp0) AS a WHERE a.[[id]] = [[id]] AND a.[[name = ]]name`)', [':qp0' => 1] ],
                 ]);
 
                 break;

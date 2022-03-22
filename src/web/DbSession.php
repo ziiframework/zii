@@ -117,7 +117,7 @@ class DbSession extends MultiFieldSession
             $id = $this->getId();
 
             if (!$this->getReadQuery($id)->exists($this->db)) {
-                //This session id does not exist, mark it for forced regeneration
+                // This session id does not exist, mark it for forced regeneration
                 $this->_forceRegenerateId = $id;
             }
         }
@@ -223,7 +223,7 @@ class DbSession extends MultiFieldSession
     public function writeSession($id, $data)
     {
         if ($this->getUseStrictMode() && $id === $this->_forceRegenerateId) {
-            //Ignore write when forceRegenerate is active for this id
+            // Ignore write when forceRegenerate is active for this id
             return true;
         }
 

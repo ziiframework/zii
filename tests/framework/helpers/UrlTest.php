@@ -235,7 +235,7 @@ class UrlTest extends TestCase
         $this->assertEquals('https://cdn.example.com/images/logo.gif', Url::to('@cdn/images/logo.gif', 'https'));
         Yii::setAlias('@cdn', null);
 
-        //In case there is no controller, throw an exception
+        // In case there is no controller, throw an exception
         $this->removeMockedAction();
 
         $this->expectException('yii\base\InvalidParamException');

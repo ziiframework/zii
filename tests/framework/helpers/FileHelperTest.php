@@ -949,9 +949,9 @@ class FileHelperTest extends TestCase
         $currentGroupId = posix_getgid();
         $currentGroupName = posix_getgrgid($currentGroupId)['name'];
 
-        /////////////
-        /// Setup ///
-        /////////////
+        // ///////////
+        // / Setup ///
+        // ///////////
 
         $this->createFileStructure([
             $dirName => [
@@ -968,9 +968,9 @@ class FileHelperTest extends TestCase
         $this->assertEquals($currentGroupId, filegroup($testFile), 'Expected created test file group to be current group.');
         $this->assertEquals('0' . decoct($fileMode), substr(decoct(fileperms($testFile)), -4), 'Expected file mode to be changed.');
 
-        /////////////////
-        /// File Mode ///
-        /////////////////
+        // ///////////////
+        // / File Mode ///
+        // ///////////////
 
         // Test file mode
         $fileMode = 0777;
@@ -984,9 +984,9 @@ class FileHelperTest extends TestCase
             $this->markTestInComplete(__METHOD__ . ' could only run partially, chown() can only to be tested as root user. Current user: ' . $currentUserName);
         }
 
-        //////////////////////
-        /// User Ownership ///
-        //////////////////////
+        // ////////////////////
+        // / User Ownership ///
+        // ////////////////////
 
         // Test user ownership as integer
         $ownership = 10001;
@@ -1052,9 +1052,9 @@ class FileHelperTest extends TestCase
         $this->assertEquals($currentGroupId, filegroup($testFile), 'Expected file group to be unchanged.');
         $this->assertEquals('0' . decoct($fileMode), substr(decoct(fileperms($testFile)), -4), 'Expected file mode to be unchanged.');
 
-        ///////////////////////
-        /// Group Ownership ///
-        ///////////////////////
+        // /////////////////////
+        // / Group Ownership ///
+        // /////////////////////
 
         // Test group ownership as numeric string
         $ownership = ':10006';
@@ -1096,9 +1096,9 @@ class FileHelperTest extends TestCase
         $this->assertEquals($ownership['group'], posix_getgrgid(filegroup($testFile))['name'], 'Expected created test file group to be changed.');
         $this->assertEquals('0' . decoct($fileMode), substr(decoct(fileperms($testFile)), -4), 'Expected file mode to be unchanged.');
 
-        /////////////////////////////////
-        /// User- and Group Ownership ///
-        /////////////////////////////////
+        // ///////////////////////////////
+        // / User- and Group Ownership ///
+        // ///////////////////////////////
 
         // Test user and group ownership as numeric string
         $ownership = '10009:10010';
@@ -1164,9 +1164,9 @@ class FileHelperTest extends TestCase
         $this->assertEquals($ownership['group'], posix_getgrgid(filegroup($testFile))['name'], 'Expected created test file group to be changed.');
         $this->assertEquals('0' . decoct($fileMode), substr(decoct(fileperms($testFile)), -4), 'Expected file mode to be unchanged.');
 
-        ///////////////////////////////////////
-        /// Mode, User- and Group Ownership ///
-        ///////////////////////////////////////
+        // /////////////////////////////////////
+        // / Mode, User- and Group Ownership ///
+        // /////////////////////////////////////
 
         // Test user ownership as integer with file mode
         $ownership = '10019:10020';

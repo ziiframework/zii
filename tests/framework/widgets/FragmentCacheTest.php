@@ -223,7 +223,7 @@ class FragmentCacheTest extends \yiiunit\TestCase
         $view->endCache();
         $this->assertFalse($view->beginCache('test', ['variations' => ['en']]), 'Cached fragment should be exist');
 
-        //without variations
+        // without variations
         ob_start();
         ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
         $view = new View();
@@ -233,7 +233,7 @@ class FragmentCacheTest extends \yiiunit\TestCase
         $cached = ob_get_clean();
         $this->assertEquals('cached fragment', $cached);
 
-        //with variations as a string
+        // with variations as a string
         ob_start();
         ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
         $this->assertTrue($view->beginCache('test', ['variations' => 'uz']), 'Cached fragment should not be exist');

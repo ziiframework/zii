@@ -259,7 +259,7 @@ class DeadLockTest extends \yiiunit\framework\db\mysql\ConnectionTest
             /** @var Connection $second */
             $second = $this->getConnection(true, false);
             $second->open();
-            //sleep(1);
+            // sleep(1);
             $this->log('child 2: transaction');
             $second->transaction(function (Connection $second): void {
                 $second->transaction(function (Connection $second): void {

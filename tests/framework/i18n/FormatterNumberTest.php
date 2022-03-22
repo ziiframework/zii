@@ -326,8 +326,8 @@ class FormatterNumberTest extends TestCase
         $this->assertSame('$0.00', $this->formatter->asCurrency('0'));
         // Starting from ICU 52.1, negative currency value will be formatted as -$123,456.12
         // see: http://source.icu-project.org/repos/icu/icu/tags/release-52-1/source/data/locales/en.txt
-        //$value = '-123456.123';
-        //$this->assertSame("($123,456.12)", $this->formatter->asCurrency($value));
+        // $value = '-123456.123';
+        // $this->assertSame("($123,456.12)", $this->formatter->asCurrency($value));
 
         // "\xc2\xa0" is used as non-breaking space explicitly
         $this->formatter->locale = 'de-DE';
@@ -635,7 +635,7 @@ class FormatterNumberTest extends TestCase
         $this->assertSame('5 GiB', $this->formatter->asShortSize(5 * 1024 * 1024 * 1024));
         $this->assertSame('6 TiB', $this->formatter->asShortSize(6 * 1024 * 1024 * 1024 * 1024));
         $this->assertNotEquals('5 PiB', $this->formatter->asShortSize(5 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024)); // this is 5 EiB not 5 PiB
-        //$this->assertSame("1 YiB", $this->formatter->asShortSize(pow(2, 80)));
+        // $this->assertSame("1 YiB", $this->formatter->asShortSize(pow(2, 80)));
         $this->assertSame('2 GiB', $this->formatter->asShortSize(2147483647)); // round 1.999 up to 2
         $this->formatter->decimalSeparator = ',';
         $this->formatter->numberFormatterOptions = [];
@@ -676,7 +676,7 @@ class FormatterNumberTest extends TestCase
         $this->assertSame('5.00 GiB', $this->formatter->asShortSize(5 * 1024 * 1024 * 1024));
         $this->assertSame('6.00 TiB', $this->formatter->asShortSize(6 * 1024 * 1024 * 1024 * 1024));
         $this->assertNotEquals('5.00 PiB', $this->formatter->asShortSize(5 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024)); // this is 5 EiB not 5 PiB
-        //$this->assertSame("1 YiB", $this->formatter->asShortSize(pow(2, 80)));
+        // $this->assertSame("1 YiB", $this->formatter->asShortSize(pow(2, 80)));
         $this->assertSame('2.00 GiB', $this->formatter->asShortSize(2147483647)); // round 1.999 up to 2
         $this->formatter->decimalSeparator = ',';
         $this->assertSame('1,001 KiB', $this->formatter->asShortSize(1025, 3));

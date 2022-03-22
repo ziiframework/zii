@@ -81,7 +81,7 @@ class ArrayHelperTest extends TestCase
             ],
         ], ArrayHelper::toArray($object));
 
-        //recursive with attributes of object and sub-object
+        // recursive with attributes of object and sub-object
         $subObject = $object->subObject;
         $this->assertEquals([
             'id' => 33,
@@ -101,7 +101,7 @@ class ArrayHelperTest extends TestCase
             ],
         ]));
 
-        //recursive with attributes of subobject only
+        // recursive with attributes of subobject only
         $this->assertEquals([
             'id' => 33,
             'subObject' => [
@@ -1274,7 +1274,7 @@ class ArrayHelperTest extends TestCase
             'G' => 1,
         ];
 
-        //Include tests
+        // Include tests
         $this->assertEquals([
             'A' => [
                 'B' => 1,
@@ -1325,7 +1325,7 @@ class ArrayHelperTest extends TestCase
             'G' => 1,
         ], ArrayHelper::filter($array, ['A.D.E', 'G']));
 
-        //Exclude (combined with include) tests
+        // Exclude (combined with include) tests
         $this->assertEquals([
             'A' => [
                 'C' => 2,
@@ -1363,13 +1363,13 @@ class ArrayHelperTest extends TestCase
             'G' => 1,
         ], ArrayHelper::filter($array, ['G', '!Z', '!X.A']));
 
-        //Non existing keys tests
+        // Non existing keys tests
         $this->assertEquals([], ArrayHelper::filter($array, ['X']));
         $this->assertEquals([], ArrayHelper::filter($array, ['X.Y']));
         $this->assertEquals([], ArrayHelper::filter($array, ['X.Y.Z']));
         $this->assertEquals([], ArrayHelper::filter($array, ['A.X']));
 
-        //Values that evaluate to `true` with `empty()` tests
+        // Values that evaluate to `true` with `empty()` tests
         $tmp = [
             'a' => 0,
             'b' => '',

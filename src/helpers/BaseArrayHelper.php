@@ -1028,17 +1028,17 @@ class BaseArrayHelper
                 continue;
             }
 
-            $nodeValue = $array; //set $array as root node
+            $nodeValue = $array; // set $array as root node
             $keys = explode('.', (string) $filter);
 
             foreach ($keys as $key) {
                 if (!array_key_exists($key, $nodeValue)) {
-                    continue 2; //Jump to next filter
+                    continue 2; // Jump to next filter
                 }
                 $nodeValue = $nodeValue[$key];
             }
 
-            //We've found a value now let's insert it
+            // We've found a value now let's insert it
             $resultNode = &$result;
 
             foreach ($keys as $key) {
@@ -1057,7 +1057,7 @@ class BaseArrayHelper
 
             foreach ($keys as $i => $key) {
                 if (!array_key_exists($key, $excludeNode)) {
-                    continue 2; //Jump to next filter
+                    continue 2; // Jump to next filter
                 }
 
                 if ($i < $numNestedKeys) {

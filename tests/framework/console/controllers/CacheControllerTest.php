@@ -72,7 +72,7 @@ class CacheControllerTest extends TestCase
         $this->_cacheController = Yii::createObject([
             'class' => 'yiiunit\framework\console\controllers\SilencedCacheController',
             'interactive' => false,
-        ], [null, null]); //id and module are null
+        ], [null, null]); // id and module are null
 
         if (isset($config['fixture'])) {
             Yii::$app->db->open();
