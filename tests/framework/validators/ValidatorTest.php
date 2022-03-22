@@ -208,7 +208,7 @@ class ValidatorTest extends TestCase
     public function testClientValidateAttribute(): void
     {
         $val = new TestValidator();
-        $this->assertNull($val->clientValidateAttribute($this->getTestModel(), 'attr_runMe1', [])); //todo pass a view instead of array
+        $this->assertNull($val->clientValidateAttribute($this->getTestModel(), 'attr_runMe1', [])); // todo pass a view instead of array
 
         // Access to validator in inline validation (https://github.com/yiisoft/yii2/issues/6242)
 

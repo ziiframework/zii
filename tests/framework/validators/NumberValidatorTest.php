@@ -229,7 +229,7 @@ class NumberValidatorTest extends TestCase
         $model->attr_number = '5.5e1';
         $val->validateAttribute($model, 'attr_number');
         $this->assertFalse($model->hasErrors('attr_number'));
-        $model->attr_number = '43^32'; //expression
+        $model->attr_number = '43^32'; // expression
         $val->validateAttribute($model, 'attr_number');
         $this->assertTrue($model->hasErrors('attr_number'));
         $val = new NumberValidator(['min' => 10]);
@@ -276,7 +276,7 @@ class NumberValidatorTest extends TestCase
         $model->attr_number = ['5.5e1'];
         $val->validateAttribute($model, 'attr_number');
         $this->assertFalse($model->hasErrors('attr_number'));
-        $model->attr_number = ['43^32']; //expression
+        $model->attr_number = ['43^32']; // expression
         $val->validateAttribute($model, 'attr_number');
         $this->assertTrue($model->hasErrors('attr_number'));
         $val = new NumberValidator(['min' => 10]);
@@ -323,7 +323,7 @@ class NumberValidatorTest extends TestCase
         $model->attr_number = ['5.5e1'];
         $val->validateAttribute($model, 'attr_number');
         $this->assertTrue($model->hasErrors('attr_number'));
-        $model->attr_number = ['43^32']; //expression
+        $model->attr_number = ['43^32']; // expression
         $val->validateAttribute($model, 'attr_number');
         $this->assertTrue($model->hasErrors('attr_number'));
         $val = new NumberValidator(['min' => 10]);

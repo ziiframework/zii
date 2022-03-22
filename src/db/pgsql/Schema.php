@@ -356,8 +356,8 @@ SQL;
         $tableName = $this->quoteValue($table->name);
         $tableSchema = $this->quoteValue($table->schemaName);
 
-        //We need to extract the constraints de hard way since:
-        //http://www.postgresql.org/message-id/26677.1086673982@sss.pgh.pa.us
+        // We need to extract the constraints de hard way since:
+        // http://www.postgresql.org/message-id/26677.1086673982@sss.pgh.pa.us
 
         $sql = <<<SQL
 select

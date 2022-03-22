@@ -8,7 +8,7 @@ declare(strict_types=1);
  * @license https://www.yiiframework.com/license/
  */
 
-/* @var $this \yiiunit\framework\db\CommandTest  */
+/* @var $this \yiiunit\framework\db\CommandTest */
 
 $rows = call_user_func(static function () {
     if (false) {

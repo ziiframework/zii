@@ -47,7 +47,7 @@ trait SessionTestTrait
             return;
         }
 
-        //non-strict-mode test
+        // non-strict-mode test
         $session->useStrictMode = false;
         $session->close();
         $session->destroySession('non-existing-non-strict');
@@ -56,7 +56,7 @@ trait SessionTestTrait
         $this->assertEquals('non-existing-non-strict', $session->getId());
         $session->close();
 
-        //strict-mode test
+        // strict-mode test
         $session->useStrictMode = true;
         $session->close();
         $session->destroySession('non-existing-strict');
@@ -66,12 +66,12 @@ trait SessionTestTrait
         $this->assertNotEquals('non-existing-strict', $id);
         $session->set('strict_mode_test', 'session data');
         $session->close();
-        //Ensure session was not stored under forced id
+        // Ensure session was not stored under forced id
         $session->setId('non-existing-strict');
         $session->open();
         $this->assertNotEquals('session data', $session->get('strict_mode_test'));
         $session->close();
-        //Ensure session can be accessed with the new (and thus existing) id.
+        // Ensure session can be accessed with the new (and thus existing) id.
         $session->setId($id);
         $session->open();
         $this->assertNotEmpty($id);

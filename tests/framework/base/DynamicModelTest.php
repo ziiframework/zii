@@ -86,7 +86,7 @@ class DynamicModelTest extends TestCase
     public function testLoad(): void
     {
         $dynamic = new DynamicModel();
-        //define two attributes
+        // define two attributes
         $dynamic->defineAttribute('name');
         $dynamic->defineAttribute('mobile');
         // define rule

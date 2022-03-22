@@ -47,7 +47,7 @@ class FixtureControllerTest extends DatabaseTestCase
             'interactive' => false,
             'globalFixtures' => [],
             'namespace' => 'yiiunit\data\console\controllers\fixtures',
-        ], [null, null]); //id and module are null
+        ], [null, null]); // id and module are null
     }
 
     protected function tearDown(): void
