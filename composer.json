@@ -38,7 +38,7 @@
     },
     "require-dev": {
         "cebe/indent": "^1.0",
-        "nette/php-generator": "^4.0",
+        "nette/php-generator": "^3.6",
         "phpunit/phpunit": "^9.5",
         "symfony/var-dumper": "^5.4"
     },
@@ -57,7 +57,7 @@
     },
     "config": {
         "platform": {
-            "php": "8.0"
+            "php": "7.4"
         },
         "optimize-autoloader": true,
         "sort-packages": true,
