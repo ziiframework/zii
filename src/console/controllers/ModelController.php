@@ -304,6 +304,15 @@ class ModelController extends Controller
             ++$this->_columnIdx;
         }
 
+        foreach ($this->getTableForeignKeys($tableName) as $tableForeignKey) {
+            $this->_ruleExist[] = [
+                'name' => $tableForeignKey['COLUMN_NAME'],
+                'targetClassName' => Inflector::camelize($tableForeignKey['REFERENCED_TABLE_NAME']),
+                'targetAttribute' => $tableForeignKey['REFERENCED_COLUMN_NAME'],
+                'targetClassComment' => $this->getTableComment($tableForeignKey['REFERENCED_TABLE_NAME']),
+            ];
+        }
+
         // public function behaviors(): array
         if (!empty($this->_typeCastAttributes)) {
             $this->_targetNamespace->addUse(AttributeTypecastBehavior::class);
@@ -541,20 +550,6 @@ class ModelController extends Controller
                 'name' => $column->name,
                 'format' => self::$_dateFormat[$this->fieldTypeCast($column->dbType)],
             ];
-        }
-
-        // xxx_id, xxx_hashtag
-        if (preg_match('/^([a-z0-9_]+)_(id|hashtag)$/', $column->name, $matches)) {
-            $getTableComment = $this->getTableComment($matches[1]);
-
-            if ($getTableComment !== null) {
-                $this->_ruleExist[] = [
-                    'name' => $column->name,
-                    'targetClassName' => Inflector::camelize($matches[1]),
-                    'targetAttribute' => $matches[2],
-                    'targetClassComment' => $getTableComment,
-                ];
-            }
         }
     }
 
@@ -795,6 +790,42 @@ class ModelController extends Controller
     private function getTableIndexes(string $tableName): array
     {
         $sql = 'SHOW INDEX FROM ' . Yii::$app->db->schema->getRawTableName($tableName);
+        $command = Yii::$app->db->createCommand($sql);
+
+        try {
+            return $command->queryAll();
+        } catch (Exception $e) {
+            return [];
+        }
+    }
+
+    private function getTableForeignKeys(string $tableName): array
+    {
+        preg_match('/dbname=([^;]+)/', Yii::$app->db->dsn, $matches);
+
+        $databaseName = $matches[1];
+        $tableName = Yii::$app->db->schema->getRawTableName($tableName);
+
+        $sql = <<<EOT
+SELECT
+    ii.TABLE_SCHEMA,
+    ii.TABLE_NAME,
+    ii.CONSTRAINT_TYPE,
+    ii.CONSTRAINT_NAME,
+    kk.COLUMN_NAME,
+    kk.REFERENCED_TABLE_NAME,
+    kk.REFERENCED_COLUMN_NAME
+FROM
+    INFORMATION_SCHEMA.TABLE_CONSTRAINTS ii
+LEFT JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE kk
+ON
+    ii.CONSTRAINT_NAME = kk.CONSTRAINT_NAME
+WHERE
+    ii.TABLE_SCHEMA = '$databaseName' AND ii.TABLE_NAME = '$tableName' AND ii.CONSTRAINT_TYPE = 'FOREIGN KEY'
+ORDER BY
+    ii.TABLE_NAME;
+EOT;
+
         $command = Yii::$app->db->createCommand($sql);
 
         try {
