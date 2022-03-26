@@ -719,6 +719,14 @@ class ModelController extends Controller
                     'targetAttribute' => $item['targetAttribute'],
                     'message' => '%"{attribute}" . " " . zii_t("不存在")%',
                 ];
+
+                // Table Relations
+                $this->_targetClass->addMethod('getDb' . Inflector::camelize(str_replace(['_id', '_hashtag', 'ref_'], '', $item['name'])))
+                    ->setReturnType(ActiveQuery::class)
+                    ->setReturnNullable()
+                    ->addComment("@return {$item['targetClassName']}|ActiveQuery|null")
+                    ->setBody("return \$this->hasOne({$item['targetClassName']}::class, ['{$item['targetAttribute']}' => '" . $item['name'] . "']);");
+
                 // Class Comment
                 $this->_targetClass->addComment(implode(' ', [
                     '@property',
@@ -726,13 +734,6 @@ class ModelController extends Controller
                     '$db' . ucfirst($item['targetClassName']),
                     // '关联' . str_replace('表', '', $item['targetClassComment']) . '[ActiveRecord].',
                 ]));
-                // Table Relations
-                $this->_targetClass->addMethod("getDb{$item['targetClassName']}")
-                    ->setReturnType(ActiveQuery::class)
-                    ->setReturnNullable()
-                    // ->addComment("关联{$item['targetClassComment']}")
-                    ->addComment("@return {$item['targetClassName']}|ActiveQuery|null")
-                    ->setBody("return \$this->hasOne({$item['targetClassName']}::class, ['{$item['targetAttribute']}' => '" . $item['name'] . "']);");
             }
         }
         // Unique Index
