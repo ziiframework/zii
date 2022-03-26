@@ -375,7 +375,7 @@ class ModelController extends Controller
             ->setReturnType('array')
             // ->addComment('@inheritdoc')
             ->setBody('return array_merge(parent::extraFields(), ?);', [
-                array_map(fn (string $targetClassName): string => 'db' . $targetClassName, array_column($this->_ruleExist, 'targetClassName')),
+                array_map(fn (string $field): string => 'db' . $this->getRelationMethodName($field), array_column($this->_ruleExist, 'name')),
             ]);
 
         // rules
@@ -720,10 +720,8 @@ class ModelController extends Controller
                     'message' => '%"{attribute}" . " " . zii_t("不存在")%',
                 ];
 
-                $tableRelationMethodName = Inflector::camelize(str_replace(['_id', '_hashtag', 'ref_'], '', $item['name']));
-
                 // Table Relations
-                $this->_targetClass->addMethod('getDb' . $tableRelationMethodName)
+                $this->_targetClass->addMethod('getDb' . $this->getRelationMethodName($item['name']))
                     ->setReturnType(ActiveQuery::class)
                     ->setReturnNullable()
                     ->addComment("@return {$item['targetClassName']}|ActiveQuery|null")
@@ -733,7 +731,7 @@ class ModelController extends Controller
                 $this->_targetClass->addComment(implode(' ', [
                     '@property',
                     $item['targetClassName'],
-                    '$db' . $tableRelationMethodName,
+                    '$db' . $this->getRelationMethodName($item['name']),
                 ]));
             }
         }
@@ -774,6 +772,11 @@ class ModelController extends Controller
         }
 
         return $value;
+    }
+
+    private function getRelationMethodName(string $field): string
+    {
+        return Inflector::camelize(str_replace(['_id', '_hashtag', 'ref_'], '', $field));
     }
 
     private function getTableComment(string $tableName): ?string
