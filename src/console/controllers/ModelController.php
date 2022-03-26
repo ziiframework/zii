@@ -720,8 +720,10 @@ class ModelController extends Controller
                     'message' => '%"{attribute}" . " " . zii_t("不存在")%',
                 ];
 
+                $tableRelationMethodName = Inflector::camelize(str_replace(['_id', '_hashtag', 'ref_'], '', $item['name']));
+
                 // Table Relations
-                $this->_targetClass->addMethod('getDb' . Inflector::camelize(str_replace(['_id', '_hashtag', 'ref_'], '', $item['name'])))
+                $this->_targetClass->addMethod('getDb' . $tableRelationMethodName)
                     ->setReturnType(ActiveQuery::class)
                     ->setReturnNullable()
                     ->addComment("@return {$item['targetClassName']}|ActiveQuery|null")
@@ -731,8 +733,7 @@ class ModelController extends Controller
                 $this->_targetClass->addComment(implode(' ', [
                     '@property',
                     $item['targetClassName'],
-                    '$db' . ucfirst($item['targetClassName']),
-                    // '关联' . str_replace('表', '', $item['targetClassComment']) . '[ActiveRecord].',
+                    '$db' . $tableRelationMethodName,
                 ]));
             }
         }
