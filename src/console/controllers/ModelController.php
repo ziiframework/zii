@@ -233,7 +233,7 @@ class ModelController extends Controller
 
         $this->_targetClass = $this->_targetNamespace->addClass('Base' . Inflector::camelize($tableName));
         $this->_targetClass->setExtends($this->modelExtends);
-        // $this->_targetClass->setFinal();
+        $this->_targetClass->setAbstract();
 
         if ($tableName === $this->identityTable) {
             $this->_targetNamespace->addUse(IdentityInterface::class);
