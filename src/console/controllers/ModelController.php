@@ -722,7 +722,7 @@ class ModelController extends Controller
 
                 // Table Relations
                 $this->_targetClass->addMethod('getDb' . $this->getRelationMethodName($item['name']))
-                    ->setReturnType(ActiveQuery::class)
+                    ->setReturnType("{$item['targetClassName']}|ActiveQuery|null")
                     ->setReturnNullable()
                     ->addComment("@return {$item['targetClassName']}|ActiveQuery|null")
                     ->setBody("return \$this->hasOne({$item['targetClassName']}::class, ['{$item['targetAttribute']}' => '" . $item['name'] . "']);");
