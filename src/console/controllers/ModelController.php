@@ -14,6 +14,7 @@ use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\Closure;
 use Nette\PhpGenerator\Parameter;
 use Nette\PhpGenerator\PhpNamespace;
+use Nette\PhpGenerator\Type;
 use Yii;
 use yii\behaviors\AttributeTypecastBehavior;
 use yii\console\Controller;
@@ -722,9 +723,8 @@ class ModelController extends Controller
 
                 // Table Relations
                 $this->_targetClass->addMethod('getDb' . $this->getRelationMethodName($item['name']))
-                    ->setReturnType("{$item['targetClassName']}|ActiveQuery|null")
+                    ->setReturnType(Type::union($this->modelNamespace . '\\' . $item['targetClassName'], ActiveQuery::class))
                     ->setReturnNullable()
-                    ->addComment("@return {$item['targetClassName']}|ActiveQuery|null")
                     ->setBody("return \$this->hasOne({$item['targetClassName']}::class, ['{$item['targetAttribute']}' => '" . $item['name'] . "']);");
 
                 // Class Comment
