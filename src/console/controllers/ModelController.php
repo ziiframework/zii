@@ -217,6 +217,7 @@ class ModelController extends Controller
         $this->_ruleInteger = [];
         $this->_ruleDecimal = [];
         $this->_ruleString = [];
+        $this->_ruleText = [];
         $this->_ruleYmdHis = [];
         $this->_ruleExist = [];
         $this->_typeCastAttributes = [];
@@ -334,7 +335,6 @@ class ModelController extends Controller
 
             // Column Cast
             $this->castColumn($column);
-            ++$this->_columnIdx;
         }
 
         foreach ($this->getTableForeignKeys($tableName) as $tableForeignKey) {
@@ -474,8 +474,6 @@ class ModelController extends Controller
             echo '✘ Create model Base' . Inflector::camelize($tableName) . " aborted, file $file already exists\n";
         }
     }
-
-    private int $_columnIdx = 0;
 
     private function castColumn(ColumnSchema $column): void
     {
