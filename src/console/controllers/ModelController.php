@@ -289,7 +289,7 @@ class ModelController extends Controller
             } else {
                 $this->_targetClass->addComment(implode(' ', [
                     '@property',
-                    $varType,
+                    $varType . ($column->allowNull ? '|null' : ''),
                     '$' . $column->name,
                     $column->comment . "[$column->dbType]" . ($column->allowNull ? '.' : '[NOT NULL].'),
                     isset($this->_indexes[$column->name]) && $this->_indexes[$column->name] ? "This property is {$this->_indexes[$column->name]}." : '',
