@@ -239,9 +239,20 @@ class ModelController extends Controller
     {
         $tableNames = Yii::$app->db->getSchema()->getTableNames('', true);
 
+        $exclude = array_merge([
+            'dbcache',
+            'dbsession',
+            'dbqueue',
+            'dbauth_item',
+            'dbauth_item_child',
+            'dbauth_assignment',
+            'dbauth_rule',
+            'dbmigration',
+        ], $this->exclude);
+
         foreach ($tableNames as $tableName) {
-            if (!in_array($tableName, $this->exclude, true)) {
-                $this->runAction('gii', ['tableName' => $tableName, 'override' => $this->override]);
+            if (!in_array($tableName, $exclude, true)) {
+                $this->actionGii($tableName, $this->override);
             }
         }
     }
