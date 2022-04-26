@@ -215,6 +215,7 @@ class ModelController extends Controller
         $this->_ruleRange = [];
         $this->_ruleBoolean = [];
         $this->_ruleInteger = [];
+        $this->_ruleDecimal = [];
         $this->_ruleString = [];
         $this->_ruleYmdHis = [];
         $this->_ruleExist = [];
