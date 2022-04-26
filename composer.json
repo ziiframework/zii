@@ -39,6 +39,7 @@
     "require-dev": {
         "cebe/indent": "^1.0",
         "nette/php-generator": "^3.6",
+        "phpstan/phpstan": "^1.6",
         "phpunit/phpunit": "^9.5",
         "symfony/var-dumper": "^5.4||^6.0"
     },

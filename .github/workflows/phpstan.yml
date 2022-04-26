@@ -1,0 +1,38 @@
+name: phpstan
+
+on:
+  push:
+    branches:
+      - master
+      - main
+
+  pull_request:
+    branches:
+      - master
+      - main
+
+jobs:
+  phpstan:
+    name: PHP ${{ matrix.php-version }} on ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['7.4', '8.0', '8.1']
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+
+      - name: Install Deps
+        run: |
+          composer self-update -vvv
+          composer redo-install
+
+      - run: vendor/bin/phpstan --memory-limit=512M --debug
