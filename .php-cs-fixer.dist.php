@@ -107,4 +107,5 @@ return (new PhpCsFixer\Config())
             ->notName('DetailViewTest.php')
             ->notName('VarDumperTest.php')
             ->notName('MaskedInput.php')
+            ->notName('ModelController.php')
     );
