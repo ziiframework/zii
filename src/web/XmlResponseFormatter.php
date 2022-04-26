@@ -144,7 +144,7 @@ class XmlResponseFormatter extends Component implements ResponseFormatterInterfa
             }
         } elseif (is_object($data)) {
             if ($this->useObjectTags) {
-                $name = StringHelper::basename(get_class($data));
+                $name = StringHelper::basename($data::class);
 
                 if ($this->objectTagToLowercase) {
                     $name = strtolower($name);

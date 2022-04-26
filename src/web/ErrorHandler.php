@@ -178,7 +178,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
         }
 
         if (YII_DEBUG) {
-            $array['type'] = get_class($exception);
+            $array['type'] = $exception::class;
 
             if (!$exception instanceof UserException) {
                 $array['file'] = $exception->getFile();
@@ -513,7 +513,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
             }
 
             if (is_object($value)) {
-                $args[$key] = '<span class="title">' . $this->htmlEncode(get_class($value)) . '</span>';
+                $args[$key] = '<span class="title">' . $this->htmlEncode($value::class) . '</span>';
             } elseif (is_bool($value)) {
                 $args[$key] = '<span class="keyword">' . ($value ? 'true' : 'false') . '</span>';
             } elseif (is_string($value)) {

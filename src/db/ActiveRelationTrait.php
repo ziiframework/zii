@@ -201,7 +201,7 @@ trait ActiveRelationTrait
             $realName = lcfirst(substr($method->getName(), 3));
 
             if ($realName !== $name) {
-                throw new InvalidArgumentException('Relation names are case sensitive. ' . get_class($model) . " has a relation named \"$realName\" instead of \"$name\".");
+                throw new InvalidArgumentException('Relation names are case sensitive. ' . $model::class . " has a relation named \"$realName\" instead of \"$name\".");
             }
         }
 

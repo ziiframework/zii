@@ -89,7 +89,7 @@ return (new PhpCsFixer\Config())
         'native_function_invocation' => false,
         'native_function_type_declaration_casing' => true,
         'fopen_flags' => ['b_mode' => true],
-        'get_class_to_class_keyword' => false, // TODO: as of php 8.0
+        'get_class_to_class_keyword' => true, // TODO: as of php 8.0
     ])
     ->setFinder(
         PhpCsFixer\Finder::create()

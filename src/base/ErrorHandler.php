@@ -328,7 +328,7 @@ abstract class ErrorHandler extends Component
      */
     public function logException($exception): void
     {
-        $category = get_class($exception);
+        $category = $exception::class;
 
         if ($exception instanceof HttpException) {
             $category = 'yii\\web\\HttpException:' . $exception->statusCode;
@@ -402,7 +402,7 @@ abstract class ErrorHandler extends Component
         } else {
             $message = 'Exception';
         }
-        $message .= " '" . get_class($exception) . "' with message '{$exception->getMessage()}' \n\nin "
+        $message .= " '" . $exception::class . "' with message '{$exception->getMessage()}' \n\nin "
             . $exception->getFile() . ':' . $exception->getLine() . "\n\n"
             . "Stack trace:\n" . $exception->getTraceAsString();
 

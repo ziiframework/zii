@@ -137,16 +137,16 @@ class BaseVarDumper
 
             case 'object':
                 if (($id = array_search($var, self::$_objects, true)) !== false) {
-                    self::$_output .= get_class($var) . '#' . ($id + 1) . '(...)';
+                    self::$_output .= $var::class . '#' . ($id + 1) . '(...)';
                 } elseif (self::$_depth <= $level) {
-                    self::$_output .= get_class($var) . '(...)';
+                    self::$_output .= $var::class . '(...)';
                 } else {
                     $id = array_push(self::$_objects, $var);
-                    $className = get_class($var);
+                    $className = $var::class;
                     $spaces = str_repeat(' ', $level * 4);
                     self::$_output .= "$className#$id\n" . $spaces . '(';
 
-                    if ('__PHP_Incomplete_Class' !== get_class($var) && method_exists($var, '__debugInfo')) {
+                    if ('__PHP_Incomplete_Class' !== $var::class && method_exists($var, '__debugInfo')) {
                         $dumpValues = $var->__debugInfo();
 
                         if (!is_array($dumpValues)) {
@@ -251,7 +251,7 @@ class BaseVarDumper
                             self::exportInternal($varAsArray, $level);
 
                             return;
-                        } elseif ('__PHP_Incomplete_Class' !== get_class($var) && method_exists($var, '__toString')) {
+                        } elseif ('__PHP_Incomplete_Class' !== $var::class && method_exists($var, '__toString')) {
                             $output = var_export($var->__toString(), true);
                         } else {
                             $outputBackup = self::$_output;

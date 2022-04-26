@@ -108,7 +108,7 @@ class ArrayExpressionBuilder implements ExpressionBuilderInterface
      */
     private function unnestArrayExpression(ArrayExpression $expression, $value)
     {
-        $expressionClass = get_class($expression);
+        $expressionClass = $expression::class;
 
         return new $expressionClass($value, $expression->getType(), $expression->getDimension() - 1);
     }

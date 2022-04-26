@@ -279,7 +279,7 @@ abstract class CacheTestCase extends TestCase
 
     public function getOrSetCallable($cache)
     {
-        return get_class($cache);
+        return $cache::class;
     }
 
     public function testGetOrSetWithDependencies(): void

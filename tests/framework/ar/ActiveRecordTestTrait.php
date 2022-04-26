@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace yiiunit\framework\ar;
 
 use Exception;
-use function get_class;
 use yii\base\Event;
 use yii\db\ActiveRecordInterface;
 use yii\db\BaseActiveRecord;
@@ -1120,7 +1119,7 @@ trait ActiveRecordTestTrait
         Event::on(BaseActiveRecord::className(), BaseActiveRecord::EVENT_AFTER_FIND, static function ($event) use (&$afterFindCalls): void {
             /* @var $ar BaseActiveRecord */
             $ar = $event->sender;
-            $afterFindCalls[] = [get_class($ar), $ar->getIsNewRecord(), $ar->getPrimaryKey(), $ar->isRelationPopulated('orders')];
+            $afterFindCalls[] = [$ar::class, $ar->getIsNewRecord(), $ar->getPrimaryKey(), $ar->isRelationPopulated('orders')];
         });
 
         $customer = $customerClass::findOne(1);
@@ -1175,7 +1174,7 @@ trait ActiveRecordTestTrait
         Event::on(BaseActiveRecord::className(), BaseActiveRecord::EVENT_AFTER_REFRESH, static function ($event) use (&$afterRefreshCalls): void {
             /* @var $ar BaseActiveRecord */
             $ar = $event->sender;
-            $afterRefreshCalls[] = [get_class($ar), $ar->getIsNewRecord(), $ar->getPrimaryKey(), $ar->isRelationPopulated('orders')];
+            $afterRefreshCalls[] = [$ar::class, $ar->getIsNewRecord(), $ar->getPrimaryKey(), $ar->isRelationPopulated('orders')];
         });
 
         $customer = $customerClass::findOne(1);

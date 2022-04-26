@@ -45,7 +45,7 @@ class ActiveFixtureTest extends DatabaseTestCase
         $test->setUp();
         $fixture = $test->getFixture('customers');
 
-        $this->assertEquals(CustomerFixture::className(), get_class($fixture));
+        $this->assertEquals(CustomerFixture::className(), $fixture::class);
         $this->assertCount(2, $fixture);
         $this->assertEquals(1, $fixture['customer1']['id']);
         $this->assertEquals('customer1@example.com', $fixture['customer1']['email']);

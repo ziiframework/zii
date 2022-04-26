@@ -65,7 +65,7 @@ abstract class CompositeUrlRule extends BaseObject implements UrlRuleInterface
 
             if (YII_DEBUG) {
                 Yii::debug([
-                    'rule' => method_exists($rule, '__toString') ? $rule->__toString() : get_class($rule),
+                    'rule' => method_exists($rule, '__toString') ? $rule->__toString() : $rule::class,
                     'match' => $result !== false,
                     'parent' => self::className(),
                 ], __METHOD__);

@@ -237,7 +237,7 @@ class Event extends BaseObject
         }
 
         if (is_object($class)) {
-            $class = get_class($class);
+            $class = $class::class;
         } else {
             $class = ltrim($class, '\\');
         }
@@ -307,7 +307,7 @@ class Event extends BaseObject
             if ($event->sender === null) {
                 $event->sender = $class;
             }
-            $class = get_class($class);
+            $class = $class::class;
         } else {
             $class = ltrim($class, '\\');
         }

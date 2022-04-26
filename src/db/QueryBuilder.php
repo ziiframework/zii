@@ -313,7 +313,7 @@ class QueryBuilder extends \yii\base\BaseObject
      */
     public function getExpressionBuilder(ExpressionInterface $expression)
     {
-        $className = get_class($expression);
+        $className = $expression::class;
 
         if (!isset($this->expressionBuilders[$className])) {
             foreach (array_reverse($this->expressionBuilders) as $expressionClass => $builderClass) {

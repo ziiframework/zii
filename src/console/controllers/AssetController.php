@@ -516,7 +516,7 @@ class AssetController extends Controller
         foreach ($targets as $name => $target) {
             if (isset($this->targets[$name])) {
                 $array[$name] = array_merge($this->targets[$name], [
-                    'class' => get_class($target),
+                    'class' => $target::class,
                     'sourcePath' => null,
                     'basePath' => $this->targets[$name]['basePath'],
                     'baseUrl' => $this->targets[$name]['baseUrl'],
@@ -875,7 +875,7 @@ EOD;
     private function composeBundleConfig($bundle)
     {
         $config = Yii::getObjectVars($bundle);
-        $config['class'] = get_class($bundle);
+        $config['class'] = $bundle::class;
 
         return $config;
     }

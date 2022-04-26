@@ -355,7 +355,7 @@ class UrlManager extends Component
 
                 if (YII_DEBUG) {
                     Yii::debug([
-                        'rule' => method_exists($rule, '__toString') ? $rule->__toString() : get_class($rule),
+                        'rule' => method_exists($rule, '__toString') ? $rule->__toString() : $rule::class,
                         'match' => $result !== false,
                         'parent' => null,
                     ], __METHOD__);

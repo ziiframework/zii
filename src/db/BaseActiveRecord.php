@@ -1210,7 +1210,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
             return false;
         }
 
-        return static::class === get_class($record) && $this->getPrimaryKey() === $record->getPrimaryKey();
+        return static::class === $record::class && $this->getPrimaryKey() === $record->getPrimaryKey();
     }
 
     /**
@@ -1736,7 +1736,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
             $value = $primaryModel->$pk;
 
             if ($value === null) {
-                throw new InvalidCallException('Unable to link models: the primary key of ' . get_class($primaryModel) . ' is null.');
+                throw new InvalidCallException('Unable to link models: the primary key of ' . $primaryModel::class . ' is null.');
             }
 
             if (is_array($foreignModel->$fk)) { // relation via array valued attribute

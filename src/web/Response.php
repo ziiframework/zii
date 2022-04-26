@@ -434,7 +434,7 @@ class Response extends \yii\base\Response
 
         if ($request->enableCookieValidation) {
             if ($request->cookieValidationKey == '') {
-                throw new InvalidConfigException(get_class($request) . '::cookieValidationKey must be configured with a secret key.');
+                throw new InvalidConfigException($request::class . '::cookieValidationKey must be configured with a secret key.');
             }
             $validationKey = $request->cookieValidationKey;
         }
