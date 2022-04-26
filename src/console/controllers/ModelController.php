@@ -221,9 +221,29 @@ class ModelController extends Controller
         $this->_typeCastAttributes = [];
     }
 
+    public bool $override = false;
+
+    public array $exclude = [];
+
+    public function options($actionID)
+    {
+        return ['override', 'exclude'];
+    }
+
     public function actionIndex(): void
     {
         $this->stdout("Use php yii model/generate to generate a model.\n", Console::FG_RED);
+    }
+
+    public function actionGiiAll(): void
+    {
+        $tableNames = Yii::$app->db->getSchema()->getTableNames('', true);
+
+        foreach ($tableNames as $tableName) {
+            if (!in_array($tableName, $this->exclude, true)) {
+                $this->runAction('gii', ['tableName' => $tableName, 'override' => $this->override]);
+            }
+        }
     }
 
     public function actionGii(string $tableName, bool $overwrite = false): void
