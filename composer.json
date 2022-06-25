@@ -33,7 +33,7 @@
         "cebe/markdown": "^1.2",
         "ezyang/htmlpurifier": "^4.13",
         "symfony/polyfill-php80": "^1.26",
-        "symfony/polyfill-php81": "^1.25",
+        "symfony/polyfill-php81": "^1.26",
         "ziiframework/composer": ">=3.6.0"
     },
     "require-dev": {
