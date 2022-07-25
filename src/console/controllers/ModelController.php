@@ -57,6 +57,7 @@ class ModelController extends Controller
         'id' => 'ID',
         'client_ip' => '%zii_t("客户端IP")%',
         'created_at_microtime' => '%zii_t("创建时间戳")%',
+        'created_at_unixtime' => '%zii_t("创建时间戳")%',
         'created_at' => '%zii_t("创建时间")%',
         'updated_at' => '%zii_t("更新时间")%',
     ];
