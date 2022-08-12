@@ -455,11 +455,11 @@ class ErrorHandler extends \yii\base\ErrorHandler
     public function createServerInformationLink()
     {
         $serverUrls = [
-            'http://httpd.apache.org/' => ['apache'],
-            'http://nginx.org/' => ['nginx'],
-            'http://lighttpd.net/' => ['lighttpd'],
-            'http://gwan.com/' => ['g-wan', 'gwan'],
-            'http://iis.net/' => ['iis', 'services'],
+            'https://httpd.apache.org/' => ['apache'],
+            'https://nginx.org/' => ['nginx'],
+            'https://lighttpd.net/' => ['lighttpd'],
+            'https://gwan.com/' => ['g-wan', 'gwan'],
+            'https://iis.net/' => ['iis', 'services'],
             'https://www.php.net/manual/en/features.commandline.webserver.php' => ['development'],
         ];
 
@@ -484,7 +484,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
      */
     public function createFrameworkVersionLink()
     {
-        return '<a href="http://github.com/yiisoft/yii2/" target="_blank">' . $this->htmlEncode(Yii::getVersion()) . '</a>';
+        return '<a href="https://github.com/yiisoft/yii2/" target="_blank">' . $this->htmlEncode(Yii::getVersion()) . '</a>';
     }
 
     /**

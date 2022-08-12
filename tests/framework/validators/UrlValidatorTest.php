@@ -97,7 +97,7 @@ class UrlValidatorTest extends TestCase
             'enableIDN' => true,
         ]);
         $this->assertTrue($val->validate('http://äüößìà.de'));
-        // converted via http://mct.verisign-grs.com/convertServlet
+        // converted via https://mct.verisign-grs.com/convertServlet
         $this->assertTrue($val->validate('http://xn--zcack7ayc9a.de'));
     }
 
