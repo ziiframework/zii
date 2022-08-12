@@ -227,7 +227,7 @@ class BaseYii
      * be removed. Trailing '/' and '\' characters will be trimmed. This can be
      *
      * - a directory or a file path (e.g. `/tmp`, `/tmp/main.txt`)
-     * - a URL (e.g. `http://www.yiiframework.com`)
+     * - a URL (e.g. `https://www.yiiframework.com`)
      * - a path alias (e.g. `@yii/base`). In this case, the path alias will be converted into the
      *   actual path first by calling [[getAlias()]].
      *
@@ -546,7 +546,7 @@ class BaseYii
     public static function powered()
     {
         return Yii::t('yii', 'Powered by {yii}', [
-            'yii' => '<a href="http://www.yiiframework.com/" rel="external">' . Yii::t('yii', 'Yii Framework') . '</a>',
+            'yii' => '<a href="https://www.yiiframework.com/" rel="external">' . Yii::t('yii', 'Yii Framework') . '</a>',
         ]);
     }
 
