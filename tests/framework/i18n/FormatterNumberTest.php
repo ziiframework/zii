@@ -325,7 +325,7 @@ class FormatterNumberTest extends TestCase
         $this->assertSame('$123,456.00', $this->formatter->asCurrency('123456'));
         $this->assertSame('$0.00', $this->formatter->asCurrency('0'));
         // Starting from ICU 52.1, negative currency value will be formatted as -$123,456.12
-        // see: http://source.icu-project.org/repos/icu/icu/tags/release-52-1/source/data/locales/en.txt
+        // see: https://source.icu-project.org/repos/icu/icu/tags/release-52-1/source/data/locales/en.txt
         // $value = '-123456.123';
         // $this->assertSame("($123,456.12)", $this->formatter->asCurrency($value));
 

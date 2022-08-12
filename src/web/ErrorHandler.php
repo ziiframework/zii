@@ -272,7 +272,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
         }
 
         $page = $this->htmlEncode(strtolower(str_replace('\\', '-', $class)));
-        $url = "http://www.yiiframework.com/doc-2.0/$page.html";
+        $url = "https://www.yiiframework.com/doc-2.0/$page.html";
 
         if ($method) {
             $url .= "#$method()-detail";
@@ -443,7 +443,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
      */
     public function createHttpStatusLink($statusCode, $statusDescription)
     {
-        return '<a href="http://en.wikipedia.org/wiki/List_of_HTTP_status_codes#' . (int) $statusCode . '" target="_blank">HTTP ' . (int) $statusCode . ' &ndash; ' . $statusDescription . '</a>';
+        return '<a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#' . (int) $statusCode . '" target="_blank">HTTP ' . (int) $statusCode . ' &ndash; ' . $statusDescription . '</a>';
     }
 
     /**
@@ -455,11 +455,11 @@ class ErrorHandler extends \yii\base\ErrorHandler
     public function createServerInformationLink()
     {
         $serverUrls = [
-            'http://httpd.apache.org/' => ['apache'],
-            'http://nginx.org/' => ['nginx'],
-            'http://lighttpd.net/' => ['lighttpd'],
-            'http://gwan.com/' => ['g-wan', 'gwan'],
-            'http://iis.net/' => ['iis', 'services'],
+            'https://httpd.apache.org/' => ['apache'],
+            'https://nginx.org/' => ['nginx'],
+            'https://lighttpd.net/' => ['lighttpd'],
+            'https://gwan.com/' => ['g-wan', 'gwan'],
+            'https://iis.net/' => ['iis', 'services'],
             'https://www.php.net/manual/en/features.commandline.webserver.php' => ['development'],
         ];
 
@@ -484,7 +484,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
      */
     public function createFrameworkVersionLink()
     {
-        return '<a href="http://github.com/yiisoft/yii2/" target="_blank">' . $this->htmlEncode(Yii::getVersion()) . '</a>';
+        return '<a href="https://github.com/yiisoft/yii2/" target="_blank">' . $this->htmlEncode(Yii::getVersion()) . '</a>';
     }
 
     /**

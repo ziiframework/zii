@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\base;
@@ -61,7 +61,7 @@ class ErrorException extends \ErrorException
                     $frame['function'] = 'unknown';
                 }
 
-                // Xdebug < 2.1.1: http://bugs.xdebug.org/view.php?id=695
+                // Xdebug < 2.1.1: https://bugs.xdebug.org/view.php?id=695
                 if (!isset($frame['type']) || $frame['type'] === 'static') {
                     $frame['type'] = '::';
                 } elseif ($frame['type'] === 'dynamic') {

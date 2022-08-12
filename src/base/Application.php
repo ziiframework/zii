@@ -117,7 +117,7 @@ abstract class Application extends Module
 
     /**
      * @var string the language that is meant to be used for end users. It is recommended that you
-     * use [IETF language tags](http://en.wikipedia.org/wiki/IETF_language_tag). For example, `en` stands
+     * use [IETF language tags](https://en.wikipedia.org/wiki/IETF_language_tag). For example, `en` stands
      * for English, while `en-US` stands for English (United States).
      *
      * @see sourceLanguage

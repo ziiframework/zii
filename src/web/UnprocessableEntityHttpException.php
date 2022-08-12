@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\web;
@@ -19,7 +19,7 @@ use Exception;
  * was unable to process the contained instructions. For example, to return form
  * validation errors.
  *
- * @link http://www.webdav.org/specs/rfc2518.html#STATUS_422
+ * @link https://www.webdav.org/specs/rfc2518.html#STATUS_422
  *
  * @author Jan Silva <janfrs3@gmail.com>
  *

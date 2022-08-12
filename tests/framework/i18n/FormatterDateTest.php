@@ -256,7 +256,7 @@ class FormatterDateTest extends TestCase
      */
     public function testDateRangeLow(): void
     {
-        // http://en.wikipedia.org/wiki/Year_2038_problem
+        // https://en.wikipedia.org/wiki/Year_2038_problem
         $this->assertSame('13-12-1901', $this->formatter->asDate('1901-12-13', 'dd-MM-yyyy'));
         $this->assertSame('12-12-1901', $this->formatter->asDate('1901-12-12', 'dd-MM-yyyy'));
 
@@ -277,7 +277,7 @@ class FormatterDateTest extends TestCase
      */
     public function testDateRangeHigh(): void
     {
-        // http://en.wikipedia.org/wiki/Year_2038_problem
+        // https://en.wikipedia.org/wiki/Year_2038_problem
         $this->assertSame('19-01-2038', $this->formatter->asDate('2038-01-19', 'dd-MM-yyyy'));
         $this->assertSame('20-01-2038', $this->formatter->asDate('2038-01-20', 'dd-MM-yyyy'));
 
@@ -354,7 +354,7 @@ class FormatterDateTest extends TestCase
         $this->assertSame('12 years ago', $this->formatter->asRelativeTime($this->buildDateSubIntervals('2014-03-13', [$interval_12_years]), $dateNow));
 
         // Tricky 31-days month stuff
-        // See: http://www.gnu.org/software/tar/manual/html_section/Relative-items-in-date-strings.html
+        // See: https://www.gnu.org/software/tar/manual/html_section/Relative-items-in-date-strings.html
         $dateNow = new DateTime('2014-03-31');
         $dateThen = new DateTime('2014-03-03');
         $this->assertSame('28 days ago', $this->formatter->asRelativeTime($this->buildDateSubIntervals('2014-03-31', [$interval_1_month]), $dateNow));
@@ -409,7 +409,7 @@ class FormatterDateTest extends TestCase
         $this->assertSame('in 12 years', $this->formatter->asRelativeTime($this->buildDateSubIntervals('2014-03-13', [$interval_12_years]), $dateNow));
 
         // Tricky 31-days month stuff
-        // See: http://www.gnu.org/software/tar/manual/html_section/Relative-items-in-date-strings.html
+        // See: https://www.gnu.org/software/tar/manual/html_section/Relative-items-in-date-strings.html
         $dateNow = new DateTime('2014-03-03');
         $dateThen = new DateTime('2014-03-31');
         $this->assertSame('in a month', $this->formatter->asRelativeTime($this->buildDateSubIntervals('2014-03-03', [$interval_1_month]), $dateNow));

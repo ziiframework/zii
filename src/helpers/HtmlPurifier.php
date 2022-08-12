@@ -27,7 +27,7 @@ namespace yii\helpers;
  * ]);
  * ```
  *
- * For more details please refer to [HTMLPurifier documentation](http://htmlpurifier.org/).
+ * For more details please refer to [HTMLPurifier documentation](https://htmlpurifier.org/).
  *
  * @author Alexander Makarov <sam@rmcreative.ru>
  *
