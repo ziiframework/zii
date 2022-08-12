@@ -750,7 +750,7 @@ If you've extended `yii\base\Security` to override any of the config constants y
 Upgrade from Yii 2.0.0
 ----------------------
 
-* Upgraded Twitter Bootstrap to [version 3.3.x](http://blog.getbootstrap.com/2014/10/29/bootstrap-3-3-0-released/).
+* Upgraded Twitter Bootstrap to [version 3.3.x](https://blog.getbootstrap.com/2014/10/29/bootstrap-3-3-0-released/).
   If you need to use an older version (i.e. stick with 3.2.x) you can specify that in your `composer.json` by
   adding the following line in the `require` section:
 

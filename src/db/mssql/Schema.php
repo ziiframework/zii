@@ -613,7 +613,7 @@ SQL;
         }
 
         // please refer to the following page for more details:
-        // http://msdn2.microsoft.com/en-us/library/aa175805(SQL.80).aspx
+        // https://msdn2.microsoft.com/en-us/library/aa175805(SQL.80).aspx
         $sql = <<<'SQL'
 SELECT
 	[fk].[name] AS [fk_name],
