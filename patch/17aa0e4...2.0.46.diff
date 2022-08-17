@@ -1039,48 +1039,6 @@ index c5e78849e45..12e50f759f0 100644
  #
  # Usage:
  # Temporarily you can source this file in you bash by typing: source yii
-diff --git a/cs/src/YiiConfig.php b/cs/src/YiiConfig.php
-index 95442861a4e..582ab283bf0 100644
---- a/cs/src/YiiConfig.php
-+++ b/cs/src/YiiConfig.php
-@@ -1,8 +1,8 @@
- <?php
- /**
-- * @link http://www.yiiframework.com/
-+ * @link https://www.yiiframework.com/
-  * @copyright Copyright (c) 2008 Yii Software LLC
-- * @license http://www.yiiframework.com/license/
-+ * @license https://www.yiiframework.com/license/
-  */
- 
- namespace yii\cs;
-diff --git a/cs/src/YiisoftConfig.php b/cs/src/YiisoftConfig.php
-index c5b4ea16a52..16dc6d6f871 100644
---- a/cs/src/YiisoftConfig.php
-+++ b/cs/src/YiisoftConfig.php
-@@ -1,8 +1,8 @@
- <?php
- /**
-- * @link http://www.yiiframework.com/
-+ * @link https://www.yiiframework.com/
-  * @copyright Copyright (c) 2008 Yii Software LLC
-- * @license http://www.yiiframework.com/license/
-+ * @license https://www.yiiframework.com/license/
-  */
- 
- namespace yii\cs;
-@@ -23,9 +23,9 @@ public function __construct()
-         parent::__construct('yiisoft-cs-config');
- 
-         $header = <<<'HEADER'
--@link http://www.yiiframework.com/
-+@link https://www.yiiframework.com/
- @copyright Copyright (c) 2008 Yii Software LLC
--@license http://www.yiiframework.com/license/
-+@license https://www.yiiframework.com/license/
- HEADER;
- 
-         $this->mergeRules([
 diff --git a/framework/BaseYii.php b/framework/BaseYii.php
 index 002b0f61ed8..1195b2349a0 100644
 --- a/framework/BaseYii.php
