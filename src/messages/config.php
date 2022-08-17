@@ -56,9 +56,9 @@ return [
     // If a file/directory matches both a pattern in "only" and "except", it will NOT be processed.
     'only' => ['*.php'],
     'phpFileHeader' => '/**
- * @link https://www.yiiframework.com/
+ * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license https://www.yiiframework.com/license/
+ * @license http://www.yiiframework.com/license/
  */
 
 ',
