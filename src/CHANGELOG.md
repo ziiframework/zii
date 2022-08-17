@@ -2583,7 +2583,7 @@ upstream changes: [dbb157f...master](https://github.com/yiisoft/yii2/compare/655
 - Bug: Fixed issue with `yii\db\ActiveRelationTrait` preventing `yii\db\ActiveQuery` from clearing events and behaviors on clone (jom)
 - Bug: `yii\db\Query::queryScalar()` wasn't making `SELECT DISTINCT` queries subqueries (jom)
 - Bug: Fixed use `$files` instead of `self::$_files[$key]` to allow inheritance (pgaultier)
-- Enh #46: Added Image extension based on [Imagine library](https://imagine.readthedocs.org) (tonydspaniard)
+- Enh #46: Added Image extension based on [Imagine library](http://imagine.readthedocs.org) (tonydspaniard)
 - Enh #364: Improve `yii\helpers\Inflector::slug()` with `intl` transliteration. Improved transliteration char map. (tonydspaniard)
 - Enh #497: Removed `yii\log\Target::logUser` and added `yii\log\Target::prefix` to support customizing message prefix (qiangxue)
 - Enh #499: Decoupled `Rule` from RBAC `Item` (samdark, qiangxue)

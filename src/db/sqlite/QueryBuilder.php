@@ -155,7 +155,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
         }
 
         // SQLite supports batch insert natively since 3.7.11
-        // https://www.sqlite.org/releaselog/3_7_11.html
+        // http://www.sqlite.org/releaselog/3_7_11.html
         $this->db->open(); // ensure pdo is not null
 
         if (version_compare($this->db->getServerVersion(), '3.7.11', '>=')) {
@@ -541,7 +541,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
             }
         } elseif ($this->hasOffset($offset)) {
             // limit is not optional in SQLite
-            // https://www.sqlite.org/syntaxdiagrams.html#select-stmt
+            // http://www.sqlite.org/syntaxdiagrams.html#select-stmt
             $sql = "LIMIT 9223372036854775807 OFFSET $offset"; // 2^63-1
         }
 
