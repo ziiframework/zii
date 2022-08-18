@@ -15,7 +15,7 @@ use yii\db\ArrayExpression;
 /**
  * Class EnumTypeInCustomSchema.
  *
- * @property int             $id
+ * @property int $id
  * @property ArrayExpression $test_type
  */
 class EnumTypeInCustomSchema extends ActiveRecord

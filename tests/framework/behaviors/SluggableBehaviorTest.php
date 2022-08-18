@@ -234,10 +234,10 @@ class SluggableBehaviorTest extends TestCase
 /**
  * Test Active Record class with [[SluggableBehavior]] behavior attached.
  *
- * @property int               $id
- * @property string            $name
- * @property string            $slug
- * @property int               $category_id
+ * @property int $id
+ * @property string $name
+ * @property string $slug
+ * @property int $category_id
  * @property SluggableBehavior $sluggable
  */
 class ActiveRecordSluggable extends ActiveRecord

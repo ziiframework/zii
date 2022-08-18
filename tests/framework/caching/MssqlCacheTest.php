@@ -46,7 +46,7 @@ class MssqlCacheTest extends CacheTestCase
     }
 
     /**
-     * @param bool $reset whether to clean up the test database
+     * @param  bool            $reset whether to clean up the test database
      *
      * @return \yii\db\Connection
      */

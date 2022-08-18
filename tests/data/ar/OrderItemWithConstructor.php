@@ -15,9 +15,9 @@ use ReflectionClass;
 /**
  * OrderItemWithConstructor.
  *
- * @property int    $order_id
- * @property int    $item_id
- * @property int    $quantity
+ * @property int $order_id
+ * @property int $item_id
+ * @property int $quantity
  * @property string $subtotal
  */
 class OrderItemWithConstructor extends ActiveRecord

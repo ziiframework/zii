@@ -266,12 +266,12 @@ class AttributeTypecastBehaviorTest extends TestCase
 /**
  * Test Active Record class with [[AttributeTypecastBehavior]] behavior attached.
  *
- * @property int                       $id
- * @property string                    $name
- * @property int                       $amount
- * @property float                     $price
- * @property bool                      $isActive
- * @property string                    $callback
+ * @property int $id
+ * @property string $name
+ * @property int $amount
+ * @property float $price
+ * @property bool $isActive
+ * @property string $callback
  * @property AttributeTypecastBehavior $attributeTypecastBehavior
  */
 class ActiveRecordAttributeTypecast extends ActiveRecord

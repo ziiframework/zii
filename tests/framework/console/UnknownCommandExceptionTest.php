@@ -63,7 +63,7 @@ class UnknownCommandExceptionTest extends TestCase
      * @dataProvider suggestedCommandsProvider
      *
      * @param string $command
-     * @param array  $expectedSuggestion
+     * @param array $expectedSuggestion
      */
     public function testSuggestCommand($command, $expectedSuggestion): void
     {

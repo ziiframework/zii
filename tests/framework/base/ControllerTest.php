@@ -52,8 +52,8 @@ class ControllerTest extends TestCase
     /**
      * @dataProvider createInlineActionProvider
      *
-     * @param string      $controllerClass
-     * @param string      $actionId
+     * @param string $controllerClass
+     * @param string $actionId
      * @param string|null $expectedActionMethod
      */
     public function testCreateInlineAction($controllerClass, $actionId, $expectedActionMethod): void

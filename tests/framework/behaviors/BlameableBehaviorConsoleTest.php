@@ -99,9 +99,9 @@ class ActiveRecordBlameableConsoleWithDefaultValueClosure extends ActiveRecordBl
 /**
  * Test Active Record class with [[BlameableBehavior]] behavior attached.
  *
- * @property string            $name
- * @property int               $created_by
- * @property int               $updated_by
+ * @property string $name
+ * @property int $created_by
+ * @property int $updated_by
  * @property BlameableBehavior $blameable
  */
 class ActiveRecordBlameableConsole extends ActiveRecord

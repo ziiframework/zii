@@ -15,13 +15,13 @@ use ReflectionClass;
 /**
  * OrderWithConstructor.
  *
- * @property int                      $id
- * @property int                      $customer_id
- * @property int                      $created_at
- * @property string                   $total
+ * @property int $id
+ * @property int $customer_id
+ * @property int $created_at
+ * @property string $total
  * @property OrderItemWithConstructor $orderItems
- * @property CustomerWithConstructor  $customer
- * @property CustomerWithConstructor  $customerJoinedWithProfile
+ * @property CustomerWithConstructor $customer
+ * @property CustomerWithConstructor $customerJoinedWithProfile
  */
 class OrderWithConstructor extends ActiveRecord
 {

@@ -15,7 +15,7 @@ namespace yiiunit\data\ar;
  *
  * @author mankwok <astleykwok@gmail.com>
  *
- * @property int    $id
+ * @property int $id
  * @property string $second_key_column
  * @property string $type
  */

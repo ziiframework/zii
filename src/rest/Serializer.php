@@ -75,7 +75,7 @@ class Serializer extends Component
     public $perPageHeader = 'X-Pagination-Per-Page';
 
     /**
-     * @var string the name of the envelope (e.g. `items`) for returning the resource objects in a collection.
+     * @var string|null the name of the envelope (e.g. `items`) for returning the resource objects in a collection.
      * This is used when serving a resource collection. When this is set and pagination is enabled, the serializer
      * will return a collection in the following format:
      *
@@ -118,12 +118,12 @@ class Serializer extends Component
     public $metaEnvelope = '_meta';
 
     /**
-     * @var Request the current request. If not set, the `request` application component will be used.
+     * @var Request|null the current request. If not set, the `request` application component will be used.
      */
     public $request;
 
     /**
-     * @var Response the response to be sent. If not set, the `response` application component will be used.
+     * @var Response|null the response to be sent. If not set, the `response` application component will be used.
      */
     public $response;
 

@@ -20,7 +20,7 @@ class AnyCaseValue extends CompareValue
      * Constructor.
      *
      * @param string|string[] $value
-     * @param array           $config
+     * @param array $config
      */
     public function __construct($value, $config = [])
     {
