@@ -14,17 +14,17 @@ namespace yii\db;
  * ConstraintFinderTrait provides methods for getting a table constraint information.
  *
  * @property CheckConstraint[][] $schemaChecks Check constraints for all tables in the database.
- * Each array element is an array of [[CheckConstraint]] or its child classes.
+ * Each array element is an array of [[CheckConstraint]] or its child classes. This property is read-only.
  * @property DefaultValueConstraint[] $schemaDefaultValues Default value constraints for all tables in the database.
- * Each array element is an array of [[DefaultValueConstraint]] or its child classes.
+ * Each array element is an array of [[DefaultValueConstraint]] or its child classes. This property is read-only.
  * @property ForeignKeyConstraint[][] $schemaForeignKeys Foreign keys for all tables in the database. Each
- * array element is an array of [[ForeignKeyConstraint]] or its child classes.
+ * array element is an array of [[ForeignKeyConstraint]] or its child classes. This property is read-only.
  * @property IndexConstraint[][] $schemaIndexes Indexes for all tables in the database. Each array element is
- * an array of [[IndexConstraint]] or its child classes.
+ * an array of [[IndexConstraint]] or its child classes. This property is read-only.
  * @property Constraint[] $schemaPrimaryKeys Primary keys for all tables in the database. Each array element
- * is an instance of [[Constraint]] or its child class.
+ * is an instance of [[Constraint]] or its child class. This property is read-only.
  * @property IndexConstraint[][] $schemaUniques Unique constraints for all tables in the database.
- * Each array element is an array of [[IndexConstraint]] or its child classes.
+ * Each array element is an array of [[IndexConstraint]] or its child classes. This property is read-only.
  *
  * @author Sergey Makinen <sergey@makinen.ru>
  *

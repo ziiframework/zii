@@ -144,8 +144,8 @@ class ColumnSchemaBuilder extends BaseObject
      * Create a column schema builder instance giving the type and value precision.
      *
      * @param string $type type of the column. See [[$type]].
-     * @param int|string|array $length length or precision of the column. See [[$length]].
-     * @param \yii\db\Connection $db the current database connection. See [[$db]].
+     * @param int|string|array|null $length length or precision of the column. See [[$length]].
+     * @param \yii\db\Connection|null $db the current database connection. See [[$db]].
      * @param array $config name-value pairs that will be used to initialize the object properties
      */
     public function __construct($type, $length = null, $db = null, $config = [])
@@ -254,12 +254,10 @@ class ColumnSchemaBuilder extends BaseObject
         switch ($this->type) {
             case Schema::TYPE_PK:
                 $this->type = Schema::TYPE_UPK;
-
                 break;
 
             case Schema::TYPE_BIGPK:
                 $this->type = Schema::TYPE_UBIGPK;
-
                 break;
         }
         $this->isUnsigned = true;
@@ -342,7 +340,6 @@ class ColumnSchemaBuilder extends BaseObject
         switch ($this->getTypeCategory()) {
             case self::CATEGORY_PK:
                 $format = '{type}{check}{comment}{append}';
-
                 break;
 
             default:
@@ -432,18 +429,15 @@ class ColumnSchemaBuilder extends BaseObject
             case 'double':
                 // ensure type cast always has . as decimal separator in all locales
                 $defaultValue = StringHelper::floatToString($this->default);
-
                 break;
 
             case 'boolean':
                 $defaultValue = $this->default ? 'TRUE' : 'FALSE';
-
                 break;
 
             case 'integer':
             case 'object':
                 $defaultValue = (string) $this->default;
-
                 break;
 
             default:

@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace yii\db;
 
 use PDO;
+use BackedEnum;
 use yii\base\BaseObject;
 use yii\helpers\StringHelper;
 
@@ -184,9 +185,17 @@ class ColumnSchema extends BaseObject
                     return $value;
                 }
 
+                if (PHP_VERSION_ID >= 80100 && is_object($value) && $value instanceof BackedEnum) {
+                    return (string) $value->value;
+                }
+
                 return (string) $value;
 
             case 'integer':
+                if (PHP_VERSION_ID >= 80100 && is_object($value) && $value instanceof BackedEnum) {
+                    return (int) $value->value;
+                }
+
                 return (int) $value;
 
             case 'boolean':

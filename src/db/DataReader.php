@@ -49,7 +49,7 @@ use yii\base\InvalidCallException;
  * for more details about possible fetch mode.
  *
  * @property-read int $columnCount The number of columns in the result set.
- * @property-write int $fetchMode Fetch mode. This property is write-only.
+ * @property-write int $fetchMode Fetch mode.
  * @property-read bool $isClosed Whether the reader is closed or not.
  * @property-read int $rowCount Number of rows contained in the result.
  *
@@ -89,7 +89,7 @@ class DataReader extends \yii\base\BaseObject implements Iterator, Countable
      * in the result set. If using the column name, be aware that the name
      * should match the case of the column, as returned by the driver.
      * @param mixed $value Name of the PHP variable to which the column will be bound.
-     * @param int $dataType Data type of the parameter
+     * @param int|null $dataType Data type of the parameter
      *
      * @see https://www.php.net/manual/en/function.PDOStatement-bindColumn.php
      */
