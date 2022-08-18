@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\caching;
 
+use yiiunit\TestCase;
 use yii\caching\FileCache;
 use yii\caching\TagDependency;
-use yiiunit\TestCase;
 
 /**
  * @group caching

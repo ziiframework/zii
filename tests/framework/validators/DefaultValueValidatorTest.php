@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace yiiunit\framework\validators;
 
 use stdclass;
-use yii\validators\DefaultValueValidator;
 use yiiunit\TestCase;
+use yii\validators\DefaultValueValidator;
 
 /**
  * @group validators

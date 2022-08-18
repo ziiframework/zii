@@ -10,15 +10,15 @@ declare(strict_types=1);
 
 namespace yii\grid;
 
-use Closure;
 use Yii;
-use yii\base\InvalidConfigException;
+use Closure;
 use yii\base\Model;
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\helpers\Json;
-use yii\helpers\Url;
 use yii\i18n\Formatter;
 use yii\widgets\BaseListView;
+use yii\base\InvalidConfigException;
 
 /**
  * The GridView widget is used to display data in a grid.

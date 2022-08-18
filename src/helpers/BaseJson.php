@@ -10,14 +10,14 @@ declare(strict_types=1);
 
 namespace yii\helpers;
 
-use DateTimeInterface;
+use yii\base\Model;
 use JsonSerializable;
 use SimpleXMLElement;
+use DateTimeInterface;
 use yii\base\Arrayable;
-use yii\base\InvalidArgumentException;
-use yii\base\Model;
 use yii\web\JsExpression;
 use yii\web\JsonResponseFormatter;
+use yii\base\InvalidArgumentException;
 
 /**
  * BaseJson provides concrete implementation for [[Json]].

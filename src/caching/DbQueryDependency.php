@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yii\caching;
 
-use yii\base\InvalidConfigException;
-use yii\db\QueryInterface;
 use yii\di\Instance;
+use yii\db\QueryInterface;
+use yii\base\InvalidConfigException;
 
 /**
  * DbQueryDependency represents a dependency based on the query result of an [[QueryInterface]] instance.

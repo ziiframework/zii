@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace yiiunit\framework\filters\auth;
 
 use Yii;
+use yii\web\User;
 use yii\base\Event;
 use yii\filters\auth\HttpBasicAuth;
-use yii\web\User;
 use yiiunit\framework\filters\stubs\UserIdentity;
 
 /**

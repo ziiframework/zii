@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace yii\mutex;
 
 use Yii;
-use yii\base\InvalidConfigException;
 use yii\helpers\FileHelper;
+use yii\base\InvalidConfigException;
 
 /**
  * FileMutex implements mutex "lock" mechanism via local file system files.

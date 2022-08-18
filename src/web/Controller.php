@@ -10,12 +10,12 @@ declare(strict_types=1);
 
 namespace yii\web;
 
-use ReflectionMethod;
-use ReflectionNamedType;
 use Yii;
-use yii\base\Exception;
-use yii\base\InlineAction;
 use yii\helpers\Url;
+use ReflectionMethod;
+use yii\base\Exception;
+use ReflectionNamedType;
+use yii\base\InlineAction;
 
 /**
  * Controller is the base class of web controllers.

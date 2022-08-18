@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace yiiunit\framework\data;
 
 use ReflectionClass;
-use yii\data\BaseDataProvider;
 use yiiunit\TestCase;
+use yii\data\BaseDataProvider;
 
 /**
  * @group data

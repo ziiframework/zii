@@ -10,14 +10,14 @@ declare(strict_types=1);
 
 namespace yii\web;
 
-use Exception;
 use PDO;
 use Yii;
-use yii\base\InvalidConfigException;
-use yii\db\Connection;
-use yii\db\PdoValue;
+use Exception;
 use yii\db\Query;
+use yii\db\PdoValue;
 use yii\di\Instance;
+use yii\db\Connection;
+use yii\base\InvalidConfigException;
 
 /**
  * DbSession extends [[Session]] by using database as session data storage.

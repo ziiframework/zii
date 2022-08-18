@@ -12,10 +12,10 @@ namespace yiiunit\framework\test;
 
 use Yii;
 use yii\db\Connection;
-use yii\test\ActiveFixture;
 use yii\test\FixtureTrait;
-use yiiunit\data\ar\ActiveRecord;
+use yii\test\ActiveFixture;
 use yiiunit\data\ar\Customer;
+use yiiunit\data\ar\ActiveRecord;
 use yiiunit\framework\db\DatabaseTestCase;
 
 /**

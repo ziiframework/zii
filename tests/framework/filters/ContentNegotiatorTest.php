@@ -12,11 +12,11 @@ namespace yiiunit\framework\filters;
 
 use Yii;
 use yii\base\Action;
-use yii\filters\ContentNegotiator;
-use yii\web\Controller;
 use yii\web\Request;
 use yii\web\Response;
 use yiiunit\TestCase;
+use yii\web\Controller;
+use yii\filters\ContentNegotiator;
 
 /**
  *  @group filters

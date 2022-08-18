@@ -12,15 +12,15 @@ namespace yii\console\controllers;
 
 use Yii;
 use yii\base\BaseObject;
-use yii\base\InvalidConfigException;
-use yii\base\NotSupportedException;
-use yii\console\Controller;
-use yii\console\Exception;
-use yii\console\ExitCode;
-use yii\db\MigrationInterface;
 use yii\helpers\Console;
-use yii\helpers\FileHelper;
+use yii\console\ExitCode;
+use yii\console\Exception;
 use yii\helpers\Inflector;
+use yii\console\Controller;
+use yii\helpers\FileHelper;
+use yii\db\MigrationInterface;
+use yii\base\NotSupportedException;
+use yii\base\InvalidConfigException;
 
 /**
  * BaseMigrateController is the base class for migrate controllers.
@@ -135,9 +135,9 @@ abstract class BaseMigrateController extends Controller
      *
      * @param \yii\base\Action $action the action to be executed.
      *
-     * @throws InvalidConfigException if directory specified in migrationPath doesn't exist and action isn't "create".
-     *
      * @return bool whether the action should continue to be executed.
+     *
+     * @throws InvalidConfigException if directory specified in migrationPath doesn't exist and action isn't "create".
      */
     public function beforeAction($action)
     {
@@ -263,9 +263,9 @@ abstract class BaseMigrateController extends Controller
      * @param int|string $limit the number of migrations to be reverted. Defaults to 1,
      * meaning the last applied migration will be reverted. When value is "all", all migrations will be reverted.
      *
-     * @throws Exception if the number of the steps specified is less than 1.
-     *
      * @return int the status of the action execution. 0 means normal, other values mean abnormal.
+     *
+     * @throws Exception if the number of the steps specified is less than 1.
      */
     public function actionDown($limit = 1)
     {
@@ -331,9 +331,9 @@ abstract class BaseMigrateController extends Controller
      * @param int|string $limit the number of migrations to be redone. Defaults to 1,
      * meaning the last applied migration will be redone. When equals "all", all migrations will be redone.
      *
-     * @throws Exception if the number of the steps specified is less than 1.
-     *
      * @return int the status of the action execution. 0 means normal, other values mean abnormal.
+     *
+     * @throws Exception if the number of the steps specified is less than 1.
      */
     public function actionRedo($limit = 1)
     {

@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace yiiunit\framework\console;
 
 use Yii;
-use yii\console\UnknownCommandException;
 use yiiunit\TestCase;
+use yii\console\UnknownCommandException;
 
 /**
  * @group console

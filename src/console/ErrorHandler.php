@@ -12,10 +12,11 @@ namespace yii\console;
 
 use const STDERR;
 use const STDOUT;
+
 use Yii;
-use yii\base\ErrorException;
-use yii\base\UserException;
 use yii\helpers\Console;
+use yii\base\UserException;
+use yii\base\ErrorException;
 
 /**
  * ErrorHandler handles uncaught PHP errors and exceptions.

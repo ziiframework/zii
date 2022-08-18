@@ -10,13 +10,13 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\rest;
 
-use JsonSerializable;
-use ReturnTypeWillChange;
 use Yii;
 use yii\base\Model;
-use yii\data\ArrayDataProvider;
-use yii\rest\Serializer;
+use JsonSerializable;
 use yiiunit\TestCase;
+use yii\rest\Serializer;
+use ReturnTypeWillChange;
+use yii\data\ArrayDataProvider;
 
 /**
  * @group rest

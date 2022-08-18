@@ -11,11 +11,11 @@ declare(strict_types=1);
 namespace yii\web;
 
 use Yii;
-use yii\base\Component;
-use yii\base\InvalidConfigException;
-use yii\caching\CacheInterface;
 use yii\di\Instance;
 use yii\helpers\Url;
+use yii\base\Component;
+use yii\caching\CacheInterface;
+use yii\base\InvalidConfigException;
 
 /**
  * UrlManager handles HTTP request parsing and creation of URLs based on a set of rules.

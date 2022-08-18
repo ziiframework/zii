@@ -10,12 +10,12 @@ declare(strict_types=1);
 
 namespace yii\helpers;
 
-use ArrayAccess;
-use Closure;
-use DateTimeInterface;
-use Exception;
-use Traversable;
 use Yii;
+use Closure;
+use Exception;
+use ArrayAccess;
+use Traversable;
+use DateTimeInterface;
 use yii\base\Arrayable;
 use yii\base\InvalidArgumentException;
 
@@ -945,9 +945,9 @@ class BaseArrayHelper
      * @param array|Traversable $haystack The set of value to search.
      * @param bool $strict Whether to enable strict (`===`) comparison.
      *
-     * @throws InvalidArgumentException if `$haystack` or `$needles` is neither traversable nor an array.
-     *
      * @return bool `true` if `$needles` is a subset of `$haystack`, `false` otherwise.
+     *
+     * @throws InvalidArgumentException if `$haystack` or `$needles` is neither traversable nor an array.
      *
      * @since 2.0.7
      */

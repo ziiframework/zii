@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace yiiunit\framework\console\controllers;
 
 use Yii;
+use yiiunit\TestCase;
 use yii\caching\ArrayCache;
 use yii\console\controllers\CacheController;
-use yiiunit\TestCase;
 
 /**
  * Unit test for [[\yii\console\controllers\CacheController]].

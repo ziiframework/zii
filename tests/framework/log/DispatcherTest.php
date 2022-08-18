@@ -21,11 +21,11 @@ namespace yii\log {
 
 namespace yiiunit\framework\log {
     use Yii;
-    use yii\base\UserException;
-    use yii\log\Dispatcher;
     use yii\log\Logger;
-    use yiiunit\framework\log\mocks\TargetMock;
     use yiiunit\TestCase;
+    use yii\log\Dispatcher;
+    use yii\base\UserException;
+    use yiiunit\framework\log\mocks\TargetMock;
 
     /**
      * @group log

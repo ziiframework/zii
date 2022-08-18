@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\base;
 
-use yii\base\Security;
 use yiiunit\TestCase;
+use yii\base\Security;
 
 /**
  * @group base
@@ -860,7 +860,7 @@ TEXT;
         }
         $t = microtime(true) - $t;
         $nbytes = number_format($count * $length, 0);
-        $milisec = number_format(1000 * ($t), 3);
+        $milisec = number_format(1000 * $t, 3);
         $rate = number_format($count * $length / $t / 1000000, 3);
         fwrite(STDERR, "$message: $count x $length B = $nbytes B in $milisec ms => $rate MB/s\n");
     }

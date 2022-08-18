@@ -10,8 +10,9 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\caching;
 
-use function time;
 use yii\caching\DbCache;
+
+use function time;
 
 /**
  * Class for testing file cache backend.

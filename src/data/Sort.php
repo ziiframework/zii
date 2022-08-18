@@ -10,13 +10,13 @@ declare(strict_types=1);
 
 namespace yii\data;
 
-use Traversable;
 use Yii;
-use yii\base\BaseObject;
-use yii\base\InvalidConfigException;
-use yii\helpers\Html;
-use yii\helpers\Inflector;
+use Traversable;
 use yii\web\Request;
+use yii\helpers\Html;
+use yii\base\BaseObject;
+use yii\helpers\Inflector;
+use yii\base\InvalidConfigException;
 
 /**
  * Sort represents information relevant to sorting.

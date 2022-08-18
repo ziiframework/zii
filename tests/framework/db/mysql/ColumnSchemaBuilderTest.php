@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\db\mysql;
 
-use yii\db\mysql\ColumnSchemaBuilder;
 use yii\db\mysql\Schema;
+use yii\db\mysql\ColumnSchemaBuilder;
 
 /**
  * ColumnSchemaBuilderTest tests ColumnSchemaBuilder for MySQL.

@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\di;
 
+use yiiunit\TestCase;
 use yii\base\BaseObject;
 use yii\di\ServiceLocator;
-use yiiunit\TestCase;
 
 class Creator
 {

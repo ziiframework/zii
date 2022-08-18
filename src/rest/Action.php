@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yii\rest;
 
-use yii\base\InvalidConfigException;
 use yii\db\ActiveRecordInterface;
 use yii\web\NotFoundHttpException;
+use yii\base\InvalidConfigException;
 
 /**
  * Action is the base class for action classes that implement RESTful API.

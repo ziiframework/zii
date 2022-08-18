@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace yii\db\conditions;
 
+use yii\db\ExpressionInterface;
+use yii\db\ExpressionBuilderTrait;
 use yii\base\InvalidArgumentException;
 use yii\db\ExpressionBuilderInterface;
-use yii\db\ExpressionBuilderTrait;
-use yii\db\ExpressionInterface;
 
 /**
  * Class LikeConditionBuilder builds objects of [[LikeCondition]].

@@ -10,8 +10,9 @@ declare(strict_types=1);
 
 namespace yiiunit\data\validators\models;
 
-use function func_get_args;
 use yii\base\Model;
+
+use function func_get_args;
 
 class FakedValidationModel extends Model
 {

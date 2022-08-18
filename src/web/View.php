@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace yii\web;
 
 use Yii;
-use yii\base\InvalidConfigException;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
+use yii\base\InvalidConfigException;
 
 /**
  * View represents a view object in the MVC pattern.

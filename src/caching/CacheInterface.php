@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yii\caching;
 
-use ArrayAccess;
 use Closure;
+use ArrayAccess;
 
 /**
  * CacheInterface is the base interface for cache.

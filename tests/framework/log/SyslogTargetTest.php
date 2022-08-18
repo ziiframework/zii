@@ -26,10 +26,10 @@ namespace yii\log {
 }
 
 namespace yiiunit\framework\log {
-    use PHPUnit_Framework_MockObject_MockObject;
-    use yii\helpers\VarDumper;
     use yii\log\Logger;
     use yiiunit\TestCase;
+    use yii\helpers\VarDumper;
+    use PHPUnit_Framework_MockObject_MockObject;
 
     /**
      * Class SyslogTargetTest.

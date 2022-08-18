@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\filters;
 
-use ReflectionMethod;
 use Yii;
+use ReflectionMethod;
 use yii\filters\HttpCache;
 
 /**

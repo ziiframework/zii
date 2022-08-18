@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace yii\db;
 
 use Exception;
-use ReflectionMethod;
 use Throwable;
-use yii\base\InvalidArgumentException;
+use ReflectionMethod;
 use yii\base\InvalidConfigException;
+use yii\base\InvalidArgumentException;
 
 /**
  * ActiveRelationTrait implements the common methods and properties for active record relational queries.

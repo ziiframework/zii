@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace yiiunit\framework\web;
 
 use yii\base\Component;
-use yii\base\NotSupportedException;
 use yii\web\IdentityInterface;
+use yii\base\NotSupportedException;
 
 class UserIdentity extends Component implements IdentityInterface
 {

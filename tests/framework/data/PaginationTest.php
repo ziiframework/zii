@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\data;
 
-use yii\data\Pagination;
 use yii\web\Link;
 use yiiunit\TestCase;
+use yii\data\Pagination;
 
 /**
  * @group data

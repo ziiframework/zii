@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace yii\validators;
 
 use Yii;
-use yii\base\InvalidConfigException;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\web\JsExpression;
+use yii\base\InvalidConfigException;
 
 /**
  * RegularExpressionValidator validates that the attribute value matches the specified [[pattern]].

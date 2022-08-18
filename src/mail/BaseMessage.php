@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yii\mail;
 
-use Exception;
 use Yii;
+use Exception;
 use yii\base\BaseObject;
 use yii\base\ErrorHandler;
 

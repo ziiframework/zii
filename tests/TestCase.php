@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yiiunit;
 
+use Yii;
 use ReflectionClass;
 use ReflectionObject;
-use Yii;
 use yii\helpers\ArrayHelper;
 
 /**

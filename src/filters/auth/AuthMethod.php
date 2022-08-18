@@ -11,13 +11,13 @@ declare(strict_types=1);
 namespace yii\filters\auth;
 
 use Yii;
+use yii\web\User;
 use yii\base\Action;
-use yii\base\ActionFilter;
-use yii\helpers\StringHelper;
 use yii\web\Request;
 use yii\web\Response;
+use yii\base\ActionFilter;
+use yii\helpers\StringHelper;
 use yii\web\UnauthorizedHttpException;
-use yii\web\User;
 
 /**
  * AuthMethod is a base class implementing the [[AuthInterface]] interface.

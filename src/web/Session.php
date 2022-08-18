@@ -10,15 +10,15 @@ declare(strict_types=1);
 
 namespace yii\web;
 
-use ArrayAccess;
+use Yii;
 use Countable;
+use ArrayAccess;
 use IteratorAggregate;
+use yii\base\Component;
 use ReturnTypeWillChange;
 use SessionHandlerInterface;
-use Yii;
-use yii\base\Component;
-use yii\base\InvalidArgumentException;
 use yii\base\InvalidConfigException;
+use yii\base\InvalidArgumentException;
 
 /**
  * Session provides session data management and the related configurations.

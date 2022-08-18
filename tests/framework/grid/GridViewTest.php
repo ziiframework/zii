@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace yiiunit\framework\grid;
 
 use Exception;
-use yii\data\ArrayDataProvider;
-use yii\grid\DataColumn;
-use yii\grid\GridView;
 use yii\web\View;
+use yii\grid\GridView;
+use yii\grid\DataColumn;
+use yii\data\ArrayDataProvider;
 
 /**
  * @author Evgeniy Tkachenko <et.coder@gmail.com>

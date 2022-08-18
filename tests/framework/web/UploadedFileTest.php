@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\web;
 
+use yiiunit\TestCase;
 use yii\web\UploadedFile;
 use yiiunit\framework\web\stubs\ModelStub;
 use yiiunit\framework\web\stubs\VendorImage;
-use yiiunit\TestCase;
 
 /**
  * @group web

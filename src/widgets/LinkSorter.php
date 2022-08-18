@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace yii\widgets;
 
-use yii\base\InvalidConfigException;
-use yii\base\Widget;
 use yii\data\Sort;
+use yii\base\Widget;
 use yii\helpers\Html;
+use yii\base\InvalidConfigException;
 
 /**
  * LinkSorter renders a list of sort links for the given sort definition.

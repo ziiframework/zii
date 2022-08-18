@@ -10,15 +10,15 @@ declare(strict_types=1);
 
 namespace yii\widgets;
 
-use Closure;
 use Yii;
-use yii\base\InvalidCallException;
+use Closure;
 use yii\base\Model;
 use yii\base\Widget;
-use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\helpers\Json;
-use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
+use yii\base\InvalidCallException;
 
 /**
  * ActiveForm is a widget that builds an interactive HTML form for one or multiple data models.

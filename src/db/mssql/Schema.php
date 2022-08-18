@@ -11,15 +11,15 @@ declare(strict_types=1);
 namespace yii\db\mssql;
 
 use Exception;
-use yii\db\CheckConstraint;
 use yii\db\Constraint;
-use yii\db\ConstraintFinderInterface;
-use yii\db\ConstraintFinderTrait;
-use yii\db\DefaultValueConstraint;
-use yii\db\ForeignKeyConstraint;
+use yii\db\CheckConstraint;
 use yii\db\IndexConstraint;
 use yii\db\ViewFinderTrait;
 use yii\helpers\ArrayHelper;
+use yii\db\ForeignKeyConstraint;
+use yii\db\ConstraintFinderTrait;
+use yii\db\DefaultValueConstraint;
+use yii\db\ConstraintFinderInterface;
 
 /**
  * Schema is the class for retrieving metadata from MS SQL Server databases (version 2008 and above).

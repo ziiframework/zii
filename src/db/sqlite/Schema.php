@@ -10,19 +10,19 @@ declare(strict_types=1);
 
 namespace yii\db\sqlite;
 
-use yii\base\NotSupportedException;
-use yii\db\CheckConstraint;
-use yii\db\ColumnSchema;
-use yii\db\Constraint;
-use yii\db\ConstraintFinderInterface;
-use yii\db\ConstraintFinderTrait;
-use yii\db\Expression;
-use yii\db\ForeignKeyConstraint;
-use yii\db\IndexConstraint;
 use yii\db\SqlToken;
+use yii\db\Constraint;
+use yii\db\Expression;
 use yii\db\TableSchema;
 use yii\db\Transaction;
+use yii\db\ColumnSchema;
+use yii\db\CheckConstraint;
+use yii\db\IndexConstraint;
 use yii\helpers\ArrayHelper;
+use yii\db\ForeignKeyConstraint;
+use yii\db\ConstraintFinderTrait;
+use yii\base\NotSupportedException;
+use yii\db\ConstraintFinderInterface;
 
 /**
  * Schema is the class for retrieving metadata from a SQLite (2/3) database.

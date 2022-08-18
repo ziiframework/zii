@@ -10,13 +10,13 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\data;
 
-use yii\base\InvalidCallException;
-use yii\data\ActiveDataProvider;
 use yii\db\Query;
-use yiiunit\data\ar\ActiveRecord;
-use yiiunit\data\ar\Customer;
 use yiiunit\data\ar\Item;
 use yiiunit\data\ar\Order;
+use yiiunit\data\ar\Customer;
+use yii\data\ActiveDataProvider;
+use yiiunit\data\ar\ActiveRecord;
+use yii\base\InvalidCallException;
 use yiiunit\framework\db\DatabaseTestCase;
 use yiiunit\framework\db\UnqueryableQueryMock;
 

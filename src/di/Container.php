@@ -10,17 +10,17 @@ declare(strict_types=1);
 
 namespace yii\di;
 
+use Yii;
 use Closure;
 use ReflectionClass;
-use ReflectionException;
-use ReflectionFunction;
 use ReflectionMethod;
+use ReflectionFunction;
+use yii\base\Component;
+use ReflectionException;
 use ReflectionNamedType;
 use ReflectionParameter;
-use Yii;
-use yii\base\Component;
-use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
+use yii\base\InvalidConfigException;
 
 /**
  * Container implements a [dependency injection](http://en.wikipedia.org/wiki/Dependency_injection) container.

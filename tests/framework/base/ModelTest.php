@@ -11,11 +11,11 @@ declare(strict_types=1);
 namespace yiiunit\framework\base;
 
 use yii\base\Model;
-use yiiunit\data\base\InvalidRulesModel;
-use yiiunit\data\base\RulesModel;
+use yiiunit\TestCase;
 use yiiunit\data\base\Singer;
 use yiiunit\data\base\Speaker;
-use yiiunit\TestCase;
+use yiiunit\data\base\RulesModel;
+use yiiunit\data\base\InvalidRulesModel;
 
 /**
  * @group base

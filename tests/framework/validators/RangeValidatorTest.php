@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace yiiunit\framework\validators;
 
 use ArrayObject;
+use yiiunit\TestCase;
 use yii\validators\RangeValidator;
 use yiiunit\data\validators\models\FakedValidationModel;
-use yiiunit\TestCase;
 
 /**
  * @group validators

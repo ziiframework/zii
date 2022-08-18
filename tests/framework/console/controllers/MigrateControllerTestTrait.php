@@ -11,11 +11,11 @@ declare(strict_types=1);
 namespace yiiunit\framework\console\controllers;
 
 use Yii;
-use yii\console\controllers\BaseMigrateController;
+use yiiunit\TestCase;
 use yii\console\ExitCode;
 use yii\helpers\FileHelper;
 use yii\helpers\StringHelper;
-use yiiunit\TestCase;
+use yii\console\controllers\BaseMigrateController;
 
 /**
  * This trait provides unit tests shared by the different migration controllers implementations.

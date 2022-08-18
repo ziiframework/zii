@@ -11,11 +11,11 @@ declare(strict_types=1);
 namespace yiiunit\framework\widgets;
 
 use Yii;
-use yii\base\DynamicModel;
-use yii\web\AssetManager;
 use yii\web\View;
-use yii\widgets\ActiveField;
+use yii\web\AssetManager;
+use yii\base\DynamicModel;
 use yii\widgets\ActiveForm;
+use yii\widgets\ActiveField;
 use yii\widgets\InputWidget;
 use yii\widgets\MaskedInput;
 

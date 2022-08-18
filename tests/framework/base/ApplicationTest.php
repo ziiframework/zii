@@ -11,11 +11,11 @@ declare(strict_types=1);
 namespace yiiunit\framework\base;
 
 use Yii;
-use yii\base\BootstrapInterface;
-use yii\base\Component;
 use yii\base\Module;
-use yii\log\Dispatcher;
 use yiiunit\TestCase;
+use yii\base\Component;
+use yii\log\Dispatcher;
+use yii\base\BootstrapInterface;
 
 /**
  * @group base

@@ -11,17 +11,17 @@ declare(strict_types=1);
 namespace yii\db\pgsql;
 
 use PDO;
-use yii\base\NotSupportedException;
-use yii\db\CheckConstraint;
 use yii\db\Constraint;
-use yii\db\ConstraintFinderInterface;
-use yii\db\ConstraintFinderTrait;
 use yii\db\Expression;
-use yii\db\ForeignKeyConstraint;
-use yii\db\IndexConstraint;
 use yii\db\TableSchema;
+use yii\db\CheckConstraint;
+use yii\db\IndexConstraint;
 use yii\db\ViewFinderTrait;
 use yii\helpers\ArrayHelper;
+use yii\db\ForeignKeyConstraint;
+use yii\db\ConstraintFinderTrait;
+use yii\base\NotSupportedException;
+use yii\db\ConstraintFinderInterface;
 
 /**
  * Schema is the class for retrieving metadata from a PostgreSQL database
