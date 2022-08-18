@@ -20,7 +20,7 @@ use yii\helpers\FileHelper;
 class FileHelperTest extends TestCase
 {
     /**
-     * @var string test files path
+     * @var string test files path.
      */
     private $testFilePath = '';
 
@@ -68,7 +68,7 @@ class FileHelperTest extends TestCase
     /**
      * Creates directory.
      *
-     * @param string $dirName directory full name
+     * @param string $dirName directory full name.
      */
     protected function createDir($dirName): void
     {
@@ -80,7 +80,7 @@ class FileHelperTest extends TestCase
     /**
      * Removes directory.
      *
-     * @param string $dirName directory full name
+     * @param string $dirName directory full name.
      */
     protected function removeDir($dirName): void
     {
@@ -106,9 +106,9 @@ class FileHelperTest extends TestCase
     /**
      * Get file permission mode.
      *
-     * @param string $file file name
+     * @param  string $file file name.
      *
-     * @return string permission mode
+     * @return string permission mode.
      */
     protected function getMode($file)
     {
@@ -119,8 +119,8 @@ class FileHelperTest extends TestCase
      * Creates test files structure.
      *
      * @param array  $items    file system objects to be created in format: objectName => objectContent
-     *                         Arrays specifies directories, other values - files
-     * @param string $basePath structure base file path
+     *                         Arrays specifies directories, other values - files.
+     * @param string $basePath structure base file path.
      */
     protected function createFileStructure(array $items, $basePath = ''): void
     {
@@ -147,9 +147,9 @@ class FileHelperTest extends TestCase
     /**
      * Asserts that file has specific permission mode.
      *
-     * @param int    $expectedMode expected file permission mode
-     * @param string $fileName     file name
-     * @param string $message      error message
+     * @param int $expectedMode expected file permission mode.
+     * @param string  $fileName     file name.
+     * @param string  $message      error message
      */
     protected function assertFileMode($expectedMode, $fileName, $message = ''): void
     {
@@ -713,6 +713,24 @@ class FileHelperTest extends TestCase
         $this->assertTrue(in_array(FileHelper::getMimeType($file), ['application/json', 'text/plain']));
     }
 
+    public function testGetUploadedImageMimeTypes(): void
+    {
+        $ds = DIRECTORY_SEPARATOR;
+        $phpunitPath = Yii::getAlias('@yiiunit');
+        $runtimeLocation = Yii::getAlias('@yiiunit/runtime');
+        $resourceSourceLocation = "{$phpunitPath}{$ds}framework{$ds}validators{$ds}data{$ds}mimeType";
+
+        $pngFile = "{$runtimeLocation}{$ds}php1234";
+        copy("{$resourceSourceLocation}{$ds}test.png", $pngFile);
+
+        $this->assertEquals('image/png', FileHelper::getMimeType($pngFile));
+
+        $jpgFile = "{$runtimeLocation}{$ds}php4567";
+        copy("{$resourceSourceLocation}{$ds}test.jpg", $jpgFile);
+
+        $this->assertEquals('image/jpeg', FileHelper::getMimeType($jpgFile));
+    }
+
     public function testNormalizePath(): void
     {
         $ds = DIRECTORY_SEPARATOR;
@@ -1205,7 +1223,7 @@ class FileHelperTest extends TestCase
     /**
      * @dataProvider changeOwnershipInvalidArgumentsProvider
      *
-     * @param bool  $useFile
+     * @param bool $useFile
      * @param mixed $ownership
      * @param mixed $mode
      */

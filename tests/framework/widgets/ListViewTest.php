@@ -159,7 +159,7 @@ HTML
     /**
      * @dataProvider itemViewOptions
      *
-     * @param mixed  $itemView
+     * @param mixed $itemView
      * @param string $expected
      */
     public function testItemViewOptions($itemView, $expected): void
@@ -206,7 +206,7 @@ HTML
     /**
      * @dataProvider itemOptions
      *
-     * @param mixed  $itemOptions
+     * @param mixed $itemOptions
      * @param string $expected
      */
     public function testItemOptions($itemOptions, $expected): void

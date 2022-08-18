@@ -341,7 +341,7 @@ class MigrateControllerTest extends TestCase
      * @param string $expectedFile
      * @param string $migrationName
      * @param string $table
-     * @param array  $params
+     * @param array $params
      * @dataProvider generateMigrationDataProvider
      */
     public function testGenerateMigration($expectedFile, $migrationName, $table, $params): void

@@ -108,4 +108,28 @@ class DbQueryDependencyTest extends DatabaseTestCase
 
         $this->assertTrue($dependency->isChanged($cache));
     }
+
+    /**
+     * @depends testCustomMethod
+     */
+    public function testReusableAndCustomMethodCallback(): void
+    {
+        $db = $this->getConnection(false);
+        $cache = new ArrayCache();
+
+        $dependency = new DbQueryDependency();
+        $dependency->db = $db;
+        $dependency->query = (new Query())
+            ->from('dependency_item')
+            ->andWhere(['value' => 'not exist']);
+        $dependency->reusable = true;
+        $dependency->method = static fn (Query $query, $db) => $query->orWhere(['value' => 'initial'])->exists($db);
+
+        $dependency->evaluateDependency($cache);
+        $this->assertFalse($dependency->isChanged($cache));
+
+        $db->createCommand()->delete('dependency_item')->execute();
+
+        $this->assertTrue($dependency->isChanged($cache));
+    }
 }

@@ -37,9 +37,9 @@ class AuthMethodTest extends TestCase
     /**
      * Creates mock for [[AuthMethod]] filter.
      *
-     * @param callable $authenticateCallback callback, which result should [[authenticate()]] method return
+     * @param callable $authenticateCallback callback, which result should [[authenticate()]] method return.
      *
-     * @return AuthMethod filter instance
+     * @return AuthMethod filter instance.
      */
     protected function createFilter($authenticateCallback)
     {
@@ -54,9 +54,9 @@ class AuthMethodTest extends TestCase
     /**
      * Creates test action.
      *
-     * @param array $config action configuration
+     * @param array $config action configuration.
      *
-     * @return Action action instance
+     * @return Action action instance.
      */
     protected function createAction(array $config = [])
     {

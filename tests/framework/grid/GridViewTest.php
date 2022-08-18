@@ -53,7 +53,7 @@ class GridViewTest extends \yiiunit\TestCase
     /**
      * @dataProvider emptyDataProvider
      *
-     * @param mixed  $emptyText
+     * @param mixed $emptyText
      * @param string $expectedText
      *
      * @throws Exception

@@ -2181,4 +2181,14 @@ abstract class ActiveRecordTest extends DatabaseTestCase
             'item_id' => null,
         ]));
     }
+
+    public function testVirtualRelation(): void
+    {
+        /* @var $orderClass ActiveRecordInterface */
+        $orderClass = $this->getOrderClass();
+        $order = $orderClass::findOne(2);
+        $order->virtualCustomerId = $order->customer_id;
+
+        $this->assertNotNull($order->virtualCustomer);
+    }
 }
