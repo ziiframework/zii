@@ -61,7 +61,7 @@ class ErrorException extends \ErrorException
                     $frame['function'] = 'unknown';
                 }
 
-                // Xdebug < 2.1.1: https://bugs.xdebug.org/view.php?id=695
+                // Xdebug < 2.1.1: http://bugs.xdebug.org/view.php?id=695
                 if (!isset($frame['type']) || $frame['type'] === 'static') {
                     $frame['type'] = '::';
                 } elseif ($frame['type'] === 'dynamic') {

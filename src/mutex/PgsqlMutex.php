@@ -75,7 +75,7 @@ class PgsqlMutex extends DbMutex
      *
      * @return bool acquiring result.
      *
-     * @see https://www.postgresql.org/docs/9.0/static/functions-admin.html
+     * @see http://www.postgresql.org/docs/9.0/static/functions-admin.html
      */
     protected function acquireLock($name, $timeout = 0)
     {
@@ -96,7 +96,7 @@ class PgsqlMutex extends DbMutex
      *
      * @return bool release result.
      *
-     * @see https://www.postgresql.org/docs/9.0/static/functions-admin.html
+     * @see http://www.postgresql.org/docs/9.0/static/functions-admin.html
      */
     protected function releaseLock($name)
     {
