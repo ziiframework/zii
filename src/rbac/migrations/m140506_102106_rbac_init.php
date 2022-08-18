@@ -8,8 +8,8 @@ declare(strict_types=1);
  * @license https://www.yiiframework.com/license/
  */
 
-use yii\base\InvalidConfigException;
 use yii\rbac\DbManager;
+use yii\base\InvalidConfigException;
 
 /**
  * Initializes RBAC tables.
@@ -21,9 +21,9 @@ use yii\rbac\DbManager;
 class m140506_102106_rbac_init extends \yii\db\Migration
 {
     /**
-     * @throws yii\base\InvalidConfigException
-     *
      * @return DbManager
+     *
+     * @throws yii\base\InvalidConfigException
      */
     protected function getAuthManager()
     {

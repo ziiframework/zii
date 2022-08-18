@@ -333,9 +333,9 @@ class Security extends Component
      * @param int $length length of the output key in bytes. If 0, the output key is
      * the length of the hash algorithm output.
      *
-     * @throws InvalidArgumentException when HMAC generation fails.
-     *
      * @return string the derived key
+     *
+     * @throws InvalidArgumentException when HMAC generation fails.
      */
     public function hkdf($algo, $inputKey, $salt = null, $info = null, $length = 0)
     {

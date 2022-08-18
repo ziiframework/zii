@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace yii\console\controllers;
 
 use Yii;
-use yii\console\Controller;
 use yii\helpers\Console;
+use yii\console\Controller;
 
 /**
  * Runs PHP built-in web server.

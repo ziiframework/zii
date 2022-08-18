@@ -11,11 +11,11 @@ declare(strict_types=1);
 namespace yii\behaviors;
 
 use Yii;
-use yii\base\InvalidConfigException;
+use yii\helpers\Inflector;
 use yii\db\BaseActiveRecord;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Inflector;
 use yii\validators\UniqueValidator;
+use yii\base\InvalidConfigException;
 
 /**
  * SluggableBehavior automatically fills the specified attribute with a value that can be used a slug in a URL.

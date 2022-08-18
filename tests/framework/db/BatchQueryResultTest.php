@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\db;
 
-use yii\db\BatchQueryResult;
 use yii\db\Query;
-use yiiunit\data\ar\ActiveRecord;
+use yii\db\BatchQueryResult;
 use yiiunit\data\ar\Customer;
+use yiiunit\data\ar\ActiveRecord;
 
 abstract class BatchQueryResultTest extends DatabaseTestCase
 {

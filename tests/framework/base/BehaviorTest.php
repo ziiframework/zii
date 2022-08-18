@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\base;
 
+use yiiunit\TestCase;
 use yii\base\Behavior;
 use yii\base\Component;
-use yiiunit\TestCase;
 
 class BarClass extends Component
 {

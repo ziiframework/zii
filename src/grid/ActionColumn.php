@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace yii\grid;
 
-use Closure;
 use Yii;
-use yii\helpers\Html;
+use Closure;
 use yii\helpers\Url;
+use yii\helpers\Html;
 
 /**
  * ActionColumn is a column for the [[GridView]] widget that displays buttons for viewing and manipulating the items.

@@ -10,14 +10,14 @@ declare(strict_types=1);
 
 namespace yii\helpers;
 
+use Yii;
 use ArrayAccess;
 use Traversable;
-use Yii;
-use yii\base\InvalidArgumentException;
 use yii\base\Model;
+use yii\web\Request;
 use yii\db\ActiveRecordInterface;
 use yii\validators\StringValidator;
-use yii\web\Request;
+use yii\base\InvalidArgumentException;
 
 /**
  * BaseHtml provides concrete implementation for [[Html]].

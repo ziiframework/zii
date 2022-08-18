@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace yii\db;
 
 use Yii;
-use yii\base\InvalidConfigException;
 use yii\base\NotSupportedException;
+use yii\base\InvalidConfigException;
 
 /**
  * Transaction represents a DB transaction.

@@ -10,14 +10,14 @@ declare(strict_types=1);
 
 namespace yii\web;
 
+use Yii;
 use Exception;
 use Throwable;
-use Yii;
-use yii\base\Component;
-use yii\base\InvalidConfigException;
-use yii\base\InvalidValueException;
 use yii\di\Instance;
+use yii\base\Component;
 use yii\rbac\CheckAccessInterface;
+use yii\base\InvalidValueException;
+use yii\base\InvalidConfigException;
 
 /**
  * User is the class for the `user` application component that manages the user authentication status.

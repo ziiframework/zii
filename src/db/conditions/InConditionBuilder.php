@@ -12,10 +12,10 @@ namespace yii\db\conditions;
 
 use ArrayAccess;
 use Traversable;
-use yii\db\ExpressionBuilderInterface;
-use yii\db\ExpressionBuilderTrait;
-use yii\db\ExpressionInterface;
 use yii\db\Query;
+use yii\db\ExpressionInterface;
+use yii\db\ExpressionBuilderTrait;
+use yii\db\ExpressionBuilderInterface;
 
 /**
  * Class InConditionBuilder builds objects of [[InCondition]].

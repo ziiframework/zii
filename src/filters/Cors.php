@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace yii\filters;
 
 use Yii;
-use yii\base\ActionFilter;
-use yii\base\InvalidConfigException;
 use yii\web\Request;
 use yii\web\Response;
+use yii\base\ActionFilter;
+use yii\base\InvalidConfigException;
 
 /**
  * Cors filter implements [Cross Origin Resource Sharing](http://en.wikipedia.org/wiki/Cross-origin_resource_sharing).

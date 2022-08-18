@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\web;
 
-use stdClass;
 use Yii;
+use stdClass;
 use yii\web\Request;
 use yiiunit\TestCase;
 

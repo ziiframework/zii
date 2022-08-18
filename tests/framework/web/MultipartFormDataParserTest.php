@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\web;
 
-use yii\web\MultipartFormDataParser;
 use yiiunit\TestCase;
+use yii\web\MultipartFormDataParser;
 
 class MultipartFormDataParserTest extends TestCase
 {

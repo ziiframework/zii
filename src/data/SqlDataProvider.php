@@ -11,11 +11,11 @@ declare(strict_types=1);
 namespace yii\data;
 
 use Yii;
-use yii\base\InvalidConfigException;
-use yii\db\Connection;
-use yii\db\Expression;
 use yii\db\Query;
 use yii\di\Instance;
+use yii\db\Connection;
+use yii\db\Expression;
+use yii\base\InvalidConfigException;
 
 /**
  * SqlDataProvider implements a data provider based on a plain SQL statement.

@@ -12,10 +12,10 @@ namespace yiiunit\framework\mail;
 
 use Yii;
 use yii\base\View;
-use yii\helpers\FileHelper;
+use yiiunit\TestCase;
 use yii\mail\BaseMailer;
 use yii\mail\BaseMessage;
-use yiiunit\TestCase;
+use yii\helpers\FileHelper;
 
 /**
  * @group mail

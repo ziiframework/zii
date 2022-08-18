@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yii\base;
 
-use ReflectionClass;
 use Yii;
+use ReflectionClass;
 use yii\di\ServiceLocator;
 
 /**

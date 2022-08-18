@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace yii\grid;
 
 use Closure;
-use yii\base\BaseObject;
 use yii\helpers\Html;
+use yii\base\BaseObject;
 
 /**
  * Column is the base class of all [[GridView]] column classes.

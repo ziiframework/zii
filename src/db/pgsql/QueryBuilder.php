@@ -11,14 +11,14 @@ declare(strict_types=1);
 namespace yii\db\pgsql;
 
 use PDO;
-use yii\base\InvalidArgumentException;
-use yii\db\ColumnSchemaBuilder;
+use yii\db\Query;
+use yii\db\PdoValue;
 use yii\db\Constraint;
 use yii\db\Expression;
-use yii\db\ExpressionInterface;
-use yii\db\PdoValue;
-use yii\db\Query;
 use yii\helpers\StringHelper;
+use yii\db\ColumnSchemaBuilder;
+use yii\db\ExpressionInterface;
+use yii\base\InvalidArgumentException;
 
 /**
  * QueryBuilder is the query builder for PostgreSQL databases.

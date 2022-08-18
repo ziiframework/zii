@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yii\db\conditions;
 
-use yii\base\InvalidParamException;
 use yii\db\ExpressionInterface;
+use yii\base\InvalidParamException;
 
 /**
  * Interface ConditionInterface should be implemented by classes that represent a condition

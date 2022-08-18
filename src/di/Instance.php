@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yii\di;
 
+use Yii;
 use Exception;
 use ReflectionException;
-use Yii;
 use yii\base\InvalidConfigException;
 
 /**

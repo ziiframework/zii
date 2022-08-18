@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\mutex;
 
-use yii\base\InvalidConfigException;
 use yii\mutex\Mutex;
+use yii\base\InvalidConfigException;
 
 /**
  * Class MutexTestTrait.

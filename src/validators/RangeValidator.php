@@ -10,11 +10,11 @@ declare(strict_types=1);
 
 namespace yii\validators;
 
+use Yii;
 use Closure;
 use Traversable;
-use Yii;
-use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
+use yii\base\InvalidConfigException;
 
 /**
  * RangeValidator validates that the attribute value is among a list of values.

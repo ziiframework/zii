@@ -10,17 +10,17 @@ declare(strict_types=1);
 
 namespace yii\base;
 
+use Yii;
 use ArrayAccess;
-use ArrayIterator;
 use ArrayObject;
-use IteratorAggregate;
+use ArrayIterator;
 use ReflectionClass;
+use IteratorAggregate;
 use ReflectionProperty;
 use ReturnTypeWillChange;
-use Yii;
 use yii\helpers\Inflector;
-use yii\validators\RequiredValidator;
 use yii\validators\Validator;
+use yii\validators\RequiredValidator;
 
 /**
  * Model is the base class for data models.

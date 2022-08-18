@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yii\log;
 
+use Yii;
 use Exception;
 use Throwable;
-use Yii;
 use yii\base\Component;
 use yii\base\ErrorHandler;
 

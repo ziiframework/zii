@@ -11,14 +11,14 @@ declare(strict_types=1);
 namespace yii\console\controllers;
 
 use Yii;
-use yii\base\InvalidConfigException;
-use yii\base\InvalidParamException;
-use yii\console\Controller;
-use yii\console\Exception;
-use yii\console\ExitCode;
 use yii\helpers\Console;
-use yii\helpers\FileHelper;
+use yii\console\ExitCode;
+use yii\console\Exception;
 use yii\test\FixtureTrait;
+use yii\console\Controller;
+use yii\helpers\FileHelper;
+use yii\base\InvalidParamException;
+use yii\base\InvalidConfigException;
 
 /**
  * Manages fixture data loading and unloading.
@@ -548,9 +548,9 @@ class FixtureController extends Controller
     /**
      * Returns fixture path that determined on fixtures namespace.
      *
-     * @throws InvalidConfigException if fixture namespace is invalid
-     *
      * @return string fixture path
+     *
+     * @throws InvalidConfigException if fixture namespace is invalid
      */
     private function getFixturePath()
     {

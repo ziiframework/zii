@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\base;
 
-use yii\base\Behavior;
-use yii\base\Component;
 use yii\base\Event;
 use yiiunit\TestCase;
+use yii\base\Behavior;
+use yii\base\Component;
 
 function globalEventHandler($event): void
 {

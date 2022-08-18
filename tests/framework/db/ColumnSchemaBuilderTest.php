@@ -10,10 +10,11 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\db;
 
-use function call_user_func_array;
-use yii\db\ColumnSchemaBuilder;
-use yii\db\Expression;
 use yii\db\Schema;
+use yii\db\Expression;
+use yii\db\ColumnSchemaBuilder;
+
+use function call_user_func_array;
 
 abstract class ColumnSchemaBuilderTest extends DatabaseTestCase
 {

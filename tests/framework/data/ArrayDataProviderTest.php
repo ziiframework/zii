@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\data;
 
-use yii\data\ArrayDataProvider;
 use yiiunit\TestCase;
+use yii\data\ArrayDataProvider;
 
 /**
  * @group data

@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yii\i18n;
 
-use NumberFormatter;
 use Yii;
+use NumberFormatter;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
 

@@ -11,12 +11,12 @@ declare(strict_types=1);
 namespace yiiunit\framework\web;
 
 use Yii;
-use yii\web\NotFoundHttpException;
 use yii\web\Request;
+use yiiunit\TestCase;
 use yii\web\UrlManager;
 use yii\web\UrlNormalizer;
+use yii\web\NotFoundHttpException;
 use yii\web\UrlNormalizerRedirectException;
-use yiiunit\TestCase;
 
 /**
  * @group web

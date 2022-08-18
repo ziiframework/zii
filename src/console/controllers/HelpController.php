@@ -10,17 +10,17 @@ declare(strict_types=1);
 
 namespace yii\console\controllers;
 
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use RecursiveRegexIterator;
-use ReflectionClass;
-use RegexIterator;
 use Yii;
-use yii\base\Application;
-use yii\console\Controller;
-use yii\console\Exception;
+use RegexIterator;
+use ReflectionClass;
 use yii\helpers\Console;
+use yii\base\Application;
+use yii\console\Exception;
 use yii\helpers\Inflector;
+use RecursiveRegexIterator;
+use yii\console\Controller;
+use RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
 
 /**
  * Provides help information about console commands.

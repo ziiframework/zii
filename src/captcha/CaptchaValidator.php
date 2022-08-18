@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace yii\captcha;
 
 use Yii;
-use yii\base\InvalidConfigException;
-use yii\validators\ValidationAsset;
 use yii\validators\Validator;
+use yii\validators\ValidationAsset;
+use yii\base\InvalidConfigException;
 
 /**
  * CaptchaValidator validates that the attribute value is the same as the verification code displayed in the CAPTCHA.

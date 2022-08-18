@@ -12,10 +12,10 @@ namespace yiiunit\framework\filters;
 
 use Yii;
 use yii\base\Action;
-use yii\filters\Cors;
-use yii\web\Controller;
 use yii\web\Request;
+use yii\filters\Cors;
 use yiiunit\TestCase;
+use yii\web\Controller;
 
 /**
  * @group filters

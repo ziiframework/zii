@@ -10,14 +10,14 @@ declare(strict_types=1);
 
 namespace yii\db;
 
+use Yii;
 use Exception;
 use Throwable;
-use Yii;
-use yii\base\InvalidArgumentException;
-use yii\base\InvalidConfigException;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Inflector;
+use yii\helpers\ArrayHelper;
 use yii\helpers\StringHelper;
+use yii\base\InvalidConfigException;
+use yii\base\InvalidArgumentException;
 
 /**
  * ActiveRecord is the base class for classes representing relational data in terms of objects.

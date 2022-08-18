@@ -10,14 +10,14 @@ declare(strict_types=1);
 
 namespace yii\web;
 
+use Yii;
 use Error;
 use ParseError;
 use ReflectionClass;
-use Yii;
-use yii\base\ErrorException;
 use yii\base\Exception;
-use yii\base\UserException;
 use yii\helpers\VarDumper;
+use yii\base\UserException;
+use yii\base\ErrorException;
 
 /**
  * ErrorHandler handles uncaught PHP errors and exceptions.

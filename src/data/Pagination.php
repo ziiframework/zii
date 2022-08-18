@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace yii\data;
 
 use Yii;
-use yii\base\BaseObject;
 use yii\web\Link;
-use yii\web\Linkable;
 use yii\web\Request;
+use yii\web\Linkable;
+use yii\base\BaseObject;
 
 /**
  * Pagination represents information relevant to pagination of data items.

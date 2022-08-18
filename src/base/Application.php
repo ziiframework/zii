@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yii\base;
 
-use Closure;
 use Yii;
+use Closure;
 
 /**
  * Application is the base class for all application classes.

@@ -11,11 +11,11 @@ declare(strict_types=1);
 namespace yiiunit\framework\validators;
 
 use Yii;
+use yiiunit\TestCase;
+use yii\web\UploadedFile;
 use yii\helpers\FileHelper;
 use yii\validators\FileValidator;
-use yii\web\UploadedFile;
 use yiiunit\data\validators\models\FakedValidationModel;
-use yiiunit\TestCase;
 
 /**
  * @group validators

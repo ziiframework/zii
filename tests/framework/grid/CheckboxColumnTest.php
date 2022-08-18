@@ -11,13 +11,13 @@ declare(strict_types=1);
 namespace yiiunit\framework\grid;
 
 use Yii;
-use yii\data\ArrayDataProvider;
-use yii\grid\CheckboxColumn;
+use yii\helpers\Html;
+use yiiunit\TestCase;
 use yii\grid\GridView;
 use yii\helpers\FileHelper;
-use yii\helpers\Html;
+use yii\grid\CheckboxColumn;
+use yii\data\ArrayDataProvider;
 use yiiunit\framework\i18n\IntlTestHelper;
-use yiiunit\TestCase;
 
 /**
  * @group grid

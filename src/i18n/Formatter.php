@@ -10,28 +10,28 @@ declare(strict_types=1);
 
 namespace yii\i18n;
 
+use Yii;
 use Closure;
-use DateInterval;
 use DateTime;
+use Exception;
+use DateInterval;
+use DateTimeZone;
+use IntlCalendar;
+use IntlException;
+use ResourceBundle;
+use NumberFormatter;
+use yii\helpers\Url;
+use MessageFormatter;
+use yii\helpers\Html;
 use DateTimeImmutable;
 use DateTimeInterface;
-use DateTimeZone;
-use Exception;
-use IntlCalendar;
 use IntlDateFormatter;
-use IntlException;
-use MessageFormatter;
-use NumberFormatter;
-use ResourceBundle;
-use Yii;
 use yii\base\Component;
-use yii\base\InvalidArgumentException;
-use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
-use yii\helpers\FormatConverter;
-use yii\helpers\Html;
 use yii\helpers\HtmlPurifier;
-use yii\helpers\Url;
+use yii\helpers\FormatConverter;
+use yii\base\InvalidConfigException;
+use yii\base\InvalidArgumentException;
 
 /**
  * Formatter provides a set of commonly used data formatting methods.
@@ -829,9 +829,9 @@ class Formatter extends Component
      * @param string $format the format used to convert the value into a date string.
      * @param string $type 'date', 'time', or 'datetime'.
      *
-     * @throws InvalidConfigException if the date format is invalid.
-     *
      * @return string the formatted result.
+     *
+     * @throws InvalidConfigException if the date format is invalid.
      */
     private function formatDateTimeValue($value, $format, $type)
     {

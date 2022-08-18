@@ -10,24 +10,24 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\db;
 
+use Yii;
 use Closure;
 use Exception;
-use Yii;
+use yii\db\Query;
+use yii\db\Schema;
+use yii\db\Expression;
+use yii\db\QueryBuilder;
+use yii\helpers\ArrayHelper;
+use yii\db\SchemaBuilderTrait;
 use yii\db\ColumnSchemaBuilder;
-use yii\db\conditions\BetweenColumnsCondition;
 use yii\db\conditions\InCondition;
 use yii\db\conditions\LikeCondition;
-use yii\db\Expression;
+use yiiunit\data\base\TraversableObject;
+use yii\db\conditions\BetweenColumnsCondition;
 use yii\db\mssql\QueryBuilder as MssqlQueryBuilder;
 use yii\db\mysql\QueryBuilder as MysqlQueryBuilder;
 use yii\db\pgsql\QueryBuilder as PgsqlQueryBuilder;
-use yii\db\Query;
-use yii\db\QueryBuilder;
-use yii\db\Schema;
-use yii\db\SchemaBuilderTrait;
 use yii\db\sqlite\QueryBuilder as SqliteQueryBuilder;
-use yii\helpers\ArrayHelper;
-use yiiunit\data\base\TraversableObject;
 
 abstract class QueryBuilderTest extends DatabaseTestCase
 {

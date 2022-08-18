@@ -10,16 +10,16 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\filters;
 
-use Closure;
 use Yii;
-use yii\base\Action;
-use yii\filters\AccessRule;
-use yii\web\Controller;
-use yii\web\Request;
+use Closure;
 use yii\web\User;
-use yiiunit\framework\filters\stubs\MockAuthManager;
-use yiiunit\framework\filters\stubs\UserIdentity;
+use yii\base\Action;
+use yii\web\Request;
+use yii\web\Controller;
+use yii\filters\AccessRule;
 use yiiunit\framework\rbac\AuthorRule;
+use yiiunit\framework\filters\stubs\UserIdentity;
+use yiiunit\framework\filters\stubs\MockAuthManager;
 
 /**
  * @group filters

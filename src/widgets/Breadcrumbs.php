@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace yii\widgets;
 
 use Yii;
-use yii\base\InvalidConfigException;
 use yii\base\Widget;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
+use yii\base\InvalidConfigException;
 
 /**
  * Breadcrumbs displays a list of links indicating the position of the current page in the whole site hierarchy.

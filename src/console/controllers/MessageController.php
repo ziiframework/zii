@@ -11,14 +11,14 @@ declare(strict_types=1);
 namespace yii\console\controllers;
 
 use Yii;
-use yii\console\Exception;
-use yii\console\ExitCode;
-use yii\db\Connection;
 use yii\db\Query;
 use yii\di\Instance;
+use yii\db\Connection;
 use yii\helpers\Console;
-use yii\helpers\FileHelper;
+use yii\console\ExitCode;
+use yii\console\Exception;
 use yii\helpers\VarDumper;
+use yii\helpers\FileHelper;
 use yii\i18n\GettextPoFile;
 
 /**

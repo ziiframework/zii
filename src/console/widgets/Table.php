@@ -12,8 +12,8 @@ namespace yii\console\widgets;
 
 use Yii;
 use yii\base\Widget;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Console;
+use yii\helpers\ArrayHelper;
 
 /**
  * Table class displays a table in console.

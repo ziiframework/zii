@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\validators;
 
-use yii\validators\BooleanValidator;
 use yii\web\View;
-use yiiunit\data\validators\models\FakedValidationModel;
 use yiiunit\TestCase;
+use yii\validators\BooleanValidator;
+use yiiunit\data\validators\models\FakedValidationModel;
 
 /**
  * @group validators

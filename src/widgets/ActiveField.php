@@ -10,15 +10,15 @@ declare(strict_types=1);
 
 namespace yii\widgets;
 
+use Yii;
 use Exception;
 use Throwable;
-use Yii;
-use yii\base\Component;
-use yii\base\ErrorHandler;
 use yii\base\Model;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\base\Component;
 use yii\web\JsExpression;
+use yii\base\ErrorHandler;
+use yii\helpers\ArrayHelper;
 
 /**
  * ActiveField represents a form input field within an [[ActiveForm]].

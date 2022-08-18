@@ -11,14 +11,14 @@ declare(strict_types=1);
 namespace yii\filters;
 
 use Closure;
+use yii\web\User;
 use yii\base\Action;
+use yii\web\Request;
 use yii\base\Component;
 use yii\base\Controller;
-use yii\base\InvalidConfigException;
 use yii\helpers\IpHelper;
 use yii\helpers\StringHelper;
-use yii\web\Request;
-use yii\web\User;
+use yii\base\InvalidConfigException;
 
 /**
  * This class represents an access rule defined by the [[AccessControl]] action filter.

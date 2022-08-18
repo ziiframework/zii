@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace yiiunit\framework\helpers;
 
 use Exception;
-use yii\helpers\IpHelper;
 use yiiunit\TestCase;
+use yii\helpers\IpHelper;
 
 /**
  * Class IpHelperTest.

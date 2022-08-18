@@ -10,15 +10,15 @@ declare(strict_types=1);
 
 namespace yii\helpers;
 
+use Yii;
+use HTMLPurifier_Lexer;
 use HTMLPurifier_Config;
 use HTMLPurifier_Context;
 use HTMLPurifier_Generator;
-use HTMLPurifier_Lexer;
-use HTMLPurifier_Token_Empty;
 use HTMLPurifier_Token_End;
-use HTMLPurifier_Token_Start;
 use HTMLPurifier_Token_Text;
-use Yii;
+use HTMLPurifier_Token_Empty;
+use HTMLPurifier_Token_Start;
 
 /**
  * BaseStringHelper provides concrete implementation for [[StringHelper]].

@@ -239,9 +239,9 @@ class BaseObject implements Configurable
      * @param string $name the method name
      * @param array $params method parameters
      *
-     * @throws UnknownMethodException when calling unknown method
-     *
      * @return mixed the method return value
+     *
+     * @throws UnknownMethodException when calling unknown method
      */
     public function __call($name, $params)
     {

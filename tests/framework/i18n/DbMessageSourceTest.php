@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace yiiunit\framework\i18n;
 
 use Yii;
+use yii\i18n\I18N;
 use yii\base\Event;
 use yii\db\Connection;
 use yii\i18n\DbMessageSource;
-use yii\i18n\I18N;
 use yiiunit\framework\console\controllers\EchoMigrateController;
 
 /**

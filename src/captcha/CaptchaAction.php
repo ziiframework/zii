@@ -10,14 +10,14 @@ declare(strict_types=1);
 
 namespace yii\captcha;
 
+use Yii;
 use Imagick;
 use ImagickDraw;
 use ImagickPixel;
-use Yii;
 use yii\base\Action;
-use yii\base\InvalidConfigException;
 use yii\helpers\Url;
 use yii\web\Response;
+use yii\base\InvalidConfigException;
 
 /**
  * CaptchaAction renders a CAPTCHA image.

@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\caching;
 
+use yii\db\Query;
 use yii\caching\ArrayCache;
 use yii\caching\DbQueryDependency;
-use yii\db\Query;
 use yiiunit\framework\db\DatabaseTestCase;
 
 class DbQueryDependencyTest extends DatabaseTestCase

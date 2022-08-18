@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yii\base;
 
+use Yii;
 use Exception;
 use ReflectionClass;
-use Yii;
 
 /**
  * Widget is the base class for widgets.

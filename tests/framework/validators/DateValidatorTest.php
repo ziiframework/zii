@@ -10,11 +10,11 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\validators;
 
+use yiiunit\TestCase;
 use IntlDateFormatter;
 use yii\validators\DateValidator;
-use yiiunit\data\validators\models\FakedValidationModel;
 use yiiunit\framework\i18n\IntlTestHelper;
-use yiiunit\TestCase;
+use yiiunit\data\validators\models\FakedValidationModel;
 
 /**
  * @group validators

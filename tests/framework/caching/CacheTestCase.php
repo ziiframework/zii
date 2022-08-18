@@ -34,9 +34,9 @@ function microtime($float = false)
 
 namespace yiiunit\framework\caching;
 
-use yii\caching\CacheInterface;
-use yii\caching\TagDependency;
 use yiiunit\TestCase;
+use yii\caching\TagDependency;
+use yii\caching\CacheInterface;
 
 /**
  * Base class for testing cache backends.

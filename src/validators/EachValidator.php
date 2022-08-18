@@ -10,11 +10,11 @@ declare(strict_types=1);
 
 namespace yii\validators;
 
-use ArrayAccess;
 use Yii;
+use ArrayAccess;
+use yii\base\Model;
 use yii\base\DynamicModel;
 use yii\base\InvalidConfigException;
-use yii\base\Model;
 
 /**
  * EachValidator validates an array by checking each of its elements against an embedded validation rule.
@@ -97,9 +97,9 @@ class EachValidator extends Validator
      * @param Model|null $model model in which context validator should be created.
      * @param mixed|null $current value being currently validated.
      *
-     * @throws \yii\base\InvalidConfigException
-     *
      * @return Validator validator instance
+     *
+     * @throws \yii\base\InvalidConfigException
      */
     private function createEmbeddedValidator($model = null, $current = null)
     {

@@ -8,10 +8,10 @@ declare(strict_types=1);
  * @license https://www.yiiframework.com/license/
  */
 
-use yii\base\InvalidConfigException;
-use yii\db\Migration;
 use yii\db\Query;
+use yii\db\Migration;
 use yii\rbac\DbManager;
+use yii\base\InvalidConfigException;
 
 /**
  * Fix MSSQL trigger.
@@ -25,9 +25,9 @@ use yii\rbac\DbManager;
 class m200409_110543_rbac_update_mssql_trigger extends Migration
 {
     /**
-     * @throws yii\base\InvalidConfigException
-     *
      * @return DbManager
+     *
+     * @throws yii\base\InvalidConfigException
      */
     protected function getAuthManager()
     {

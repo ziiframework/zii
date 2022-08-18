@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace yiiunit\framework\behaviors;
 
 use Yii;
-use yii\behaviors\AttributeBehavior;
-use yii\db\ActiveRecord;
-use yii\db\Connection;
 use yiiunit\TestCase;
+use yii\db\Connection;
+use yii\db\ActiveRecord;
+use yii\behaviors\AttributeBehavior;
 
 /**
  * Unit test for [[\yii\behaviors\AttributeBehavior]].
