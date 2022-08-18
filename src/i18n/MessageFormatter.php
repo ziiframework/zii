@@ -17,7 +17,7 @@ use yii\base\Component;
 use yii\base\NotSupportedException;
 
 /**
- * MessageFormatter allows formatting messages via [ICU message format](https://userguide.icu-project.org/formatparse/messages).
+ * MessageFormatter allows formatting messages via [ICU message format](http://userguide.icu-project.org/formatparse/messages).
  *
  * This class enhances the message formatter class provided by the PHP intl extension.
  *
@@ -79,7 +79,7 @@ class MessageFormatter extends Component
     }
 
     /**
-     * Formats a message via [ICU message format](https://userguide.icu-project.org/formatparse/messages).
+     * Formats a message via [ICU message format](http://userguide.icu-project.org/formatparse/messages).
      *
      * It uses the PHP intl extension's [MessageFormatter](https://www.php.net/manual/en/class.messageformatter.php)
      * and works around some issues.
@@ -150,7 +150,7 @@ class MessageFormatter extends Component
     }
 
     /**
-     * Parses an input string according to an [ICU message format](https://userguide.icu-project.org/formatparse/messages) pattern.
+     * Parses an input string according to an [ICU message format](http://userguide.icu-project.org/formatparse/messages) pattern.
      *
      * It uses the PHP intl extension's [MessageFormatter::parse()](https://www.php.net/manual/en/messageformatter.parsemessage.php)
      * and adds support for named arguments.
@@ -386,7 +386,7 @@ class MessageFormatter extends Component
     private function parseToken($token, $args, $locale)
     {
         // parsing pattern based on ICU grammar:
-        // https://icu-project.org/apiref/icu4c/classMessageFormat.html#details
+        // http://icu-project.org/apiref/icu4c/classMessageFormat.html#details
         $charset = Yii::$app ? Yii::$app->charset : 'UTF-8';
         $param = trim($token[0]);
 
@@ -427,7 +427,7 @@ class MessageFormatter extends Component
                 return $arg;
 
             case 'select':
-                /* https://icu-project.org/apiref/icu4c/classicu_1_1SelectFormat.html
+                /* http://icu-project.org/apiref/icu4c/classicu_1_1SelectFormat.html
                 selectStyle = (selector '{' message '}')+
                 */
                 if (!isset($token[2])) {
@@ -455,7 +455,7 @@ class MessageFormatter extends Component
                 break;
 
             case 'plural':
-                /* https://icu-project.org/apiref/icu4c/classicu_1_1PluralFormat.html
+                /* http://icu-project.org/apiref/icu4c/classicu_1_1PluralFormat.html
                 pluralStyle = [offsetValue] (selector '{' message '}')+
                 offsetValue = "offset:" number
                 selector = explicitValue | keyword

@@ -123,7 +123,7 @@ class Request extends \yii\base\Request
      * You also need to include CSRF meta tags in your pages by using [[\yii\helpers\Html::csrfMetaTags()]].
      *
      * @see Controller::enableCsrfValidation
-     * @see https://en.wikipedia.org/wiki/Cross-site_request_forgery
+     * @see http://en.wikipedia.org/wiki/Cross-site_request_forgery
      */
     public $enableCsrfValidation = true;
 
@@ -1042,7 +1042,7 @@ class Request extends \yii\base\Request
         $pathInfo = urldecode($pathInfo);
 
         // try to encode in UTF8 if not so
-        // https://w3.org/International/questions/qa-forms-utf-8.html
+        // http://w3.org/International/questions/qa-forms-utf-8.html
         if (!preg_match('%^(?:
             [\x09\x0A\x0D\x20-\x7E]              # ASCII
             | [\xC2-\xDF][\x80-\xBF]             # non-overlong 2-byte
@@ -1902,7 +1902,7 @@ break;
     /**
      * Returns the token used to perform CSRF validation.
      *
-     * This token is generated in a way to prevent [BREACH attacks](https://breachattack.com/). It may be passed
+     * This token is generated in a way to prevent [BREACH attacks](http://breachattack.com/). It may be passed
      * along via a hidden field of an HTML form or an HTTP header value to support CSRF validation.
      *
      * @param bool $regenerate whether to regenerate CSRF token. When this parameter is true, each time

@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace yii\web;
 
 /**
- * This asset bundle provides the [jQuery](https://jquery.com/) JavaScript library.
+ * This asset bundle provides the [jQuery](http://jquery.com/) JavaScript library.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  *

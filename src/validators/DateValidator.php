@@ -83,7 +83,7 @@ class DateValidator extends Validator
 
     /**
      * @var string the date format that the value being validated should follow.
-     * This can be a date time pattern as described in the [ICU manual](https://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax).
+     * This can be a date time pattern as described in the [ICU manual](http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax).
      *
      * Alternatively this can be a string prefixed with `php:` representing a format that can be recognized by the PHP Datetime class.
      * Please refer to <https://www.php.net/manual/en/datetime.createfromformat.php> on supported formats.

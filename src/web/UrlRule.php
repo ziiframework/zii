@@ -96,7 +96,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
     public $pattern;
 
     /**
-     * @var string|null the pattern used to parse and create the host info part of a URL (e.g. `https://example.com`).
+     * @var string|null the pattern used to parse and create the host info part of a URL (e.g. `http://example.com`).
      *
      * @see pattern
      */

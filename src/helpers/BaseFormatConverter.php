@@ -96,7 +96,7 @@ class BaseFormatConverter
      * Pattern constructs that are not supported by the PHP format will be removed.
      *
      * [php date() function format]: https://www.php.net/manual/en/function.date.php
-     * [ICU format]: https://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax
+     * [ICU format]: http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax
      *
      * @param string $pattern date format pattern in ICU format.
      * @param string $type 'date', 'time', or 'datetime'.
@@ -125,7 +125,7 @@ class BaseFormatConverter
                 return static::$phpFallbackDatePatterns[$pattern][$type];
             }
         }
-        // https://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax
+        // http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax
         // escaped text
         $escaped = [];
 
@@ -246,7 +246,7 @@ class BaseFormatConverter
      * Pattern constructs that are not supported by the ICU format will be removed.
      *
      * [php date() function format]: https://www.php.net/manual/en/function.date.php
-     * [ICU format]: https://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax
+     * [ICU format]: http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax
      *
      * Since 2.0.13 it handles escaped characters correctly.
      *
@@ -356,8 +356,8 @@ class BaseFormatConverter
      *
      * Pattern constructs that are not supported by the jQuery UI format will be removed.
      *
-     * [jQuery UI date format]: https://api.jqueryui.com/datepicker/#utility-formatDate
-     * [ICU format]: https://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax
+     * [jQuery UI date format]: http://api.jqueryui.com/datepicker/#utility-formatDate
+     * [ICU format]: http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax
      *
      * @param string $pattern date format pattern in ICU format.
      * @param string $type 'date', 'time', or 'datetime'.
@@ -386,7 +386,7 @@ class BaseFormatConverter
                 return static::$juiFallbackDatePatterns[$pattern][$type];
             }
         }
-        // https://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax
+        // http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax
         // escaped text
         $escaped = [];
 
@@ -509,7 +509,7 @@ class BaseFormatConverter
      * Pattern constructs that are not supported by the jQuery UI format will be removed.
      *
      * [php date() function format]: https://www.php.net/manual/en/function.date.php
-     * [jQuery UI date format]: https://api.jqueryui.com/datepicker/#utility-formatDate
+     * [jQuery UI date format]: http://api.jqueryui.com/datepicker/#utility-formatDate
      *
      * @param string $pattern date format pattern in php date()-function format.
      *
