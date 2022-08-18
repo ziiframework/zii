@@ -355,7 +355,6 @@ abstract class SqlTokenizer extends Component
                 $this->_currentToken[] = new SqlToken(['type' => SqlToken::TYPE_PARENTHESIS]);
                 $this->_tokenStack->push($this->_currentToken[-1]);
                 $this->_currentToken = $this->_tokenStack->top();
-
                 break;
 
             case ')':
@@ -367,7 +366,6 @@ abstract class SqlTokenizer extends Component
                     'startOffset' => $this->offset,
                     'endOffset' => $this->offset + $length,
                 ]);
-
                 break;
 
             case ';':
@@ -386,7 +384,6 @@ abstract class SqlTokenizer extends Component
                 $this->_currentToken[] = new SqlToken(['type' => SqlToken::TYPE_STATEMENT]);
                 $this->_tokenStack->push($this->_currentToken[-1]);
                 $this->_currentToken = $this->_tokenStack->top();
-
                 break;
 
             default:
@@ -396,7 +393,6 @@ abstract class SqlTokenizer extends Component
                     'startOffset' => $this->offset,
                     'endOffset' => $this->offset + $length,
                 ]);
-
                 break;
         }
 

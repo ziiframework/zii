@@ -57,7 +57,7 @@ use yii\base\ErrorHandler;
  *
  * @property int $flushInterval How many messages should be logged before they are sent to targets. This
  * method returns the value of [[Logger::flushInterval]].
- * @property Logger $logger The logger. If not set, [[\Yii::getLogger()]] will be used. Note that the type of
+ * @property Logger $logger The logger. If not set, [[Yii::getLogger()]] will be used. Note that the type of
  * this property differs in getter and setter. See [[getLogger()]] and [[setLogger()]] for details.
  * @property int $traceLevel How many application call stacks should be logged together with each message.
  * This method returns the value of [[Logger::traceLevel]]. Defaults to 0.
@@ -75,7 +75,7 @@ class Dispatcher extends Component
     public $targets = [];
 
     /**
-     * @var Logger the logger.
+     * @var Logger|null the logger.
      */
     private $_logger;
 
@@ -221,7 +221,7 @@ class Dispatcher extends Component
      * Generate target error message.
      *
      * @param Target $target log target object
-     * @param Throwable|Exception $throwable catched exception
+     * @param Throwable $throwable catched exception
      * @param string $method full method path
      *
      * @return array generated error message data
