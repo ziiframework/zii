@@ -48,10 +48,10 @@ class HelpControllerTest extends TestCase
     /**
      * Emulates running controller action.
      *
-     * @param string $actionID     id of action to be run
-     * @param array  $actionParams action arguments
+     * @param string $actionID id of action to be run.
+     * @param array $actionParams action arguments.
      *
-     * @return string command output
+     * @return string command output.
      */
     protected function runControllerAction($actionID, $actionParams = [])
     {

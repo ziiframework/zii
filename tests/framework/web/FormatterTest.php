@@ -96,7 +96,7 @@ abstract class FormatterTest extends \yiiunit\TestCase
     }
 
     /**
-     * @param mixed  $data           the data to be formatted
+     * @param mixed  $data the data to be formatted
      * @param string $expectedResult the expected body
      * @dataProvider formatModelDataProvider
      */

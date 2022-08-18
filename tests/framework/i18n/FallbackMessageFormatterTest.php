@@ -185,7 +185,7 @@ _MSG_
      *
      * @param string $pattern
      * @param string $expected
-     * @param array  $args
+     * @param array $args
      */
     public function testNamedArguments($pattern, $expected, $args): void
     {

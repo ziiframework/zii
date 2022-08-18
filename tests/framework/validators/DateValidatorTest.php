@@ -272,10 +272,10 @@ class DateValidatorTest extends TestCase
      * @dataProvider timestampFormatProvider
      *
      * @param string|null $format
-     * @param string      $date
-     * @param string|int  $expectedDate
-     * @param string      $timezone
-     * @param string      $appTimezone
+     * @param string $date
+     * @param string|int $expectedDate
+     * @param string $timezone
+     * @param string $appTimezone
      */
     public function testIntlTimestampAttributeFormat($format, $date, $expectedDate, $timezone, $appTimezone): void
     {
@@ -286,10 +286,10 @@ class DateValidatorTest extends TestCase
      * @dataProvider timestampFormatProvider
      *
      * @param string|null $format
-     * @param string      $date
-     * @param string|int  $expectedDate
-     * @param string      $timezone
-     * @param string      $appTimezone
+     * @param string $date
+     * @param string|int $expectedDate
+     * @param string $timezone
+     * @param string $appTimezone
      */
     public function testTimestampAttributeFormat($format, $date, $expectedDate, $timezone, $appTimezone): void
     {
@@ -319,7 +319,6 @@ class DateValidatorTest extends TestCase
                 $enGB_dateTime_invalid = '05/31/2017, 12:30';
                 $deDE_dateTime_valid = '31.05.2017, 12:30';
                 $deDE_dateTime_invalid = '05.31.2017, 12:30';
-
                 break;
 
             default:
