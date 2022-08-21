@@ -10,9 +10,10 @@ declare(strict_types=1);
 
 namespace yii\tests\unit\framework\db\pgsql;
 
-use function defined;
-use yii\db\ArrayExpression;
 use yii\db\JsonExpression;
+use yii\db\ArrayExpression;
+
+use function defined;
 
 /**
  * @group db

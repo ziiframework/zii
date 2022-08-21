@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace yiiunit\framework\web\session;
 
 use Yii;
-use yii\caching\FileCache;
 use yii\web\CacheSession;
+use yii\caching\FileCache;
 
 /**
  * @group web

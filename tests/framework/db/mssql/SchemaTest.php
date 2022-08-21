@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\db\mssql;
 
-use yii\db\DefaultValueConstraint;
 use yii\db\mssql\Schema;
+use yii\db\DefaultValueConstraint;
 use yiiunit\framework\db\AnyValue;
 
 /**
@@ -69,21 +69,18 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
                         $expectedType = 'char';
                         $expectedSize = 100;
                         $expectedDbType = 'char(100)';
-
                         break;
 
                     case 'char_col2':
                         $expectedType = 'string';
                         $expectedSize = 100;
                         $expectedDbType = 'varchar(100)';
-
                         break;
 
                     case 'char_col3':
                         $expectedType = 'text';
                         $expectedSize = null;
                         $expectedDbType = 'text';
-
                         break;
                 }
 

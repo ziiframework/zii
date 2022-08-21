@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\db\mysql;
 
-use yii\db\Expression;
 use yii\db\Query;
+use yii\db\Expression;
 
 /**
  * @group db

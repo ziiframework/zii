@@ -10,11 +10,11 @@ declare(strict_types=1);
 
 namespace yii\db;
 
-use BadMethodCallException;
 use Iterator;
 use PDOException;
-use ReturnTypeWillChange;
 use yii\base\Component;
+use ReturnTypeWillChange;
+use BadMethodCallException;
 
 /**
  * BatchQueryResult represents a batch query from which you can retrieve data in batches.
@@ -54,7 +54,7 @@ class BatchQueryResult extends Component implements Iterator
     public const EVENT_FINISH = 'finish';
 
     /**
-     * @var Connection the DB connection to be used when performing batch query.
+     * @var Connection|null the DB connection to be used when performing batch query.
      * If null, the "db" application component will be used.
      */
     public $db;
@@ -204,7 +204,6 @@ class BatchQueryResult extends Component implements Iterator
                 } else {
                     // we've reached the end
                     $this->trigger(self::EVENT_FINISH);
-
                     break;
                 }
             }

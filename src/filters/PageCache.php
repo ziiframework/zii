@@ -12,13 +12,13 @@ namespace yii\filters;
 
 use Yii;
 use yii\base\Action;
-use yii\base\ActionFilter;
-use yii\base\DynamicContentAwareInterface;
-use yii\base\DynamicContentAwareTrait;
-use yii\caching\CacheInterface;
-use yii\caching\Dependency;
 use yii\di\Instance;
 use yii\web\Response;
+use yii\base\ActionFilter;
+use yii\caching\Dependency;
+use yii\caching\CacheInterface;
+use yii\base\DynamicContentAwareTrait;
+use yii\base\DynamicContentAwareInterface;
 
 /**
  * PageCache implements server-side caching of whole pages.
@@ -126,7 +126,7 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
     public $enabled = true;
 
     /**
-     * @var \yii\base\View the view component to use for caching. If not set, the default application view component
+     * @var \yii\base\View|null the view component to use for caching. If not set, the default application view component
      * [[\yii\web\Application::view]] will be used.
      */
     public $view;

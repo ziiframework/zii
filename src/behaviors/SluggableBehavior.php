@@ -11,11 +11,11 @@ declare(strict_types=1);
 namespace yii\behaviors;
 
 use Yii;
-use yii\base\InvalidConfigException;
+use yii\helpers\Inflector;
 use yii\db\BaseActiveRecord;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Inflector;
 use yii\validators\UniqueValidator;
+use yii\base\InvalidConfigException;
 
 /**
  * SluggableBehavior automatically fills the specified attribute with a value that can be used a slug in a URL.
@@ -125,7 +125,7 @@ class SluggableBehavior extends AttributeBehavior
     public $uniqueValidator = [];
 
     /**
-     * @var callable slug unique value generator. It is used in case [[ensureUnique]] enabled and generated
+     * @var callable|null slug unique value generator. It is used in case [[ensureUnique]] enabled and generated
      * slug is not unique. This should be a PHP callable with following signature:
      *
      * ```php

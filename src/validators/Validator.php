@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yii\validators;
 
-use Closure;
 use Yii;
+use Closure;
 use yii\base\Component;
 use yii\base\NotSupportedException;
 

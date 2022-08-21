@@ -10,13 +10,13 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\i18n;
 
-use DateInterval;
 use DateTime;
-use DateTimeImmutable;
+use DateInterval;
 use DateTimeZone;
+use yiiunit\TestCase;
+use DateTimeImmutable;
 use IntlDateFormatter;
 use yii\i18n\Formatter;
-use yiiunit\TestCase;
 
 /**
  * @group i18n

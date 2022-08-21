@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\console;
 
-use yii\console\Controller;
 use yii\console\Response;
+use yii\console\Controller;
 
 /**
  * @author Misbahul D Munir <misbahuldmunir@gmail.com>

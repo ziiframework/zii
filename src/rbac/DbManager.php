@@ -11,13 +11,13 @@ declare(strict_types=1);
 namespace yii\rbac;
 
 use Yii;
-use yii\base\InvalidArgumentException;
-use yii\base\InvalidCallException;
-use yii\caching\CacheInterface;
-use yii\db\Connection;
-use yii\db\Expression;
 use yii\db\Query;
 use yii\di\Instance;
+use yii\db\Connection;
+use yii\db\Expression;
+use yii\caching\CacheInterface;
+use yii\base\InvalidCallException;
+use yii\base\InvalidArgumentException;
 
 /**
  * DbManager represents an authorization manager that stores authorization information in database.
@@ -71,7 +71,7 @@ class DbManager extends BaseManager
     public $ruleTable = '{{%auth_rule}}';
 
     /**
-     * @var CacheInterface|array|string the cache used to improve RBAC performance. This can be one of the following:
+     * @var CacheInterface|array|string|null the cache used to improve RBAC performance. This can be one of the following:
      *
      * - an application component ID (e.g. `cache`)
      * - a configuration array

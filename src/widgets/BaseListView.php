@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace yii\widgets;
 
 use Yii;
-use yii\base\InvalidConfigException;
 use yii\base\Widget;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
+use yii\base\InvalidConfigException;
 
 /**
  * BaseListView is a base class for widgets displaying data from data provider

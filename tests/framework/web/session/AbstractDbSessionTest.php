@@ -10,16 +10,16 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\web\session;
 
-use Exception;
 use PDO;
-use stdClass;
 use Yii;
-use yii\db\Connection;
-use yii\db\Migration;
+use stdClass;
+use Exception;
 use yii\db\Query;
+use yii\db\Migration;
+use yiiunit\TestCase;
+use yii\db\Connection;
 use yii\web\DbSession;
 use yiiunit\framework\console\controllers\EchoMigrateController;
-use yiiunit\TestCase;
 
 /**
  * @group db
@@ -57,7 +57,6 @@ abstract class AbstractDbSessionTest extends TestCase
         foreach ($driverNames as $driverName) {
             if (in_array($driverName, PDO::getAvailableDrivers()) && array_key_exists($driverName, $databases)) {
                 $driverAvailable = $driverName;
-
                 break;
             }
         }

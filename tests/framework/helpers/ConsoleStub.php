@@ -10,9 +10,10 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\helpers;
 
-use const STDERR;
 use const STDIN;
+use const STDERR;
 use const STDOUT;
+
 use yii\helpers\Console;
 
 /**

@@ -10,19 +10,20 @@ declare(strict_types=1);
 
 namespace yii\console;
 
+use const STDERR;
+use const STDOUT;
+
+use Yii;
+use Reflector;
 use ReflectionClass;
+use yii\base\Action;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
-use Reflector;
-use const STDERR;
-use const STDOUT;
-use Yii;
-use yii\base\Action;
-use yii\base\InlineAction;
-use yii\base\InvalidRouteException;
 use yii\helpers\Console;
+use yii\base\InlineAction;
 use yii\helpers\Inflector;
+use yii\base\InvalidRouteException;
 
 /**
  * Controller is the base class of console command classes.

@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yii\rest;
 
-use yii\base\InvalidConfigException;
 use yii\db\ActiveRecordInterface;
 use yii\web\NotFoundHttpException;
+use yii\base\InvalidConfigException;
 
 /**
  * Action is the base class for action classes that implement RESTful API.
@@ -33,7 +33,7 @@ class Action extends \yii\base\Action
     public $modelClass;
 
     /**
-     * @var callable a PHP callable that will be called to return the model corresponding
+     * @var callable|null a PHP callable that will be called to return the model corresponding
      * to the specified primary key value. If not set, [[findModel()]] will be used instead.
      * The signature of the callable should be:
      *
@@ -50,7 +50,7 @@ class Action extends \yii\base\Action
     public $findModel;
 
     /**
-     * @var callable a PHP callable that will be called when running an action to determine
+     * @var callable|null a PHP callable that will be called when running an action to determine
      * if the current user has the permission to execute the action. If not set, the access
      * check will not be performed. The signature of the callable should be as follows,
      *

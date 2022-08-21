@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace yii\filters;
 
 use Yii;
+use yii\web\Request;
 use yii\base\ActionFilter;
 use yii\web\BadRequestHttpException;
-use yii\web\Request;
 
 /**
  * AjaxFilter allow to limit access only for ajax requests.
@@ -42,7 +42,7 @@ class AjaxFilter extends ActionFilter
     public $errorMessage = 'Request must be XMLHttpRequest.';
 
     /**
-     * @var Request the current request. If not set, the `request` application component will be used.
+     * @var Request|null the current request. If not set, the `request` application component will be used.
      */
     public $request;
 

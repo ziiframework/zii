@@ -10,16 +10,16 @@ declare(strict_types=1);
 
 namespace yii\widgets;
 
-use Closure;
 use Yii;
-use yii\base\Arrayable;
-use yii\base\InvalidConfigException;
+use Closure;
 use yii\base\Model;
 use yii\base\Widget;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-use yii\helpers\Inflector;
+use yii\base\Arrayable;
 use yii\i18n\Formatter;
+use yii\helpers\Inflector;
+use yii\helpers\ArrayHelper;
+use yii\base\InvalidConfigException;
 
 /**
  * DetailView displays the detail of a single data [[model]].
@@ -116,7 +116,7 @@ class DetailView extends Widget
     public $template = '<tr><th{captionOptions}>{label}</th><td{contentOptions}>{value}</td></tr>';
 
     /**
-     * @var array the HTML attributes for the container tag of this widget. The `tag` option specifies
+     * @var array|null the HTML attributes for the container tag of this widget. The `tag` option specifies
      * what container tag should be used. It defaults to `table` if not set.
      *
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
@@ -124,7 +124,7 @@ class DetailView extends Widget
     public $options = ['class' => 'table table-striped table-bordered detail-view'];
 
     /**
-     * @var array|Formatter the formatter used to format model attribute values into displayable texts.
+     * @var array|Formatter|null the formatter used to format model attribute values into displayable texts.
      * This can be either an instance of [[Formatter]] or an configuration array for creating the [[Formatter]]
      * instance. If this property is not set, the `formatter` application component will be used.
      */

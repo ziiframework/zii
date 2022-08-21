@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yii\caching;
 
-use yii\base\InvalidConfigException;
-use yii\db\QueryInterface;
 use yii\di\Instance;
+use yii\db\QueryInterface;
+use yii\base\InvalidConfigException;
 
 /**
  * DbQueryDependency represents a dependency based on the query result of an [[QueryInterface]] instance.
@@ -47,7 +47,7 @@ class DbQueryDependency extends Dependency
     public $query;
 
     /**
-     * @var string|callable method which should be invoked in over the [[query]] object.
+     * @var string|callable|null method which should be invoked in over the [[query]] object.
      *
      * If specified as a string an own query method with such name will be invoked, passing [[db]] value as its
      * first argument. For example: `exists`, `all`.

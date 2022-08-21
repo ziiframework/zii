@@ -15,7 +15,7 @@ namespace yiiunit\data\ar;
  *
  * @author Jose Lorente <jose.lorente.martin@gmail.com>
  *
- * @property int    $id
+ * @property int $id
  * @property string $type
  */
 class Animal extends ActiveRecord

@@ -10,15 +10,16 @@ declare(strict_types=1);
 
 namespace yii\web;
 
-use function array_flip;
-use function array_key_exists;
-use function array_map;
+use Countable;
 use ArrayAccess;
 use ArrayIterator;
-use Countable;
 use IteratorAggregate;
-use ReturnTypeWillChange;
 use yii\base\BaseObject;
+use ReturnTypeWillChange;
+
+use function array_map;
+use function array_flip;
+use function array_key_exists;
 
 /**
  * HeaderCollection is used by [[Response]] to maintain the currently registered HTTP headers.
@@ -73,6 +74,7 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      *
      * @return int the number of headers in the collection.
      */
+    #[ReturnTypeWillChange]
     public function getCount()
     {
         return count($this->_headers);
@@ -264,7 +266,7 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      *
      * @param string $name the header name
      *
-     * @return string the header value with the specified name, null if the named header does not exist.
+     * @return string|null the header value with the specified name, null if the named header does not exist.
      */
     #[ReturnTypeWillChange]
     public function offsetGet($name)

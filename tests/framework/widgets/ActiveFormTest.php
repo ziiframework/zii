@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\widgets;
 
-use yii\base\DynamicModel;
-use yii\base\Widget;
 use yii\web\View;
+use yii\base\Widget;
+use yii\base\DynamicModel;
 use yii\widgets\ActiveForm;
 
 /**
@@ -41,7 +41,7 @@ class ActiveFormTest extends \yiiunit\TestCase
 <input type="email" id="dynamicmodel-name" class="form-control" name="DynamicModel[name]" required>
 </div>
 EOF
-, (string) $form->field($model, 'name', $o)->input('email', ['required' => true]));
+            , (string) $form->field($model, 'name', $o)->input('email', ['required' => true]));
 
         $this->assertEqualsWithoutLE(<<<'EOF'
 <div class="form-group field-dynamicmodel-name">
@@ -79,7 +79,7 @@ EOF
 </select>
 </div>
 EOF
-             , (string) $form->field($model, 'categories', $o)->listBox(['apple', 'banana', 'avocado'], ['multiple' => true]));
+            , (string) $form->field($model, 'categories', $o)->listBox(['apple', 'banana', 'avocado'], ['multiple' => true]));
     }
 
     public function testOutputBuffering(): void
@@ -107,7 +107,7 @@ EOF
 </div>
 </form>
 HTML
-, $content);
+            , $content);
     }
 
     public function testRegisterClientScript(): void
@@ -181,7 +181,7 @@ HTML
 <div class="help-block">I have an error!</div>
 </div>
 EOF
-        , (string) $form->field($model, 'name'));
+            , (string) $form->field($model, 'name'));
 
         $this->assertEqualsWithoutLE(<<<'EOF'
 <div class="form-group field-dynamicmodel-name">

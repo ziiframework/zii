@@ -10,13 +10,13 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\web;
 
-use InvalidArgumentException;
 use Yii;
-use yii\base\InvalidConfigException;
-use yii\base\UserException;
-use yii\web\ErrorAction;
-use yiiunit\data\controllers\TestController;
 use yiiunit\TestCase;
+use yii\web\ErrorAction;
+use yii\base\UserException;
+use InvalidArgumentException;
+use yii\base\InvalidConfigException;
+use yiiunit\data\controllers\TestController;
 
 /**
  * @group web

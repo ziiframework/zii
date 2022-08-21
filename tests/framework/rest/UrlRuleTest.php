@@ -11,12 +11,12 @@ declare(strict_types=1);
 namespace yiiunit\framework\rest;
 
 use Yii;
-use yii\helpers\VarDumper;
-use yii\rest\UrlRule;
 use yii\web\Request;
-use yii\web\UrlManager;
-use yii\web\UrlRule as WebUrlRule;
+use yii\rest\UrlRule;
 use yiiunit\TestCase;
+use yii\web\UrlManager;
+use yii\helpers\VarDumper;
+use yii\web\UrlRule as WebUrlRule;
 
 /**
  * @group rest

@@ -11,14 +11,14 @@ declare(strict_types=1);
 namespace yii\console\controllers;
 
 use Yii;
-use yii\console\Exception;
-use yii\console\ExitCode;
-use yii\db\Connection;
 use yii\db\Query;
 use yii\di\Instance;
+use yii\db\Connection;
 use yii\helpers\Console;
-use yii\helpers\FileHelper;
+use yii\console\ExitCode;
+use yii\console\Exception;
 use yii\helpers\VarDumper;
+use yii\helpers\FileHelper;
 use yii\i18n\GettextPoFile;
 
 /**
@@ -97,7 +97,7 @@ class MessageController extends \yii\console\Controller
     public $markUnused = true;
 
     /**
-     * @var array list of patterns that specify which files/directories should NOT be processed.
+     * @var array|null list of patterns that specify which files/directories should NOT be processed.
      * If empty or not set, all files/directories will be processed.
      * See helpers/FileHelper::findFiles() description for pattern matching rules.
      * If a file/directory matches both a pattern in "only" and "except", it will NOT be processed.
@@ -113,7 +113,7 @@ class MessageController extends \yii\console\Controller
     ];
 
     /**
-     * @var array list of patterns that specify which files (not directories) should be processed.
+     * @var array|null list of patterns that specify which files (not directories) should be processed.
      * If empty or not set, all files will be processed.
      * See helpers/FileHelper::findFiles() description for pattern matching rules.
      * If a file/directory matches both a pattern in "only" and "except", it will NOT be processed.
@@ -320,7 +320,7 @@ EOD;
      * This command will search through source code files and extract
      * messages that need to be translated in different languages.
      *
-     * @param string $configFile the path or alias of the configuration file.
+     * @param string|null $configFile the path or alias of the configuration file.
      * You may use the "yii message/config" command to generate
      * this file and then customize it for your needs.
      *

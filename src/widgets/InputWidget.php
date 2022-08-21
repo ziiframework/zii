@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace yii\widgets;
 
-use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\base\Widget;
 use yii\helpers\Html;
+use yii\base\InvalidConfigException;
 
 /**
  * InputWidget is the base class for widgets that collect user inputs.
@@ -48,17 +48,17 @@ class InputWidget extends Widget
     public $field;
 
     /**
-     * @var Model the data model that this widget is associated with.
+     * @var Model|null the data model that this widget is associated with.
      */
     public $model;
 
     /**
-     * @var string the model attribute that this widget is associated with.
+     * @var string|null the model attribute that this widget is associated with.
      */
     public $attribute;
 
     /**
-     * @var string the input name. This must be set if [[model]] and [[attribute]] are not set.
+     * @var string|null the input name. This must be set if [[model]] and [[attribute]] are not set.
      */
     public $name;
 

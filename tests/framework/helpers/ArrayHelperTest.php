@@ -10,18 +10,18 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\helpers;
 
+use DateTime;
+use Iterator;
+use stdClass;
 use ArrayAccess;
 use ArrayObject;
-use DateTime;
 use DateTimeZone;
-use Iterator;
-use ReturnTypeWillChange;
-use stdClass;
-use yii\base\BaseObject;
-use yii\base\Model;
 use yii\data\Sort;
-use yii\helpers\ArrayHelper;
+use yii\base\Model;
 use yiiunit\TestCase;
+use yii\base\BaseObject;
+use ReturnTypeWillChange;
+use yii\helpers\ArrayHelper;
 
 /**
  * @group helpers

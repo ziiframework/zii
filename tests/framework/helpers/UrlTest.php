@@ -14,10 +14,10 @@ use Yii;
 use yii\base\Action;
 use yii\base\Module;
 use yii\helpers\Url;
-use yii\web\Controller;
 use yii\widgets\Menu;
-use yiiunit\framework\filters\stubs\UserIdentity;
 use yiiunit\TestCase;
+use yii\web\Controller;
+use yiiunit\framework\filters\stubs\UserIdentity;
 
 /**
  * UrlTest.

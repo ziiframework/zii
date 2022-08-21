@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace yiiunit\framework\base;
 
 use Yii;
+use yiiunit\TestCase;
 use yii\base\Controller;
 use yii\base\InlineAction;
-use yiiunit\TestCase;
 
 /**
  * @group base
@@ -52,8 +52,8 @@ class ControllerTest extends TestCase
     /**
      * @dataProvider createInlineActionProvider
      *
-     * @param string      $controllerClass
-     * @param string      $actionId
+     * @param string $controllerClass
+     * @param string $actionId
      * @param string|null $expectedActionMethod
      */
     public function testCreateInlineAction($controllerClass, $actionId, $expectedActionMethod): void

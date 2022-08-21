@@ -10,16 +10,17 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\db;
 
-use function call_user_func_array;
-use yii\db\ColumnSchemaBuilder;
-use yii\db\Expression;
 use yii\db\Schema;
+use yii\db\Expression;
+use yii\db\ColumnSchemaBuilder;
+
+use function call_user_func_array;
 
 abstract class ColumnSchemaBuilderTest extends DatabaseTestCase
 {
     /**
      * @param string $type
-     * @param int    $length
+     * @param int $length
      *
      * @return ColumnSchemaBuilder
      */
@@ -55,10 +56,10 @@ abstract class ColumnSchemaBuilderTest extends DatabaseTestCase
     /**
      * @dataProvider typesProvider
      *
-     * @param string   $expected
-     * @param string   $type
+     * @param string $expected
+     * @param string $type
      * @param int|null $length
-     * @param mixed    $calls
+     * @param mixed $calls
      */
     public function testCustomTypes($expected, $type, $length, $calls): void
     {
@@ -66,10 +67,10 @@ abstract class ColumnSchemaBuilderTest extends DatabaseTestCase
     }
 
     /**
-     * @param string   $expected
-     * @param string   $type
+     * @param string $expected
+     * @param string $type
      * @param int|null $length
-     * @param array    $calls
+     * @param array $calls
      */
     public function checkBuildString($expected, $type, $length, $calls): void
     {

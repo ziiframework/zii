@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace yiiunit\framework\helpers;
 
 use Yii;
-use yii\base\DynamicModel;
-use yii\helpers\Console;
 use yiiunit\TestCase;
+use yii\helpers\Console;
+use yii\base\DynamicModel;
 
 /**
  * @group helpers

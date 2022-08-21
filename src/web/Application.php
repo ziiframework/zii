@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace yii\web;
 
 use Yii;
-use yii\base\InvalidRouteException;
 use yii\helpers\Url;
+use yii\base\InvalidRouteException;
 
 /**
  * Application is the base class for all web application classes.
@@ -39,7 +39,7 @@ class Application extends \yii\base\Application
     public $defaultRoute = 'site';
 
     /**
-     * @var array the configuration specifying a controller action which should handle
+     * @var array|null the configuration specifying a controller action which should handle
      * all user requests. This is mainly used when the application is in maintenance mode
      * and needs to handle all incoming requests via a single action.
      * The configuration is an array whose first element specifies the route of the action.

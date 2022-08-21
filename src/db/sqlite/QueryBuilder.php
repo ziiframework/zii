@@ -11,14 +11,14 @@ declare(strict_types=1);
 namespace yii\db\sqlite;
 
 use Generator;
-use yii\base\InvalidArgumentException;
-use yii\base\NotSupportedException;
+use yii\db\Query;
 use yii\db\Connection;
 use yii\db\Constraint;
 use yii\db\Expression;
-use yii\db\ExpressionInterface;
-use yii\db\Query;
 use yii\helpers\StringHelper;
+use yii\db\ExpressionInterface;
+use yii\base\NotSupportedException;
+use yii\base\InvalidArgumentException;
 
 /**
  * QueryBuilder is the query builder for SQLite databases.
@@ -328,8 +328,8 @@ class QueryBuilder extends \yii\db\QueryBuilder
      * @param string $refTable the table that the foreign key references to.
      * @param string|array $refColumns the name of the column that the foreign key references to.
      * If there are multiple columns, separate them with commas or use an array to represent them.
-     * @param string $delete the ON DELETE option. Most DBMS support these options: RESTRICT, CASCADE, NO ACTION, SET DEFAULT, SET NULL
-     * @param string $update the ON UPDATE option. Most DBMS support these options: RESTRICT, CASCADE, NO ACTION, SET DEFAULT, SET NULL
+     * @param string|null $delete the ON DELETE option. Most DBMS support these options: RESTRICT, CASCADE, NO ACTION, SET DEFAULT, SET NULL
+     * @param string|null $update the ON UPDATE option. Most DBMS support these options: RESTRICT, CASCADE, NO ACTION, SET DEFAULT, SET NULL
      *
      * @return string the SQL statement for adding a foreign key constraint to an existing table.
      *

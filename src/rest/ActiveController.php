@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yii\rest;
 
-use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\web\ForbiddenHttpException;
+use yii\base\InvalidConfigException;
 
 /**
  * ActiveController implements a common set of actions for supporting RESTful access to ActiveRecord.
@@ -135,7 +135,7 @@ class ActiveController extends Controller
      * If the user does not have access, a [[ForbiddenHttpException]] should be thrown.
      *
      * @param string $action the ID of the action to be executed
-     * @param object $model the model to be accessed. If null, it means no specific model is being accessed.
+     * @param object|null $model the model to be accessed. If null, it means no specific model is being accessed.
      * @param array $params additional parameters
      *
      * @throws ForbiddenHttpException if the user does not have access

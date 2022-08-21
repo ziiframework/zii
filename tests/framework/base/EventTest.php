@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace yiiunit\framework\base;
 
 use stdClass;
-use yii\base\Component;
 use yii\base\Event;
 use yiiunit\TestCase;
+use yii\base\Component;
 
 /**
  * @group base

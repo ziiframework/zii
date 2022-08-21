@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\grid;
 
-use yii\grid\ActionColumn;
 use yii\helpers\Html;
+use yii\grid\ActionColumn;
 
 /**
  * @author Vitaly S. <fornit1917@gmail.com>

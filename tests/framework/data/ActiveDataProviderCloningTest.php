@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\data;
 
-use yii\data\ActiveDataProvider;
 use yii\db\Query;
 use yiiunit\TestCase;
+use yii\data\ActiveDataProvider;
 
 class ActiveDataProviderCloningTest extends TestCase
 {

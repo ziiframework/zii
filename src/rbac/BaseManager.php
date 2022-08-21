@@ -10,13 +10,13 @@ declare(strict_types=1);
 
 namespace yii\rbac;
 
+use Yii;
 use Closure;
 use Exception;
-use Yii;
 use yii\base\Component;
-use yii\base\InvalidArgumentException;
-use yii\base\InvalidConfigException;
 use yii\base\InvalidValueException;
+use yii\base\InvalidConfigException;
+use yii\base\InvalidArgumentException;
 
 /**
  * BaseManager is a base class implementing [[ManagerInterface]] for RBAC management.

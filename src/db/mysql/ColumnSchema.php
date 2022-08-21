@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yii\db\mysql;
 
-use yii\db\ExpressionInterface;
 use yii\db\JsonExpression;
+use yii\db\ExpressionInterface;
 
 /**
  * Class ColumnSchema for MySQL database.

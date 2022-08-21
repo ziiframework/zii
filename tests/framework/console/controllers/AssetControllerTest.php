@@ -10,15 +10,15 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\console\controllers;
 
+use Yii;
 use Exception;
 use ReflectionClass;
-use Yii;
-use yii\console\controllers\AssetController;
-use yii\helpers\ArrayHelper;
-use yii\helpers\FileHelper;
-use yii\helpers\StringHelper;
-use yii\helpers\VarDumper;
 use yiiunit\TestCase;
+use yii\helpers\VarDumper;
+use yii\helpers\FileHelper;
+use yii\helpers\ArrayHelper;
+use yii\helpers\StringHelper;
+use yii\console\controllers\AssetController;
 
 /**
  * Unit test for [[\yii\console\controllers\AssetController]].

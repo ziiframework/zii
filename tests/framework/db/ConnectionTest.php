@@ -10,14 +10,14 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\db;
 
-use Exception;
 use Yii;
-use yii\base\InvalidConfigException;
-use yii\caching\ArrayCache;
-use yii\db\conditions\AndCondition;
-use yii\db\conditions\OrCondition;
+use Exception;
 use yii\db\Connection;
 use yii\db\Transaction;
+use yii\caching\ArrayCache;
+use yii\db\conditions\OrCondition;
+use yii\db\conditions\AndCondition;
+use yii\base\InvalidConfigException;
 
 abstract class ConnectionTest extends DatabaseTestCase
 {

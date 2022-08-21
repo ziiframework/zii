@@ -10,8 +10,9 @@ declare(strict_types=1);
 
 namespace yiiunit\data\validators\models;
 
-use function func_get_args;
 use yii\base\Model;
+
+use function func_get_args;
 
 class FakedValidationModel extends Model
 {
@@ -24,7 +25,7 @@ class FakedValidationModel extends Model
     private $inlineValArgs;
 
     /**
-     * @param array $attributes
+     * @param  array $attributes
      *
      * @return self
      */
@@ -57,7 +58,7 @@ class FakedValidationModel extends Model
         return true;
     }
 
-    public function clientInlineVal($attribute, $params, $validator, $current)
+    public function clientInlineVal($attribute, $params, $validator, $current, $view = null)
     {
         return func_get_args();
     }
@@ -88,7 +89,7 @@ class FakedValidationModel extends Model
     /**
      * Returns the arguments of the inlineVal method in the last call.
      *
-     * @return array|null an array of arguments in the last call or null if method never been called
+     * @return array|null an array of arguments in the last call or null if method never been called.
      *
      * @see inlineVal
      */

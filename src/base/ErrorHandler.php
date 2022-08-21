@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace yii\base;
 
-use Error;
-use ReflectionProperty;
-use Throwable;
 use Yii;
+use Error;
+use Throwable;
+use ReflectionProperty;
 use yii\helpers\VarDumper;
 use yii\web\HttpException;
 

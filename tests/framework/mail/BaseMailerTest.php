@@ -12,10 +12,10 @@ namespace yiiunit\framework\mail;
 
 use Yii;
 use yii\base\View;
-use yii\helpers\FileHelper;
+use yiiunit\TestCase;
 use yii\mail\BaseMailer;
 use yii\mail\BaseMessage;
-use yiiunit\TestCase;
+use yii\helpers\FileHelper;
 
 /**
  * @group mail
@@ -46,7 +46,7 @@ class BaseMailerTest extends TestCase
     }
 
     /**
-     * @return string test file path
+     * @return string test file path.
      */
     protected function getTestFilePath()
     {
@@ -54,7 +54,7 @@ class BaseMailerTest extends TestCase
     }
 
     /**
-     * @return Mailer test email component instance
+     * @return Mailer test email component instance.
      */
     protected function createTestMailComponent()
     {
@@ -260,7 +260,7 @@ TEXT
     /**
      * @dataProvider htmlAndPlainProvider
      *
-     * @param int    $i
+     * @param int $i
      * @param string $htmlViewFileContent
      * @param string $expectedTextRendering
      */

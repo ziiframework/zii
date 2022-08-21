@@ -11,11 +11,11 @@ declare(strict_types=1);
 namespace yiiunit\framework\validators;
 
 use Yii;
+use yiiunit\TestCase;
+use yii\web\UploadedFile;
 use yii\helpers\FileHelper;
 use yii\validators\FileValidator;
-use yii\web\UploadedFile;
 use yiiunit\data\validators\models\FakedValidationModel;
-use yiiunit\TestCase;
 
 /**
  * @group validators
@@ -289,7 +289,7 @@ class FileValidatorTest extends TestCase
     }
 
     /**
-     * @param array $params
+     * @param  array          $params
      *
      * @return UploadedFile[]
      */
@@ -508,7 +508,7 @@ class FileValidatorTest extends TestCase
 
     public function validMimeTypes()
     {
-        return array_filter([
+        $validMimeTypes = array_filter([
             ['test.svg', 'image/*', 'svg'],
             ['test.jpg', 'image/*', 'jpg'],
             ['test.png', 'image/*', 'png'],
@@ -518,6 +518,14 @@ class FileValidatorTest extends TestCase
             ['test.odt', 'application/vnd*', 'odt'],
             ['test.tar.xz', 'application/x-xz', 'tar.xz'],
         ]);
+
+        if (PHP_VERSION_ID >= 80100) {
+            $v81_zx = ['test.tar.xz', 'application/octet-stream', 'tar.xz'];
+            array_pop($validMimeTypes);
+            $validMimeTypes[] = $v81_zx;
+        }
+
+        return $validMimeTypes;
     }
 
     public function invalidMimeTypes()
@@ -532,8 +540,8 @@ class FileValidatorTest extends TestCase
     }
 
     /**
-     * @param string       $fileName
-     * @param mixed        $_
+     * @param string $fileName
+     * @param mixed $_
      * @param string|array $allowedExtensions
      * @dataProvider validMimeTypes
      */
@@ -546,8 +554,8 @@ class FileValidatorTest extends TestCase
     }
 
     /**
-     * @param string       $fileName
-     * @param mixed        $_
+     * @param string $fileName
+     * @param mixed $_
      * @param string|array $allowedExtensions
      * @dataProvider invalidMimeTypes
      */
@@ -617,9 +625,7 @@ class FileValidatorTest extends TestCase
      */
     public function testValidateMimeTypeCaseInsensitive($mask, $fileMimeType, $expected): void
     {
-        $validator = $this->getMockBuilder('\yii\validators\FileValidator')
-            ->setMethods(['getMimeTypeByFile'])
-            ->getMock();
+        $validator = $this->getMock('\yii\validators\FileValidator', ['getMimeTypeByFile']);
         $validator->method('getMimeTypeByFile')->willReturn($fileMimeType);
         $validator->mimeTypes = [$mask];
 

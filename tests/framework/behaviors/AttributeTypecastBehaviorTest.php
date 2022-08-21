@@ -11,11 +11,11 @@ declare(strict_types=1);
 namespace yiiunit\framework\behaviors;
 
 use Yii;
-use yii\base\DynamicModel;
 use yii\base\Event;
-use yii\behaviors\AttributeTypecastBehavior;
-use yii\db\ActiveRecord;
 use yiiunit\TestCase;
+use yii\db\ActiveRecord;
+use yii\base\DynamicModel;
+use yii\behaviors\AttributeTypecastBehavior;
 
 /**
  * Unit test for [[\yii\behaviors\AttributeTypecastBehavior]].
@@ -266,12 +266,12 @@ class AttributeTypecastBehaviorTest extends TestCase
 /**
  * Test Active Record class with [[AttributeTypecastBehavior]] behavior attached.
  *
- * @property int                       $id
- * @property string                    $name
- * @property int                       $amount
- * @property float                     $price
- * @property bool                      $isActive
- * @property string                    $callback
+ * @property int $id
+ * @property string $name
+ * @property int $amount
+ * @property float $price
+ * @property bool $isActive
+ * @property string $callback
  * @property AttributeTypecastBehavior $attributeTypecastBehavior
  */
 class ActiveRecordAttributeTypecast extends ActiveRecord

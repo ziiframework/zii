@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\i18n;
 
-use yii\i18n\MessageFormatter;
 use yiiunit\TestCase;
+use yii\i18n\MessageFormatter;
 
 /**
  * @author Alexander Makarov <sam@rmcreative.ru>
@@ -356,8 +356,8 @@ _MSG_
      *
      * @param string $pattern
      * @param string $expected
-     * @param array  $args
-     * @param bool   $skip
+     * @param array $args
+     * @param bool $skip
      * @param string $skipMessage
      */
     public function testNamedArguments($pattern, $expected, $args, $skip = false, $skipMessage = ''): void
@@ -375,7 +375,7 @@ _MSG_
      *
      * @param string $pattern
      * @param string $expected
-     * @param array  $args
+     * @param array $args
      * @param string $locale
      */
     public function testParseNamedArguments($pattern, $expected, $args, $locale = 'en-US'): void

@@ -10,11 +10,12 @@ declare(strict_types=1);
 
 namespace yii\validators;
 
+use Yii;
 use Closure;
 use Traversable;
-use Yii;
-use yii\base\InvalidConfigException;
+use yii\helpers\Json;
 use yii\helpers\ArrayHelper;
+use yii\base\InvalidConfigException;
 
 /**
  * RangeValidator validates that the attribute value is among a list of values.
@@ -121,7 +122,7 @@ class RangeValidator extends Validator
         ValidationAsset::register($view);
         $options = $this->getClientOptions($model, $attribute);
 
-        return 'yii.validation.range(value, messages, ' . json_encode($options, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . ');';
+        return 'yii.validation.range(value, messages, ' . Json::htmlEncode($options) . ');';
     }
 
     /**

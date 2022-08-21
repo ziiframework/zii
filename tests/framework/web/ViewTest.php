@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace yiiunit\framework\web;
 
 use Yii;
-use yii\caching\FileCache;
 use yii\web\View;
 use yiiunit\TestCase;
+use yii\caching\FileCache;
 
 /**
  * @group web

@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace yii\base;
 
-use ReflectionMethod;
-use ReflectionType;
 use Yii;
+use ReflectionType;
 use yii\di\Instance;
+use ReflectionMethod;
 use yii\di\NotInstantiableException;
 
 /**
@@ -189,7 +189,6 @@ class Controller extends Component implements ViewContextInterface
                 array_unshift($modules, $module);
             } else {
                 $runAction = false;
-
                 break;
             }
         }

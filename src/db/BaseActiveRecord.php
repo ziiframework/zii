@@ -10,20 +10,20 @@ declare(strict_types=1);
 
 namespace yii\db;
 
-use Closure;
-use ReflectionMethod;
-use ReturnTypeWillChange;
-use Throwable;
 use Yii;
-use yii\base\InvalidArgumentException;
-use yii\base\InvalidCallException;
-use yii\base\InvalidConfigException;
-use yii\base\InvalidParamException;
+use Closure;
+use Throwable;
 use yii\base\Model;
+use ReflectionMethod;
 use yii\base\ModelEvent;
-use yii\base\NotSupportedException;
-use yii\base\UnknownMethodException;
+use ReturnTypeWillChange;
 use yii\helpers\ArrayHelper;
+use yii\base\InvalidCallException;
+use yii\base\InvalidParamException;
+use yii\base\NotSupportedException;
+use yii\base\InvalidConfigException;
+use yii\base\UnknownMethodException;
+use yii\base\InvalidArgumentException;
 
 /**
  * ActiveRecord is the base class for classes representing relational data in terms of objects.
@@ -309,9 +309,9 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      *
      * @param string $name property name
      *
-     * @throws InvalidArgumentException if relation name is wrong
-     *
      * @return mixed property value
+     *
+     * @throws InvalidArgumentException if relation name is wrong
      *
      * @see getAttribute()
      */

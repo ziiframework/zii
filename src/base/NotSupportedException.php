@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -12,7 +11,6 @@ namespace yii\base;
  * NotSupportedException represents an exception caused by accessing features that are not supported.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class NotSupportedException extends Exception

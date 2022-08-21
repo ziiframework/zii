@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yii\caching;
 
+use Yii;
 use Memcached;
 use ReflectionClass;
-use Yii;
 use yii\base\InvalidConfigException;
 
 /**

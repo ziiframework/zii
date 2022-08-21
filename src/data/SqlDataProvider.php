@@ -11,11 +11,11 @@ declare(strict_types=1);
 namespace yii\data;
 
 use Yii;
-use yii\base\InvalidConfigException;
-use yii\db\Connection;
-use yii\db\Expression;
 use yii\db\Query;
 use yii\di\Instance;
+use yii\db\Connection;
+use yii\db\Expression;
+use yii\base\InvalidConfigException;
 
 /**
  * SqlDataProvider implements a data provider based on a plain SQL statement.
@@ -87,7 +87,7 @@ class SqlDataProvider extends BaseDataProvider
     public $params = [];
 
     /**
-     * @var string|callable the column that is used as the key of the data models.
+     * @var string|callable|null the column that is used as the key of the data models.
      * This can be either a column name, or a callable that returns the key value of a given data model.
      *
      * If this is not set, the keys of the [[models]] array will be used.

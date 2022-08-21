@@ -10,13 +10,13 @@ declare(strict_types=1);
 
 namespace yii\validators;
 
-use DateTime;
-use DateTimeZone;
-use Exception;
-use IntlDateFormatter;
 use Yii;
-use yii\base\InvalidConfigException;
+use DateTime;
+use Exception;
+use DateTimeZone;
+use IntlDateFormatter;
 use yii\helpers\FormatConverter;
+use yii\base\InvalidConfigException;
 
 /**
  * DateValidator verifies if the attribute represents a date, time or datetime in a proper [[format]].

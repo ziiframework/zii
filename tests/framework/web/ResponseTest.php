@@ -10,14 +10,14 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\web;
 
+use Yii;
 use Error;
 use Exception;
-use RuntimeException;
-use Yii;
-use yii\helpers\StringHelper;
-use yii\web\HttpException;
 use yii\web\Request;
+use RuntimeException;
 use yii\web\Response;
+use yii\web\HttpException;
+use yii\helpers\StringHelper;
 use yiiunit\framework\web\mocks\TestRequestComponent;
 
 /**

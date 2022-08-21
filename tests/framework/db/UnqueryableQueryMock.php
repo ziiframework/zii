@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\db;
 
-use yii\base\InvalidCallException;
 use yii\db\Query;
+use yii\base\InvalidCallException;
 
 class UnqueryableQueryMock extends Query
 {

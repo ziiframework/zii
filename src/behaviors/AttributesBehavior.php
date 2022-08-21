@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace yii\behaviors;
 
 use Closure;
-use yii\base\Behavior;
 use yii\base\Event;
+use yii\base\Behavior;
 use yii\db\ActiveRecord;
 
 /**

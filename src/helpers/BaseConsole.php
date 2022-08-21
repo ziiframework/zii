@@ -10,8 +10,9 @@ declare(strict_types=1);
 
 namespace yii\helpers;
 
-use const STDERR;
 use const STDIN;
+use const STDERR;
+
 use Yii;
 use yii\base\Model;
 use yii\console\Markdown as ConsoleMarkdown;

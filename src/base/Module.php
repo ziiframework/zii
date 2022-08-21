@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yii\base;
 
-use ReflectionClass;
 use Yii;
+use ReflectionClass;
 use yii\di\ServiceLocator;
 
 /**
@@ -29,9 +29,9 @@ use yii\di\ServiceLocator;
  *
  * @property-write array $aliases List of path aliases to be defined. The array keys are alias names (must
  * start with `@`) and the array values are the corresponding paths or aliases. See [[setAliases()]] for an
- * example. This property is write-only.
+ * example.
  * @property string $basePath The root directory of the module.
- * @property string $controllerPath The root directory that contains the controller classes.
+ * @property string $controllerPath The directory that contains the controller classes.
  * @property string $layoutPath The root directory of layout files. Defaults to "[[viewPath]]/layouts".
  * @property array $modules The modules (indexed by their IDs).
  * @property-read string $uniqueId The unique ID of the module.
@@ -148,7 +148,7 @@ class Module extends ServiceLocator
     private $_modules = [];
 
     /**
-     * @var string|callable the version of this module.
+     * @var string|callable|null the version of this module.
      * Version can be specified as a PHP callback, which can accept module instance as an argument and should
      * return the actual version. For example:
      *
@@ -168,7 +168,7 @@ class Module extends ServiceLocator
      * Constructor.
      *
      * @param string $id the ID of this module.
-     * @param Module $parent the parent module (if any).
+     * @param Module|null $parent the parent module (if any).
      * @param array $config name-value pairs that will be used to initialize the object properties.
      */
     public function __construct($id, $parent = null, $config = [])
@@ -382,7 +382,7 @@ class Module extends ServiceLocator
     /**
      * Sets current module version.
      *
-     * @param string|callable $version the version of this module.
+     * @param string|callable|null $version the version of this module.
      * Version can be specified as a PHP callback, which can accept module instance as an argument and should
      * return the actual version. For example:
      *

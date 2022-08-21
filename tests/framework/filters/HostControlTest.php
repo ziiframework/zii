@@ -12,10 +12,10 @@ namespace yiiunit\framework\filters;
 
 use Yii;
 use yii\base\Action;
+use yiiunit\TestCase;
+use yii\web\Controller;
 use yii\base\ExitException;
 use yii\filters\HostControl;
-use yii\web\Controller;
-use yiiunit\TestCase;
 
 /**
  * @group filters
@@ -33,7 +33,7 @@ class HostControlTest extends TestCase
     }
 
     /**
-     * @return array test data
+     * @return array test data.
      */
     public function hostInfoValidationDataProvider()
     {
@@ -84,9 +84,9 @@ class HostControlTest extends TestCase
     /**
      * @dataProvider hostInfoValidationDataProvider
      *
-     * @param mixed  $allowedHosts
+     * @param mixed $allowedHosts
      * @param string $host
-     * @param bool   $allowed
+     * @param bool $allowed
      */
     public function testFilter($allowedHosts, $host, $allowed): void
     {

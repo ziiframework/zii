@@ -11,13 +11,13 @@ declare(strict_types=1);
 namespace yii\console\controllers;
 
 use Yii;
-use yii\console\Controller;
-use yii\console\Exception;
-use yii\console\ExitCode;
 use yii\helpers\Console;
-use yii\helpers\FileHelper;
-use yii\helpers\VarDumper;
 use yii\web\AssetBundle;
+use yii\console\ExitCode;
+use yii\console\Exception;
+use yii\helpers\VarDumper;
+use yii\console\Controller;
+use yii\helpers\FileHelper;
 
 /**
  * Allows you to combine and compress your JavaScript and CSS files.
@@ -150,9 +150,9 @@ class AssetController extends Controller
     /**
      * Returns the asset manager instance.
      *
-     * @throws \yii\console\Exception on invalid configuration.
-     *
      * @return \yii\web\AssetManager asset manager instance.
+     *
+     * @throws \yii\console\Exception on invalid configuration.
      */
     public function getAssetManager()
     {
@@ -606,7 +606,7 @@ EOD;
         if (is_string($this->cssCompressor)) {
             $tmpFile = $outputFile . '.tmp';
             $this->combineCssFiles($inputFiles, $tmpFile);
-            $this->stdout(shell_exec(strtr($this->cssCompressor, [
+            $this->stdout((string) shell_exec(strtr($this->cssCompressor, [
                 '{from}' => escapeshellarg($tmpFile),
                 '{to}' => escapeshellarg($outputFile),
             ])));

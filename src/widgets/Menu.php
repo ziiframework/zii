@@ -10,12 +10,12 @@ declare(strict_types=1);
 
 namespace yii\widgets;
 
-use Closure;
 use Yii;
+use Closure;
 use yii\base\Widget;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 
 /**
  * Menu displays a multi-level menu using nested HTML lists.
@@ -157,19 +157,19 @@ class Menu extends Widget
     public $options = [];
 
     /**
-     * @var string the CSS class that will be assigned to the first item in the main menu or each submenu.
+     * @var string|null the CSS class that will be assigned to the first item in the main menu or each submenu.
      * Defaults to null, meaning no such CSS class will be assigned.
      */
     public $firstItemCssClass;
 
     /**
-     * @var string the CSS class that will be assigned to the last item in the main menu or each submenu.
+     * @var string|null the CSS class that will be assigned to the last item in the main menu or each submenu.
      * Defaults to null, meaning no such CSS class will be assigned.
      */
     public $lastItemCssClass;
 
     /**
-     * @var string the route used to determine if a menu item is active or not.
+     * @var string|null the route used to determine if a menu item is active or not.
      * If not set, it will use the route of the current request.
      *
      * @see params
@@ -178,7 +178,7 @@ class Menu extends Widget
     public $route;
 
     /**
-     * @var array the parameters used to determine if a menu item is active or not.
+     * @var array|null the parameters used to determine if a menu item is active or not.
      * If not set, it will use `$_GET`.
      *
      * @see route

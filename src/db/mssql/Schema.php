@@ -11,15 +11,15 @@ declare(strict_types=1);
 namespace yii\db\mssql;
 
 use Exception;
-use yii\db\CheckConstraint;
 use yii\db\Constraint;
-use yii\db\ConstraintFinderInterface;
-use yii\db\ConstraintFinderTrait;
-use yii\db\DefaultValueConstraint;
-use yii\db\ForeignKeyConstraint;
+use yii\db\CheckConstraint;
 use yii\db\IndexConstraint;
 use yii\db\ViewFinderTrait;
 use yii\helpers\ArrayHelper;
+use yii\db\ForeignKeyConstraint;
+use yii\db\ConstraintFinderTrait;
+use yii\db\DefaultValueConstraint;
+use yii\db\ConstraintFinderInterface;
 
 /**
  * Schema is the class for retrieving metadata from MS SQL Server databases (version 2008 and above).
@@ -520,7 +520,6 @@ SQL;
             foreach ($table->primaryKey as $primaryKey) {
                 if (strcasecmp($column->name, $primaryKey) === 0) {
                     $column->isPrimaryKey = true;
-
                     break;
                 }
             }
@@ -773,7 +772,6 @@ SQL;
                             'name' => $name,
                             'columnNames' => ArrayHelper::getColumn($constraint, 'column_name'),
                         ]);
-
                         break;
 
                     case 'F':
@@ -786,7 +784,6 @@ SQL;
                             'onDelete' => str_replace('_', '', $constraint[0]['on_delete']),
                             'onUpdate' => str_replace('_', '', $constraint[0]['on_update']),
                         ]);
-
                         break;
 
                     case 'UQ':
@@ -794,7 +791,6 @@ SQL;
                             'name' => $name,
                             'columnNames' => ArrayHelper::getColumn($constraint, 'column_name'),
                         ]);
-
                         break;
 
                     case 'C':
@@ -803,7 +799,6 @@ SQL;
                             'columnNames' => ArrayHelper::getColumn($constraint, 'column_name'),
                             'expression' => $constraint[0]['check_expr'],
                         ]);
-
                         break;
 
                     case 'D':
@@ -812,7 +807,6 @@ SQL;
                             'columnNames' => ArrayHelper::getColumn($constraint, 'column_name'),
                             'value' => $constraint[0]['default_expr'],
                         ]);
-
                         break;
                 }
             }

@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace yii\behaviors;
 
 use Yii;
-use yii\base\InvalidCallException;
 use yii\db\BaseActiveRecord;
 use yii\helpers\ArrayHelper;
+use yii\base\InvalidCallException;
 use yii\validators\NumberValidator;
 
 /**

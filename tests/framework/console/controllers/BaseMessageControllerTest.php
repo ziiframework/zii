@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace yiiunit\framework\console\controllers;
 
 use Yii;
-use yii\console\controllers\MessageController;
-use yii\helpers\FileHelper;
-use yii\helpers\VarDumper;
 use yiiunit\TestCase;
+use yii\helpers\VarDumper;
+use yii\helpers\FileHelper;
+use yii\console\controllers\MessageController;
 
 /**
  * Base for [[\yii\console\controllers\MessageController]] unit tests.

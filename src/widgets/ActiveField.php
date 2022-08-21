@@ -10,22 +10,20 @@ declare(strict_types=1);
 
 namespace yii\widgets;
 
+use Yii;
 use Exception;
 use Throwable;
-use Yii;
-use yii\base\Component;
-use yii\base\ErrorHandler;
 use yii\base\Model;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\base\Component;
 use yii\web\JsExpression;
+use yii\base\ErrorHandler;
+use yii\helpers\ArrayHelper;
 
 /**
  * ActiveField represents a form input field within an [[ActiveForm]].
  *
  * For more details and usage information on ActiveField, see the [guide article on forms](guide:input-forms).
- *
- * @property-read string $inputId The attribute `id` of the input element
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  *
@@ -115,31 +113,31 @@ class ActiveField extends Component
     public $hintOptions = ['class' => 'hint-block'];
 
     /**
-     * @var bool whether to enable client-side data validation.
+     * @var bool|null whether to enable client-side data validation.
      * If not set, it will take the value of [[ActiveForm::enableClientValidation]].
      */
     public $enableClientValidation;
 
     /**
-     * @var bool whether to enable AJAX-based data validation.
+     * @var bool|null whether to enable AJAX-based data validation.
      * If not set, it will take the value of [[ActiveForm::enableAjaxValidation]].
      */
     public $enableAjaxValidation;
 
     /**
-     * @var bool whether to perform validation when the value of the input field is changed.
+     * @var bool|null whether to perform validation when the value of the input field is changed.
      * If not set, it will take the value of [[ActiveForm::validateOnChange]].
      */
     public $validateOnChange;
 
     /**
-     * @var bool whether to perform validation when the input field loses focus.
+     * @var bool|null whether to perform validation when the input field loses focus.
      * If not set, it will take the value of [[ActiveForm::validateOnBlur]].
      */
     public $validateOnBlur;
 
     /**
-     * @var bool whether to perform validation while the user is typing in the input field.
+     * @var bool|null whether to perform validation while the user is typing in the input field.
      * If not set, it will take the value of [[ActiveForm::validateOnType]].
      *
      * @see validationDelay
@@ -147,7 +145,7 @@ class ActiveField extends Component
     public $validateOnType;
 
     /**
-     * @var int number of milliseconds that the validation should be delayed when the user types in the field
+     * @var int|null number of milliseconds that the validation should be delayed when the user types in the field
      * and [[validateOnType]] is set `true`.
      * If not set, it will take the value of [[ActiveForm::validationDelay]].
      */
@@ -219,7 +217,7 @@ class ActiveField extends Component
      * This method will generate the label, error tag, input tag and hint tag (if any), and
      * assemble them into HTML according to [[template]].
      *
-     * @param string|callable $content the content within the field container.
+     * @param string|callable|null $content the content within the field container.
      * If `null` (not set), the default methods will be called to generate the label, error tag and input tag,
      * and use them as the content.
      * If a callable, it will be called to generate the content. The signature of the callable should be:
@@ -372,7 +370,7 @@ class ActiveField extends Component
     /**
      * Renders the hint tag.
      *
-     * @param string|bool $content the hint content.
+     * @param string|bool|null $content the hint content.
      * If `null`, the hint will be generated via [[Model::getAttributeHint()]].
      * If `false`, the generated field will not contain the hint part.
      * Note that this will NOT be [[Html::encode()|encoded]].
@@ -1009,6 +1007,8 @@ class ActiveField extends Component
     /**
      * Adds aria attributes to the input options.
      *
+     * @param $options array input options
+     *
      * @since 2.0.11
      */
     protected function addAriaAttributes(&$options): void
@@ -1030,6 +1030,7 @@ class ActiveField extends Component
     /**
      * Add role attributes to the input options.
      *
+     * @param $options array input options
      * @param string $role
      *
      * @since 2.0.16
@@ -1043,6 +1044,8 @@ class ActiveField extends Component
 
     /**
      * Adds validation class to the input options if needed.
+     *
+     * @param $options array input options
      *
      * @since 2.0.14
      */

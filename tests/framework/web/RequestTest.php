@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\web;
 
-use stdClass;
 use Yii;
+use stdClass;
 use yii\web\Request;
 use yiiunit\TestCase;
 
@@ -563,7 +563,7 @@ class RequestTest extends TestCase
      * @dataProvider isSecureServerDataProvider
      *
      * @param array $server
-     * @param bool  $expected
+     * @param bool $expected
      */
     public function testGetIsSecureConnection($server, $expected): void
     {
@@ -618,7 +618,7 @@ class RequestTest extends TestCase
      * @dataProvider isSecureServerWithoutTrustedHostDataProvider
      *
      * @param array $server
-     * @param bool  $expected
+     * @param bool $expected
      */
     public function testGetIsSecureConnectionWithoutTrustedHost($server, $expected): void
     {
@@ -782,7 +782,7 @@ class RequestTest extends TestCase
     /**
      * @dataProvider getUserIPDataProvider
      *
-     * @param array  $server
+     * @param array $server
      * @param string $expected
      */
     public function testGetUserIP($server, $expected): void
@@ -836,18 +836,18 @@ class RequestTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getUserIPWithoutTruestHostDataProvider
-     *
-     * @param array  $server
-     * @param string $expected
-     */
-    public function testGetUserIPWithoutTrustedHost($server, $expected): void
-    {
-        $original = $_SERVER;
-        $_SERVER = $server;
+   /**
+    * @dataProvider getUserIPWithoutTruestHostDataProvider
+    *
+    * @param array $server
+    * @param string $expected
+    */
+   public function testGetUserIPWithoutTrustedHost($server, $expected): void
+   {
+       $original = $_SERVER;
+       $_SERVER = $server;
 
-        $request = new Request([
+       $request = new Request([
            'trustedHosts' => [
                '192.168.0.0/24' => ['X-Forwarded-For'],
            ],
@@ -860,10 +860,10 @@ class RequestTest extends TestCase
                'forwarded',
            ],
        ]);
-        $this->assertEquals($expected, $request->getUserIP());
+       $this->assertEquals($expected, $request->getUserIP());
 
-        $_SERVER = $original;
-    }
+       $_SERVER = $original;
+   }
 
     public function getMethodDataProvider()
     {
@@ -887,7 +887,7 @@ class RequestTest extends TestCase
     /**
      * @dataProvider getMethodDataProvider
      *
-     * @param array  $server
+     * @param array $server
      * @param string $expected
      */
     public function testGetMethod($server, $expected): void
@@ -921,7 +921,7 @@ class RequestTest extends TestCase
      * @dataProvider getIsAjaxDataProvider
      *
      * @param array $server
-     * @param bool  $expected
+     * @param bool $expected
      */
     public function testGetIsAjax($server, $expected): void
     {
@@ -955,7 +955,7 @@ class RequestTest extends TestCase
      * @dataProvider getIsPjaxDataProvider
      *
      * @param array $server
-     * @param bool  $expected
+     * @param bool $expected
      */
     public function testGetIsPjax($server, $expected): void
     {
@@ -996,7 +996,7 @@ class RequestTest extends TestCase
      * @dataProvider httpAuthorizationHeadersProvider
      *
      * @param string $secret
-     * @param array  $expected
+     * @param array $expected
      */
     public function testHttpAuthCredentialsFromHttpAuthorizationHeader($secret, $expected): void
     {
@@ -1118,6 +1118,33 @@ class RequestTest extends TestCase
         }
         $request = new Request($params);
         $this->assertSame($expectedUserIp, $request->getUserIP());
+    }
+
+    public function trustedHostAndXForwardedPortDataProvider()
+    {
+        return [
+            'defaultPlain' => ['1.1.1.1', 80, null, null, 80],
+            'defaultSSL' => ['1.1.1.1', 443, null, null, 443],
+            'untrustedForwardedSSL' => ['1.1.1.1', 80, 443, ['10.0.0.0/8'], 80],
+            'untrustedForwardedPlain' => ['1.1.1.1', 443, 80, ['10.0.0.0/8'], 443],
+            'trustedForwardedSSL' => ['10.10.10.10', 80, 443, ['10.0.0.0/8'], 443],
+            'trustedForwardedPlain' => ['10.10.10.10', 443, 80, ['10.0.0.0/8'], 80],
+        ];
+    }
+
+    /**
+     * @dataProvider trustedHostAndXForwardedPortDataProvider
+     */
+    public function testTrustedHostAndXForwardedPort($remoteAddress, $requestPort, $xForwardedPort, $trustedHosts, $expectedPort): void
+    {
+        $_SERVER['REMOTE_ADDR'] = $remoteAddress;
+        $_SERVER['SERVER_PORT'] = $requestPort;
+        $_SERVER['HTTP_X_FORWARDED_PORT'] = $xForwardedPort;
+        $params = [
+            'trustedHosts' => $trustedHosts,
+        ];
+        $request = new Request($params);
+        $this->assertSame($expectedPort, $request->getServerPort());
     }
 
     /**

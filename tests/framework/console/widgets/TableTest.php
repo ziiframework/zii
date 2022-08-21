@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\console\widgets;
 
-use yii\console\widgets\Table;
-use yii\helpers\Console;
 use yiiunit\Support;
 use yiiunit\TestCase;
+use yii\helpers\Console;
+use yii\console\widgets\Table;
 
 /**
  * @group console

@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS "cache"
     }
 
     /**
-     * @param bool $reset whether to clean up the test database
+     * @param  bool            $reset whether to clean up the test database
      *
      * @return Connection
      */

@@ -10,14 +10,14 @@ declare(strict_types=1);
 
 namespace yii\console\controllers;
 
-use Closure;
 use Yii;
-use yii\caching\ApcCache;
-use yii\caching\CacheInterface;
-use yii\console\Controller;
-use yii\console\Exception;
-use yii\console\ExitCode;
+use Closure;
 use yii\helpers\Console;
+use yii\caching\ApcCache;
+use yii\console\ExitCode;
+use yii\console\Exception;
+use yii\console\Controller;
+use yii\caching\CacheInterface;
 
 /**
  * Allows you to flush cache.

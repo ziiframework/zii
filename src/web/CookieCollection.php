@@ -10,13 +10,13 @@ declare(strict_types=1);
 
 namespace yii\web;
 
+use Yii;
+use Countable;
 use ArrayAccess;
 use ArrayIterator;
-use Countable;
 use IteratorAggregate;
-use ReturnTypeWillChange;
-use Yii;
 use yii\base\BaseObject;
+use ReturnTypeWillChange;
 use yii\base\InvalidCallException;
 
 /**
@@ -123,7 +123,7 @@ class CookieCollection extends BaseObject implements IteratorAggregate, ArrayAcc
 
     /**
      * Returns whether there is a cookie with the specified name.
-     * Note that if a cookie is marked for deletion from browser, this method will return false.
+     * Note that if a cookie is marked for deletion from browser or its value is an empty string, this method will return false.
      *
      * @param string $name the cookie name
      *
@@ -246,7 +246,7 @@ class CookieCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      *
      * @param string $name the cookie name
      *
-     * @return Cookie the cookie with the specified name, null if the named cookie does not exist.
+     * @return Cookie|null the cookie with the specified name, null if the named cookie does not exist.
      */
     #[ReturnTypeWillChange]
     public function offsetGet($name)

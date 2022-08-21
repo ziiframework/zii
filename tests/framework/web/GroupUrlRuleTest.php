@@ -10,11 +10,11 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\web;
 
-use yii\web\GroupUrlRule;
 use yii\web\Request;
-use yii\web\UrlManager;
 use yii\web\UrlRule;
 use yiiunit\TestCase;
+use yii\web\UrlManager;
+use yii\web\GroupUrlRule;
 
 /**
  * @group web

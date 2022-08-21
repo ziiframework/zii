@@ -10,15 +10,15 @@ declare(strict_types=1);
 
 namespace yii\widgets;
 
-use Closure;
 use Yii;
-use yii\base\InvalidCallException;
+use Closure;
 use yii\base\Model;
 use yii\base\Widget;
-use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\helpers\Json;
-use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
+use yii\base\InvalidCallException;
 
 /**
  * ActiveForm is a widget that builds an interactive HTML form for one or multiple data models.
@@ -162,7 +162,7 @@ class ActiveForm extends Widget
     public $enableClientScript = true;
 
     /**
-     * @var array|string the URL for performing AJAX-based validation. This property will be processed by
+     * @var array|string|null the URL for performing AJAX-based validation. This property will be processed by
      * [[Url::to()]]. Please refer to [[Url::to()]] for more details on how to configure this property.
      * If this property is not set, it will take the value of the form's action attribute.
      */

@@ -9,6 +9,7 @@ declare(strict_types=1);
  */
 
 return [
+    'text/rtf' => 'application/rtf',
     'text/xml' => 'application/xml',
     'image/svg' => 'image/svg+xml',
     'image/x-bmp' => 'image/bmp',

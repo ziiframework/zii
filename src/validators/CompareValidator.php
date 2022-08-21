@@ -10,10 +10,11 @@ declare(strict_types=1);
 
 namespace yii\validators;
 
-use Closure;
 use Yii;
-use yii\base\InvalidConfigException;
+use Closure;
 use yii\helpers\Html;
+use yii\helpers\Json;
+use yii\base\InvalidConfigException;
 
 /**
  * CompareValidator compares the specified attribute value with another value.
@@ -121,33 +122,27 @@ class CompareValidator extends Validator
                 case '==':
                 case '===':
                     $this->message = Yii::t('yii', '{attribute} must be equal to "{compareValueOrAttribute}".');
-
                     break;
 
                 case '!=':
                 case '!==':
                     $this->message = Yii::t('yii', '{attribute} must not be equal to "{compareValueOrAttribute}".');
-
                     break;
 
                 case '>':
                     $this->message = Yii::t('yii', '{attribute} must be greater than "{compareValueOrAttribute}".');
-
                     break;
 
                 case '>=':
                     $this->message = Yii::t('yii', '{attribute} must be greater than or equal to "{compareValueOrAttribute}".');
-
                     break;
 
                 case '<':
                     $this->message = Yii::t('yii', '{attribute} must be less than "{compareValueOrAttribute}".');
-
                     break;
 
                 case '<=':
                     $this->message = Yii::t('yii', '{attribute} must be less than or equal to "{compareValueOrAttribute}".');
-
                     break;
 
                 default:
@@ -275,7 +270,7 @@ class CompareValidator extends Validator
         ValidationAsset::register($view);
         $options = $this->getClientOptions($model, $attribute);
 
-        return 'yii.validation.compare(value, messages, ' . json_encode($options, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . ', $form);';
+        return 'yii.validation.compare(value, messages, ' . Json::htmlEncode($options) . ', $form);';
     }
 
     /**

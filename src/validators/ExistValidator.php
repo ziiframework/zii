@@ -10,13 +10,13 @@ declare(strict_types=1);
 
 namespace yii\validators;
 
-use Closure;
 use Yii;
-use yii\base\InvalidConfigException;
+use Closure;
 use yii\base\Model;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\QueryInterface;
+use yii\base\InvalidConfigException;
 
 /**
  * ExistValidator validates that the attribute value exists in a table.

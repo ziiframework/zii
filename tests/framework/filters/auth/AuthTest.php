@@ -10,15 +10,15 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\filters\auth;
 
-use ReflectionClass;
 use Yii;
+use ReflectionClass;
 use yii\base\Action;
+use yii\rest\Controller;
+use yii\helpers\ArrayHelper;
 use yii\filters\auth\AuthMethod;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\auth\HttpHeaderAuth;
 use yii\filters\auth\QueryParamAuth;
-use yii\helpers\ArrayHelper;
-use yii\rest\Controller;
 use yii\web\UnauthorizedHttpException;
 use yiiunit\framework\filters\stubs\UserIdentity;
 

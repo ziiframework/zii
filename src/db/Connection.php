@@ -11,13 +11,13 @@ declare(strict_types=1);
 namespace yii\db;
 
 use PDO;
-use PDOException;
-use Throwable;
 use Yii;
+use Throwable;
+use PDOException;
 use yii\base\Component;
-use yii\base\InvalidConfigException;
-use yii\base\NotSupportedException;
 use yii\caching\CacheInterface;
+use yii\base\NotSupportedException;
+use yii\base\InvalidConfigException;
 
 /**
  * Connection represents a connection to a database via [PDO](https://www.php.net/manual/en/book.pdo.php).
@@ -912,9 +912,9 @@ class Connection extends Component
      * @param string|null $isolationLevel The isolation level to use for this transaction.
      * See [[Transaction::begin()]] for details.
      *
-     * @throws \Exception if there is any exception during query. In this case the transaction will be rolled back.
-     *
      * @return mixed result of callback function
+     *
+     * @throws \Exception if there is any exception during query. In this case the transaction will be rolled back.
      */
     public function transaction(callable $callback, $isolationLevel = null)
     {
