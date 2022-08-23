@@ -43,10 +43,6 @@ abstract class DatabaseTestCase extends TestCase
         $this->database = $databases[$this->driverName];
         $pdo_database = 'pdo_' . $this->driverName;
 
-        if ($this->driverName === 'oci') {
-            $pdo_database = 'oci8';
-        }
-
         if (!extension_loaded('pdo') || !extension_loaded($pdo_database)) {
             $this->markTestSkipped('pdo and ' . $pdo_database . ' extension are required.');
         }
@@ -104,13 +100,7 @@ abstract class DatabaseTestCase extends TestCase
         $db->open();
 
         if ($fixture !== null) {
-            if ($this->driverName === 'oci') {
-                [$drops, $creates] = explode('/* STATEMENTS */', file_get_contents($fixture), 2);
-                [$statements, $triggers, $data] = explode('/* TRIGGERS */', $creates, 3);
-                $lines = array_merge(explode('--', $drops), explode(';', $statements), explode('/', $triggers), explode(';', $data));
-            } else {
-                $lines = explode(';', file_get_contents($fixture));
-            }
+            $lines = explode(';', file_get_contents($fixture));
 
             foreach ($lines as $line) {
                 if (trim($line) !== '') {

@@ -190,29 +190,15 @@ SQL;
         $command->bindParam(':int_col', $intCol, PDO::PARAM_INT);
         $command->bindParam(':char_col', $charCol);
 
-        if ($this->driverName === 'oci') {
-            // can't bind floats without support from a custom PDO driver
-            $floatCol = 2;
-            $numericCol = 3;
-            // can't use blobs without support from a custom PDO driver
-            $blobCol = null;
-            // You can create a table with a column of datatype CHAR(1) and store either “Y” or “N” in that column
-            // to indicate TRUE or FALSE.
-            $boolCol = '0';
-            $command->bindParam(':float_col', $floatCol, PDO::PARAM_INT);
-            $command->bindParam(':numeric_col', $numericCol, PDO::PARAM_INT);
-            $command->bindParam(':blob_col', $blobCol);
-            $command->bindParam(':bool_col', $boolCol, PDO::PARAM_BOOL);
-        } else {
-            $floatCol = 1.23;
-            $numericCol = '1.23';
-            $blobCol = "\x10\x11\x12";
-            $boolCol = false;
-            $command->bindParam(':float_col', $floatCol);
-            $command->bindParam(':numeric_col', $numericCol);
-            $command->bindParam(':blob_col', $blobCol);
-            $command->bindParam(':bool_col', $boolCol, PDO::PARAM_BOOL);
-        }
+        $floatCol = 1.23;
+        $numericCol = '1.23';
+        $blobCol = "\x10\x11\x12";
+        $boolCol = false;
+        $command->bindParam(':float_col', $floatCol);
+        $command->bindParam(':numeric_col', $numericCol);
+        $command->bindParam(':blob_col', $blobCol);
+        $command->bindParam(':bool_col', $boolCol, PDO::PARAM_BOOL);
+
         $this->assertEquals(1, $command->execute());
 
         $command = $db->createCommand('SELECT [[int_col]], [[char_col]], [[float_col]], [[blob_col]], [[numeric_col]], [[bool_col]] FROM {{type}}');
@@ -223,7 +209,7 @@ SQL;
         $this->assertEquals($charCol, $row['char_col']);
         $this->assertEquals($floatCol, $row['float_col']);
 
-        if ($this->driverName === 'mysql' || $this->driverName === 'sqlite' || $this->driverName === 'oci') {
+        if ($this->driverName === 'mysql' || $this->driverName === 'sqlite') {
             $this->assertEquals($blobCol, $row['blob_col']);
         } elseif (defined('HHVM_VERSION') && $this->driverName === 'pgsql') {
             // HHVMs pgsql implementation does not seem to support blob columns correctly.
@@ -233,7 +219,7 @@ SQL;
         }
         $this->assertEquals($numericCol, $row['numeric_col']);
 
-        if ($this->driverName === 'mysql' || $this->driverName === 'oci' || (defined('HHVM_VERSION') && in_array($this->driverName, ['sqlite', 'pgsql']))) {
+        if ($this->driverName === 'mysql' || (defined('HHVM_VERSION') && in_array($this->driverName, ['sqlite', 'pgsql']))) {
             $this->assertEquals($boolCol, (int) $row['bool_col']);
         } else {
             $this->assertEquals($boolCol, $row['bool_col']);
