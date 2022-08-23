@@ -168,7 +168,7 @@ class Controller extends \yii\base\Controller
 
             foreach ($params as $name => $value) {
                 // Allow camelCase options to be entered in kebab-case
-                if (!in_array($name, $options, true) && strpos($name, '-') !== false) {
+                if (!in_array($name, $options, true) && strpos((string) $name, '-') !== false) {
                     $kebabName = $name;
                     $altName = lcfirst(Inflector::id2camel($kebabName));
 
