@@ -380,7 +380,7 @@ class View extends Component implements DynamicContentAwareInterface
     {
         $_obInitialLevel_ = ob_get_level();
         ob_start();
-        ob_implicit_flush(false);
+        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
         extract($_params_, EXTR_OVERWRITE);
 
         try {
@@ -632,7 +632,7 @@ class View extends Component implements DynamicContentAwareInterface
     public function beginPage(): void
     {
         ob_start();
-        ob_implicit_flush(false);
+        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
 
         $this->trigger(self::EVENT_BEGIN_PAGE);
     }

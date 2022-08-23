@@ -40,7 +40,7 @@ class WidgetTest extends TestCase
     public function testBeginEnd(): void
     {
         ob_start();
-        ob_implicit_flush(false);
+        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
 
         $widget = TestWidget::begin(['id' => 'test']);
         $this->assertTrue($widget instanceof TestWidget);
@@ -64,7 +64,7 @@ class WidgetTest extends TestCase
         ]);
 
         ob_start();
-        ob_implicit_flush(false);
+        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
 
         $widget = TestWidgetB::begin(['id' => 'test']);
         $this->assertTrue($widget instanceof TestWidget);

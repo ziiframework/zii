@@ -61,7 +61,7 @@ class Spaceless extends Widget
     {
         parent::init();
         ob_start();
-        ob_implicit_flush(false);
+        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
     }
 
     /**

@@ -92,7 +92,7 @@ class ConsoleTest extends TestCase
     public function testStripAnsiFormat(): void
     {
         ob_start();
-        ob_implicit_flush(false);
+        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
         echo 'a';
         Console::moveCursorForward(1);
         echo 'a';
@@ -143,7 +143,7 @@ class ConsoleTest extends TestCase
         Console::endAnsiFormat();
         echo 'a';
         $output = Console::stripAnsiFormat(ob_get_clean());
-        ob_implicit_flush(true);
+        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? true : 1);
         // $output = str_replace("\033", 'X003', $output );// uncomment for debugging
         $this->assertEquals(str_repeat('a', 25), $output);
     }

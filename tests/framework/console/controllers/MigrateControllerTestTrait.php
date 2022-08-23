@@ -113,7 +113,7 @@ trait MigrateControllerTestTrait
     {
         $controller = $this->createMigrateController($config);
         ob_start();
-        ob_implicit_flush(false);
+        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
         $this->migrationExitCode = $controller->run($actionID, $args);
 
         return ob_get_clean();

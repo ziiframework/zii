@@ -294,7 +294,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
 
         if ($this->exception instanceof ErrorException || !Yii::$app->has('view')) {
             ob_start();
-            ob_implicit_flush(false);
+            ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
             extract($_params_, EXTR_OVERWRITE);
 
             require Yii::getAlias($_file_);
