@@ -107,7 +107,6 @@ return (new PhpCsFixer\Config())
         'native_function_type_declaration_casing' => true,
         'fopen_flags' => ['b_mode' => true],
         'get_class_to_class_keyword' => false, // TODO: as of php 8.0
-        'single_line_comment_spacing' => true,
         'no_trailing_comma_in_singleline_function_call' => true,
         'class_reference_name_casing' => true,
         'no_unneeded_import_alias' => false,
