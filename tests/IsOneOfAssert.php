@@ -24,16 +24,13 @@ class IsOneOfAssert extends \PHPUnit\Framework\Constraint\Constraint
      */
     public function __construct(array $allowedValues)
     {
-        parent::__construct();
         $this->allowedValues = $allowedValues;
     }
 
     /**
      * Returns a string representation of the object.
-     *
-     * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         $allowedValues = array_map(static fn ($value) => VarDumper::dumpAsString($value), $this->allowedValues);
         $expectedAsString = implode(', ', $allowedValues);
@@ -44,7 +41,7 @@ class IsOneOfAssert extends \PHPUnit\Framework\Constraint\Constraint
     /**
      * {@inheritdoc}
      */
-    protected function matches($other)
+    protected function matches($other): bool
     {
         return in_array($other, $this->allowedValues, false);
     }
