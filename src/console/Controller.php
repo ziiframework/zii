@@ -771,7 +771,13 @@ class Controller extends \yii\base\Controller
     protected function parseDocCommentTags($reflection)
     {
         $comment = $reflection->getDocComment();
-        $comment = "@description \n" . strtr(trim(preg_replace('/^\s*\**( |\t)?/m', '', trim($comment, '/'))), "\r", '');
+
+        if ($comment === false) {
+            $comment = '';
+        }
+
+        $comment = "@description \n" . str_replace("\r", '', trim(preg_replace('/^\s*\**( |\t)?/m', '', trim($comment, '/'))));
+
         $parts = preg_split('/^\s*@/m', $comment, -1, PREG_SPLIT_NO_EMPTY);
         $tags = [];
 
@@ -801,7 +807,13 @@ class Controller extends \yii\base\Controller
      */
     protected function parseDocCommentSummary($reflection)
     {
-        $docLines = preg_split('~\R~u', $reflection->getDocComment());
+        $docComment = $reflection->getDocComment();
+
+        if ($docComment === false) {
+            $docComment = '';
+        }
+
+        $docLines = preg_split('~\R~u', $docComment);
 
         if (isset($docLines[1])) {
             return trim($docLines[1], "\t *");
@@ -819,7 +831,13 @@ class Controller extends \yii\base\Controller
      */
     protected function parseDocCommentDetail($reflection)
     {
-        $comment = strtr(trim(preg_replace('/^\s*\**( |\t)?/m', '', trim($reflection->getDocComment(), '/'))), "\r", '');
+        $docComment = $reflection->getDocComment();
+
+        if ($docComment === false) {
+            return '';
+        }
+
+        $comment = str_replace("\r", '', trim(preg_replace('/^\s*\**( |\t)?/m', '', trim($docComment, '/'))));
 
         if (preg_match('/^\s*@\w+/m', $comment, $matches, PREG_OFFSET_CAPTURE)) {
             $comment = trim(substr($comment, 0, $matches[0][1]));
