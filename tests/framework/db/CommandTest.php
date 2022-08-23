@@ -207,7 +207,7 @@ SQL;
         $row = $command->queryOne();
         $this->assertEquals($intCol, $row['int_col']);
         $this->assertEquals($charCol, $row['char_col']);
-        $this->assertContains($row['float_col'], [$floatCol, (string) $floatCol, (float) $floatCol, sprintf('%.3f', $floatCol)]);
+        $this->assertStringContainsString($row['float_col'], [$floatCol, (string) $floatCol, (float) $floatCol, sprintf('%.3f', $floatCol)]);
 
         if ($this->driverName === 'mysql' || $this->driverName === 'sqlite') {
             $this->assertEquals($blobCol, $row['blob_col']);

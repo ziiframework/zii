@@ -345,8 +345,8 @@ abstract class QueryTest extends DatabaseTestCase
         }
 
         $this->assertNotContains('1', $columnValues);
-        $this->assertContains('2', $columnValues);
-        $this->assertContains('3', $columnValues);
+        $this->assertStringContainsString('2', $columnValues);
+        $this->assertStringContainsString('3', $columnValues);
     }
 
     public function testUnion(): void

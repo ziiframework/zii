@@ -420,7 +420,7 @@ EOL;
         $this->assertEquals($externalAssetConfig['css'], $compressedExternalAssetConfig['css'], 'External bundle css is lost!');
 
         $compressedRegularAssetConfig = $compressedBundleConfig[$regularAssetBundleClassName];
-        $this->assertContains($externalAssetBundleClassName, $compressedRegularAssetConfig['depends'], 'Dependency on external bundle is lost!');
+        $this->assertStringContainsString($externalAssetBundleClassName, $compressedRegularAssetConfig['depends'], 'Dependency on external bundle is lost!');
     }
 
     /**
