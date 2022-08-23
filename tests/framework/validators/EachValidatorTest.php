@@ -215,12 +215,6 @@ class EachValidatorTest extends TestCase
      */
     public function testTypedProperties(): void
     {
-        if (PHP_VERSION_ID < 70400) {
-            $this->markTestSkipped('Can not be tested on PHP < 7.4');
-
-            return;
-        }
-
         $model = new ValidatorTestTypedPropModel();
 
         $validator = new EachValidator(['rule' => ['boolean']]);

@@ -454,12 +454,6 @@ class ComponentTest extends TestCase
      */
     public function testEventClosureDetachesItself(): void
     {
-        if (PHP_VERSION_ID < 70000) {
-            $this->markTestSkipped('Can not be tested on PHP < 7.0');
-
-            return;
-        }
-
         $obj = require __DIR__ . '/stub/AnonymousComponentClass.php';
 
         $obj->trigger('barEventOnce');

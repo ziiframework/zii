@@ -594,12 +594,6 @@ class ContainerTest extends TestCase
 
     public function testNullTypeConstructorParameters(): void
     {
-        if (PHP_VERSION_ID < 70100) {
-            $this->markTestSkipped('Can not be tested on PHP < 7.1');
-
-            return;
-        }
-
         $zeta = (new Container())->get(Zeta::className());
         $this->assertInstanceOf(Beta::className(), $zeta->beta);
         $this->assertInstanceOf(Beta::className(), $zeta->betaNull);

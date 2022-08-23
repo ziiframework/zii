@@ -103,12 +103,6 @@ class ControllerTest extends TestCase
 
     public function testNullableInjectedActionParams(): void
     {
-        if (PHP_VERSION_ID < 70100) {
-            $this->markTestSkipped('Can not be tested on PHP < 7.1');
-
-            return;
-        }
-
         // Use the PHP71 controller for this test
         $this->controller = new FakePhp71Controller('fake', new Application([
             'id' => 'app',
@@ -125,11 +119,6 @@ class ControllerTest extends TestCase
 
     public function testInjectionContainerException(): void
     {
-        if (PHP_VERSION_ID < 70100) {
-            $this->markTestSkipped('Can not be tested on PHP < 7.1');
-
-            return;
-        }
         // Use the PHP71 controller for this test
         $this->controller = new FakePhp71Controller('fake', new Application([
             'id' => 'app',
@@ -148,11 +137,6 @@ class ControllerTest extends TestCase
 
     public function testUnknownInjection(): void
     {
-        if (PHP_VERSION_ID < 70100) {
-            $this->markTestSkipped('Can not be tested on PHP < 7.1');
-
-            return;
-        }
         // Use the PHP71 controller for this test
         $this->controller = new FakePhp71Controller('fake', new Application([
             'id' => 'app',
@@ -170,11 +154,6 @@ class ControllerTest extends TestCase
 
     public function testInjectedActionParams(): void
     {
-        if (PHP_VERSION_ID < 70100) {
-            $this->markTestSkipped('Can not be tested on PHP < 7.1');
-
-            return;
-        }
         // Use the PHP71 controller for this test
         $this->controller = new FakePhp71Controller('fake', new Application([
             'id' => 'app',
@@ -199,11 +178,6 @@ class ControllerTest extends TestCase
 
     public function testInjectedActionParamsFromModule(): void
     {
-        if (PHP_VERSION_ID < 70100) {
-            $this->markTestSkipped('Can not be tested on PHP < 7.1');
-
-            return;
-        }
         $module = new \yii\base\Module('fake', new Application([
             'id' => 'app',
             'basePath' => __DIR__,

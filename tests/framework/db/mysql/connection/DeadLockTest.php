@@ -308,11 +308,6 @@ class DeadLockTest extends \yiiunit\framework\db\mysql\ConnectionTest
      */
     private function setErrorHandler(): void
     {
-        if (PHP_VERSION_ID < 70000) {
-            set_error_handler(static function ($errno, $errstr, $errfile, $errline): void {
-                throw new ErrorException($errstr, $errno, $errno, $errfile, $errline);
-            });
-        }
     }
 
     /**
