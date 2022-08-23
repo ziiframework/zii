@@ -27,12 +27,11 @@ use yii\grid\RadioButtonColumn;
  */
 class RadiobuttonColumnTest extends TestCase
 {
-    /**
-     * @expectedException \yii\base\InvalidConfigException
-     * @expectedExceptionMessage The "name" property must be set.
-     */
     public function testException(): void
     {
+        $this->expectException('\yii\base\InvalidConfigException');
+        $this->expectedExceptionMessage('The "name" property must be set.');
+
         new RadioButtonColumn([
             'name' => null,
         ]);

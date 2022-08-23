@@ -143,11 +143,10 @@ class PhpManagerTest extends ManagerTestCase
         $this->assertTrue($this->auth->update($name, $permission), 'You should be able to save w/o changing name.');
     }
 
-    /**
-     * @expectedException \yii\base\InvalidParamException
-     */
     public function testOverwriteName(): void
     {
+        $this->expectException('\yii\base\InvalidParamException');
+
         $this->prepareData();
         $name = 'readPost';
         $permission = $this->auth->getPermission($name);

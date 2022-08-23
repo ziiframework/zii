@@ -139,11 +139,10 @@ class CacheControllerTest extends TestCase
         $this->assertEquals('firstValue', Yii::$app->firstCache->get('firstKey'), 'first cache data should not be flushed');
     }
 
-    /**
-     * @expectedException \yii\console\Exception
-     */
     public function testNothingToFlushException(): void
     {
+        $this->expectException('\yii\console\Exception');
+
         $this->_cacheController->actionFlush();
     }
 

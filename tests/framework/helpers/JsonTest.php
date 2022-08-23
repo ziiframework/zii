@@ -199,12 +199,13 @@ class JsonTest extends TestCase
     }
 
     /**
-     * @expectedException \yii\base\InvalidArgumentException
-     * @expectedExceptionMessage Invalid JSON data.
      * @covers ::decode
      */
     public function testDecodeInvalidParamException(): void
     {
+        $this->expectException('\yii\base\InvalidArgumentException');
+        $this->expectedExceptionMessage('Invalid JSON data.');
+
         Json::decode([]);
     }
 

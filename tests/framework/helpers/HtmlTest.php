@@ -1873,12 +1873,11 @@ EOD;
         $this->assertEqualsWithoutLE($expected, $actual);
     }
 
-    /**
-     * @expectedException \yii\base\InvalidArgumentException
-     * @expectedExceptionMessage Attribute name must contain word characters only.
-     */
     public function testGetAttributeValueInvalidArgumentException(): void
     {
+        $this->expectException('\yii\base\InvalidArgumentException');
+        $this->expectedExceptionMessage('Attribute name must contain word characters only.');
+
         $model = new HtmlTestModel();
         Html::getAttributeValue($model, '-');
     }
@@ -1908,22 +1907,20 @@ EOD;
         $this->assertSame($expected, $actual);
     }
 
-    /**
-     * @expectedException \yii\base\InvalidArgumentException
-     * @expectedExceptionMessage Attribute name must contain word characters only.
-     */
     public function testGetInputNameInvalidArgumentExceptionAttribute(): void
     {
+        $this->expectException('\yii\base\InvalidArgumentException');
+        $this->expectedExceptionMessage('Attribute name must contain word characters only.');
+
         $model = new HtmlTestModel();
         Html::getInputName($model, '-');
     }
 
-    /**
-     * @expectedException \yii\base\InvalidArgumentException
-     * @expectedExceptionMessageRegExp /(.*)formName\(\) cannot be empty for tabular inputs.$/
-     */
     public function testGetInputNameInvalidArgumentExceptionFormName(): void
     {
+        $this->expectException('\yii\base\InvalidArgumentException');
+        $this->expectExceptionMessageMatches('/(.*)formName\(\) cannot be empty for tabular inputs.$/');
+
         $model = $this->getMockBuilder('yii\\base\\Model')->getMock();
         $model->method('formName')->willReturn('');
         Html::getInputName($model, '[foo]bar');
