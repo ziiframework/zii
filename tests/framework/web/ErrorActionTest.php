@@ -45,7 +45,7 @@ class ErrorActionTest extends TestCase
     {
         Yii::$app->getErrorHandler()->exception = new InvalidConfigException('This message will not be shown to the user');
 
-        $this->assertEquals('Name: Invalid Configuration
+        $this->assertEqualsWithoutLE('Name: Invalid Configuration
 Code: 500
 Message: An internal server error occurred.
 Exception: yii\base\InvalidConfigException', $this->getController()->runAction('error'));
@@ -55,7 +55,7 @@ Exception: yii\base\InvalidConfigException', $this->getController()->runAction('
     {
         Yii::$app->getErrorHandler()->exception = new UserException('User can see this error message');
 
-        $this->assertEquals('Name: Exception
+        $this->assertEqualsWithoutLE('Name: Exception
 Code: 500
 Message: User can see this error message
 Exception: yii\base\UserException', $this->getController()->runAction('error'));
@@ -72,7 +72,7 @@ Exception: yii\base\UserException', $this->getController()->runAction('error'));
     {
         Yii::$app->getErrorHandler()->exception = new InvalidArgumentException('This message will not be shown to the user');
 
-        $this->assertEquals('Name: Error
+        $this->assertEqualsWithoutLE('Name: Error
 Code: 500
 Message: An internal server error occurred.
 Exception: InvalidArgumentException', $this->getController()->runAction('error'));
@@ -87,7 +87,7 @@ Exception: InvalidArgumentException', $this->getController()->runAction('error')
             'defaultMessage' => 'The system is drunk',
         ]);
 
-        $this->assertEquals('Name: Oops...
+        $this->assertEqualsWithoutLE('Name: Oops...
 Code: 500
 Message: The system is drunk
 Exception: InvalidArgumentException', $controller->runAction('error'));
@@ -95,7 +95,7 @@ Exception: InvalidArgumentException', $controller->runAction('error'));
 
     public function testNoExceptionInHandler(): void
     {
-        $this->assertEquals('Name: Not Found (#404)
+        $this->assertEqualsWithoutLE('Name: Not Found (#404)
 Code: 404
 Message: Page not found.
 Exception: yii\web\NotFoundHttpException', $this->getController()->runAction('error'));
