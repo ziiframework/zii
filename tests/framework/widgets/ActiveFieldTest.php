@@ -274,7 +274,7 @@ EOT;
     /**
      * @dataProvider hintDataProvider
      *
-     * @param mixed $hint
+     * @param mixed  $hint
      * @param string $expectedHtml
      */
     public function testHint($hint, $expectedHtml): void
@@ -463,22 +463,18 @@ EOD;
         $this->activeField->textInput();
         $actualValue = $this->activeField->getClientOptions();
 
-        $this->assertArraySubset([
-            'id' => 'activefieldtestmodel-attributename',
-            'name' => $this->attributeName,
-            'container' => '.field-custom-input-id',
-            'input' => '#custom-input-id',
-        ], $actualValue);
+        $this->assertEquals('activefieldtestmodel-attributename', $actualValue['id']);
+        $this->assertEquals($this->attributeName, $actualValue['name']);
+        $this->assertEquals('.field-custom-input-id', $actualValue['container']);
+        $this->assertEquals('#custom-input-id', $actualValue['input']);
 
         $this->activeField->textInput(['id' => 'custom-textinput-id']);
         $actualValue = $this->activeField->getClientOptions();
 
-        $this->assertArraySubset([
-            'id' => 'activefieldtestmodel-attributename',
-            'name' => $this->attributeName,
-            'container' => '.field-custom-textinput-id',
-            'input' => '#custom-textinput-id',
-        ], $actualValue);
+        $this->assertEquals('activefieldtestmodel-attributename', $actualValue['id']);
+        $this->assertEquals($this->attributeName, $actualValue['name']);
+        $this->assertEquals('.field-custom-textinput-id', $actualValue['container']);
+        $this->assertEquals('#custom-textinput-id', $actualValue['input']);
     }
 
     public function testAriaAttributes(): void
