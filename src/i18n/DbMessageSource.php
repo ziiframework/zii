@@ -11,13 +11,13 @@ declare(strict_types=1);
 namespace yii\i18n;
 
 use Yii;
-use yii\db\Query;
-use yii\di\Instance;
+use yii\base\InvalidConfigException;
+use yii\caching\CacheInterface;
 use yii\db\Connection;
 use yii\db\Expression;
+use yii\db\Query;
+use yii\di\Instance;
 use yii\helpers\ArrayHelper;
-use yii\caching\CacheInterface;
-use yii\base\InvalidConfigException;
 
 /**
  * DbMessageSource extends [[MessageSource]] and represents a message source that stores translated

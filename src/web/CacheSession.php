@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace yii\web;
 
 use Yii;
-use yii\di\Instance;
 use yii\caching\CacheInterface;
+use yii\di\Instance;
 
 /**
  * CacheSession implements a session component using cache as storage medium.

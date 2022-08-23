@@ -15,10 +15,10 @@ use yii\db\ActiveQuery;
 /**
  * Class Dossier.
  *
- * @property int $id
- * @property int $department_id
- * @property int $employee_id
- * @property string $summary
+ * @property int      $id
+ * @property int      $department_id
+ * @property int      $employee_id
+ * @property string   $summary
  * @property Employee $employee
  *
  * @author Kolyunya <OleynikovNY@mail.ru>

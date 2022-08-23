@@ -10,13 +10,12 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\db;
 
-use yii\db\Query;
-use yii\db\Schema;
+use function in_array;
+use yii\caching\ArrayCache;
 use yii\db\Connection;
 use yii\db\Expression;
-use yii\caching\ArrayCache;
-
-use function in_array;
+use yii\db\Query;
+use yii\db\Schema;
 
 abstract class QueryTest extends DatabaseTestCase
 {

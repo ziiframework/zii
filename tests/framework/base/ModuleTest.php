@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace yiiunit\framework\base;
 
 use Yii;
-use yii\base\Module;
-use yiiunit\TestCase;
 use yii\base\BaseObject;
 use yii\base\Controller;
+use yii\base\Module;
+use yiiunit\TestCase;
 
 /**
  * @group base

@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace yii\widgets;
 
-use yii\data\Sort;
-use yii\base\Widget;
-use yii\helpers\Html;
 use yii\base\InvalidConfigException;
+use yii\base\Widget;
+use yii\data\Sort;
+use yii\helpers\Html;
 
 /**
  * LinkSorter renders a list of sort links for the given sort definition.
@@ -29,12 +29,12 @@ use yii\base\InvalidConfigException;
 class LinkSorter extends Widget
 {
     /**
-     * @var Sort|null the sort definition
+     * @var Sort the sort definition
      */
     public $sort;
 
     /**
-     * @var array|null list of the attributes that support sorting. If not set, it will be determined
+     * @var array list of the attributes that support sorting. If not set, it will be determined
      * using [[Sort::attributes]].
      */
     public $attributes;

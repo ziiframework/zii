@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace yii\web;
 
 use Yii;
-use yii\helpers\Html;
 use yii\base\BaseObject;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 
 /**
  * UploadedFile represents the information for an uploaded file.

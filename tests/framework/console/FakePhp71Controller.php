@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\console;
 
-use yii\console\Request;
 use yii\console\Controller;
+use yii\console\Request;
 use yii\data\DataProviderInterface;
 use yiiunit\framework\console\stubs\DummyService;
 

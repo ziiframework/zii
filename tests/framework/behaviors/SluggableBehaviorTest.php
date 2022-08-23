@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace yiiunit\framework\behaviors;
 
 use Yii;
-use yiiunit\TestCase;
-use yii\db\Connection;
-use yii\db\ActiveRecord;
 use yii\behaviors\SluggableBehavior;
+use yii\db\ActiveRecord;
+use yii\db\Connection;
+use yiiunit\TestCase;
 
 /**
  * Unit test for [[\yii\behaviors\SluggableBehavior]].
@@ -234,10 +234,10 @@ class SluggableBehaviorTest extends TestCase
 /**
  * Test Active Record class with [[SluggableBehavior]] behavior attached.
  *
- * @property int $id
- * @property string $name
- * @property string $slug
- * @property int $category_id
+ * @property int               $id
+ * @property string            $name
+ * @property string            $slug
+ * @property int               $category_id
  * @property SluggableBehavior $sluggable
  */
 class ActiveRecordSluggable extends ActiveRecord

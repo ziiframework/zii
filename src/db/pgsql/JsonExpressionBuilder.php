@@ -10,13 +10,13 @@ declare(strict_types=1);
 
 namespace yii\db\pgsql;
 
+use yii\db\ArrayExpression;
+use yii\db\ExpressionBuilderInterface;
+use yii\db\ExpressionBuilderTrait;
+use yii\db\ExpressionInterface;
+use yii\db\JsonExpression;
 use yii\db\Query;
 use yii\helpers\Json;
-use yii\db\JsonExpression;
-use yii\db\ArrayExpression;
-use yii\db\ExpressionInterface;
-use yii\db\ExpressionBuilderTrait;
-use yii\db\ExpressionBuilderInterface;
 
 /**
  * Class JsonExpressionBuilder builds [[JsonExpression]] for PostgreSQL DBMS.

@@ -10,14 +10,14 @@ declare(strict_types=1);
 
 namespace yii\behaviors;
 
-use yii\base\Model;
 use yii\base\Behavior;
+use yii\base\InvalidArgumentException;
+use yii\base\Model;
 use yii\db\BaseActiveRecord;
 use yii\helpers\StringHelper;
+use yii\validators\BooleanValidator;
 use yii\validators\NumberValidator;
 use yii\validators\StringValidator;
-use yii\validators\BooleanValidator;
-use yii\base\InvalidArgumentException;
 
 /**
  * AttributeTypecastBehavior provides an ability of automatic model attribute typecasting.
@@ -126,7 +126,7 @@ class AttributeTypecastBehavior extends Behavior
     public $owner;
 
     /**
-     * @var array|null attribute typecast map in format: attributeName => type.
+     * @var array attribute typecast map in format: attributeName => type.
      * Type can be set via PHP callable, which accept raw value as an argument and should return
      * typecast result.
      * For example:
@@ -226,7 +226,7 @@ class AttributeTypecastBehavior extends Behavior
     /**
      * Typecast owner attributes according to [[attributeTypes]].
      *
-     * @param array|null $attributeNames list of attribute names that should be type-casted.
+     * @param array $attributeNames list of attribute names that should be type-casted.
      * If this parameter is empty, it means any attribute listed in the [[attributeTypes]]
      * should be type-casted.
      */

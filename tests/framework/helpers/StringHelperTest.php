@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\helpers;
 
-use yiiunit\TestCase;
 use yii\helpers\StringHelper;
+use yiiunit\TestCase;
 
 /**
  * StringHelperTest.
@@ -156,8 +156,8 @@ class StringHelperTest extends TestCase
     /**
      * @dataProvider providerStartsWith
      *
-     * @param bool $result
-     * @param string $string
+     * @param bool        $result
+     * @param string      $string
      * @param string|null $with
      */
     public function testStartsWith($result, $string, $with): void
@@ -213,8 +213,8 @@ class StringHelperTest extends TestCase
     /**
      * @dataProvider providerEndsWith
      *
-     * @param bool $result
-     * @param string $string
+     * @param bool        $result
+     * @param string      $string
      * @param string|null $with
      */
     public function testEndsWith($result, $string, $with): void
@@ -325,7 +325,7 @@ class StringHelperTest extends TestCase
     /**
      * Data provider for [[testMatchWildcard()]].
      *
-     * @return array test data.
+     * @return array test data
      */
     public function dataProviderMatchWildcard()
     {
@@ -402,8 +402,8 @@ class StringHelperTest extends TestCase
      *
      * @param string $pattern
      * @param string $string
-     * @param bool $expectedResult
-     * @param array $options
+     * @param bool   $expectedResult
+     * @param array  $options
      */
     public function testMatchWildcard($pattern, $string, $expectedResult, $options = []): void
     {

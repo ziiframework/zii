@@ -10,14 +10,14 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\web;
 
-use Yii;
 use RuntimeException;
-use yii\web\Response;
-use yiiunit\TestCase;
+use Yii;
 use yii\base\InlineAction;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 use yii\web\ServerErrorHttpException;
 use yiiunit\framework\web\stubs\VendorImage;
+use yiiunit\TestCase;
 
 /**
  * @group web

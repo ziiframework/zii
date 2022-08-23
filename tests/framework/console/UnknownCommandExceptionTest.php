@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace yiiunit\framework\console;
 
 use Yii;
-use yiiunit\TestCase;
 use yii\console\UnknownCommandException;
+use yiiunit\TestCase;
 
 /**
  * @group console
@@ -63,7 +63,7 @@ class UnknownCommandExceptionTest extends TestCase
      * @dataProvider suggestedCommandsProvider
      *
      * @param string $command
-     * @param array $expectedSuggestion
+     * @param array  $expectedSuggestion
      */
     public function testSuggestCommand($command, $expectedSuggestion): void
     {

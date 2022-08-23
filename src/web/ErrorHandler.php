@@ -10,13 +10,14 @@ declare(strict_types=1);
 
 namespace yii\web;
 
-use Yii;
-use Throwable;
+use Error;
+use ParseError;
 use ReflectionClass;
-use yii\base\Exception;
-use yii\helpers\VarDumper;
-use yii\base\UserException;
+use Yii;
 use yii\base\ErrorException;
+use yii\base\Exception;
+use yii\base\UserException;
+use yii\helpers\VarDumper;
 
 /**
  * ErrorHandler handles uncaught PHP errors and exceptions.
@@ -47,7 +48,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
     public $maxTraceSourceLines = 13;
 
     /**
-     * @var string|null the route (e.g. `site/error`) to the controller action that will be used
+     * @var string the route (e.g. `site/error`) to the controller action that will be used
      * to display external errors. Inside the action, it can retrieve the error information
      * using `Yii::$app->errorHandler->exception`. This property defaults to null, meaning ErrorHandler
      * will handle the error display.
@@ -100,7 +101,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
     /**
      * Renders the exception.
      *
-     * @param Throwable $exception the exception to be rendered.
+     * @param \Exception|Error $exception the exception to be rendered.
      */
     protected function renderException($exception): void
     {
@@ -156,7 +157,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
     /**
      * Converts an exception into an array.
      *
-     * @param Throwable $exception the exception being converted
+     * @param \Exception|Error $exception the exception being converted
      *
      * @return array the array representation of the exception.
      */
@@ -311,7 +312,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
     /**
      * Renders the previous exception stack for a given Exception.
      *
-     * @param Throwable $exception the exception whose precursors should be rendered.
+     * @param \Exception $exception the exception whose precursors should be rendered.
      *
      * @return string HTML content of the rendered previous exceptions.
      * Empty string if there are none.
@@ -371,7 +372,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
     /**
      * Renders call stack.
      *
-     * @param Throwable $exception exception to get call stack from
+     * @param \Exception|ParseError $exception exception to get call stack from
      *
      * @return string HTML content of the rendered call stack.
      *
@@ -547,7 +548,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
     /**
      * Returns human-readable exception name.
      *
-     * @param Throwable $exception
+     * @param \Exception $exception
      *
      * @return string|null human-readable exception name or null if it cannot be determined
      */

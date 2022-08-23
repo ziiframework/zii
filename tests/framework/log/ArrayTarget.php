@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\log;
 
-use yii\log\Target;
 use yii\base\Exception;
+use yii\log\Target;
 
 /**
  * ArrayTarget logs messages into an array, useful for tracking data in tests.

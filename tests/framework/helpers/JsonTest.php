@@ -11,14 +11,14 @@ declare(strict_types=1);
 namespace yiiunit\framework\helpers;
 
 use DateTime;
+use DateTimeZone;
 use SplStack;
 use stdClass;
-use DateTimeZone;
 use yii\helpers\Json;
-use yiiunit\TestCase;
 use yii\web\JsExpression;
-use yiiunit\framework\web\Post;
 use yiiunit\framework\models\JsonModel;
+use yiiunit\framework\web\Post;
+use yiiunit\TestCase;
 
 /**
  * @group helpers

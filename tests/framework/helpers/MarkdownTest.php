@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\helpers;
 
-use yiiunit\TestCase;
 use yii\helpers\Markdown;
+use yiiunit\TestCase;
 
 /**
  * Description of MarkdownTest.

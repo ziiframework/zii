@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace yiiunit\framework\mutex;
 
 use Yii;
-use yiiunit\TestCase;
 use yii\base\InvalidConfigException;
 use yiiunit\framework\mutex\mocks\DumbMutex;
+use yiiunit\TestCase;
 
 /**
  * Class RetryAcquireTraitTest.

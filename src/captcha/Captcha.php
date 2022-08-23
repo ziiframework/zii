@@ -11,11 +11,11 @@ declare(strict_types=1);
 namespace yii\captcha;
 
 use Imagick;
-use yii\helpers\Url;
+use yii\base\InvalidConfigException;
 use yii\helpers\Html;
 use yii\helpers\Json;
+use yii\helpers\Url;
 use yii\widgets\InputWidget;
-use yii\base\InvalidConfigException;
 
 /**
  * Captcha renders a CAPTCHA image and an input field that takes user-entered verification code.

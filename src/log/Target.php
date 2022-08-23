@@ -10,14 +10,14 @@ declare(strict_types=1);
 
 namespace yii\log;
 
-use Yii;
 use Exception;
 use Throwable;
-use yii\web\Request;
+use Yii;
 use yii\base\Component;
-use yii\helpers\VarDumper;
-use yii\helpers\ArrayHelper;
 use yii\base\InvalidConfigException;
+use yii\helpers\ArrayHelper;
+use yii\helpers\VarDumper;
+use yii\web\Request;
 
 /**
  * Target is the base class for all log target classes.

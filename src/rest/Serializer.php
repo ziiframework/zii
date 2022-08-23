@@ -10,17 +10,17 @@ declare(strict_types=1);
 
 namespace yii\rest;
 
-use Yii;
-use yii\web\Link;
-use yii\base\Model;
-use yii\web\Request;
 use JsonSerializable;
-use yii\web\Response;
+use Yii;
 use yii\base\Arrayable;
 use yii\base\Component;
+use yii\base\Model;
+use yii\data\DataProviderInterface;
 use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
-use yii\data\DataProviderInterface;
+use yii\web\Link;
+use yii\web\Request;
+use yii\web\Response;
 
 /**
  * Serializer converts resource objects and collections into array representation.
@@ -75,7 +75,7 @@ class Serializer extends Component
     public $perPageHeader = 'X-Pagination-Per-Page';
 
     /**
-     * @var string|null the name of the envelope (e.g. `items`) for returning the resource objects in a collection.
+     * @var string the name of the envelope (e.g. `items`) for returning the resource objects in a collection.
      * This is used when serving a resource collection. When this is set and pagination is enabled, the serializer
      * will return a collection in the following format:
      *
@@ -118,12 +118,12 @@ class Serializer extends Component
     public $metaEnvelope = '_meta';
 
     /**
-     * @var Request|null the current request. If not set, the `request` application component will be used.
+     * @var Request the current request. If not set, the `request` application component will be used.
      */
     public $request;
 
     /**
-     * @var Response|null the response to be sent. If not set, the `response` application component will be used.
+     * @var Response the response to be sent. If not set, the `response` application component will be used.
      */
     public $response;
 

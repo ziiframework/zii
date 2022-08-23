@@ -14,9 +14,7 @@ use Closure;
 use yii\validators\Validator;
 
 /**
- * DynamicModel is a model class that supports defining attributes at run-time (the so-called
- * "dynamic attributes") using its constructor or [[defineAttribute()]]. DynamicModel can be used
- * to support ad hoc data validation.
+ * DynamicModel is a model class primarily used to support ad hoc data validation.
  *
  * The typical usage of DynamicModel is as follows,
  *
@@ -39,7 +37,7 @@ use yii\validators\Validator;
  * The [[validateData()]] method creates an instance of DynamicModel, defines the attributes
  * using the given data (`name` and `email` in this example), and then calls [[Model::validate()]].
  *
- * You can check the validation result using [[hasErrors()]], like you do with a normal model.
+ * You can check the validation result by [[hasErrors()]], like you do with a normal model.
  * You may also access the dynamic attributes defined through the model instance, e.g.,
  * `$model->name` and `$model->email`.
  *
@@ -52,29 +50,33 @@ use yii\validators\Validator;
  *     ->validate();
  * ```
  *
+ * DynamicModel implements the above ad-hoc data validation feature by supporting the so-called
+ * "dynamic attributes". It basically allows an attribute to be defined dynamically through its constructor
+ * or [[defineAttribute()]].
+ *
  * @author Qiang Xue <qiang.xue@gmail.com>
  *
  * @since 2.0
  */
 class DynamicModel extends Model
 {
-    /**
-     * @var mixed[] dynamic attribute values (name => value).
-     */
     private $_attributes = [];
 
     /**
-     * @var string[] dynamic attribute labels (name => label).
-     * Used as form field labels and in validation error messages.
+     * Array of the dynamic attribute labels.
+     * Used to as form field labels and in validation errors.
      *
+     * @see attributeLabels()
+     * @see setAttributeLabels()
+     * @see setAttributeLabel()
      * @since 2.0.35
      */
     private $_attributeLabels = [];
 
     /**
-     * Constructor.
+     * Constructors.
      *
-     * @param array $attributes the attributes (name-value pairs, or names) being defined.
+     * @param array $attributes the dynamic attributes (name-value pairs, or names) being defined
      * @param array $config the configuration array to be applied to this object.
      */
     public function __construct(array $attributes = [], $config = [])
@@ -156,7 +158,7 @@ class DynamicModel extends Model
     /**
      * Returns a value indicating whether the model has an attribute with the specified name.
      *
-     * @param string $name the name of the attribute.
+     * @param string $name the name of the attribute
      *
      * @return bool whether the model has an attribute with the specified name.
      *
@@ -170,8 +172,8 @@ class DynamicModel extends Model
     /**
      * Defines an attribute.
      *
-     * @param string $name the attribute name.
-     * @param mixed $value the attribute value.
+     * @param string $name the attribute name
+     * @param mixed $value the attribute value
      */
     public function defineAttribute($name, $value = null): void
     {
@@ -181,7 +183,7 @@ class DynamicModel extends Model
     /**
      * Undefines an attribute.
      *
-     * @param string $name the attribute name.
+     * @param string $name the attribute name
      */
     public function undefineAttribute($name): void
     {
@@ -193,16 +195,16 @@ class DynamicModel extends Model
      * You can also directly manipulate [[validators]] to add or remove validation rules.
      * This method provides a shortcut.
      *
-     * @param string|array $attributes the attribute(s) to be validated by the rule.
+     * @param string|array $attributes the attribute(s) to be validated by the rule
      * @param string|Validator|Closure $validator the validator. This can be either:
      *  * a built-in validator name listed in [[builtInValidators]];
      *  * a method name of the model class;
      *  * an anonymous function;
      *  * a validator class name.
      *  * a Validator.
-     * @param array $options the options (name-value pairs) to be applied to the validator.
+     * @param array $options the options (name-value pairs) to be applied to the validator
      *
-     * @return $this
+     * @return $this the model itself
      */
     public function addRule($attributes, $validator, $options = [])
     {
@@ -224,10 +226,10 @@ class DynamicModel extends Model
      * This method will create a DynamicModel instance, populate it with the data to be validated,
      * create the specified validation rules, and then validate the data using these rules.
      *
-     * @param array $data the data (name-value pairs) to be validated.
+     * @param array $data the data (name-value pairs) to be validated
      * @param array $rules the validation rules. Please refer to [[Model::rules()]] on the format of this parameter.
      *
-     * @return static the model instance that contains the data being validated.
+     * @return static the model instance that contains the data being validated
      *
      * @throws InvalidConfigException if a validation rule is not specified correctly.
      */
@@ -265,13 +267,14 @@ class DynamicModel extends Model
     }
 
     /**
-     * Sets the labels for all attributes.
+     * Sets the attribute labels in a massive way.
      *
-     * @param string[] $labels attribute labels.
+     * @see attributeLabels()
+     * @since 2.0.35
+     *
+     * @param array $labels Array of attribute labels
      *
      * @return $this
-     *
-     * @since 2.0.35
      */
     public function setAttributeLabels(array $labels = [])
     {
@@ -281,14 +284,15 @@ class DynamicModel extends Model
     }
 
     /**
-     * Sets a label for a single attribute.
+     * Sets a label for an attribute.
      *
-     * @param string $attribute attribute name.
-     * @param string $label attribute label value.
+     * @see attributeLabels()
+     * @since 2.0.35
+     *
+     * @param string $attribute Attribute name
+     * @param string $label Attribute label value
      *
      * @return $this
-     *
-     * @since 2.0.35
      */
     public function setAttributeLabel($attribute, $label)
     {
@@ -298,10 +302,10 @@ class DynamicModel extends Model
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function attributeLabels()
     {
-        return $this->_attributeLabels;
+        return array_merge(parent::attributeLabels(), $this->_attributeLabels);
     }
 }

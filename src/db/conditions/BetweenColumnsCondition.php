@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yii\db\conditions;
 
-use yii\db\Query;
-use yii\db\ExpressionInterface;
 use yii\base\InvalidArgumentException;
+use yii\db\ExpressionInterface;
+use yii\db\Query;
 
 /**
  * Class BetweenColumnCondition represents a `BETWEEN` condition where

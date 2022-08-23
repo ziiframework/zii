@@ -10,13 +10,12 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\db;
 
-use Yii;
 use Exception;
-use yiiunit\TestCase;
-use yii\db\Connection;
-use yii\caching\DummyCache;
-
 use function extension_loaded;
+use Yii;
+use yii\caching\DummyCache;
+use yii\db\Connection;
+use yiiunit\TestCase;
 
 abstract class DatabaseTestCase extends TestCase
 {

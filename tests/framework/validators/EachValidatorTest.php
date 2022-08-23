@@ -10,13 +10,13 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\validators;
 
-use yiiunit\TestCase;
-use yiiunit\data\base\Speaker;
 use yii\validators\EachValidator;
 use yiiunit\data\base\ArrayAccessObject;
+use yiiunit\data\base\Speaker;
 use yiiunit\data\validators\models\FakedValidationModel;
-use yiiunit\data\validators\models\ValidatorTestTypedPropModel;
 use yiiunit\data\validators\models\ValidatorTestEachAndInlineMethodModel;
+use yiiunit\data\validators\models\ValidatorTestTypedPropModel;
+use yiiunit\TestCase;
 
 /**
  * @group validators

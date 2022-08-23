@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace yiiunit\framework\data;
 
 use stdClass;
-use yiiunit\TestCase;
-use yii\data\DataFilter;
 use yii\base\DynamicModel;
+use yii\data\DataFilter;
 use yiiunit\data\base\Singer;
+use yiiunit\TestCase;
 
 /**
  * @group data
@@ -88,7 +88,7 @@ class DataFilterTest extends TestCase
     /**
      * Data provider for [[testValidate()]].
      *
-     * @return array test data.
+     * @return array test data
      */
     public function dataProviderValidate()
     {
@@ -264,7 +264,7 @@ class DataFilterTest extends TestCase
      * @dataProvider dataProviderValidate
      *
      * @param array $filter
-     * @param bool $expectedResult
+     * @param bool  $expectedResult
      * @param array $expectedErrors
      */
     public function testValidate($filter, $expectedResult, $expectedErrors): void
@@ -297,7 +297,7 @@ class DataFilterTest extends TestCase
     /**
      * Data provider for [[testNormalize()]].
      *
-     * @return array test data.
+     * @return array test data
      */
     public function dataProviderNormalize()
     {
@@ -335,18 +335,6 @@ class DataFilterTest extends TestCase
                     'number' => [
                         '>' => 10,
                         '<' => 20,
-                    ],
-                ],
-            ],
-            [
-                [
-                    'name' => [
-                        'like' => 'foo',
-                    ],
-                ],
-                [
-                    'name' => [
-                        'LIKE' => 'foo',
                     ],
                 ],
             ],

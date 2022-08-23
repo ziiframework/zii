@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace yiiunit\framework\widgets;
 
 use yii\data\Pagination;
-use yii\widgets\LinkPager;
 use yii\helpers\StringHelper;
+use yii\widgets\LinkPager;
 
 /**
  * @group widgets

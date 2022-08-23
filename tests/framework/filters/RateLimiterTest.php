@@ -11,14 +11,14 @@ declare(strict_types=1);
 namespace yiiunit\framework\filters;
 
 use Yii;
-use yii\web\User;
+use yii\filters\RateLimiter;
 use yii\web\Request;
 use yii\web\Response;
-use yiiunit\TestCase;
-use yii\filters\RateLimiter;
+use yii\web\User;
+use yiiunit\framework\filters\stubs\ExposedLogger;
 use yiiunit\framework\filters\stubs\RateLimit;
 use yiiunit\framework\filters\stubs\UserIdentity;
-use yiiunit\framework\filters\stubs\ExposedLogger;
+use yiiunit\TestCase;
 
 /**
  *  @group filters

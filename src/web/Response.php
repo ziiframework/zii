@@ -10,16 +10,16 @@ declare(strict_types=1);
 
 namespace yii\web;
 
-use Yii;
 use Error;
 use Exception;
 use Throwable;
-use yii\helpers\Url;
-use yii\helpers\Inflector;
-use yii\helpers\FileHelper;
-use yii\helpers\StringHelper;
-use yii\base\InvalidConfigException;
+use Yii;
 use yii\base\InvalidArgumentException;
+use yii\base\InvalidConfigException;
+use yii\helpers\FileHelper;
+use yii\helpers\Inflector;
+use yii\helpers\StringHelper;
+use yii\helpers\Url;
 
 /**
  * The web Response class represents an HTTP response.
@@ -303,9 +303,9 @@ class Response extends \yii\base\Response
      * @param int $value the status code
      * @param string $text the status text. If not set, it will be set automatically based on the status code.
      *
-     * @return $this the response object itself
-     *
      * @throws InvalidArgumentException if the status code is invalid.
+     *
+     * @return $this the response object itself
      */
     public function setStatusCode($value, $text = null)
     {
@@ -332,9 +332,9 @@ class Response extends \yii\base\Response
      *
      * @param Exception|Error|Throwable $e the exception object.
      *
-     * @return $this the response object itself
-     *
      * @throws InvalidArgumentException if the status code is invalid.
+     *
+     * @return $this the response object itself
      *
      * @since 2.0.12
      */

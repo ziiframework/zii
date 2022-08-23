@@ -28,9 +28,9 @@ class Post extends BaseObject
     public $title;
 
     /**
-     * @param int $id
+     * @param int    $id
      * @param string $title
-     * @param array $config
+     * @param array  $config
      */
     public function __construct($id, $title, $config = [])
     {

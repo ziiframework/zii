@@ -10,12 +10,11 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\log;
 
+use function microtime;
+use PHPUnit_Framework_MockObject_MockObject;
+use yii\log\Dispatcher;
 use yii\log\Logger;
 use yiiunit\TestCase;
-use yii\log\Dispatcher;
-use PHPUnit_Framework_MockObject_MockObject;
-
-use function microtime;
 
 /**
  * @group log

@@ -11,12 +11,12 @@ declare(strict_types=1);
 namespace yii\validators;
 
 use Yii;
+use yii\helpers\FileHelper;
 use yii\helpers\Html;
 use yii\helpers\Json;
+use yii\helpers\StringHelper;
 use yii\web\JsExpression;
 use yii\web\UploadedFile;
-use yii\helpers\FileHelper;
-use yii\helpers\StringHelper;
 
 /**
  * FileValidator verifies if an attribute is receiving a valid uploaded file.

@@ -10,14 +10,14 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\filters\auth;
 
-use Yii;
-use stdClass;
 use ReflectionClass;
+use stdClass;
+use Yii;
 use yii\base\Action;
-use yiiunit\TestCase;
-use yii\web\Controller;
 use yii\filters\auth\AuthMethod;
+use yii\web\Controller;
 use yiiunit\framework\filters\stubs\UserIdentity;
+use yiiunit\TestCase;
 
 class AuthMethodTest extends TestCase
 {
@@ -37,9 +37,9 @@ class AuthMethodTest extends TestCase
     /**
      * Creates mock for [[AuthMethod]] filter.
      *
-     * @param callable $authenticateCallback callback, which result should [[authenticate()]] method return.
+     * @param callable $authenticateCallback callback, which result should [[authenticate()]] method return
      *
-     * @return AuthMethod filter instance.
+     * @return AuthMethod filter instance
      */
     protected function createFilter($authenticateCallback)
     {
@@ -54,9 +54,9 @@ class AuthMethodTest extends TestCase
     /**
      * Creates test action.
      *
-     * @param array $config action configuration.
+     * @param array $config action configuration
      *
-     * @return Action action instance.
+     * @return Action action instance
      */
     protected function createAction(array $config = [])
     {

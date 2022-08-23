@@ -10,16 +10,16 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\filters;
 
-use Yii;
 use Closure;
-use yii\web\User;
+use Yii;
 use yii\base\Action;
-use yii\web\Request;
-use yii\web\Controller;
 use yii\filters\AccessRule;
-use yiiunit\framework\rbac\AuthorRule;
-use yiiunit\framework\filters\stubs\UserIdentity;
+use yii\web\Controller;
+use yii\web\Request;
+use yii\web\User;
 use yiiunit\framework\filters\stubs\MockAuthManager;
+use yiiunit\framework\filters\stubs\UserIdentity;
+use yiiunit\framework\rbac\AuthorRule;
 
 /**
  * @group filters
@@ -219,10 +219,10 @@ class AccessRuleTest extends \yiiunit\TestCase
      * Data provider for testMatchRole.
      *
      * @return array or arrays
-     *           the id of the action
-     *           should the action allow (true) or disallow (false)
-     *           test user id
-     *           expected match result (true, false, null)
+     *               the id of the action
+     *               should the action allow (true) or disallow (false)
+     *               test user id
+     *               expected match result (true, false, null)
      */
     public function matchRoleProvider()
     {
@@ -263,11 +263,11 @@ class AccessRuleTest extends \yiiunit\TestCase
      *
      * @dataProvider matchRoleProvider
      *
-     * @param string $actionid the action id
-     * @param bool $allow whether the rule should allow access
-     * @param string $userid the userid to check
+     * @param string        $actionid   the action id
+     * @param bool          $allow      whether the rule should allow access
+     * @param string        $userid     the userid to check
      * @param array|Closure $roleParams params for $roleParams
-     * @param bool $expected the expected result or null
+     * @param bool          $expected   the expected result or null
      */
     public function testMatchRole($actionid, $allow, $userid, $roleParams, $expected): void
     {

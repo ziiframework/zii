@@ -12,12 +12,12 @@ namespace yii\grid;
 
 use Closure;
 use yii\base\Model;
+use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
+use yii\db\ActiveQueryInterface;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Inflector;
-use yii\helpers\ArrayHelper;
-use yii\data\ArrayDataProvider;
-use yii\data\ActiveDataProvider;
-use yii\db\ActiveQueryInterface;
 
 /**
  * DataColumn is the default column type for the [[GridView]] widget.

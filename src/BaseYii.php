@@ -11,11 +11,11 @@ declare(strict_types=1);
 namespace yii;
 
 use Yii;
-use yii\log\Logger;
-use yii\di\Container;
-use yii\base\UnknownClassException;
-use yii\base\InvalidConfigException;
 use yii\base\InvalidArgumentException;
+use yii\base\InvalidConfigException;
+use yii\base\UnknownClassException;
+use yii\di\Container;
+use yii\log\Logger;
 
 /*
  * Gets the application start timestamp.
@@ -104,7 +104,7 @@ class BaseYii
      */
     public static function getVersion()
     {
-        return '2.0.46-dev';
+        return '2.0.44';
     }
 
     /**
@@ -223,7 +223,7 @@ class BaseYii
      * @param string $alias the alias name (e.g. "@yii"). It must start with a '@' character.
      * It may contain the forward-slash '/' which serves as a boundary character when performing
      * alias translation by [[getAlias()]].
-     * @param string|null $path the path corresponding to the alias. If this is null, the alias will
+     * @param string $path the path corresponding to the alias. If this is null, the alias will
      * be removed. Trailing '/' and '\' characters will be trimmed. This can be
      *
      * - a directory or a file path (e.g. `/tmp`, `/tmp/main.txt`)
@@ -415,7 +415,7 @@ class BaseYii
     /**
      * Sets the logger object.
      *
-     * @param Logger|null $logger the logger object.
+     * @param Logger $logger the logger object.
      */
     public static function setLogger($logger): void
     {
@@ -571,7 +571,7 @@ class BaseYii
      * @param string $category the message category.
      * @param string $message the message to be translated.
      * @param array $params the parameters that will be used to replace the corresponding placeholders in the message.
-     * @param string|null $language the language code (e.g. `en-US`, `en`). If this is null, the current
+     * @param string $language the language code (e.g. `en-US`, `en`). If this is null, the current
      * [[\yii\base\Application::language|application language]] will be used.
      *
      * @return string the translated message.

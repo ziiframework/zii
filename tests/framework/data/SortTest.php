@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace yiiunit\framework\data;
 
 use yii\data\Sort;
-use yiiunit\TestCase;
 use yii\web\UrlManager;
+use yiiunit\TestCase;
 
 /**
  * @author Qiang Xue <qiang.xue@gmail.com>

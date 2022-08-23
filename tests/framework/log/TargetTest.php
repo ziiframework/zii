@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\log;
 
+use yii\log\Dispatcher;
 use yii\log\Logger;
 use yii\log\Target;
 use yiiunit\TestCase;
-use yii\log\Dispatcher;
 
 /**
  * @group log

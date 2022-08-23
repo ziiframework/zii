@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yii\filters;
 
-use Yii;
 use Closure;
 use Traversable;
+use Yii;
 use yii\base\ActionFilter;
 use yii\helpers\StringHelper;
 use yii\web\NotFoundHttpException;

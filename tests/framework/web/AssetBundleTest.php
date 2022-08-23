@@ -10,12 +10,12 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\web;
 
-use Yii;
 use Exception;
-use yii\web\View;
+use Yii;
+use yii\helpers\FileHelper;
 use yii\web\AssetBundle;
 use yii\web\AssetManager;
-use yii\helpers\FileHelper;
+use yii\web\View;
 
 /**
  * @group web
@@ -324,7 +324,7 @@ EOF;
 <script src="/files/jsFile.js"></script>234
 EOF;
 
-                break;
+            break;
 
             case View::POS_BEGIN:
                 $expected = <<<'EOF'
@@ -332,7 +332,7 @@ EOF;
 <script src="/files/jsFile.js"></script>34
 EOF;
 
-                break;
+            break;
 
             default:
             case View::POS_END:
@@ -341,7 +341,7 @@ EOF;
 <script src="/files/jsFile.js"></script>4
 EOF;
 
-                break;
+            break;
         }
         $this->assertEqualsWithoutLE($expected, $view->renderFile('@yiiunit/data/views/rawlayout.php'));
     }

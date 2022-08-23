@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace yii\helpers;
 
 use Yii;
-use yii\base\Exception;
 use yii\base\ErrorException;
-use yii\base\InvalidConfigException;
+use yii\base\Exception;
 use yii\base\InvalidArgumentException;
+use yii\base\InvalidConfigException;
 
 /**
  * BaseFileHelper provides concrete implementation for [[FileHelper]].

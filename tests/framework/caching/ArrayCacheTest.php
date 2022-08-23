@@ -10,9 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\caching;
 
-use yii\caching\ArrayCache;
-
 use function microtime;
+use yii\caching\ArrayCache;
 
 /**
  * Class for testing file cache backend.

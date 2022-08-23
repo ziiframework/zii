@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yii\behaviors;
 
-use Yii;
 use Closure;
+use Yii;
 use yii\db\BaseActiveRecord;
 
 /**

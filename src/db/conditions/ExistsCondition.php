@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yii\db\conditions;
 
-use yii\db\Query;
 use yii\base\InvalidArgumentException;
+use yii\db\Query;
 
 /**
  * Condition that represents `EXISTS` operator.

@@ -11,12 +11,12 @@ declare(strict_types=1);
 namespace yii\widgets;
 
 use Yii;
-use yii\base\Widget;
-use yii\di\Instance;
-use yii\caching\Dependency;
-use yii\caching\CacheInterface;
-use yii\base\DynamicContentAwareTrait;
 use yii\base\DynamicContentAwareInterface;
+use yii\base\DynamicContentAwareTrait;
+use yii\base\Widget;
+use yii\caching\CacheInterface;
+use yii\caching\Dependency;
+use yii\di\Instance;
 
 /**
  * FragmentCache is used by [[\yii\base\View]] to provide caching of page fragments.

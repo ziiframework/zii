@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace yii\web;
 
 use Yii;
-use yii\helpers\Url;
 use yii\base\BaseObject;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 
 /**
  * AssetBundle represents a collection of asset files, such as CSS, JS, images.
@@ -34,7 +34,7 @@ use yii\helpers\ArrayHelper;
 class AssetBundle extends BaseObject
 {
     /**
-     * @var string|null the directory that contains the source asset files for this asset bundle.
+     * @var string the directory that contains the source asset files for this asset bundle.
      * A source asset file is a file that is part of your source code repository of your Web application.
      *
      * You must set this property if the directory containing the source asset files is not Web accessible.

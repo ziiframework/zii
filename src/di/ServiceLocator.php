@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yii\di;
 
-use Yii;
 use Closure;
+use Yii;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
 

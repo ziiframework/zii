@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace yiiunit;
 
 use Exception;
-use ReflectionObject;
 use ReflectionException;
+use ReflectionObject;
 
 class Support
 {

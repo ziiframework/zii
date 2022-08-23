@@ -11,11 +11,11 @@ declare(strict_types=1);
 namespace yii\rest;
 
 use Yii;
-use yii\web\Response;
-use yii\filters\VerbFilter;
-use yii\filters\RateLimiter;
-use yii\filters\ContentNegotiator;
 use yii\filters\auth\CompositeAuth;
+use yii\filters\ContentNegotiator;
+use yii\filters\RateLimiter;
+use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * Controller is the base class for RESTful API controller classes.

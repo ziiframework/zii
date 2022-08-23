@@ -15,11 +15,11 @@ use ReflectionClass;
 /**
  * CustomerWithConstructor.
  *
- * @property int $id
- * @property string $name
- * @property string $email
- * @property string $address
- * @property int $status
+ * @property int                    $id
+ * @property string                 $name
+ * @property string                 $email
+ * @property string                 $address
+ * @property int                    $status
  * @property ProfileWithConstructor $profile
  */
 class CustomerWithConstructor extends ActiveRecord

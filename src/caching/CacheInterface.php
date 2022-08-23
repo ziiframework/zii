@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yii\caching;
 
-use Closure;
 use ArrayAccess;
+use Closure;
 
 /**
  * CacheInterface is the base interface for cache.
@@ -111,9 +111,9 @@ interface CacheInterface extends ArrayAccess
      * @param mixed $key a key identifying the value to be cached. This can be a simple string or
      * a complex data structure consisting of factors representing the key.
      * @param mixed $value the value to be cached
-     * @param int|null $duration default duration in seconds before the cache will expire. If not set,
+     * @param int $duration default duration in seconds before the cache will expire. If not set,
      * default [[defaultDuration]] value is used.
-     * @param Dependency|null $dependency dependency of the cached item. If the dependency changes,
+     * @param Dependency $dependency dependency of the cached item. If the dependency changes,
      * the corresponding value in the cache will be invalidated when it is fetched via [[get()]].
      * This parameter is ignored if [[serializer]] is false.
      *
@@ -127,9 +127,9 @@ interface CacheInterface extends ArrayAccess
      * expiration time will be replaced with the new ones, respectively.
      *
      * @param array $items the items to be cached, as key-value pairs.
-     * @param int|null $duration default duration in seconds before the cache will expire. If not set,
+     * @param int $duration default duration in seconds before the cache will expire. If not set,
      * default [[defaultDuration]] value is used.
-     * @param Dependency|null $dependency dependency of the cached items. If the dependency changes,
+     * @param Dependency $dependency dependency of the cached items. If the dependency changes,
      * the corresponding values in the cache will be invalidated when it is fetched via [[get()]].
      * This parameter is ignored if [[serializer]] is false.
      *
@@ -145,7 +145,7 @@ interface CacheInterface extends ArrayAccess
      * a complex data structure consisting of factors representing the key.
      * @param mixed $value the value to be cached
      * @param int $duration the number of seconds in which the cached value will expire. 0 means never expire.
-     * @param Dependency|null $dependency dependency of the cached item. If the dependency changes,
+     * @param Dependency $dependency dependency of the cached item. If the dependency changes,
      * the corresponding value in the cache will be invalidated when it is fetched via [[get()]].
      * This parameter is ignored if [[serializer]] is false.
      *
@@ -159,7 +159,7 @@ interface CacheInterface extends ArrayAccess
      *
      * @param array $items the items to be cached, as key-value pairs.
      * @param int $duration default number of seconds in which the cached values will expire. 0 means never expire.
-     * @param Dependency|null $dependency dependency of the cached items. If the dependency changes,
+     * @param Dependency $dependency dependency of the cached items. If the dependency changes,
      * the corresponding values in the cache will be invalidated when it is fetched via [[get()]].
      * This parameter is ignored if [[serializer]] is false.
      *
@@ -204,9 +204,9 @@ interface CacheInterface extends ArrayAccess
      * a complex data structure consisting of factors representing the key.
      * @param callable|Closure $callable the callable or closure that will be used to generate a value to be cached.
      * In case $callable returns `false`, the value will not be cached.
-     * @param int|null $duration default duration in seconds before the cache will expire. If not set,
+     * @param int $duration default duration in seconds before the cache will expire. If not set,
      * [[defaultDuration]] value will be used.
-     * @param Dependency|null $dependency dependency of the cached item. If the dependency changes,
+     * @param Dependency $dependency dependency of the cached item. If the dependency changes,
      * the corresponding value in the cache will be invalidated when it is fetched via [[get()]].
      * This parameter is ignored if [[serializer]] is `false`.
      *

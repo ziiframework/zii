@@ -34,9 +34,9 @@ function microtime($float = false)
 
 namespace yiiunit\framework\caching;
 
-use yiiunit\TestCase;
-use yii\caching\TagDependency;
 use yii\caching\CacheInterface;
+use yii\caching\TagDependency;
+use yiiunit\TestCase;
 
 /**
  * Base class for testing cache backends.
@@ -45,13 +45,13 @@ abstract class CacheTestCase extends TestCase
 {
     /**
      * @var int virtual time to be returned by mocked time() function.
-     * Null means normal time() behavior.
+     *          Null means normal time() behavior.
      */
     public static $time;
 
     /**
      * @var float virtual time to be returned by mocked microtime() function.
-     * Null means normal microtime() behavior.
+     *            Null means normal microtime() behavior.
      */
     public static $microtime;
 
@@ -161,13 +161,6 @@ abstract class CacheTestCase extends TestCase
 
         $cache['arrayaccess_test'] = new \stdClass();
         $this->assertInstanceOf('stdClass', $cache['arrayaccess_test']);
-    }
-
-    public function testGetValueNonExistent(): void
-    {
-        $cache = $this->getCacheInstance();
-
-        $this->assertFalse($this->invokeMethod($cache, 'getValue', ['non_existent_key']));
     }
 
     public function testGetNonExistent(): void

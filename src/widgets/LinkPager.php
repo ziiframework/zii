@@ -10,11 +10,11 @@ declare(strict_types=1);
 
 namespace yii\widgets;
 
+use yii\base\InvalidConfigException;
 use yii\base\Widget;
-use yii\helpers\Html;
 use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
-use yii\base\InvalidConfigException;
+use yii\helpers\Html;
 
 /**
  * LinkPager displays a list of hyperlinks that lead to different pages of target.

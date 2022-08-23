@@ -10,10 +10,9 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\validators;
 
-use yii\base\Model;
-use yiiunit\TestCase;
 use yii\validators\RequiredValidator;
 use yiiunit\data\validators\models\FakedValidationModel;
+use yiiunit\TestCase;
 
 /**
  * @group validators
@@ -69,31 +68,5 @@ class RequiredValidatorTest extends TestCase
         $m = FakedValidationModel::createWithAttributes(['attr_val' => 55]);
         $val->validateAttribute($m, 'attr_val');
         $this->assertFalse($m->hasErrors('attr_val'));
-    }
-
-    public function testErrorClientMessage(): void
-    {
-        $validator = new RequiredValidator(['message' => '<strong>error</strong> for {attribute}']);
-
-        $obj = new ModelForReqValidator();
-
-        $this->assertEquals('yii.validation.required(value, messages, {"message":"\u003Cstrong\u003Eerror\u003C\/strong\u003E for \u003Cb\u003EAttr\u003C\/b\u003E"});', $validator->clientValidateAttribute($obj, 'attr', new ViewStub()));
-    }
-}
-
-class ModelForReqValidator extends Model
-{
-    public $attr;
-
-    public function rules()
-    {
-        return [
-            [['attr'], 'required'],
-        ];
-    }
-
-    public function attributeLabels()
-    {
-        return ['attr' => '<b>Attr</b>'];
     }
 }

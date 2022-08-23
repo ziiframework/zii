@@ -10,15 +10,15 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\grid;
 
-use Yii;
 use ReflectionMethod;
-use yii\grid\GridView;
+use Yii;
+use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
 use yii\grid\DataColumn;
+use yii\grid\GridView;
+use yiiunit\data\ar\ActiveRecord;
 use yiiunit\data\ar\Order;
 use yiiunit\data\base\Singer;
-use yii\data\ArrayDataProvider;
-use yii\data\ActiveDataProvider;
-use yiiunit\data\ar\ActiveRecord;
 
 /**
  * @author Dmitry Naumenko <d.naumenko.a@gmail.com>

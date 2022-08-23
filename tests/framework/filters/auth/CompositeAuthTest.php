@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace yiiunit\framework\filters\auth;
 
 use Yii;
-use yii\rest\Controller;
 use yii\filters\auth\AuthMethod;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
+use yii\rest\Controller;
 use yiiunit\framework\web\UserIdentity;
 
 /**

@@ -10,12 +10,12 @@ declare(strict_types=1);
 
 namespace yii\db;
 
-use PDO;
-use Yii;
 use Generator;
-use Throwable;
+use PDO;
 use PDOException;
 use PDOStatement;
+use Throwable;
+use Yii;
 use yii\base\Component;
 use yii\base\NotSupportedException;
 

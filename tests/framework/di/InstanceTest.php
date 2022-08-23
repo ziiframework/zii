@@ -11,11 +11,11 @@ declare(strict_types=1);
 namespace yiiunit\framework\di;
 
 use Yii;
-use yii\di\Instance;
-use yii\di\Container;
-use yiiunit\TestCase;
-use yii\db\Connection;
 use yii\base\Component;
+use yii\db\Connection;
+use yii\di\Container;
+use yii\di\Instance;
+use yiiunit\TestCase;
 
 /**
  * @author Qiang Xue <qiang.xue@gmail.com>

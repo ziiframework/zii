@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace yii\db\mssql\conditions;
 
-use yii\db\Expression;
 use yii\base\NotSupportedException;
 
 /**
@@ -44,9 +43,6 @@ class InConditionBuilder extends \yii\db\conditions\InConditionBuilder
         $quotedColumns = [];
 
         foreach ($columns as $i => $column) {
-            if ($column instanceof Expression) {
-                $column = $column->expression;
-            }
             $quotedColumns[$i] = strpos($column, '(') === false ? $this->queryBuilder->db->quoteColumnName($column) : $column;
         }
         $vss = [];
@@ -55,10 +51,6 @@ class InConditionBuilder extends \yii\db\conditions\InConditionBuilder
             $vs = [];
 
             foreach ($columns as $i => $column) {
-                if ($column instanceof Expression) {
-                    $column = $column->expression;
-                }
-
                 if (isset($value[$column])) {
                     $phName = $this->queryBuilder->bindParam($value[$column], $params);
                     $vs[] = $quotedColumns[$i] . ($operator === 'IN' ? ' = ' : ' != ') . $phName;

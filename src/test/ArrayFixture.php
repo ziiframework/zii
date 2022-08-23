@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yii\test;
 
-use Countable;
 use ArrayAccess;
+use Countable;
 use IteratorAggregate;
 use yii\base\ArrayAccessTrait;
 use yii\base\InvalidConfigException;

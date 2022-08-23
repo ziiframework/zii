@@ -15,9 +15,9 @@ use yii\db\ActiveQuery;
 /**
  * Class Order.
  *
- * @property int $id
- * @property int $customer_id
- * @property int $created_at
+ * @property int    $id
+ * @property int    $customer_id
+ * @property int    $created_at
  * @property string $total
  * @property-read Item[] $expensiveItemsUsingViaWithCallable
  * @property-read Item[] $cheapItemsUsingViaWithCallable
@@ -26,8 +26,6 @@ use yii\db\ActiveQuery;
 class Order extends ActiveRecord
 {
     public static $tableName;
-
-    public $virtualCustomerId = null;
 
     public static function tableName()
     {
@@ -239,10 +237,5 @@ class Order extends ActiveRecord
     public function getItemsFor8()
     {
         return $this->hasMany(Item::className(), ['id' => 'item_id'])->via('orderItemsFor8');
-    }
-
-    public function getVirtualCustomer()
-    {
-        return $this->hasOne(Customer::className(), ['id' => 'virtualCustomerId']);
     }
 }

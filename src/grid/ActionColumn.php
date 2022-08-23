@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace yii\grid;
 
-use Yii;
 use Closure;
-use yii\helpers\Url;
+use Yii;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 /**
  * ActionColumn is a column for the [[GridView]] widget that displays buttons for viewing and manipulating the items.
@@ -44,7 +44,7 @@ class ActionColumn extends Column
     public $headerOptions = ['class' => 'action-column'];
 
     /**
-     * @var string|null the ID of the controller that should handle the actions specified here.
+     * @var string the ID of the controller that should handle the actions specified here.
      * If not set, it will use the currently active controller. This property is mainly used by
      * [[urlCreator]] to create URLs for different actions. The value of this property will be prefixed
      * to each action name to form the route of the action.
@@ -138,7 +138,7 @@ class ActionColumn extends Column
     public $visibleButtons = [];
 
     /**
-     * @var callable|null a callback that creates a button URL using the specified model information.
+     * @var callable a callback that creates a button URL using the specified model information.
      * The signature of the callback should be the same as that of [[createUrl()]]
      * Since 2.0.10 it can accept additional parameter, which refers to the column instance itself:
      *
@@ -197,14 +197,17 @@ class ActionColumn extends Column
                 switch ($name) {
                     case 'view':
                         $title = Yii::t('yii', 'View');
+
                         break;
 
                     case 'update':
                         $title = Yii::t('yii', 'Update');
+
                         break;
 
                     case 'delete':
                         $title = Yii::t('yii', 'Delete');
+
                         break;
 
                     default:

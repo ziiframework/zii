@@ -13,7 +13,7 @@ namespace yiiunit\data\ar;
 /**
  * Class TestTriggerAlert.
  *
- * @property int $id
+ * @property int    $id
  * @property string $stringcol
  */
 class TestTriggerAlert extends ActiveRecord

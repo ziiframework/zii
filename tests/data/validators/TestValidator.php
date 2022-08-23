@@ -10,9 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\data\validators;
 
-use yii\validators\Validator;
-
 use function get_class;
+use yii\validators\Validator;
 
 class TestValidator extends Validator
 {

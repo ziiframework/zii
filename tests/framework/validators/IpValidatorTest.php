@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\validators;
 
-use yiiunit\TestCase;
 use yii\validators\IpValidator;
 use yiiunit\data\validators\models\FakedValidationModel;
+use yiiunit\TestCase;
 
 /**
  * @group validators

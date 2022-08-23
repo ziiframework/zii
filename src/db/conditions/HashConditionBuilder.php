@@ -10,11 +10,11 @@ declare(strict_types=1);
 
 namespace yii\db\conditions;
 
+use yii\db\ExpressionBuilderInterface;
+use yii\db\ExpressionBuilderTrait;
+use yii\db\ExpressionInterface;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
-use yii\db\ExpressionInterface;
-use yii\db\ExpressionBuilderTrait;
-use yii\db\ExpressionBuilderInterface;
 
 /**
  * Class HashConditionBuilder builds objects of [[HashCondition]].

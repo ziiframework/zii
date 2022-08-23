@@ -40,7 +40,7 @@ class ActionFilter extends Behavior
      *
      * @see except
      */
-    public $only = [];
+    public $only;
 
     /**
      * @var array list of action IDs that this filter should not apply to.
@@ -170,6 +170,7 @@ class ActionFilter extends Behavior
             foreach ($this->only as $pattern) {
                 if (StringHelper::matchWildcard($pattern, $id)) {
                     $onlyMatch = true;
+
                     break;
                 }
             }
@@ -180,6 +181,7 @@ class ActionFilter extends Behavior
         foreach ($this->except as $pattern) {
             if (StringHelper::matchWildcard($pattern, $id)) {
                 $exceptMatch = true;
+
                 break;
             }
         }

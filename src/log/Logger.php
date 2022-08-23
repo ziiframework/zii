@@ -299,6 +299,7 @@ class Logger extends Component
                     && strpos($outerTimingItem['category'], $prefix) === 0
                 ) {
                     $matched = true;
+
                     break;
                 }
             }
@@ -315,6 +316,7 @@ class Logger extends Component
                             && strpos($innerTimingItem['category'], $prefix) === 0
                         ) {
                             $matched = false;
+
                             break;
                         }
                     }

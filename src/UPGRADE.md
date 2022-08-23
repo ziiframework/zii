@@ -51,26 +51,10 @@ if you want to upgrade from version A to version C and there is
 version B between A and C, you need to follow the instructions
 for both A and B.
 
-Upgrade from Yii 2.0.45
------------------------
-
-* Changes in `Inflector::camel2words()` introduced in 2.0.45 were reverted so it works as in pre-2.0.45. If you need
-  2.0.45 behavior, [introduce your own method](https://github.com/yiisoft/yii2/pull/19495/files).
-* `yii\log\FileTarget::$rotateByCopy` is now deprecated and setting it to `false` has no effect since rotating of 
-  the files is done only by copy.
-
-Upgrade from Yii 2.0.44
------------------------
-
-* `yii\filters\PageCache::$cacheHeaders` now takes a case-sensitive list of header names since PageCache is no longer 
-  storing the normalized (lowercase) versions of them so make sure this list is properly updated and your page cache 
-  is recreated.
-
 Upgrade from Yii 2.0.43
 -----------------------
 
-* `Json::encode()` can now handle zero-indexed objects in same way as `json_encode()` and keep them as objects. In order 
-  to avoid breaking backwards compatibility this behavior could be enabled by a new option flag but is disabled by default.
+* `Json::encode()` can now handle zero-indexed objects in same way as `json_encode()` and keep them as objects. In order to avoid breaking backwards compatibility this behavior could be enabled by a new option flag but is disabled by default.
   * Set `yii/helpers/Json::$keepObjectType = true` anywhere in your application code
   * Or configure json response formatter to enable it for all JSON responses:
       ```php
@@ -84,8 +68,7 @@ Upgrade from Yii 2.0.43
         ],
       ],
       ```
-* `yii\caching\Cache::multiSet()` now uses the default cache duration (`yii\caching\Cache::$defaultDuration`) when no 
-  duration is provided. A duration of 0 should be explicitly passed if items should not expire.
+* `yii\caching\Cache::multiSet()` now uses the default cache duration (`yii\caching\Cache::$defaultDuration`) when no duration is provided. A duration of 0 should be explicitly passed if items should not expire.
 
 Upgrade from Yii 2.0.42
 -----------------------

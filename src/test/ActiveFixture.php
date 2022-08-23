@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace yii\test;
 
 use ReflectionClass;
-use yii\db\TableSchema;
-use yii\db\ActiveRecord;
 use yii\base\InvalidConfigException;
+use yii\db\ActiveRecord;
+use yii\db\TableSchema;
 
 /**
  * ActiveFixture represents a fixture backed up by a [[modelClass|ActiveRecord class]] or a [[tableName|database table]].
@@ -39,7 +39,7 @@ use yii\base\InvalidConfigException;
 class ActiveFixture extends BaseActiveFixture
 {
     /**
-     * @var string|null the name of the database table that this fixture is about. If this property is not set,
+     * @var string the name of the database table that this fixture is about. If this property is not set,
      * the table name will be determined via [[modelClass]].
      *
      * @see modelClass
@@ -47,7 +47,7 @@ class ActiveFixture extends BaseActiveFixture
     public $tableName;
 
     /**
-     * @var string|bool|null the file path or [path alias](guide:concept-aliases) of the data file that contains the fixture data
+     * @var string|bool the file path or [path alias](guide:concept-aliases) of the data file that contains the fixture data
      * to be returned by [[getData()]]. If this is not set, it will default to `FixturePath/data/TableName.php`,
      * where `FixturePath` stands for the directory containing this fixture class, and `TableName` stands for the
      * name of the table associated with this fixture. You can set this property to be false to prevent loading any data.

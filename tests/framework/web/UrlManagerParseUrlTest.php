@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\web;
 
-use yii\web\Request;
-use yiiunit\TestCase;
-use yii\web\UrlManager;
 use yii\caching\ArrayCache;
+use yii\web\Request;
+use yii\web\UrlManager;
+use yiiunit\TestCase;
 
 /**
  * This class implements the tests for URL parsing with "pretty" url format.

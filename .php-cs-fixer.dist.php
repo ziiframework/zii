@@ -49,10 +49,6 @@ return (new PhpCsFixer\Config())
         'no_leading_import_slash' => true,
         'no_unused_imports' => true,
         'single_import_per_statement' => true,
-        'ordered_imports' => [
-            'sort_algorithm' => 'length',
-            'imports_order' => ['const', 'class', 'function']
-        ],
         'single_line_after_imports' => true,
         'strict_comparison' => false, // TODO remove
         'echo_tag_syntax' => ['format' => 'short'],

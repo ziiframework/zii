@@ -12,10 +12,10 @@ namespace yiiunit\framework\filters;
 
 use Yii;
 use yii\base\Action;
+use yii\filters\AjaxFilter;
+use yii\web\Controller;
 use yii\web\Request;
 use yiiunit\TestCase;
-use yii\web\Controller;
-use yii\filters\AjaxFilter;
 
 /**
  * @group filters

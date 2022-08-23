@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\db\pgsql;
 
-use yiiunit\data\ar\Type;
 use yii\validators\UniqueValidator;
+use yiiunit\data\ar\Type;
 
 /**
  * @group db

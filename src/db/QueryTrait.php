@@ -298,6 +298,7 @@ trait QueryTrait
                 if (empty($condition)) {
                     return [];
                 }
+
                 break;
 
             case 'BETWEEN':
@@ -307,6 +308,7 @@ trait QueryTrait
                         return [];
                     }
                 }
+
                 break;
 
             default:

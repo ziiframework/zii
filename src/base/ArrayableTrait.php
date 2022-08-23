@@ -10,11 +10,11 @@ declare(strict_types=1);
 
 namespace yii\base;
 
-use Yii;
-use yii\web\Link;
 use JsonSerializable;
-use yii\web\Linkable;
+use Yii;
 use yii\helpers\ArrayHelper;
+use yii\web\Link;
+use yii\web\Linkable;
 
 /**
  * ArrayableTrait provides a common implementation of the [[Arrayable]] interface.

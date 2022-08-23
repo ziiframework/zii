@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace yii\db;
 
 use ArrayAccess;
-use yii\base\BaseObject;
 use ReturnTypeWillChange;
+use yii\base\BaseObject;
 
 /**
  * SqlToken represents SQL tokens produced by [[SqlTokenizer]] or its child classes.

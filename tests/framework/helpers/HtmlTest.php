@@ -10,14 +10,14 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\helpers;
 
-use Yii;
-use Closure;
 use ArrayObject;
-use yii\helpers\Url;
-use yii\helpers\Html;
-use yiiunit\TestCase;
+use Closure;
+use Yii;
 use yii\base\DynamicModel;
 use yii\db\ArrayExpression;
+use yii\helpers\Html;
+use yii\helpers\Url;
+use yiiunit\TestCase;
 
 /**
  * @group helpers

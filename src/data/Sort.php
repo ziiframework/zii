@@ -10,13 +10,13 @@ declare(strict_types=1);
 
 namespace yii\data;
 
-use Yii;
 use Traversable;
-use yii\web\Request;
-use yii\helpers\Html;
+use Yii;
 use yii\base\BaseObject;
-use yii\helpers\Inflector;
 use yii\base\InvalidConfigException;
+use yii\helpers\Html;
+use yii\helpers\Inflector;
+use yii\web\Request;
 
 /**
  * Sort represents information relevant to sorting.
@@ -169,7 +169,7 @@ class Sort extends BaseObject
     public $defaultOrder;
 
     /**
-     * @var string|null the route of the controller action for displaying the sorted contents.
+     * @var string the route of the controller action for displaying the sorted contents.
      * If not set, it means using the currently requested route.
      */
     public $route;
@@ -180,7 +180,7 @@ class Sort extends BaseObject
     public $separator = ',';
 
     /**
-     * @var array|null parameters (name => value) that should be used to obtain the current sort directions
+     * @var array parameters (name => value) that should be used to obtain the current sort directions
      * and to create new sort URLs. If not set, `$_GET` will be used instead.
      *
      * In order to add hash to all links use `array_merge($_GET, ['#' => 'my-hash'])`.
@@ -194,7 +194,7 @@ class Sort extends BaseObject
     public $params;
 
     /**
-     * @var \yii\web\UrlManager|null the URL manager used for creating sort URLs. If not set,
+     * @var \yii\web\UrlManager the URL manager used for creating sort URLs. If not set,
      * the `urlManager` application component will be used.
      */
     public $urlManager;

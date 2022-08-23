@@ -10,12 +10,12 @@ declare(strict_types=1);
 
 namespace yii\web;
 
-use Yii;
-use yii\helpers\Url;
 use ReflectionMethod;
-use yii\base\Exception;
 use ReflectionNamedType;
+use Yii;
+use yii\base\Exception;
 use yii\base\InlineAction;
+use yii\helpers\Url;
 
 /**
  * Controller is the base class of web controllers.
@@ -177,14 +177,17 @@ class Controller extends \yii\base\Controller
                         switch ($typeName) {
                             case 'int':
                                 $params[$name] = filter_var($params[$name], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
+
                                 break;
 
                             case 'float':
                                 $params[$name] = filter_var($params[$name], FILTER_VALIDATE_FLOAT, FILTER_NULL_ON_FAILURE);
+
                                 break;
 
                             case 'bool':
                                 $params[$name] = filter_var($params[$name], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+
                                 break;
                         }
 
@@ -310,7 +313,7 @@ class Controller extends \yii\base\Controller
      *
      * For this function to work you have to [[User::setReturnUrl()|set the return URL]] in appropriate places before.
      *
-     * @param string|array|null $defaultUrl the default return URL in case it was not set previously.
+     * @param string|array $defaultUrl the default return URL in case it was not set previously.
      * If this is null and the return URL was not set previously, [[Application::homeUrl]] will be redirected to.
      * Please refer to [[User::setReturnUrl()]] on accepted format of the URL.
      *

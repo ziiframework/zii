@@ -12,9 +12,9 @@ namespace yiiunit\framework\db\pgsql;
 
 use PDO;
 use yii\db\Expression;
-use yiiunit\data\ar\Type;
 use yiiunit\data\ar\ActiveRecord;
 use yiiunit\data\ar\EnumTypeInCustomSchema;
+use yiiunit\data\ar\Type;
 
 /**
  * @group db

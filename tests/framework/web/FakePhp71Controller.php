@@ -10,11 +10,11 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\web;
 
-use yii\web\Request;
-use yii\web\Controller;
 use yii\data\DataProviderInterface;
-use yiiunit\framework\web\stubs\VendorImage;
+use yii\web\Controller;
+use yii\web\Request;
 use yiiunit\framework\web\stubs\ModelBindingStub;
+use yiiunit\framework\web\stubs\VendorImage;
 
 /**
  * @author Sam Mousa<sam@mousa.nl>

@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yii\db\mssql;
 
-use yii\db\Expression;
 use yii\db\ColumnSchemaBuilder as AbstractColumnSchemaBuilder;
+use yii\db\Expression;
 
 /**
  * ColumnSchemaBuilder is the schema builder for MSSQL databases.

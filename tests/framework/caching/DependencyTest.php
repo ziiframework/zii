@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\caching;
 
-use yiiunit\TestCase;
 use yii\caching\Cache;
 use yii\caching\Dependency;
 use yiiunit\data\cache\MockDependency;
+use yiiunit\TestCase;
 
 /**
  * Dependency (abstract) tests.

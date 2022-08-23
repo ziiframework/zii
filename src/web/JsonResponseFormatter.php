@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace yii\web;
 
 use Yii;
-use yii\helpers\Json;
 use yii\base\Component;
+use yii\helpers\Json;
 
 /**
  * JsonResponseFormatter formats the given data into a JSON or JSONP response content.

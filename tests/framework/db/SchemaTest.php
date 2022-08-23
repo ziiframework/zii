@@ -10,23 +10,22 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\db;
 
-use PDO;
-use Exception;
-use yii\db\Schema;
-use yii\db\Constraint;
-use yii\db\Expression;
-use yii\db\TableSchema;
-use yii\db\ColumnSchema;
-use yii\caching\FileCache;
-use yii\caching\ArrayCache;
-use yii\db\CheckConstraint;
-use yii\db\IndexConstraint;
-use yii\db\ForeignKeyConstraint;
-
 use function count;
+use Exception;
 use function gettype;
 use function is_array;
 use function is_object;
+use PDO;
+use yii\caching\ArrayCache;
+use yii\caching\FileCache;
+use yii\db\CheckConstraint;
+use yii\db\ColumnSchema;
+use yii\db\Constraint;
+use yii\db\Expression;
+use yii\db\ForeignKeyConstraint;
+use yii\db\IndexConstraint;
+use yii\db\Schema;
+use yii\db\TableSchema;
 
 abstract class SchemaTest extends DatabaseTestCase
 {

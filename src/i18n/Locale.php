@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yii\i18n;
 
-use Yii;
 use NumberFormatter;
+use Yii;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
 
@@ -27,7 +27,7 @@ use yii\base\InvalidConfigException;
 class Locale extends Component
 {
     /**
-     * @var string|null the locale ID.
+     * @var string the locale ID.
      * If not set, [[\yii\base\Application::language]] will be used.
      */
     public $locale;
@@ -49,7 +49,7 @@ class Locale extends Component
     /**
      * Returns a currency symbol.
      *
-     * @param string|null $currencyCode the 3-letter ISO 4217 currency code to get symbol for. If null,
+     * @param string $currencyCode the 3-letter ISO 4217 currency code to get symbol for. If null,
      * method will attempt using currency code from [[locale]].
      *
      * @return string

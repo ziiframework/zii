@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace yiiunit\framework\filters\auth;
 
 use Yii;
-use yii\web\User;
 use yii\base\Event;
 use yii\filters\auth\HttpBasicAuth;
+use yii\web\User;
 use yiiunit\framework\filters\stubs\UserIdentity;
 
 /**
@@ -87,7 +87,7 @@ class BasicAuthTest extends AuthTest
         $filter = [
             'class' => HttpBasicAuth::className(),
             'auth' => static function ($username, $password) {
-                if (preg_match('/\d$/', (string) $username)) {
+                if (is_string($username) && preg_match('/\d$/', $username)) {
                     return UserIdentity::findIdentity($username);
                 }
 

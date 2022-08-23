@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yii\base;
 
-use Yii;
 use Closure;
+use Yii;
 
 /**
  * Application is the base class for all application classes.
@@ -19,8 +19,8 @@ use Closure;
  * For more details and usage information on Application, see the [guide article on applications](guide:structure-applications).
  *
  * @property-read \yii\web\AssetManager $assetManager The asset manager application component.
- * @property-read \yii\rbac\ManagerInterface|null $authManager The auth manager application component or null
- * if it's not configured.
+ * @property-read \yii\rbac\ManagerInterface $authManager The auth manager application component. Null is
+ * returned if auth manager is not configured.
  * @property string $basePath The root directory of the application.
  * @property-read \yii\caching\CacheInterface $cache The cache application component. Null if the component is
  * not enabled.
@@ -149,7 +149,7 @@ abstract class Application extends Module
     public $requestedRoute;
 
     /**
-     * @var Action|null the requested Action. If null, it means the request cannot be resolved into an action.
+     * @var Action the requested Action. If null, it means the request cannot be resolved into an action.
      */
     public $requestedAction;
 
@@ -159,7 +159,7 @@ abstract class Application extends Module
     public $requestedParams;
 
     /**
-     * @var array|null list of installed Yii extensions. Each array element represents a single extension
+     * @var array list of installed Yii extensions. Each array element represents a single extension
      * with the following structure:
      *
      * ```php
@@ -576,7 +576,7 @@ abstract class Application extends Module
     /**
      * Returns the cache component.
      *
-     * @return \yii\caching\CacheInterface|null the cache application component. Null if the component is not enabled.
+     * @return \yii\caching\CacheInterface the cache application component. Null if the component is not enabled.
      */
     public function getCache()
     {
@@ -717,7 +717,7 @@ abstract class Application extends Module
      * before terminating the application.
      *
      * @param int $status the exit status (value 0 means normal exit while other values mean abnormal exit).
-     * @param Response|null $response the response to be sent. If not set, the default application [[response]] component will be used.
+     * @param Response $response the response to be sent. If not set, the default application [[response]] component will be used.
      *
      * @throws ExitException if the application is in testing mode
      */

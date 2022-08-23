@@ -10,11 +10,11 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\web;
 
-use Yii;
 use Exception;
+use Yii;
+use yii\web\NotFoundHttpException;
 use yii\web\View;
 use yiiunit\TestCase;
-use yii\web\NotFoundHttpException;
 
 class ErrorHandlerTest extends TestCase
 {

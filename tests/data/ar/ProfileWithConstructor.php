@@ -15,7 +15,7 @@ use ReflectionClass;
 /**
  * ProfileWithConstructor.
  *
- * @property int $id
+ * @property int    $id
  * @property string $description
  */
 class ProfileWithConstructor extends ActiveRecord

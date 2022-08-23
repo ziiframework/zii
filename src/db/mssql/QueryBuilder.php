@@ -10,11 +10,11 @@ declare(strict_types=1);
 
 namespace yii\db\mssql;
 
+use yii\base\InvalidArgumentException;
+use yii\base\NotSupportedException;
 use yii\db\Constraint;
 use yii\db\Expression;
 use yii\db\TableSchema;
-use yii\base\NotSupportedException;
-use yii\base\InvalidArgumentException;
 
 /**
  * QueryBuilder is the query builder for MS SQL Server databases (version 2008 and above).
@@ -316,7 +316,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      * @param string $comment the text of the comment to be added. The comment will be properly quoted by the method.
      * @param string $table the table to be commented or whose column is to be commented. The table name will be
      * properly quoted by the method.
-     * @param string|null $column optional. The name of the column to be commented. If empty, the command will add the
+     * @param string $column optional. The name of the column to be commented. If empty, the command will add the
      * comment to the table instead. The column name will be properly quoted by the method.
      *
      * @return string the SQL statement for adding a comment.
@@ -387,7 +387,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      *
      * @param string $table the table that will have the comment removed or whose column will have the comment removed.
      * The table name will be properly quoted by the method.
-     * @param string|null $column optional. The name of the column whose comment will be removed. If empty, the command
+     * @param string $column optional. The name of the column whose comment will be removed. If empty, the command
      * will remove the comment from the table instead. The column name will be properly quoted by the method.
      *
      * @return string the SQL statement for removing the comment.
@@ -448,7 +448,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
     /**
      * Returns an array of column names given model name.
      *
-     * @param string|null $modelClass name of the model class
+     * @param string $modelClass name of the model class
      *
      * @return array|null array of column names
      */

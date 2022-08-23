@@ -11,12 +11,12 @@ declare(strict_types=1);
 namespace yiiunit\framework\behaviors;
 
 use Yii;
-use yiiunit\TestCase;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 use yii\db\Connection;
 use yii\db\Expression;
-use yii\db\ActiveRecord;
 use yii\db\ExpressionInterface;
-use yii\behaviors\TimestampBehavior;
+use yiiunit\TestCase;
 
 /**
  * Unit test for [[\yii\behaviors\TimestampBehavior]].

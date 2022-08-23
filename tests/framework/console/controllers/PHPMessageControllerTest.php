@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace yiiunit\framework\console\controllers;
 
 use Yii;
-use yii\helpers\VarDumper;
 use yii\helpers\FileHelper;
+use yii\helpers\VarDumper;
 
 /**
  * Tests that [[\yii\console\controllers\MessageController]] works as expected with PHP message format.

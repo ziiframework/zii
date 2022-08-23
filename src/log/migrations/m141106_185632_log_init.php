@@ -8,9 +8,9 @@ declare(strict_types=1);
  * @license https://www.yiiframework.com/license/
  */
 
+use yii\base\InvalidConfigException;
 use yii\db\Migration;
 use yii\log\DbTarget;
-use yii\base\InvalidConfigException;
 
 /**
  * Initializes log table.
@@ -31,9 +31,9 @@ class m141106_185632_log_init extends Migration
     private $dbTargets = [];
 
     /**
-     * @return DbTarget[]
-     *
      * @throws InvalidConfigException
+     *
+     * @return DbTarget[]
      */
     protected function getDbTargets()
     {

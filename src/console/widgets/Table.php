@@ -12,8 +12,8 @@ namespace yii\console\widgets;
 
 use Yii;
 use yii\base\Widget;
-use yii\helpers\Console;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Console;
 
 /**
  * Table class displays a table in console.
@@ -43,8 +43,8 @@ use yii\helpers\ArrayHelper;
  *     ],
  * ]);
  *
- * @property-write string $listPrefix List prefix.
- * @property-write int $screenWidth Screen width.
+ * @property-write string $listPrefix List prefix. This property is write-only.
+ * @property-write int $screenWidth Screen width. This property is write-only.
  *
  * @author Daniel Gomez Pan <pana_1990@hotmail.com>
  *

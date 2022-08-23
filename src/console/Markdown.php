@@ -10,11 +10,11 @@ declare(strict_types=1);
 
 namespace yii\console;
 
-use yii\helpers\Console;
-use cebe\markdown\inline\CodeTrait;
 use cebe\markdown\block\FencedCodeTrait;
-use cebe\markdown\inline\StrikeoutTrait;
+use cebe\markdown\inline\CodeTrait;
 use cebe\markdown\inline\EmphStrongTrait;
+use cebe\markdown\inline\StrikeoutTrait;
+use yii\helpers\Console;
 
 /**
  * A Markdown parser that enhances markdown for reading in console environments.

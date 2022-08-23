@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\console\controllers;
 
-use yiiunit\TestCase;
-use yii\helpers\Console;
 use yii\console\controllers\HelpController;
+use yii\helpers\Console;
+use yiiunit\TestCase;
 
 /**
  * Unit test for [[\yii\console\controllers\HelpController]].
@@ -48,10 +48,10 @@ class HelpControllerTest extends TestCase
     /**
      * Emulates running controller action.
      *
-     * @param string $actionID id of action to be run.
-     * @param array $actionParams action arguments.
+     * @param string $actionID     id of action to be run
+     * @param array  $actionParams action arguments
      *
-     * @return string command output.
+     * @return string command output
      */
     protected function runControllerAction($actionID, $actionParams = [])
     {
@@ -118,7 +118,7 @@ migrate/to
 migrate/up
 
 STRING
-            , $result);
+        , $result);
     }
 
     public function testActionListActionOptions(): void
@@ -140,7 +140,7 @@ action: route to action
 --silent-exit-on-exception: if true - script finish with `ExitCode\:\:OK` in case of exception.false - `ExitCode\:\:UNSPECIFIED_ERROR`.Default\: `YII_ENV_TEST`
 
 STRING
-            , $result);
+        , $result);
     }
 
     public function testActionUsage(): void

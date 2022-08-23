@@ -11,17 +11,17 @@ declare(strict_types=1);
 namespace yii\db\pgsql;
 
 use PDO;
-use yii\db\Constraint;
-use yii\db\Expression;
-use yii\db\TableSchema;
+use yii\base\NotSupportedException;
 use yii\db\CheckConstraint;
+use yii\db\Constraint;
+use yii\db\ConstraintFinderInterface;
+use yii\db\ConstraintFinderTrait;
+use yii\db\Expression;
+use yii\db\ForeignKeyConstraint;
 use yii\db\IndexConstraint;
+use yii\db\TableSchema;
 use yii\db\ViewFinderTrait;
 use yii\helpers\ArrayHelper;
-use yii\db\ForeignKeyConstraint;
-use yii\db\ConstraintFinderTrait;
-use yii\base\NotSupportedException;
-use yii\db\ConstraintFinderInterface;
 
 /**
  * Schema is the class for retrieving metadata from a PostgreSQL database
@@ -753,6 +753,7 @@ SQL;
                             'name' => $name,
                             'columnNames' => ArrayHelper::getColumn($constraint, 'column_name'),
                         ]);
+
                         break;
 
                     case 'f':
@@ -765,6 +766,7 @@ SQL;
                             'onDelete' => $actionTypes[$constraint[0]['on_delete']] ?? null,
                             'onUpdate' => $actionTypes[$constraint[0]['on_update']] ?? null,
                         ]);
+
                         break;
 
                     case 'u':
@@ -772,6 +774,7 @@ SQL;
                             'name' => $name,
                             'columnNames' => ArrayHelper::getColumn($constraint, 'column_name'),
                         ]);
+
                         break;
 
                     case 'c':
@@ -780,6 +783,7 @@ SQL;
                             'columnNames' => ArrayHelper::getColumn($constraint, 'column_name'),
                             'expression' => $constraint[0]['check_expr'],
                         ]);
+
                         break;
                 }
             }

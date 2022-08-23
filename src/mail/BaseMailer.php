@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace yii\mail;
 
 use Yii;
-use yii\web\View;
 use yii\base\Component;
-use yii\base\ViewContextInterface;
 use yii\base\InvalidConfigException;
+use yii\base\ViewContextInterface;
+use yii\web\View;
 
 /**
  * BaseMailer serves as a base class that implements the basic functions required by [[MailerInterface]].

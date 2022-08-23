@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace yiiunit\framework\validators;
 
 use stdClass;
-use yii\web\View;
-use yiiunit\TestCase;
 use yii\validators\NumberValidator;
+use yii\web\View;
 use yiiunit\data\validators\models\FakedValidationModel;
+use yiiunit\TestCase;
 
 /**
  * @group validators

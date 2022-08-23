@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace yiiunit\framework\test;
 
 use yii\test\Fixture;
-use yiiunit\TestCase;
 use yii\test\FixtureTrait;
+use yiiunit\TestCase;
 
 class Fixture1 extends Fixture
 {

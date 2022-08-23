@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\i18n;
 
-use yiiunit\TestCase;
 use yii\i18n\GettextMoFile;
+use yiiunit\TestCase;
 
 /**
  * @group i18n

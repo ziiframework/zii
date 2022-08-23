@@ -10,13 +10,13 @@ declare(strict_types=1);
 
 namespace yii\log;
 
-use Yii;
 use Throwable;
-use yii\di\Instance;
-use yii\db\Exception;
-use yii\db\Connection;
-use yii\helpers\VarDumper;
+use Yii;
 use yii\base\InvalidConfigException;
+use yii\db\Connection;
+use yii\db\Exception;
+use yii\di\Instance;
+use yii\helpers\VarDumper;
 
 /**
  * DbTarget stores log messages in a database table.

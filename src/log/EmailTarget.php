@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace yii\log;
 
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\di\Instance;
 use yii\mail\MailerInterface;
-use yii\base\InvalidConfigException;
 
 /**
  * EmailTarget sends selected log messages to the specified email addresses.

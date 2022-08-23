@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yii\db\conditions;
 
-use yii\db\ExpressionInterface;
-use yii\db\ExpressionBuilderTrait;
 use yii\db\ExpressionBuilderInterface;
+use yii\db\ExpressionBuilderTrait;
+use yii\db\ExpressionInterface;
 
 /**
  * Class NotConditionBuilder builds objects of [[SimpleCondition]].

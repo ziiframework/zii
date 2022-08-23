@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yii\db\conditions;
 
-use yii\db\ExpressionInterface;
 use yii\base\InvalidArgumentException;
+use yii\db\ExpressionInterface;
 
 /**
  * Class InCondition represents `IN` condition.

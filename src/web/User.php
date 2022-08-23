@@ -10,14 +10,14 @@ declare(strict_types=1);
 
 namespace yii\web;
 
-use Yii;
 use Exception;
 use Throwable;
-use yii\di\Instance;
+use Yii;
 use yii\base\Component;
-use yii\rbac\CheckAccessInterface;
-use yii\base\InvalidValueException;
 use yii\base\InvalidConfigException;
+use yii\base\InvalidValueException;
+use yii\di\Instance;
+use yii\rbac\CheckAccessInterface;
 
 /**
  * User is the class for the `user` application component that manages the user authentication status.
@@ -89,7 +89,7 @@ class User extends Component
     public $enableSession = true;
 
     /**
-     * @var string|array|null the URL for login when [[loginRequired()]] is called.
+     * @var string|array the URL for login when [[loginRequired()]] is called.
      * If an array is given, [[UrlManager::createUrl()]] will be called to create the corresponding URL.
      * The first element of the array should be the route to the login action, and the rest of
      * the name-value pairs are GET parameters used to construct the login URL. For example,
@@ -110,7 +110,7 @@ class User extends Component
     public $identityCookie = ['name' => '_identity', 'httpOnly' => true];
 
     /**
-     * @var int|null the number of seconds in which the user will be logged out automatically if the user
+     * @var int the number of seconds in which the user will be logged out automatically if the user
      * remains inactive. If this property is not set, the user will be logged out after
      * the current session expires (c.f. [[Session::timeout]]).
      * Note that this will not work if [[enableAutoLogin]] is `true`.
@@ -118,7 +118,7 @@ class User extends Component
     public $authTimeout;
 
     /**
-     * @var CheckAccessInterface|string|array|null The access checker object to use for checking access or the application
+     * @var CheckAccessInterface|string|array The access checker object to use for checking access or the application
      * component ID of the access checker.
      * If not set the application auth manager will be used.
      *
@@ -127,7 +127,7 @@ class User extends Component
     public $accessChecker;
 
     /**
-     * @var int|null the number of seconds in which the user will be logged out automatically
+     * @var int the number of seconds in which the user will be logged out automatically
      * regardless of activity.
      * Note that this will not work if [[enableAutoLogin]] is `true`.
      */
@@ -415,7 +415,7 @@ class User extends Component
     /**
      * Returns a value that uniquely represents the user.
      *
-     * @return string|int|null the unique identifier for the user. If `null`, it means the user is a guest.
+     * @return string|int the unique identifier for the user. If `null`, it means the user is a guest.
      *
      * @see getIdentity()
      */
@@ -432,7 +432,7 @@ class User extends Component
      * This method reads the return URL from the session. It is usually used by the login action which
      * may call this method to redirect the browser to where it goes after successful authentication.
      *
-     * @param string|array|null $defaultUrl the default return URL in case it was not set previously.
+     * @param string|array $defaultUrl the default return URL in case it was not set previously.
      * If this is null and the return URL was not set previously, [[Application::homeUrl]] will be redirected to.
      * Please refer to [[setReturnUrl()]] on accepted format of the URL.
      *
@@ -729,6 +729,7 @@ class User extends Component
         }
 
         $session = Yii::$app->getSession();
+
         $session->regenerateID(true);
         $session->remove($this->idParam);
         $session->remove($this->authTimeoutParam);

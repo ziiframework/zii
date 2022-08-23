@@ -10,14 +10,14 @@ declare(strict_types=1);
 
 namespace yii\validators;
 
-use Yii;
 use Closure;
+use Yii;
 use yii\base\Model;
 use yii\db\ActiveQuery;
-use yii\db\ActiveRecord;
-use yii\helpers\Inflector;
 use yii\db\ActiveQueryInterface;
+use yii\db\ActiveRecord;
 use yii\db\ActiveRecordInterface;
+use yii\helpers\Inflector;
 
 /**
  * UniqueValidator validates that the attribute value is unique in the specified database table.

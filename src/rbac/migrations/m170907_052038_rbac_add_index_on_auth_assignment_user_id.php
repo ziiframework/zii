@@ -8,9 +8,9 @@ declare(strict_types=1);
  * @license https://www.yiiframework.com/license/
  */
 
+use yii\base\InvalidConfigException;
 use yii\db\Migration;
 use yii\rbac\DbManager;
-use yii\base\InvalidConfigException;
 
 /**
  * Adds index on `user_id` column in `auth_assignment` table for performance reasons.
@@ -27,9 +27,9 @@ class m170907_052038_rbac_add_index_on_auth_assignment_user_id extends Migration
     public $index = 'auth_assignment_user_id_idx';
 
     /**
-     * @return DbManager
-     *
      * @throws yii\base\InvalidConfigException
+     *
+     * @return DbManager
      */
     protected function getAuthManager()
     {

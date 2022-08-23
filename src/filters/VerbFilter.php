@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace yii\filters;
 
 use Yii;
+use yii\base\ActionEvent;
 use yii\base\Behavior;
 use yii\web\Controller;
-use yii\base\ActionEvent;
 use yii\web\MethodNotAllowedHttpException;
 
 /**

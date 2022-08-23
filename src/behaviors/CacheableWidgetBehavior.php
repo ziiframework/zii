@@ -10,13 +10,13 @@ declare(strict_types=1);
 
 namespace yii\behaviors;
 
-use yii\base\Widget;
-use yii\di\Instance;
 use yii\base\Behavior;
-use yii\base\WidgetEvent;
-use yii\caching\Dependency;
-use yii\caching\CacheInterface;
 use yii\base\InvalidConfigException;
+use yii\base\Widget;
+use yii\base\WidgetEvent;
+use yii\caching\CacheInterface;
+use yii\caching\Dependency;
+use yii\di\Instance;
 
 /**
  * Cacheable widget behavior automatically caches widget contents according to duration and dependencies specified.

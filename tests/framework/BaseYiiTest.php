@@ -12,14 +12,14 @@ namespace yiiunit\framework;
 
 use Yii;
 use yii\BaseYii;
-use yii\log\Logger;
 use yii\di\Container;
-use yiiunit\TestCase;
-use yiiunit\data\base\Singer;
-use yiiunit\framework\di\stubs\Qux;
+use yii\log\Logger;
 use yiiunit\data\base\CallableClass;
+use yiiunit\data\base\Singer;
 use yiiunit\framework\di\stubs\FooBaz;
 use yiiunit\framework\di\stubs\FooDependentSubclass;
+use yiiunit\framework\di\stubs\Qux;
+use yiiunit\TestCase;
 
 /**
  * BaseYiiTest.

@@ -13,7 +13,7 @@ namespace yiiunit\data\ar;
 /**
  * Class Profile.
  *
- * @property int $id
+ * @property int    $id
  * @property string $description
  */
 class Profile extends ActiveRecord

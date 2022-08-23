@@ -11,15 +11,15 @@ declare(strict_types=1);
 namespace yii\db;
 
 use PDO;
-use Yii;
 use PDOException;
-use yii\caching\Cache;
+use Yii;
 use yii\base\BaseObject;
-use yii\caching\TagDependency;
-use yii\caching\CacheInterface;
 use yii\base\InvalidCallException;
-use yii\base\NotSupportedException;
 use yii\base\InvalidConfigException;
+use yii\base\NotSupportedException;
+use yii\caching\Cache;
+use yii\caching\CacheInterface;
+use yii\caching\TagDependency;
 
 /**
  * Schema is the base class for concrete DBMS-specific schema classes.

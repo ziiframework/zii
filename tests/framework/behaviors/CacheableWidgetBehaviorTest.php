@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace yiiunit\framework\behaviors;
 
 use Exception;
-use yii\base\Widget;
-use yiiunit\TestCase;
-use yii\behaviors\CacheableWidgetBehavior;
 use PHPUnit_Framework_MockObject_MockObject;
+use yii\base\Widget;
+use yii\behaviors\CacheableWidgetBehavior;
+use yiiunit\TestCase;
 
 /**
  * Unit test for [[\yii\behaviors\CacheableWidgetBehavior]].

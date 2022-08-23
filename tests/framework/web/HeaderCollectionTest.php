@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\web;
 
-use yiiunit\TestCase;
 use yii\web\HeaderCollection;
+use yiiunit\TestCase;
 
 /**
  * @group web

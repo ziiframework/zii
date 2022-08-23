@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yii\behaviors;
 
-use yii\db\BaseActiveRecord;
 use yii\base\InvalidCallException;
+use yii\db\BaseActiveRecord;
 
 /**
  * TimestampBehavior automatically fills the specified attributes with the current timestamp.

@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace yii\web;
 
 use stdClass;
-use yii\helpers\Json;
 use yii\base\InvalidArgumentException;
+use yii\helpers\Json;
 
 /**
  * Parses a raw HTTP request using [[\yii\helpers\Json::decode()]].

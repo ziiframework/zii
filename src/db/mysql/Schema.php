@@ -10,18 +10,18 @@ declare(strict_types=1);
 
 namespace yii\db\mysql;
 
-use PDO;
 use Exception;
+use PDO;
 use PDOException;
-use yii\db\Constraint;
-use yii\db\Expression;
-use yii\db\TableSchema;
-use yii\db\IndexConstraint;
-use yii\helpers\ArrayHelper;
-use yii\db\ForeignKeyConstraint;
-use yii\db\ConstraintFinderTrait;
 use yii\base\NotSupportedException;
+use yii\db\Constraint;
 use yii\db\ConstraintFinderInterface;
+use yii\db\ConstraintFinderTrait;
+use yii\db\Expression;
+use yii\db\ForeignKeyConstraint;
+use yii\db\IndexConstraint;
+use yii\db\TableSchema;
+use yii\helpers\ArrayHelper;
 
 /**
  * Schema is the class for retrieving metadata from a MySQL database (version 4.1.x and 5.x).

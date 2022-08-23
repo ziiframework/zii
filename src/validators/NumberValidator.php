@@ -12,8 +12,8 @@ namespace yii\validators;
 
 use Yii;
 use yii\helpers\Json;
-use yii\web\JsExpression;
 use yii\helpers\StringHelper;
+use yii\web\JsExpression;
 
 /**
  * NumberValidator validates that the attribute value is a number.
@@ -41,14 +41,14 @@ class NumberValidator extends Validator
     public $integerOnly = false;
 
     /**
-     * @var int|float|null upper limit of the number. Defaults to null, meaning no upper limit.
+     * @var int|float upper limit of the number. Defaults to null, meaning no upper limit.
      *
      * @see tooBig for the customized message used when the number is too big.
      */
     public $max;
 
     /**
-     * @var int|float|null lower limit of the number. Defaults to null, meaning no lower limit.
+     * @var int|float lower limit of the number. Defaults to null, meaning no lower limit.
      *
      * @see tooSmall for the customized message used when the number is too small.
      */

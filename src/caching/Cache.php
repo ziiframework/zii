@@ -10,13 +10,12 @@ declare(strict_types=1);
 
 namespace yii\caching;
 
-use Yii;
 use Closure;
-use yii\base\Component;
-use ReturnTypeWillChange;
-use yii\helpers\StringHelper;
-
 use function extension_loaded;
+use ReturnTypeWillChange;
+use Yii;
+use yii\base\Component;
+use yii\helpers\StringHelper;
 
 /**
  * Cache is the base class for cache classes supporting different cache storage implementations.

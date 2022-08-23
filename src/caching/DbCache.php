@@ -10,14 +10,14 @@ declare(strict_types=1);
 
 namespace yii\caching;
 
+use Exception;
 use PDO;
 use Yii;
-use Exception;
-use yii\db\Query;
-use yii\db\PdoValue;
-use yii\di\Instance;
-use yii\db\Connection;
 use yii\base\InvalidConfigException;
+use yii\db\Connection;
+use yii\db\PdoValue;
+use yii\db\Query;
+use yii\di\Instance;
 
 /**
  * DbCache implements a cache application component by storing cached data in a database.

@@ -10,10 +10,9 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\mutex\mocks;
 
+use function microtime;
 use yii\mutex\Mutex;
 use yii\mutex\RetryAcquireTrait;
-
-use function microtime;
 
 /**
  * Class DumbMutex.

@@ -12,8 +12,8 @@ namespace yii\db;
 
 use Exception;
 use Throwable;
-use yii\di\Instance;
 use yii\base\Component;
+use yii\di\Instance;
 use yii\helpers\StringHelper;
 
 /**

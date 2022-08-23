@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\db\mysql;
 
-use yii\db\mysql\Schema;
 use yii\db\mysql\ColumnSchemaBuilder;
+use yii\db\mysql\Schema;
 
 /**
  * ColumnSchemaBuilderTest tests ColumnSchemaBuilder for MySQL.
@@ -25,7 +25,7 @@ class ColumnSchemaBuilderTest extends \yiiunit\framework\db\ColumnSchemaBuilderT
 
     /**
      * @param string $type
-     * @param int $length
+     * @param int    $length
      *
      * @return ColumnSchemaBuilder
      */

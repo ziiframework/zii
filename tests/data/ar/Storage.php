@@ -15,7 +15,7 @@ namespace yiiunit\data\ar;
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  *
- * @property int $id
+ * @property int   $id
  * @property array $data
  */
 class Storage extends ActiveRecord

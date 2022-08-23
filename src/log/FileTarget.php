@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace yii\log;
 
 use Yii;
-use yii\helpers\FileHelper;
 use yii\base\InvalidConfigException;
+use yii\helpers\FileHelper;
 
 /**
  * FileTarget records log messages in a file.

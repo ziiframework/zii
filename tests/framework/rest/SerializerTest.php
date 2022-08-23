@@ -10,13 +10,13 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\rest;
 
+use JsonSerializable;
+use ReturnTypeWillChange;
 use Yii;
 use yii\base\Model;
-use JsonSerializable;
-use yiiunit\TestCase;
-use yii\rest\Serializer;
-use ReturnTypeWillChange;
 use yii\data\ArrayDataProvider;
+use yii\rest\Serializer;
+use yiiunit\TestCase;
 
 /**
  * @group rest
@@ -398,8 +398,8 @@ class SerializerTest extends TestCase
      * @dataProvider dataProviderSerializeDataProvider
      *
      * @param \yii\data\DataProviderInterface $dataProvider
-     * @param array $expectedResult
-     * @param bool $saveKeys
+     * @param array                           $expectedResult
+     * @param bool                            $saveKeys
      */
     public function testSerializeDataProvider($dataProvider, $expectedResult, $saveKeys = false): void
     {

@@ -11,11 +11,11 @@ declare(strict_types=1);
 namespace yiiunit\framework\log;
 
 use Yii;
-use yii\log\Logger;
-use yiiunit\TestCase;
+use yii\helpers\FileHelper;
 use yii\log\Dispatcher;
 use yii\log\FileTarget;
-use yii\helpers\FileHelper;
+use yii\log\Logger;
+use yiiunit\TestCase;
 
 /**
  * @group log

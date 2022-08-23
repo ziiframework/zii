@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace yiiunit\framework\i18n;
 
 use Yii;
-use yii\i18n\I18N;
 use yii\base\Event;
-use yiiunit\TestCase;
+use yii\i18n\I18N;
 use yii\i18n\PhpMessageSource;
+use yiiunit\TestCase;
 
 /**
  * @author Carsten Brandt <mail@cebe.cc>

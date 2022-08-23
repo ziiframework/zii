@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yii\i18n;
 
-use Yii;
 use Exception;
 use IntlException;
+use Yii;
 use yii\base\Component;
 use yii\base\NotSupportedException;
 

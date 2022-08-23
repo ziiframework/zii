@@ -12,12 +12,10 @@ namespace yii\console;
 
 use const STDERR;
 use const STDOUT;
-
 use Yii;
-use Throwable;
-use yii\helpers\Console;
-use yii\base\UserException;
 use yii\base\ErrorException;
+use yii\base\UserException;
+use yii\helpers\Console;
 
 /**
  * ErrorHandler handles uncaught PHP errors and exceptions.
@@ -34,7 +32,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
     /**
      * Renders an exception using ansi format for console output.
      *
-     * @param Throwable $exception the exception to be rendered.
+     * @param \Exception $exception the exception to be rendered.
      */
     protected function renderException($exception): void
     {

@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\db\sqlite;
 
+use yii\db\sqlite\SqlTokenizer;
 use yii\db\SqlToken;
 use yiiunit\TestCase;
-use yii\db\sqlite\SqlTokenizer;
 
 /**
  * @group db

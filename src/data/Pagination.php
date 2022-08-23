@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace yii\data;
 
 use Yii;
-use yii\web\Link;
-use yii\web\Request;
-use yii\web\Linkable;
 use yii\base\BaseObject;
+use yii\web\Link;
+use yii\web\Linkable;
+use yii\web\Request;
 
 /**
  * Pagination represents information relevant to pagination of data items.
@@ -105,13 +105,13 @@ class Pagination extends BaseObject implements Linkable
     public $forcePageParam = true;
 
     /**
-     * @var string|null the route of the controller action for displaying the paged contents.
+     * @var string the route of the controller action for displaying the paged contents.
      * If not set, it means using the currently requested route.
      */
     public $route;
 
     /**
-     * @var array|null parameters (name => value) that should be used to obtain the current page number
+     * @var array parameters (name => value) that should be used to obtain the current page number
      * and to create new pagination URLs. If not set, all parameters from $_GET will be used instead.
      *
      * In order to add hash to all links use `array_merge($_GET, ['#' => 'my-hash'])`.
@@ -122,7 +122,7 @@ class Pagination extends BaseObject implements Linkable
     public $params;
 
     /**
-     * @var \yii\web\UrlManager|null the URL manager used for creating pagination URLs. If not set,
+     * @var \yii\web\UrlManager the URL manager used for creating pagination URLs. If not set,
      * the "urlManager" application component will be used.
      */
     public $urlManager;
@@ -275,7 +275,7 @@ class Pagination extends BaseObject implements Linkable
      * This method is mainly called by pagers when creating URLs used to perform pagination.
      *
      * @param int $page the zero-based page number that the URL should point to.
-     * @param int|null $pageSize the number of items on each page. If not set, the value of [[pageSize]] will be used.
+     * @param int $pageSize the number of items on each page. If not set, the value of [[pageSize]] will be used.
      * @param bool $absolute whether to create an absolute URL. Defaults to `false`.
      *
      * @return string the created URL
@@ -377,7 +377,7 @@ class Pagination extends BaseObject implements Linkable
      * This method returns the named parameter value from [[params]]. Null is returned if the value does not exist.
      *
      * @param string $name the parameter name
-     * @param string|null $defaultValue the value to be returned when the specified parameter does not exist in [[params]].
+     * @param string $defaultValue the value to be returned when the specified parameter does not exist in [[params]].
      *
      * @return string|null the parameter value
      */

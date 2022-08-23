@@ -11,12 +11,12 @@ declare(strict_types=1);
 namespace yii\db\pgsql;
 
 use Traversable;
-use yii\db\Query;
-use yii\db\JsonExpression;
 use yii\db\ArrayExpression;
-use yii\db\ExpressionInterface;
-use yii\db\ExpressionBuilderTrait;
 use yii\db\ExpressionBuilderInterface;
+use yii\db\ExpressionBuilderTrait;
+use yii\db\ExpressionInterface;
+use yii\db\JsonExpression;
+use yii\db\Query;
 
 /**
  * Class ArrayExpressionBuilder builds [[ArrayExpression]] for PostgreSQL DBMS.

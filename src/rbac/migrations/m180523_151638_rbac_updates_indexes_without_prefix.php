@@ -8,9 +8,9 @@ declare(strict_types=1);
  * @license https://www.yiiframework.com/license/
  */
 
+use yii\base\InvalidConfigException;
 use yii\db\Migration;
 use yii\rbac\DbManager;
-use yii\base\InvalidConfigException;
 
 /**
  * Updates indexes without a prefix.
@@ -24,9 +24,9 @@ use yii\base\InvalidConfigException;
 class m180523_151638_rbac_updates_indexes_without_prefix extends Migration
 {
     /**
-     * @return DbManager
-     *
      * @throws yii\base\InvalidConfigException
+     *
+     * @return DbManager
      */
     protected function getAuthManager()
     {

@@ -10,16 +10,16 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\db\pgsql;
 
-use yiiunit\TestCase;
-use yii\db\Expression;
-use yii\db\pgsql\Schema;
-use yii\db\JsonExpression;
-use yii\db\ArrayExpression;
-use yiiunit\data\ar\DefaultPk;
-use yii\db\ActiveRecordInterface;
-use yiiunit\data\ar\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecordInterface;
+use yii\db\ArrayExpression;
+use yii\db\Expression;
+use yii\db\JsonExpression;
+use yii\db\pgsql\Schema;
+use yiiunit\data\ar\ActiveRecord;
+use yiiunit\data\ar\DefaultPk;
 use yiiunit\framework\ar\ActiveRecordTestTrait;
+use yiiunit\TestCase;
 
 /**
  * @group db

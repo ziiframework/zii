@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\db;
 
-use yiiunit\TestCase;
 use yii\db\ActiveQuery;
-use yiiunit\data\ar\ActiveRecord;
 use yii\db\ActiveRecord as DefaultActiveRecord;
+use yiiunit\data\ar\ActiveRecord;
+use yiiunit\TestCase;
 
 class ActiveQueryModelConnectionTest extends TestCase
 {

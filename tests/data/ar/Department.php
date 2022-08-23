@@ -15,8 +15,8 @@ use yii\db\ActiveQuery;
 /**
  * Class Department.
  *
- * @property int $id
- * @property string $title
+ * @property int        $id
+ * @property string     $title
  * @property Employee[] $employees
  *
  * @author Kolyunya <OleynikovNY@mail.ru>

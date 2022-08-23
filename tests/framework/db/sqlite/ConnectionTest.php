@@ -10,14 +10,13 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\db\sqlite;
 
-use Yii;
+use function count;
 use Exception;
+use Yii;
 use yii\db\Connection;
 use yii\db\Transaction;
-use yiiunit\data\ar\Customer;
 use yiiunit\data\ar\ActiveRecord;
-
-use function count;
+use yiiunit\data\ar\Customer;
 
 /**
  * @group db

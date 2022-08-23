@@ -1,5 +1,5 @@
 <?php
-/* @var $exception \Throwable */
+/* @var $exception \yii\web\HttpException|\Exception */
 /* @var $handler \yii\web\ErrorHandler */
 if ($exception instanceof \yii\web\HttpException) {
     $code = $exception->statusCode;

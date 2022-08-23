@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\data;
 
-use yiiunit\TestCase;
 use yii\base\DynamicModel;
 use yii\data\ActiveDataFilter;
+use yiiunit\TestCase;
 
 class ActiveDataFilterTest extends TestCase
 {

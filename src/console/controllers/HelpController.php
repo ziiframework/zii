@@ -10,17 +10,17 @@ declare(strict_types=1);
 
 namespace yii\console\controllers;
 
-use Yii;
-use RegexIterator;
-use ReflectionClass;
-use yii\helpers\Console;
-use yii\base\Application;
-use yii\console\Exception;
-use yii\helpers\Inflector;
-use RecursiveRegexIterator;
-use yii\console\Controller;
-use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use RecursiveRegexIterator;
+use ReflectionClass;
+use RegexIterator;
+use Yii;
+use yii\base\Application;
+use yii\console\Controller;
+use yii\console\Exception;
+use yii\helpers\Console;
+use yii\helpers\Inflector;
 
 /**
  * Provides help information about console commands.
@@ -50,7 +50,7 @@ class HelpController extends Controller
      * Displays available commands or the detailed information
      * about a particular command.
      *
-     * @param string|null $command The name of the command to show help about.
+     * @param string $command The name of the command to show help about.
      * If not provided, all available commands will be displayed.
      *
      * @return int the exit status

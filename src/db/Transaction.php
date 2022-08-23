@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace yii\db;
 
 use Yii;
-use yii\base\NotSupportedException;
 use yii\base\InvalidConfigException;
+use yii\base\NotSupportedException;
 
 /**
  * Transaction represents a DB transaction.
@@ -46,7 +46,8 @@ use yii\base\InvalidConfigException;
  * [[commit()]] or [[rollBack()]].
  * @property-write string $isolationLevel The transaction isolation level to use for this transaction. This
  * can be one of [[READ_UNCOMMITTED]], [[READ_COMMITTED]], [[REPEATABLE_READ]] and [[SERIALIZABLE]] but also a
- * string containing DBMS specific syntax to be used after `SET TRANSACTION ISOLATION LEVEL`.
+ * string containing DBMS specific syntax to be used after `SET TRANSACTION ISOLATION LEVEL`. This property is
+ * write-only.
  * @property-read int $level The current nesting level of the transaction.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>

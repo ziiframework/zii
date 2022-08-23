@@ -11,17 +11,17 @@ declare(strict_types=1);
 namespace yiiunit\framework\filters;
 
 use Yii;
-use yii\web\View;
-use yii\web\Cookie;
 use yii\base\Action;
-use yii\helpers\Json;
-use yiiunit\TestCase;
-use yii\web\Controller;
-use yii\filters\PageCache;
 use yii\caching\ArrayCache;
-use yii\helpers\ArrayHelper;
 use yii\caching\ExpressionDependency;
+use yii\filters\PageCache;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
+use yii\web\Controller;
+use yii\web\Cookie;
+use yii\web\View;
 use yiiunit\framework\caching\CacheTestCase;
+use yiiunit\TestCase;
 
 /**
  * @group filters

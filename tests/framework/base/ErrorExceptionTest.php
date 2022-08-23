@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\base;
 
-use yiiunit\TestCase;
 use yii\base\ErrorException;
+use yiiunit\TestCase;
 
 /**
  * @group base

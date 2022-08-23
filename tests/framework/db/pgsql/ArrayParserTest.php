@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\db\pgsql;
 
-use yiiunit\TestCase;
 use yii\db\pgsql\ArrayParser;
+use yiiunit\TestCase;
 
 class ArrayParserTest extends TestCase
 {

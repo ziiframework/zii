@@ -10,35 +10,33 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\di;
 
-use Yii;
-use Exception;
-use yii\di\Instance;
-use yii\di\Container;
-use yiiunit\TestCase;
-use yiiunit\data\ar\Cat;
-use yiiunit\data\ar\Type;
-use yiiunit\data\ar\Order;
-use yii\validators\NumberValidator;
-use yiiunit\framework\di\stubs\Bar;
-use yiiunit\framework\di\stubs\Car;
-use yiiunit\framework\di\stubs\Foo;
-use yiiunit\framework\di\stubs\Qux;
-use yiiunit\framework\di\stubs\Beta;
-use yiiunit\framework\di\stubs\Zeta;
-use yiiunit\framework\di\stubs\Alpha;
-use yiiunit\framework\di\stubs\Corge;
-use yiiunit\framework\di\stubs\Kappa;
-use yiiunit\framework\di\stubs\BarSetter;
-use yiiunit\framework\di\stubs\QuxAnother;
-use yiiunit\framework\di\stubs\QuxFactory;
-use yiiunit\framework\di\stubs\FooProperty;
-use yiiunit\framework\di\stubs\QuxInterface;
-use yiiunit\framework\di\stubs\UnionTypeNull;
-use yiiunit\framework\di\stubs\UnionTypeNotNull;
-use yiiunit\framework\di\stubs\UnionTypeWithClass;
-
 use function defined;
+use Exception;
 use function get_class;
+use Yii;
+use yii\di\Container;
+use yii\di\Instance;
+use yii\validators\NumberValidator;
+use yiiunit\data\ar\Cat;
+use yiiunit\data\ar\Order;
+use yiiunit\data\ar\Type;
+use yiiunit\framework\di\stubs\Alpha;
+use yiiunit\framework\di\stubs\Bar;
+use yiiunit\framework\di\stubs\BarSetter;
+use yiiunit\framework\di\stubs\Beta;
+use yiiunit\framework\di\stubs\Car;
+use yiiunit\framework\di\stubs\Corge;
+use yiiunit\framework\di\stubs\Foo;
+use yiiunit\framework\di\stubs\FooProperty;
+use yiiunit\framework\di\stubs\Kappa;
+use yiiunit\framework\di\stubs\Qux;
+use yiiunit\framework\di\stubs\QuxFactory;
+use yiiunit\framework\di\stubs\QuxInterface;
+use yiiunit\framework\di\stubs\UnionTypeNotNull;
+use yiiunit\framework\di\stubs\UnionTypeNull;
+use yiiunit\framework\di\stubs\UnionTypeWithClass;
+use yiiunit\framework\di\stubs\Zeta;
+use yiiunit\TestCase;
 
 /**
  * @author Qiang Xue <qiang.xue@gmail.com>
@@ -660,59 +658,5 @@ class ContainerTest extends TestCase
 
         $this->expectException('TypeError');
         (new Container())->get(UnionTypeNotNull::className());
-    }
-
-    public function testResolveCallableDependenciesUnionTypes(): void
-    {
-        if (PHP_VERSION_ID < 80000) {
-            $this->markTestSkipped('Can not be tested on PHP < 8.0');
-
-            return;
-        }
-
-        $this->mockApplication([
-            'components' => [
-                Beta::className(),
-            ],
-        ]);
-
-        Yii::$container->set('yiiunit\framework\di\stubs\QuxInterface', [
-            'class' => Qux::className(),
-        ]);
-
-        $className = 'yiiunit\framework\di\stubs\StaticMethodsWithUnionTypes';
-
-        $params = Yii::$container->resolveCallableDependencies([$className, 'withBetaUnion']);
-        $this->assertInstanceOf(Beta::classname(), $params[0]);
-
-        $params = Yii::$container->resolveCallableDependencies([$className, 'withBetaUnionInverse']);
-        $this->assertInstanceOf(Beta::classname(), $params[0]);
-
-        $params = Yii::$container->resolveCallableDependencies([$className, 'withBetaAndQuxUnion']);
-        $this->assertInstanceOf(Beta::classname(), $params[0]);
-
-        $params = Yii::$container->resolveCallableDependencies([$className, 'withQuxAndBetaUnion']);
-        $this->assertInstanceOf(Qux::classname(), $params[0]);
-    }
-
-    public function testResolveCallableDependenciesIntersectionTypes(): void
-    {
-        if (PHP_VERSION_ID < 80100) {
-            $this->markTestSkipped('Can not be tested on PHP < 8.1');
-
-            return;
-        }
-
-        Yii::$container->set('yiiunit\framework\di\stubs\QuxInterface', [
-            'class' => Qux::className(),
-        ]);
-
-        $className = 'yiiunit\framework\di\stubs\StaticMethodsWithIntersectionTypes';
-
-        $params = Yii::$container->resolveCallableDependencies([$className, 'withQuxInterfaceAndQuxAnotherIntersection']);
-        $this->assertInstanceOf(Qux::classname(), $params[0]);
-
-        $params = Yii::$container->resolveCallableDependencies([$className, 'withQuxAnotherAndQuxInterfaceIntersection']);
-        $this->assertInstanceOf(QuxAnother::classname(), $params[0]);
     }
 }

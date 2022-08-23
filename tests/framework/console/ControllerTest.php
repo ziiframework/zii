@@ -10,16 +10,16 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\console;
 
-use Yii;
-use yii\base\Module;
 use RuntimeException;
-use yiiunit\TestCase;
+use Yii;
+use yii\base\InlineAction;
+use yii\base\Module;
+use yii\console\Application;
+use yii\console\Exception;
 use yii\console\Request;
 use yii\helpers\Console;
-use yii\base\InlineAction;
-use yii\console\Exception;
-use yii\console\Application;
 use yiiunit\framework\console\stubs\DummyService;
+use yiiunit\TestCase;
 
 /**
  * @group console

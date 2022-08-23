@@ -11,13 +11,13 @@ declare(strict_types=1);
 namespace yii\filters\auth;
 
 use Yii;
-use yii\web\User;
 use yii\base\Action;
-use yii\web\Request;
-use yii\web\Response;
 use yii\base\ActionFilter;
 use yii\helpers\StringHelper;
+use yii\web\Request;
+use yii\web\Response;
 use yii\web\UnauthorizedHttpException;
+use yii\web\User;
 
 /**
  * AuthMethod is a base class implementing the [[AuthInterface]] interface.
@@ -29,17 +29,17 @@ use yii\web\UnauthorizedHttpException;
 abstract class AuthMethod extends ActionFilter implements AuthInterface
 {
     /**
-     * @var User|null the user object representing the user authentication status. If not set, the `user` application component will be used.
+     * @var User the user object representing the user authentication status. If not set, the `user` application component will be used.
      */
     public $user;
 
     /**
-     * @var Request|null the current request. If not set, the `request` application component will be used.
+     * @var Request the current request. If not set, the `request` application component will be used.
      */
     public $request;
 
     /**
-     * @var Response|null the response to be sent. If not set, the `response` application component will be used.
+     * @var Response the response to be sent. If not set, the `response` application component will be used.
      */
     public $response;
 

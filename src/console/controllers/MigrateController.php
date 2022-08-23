@@ -10,15 +10,15 @@ declare(strict_types=1);
 
 namespace yii\console\controllers;
 
-use Yii;
 use Exception;
+use ReflectionException;
+use Yii;
+use yii\db\Connection;
 use yii\db\Query;
 use yii\di\Instance;
-use yii\db\Connection;
-use ReflectionException;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Console;
 use yii\helpers\Inflector;
-use yii\helpers\ArrayHelper;
 
 /**
  * Manages application migrations.

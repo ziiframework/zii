@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace yiiunit\framework\validators;
 
 use Exception;
-use yiiunit\TestCase;
 use yii\base\InvalidConfigException;
 use yii\validators\CompareValidator;
 use yiiunit\data\validators\models\FakedValidationModel;
+use yiiunit\TestCase;
 
 /**
  * @group validators

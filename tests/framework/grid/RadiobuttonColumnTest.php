@@ -11,12 +11,12 @@ declare(strict_types=1);
 namespace yiiunit\framework\grid;
 
 use Yii;
-use yii\web\Request;
-use yii\helpers\Html;
-use yiiunit\TestCase;
-use yii\grid\GridView;
 use yii\data\ArrayDataProvider;
+use yii\grid\GridView;
 use yii\grid\RadioButtonColumn;
+use yii\helpers\Html;
+use yii\web\Request;
+use yiiunit\TestCase;
 
 /**
  * Class RadiobuttonColumnTest.

@@ -24,7 +24,7 @@ class ColumnSchemaBuilderTest extends \yiiunit\framework\db\ColumnSchemaBuilderT
 
     /**
      * @param string $type
-     * @param int $length
+     * @param int    $length
      *
      * @return ColumnSchemaBuilder
      */

@@ -11,11 +11,11 @@ declare(strict_types=1);
 namespace yiiunit\framework\behaviors;
 
 use Yii;
-use yiiunit\TestCase;
 use yii\base\BaseObject;
+use yii\behaviors\BlameableBehavior;
 use yii\db\ActiveRecord;
 use yii\db\BaseActiveRecord;
-use yii\behaviors\BlameableBehavior;
+use yiiunit\TestCase;
 
 /**
  * Unit test for [[\yii\behaviors\BlameableBehavior]].
@@ -206,9 +206,9 @@ class ActiveRecordBlameableWithDefaultValueClosure extends ActiveRecordBlameable
 /**
  * Test Active Record class with [[BlameableBehavior]] behavior attached.
  *
- * @property string $name
- * @property int $created_by
- * @property int $updated_by
+ * @property string            $name
+ * @property int               $created_by
+ * @property int               $updated_by
  * @property BlameableBehavior $blameable
  */
 class ActiveRecordBlameable extends ActiveRecord

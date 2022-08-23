@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace yiiunit\framework\grid;
 
 use Exception;
-use yii\web\View;
-use yii\grid\GridView;
-use yii\grid\DataColumn;
 use yii\data\ArrayDataProvider;
+use yii\grid\DataColumn;
+use yii\grid\GridView;
+use yii\web\View;
 
 /**
  * @author Evgeniy Tkachenko <et.coder@gmail.com>
@@ -53,7 +53,7 @@ class GridViewTest extends \yiiunit\TestCase
     /**
      * @dataProvider emptyDataProvider
      *
-     * @param mixed $emptyText
+     * @param mixed  $emptyText
      * @param string $expectedText
      *
      * @throws Exception

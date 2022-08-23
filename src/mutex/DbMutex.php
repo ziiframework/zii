@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yii\mutex;
 
-use yii\di\Instance;
-use yii\db\Connection;
 use yii\base\InvalidConfigException;
+use yii\db\Connection;
+use yii\di\Instance;
 
 /**
  * DbMutex is the base class for classes, which relies on database while implementing mutex "lock" mechanism.

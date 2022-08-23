@@ -11,15 +11,15 @@ declare(strict_types=1);
 namespace yiiunit\framework\rest;
 
 use Yii;
-use yii\db\Query;
-use yii\data\Sort;
-use yiiunit\TestCase;
-use yii\data\Pagination;
-use yii\db\ActiveRecord;
-use yii\rest\IndexAction;
-use yii\rest\ActiveController;
 use yii\data\ActiveDataProvider;
+use yii\data\Pagination;
+use yii\data\Sort;
+use yii\db\ActiveRecord;
+use yii\db\Query;
+use yii\rest\ActiveController;
+use yii\rest\IndexAction;
 use yiiunit\framework\filters\stubs\UserIdentity;
+use yiiunit\TestCase;
 
 /**
  * @group rest

@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace yii\widgets;
 
 use Closure;
-use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 
 /**
  * The ListView widget is used to display data from data

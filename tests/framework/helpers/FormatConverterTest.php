@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace yiiunit\framework\helpers;
 
 use Yii;
-use yiiunit\TestCase;
-use yii\i18n\Formatter;
 use yii\helpers\FormatConverter;
+use yii\i18n\Formatter;
 use yiiunit\framework\i18n\IntlTestHelper;
+use yiiunit\TestCase;
 
 /**
  * @group helpers

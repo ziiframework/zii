@@ -10,15 +10,14 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\db\mysql\connection;
 
-use Throwable;
 use ErrorException;
-use RuntimeException;
-use yii\db\Exception;
-use yii\db\Connection;
-use yii\db\Transaction;
-
-use function get_class;
 use function function_exists;
+use function get_class;
+use RuntimeException;
+use Throwable;
+use yii\db\Connection;
+use yii\db\Exception;
+use yii\db\Transaction;
 
 /**
  * @group db

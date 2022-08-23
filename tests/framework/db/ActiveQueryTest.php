@@ -11,14 +11,14 @@ declare(strict_types=1);
 namespace yiiunit\framework\db;
 
 use yii\base\Event;
-use yii\db\Connection;
 use yii\db\ActiveQuery;
+use yii\db\Connection;
 use yii\db\QueryBuilder;
-use yiiunit\data\ar\Order;
-use yiiunit\data\ar\Profile;
+use yiiunit\data\ar\ActiveRecord;
 use yiiunit\data\ar\Category;
 use yiiunit\data\ar\Customer;
-use yiiunit\data\ar\ActiveRecord;
+use yiiunit\data\ar\Order;
+use yiiunit\data\ar\Profile;
 
 /**
  * Class ActiveQueryTest the base class for testing ActiveQuery.

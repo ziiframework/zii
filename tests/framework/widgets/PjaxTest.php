@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\widgets;
 
+use yii\data\ArrayDataProvider;
+use yii\widgets\ListView;
 use yii\widgets\Pjax;
 use yiiunit\TestCase;
-use yii\widgets\ListView;
-use yii\data\ArrayDataProvider;
 
 class PjaxTest extends TestCase
 {

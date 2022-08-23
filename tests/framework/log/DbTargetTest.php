@@ -11,11 +11,11 @@ declare(strict_types=1);
 namespace yiiunit\framework\log;
 
 use Yii;
+use yii\db\Connection;
 use yii\db\Query;
 use yii\log\Logger;
-use yiiunit\TestCase;
-use yii\db\Connection;
 use yiiunit\framework\console\controllers\EchoMigrateController;
+use yiiunit\TestCase;
 
 /**
  * @group db
@@ -94,11 +94,11 @@ abstract class DbTargetTest extends TestCase
     }
 
     /**
-     * @return \yii\db\Connection
-     *
      * @throws \yii\base\InvalidParamException
      * @throws \yii\db\Exception
      * @throws \yii\base\InvalidConfigException
+     *
+     * @return \yii\db\Connection
      */
     public static function getConnection()
     {

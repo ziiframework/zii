@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\i18n;
 
-use Yii;
 use NumberFormatter;
-use yiiunit\TestCase;
+use Yii;
 use yii\i18n\Formatter;
+use yiiunit\TestCase;
 
 /**
  * @group i18n

@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace yiiunit\framework\behaviors;
 
 use Yii;
-use yiiunit\TestCase;
-use yii\db\ActiveRecord;
 use yii\behaviors\BlameableBehavior;
+use yii\db\ActiveRecord;
+use yiiunit\TestCase;
 
 /**
  * Unit test emulating console app (without user component) for [[\yii\behaviors\BlameableBehavior]].
@@ -99,9 +99,9 @@ class ActiveRecordBlameableConsoleWithDefaultValueClosure extends ActiveRecordBl
 /**
  * Test Active Record class with [[BlameableBehavior]] behavior attached.
  *
- * @property string $name
- * @property int $created_by
- * @property int $updated_by
+ * @property string            $name
+ * @property int               $created_by
+ * @property int               $updated_by
  * @property BlameableBehavior $blameable
  */
 class ActiveRecordBlameableConsole extends ActiveRecord

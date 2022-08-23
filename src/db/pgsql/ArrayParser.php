@@ -62,6 +62,7 @@ class ArrayParser
             switch ($value[$i]) {
                 case '{':
                     $result[] = $this->parseArray($value, $i);
+
                     break;
 
                 case '}':
@@ -75,6 +76,7 @@ class ArrayParser
                     if (in_array($value[$i + 1], [$this->delimiter, '}'], true)) { // `{,}` case
                         $result[] = null;
                     }
+
                     break;
 
                 default:

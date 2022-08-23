@@ -10,13 +10,13 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\base;
 
-use Yii;
 use Exception;
-use yii\base\View;
+use Yii;
 use yii\base\Theme;
-use yiiunit\TestCase;
+use yii\base\View;
 use yii\base\ViewEvent;
 use yii\helpers\FileHelper;
+use yiiunit\TestCase;
 
 /**
  * @group base
@@ -24,7 +24,7 @@ use yii\helpers\FileHelper;
 class ViewTest extends TestCase
 {
     /**
-     * @var string path for the test files.
+     * @var string path for the test files
      */
     protected $testViewPath = '';
 

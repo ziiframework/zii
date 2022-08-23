@@ -10,14 +10,14 @@ declare(strict_types=1);
 
 namespace yii\db;
 
-use Yii;
 use Exception;
 use Throwable;
-use yii\helpers\Inflector;
-use yii\helpers\ArrayHelper;
-use yii\helpers\StringHelper;
-use yii\base\InvalidConfigException;
+use Yii;
 use yii\base\InvalidArgumentException;
+use yii\base\InvalidConfigException;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Inflector;
+use yii\helpers\StringHelper;
 
 /**
  * ActiveRecord is the base class for classes representing relational data in terms of objects.
@@ -75,8 +75,8 @@ use yii\base\InvalidArgumentException;
  *
  * For more details and usage information on ActiveRecord, see the [guide article on ActiveRecord](guide:db-active-record).
  *
- * @method ActiveQuery hasMany($class, array $link) See [[BaseActiveRecord::hasMany()]] for more info.
- * @method ActiveQuery hasOne($class, array $link) See [[BaseActiveRecord::hasOne()]] for more info.
+ * @method ActiveQuery hasMany($class, array $link) see [[BaseActiveRecord::hasMany()]] for more info
+ * @method ActiveQuery hasOne($class, array $link) see [[BaseActiveRecord::hasOne()]] for more info
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @author Carsten Brandt <mail@cebe.cc>
@@ -422,7 +422,7 @@ class ActiveRecord extends BaseActiveRecord
      *
      * For a large set of models you might consider using [[ActiveQuery::each()]] to keep memory usage within limits.
      *
-     * @param string|array|null $condition the conditions that will be put in the WHERE part of the DELETE SQL.
+     * @param string|array $condition the conditions that will be put in the WHERE part of the DELETE SQL.
      * Please refer to [[Query::where()]] on how to specify this parameter.
      * @param array $params the parameters (name => value) to be bound to the query.
      *
@@ -506,7 +506,7 @@ class ActiveRecord extends BaseActiveRecord
      */
     public function attributes()
     {
-        return static::getTableSchema()->getColumnNames();
+        return array_keys(static::getTableSchema()->columns);
     }
 
     /**
@@ -591,12 +591,12 @@ class ActiveRecord extends BaseActiveRecord
      * @param bool $runValidation whether to perform validation (calling [[validate()]])
      * before saving the record. Defaults to `true`. If the validation fails, the record
      * will not be saved to the database and this method will return `false`.
-     * @param array|null $attributes list of attributes that need to be saved. Defaults to `null`,
+     * @param array $attributes list of attributes that need to be saved. Defaults to `null`,
      * meaning all attributes that are loaded from DB will be saved.
      *
      * @return bool whether the attributes are valid and the record is inserted successfully.
      *
-     * @throws Throwable in case insert failed.
+     * @throws Exception in case insert failed.
      */
     public function insert($runValidation = true, $attributes = null)
     {
@@ -636,7 +636,7 @@ class ActiveRecord extends BaseActiveRecord
     /**
      * Inserts an ActiveRecord into DB without considering transaction.
      *
-     * @param array|null $attributes list of attributes that need to be saved. Defaults to `null`,
+     * @param array $attributes list of attributes that need to be saved. Defaults to `null`,
      * meaning all attributes that are loaded from DB will be saved.
      *
      * @return bool whether the record is inserted successfully.
@@ -709,7 +709,7 @@ class ActiveRecord extends BaseActiveRecord
      * @param bool $runValidation whether to perform validation (calling [[validate()]])
      * before saving the record. Defaults to `true`. If the validation fails, the record
      * will not be saved to the database and this method will return `false`.
-     * @param array|null $attributeNames list of attributes that need to be saved. Defaults to `null`,
+     * @param array $attributeNames list of attributes that need to be saved. Defaults to `null`,
      * meaning all attributes that are loaded from DB will be saved.
      *
      * @return int|false the number of rows affected, or false if validation fails
@@ -717,7 +717,7 @@ class ActiveRecord extends BaseActiveRecord
      *
      * @throws StaleObjectException if [[optimisticLock|optimistic locking]] is enabled and the data
      * being updated is outdated.
-     * @throws Throwable in case update failed.
+     * @throws Exception in case update failed.
      */
     public function update($runValidation = true, $attributeNames = null)
     {
@@ -772,7 +772,7 @@ class ActiveRecord extends BaseActiveRecord
      *
      * @throws StaleObjectException if [[optimisticLock|optimistic locking]] is enabled and the data
      * being deleted is outdated.
-     * @throws Throwable in case delete failed.
+     * @throws Exception in case delete failed.
      */
     public function delete()
     {

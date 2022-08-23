@@ -10,13 +10,12 @@ declare(strict_types=1);
 
 namespace yii\web;
 
-use Yii;
-use Exception;
-use yii\validators\IpValidator;
-use yii\base\InvalidConfigException;
-
 use function chr;
+use Exception;
 use function ord;
+use Yii;
+use yii\base\InvalidConfigException;
+use yii\validators\IpValidator;
 
 /**
  * The web Request class represents an HTTP request.
@@ -1095,15 +1094,13 @@ class Request extends \yii\base\Request
         for ($i = $len >> 1, $j = 0; $i < $len; ++$i, ++$j) {
             switch (true) {
                 case $s[$i] < "\x80": $s[$j] = $s[$i];
-                    break;
+break;
 
-                case $s[$i] < "\xC0": $s[$j] = "\xC2";
-                $s[++$j] = $s[$i];
-                    break;
+                case $s[$i] < "\xC0": $s[$j] = "\xC2"; $s[++$j] = $s[$i];
+break;
 
-                default: $s[$j] = "\xC3";
-                $s[++$j] = chr(ord($s[$i]) - 64);
-                    break;
+                default: $s[$j] = "\xC3"; $s[++$j] = chr(ord($s[$i]) - 64);
+break;
             }
         }
 

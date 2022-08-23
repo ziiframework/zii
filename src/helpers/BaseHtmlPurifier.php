@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace yii\helpers;
 
-use Yii;
 use Closure;
 use HTMLPurifier;
 use HTMLPurifier_Config;
+use Yii;
 
 /**
  * BaseHtmlPurifier provides concrete implementation for [[HtmlPurifier]].

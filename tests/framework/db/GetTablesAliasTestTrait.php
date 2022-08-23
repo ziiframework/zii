@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace yiiunit\framework\db;
 
 use stdClass;
-use yii\db\Query;
 use yii\db\ActiveQuery;
+use yii\db\Query;
 
 trait GetTablesAliasTestTrait
 {

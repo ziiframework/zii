@@ -11,17 +11,17 @@ declare(strict_types=1);
 namespace yiiunit\framework\validators;
 
 use stdClass;
-use yiiunit\TestCase;
 use yii\base\DynamicModel;
-use yii\validators\Validator;
-use yii\validators\SafeValidator;
+use yii\validators\BooleanValidator;
 use yii\validators\InlineValidator;
 use yii\validators\NumberValidator;
-use yii\validators\BooleanValidator;
 use yii\validators\RequiredValidator;
-use yiiunit\data\validators\TestValidator;
+use yii\validators\SafeValidator;
+use yii\validators\Validator;
 use yiiunit\data\validators\models\FakedValidationModel;
 use yiiunit\data\validators\models\ValidatorTestFunctionModel;
+use yiiunit\data\validators\TestValidator;
+use yiiunit\TestCase;
 
 /**
  * @group validators

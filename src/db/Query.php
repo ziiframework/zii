@@ -10,14 +10,14 @@ declare(strict_types=1);
 
 namespace yii\db;
 
-use Yii;
 use Closure;
 use Exception;
 use Throwable;
+use Yii;
 use yii\base\Component;
-use yii\helpers\ArrayHelper;
-use yii\base\InvalidConfigException;
 use yii\base\InvalidArgumentException;
+use yii\base\InvalidConfigException;
+use yii\helpers\ArrayHelper;
 
 /**
  * Query represents a SELECT SQL statement in a way that is independent of DBMS.

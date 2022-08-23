@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yii\helpers;
 
-use Yii;
 use Transliterator;
+use Yii;
 
 /**
  * BaseInflector provides concrete implementation for [[Inflector]].

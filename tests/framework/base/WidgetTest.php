@@ -12,9 +12,9 @@ namespace yiiunit\framework\base;
 
 use Yii;
 use yii\base\Widget;
+use yii\base\WidgetEvent;
 use yii\di\Container;
 use yiiunit\TestCase;
-use yii\base\WidgetEvent;
 
 /**
  * @group base

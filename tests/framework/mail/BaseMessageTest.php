@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace yiiunit\framework\mail;
 
 use Yii;
-use yiiunit\TestCase;
 use yii\mail\BaseMailer;
 use yii\mail\BaseMessage;
+use yiiunit\TestCase;
 
 /**
  * @group mail
@@ -30,7 +30,7 @@ class BaseMessageTest extends TestCase
     }
 
     /**
-     * @return Mailer test email component instance.
+     * @return Mailer test email component instance
      */
     protected function createTestEmailComponent()
     {
@@ -40,7 +40,7 @@ class BaseMessageTest extends TestCase
     }
 
     /**
-     * @return TestMailer mailer instance.
+     * @return TestMailer mailer instance
      */
     protected function getMailer()
     {

@@ -23,13 +23,13 @@ function time()
 namespace yiiunit\framework\web;
 
 use Yii;
-use yii\web\Cookie;
-use yiiunit\TestCase;
 use yii\base\BaseObject;
-use yii\rbac\PhpManager;
-use yii\web\CookieCollection;
 use yii\rbac\CheckAccessInterface;
+use yii\rbac\PhpManager;
+use yii\web\Cookie;
+use yii\web\CookieCollection;
 use yii\web\LoginRequiredException;
+use yiiunit\TestCase;
 
 /**
  * @group web

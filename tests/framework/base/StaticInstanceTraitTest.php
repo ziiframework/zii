@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\base;
 
-use yiiunit\TestCase;
 use yiiunit\data\base\Singer;
 use yiiunit\data\base\Speaker;
+use yiiunit\TestCase;
 
 class StaticInstanceTraitTest extends TestCase
 {

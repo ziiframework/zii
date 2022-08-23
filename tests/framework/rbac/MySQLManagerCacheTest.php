@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\rbac;
 
-use yii\rbac\DbManager;
 use yii\caching\FileCache;
+use yii\rbac\DbManager;
 
 /**
  * MySQLManagerCacheTest.
