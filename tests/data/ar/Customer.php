@@ -16,11 +16,11 @@ use yiiunit\framework\db\ActiveRecordTest;
 /**
  * Class Customer.
  *
- * @property int    $id
+ * @property int $id
  * @property string $name
  * @property string $email
  * @property string $address
- * @property int    $status
+ * @property int $status
  *
  * @method CustomerQuery findBySql($sql, $params = []) static
  */

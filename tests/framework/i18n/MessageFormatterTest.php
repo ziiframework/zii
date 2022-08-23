@@ -356,8 +356,8 @@ _MSG_
      *
      * @param string $pattern
      * @param string $expected
-     * @param array  $args
-     * @param bool   $skip
+     * @param array $args
+     * @param bool $skip
      * @param string $skipMessage
      */
     public function testNamedArguments($pattern, $expected, $args, $skip = false, $skipMessage = ''): void
@@ -375,7 +375,7 @@ _MSG_
      *
      * @param string $pattern
      * @param string $expected
-     * @param array  $args
+     * @param array $args
      * @param string $locale
      */
     public function testParseNamedArguments($pattern, $expected, $args, $locale = 'en-US'): void

@@ -17,7 +17,7 @@ namespace yiiunit\framework\console\controllers;
 trait StdOutBufferControllerTrait
 {
     /**
-     * @var string output buffer
+     * @var string output buffer.
      */
     private $stdOutBuffer = '';
 

@@ -479,8 +479,8 @@ TEXT;
     /**
      * @dataProvider dataProviderEncryptByKeyCompat
      *
-     * @param string $key       encryption key hex string
-     * @param string $data      plaintext hex string
+     * @param string $key encryption key hex string
+     * @param string $data plaintext hex string
      * @param string $encrypted ciphertext hex string
      */
     public function testEncryptByKeyCompat($key, $data, $encrypted): void
@@ -790,8 +790,8 @@ TEXT;
     /**
      * @dataProvider dataProviderEncryptByPasswordCompat
      *
-     * @param string $password  encryption password
-     * @param string $data      plaintext hex string
+     * @param string $password encryption password
+     * @param string $data plaintext hex string
      * @param string $encrypted ciphertext hex string
      */
     public function testEncryptByPasswordCompat($password, $data, $encrypted): void
@@ -820,7 +820,8 @@ TEXT;
      */
     public function testRandomKeyInvalidInput($input): void
     {
-        $this->expectException('\yii\base\InvalidParamException');
+        $this->expectException(\yii\base\InvalidParamException::class);
+
         $key1 = $this->security->generateRandomKey($input);
     }
 
@@ -957,8 +958,8 @@ TEXT;
      * @param string $hash
      * @param string $password
      * @param string $salt
-     * @param int    $iterations
-     * @param int    $length
+     * @param int $iterations
+     * @param int $length
      * @param string $okm
      */
     public function testPbkdf2($hash, $password, $salt, $iterations, $length, $okm): void
@@ -1029,7 +1030,7 @@ TEXT;
             [
                 'Hash' => 'sha1',
                 'IKM' => '0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c',
-                'salt' => '',
+                'salt' => null,
                 'info' => '',
                 'L' => 42,
                 'PRK' => '2adccada18779e7c2077ad2eb19d3f3e731385dd',
@@ -1045,7 +1046,7 @@ TEXT;
      * @param string $ikm
      * @param string $salt
      * @param string $info
-     * @param int    $l
+     * @param int $l
      * @param string $prk
      * @param string $okm
      */
@@ -1106,7 +1107,8 @@ TEXT;
 
     public function testMaskingInvalidStrings(): void
     {
-        $this->expectException('\yii\base\InvalidParamException');
+        $this->expectException(\yii\base\InvalidParamException::class);
+
         $this->security->maskToken('');
     }
 

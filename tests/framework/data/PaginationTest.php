@@ -76,11 +76,11 @@ class PaginationTest extends TestCase
     /**
      * @dataProvider dataProviderCreateUrl
      *
-     * @param int    $page
-     * @param int    $pageSize
+     * @param int $page
+     * @param int $pageSize
      * @param string $expectedUrl
-     * @param array  $params
-     * @param bool   $absolute
+     * @param array $params
+     * @param bool $absolute
      */
     public function testCreateUrl($page, $pageSize, $expectedUrl, $params, $absolute = false): void
     {
@@ -178,9 +178,9 @@ class PaginationTest extends TestCase
      * @dataProvider dataProviderSetPage
      *
      * @param int|null $value
-     * @param bool     $validate
-     * @param int      $totalCount
-     * @param int      $page
+     * @param bool $validate
+     * @param int $totalCount
+     * @param int $page
      */
     public function testSetPage($value, $validate, $totalCount, $page): void
     {
@@ -208,7 +208,7 @@ class PaginationTest extends TestCase
      * @dataProvider dataProviderGetPageSize
      *
      * @param array|bool $pageSizeLimit
-     * @param int        $pageSize
+     * @param int $pageSize
      */
     public function testGetPageSize($pageSizeLimit, $pageSize): void
     {
@@ -239,10 +239,10 @@ class PaginationTest extends TestCase
     /**
      * @dataProvider dataProviderSetPageSize
      *
-     * @param int|null    $value
-     * @param bool        $validate
+     * @param int|null $value
+     * @param bool $validate
      * @param array|false $pageSizeLimit
-     * @param int         $pageSize
+     * @param int $pageSize
      */
     public function testSetPageSize($value, $validate, $pageSizeLimit, $pageSize): void
     {
@@ -384,10 +384,10 @@ class PaginationTest extends TestCase
     /**
      * @dataProvider dataProviderGetLinks
      *
-     * @param int         $page
-     * @param int         $pageSize
-     * @param int         $totalCount
-     * @param string      $self
+     * @param int $page
+     * @param int $pageSize
+     * @param int $totalCount
+     * @param string $self
      * @param string|null $first
      * @param string|null $last
      * @param string|null $prev

@@ -15,9 +15,9 @@ use yii\behaviors\AttributeTypecastBehavior;
 /**
  * Class OrderItem.
  *
- * @property int    $order_id
- * @property int    $item_id
- * @property int    $quantity
+ * @property int $order_id
+ * @property int $item_id
+ * @property int $quantity
  * @property string $subtotal
  */
 class OrderItem extends ActiveRecord

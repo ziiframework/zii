@@ -42,14 +42,16 @@ class FormatterTest extends TestCase
             'timeZone' => 'UTC',
             'language' => 'ru-RU',
         ]);
-        $this->formatter = new Formatter(['locale' => 'en-US']);
+
+        if (!isset($this->formatter)) {
+            $this->formatter = new Formatter(['locale' => 'en-US']);
+        }
     }
 
     protected function tearDown(): void
     {
         parent::tearDown();
         IntlTestHelper::resetIntlStatus();
-        $this->formatter = null;
     }
 
     public function testFormat(): void
@@ -89,9 +91,9 @@ class FormatterTest extends TestCase
         $value = time();
         $this->assertSame(date('Y-m-d', $value), $this->formatter->format($value, static fn ($value) => date('Y-m-d', $value)));
         $this->assertSame('from: ' . date('Y-m-d', $value), $this->formatter->format($value, static function ($value, $formatter) {
-            /* @var $formatter Formatter */
-            return 'from: ' . $formatter->asDate($value, 'php:Y-m-d');
-        }));
+                /* @var $formatter Formatter */
+                return 'from: ' . $formatter->asDate($value, 'php:Y-m-d');
+            }));
     }
 
     public function testLocale(): void

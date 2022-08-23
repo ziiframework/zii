@@ -22,7 +22,7 @@ use Exception;
 class Cat extends Animal
 {
     /**
-     * @param self  $record
+     * @param self $record
      * @param array $row
      */
     public static function populateRecord($record, $row): void

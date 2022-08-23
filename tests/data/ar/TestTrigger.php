@@ -13,7 +13,7 @@ namespace yiiunit\data\ar;
 /**
  * Class TestTrigger.
  *
- * @property int    $id
+ * @property int $id
  * @property string $stringcol
  */
 class TestTrigger extends ActiveRecord

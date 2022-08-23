@@ -24,7 +24,7 @@ use yii\helpers\FileHelper;
 class ViewTest extends TestCase
 {
     /**
-     * @var string path for the test files
+     * @var string path for the test files.
      */
     protected $testViewPath = '';
 

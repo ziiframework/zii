@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\validators;
 
-use stdclass;
+use stdClass;
 use yiiunit\TestCase;
 use yii\validators\DefaultValueValidator;
 
@@ -31,7 +31,7 @@ class DefaultValueValidatorTest extends TestCase
     {
         $val = new DefaultValueValidator();
         $val->value = 'test_value';
-        $obj = new stdclass();
+        $obj = new stdClass();
         $obj->attrA = 'attrA';
         $obj->attrB = null;
         $obj->attrC = '';

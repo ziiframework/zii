@@ -531,7 +531,7 @@ class ComplexModel1 extends Model
     {
         return [
             [['id'], 'required', 'except' => 'administration'],
-            [['name', 'description'], 'filter', 'filter' => 'trim'],
+            [['name', 'description'], 'filter', 'filter' => 'trim', 'skipOnEmpty' => true],
             [['is_disabled'], 'boolean', 'on' => 'administration'],
         ];
     }

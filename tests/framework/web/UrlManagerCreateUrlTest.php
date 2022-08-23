@@ -101,9 +101,9 @@ class UrlManagerCreateUrlTest extends TestCase
      * @dataProvider variationsProvider
      *
      * @param string $method
-     * @param bool   $showScriptName
+     * @param bool $showScriptName
      * @param string $prefix
-     * @param array  $config
+     * @param array $config
      */
     public function testWithoutRules($method, $showScriptName, $prefix, $config): void
     {
@@ -138,9 +138,9 @@ class UrlManagerCreateUrlTest extends TestCase
      * @dataProvider variationsProvider
      *
      * @param string $method
-     * @param bool   $showScriptName
+     * @param bool $showScriptName
      * @param string $prefix
-     * @param array  $config
+     * @param array $config
      */
     public function testWithoutRulesWithSuffix($method, $showScriptName, $prefix, $config): void
     {
@@ -196,9 +196,9 @@ class UrlManagerCreateUrlTest extends TestCase
      * @dataProvider variationsProvider
      *
      * @param string $method
-     * @param bool   $showScriptName
+     * @param bool $showScriptName
      * @param string $prefix
-     * @param array  $config
+     * @param array $config
      */
     public function testSimpleRules($method, $showScriptName, $prefix, $config): void
     {
@@ -256,9 +256,9 @@ class UrlManagerCreateUrlTest extends TestCase
      * @dataProvider variationsProvider
      *
      * @param string $method
-     * @param bool   $showScriptName
+     * @param bool $showScriptName
      * @param string $prefix
-     * @param array  $config
+     * @param array $config
      */
     public function testSimpleRulesWithSuffix($method, $showScriptName, $prefix, $config): void
     {
@@ -310,9 +310,9 @@ class UrlManagerCreateUrlTest extends TestCase
      * @dataProvider variationsProvider
      *
      * @param string $method
-     * @param bool   $showScriptName
+     * @param bool $showScriptName
      * @param string $prefix
-     * @param array  $config
+     * @param array $config
      */
     public function testControllerActionParams($method, $showScriptName, $prefix, $config): void
     {
@@ -362,9 +362,9 @@ class UrlManagerCreateUrlTest extends TestCase
      * @dataProvider variationsProvider
      *
      * @param string $method
-     * @param bool   $showScriptName
+     * @param bool $showScriptName
      * @param string $prefix
-     * @param array  $config
+     * @param array $config
      */
     public function testRulesWithDefaultParams($method, $showScriptName, $prefix, $config): void
     {
@@ -442,9 +442,9 @@ class UrlManagerCreateUrlTest extends TestCase
      * @see https://github.com/yiisoft/yii2/issues/10935
      *
      * @param string $method
-     * @param bool   $showScriptName
+     * @param bool $showScriptName
      * @param string $prefix
-     * @param array  $config
+     * @param array $config
      */
     public function testWithNullParams($method, $showScriptName, $prefix, $config): void
     {
@@ -483,9 +483,9 @@ class UrlManagerCreateUrlTest extends TestCase
      * @see https://github.com/yiisoft/yii2/issues/6717
      *
      * @param string $method
-     * @param bool   $showScriptName
+     * @param bool $showScriptName
      * @param string $prefix
-     * @param array  $config
+     * @param array $config
      */
     public function testWithEmptyPattern($method, $showScriptName, $prefix, $config): void
     {
@@ -555,9 +555,9 @@ class UrlManagerCreateUrlTest extends TestCase
      *
      * @dataProvider absolutePatternsVariations
      *
-     * @param bool   $showScriptName
+     * @param bool $showScriptName
      * @param string $prefix
-     * @param array  $config
+     * @param array $config
      */
     public function testAbsolutePatterns($showScriptName, $prefix, $config): void
     {
@@ -619,9 +619,9 @@ class UrlManagerCreateUrlTest extends TestCase
      *
      * @see https://github.com/yiisoft/yii2/issues/12691
      *
-     * @param bool   $showScriptName
+     * @param bool $showScriptName
      * @param string $prefix
-     * @param array  $config
+     * @param array $config
      */
     public function testProtocolRelativeAbsolutePattern($showScriptName, $prefix, $config): void
     {

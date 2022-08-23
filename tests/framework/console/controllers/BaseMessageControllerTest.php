@@ -64,7 +64,7 @@ abstract class BaseMessageControllerTest extends TestCase
     /**
      * Creates test message controller instance.
      *
-     * @return MessageControllerMock message command instance
+     * @return MessageControllerMock message command instance.
      */
     protected function createMessageController()
     {
@@ -81,10 +81,10 @@ abstract class BaseMessageControllerTest extends TestCase
     /**
      * Emulates running of the message controller action.
      *
-     * @param string $actionID id of action to be run
-     * @param array  $args     action arguments
+     * @param  string $actionID id of action to be run.
+     * @param  array  $args     action arguments.
      *
-     * @return string command output
+     * @return string command output.
      */
     protected function runMessageControllerAction($actionID, array $args = [])
     {
@@ -97,7 +97,7 @@ abstract class BaseMessageControllerTest extends TestCase
     /**
      * Creates message command config file named as [[configFileName]].
      *
-     * @param array $config message command config
+     * @param array $config message command config.
      */
     protected function saveConfigFile(array $config): void
     {
@@ -128,7 +128,7 @@ abstract class BaseMessageControllerTest extends TestCase
     /**
      * Saves messages.
      *
-     * @param array  $messages
+     * @param array $messages
      * @param string $category
      */
     abstract protected function saveMessages($messages, $category);
