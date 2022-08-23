@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace yii\db\pgsql;
 
 use PDO;
+use yii\db\ColumnSchemaBuilder;
 use yii\db\Query;
 use yii\db\PdoValue;
 use yii\db\Constraint;
@@ -288,7 +289,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
 
         // https://github.com/yiisoft/yii2/issues/4492
         // https://www.postgresql.org/docs/9.1/sql-altertable.html
-        if (preg_match('/^(DROP|SET|RESET)\s+/i', $type)) {
+        if (preg_match('/^(DROP|SET|RESET)\s+/i', ($type instanceof ColumnSchemaBuilder) ? $type->__toString() : $type)) {
             return "ALTER TABLE {$tableName} ALTER COLUMN {$columnName} {$type}";
         }
 
