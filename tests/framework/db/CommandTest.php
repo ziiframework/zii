@@ -296,7 +296,7 @@ SQL;
         $command = $db->createCommand($sql);
         $command->fetchMode = PDO::FETCH_OBJ;
         $result = $command->queryOne();
-        $this->assertInternalType('object', $result);
+        $this->assertIsObject($result);
 
         // FETCH_NUM, customized in query method
         $sql = 'SELECT * FROM {{customer}}';

@@ -90,7 +90,7 @@ class BaseMailerTest extends TestCase
         ];
         $mailer->setView($viewConfig);
         $view = $mailer->getView();
-        $this->assertInternalType('object', $view, 'Unable to setup view via config!');
+        $this->assertIsObject($view, 'Unable to setup view via config!');
         $this->assertEquals($viewConfig['params'], $view->params, 'Unable to configure view via config array!');
     }
 
@@ -101,14 +101,14 @@ class BaseMailerTest extends TestCase
     {
         $mailer = new Mailer();
         $view = $mailer->getView();
-        $this->assertInternalType('object', $view, 'Unable to get default view!');
+        $this->assertIsObject($view, 'Unable to get default view!');
     }
 
     public function testCreateMessage(): void
     {
         $mailer = new Mailer();
         $message = $mailer->compose();
-        $this->assertInternalType('object', $message, 'Unable to create message instance!');
+        $this->assertIsObject($message, 'Unable to create message instance!');
         $this->assertEquals($mailer->messageClass, get_class($message), 'Invalid message class!');
     }
 
