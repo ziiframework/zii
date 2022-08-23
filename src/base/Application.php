@@ -179,7 +179,7 @@ abstract class Application extends Module
      * its [[BootstrapInterface::bootstrap()|bootstrap()]] method will be also be called.
      *
      * If not set explicitly in the application config, this property will be populated with the contents of
-     * `@vendor/yiisoft/extensions.php`.
+     * `@vendor/ziiframework/extensions.php`.
      */
     public $extensions;
 
@@ -312,7 +312,7 @@ abstract class Application extends Module
     protected function bootstrap(): void
     {
         if ($this->extensions === null) {
-            $file = Yii::getAlias('@vendor/yiisoft/extensions.php');
+            $file = Yii::getAlias('@vendor/ziiframework/extensions.php');
             $this->extensions = is_file($file) ? include $file : [];
         }
 

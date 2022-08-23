@@ -527,8 +527,8 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
 
         if ($value >= 0 && $value <= 100) {
             // percent * 21474837 / 2147483647 ≈ percent * 0.01
-            ini_set('session.gc_probability', floor($value * 21474836.47));
-            ini_set('session.gc_divisor', 2147483647);
+            ini_set('session.gc_probability', (string) floor($value * 21474836.47));
+            ini_set('session.gc_divisor', '2147483647');
         } else {
             throw new InvalidArgumentException('GCProbability must be a value between 0 and 100.');
         }
@@ -567,6 +567,10 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
      */
     public function setTimeout($value): void
     {
+        if (is_int($value)) {
+            $value = (string) $value;
+        }
+
         $this->freeze();
         ini_set('session.gc_maxlifetime', $value);
         $this->unfreeze();
