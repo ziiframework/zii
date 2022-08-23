@@ -625,7 +625,9 @@ class FileValidatorTest extends TestCase
      */
     public function testValidateMimeTypeCaseInsensitive($mask, $fileMimeType, $expected): void
     {
-        $validator = $this->getMock('\yii\validators\FileValidator', ['getMimeTypeByFile']);
+        $validator = $this->getMockBuilder('\yii\validators\FileValidator')
+            ->setMethods(['getMimeTypeByFile'])
+            ->getMock();
         $validator->method('getMimeTypeByFile')->willReturn($fileMimeType);
         $validator->mimeTypes = [$mask];
 
