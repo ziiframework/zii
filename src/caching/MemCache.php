@@ -384,12 +384,8 @@ class MemCache extends Cache
      * @see https://www.php.net/manual/en/memcache.set.php
      * @see https://www.php.net/manual/en/memcached.expiration.php
      * @since 2.0.31
-     *
-     * @param int $duration
-     *
-     * @return int
      */
-    protected function normalizeDuration($duration)
+    protected function normalizeDuration(int $duration): int
     {
         if ($duration < 0) {
             return 0;
