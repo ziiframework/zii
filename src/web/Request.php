@@ -1098,11 +1098,11 @@ class Request extends \yii\base\Request
                     break;
 
                 case $s[$i] < "\xC0": $s[$j] = "\xC2";
-                $s[++$j] = $s[$i];
+                    $s[++$j] = $s[$i];
                     break;
 
                 default: $s[$j] = "\xC3";
-                $s[++$j] = chr(ord($s[$i]) - 64);
+                    $s[++$j] = chr(ord($s[$i]) - 64);
                     break;
             }
         }
