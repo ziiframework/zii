@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yii\rest;
 
-use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\web\ForbiddenHttpException;
+use yii\base\InvalidConfigException;
 
 /**
  * ActiveController implements a common set of actions for supporting RESTful access to ActiveRecord.

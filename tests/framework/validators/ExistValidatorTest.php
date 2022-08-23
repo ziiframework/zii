@@ -11,13 +11,13 @@ declare(strict_types=1);
 namespace yiiunit\framework\validators;
 
 use yii\base\Exception;
-use yii\validators\ExistValidator;
-use yiiunit\data\ar\ActiveRecord;
 use yiiunit\data\ar\Order;
 use yiiunit\data\ar\OrderItem;
-use yiiunit\data\validators\models\ValidatorTestMainModel;
-use yiiunit\data\validators\models\ValidatorTestRefModel;
+use yiiunit\data\ar\ActiveRecord;
+use yii\validators\ExistValidator;
 use yiiunit\framework\db\DatabaseTestCase;
+use yiiunit\data\validators\models\ValidatorTestRefModel;
+use yiiunit\data\validators\models\ValidatorTestMainModel;
 
 abstract class ExistValidatorTest extends DatabaseTestCase
 {

@@ -10,13 +10,13 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\base;
 
-use ReflectionClass;
 use Yii;
-use yii\base\Action;
-use yii\base\ActionFilter;
-use yii\base\Controller;
 use yii\web\User;
+use ReflectionClass;
+use yii\base\Action;
 use yiiunit\TestCase;
+use yii\base\Controller;
+use yii\base\ActionFilter;
 
 /**
  * @group base

@@ -11,11 +11,11 @@ declare(strict_types=1);
 namespace yii\filters;
 
 use Yii;
-use yii\base\Action;
-use yii\base\ActionFilter;
-use yii\di\Instance;
-use yii\web\ForbiddenHttpException;
 use yii\web\User;
+use yii\base\Action;
+use yii\di\Instance;
+use yii\base\ActionFilter;
+use yii\web\ForbiddenHttpException;
 
 /**
  * AccessControl provides simple access control based on a set of rules.

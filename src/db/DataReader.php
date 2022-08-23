@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yii\db;
 
-use Countable;
-use Iterator;
 use PDO;
+use Iterator;
+use Countable;
 use PDOStatement;
 use ReturnTypeWillChange;
 use yii\base\InvalidCallException;

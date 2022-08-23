@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace yiiunit\framework\data;
 
 use stdClass;
-use yii\base\DynamicModel;
-use yii\data\DataFilter;
-use yiiunit\data\base\Singer;
 use yiiunit\TestCase;
+use yii\data\DataFilter;
+use yii\base\DynamicModel;
+use yiiunit\data\base\Singer;
 
 /**
  * @group data

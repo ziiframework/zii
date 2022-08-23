@@ -12,13 +12,13 @@ namespace yii\db\mysql;
 
 use PDO;
 use Yii;
-use yii\base\InvalidArgumentException;
-use yii\base\NotSupportedException;
-use yii\caching\CacheInterface;
-use yii\caching\DbCache;
+use yii\db\Query;
 use yii\db\Exception;
 use yii\db\Expression;
-use yii\db\Query;
+use yii\caching\DbCache;
+use yii\caching\CacheInterface;
+use yii\base\NotSupportedException;
+use yii\base\InvalidArgumentException;
 
 /**
  * QueryBuilder is the query builder for MySQL databases.

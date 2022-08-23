@@ -10,13 +10,13 @@ declare(strict_types=1);
 
 namespace yii\web;
 
-use Exception;
 use Yii;
-use yii\base\Component;
-use yii\base\InvalidArgumentException;
-use yii\base\InvalidConfigException;
-use yii\helpers\FileHelper;
+use Exception;
 use yii\helpers\Url;
+use yii\base\Component;
+use yii\helpers\FileHelper;
+use yii\base\InvalidConfigException;
+use yii\base\InvalidArgumentException;
 
 /**
  * AssetManager manages asset bundle configuration and loading.

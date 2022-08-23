@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yii\widgets;
 
-use yii\base\InvalidConfigException;
 use yii\base\Widget;
+use yii\base\InvalidConfigException;
 
 /**
  * ContentDecorator records all output between [[begin()]] and [[end()]] calls, passes it to the given view file

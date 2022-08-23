@@ -10,16 +10,16 @@ declare(strict_types=1);
 
 namespace yii\widgets;
 
-use Closure;
 use Yii;
-use yii\base\Arrayable;
-use yii\base\InvalidConfigException;
+use Closure;
 use yii\base\Model;
 use yii\base\Widget;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-use yii\helpers\Inflector;
+use yii\base\Arrayable;
 use yii\i18n\Formatter;
+use yii\helpers\Inflector;
+use yii\helpers\ArrayHelper;
+use yii\base\InvalidConfigException;
 
 /**
  * DetailView displays the detail of a single data [[model]].

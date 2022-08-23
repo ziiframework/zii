@@ -10,12 +10,12 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\widgets;
 
-use yii\data\ActiveDataProvider;
-use yii\widgets\Breadcrumbs;
-use yii\widgets\LinkSorter;
 use yii\widgets\ListView;
-use yiiunit\data\ar\ActiveRecord;
 use yiiunit\data\ar\Order;
+use yii\widgets\LinkSorter;
+use yii\widgets\Breadcrumbs;
+use yii\data\ActiveDataProvider;
+use yiiunit\data\ar\ActiveRecord;
 use yiiunit\framework\db\DatabaseTestCase;
 
 /**

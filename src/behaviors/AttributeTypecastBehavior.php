@@ -10,14 +10,14 @@ declare(strict_types=1);
 
 namespace yii\behaviors;
 
-use yii\base\Behavior;
-use yii\base\InvalidArgumentException;
 use yii\base\Model;
+use yii\base\Behavior;
 use yii\db\BaseActiveRecord;
 use yii\helpers\StringHelper;
-use yii\validators\BooleanValidator;
 use yii\validators\NumberValidator;
 use yii\validators\StringValidator;
+use yii\validators\BooleanValidator;
+use yii\base\InvalidArgumentException;
 
 /**
  * AttributeTypecastBehavior provides an ability of automatic model attribute typecasting.

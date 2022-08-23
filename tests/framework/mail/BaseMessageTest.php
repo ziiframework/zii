@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace yiiunit\framework\mail;
 
 use Yii;
+use yiiunit\TestCase;
 use yii\mail\BaseMailer;
 use yii\mail\BaseMessage;
-use yiiunit\TestCase;
 
 /**
  * @group mail

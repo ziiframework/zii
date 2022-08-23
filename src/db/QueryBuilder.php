@@ -11,11 +11,11 @@ declare(strict_types=1);
 namespace yii\db;
 
 use Generator;
-use yii\base\InvalidArgumentException;
-use yii\base\NotSupportedException;
-use yii\db\conditions\ConditionInterface;
-use yii\db\conditions\HashCondition;
 use yii\helpers\StringHelper;
+use yii\base\NotSupportedException;
+use yii\db\conditions\HashCondition;
+use yii\base\InvalidArgumentException;
+use yii\db\conditions\ConditionInterface;
 
 /**
  * QueryBuilder builds a SELECT SQL statement based on the specification given as a [[Query]] object.

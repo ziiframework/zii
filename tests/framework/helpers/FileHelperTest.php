@@ -8,8 +8,8 @@ declare(strict_types=1);
  * @license https://www.yiiframework.com/license/
  */
 
-use yii\helpers\FileHelper;
 use yiiunit\TestCase;
+use yii\helpers\FileHelper;
 
 /**
  * Unit test for [[yii\helpers\FileHelper]].

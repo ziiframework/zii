@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace yii\web;
 
 use Yii;
-use yii\base\InvalidRouteException;
 use yii\helpers\Url;
+use yii\base\InvalidRouteException;
 
 /**
  * Application is the base class for all web application classes.

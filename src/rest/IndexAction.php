@@ -11,11 +11,11 @@ declare(strict_types=1);
 namespace yii\rest;
 
 use Yii;
-use yii\data\ActiveDataProvider;
+use yii\data\Sort;
 use yii\data\DataFilter;
 use yii\data\Pagination;
-use yii\data\Sort;
 use yii\helpers\ArrayHelper;
+use yii\data\ActiveDataProvider;
 
 /**
  * IndexAction implements the API endpoint for listing multiple models.

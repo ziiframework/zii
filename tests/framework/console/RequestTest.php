@@ -8,8 +8,8 @@ declare(strict_types=1);
  * @license https://www.yiiframework.com/license/
  */
 
-use yii\console\Request;
 use yiiunit\TestCase;
+use yii\console\Request;
 
 /**
  * @group console

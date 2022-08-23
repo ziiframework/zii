@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yii\helpers;
 
-use IntlDateFormatter;
 use Yii;
+use IntlDateFormatter;
 
 /**
  * BaseFormatConverter provides concrete implementation for [[FormatConverter]].

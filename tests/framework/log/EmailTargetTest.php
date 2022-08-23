@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\log;
 
-use yii\log\EmailTarget;
 use yiiunit\TestCase;
+use yii\log\EmailTarget;
 
 /**
  * Class EmailTargetTest.

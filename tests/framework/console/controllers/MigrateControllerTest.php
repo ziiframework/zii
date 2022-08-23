@@ -11,12 +11,12 @@ declare(strict_types=1);
 namespace yiiunit\framework\console\controllers;
 
 use Yii;
-use yii\console\controllers\MigrateController;
-use yii\console\ExitCode;
-use yii\db\Migration;
 use yii\db\Query;
-use yii\helpers\Inflector;
+use yii\db\Migration;
 use yiiunit\TestCase;
+use yii\console\ExitCode;
+use yii\helpers\Inflector;
+use yii\console\controllers\MigrateController;
 
 /**
  * Unit test for [[\yii\console\controllers\MigrateController]].

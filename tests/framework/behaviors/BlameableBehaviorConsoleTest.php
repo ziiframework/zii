@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace yiiunit\framework\behaviors;
 
 use Yii;
-use yii\behaviors\BlameableBehavior;
-use yii\db\ActiveRecord;
 use yiiunit\TestCase;
+use yii\db\ActiveRecord;
+use yii\behaviors\BlameableBehavior;
 
 /**
  * Unit test emulating console app (without user component) for [[\yii\behaviors\BlameableBehavior]].

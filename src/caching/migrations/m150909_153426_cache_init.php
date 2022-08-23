@@ -8,9 +8,9 @@ declare(strict_types=1);
  * @license https://www.yiiframework.com/license/
  */
 
-use yii\base\InvalidConfigException;
-use yii\caching\DbCache;
 use yii\db\Migration;
+use yii\caching\DbCache;
+use yii\base\InvalidConfigException;
 
 /**
  * Initializes Cache tables.
@@ -22,9 +22,9 @@ use yii\db\Migration;
 class m150909_153426_cache_init extends Migration
 {
     /**
-     * @throws yii\base\InvalidConfigException
-     *
      * @return DbCache
+     *
+     * @throws yii\base\InvalidConfigException
      */
     protected function getCache()
     {

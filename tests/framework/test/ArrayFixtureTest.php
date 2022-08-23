@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\test;
 
-use yii\test\ArrayFixture;
 use yiiunit\TestCase;
+use yii\test\ArrayFixture;
 
 /**
  * @group fixture

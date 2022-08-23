@@ -11,14 +11,15 @@ declare(strict_types=1);
 namespace yiiunit\framework\ar;
 
 use Exception;
-use function get_class;
 use yii\base\Event;
-use yii\db\ActiveRecordInterface;
-use yii\db\BaseActiveRecord;
-use yii\db\Expression;
-use yiiunit\data\ar\Customer;
-use yiiunit\data\ar\Order;
 use yiiunit\TestCase;
+use yii\db\Expression;
+use yiiunit\data\ar\Order;
+use yii\db\BaseActiveRecord;
+use yiiunit\data\ar\Customer;
+use yii\db\ActiveRecordInterface;
+
+use function get_class;
 
 /**
  * This trait provides unit tests shared by the different AR implementations.

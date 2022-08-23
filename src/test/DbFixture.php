@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yii\test;
 
-use yii\base\BaseObject;
-use yii\db\Connection;
 use yii\di\Instance;
+use yii\db\Connection;
+use yii\base\BaseObject;
 
 /**
  * DbFixture is the base class for DB-related fixtures.

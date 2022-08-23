@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\i18n;
 
-use yii\i18n\GettextPoFile;
 use yiiunit\TestCase;
+use yii\i18n\GettextPoFile;
 
 /**
  * @group i18n

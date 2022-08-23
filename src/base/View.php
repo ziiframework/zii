@@ -10,13 +10,13 @@ declare(strict_types=1);
 
 namespace yii\base;
 
+use Yii;
 use Exception;
 use Throwable;
-use Yii;
-use yii\helpers\FileHelper;
 use yii\widgets\Block;
-use yii\widgets\ContentDecorator;
+use yii\helpers\FileHelper;
 use yii\widgets\FragmentCache;
+use yii\widgets\ContentDecorator;
 
 /**
  * View represents a view object in the MVC pattern.

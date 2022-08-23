@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace yii\test;
 
 use ReflectionClass;
-use yii\base\InvalidConfigException;
-use yii\db\ActiveRecord;
 use yii\db\TableSchema;
+use yii\db\ActiveRecord;
+use yii\base\InvalidConfigException;
 
 /**
  * ActiveFixture represents a fixture backed up by a [[modelClass|ActiveRecord class]] or a [[tableName|database table]].

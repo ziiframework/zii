@@ -11,11 +11,11 @@ declare(strict_types=1);
 namespace yii;
 
 use Yii;
-use yii\base\InvalidArgumentException;
-use yii\base\InvalidConfigException;
-use yii\base\UnknownClassException;
-use yii\di\Container;
 use yii\log\Logger;
+use yii\di\Container;
+use yii\base\UnknownClassException;
+use yii\base\InvalidConfigException;
+use yii\base\InvalidArgumentException;
 
 /*
  * Gets the application start timestamp.

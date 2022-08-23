@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace yii\grid;
 
 use Closure;
-use yii\base\InvalidConfigException;
 use yii\helpers\Html;
 use yii\helpers\Json;
+use yii\base\InvalidConfigException;
 
 /**
  * CheckboxColumn displays a column of checkboxes in a grid view.

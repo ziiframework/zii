@@ -11,11 +11,11 @@ declare(strict_types=1);
 namespace yiiunit\framework\behaviors;
 
 use Yii;
-use yii\behaviors\OptimisticLockBehavior;
-use yii\db\ActiveRecord;
-use yii\db\Connection;
 use yii\web\Request;
 use yiiunit\TestCase;
+use yii\db\Connection;
+use yii\db\ActiveRecord;
+use yii\behaviors\OptimisticLockBehavior;
 
 /**
  * Unit test for [[\yii\behaviors\OptimisticLockBehavior]].

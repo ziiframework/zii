@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace yii\db\conditions;
 
-use yii\db\ExpressionBuilderInterface;
-use yii\db\ExpressionBuilderTrait;
-use yii\db\ExpressionInterface;
 use yii\db\Query;
+use yii\db\ExpressionInterface;
+use yii\db\ExpressionBuilderTrait;
+use yii\db\ExpressionBuilderInterface;
 
 /**
  * Class BetweenColumnsConditionBuilder builds objects of [[BetweenColumnsCondition]].

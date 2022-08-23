@@ -10,17 +10,17 @@ declare(strict_types=1);
 
 namespace yii\data;
 
-use Closure;
 use Yii;
-use yii\base\InvalidConfigException;
+use Closure;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
-use yii\validators\BooleanValidator;
+use yii\validators\Validator;
 use yii\validators\DateValidator;
 use yii\validators\EachValidator;
 use yii\validators\NumberValidator;
 use yii\validators\StringValidator;
-use yii\validators\Validator;
+use yii\base\InvalidConfigException;
+use yii\validators\BooleanValidator;
 
 /**
  * DataFilter is a special [[Model]] for processing query filtering specification.

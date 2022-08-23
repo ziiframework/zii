@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace yii\web;
 
-use DOMDocument;
 use DOMElement;
-use DOMException;
+use DOMDocument;
 use Traversable;
+use DOMException;
 use yii\base\Arrayable;
 use yii\base\Component;
 use yii\helpers\StringHelper;

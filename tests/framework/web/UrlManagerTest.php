@@ -12,8 +12,8 @@ namespace yiiunit\framework\web;
 
 use Yii;
 use yii\web\Request;
-use yii\web\UrlManager;
 use yiiunit\TestCase;
+use yii\web\UrlManager;
 
 /**
  * This tests verifies all features provided by UrlManager according to the documentation.

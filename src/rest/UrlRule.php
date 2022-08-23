@@ -11,11 +11,11 @@ declare(strict_types=1);
 namespace yii\rest;
 
 use Yii;
-use yii\base\InvalidConfigException;
 use yii\helpers\Inflector;
 use yii\web\CompositeUrlRule;
-use yii\web\UrlRule as WebUrlRule;
 use yii\web\UrlRuleInterface;
+use yii\web\UrlRule as WebUrlRule;
+use yii\base\InvalidConfigException;
 
 /**
  * UrlRule is provided to simplify the creation of URL rules for RESTful API support.

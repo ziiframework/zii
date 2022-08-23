@@ -10,11 +10,11 @@ declare(strict_types=1);
 
 namespace yii\filters;
 
-use Closure;
 use Yii;
-use yii\base\ActionFilter;
+use Closure;
 use yii\web\Request;
 use yii\web\Response;
+use yii\base\ActionFilter;
 use yii\web\TooManyRequestsHttpException;
 
 /**

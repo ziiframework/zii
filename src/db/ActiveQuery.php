@@ -255,9 +255,9 @@ class ActiveQuery extends Query implements ActiveQueryInterface
      *
      * @param array $models the models to be checked
      *
-     * @throws InvalidConfigException if model primary key is empty
-     *
      * @return array the distinctive models
+     *
+     * @throws InvalidConfigException if model primary key is empty
      */
     private function removeDuplicatedModels($models)
     {

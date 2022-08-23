@@ -11,11 +11,11 @@ declare(strict_types=1);
 namespace yiiunit\framework\behaviors;
 
 use Yii;
+use yiiunit\TestCase;
 use yii\base\BaseObject;
-use yii\behaviors\BlameableBehavior;
 use yii\db\ActiveRecord;
 use yii\db\BaseActiveRecord;
-use yiiunit\TestCase;
+use yii\behaviors\BlameableBehavior;
 
 /**
  * Unit test for [[\yii\behaviors\BlameableBehavior]].

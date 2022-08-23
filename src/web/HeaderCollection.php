@@ -10,15 +10,16 @@ declare(strict_types=1);
 
 namespace yii\web;
 
-use function array_flip;
-use function array_key_exists;
-use function array_map;
+use Countable;
 use ArrayAccess;
 use ArrayIterator;
-use Countable;
 use IteratorAggregate;
-use ReturnTypeWillChange;
 use yii\base\BaseObject;
+use ReturnTypeWillChange;
+
+use function array_map;
+use function array_flip;
+use function array_key_exists;
 
 /**
  * HeaderCollection is used by [[Response]] to maintain the currently registered HTTP headers.

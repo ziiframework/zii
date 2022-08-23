@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace yii\validators;
 
-use Closure;
 use Yii;
-use yii\base\InvalidConfigException;
+use Closure;
 use yii\helpers\Html;
+use yii\base\InvalidConfigException;
 
 /**
  * CompareValidator compares the specified attribute value with another value.

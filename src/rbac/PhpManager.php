@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace yii\rbac;
 
 use Yii;
-use yii\base\InvalidArgumentException;
-use yii\base\InvalidCallException;
 use yii\helpers\VarDumper;
+use yii\base\InvalidCallException;
+use yii\base\InvalidArgumentException;
 
 /**
  * PhpManager represents an authorization manager that stores authorization

@@ -11,12 +11,12 @@ declare(strict_types=1);
 namespace yiiunit\framework\db\mysql;
 
 use PDO;
-use yii\base\DynamicModel;
-use yii\db\Expression;
-use yii\db\JsonExpression;
 use yii\db\Query;
 use yii\db\Schema;
 use yii\helpers\Json;
+use yii\db\Expression;
+use yii\base\DynamicModel;
+use yii\db\JsonExpression;
 
 /**
  * @group db

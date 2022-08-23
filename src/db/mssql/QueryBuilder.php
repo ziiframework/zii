@@ -10,11 +10,11 @@ declare(strict_types=1);
 
 namespace yii\db\mssql;
 
-use yii\base\InvalidArgumentException;
-use yii\base\NotSupportedException;
 use yii\db\Constraint;
 use yii\db\Expression;
 use yii\db\TableSchema;
+use yii\base\NotSupportedException;
+use yii\base\InvalidArgumentException;
 
 /**
  * QueryBuilder is the query builder for MS SQL Server databases (version 2008 and above).

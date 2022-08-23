@@ -10,13 +10,13 @@ declare(strict_types=1);
 
 namespace yii\web;
 
+use Yii;
+use Countable;
 use ArrayAccess;
 use ArrayIterator;
-use Countable;
 use IteratorAggregate;
-use ReturnTypeWillChange;
-use Yii;
 use yii\base\BaseObject;
+use ReturnTypeWillChange;
 use yii\base\InvalidCallException;
 
 /**

@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\helpers;
 
-use yii\helpers\UnsetArrayValue;
 use yiiunit\TestCase;
+use yii\helpers\UnsetArrayValue;
 
 /**
  * @group helpers

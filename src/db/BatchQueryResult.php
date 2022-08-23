@@ -10,11 +10,11 @@ declare(strict_types=1);
 
 namespace yii\db;
 
-use BadMethodCallException;
 use Iterator;
 use PDOException;
-use ReturnTypeWillChange;
 use yii\base\Component;
+use ReturnTypeWillChange;
+use BadMethodCallException;
 
 /**
  * BatchQueryResult represents a batch query from which you can retrieve data in batches.

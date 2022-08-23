@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\db\mssql;
 
-use yii\db\DefaultValueConstraint;
 use yii\db\mssql\Schema;
+use yii\db\DefaultValueConstraint;
 use yiiunit\framework\db\AnyValue;
 
 /**

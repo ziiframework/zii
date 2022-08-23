@@ -12,7 +12,7 @@ $obj = new class() extends \yii\base\Component {
     public $foo = 0;
 };
 
-$obj->attachBehavior('bar', (new class() extends \yii\base\Behavior {
+$obj->attachBehavior('bar', new class() extends \yii\base\Behavior {
     public function events()
     {
         return [
@@ -22,6 +22,6 @@ $obj->attachBehavior('bar', (new class() extends \yii\base\Behavior {
             },
         ];
     }
-}));
+});
 
 return $obj;

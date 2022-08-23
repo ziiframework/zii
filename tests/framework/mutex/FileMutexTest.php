@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace yiiunit\framework\mutex;
 
 use Yii;
-use yii\base\InvalidConfigException;
-use yii\mutex\FileMutex;
 use yiiunit\TestCase;
+use yii\mutex\FileMutex;
+use yii\base\InvalidConfigException;
 
 /**
  * Class FileMutexTest.

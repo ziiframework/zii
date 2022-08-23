@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace yii\web;
 
 use Yii;
+use yii\helpers\Url;
 use yii\base\BaseObject;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Url;
 
 /**
  * AssetBundle represents a collection of asset files, such as CSS, JS, images.

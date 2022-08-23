@@ -10,12 +10,12 @@ declare(strict_types=1);
 
 namespace yii\db;
 
-use ArrayAccess;
-use ArrayIterator;
 use Countable;
+use ArrayAccess;
+use Traversable;
+use ArrayIterator;
 use IteratorAggregate;
 use ReturnTypeWillChange;
-use Traversable;
 use yii\base\InvalidConfigException;
 
 /**

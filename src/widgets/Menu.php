@@ -10,12 +10,12 @@ declare(strict_types=1);
 
 namespace yii\widgets;
 
-use Closure;
 use Yii;
+use Closure;
 use yii\base\Widget;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 
 /**
  * Menu displays a multi-level menu using nested HTML lists.

@@ -10,14 +10,14 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\filters\auth;
 
-use ReflectionClass;
-use stdClass;
 use Yii;
+use stdClass;
+use ReflectionClass;
 use yii\base\Action;
-use yii\filters\auth\AuthMethod;
-use yii\web\Controller;
-use yiiunit\framework\filters\stubs\UserIdentity;
 use yiiunit\TestCase;
+use yii\web\Controller;
+use yii\filters\auth\AuthMethod;
+use yiiunit\framework\filters\stubs\UserIdentity;
 
 class AuthMethodTest extends TestCase
 {

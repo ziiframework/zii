@@ -10,20 +10,20 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\rbac;
 
-use app\models\User;
 use Yii;
+use yii\rbac\Role;
+use yii\log\Logger;
+use app\models\User;
+use yii\db\Connection;
+use yii\rbac\DbManager;
+use yii\rbac\Assignment;
+use yii\rbac\Permission;
+use yii\console\ExitCode;
 use yii\caching\ArrayCache;
 use yii\console\Application;
-use yii\console\ExitCode;
-use yii\db\Connection;
-use yii\log\Logger;
-use yii\rbac\Assignment;
-use yii\rbac\DbManager;
-use yii\rbac\Permission;
-use yii\rbac\Role;
 use yiiunit\data\rbac\UserID;
-use yiiunit\framework\console\controllers\EchoMigrateController;
 use yiiunit\framework\log\ArrayTarget;
+use yiiunit\framework\console\controllers\EchoMigrateController;
 
 /**
  * DbManagerTestCase.
@@ -114,11 +114,11 @@ abstract class DbManagerTestCase extends ManagerTestCase
     }
 
     /**
+     * @return \yii\db\Connection
+     *
      * @throws \yii\base\InvalidParamException
      * @throws \yii\db\Exception
      * @throws \yii\base\InvalidConfigException
-     *
-     * @return \yii\db\Connection
      */
     public function getConnection()
     {

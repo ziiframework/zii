@@ -10,13 +10,13 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\rbac;
 
-use InvalidArgumentException;
 use Yii;
-use yii\rbac\BaseManager;
 use yii\rbac\Item;
-use yii\rbac\Permission;
 use yii\rbac\Role;
 use yiiunit\TestCase;
+use yii\rbac\Permission;
+use yii\rbac\BaseManager;
+use InvalidArgumentException;
 
 /**
  * ManagerTestCase.

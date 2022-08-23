@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace yii\widgets;
 
-use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\base\Widget;
 use yii\helpers\Html;
+use yii\base\InvalidConfigException;
 
 /**
  * InputWidget is the base class for widgets that collect user inputs.

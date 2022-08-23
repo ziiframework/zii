@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace yii\validators;
 
 use Yii;
-use yii\base\ErrorException;
-use yii\base\InvalidConfigException;
 use yii\helpers\Json;
 use yii\web\JsExpression;
+use yii\base\ErrorException;
+use yii\base\InvalidConfigException;
 
 /**
  * EmailValidator validates that the attribute value is a valid email address.
@@ -161,13 +161,13 @@ class EmailValidator extends Validator
     {
         $normalizedDomain = $domain . '.';
 
-        if (!checkdnsrr($normalizedDomain, ($isMX ? 'MX' : 'A'))) {
+        if (!checkdnsrr($normalizedDomain, $isMX ? 'MX' : 'A')) {
             return false;
         }
 
         try {
             // dns_get_record can return false and emit Warning that may or may not be converted to ErrorException
-            $records = dns_get_record($normalizedDomain, ($isMX ? DNS_MX : DNS_A));
+            $records = dns_get_record($normalizedDomain, $isMX ? DNS_MX : DNS_A);
         } catch (ErrorException $exception) {
             return false;
         }

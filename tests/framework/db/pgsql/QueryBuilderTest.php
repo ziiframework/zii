@@ -10,12 +10,12 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\db\pgsql;
 
-use yii\base\DynamicModel;
-use yii\db\ArrayExpression;
-use yii\db\Expression;
-use yii\db\JsonExpression;
 use yii\db\Query;
 use yii\db\Schema;
+use yii\db\Expression;
+use yii\base\DynamicModel;
+use yii\db\JsonExpression;
+use yii\db\ArrayExpression;
 use yiiunit\data\base\TraversableObject;
 
 /**

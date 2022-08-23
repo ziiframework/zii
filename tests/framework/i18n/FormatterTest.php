@@ -13,10 +13,10 @@ namespace yiiunit\framework\i18n;
 use DateTime;
 use DateTimeZone;
 use IntlException;
-use NumberFormatter;
 use ResourceBundle;
-use yii\i18n\Formatter;
+use NumberFormatter;
 use yiiunit\TestCase;
+use yii\i18n\Formatter;
 
 /**
  * Test for basic formatter functions.

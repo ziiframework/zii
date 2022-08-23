@@ -10,19 +10,19 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\validators;
 
-use Exception;
 use Yii;
-use yii\validators\UniqueValidator;
-use yiiunit\data\ar\ActiveRecord;
+use Exception;
+use yiiunit\data\ar\Order;
+use yiiunit\data\ar\Profile;
 use yiiunit\data\ar\Customer;
 use yiiunit\data\ar\Document;
-use yiiunit\data\ar\Order;
 use yiiunit\data\ar\OrderItem;
-use yiiunit\data\ar\Profile;
-use yiiunit\data\validators\models\FakedValidationModel;
-use yiiunit\data\validators\models\ValidatorTestMainModel;
-use yiiunit\data\validators\models\ValidatorTestRefModel;
+use yiiunit\data\ar\ActiveRecord;
+use yii\validators\UniqueValidator;
 use yiiunit\framework\db\DatabaseTestCase;
+use yiiunit\data\validators\models\FakedValidationModel;
+use yiiunit\data\validators\models\ValidatorTestRefModel;
+use yiiunit\data\validators\models\ValidatorTestMainModel;
 
 abstract class UniqueValidatorTest extends DatabaseTestCase
 {

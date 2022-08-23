@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace yiiunit\framework\base;
 
 use Yii;
+use yiiunit\TestCase;
 use yii\base\Controller;
 use yii\base\InlineAction;
-use yiiunit\TestCase;
 
 /**
  * @group base

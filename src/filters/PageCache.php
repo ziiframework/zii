@@ -12,13 +12,13 @@ namespace yii\filters;
 
 use Yii;
 use yii\base\Action;
-use yii\base\ActionFilter;
-use yii\base\DynamicContentAwareInterface;
-use yii\base\DynamicContentAwareTrait;
-use yii\caching\CacheInterface;
-use yii\caching\Dependency;
 use yii\di\Instance;
 use yii\web\Response;
+use yii\base\ActionFilter;
+use yii\caching\Dependency;
+use yii\caching\CacheInterface;
+use yii\base\DynamicContentAwareTrait;
+use yii\base\DynamicContentAwareInterface;
 
 /**
  * PageCache implements server-side caching of whole pages.

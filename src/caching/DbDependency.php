@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace yii\caching;
 
-use yii\base\InvalidConfigException;
-use yii\db\Connection;
 use yii\di\Instance;
+use yii\db\Connection;
+use yii\base\InvalidConfigException;
 
 /**
  * DbDependency represents a dependency based on the query result of a SQL statement.

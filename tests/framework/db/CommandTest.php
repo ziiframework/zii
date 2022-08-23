@@ -10,20 +10,21 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\db;
 
+use PDO;
+use Throwable;
 use ArrayObject;
+use yii\db\Query;
+use yii\db\Schema;
+use yii\db\Exception;
+use yii\db\Connection;
+use yii\db\DataReader;
+use yii\db\Expression;
+use yii\caching\ArrayCache;
+
 use function count;
 use function defined;
 use function in_array;
 use function is_array;
-use PDO;
-use Throwable;
-use yii\caching\ArrayCache;
-use yii\db\Connection;
-use yii\db\DataReader;
-use yii\db\Exception;
-use yii\db\Expression;
-use yii\db\Query;
-use yii\db\Schema;
 
 abstract class CommandTest extends DatabaseTestCase
 {

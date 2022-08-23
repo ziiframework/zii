@@ -10,14 +10,15 @@ declare(strict_types=1);
 
 namespace yii\filters;
 
-use function count;
 use Yii;
+use yii\web\Request;
+use yii\web\Response;
 use yii\base\ActionFilter;
 use yii\base\BootstrapInterface;
 use yii\web\BadRequestHttpException;
 use yii\web\NotAcceptableHttpException;
-use yii\web\Request;
-use yii\web\Response;
+
+use function count;
 
 /**
  * ContentNegotiator supports response format negotiation and application language negotiation.

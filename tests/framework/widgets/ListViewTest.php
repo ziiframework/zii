@@ -11,11 +11,11 @@ declare(strict_types=1);
 namespace yiiunit\framework\widgets;
 
 use Yii;
+use yii\web\Request;
+use yiiunit\TestCase;
+use yii\widgets\ListView;
 use yii\data\ArrayDataProvider;
 use yii\data\DataProviderInterface;
-use yii\web\Request;
-use yii\widgets\ListView;
-use yiiunit\TestCase;
 
 /**
  * @group widgets
@@ -66,7 +66,7 @@ class ListViewTest extends TestCase
 
 </div>
 HTML
-        , $out);
+            , $out);
     }
 
     /**
@@ -109,7 +109,7 @@ HTML
 <div data-key="2">2</div>
 </div>
 HTML
-        , $out);
+            , $out);
     }
 
     public function testWidgetOptions(): void
@@ -123,7 +123,7 @@ HTML
 <div data-key="0">0</div><div data-key="1">1</div><div data-key="2">2</div>
 </div>
 HTML
-        , $out);
+            , $out);
     }
 
     public function itemViewOptions()
@@ -253,7 +253,7 @@ HTML
 <!-- after: 3, key: 2, index: 2, widget: yii\widgets\ListView -->
 </div>
 HTML
-    , $out);
+            , $out);
     }
 
     /**

@@ -11,11 +11,11 @@ declare(strict_types=1);
 namespace yiiunit\framework\console\controllers;
 
 use Yii;
-use yii\console\controllers\FixtureController;
 use yiiunit\data\ar\ActiveRecord;
-use yiiunit\data\console\controllers\fixtures\DependentActiveFixture;
-use yiiunit\data\console\controllers\fixtures\FixtureStorage;
 use yiiunit\framework\db\DatabaseTestCase;
+use yii\console\controllers\FixtureController;
+use yiiunit\data\console\controllers\fixtures\FixtureStorage;
+use yiiunit\data\console\controllers\fixtures\DependentActiveFixture;
 
 /**
  * Unit test for [[\yii\console\controllers\FixtureController]].

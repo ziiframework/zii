@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\base;
 
-use yii\base\BaseObject;
 use yiiunit\TestCase;
+use yii\base\BaseObject;
 
 /**
  * @group base

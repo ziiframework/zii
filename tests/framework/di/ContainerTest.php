@@ -10,33 +10,34 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\di;
 
-use function defined;
-use Exception;
-use function get_class;
 use Yii;
-use yii\di\Container;
+use Exception;
 use yii\di\Instance;
-use yii\validators\NumberValidator;
-use yiiunit\data\ar\Cat;
-use yiiunit\data\ar\Order;
-use yiiunit\data\ar\Type;
-use yiiunit\framework\di\stubs\Alpha;
-use yiiunit\framework\di\stubs\Bar;
-use yiiunit\framework\di\stubs\BarSetter;
-use yiiunit\framework\di\stubs\Beta;
-use yiiunit\framework\di\stubs\Car;
-use yiiunit\framework\di\stubs\Corge;
-use yiiunit\framework\di\stubs\Foo;
-use yiiunit\framework\di\stubs\FooProperty;
-use yiiunit\framework\di\stubs\Kappa;
-use yiiunit\framework\di\stubs\Qux;
-use yiiunit\framework\di\stubs\QuxFactory;
-use yiiunit\framework\di\stubs\QuxInterface;
-use yiiunit\framework\di\stubs\UnionTypeNotNull;
-use yiiunit\framework\di\stubs\UnionTypeNull;
-use yiiunit\framework\di\stubs\UnionTypeWithClass;
-use yiiunit\framework\di\stubs\Zeta;
+use yii\di\Container;
 use yiiunit\TestCase;
+use yiiunit\data\ar\Cat;
+use yiiunit\data\ar\Type;
+use yiiunit\data\ar\Order;
+use yii\validators\NumberValidator;
+use yiiunit\framework\di\stubs\Bar;
+use yiiunit\framework\di\stubs\Car;
+use yiiunit\framework\di\stubs\Foo;
+use yiiunit\framework\di\stubs\Qux;
+use yiiunit\framework\di\stubs\Beta;
+use yiiunit\framework\di\stubs\Zeta;
+use yiiunit\framework\di\stubs\Alpha;
+use yiiunit\framework\di\stubs\Corge;
+use yiiunit\framework\di\stubs\Kappa;
+use yiiunit\framework\di\stubs\BarSetter;
+use yiiunit\framework\di\stubs\QuxFactory;
+use yiiunit\framework\di\stubs\FooProperty;
+use yiiunit\framework\di\stubs\QuxInterface;
+use yiiunit\framework\di\stubs\UnionTypeNull;
+use yiiunit\framework\di\stubs\UnionTypeNotNull;
+use yiiunit\framework\di\stubs\UnionTypeWithClass;
+
+use function defined;
+use function get_class;
 
 /**
  * @author Qiang Xue <qiang.xue@gmail.com>
