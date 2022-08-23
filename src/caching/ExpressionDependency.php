@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -20,6 +23,7 @@ namespace yii\caching;
  * For more details and usage information on Cache, see the [guide article on caching](guide:caching-overview).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class ExpressionDependency extends Dependency
@@ -30,17 +34,19 @@ class ExpressionDependency extends Dependency
      * please refer to the [php manual](https://www.php.net/manual/en/language.expressions.php).
      */
     public $expression = 'true';
+
     /**
      * @var mixed custom parameters associated with this dependency. You may get the value
      * of this property in [[expression]] using `$this->params`.
      */
     public $params;
 
-
     /**
      * Generates the data needed to determine if dependency has been changed.
      * This method returns the result of the PHP expression.
+     *
      * @param CacheInterface $cache the cache component that is currently evaluating this dependency
+     *
      * @return mixed the data needed to determine if dependency has been changed.
      */
     protected function generateDependencyData($cache)

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -18,6 +21,7 @@ namespace yii\caching;
  * For more details and usage information on Cache, see the [guide article on caching](guide:caching-overview).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  * @deprecated since 2.0.14. This class will be removed in 2.1.0.
  */
@@ -26,7 +30,9 @@ class ZendDataCache extends Cache
     /**
      * Retrieves a value from cache with a specified key.
      * This is the implementation of the method declared in the parent class.
+     *
      * @param string $key a unique key identifying the cached value
+     *
      * @return mixed|false the value stored in cache, false if the value is not in the cache or expired.
      */
     protected function getValue($key)
@@ -44,6 +50,7 @@ class ZendDataCache extends Cache
      * @param mixed $value the value to be cached. Most often it's a string. If you have disabled [[serializer]],
      * it could be something else.
      * @param int $duration the number of seconds in which the cached value will expire. 0 means never expire.
+     *
      * @return bool true if the value is successfully stored into cache, false otherwise
      */
     protected function setValue($key, $value, $duration)
@@ -59,6 +66,7 @@ class ZendDataCache extends Cache
      * @param mixed $value the value to be cached. Most often it's a string. If you have disabled [[serializer]],
      * it could be something else.
      * @param int $duration the number of seconds in which the cached value will expire. 0 means never expire.
+     *
      * @return bool true if the value is successfully stored into cache, false otherwise
      */
     protected function addValue($key, $value, $duration)
@@ -69,7 +77,9 @@ class ZendDataCache extends Cache
     /**
      * Deletes a value with the specified key from cache
      * This is the implementation of the method declared in the parent class.
+     *
      * @param string $key the key of the value to be deleted
+     *
      * @return bool if no error happens during deletion
      */
     protected function deleteValue($key)
@@ -80,6 +90,7 @@ class ZendDataCache extends Cache
     /**
      * Deletes all values from cache.
      * This is the implementation of the method declared in the parent class.
+     *
      * @return bool whether the flush operation was successful.
      */
     protected function flushValues()

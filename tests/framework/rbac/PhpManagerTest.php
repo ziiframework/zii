@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -9,7 +12,9 @@ namespace yii\rbac;
 
 /**
  * Mock for the filemtime() function for rbac classes. Avoid random test fails.
+ *
  * @param string $file
+ *
  * @return int
  */
 function filemtime($file)
@@ -19,6 +24,7 @@ function filemtime($file)
 
 /**
  * Mock for the time() function for rbac classes. Avoid random test fails.
+ *
  * @return int
  */
 function time()
@@ -32,6 +38,7 @@ use Yii;
 
 /**
  * @group rbac
+ *
  * @property ExposedPhpManager $auth
  */
 class PhpManagerTest extends ManagerTestCase
@@ -54,7 +61,7 @@ class PhpManagerTest extends ManagerTestCase
         return Yii::$app->getRuntimePath() . '/rbac-rules.php';
     }
 
-    protected function removeDataFiles()
+    protected function removeDataFiles(): void
     {
         @unlink($this->getItemFile());
         @unlink($this->getAssignmentFile());
@@ -74,7 +81,7 @@ class PhpManagerTest extends ManagerTestCase
         ]);
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         static::$filemtime = null;
         static::$time = null;
@@ -89,7 +96,7 @@ class PhpManagerTest extends ManagerTestCase
         $this->auth = $this->createManager();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->removeDataFiles();
         static::$filemtime = null;
@@ -97,7 +104,7 @@ class PhpManagerTest extends ManagerTestCase
         parent::tearDown();
     }
 
-    public function testSaveLoad()
+    public function testSaveLoad(): void
     {
         static::$time = static::$filemtime = \time();
 
@@ -117,7 +124,7 @@ class PhpManagerTest extends ManagerTestCase
         $this->assertEquals($rules, $this->auth->rules);
     }
 
-    public function testUpdateItemName()
+    public function testUpdateItemName(): void
     {
         $this->prepareData();
 
@@ -127,7 +134,7 @@ class PhpManagerTest extends ManagerTestCase
         $this->assertTrue($this->auth->update($name, $permission), 'You should be able to update name.');
     }
 
-    public function testUpdateDescription()
+    public function testUpdateDescription(): void
     {
         $this->prepareData();
         $name = 'readPost';
@@ -139,7 +146,7 @@ class PhpManagerTest extends ManagerTestCase
     /**
      * @expectedException \yii\base\InvalidParamException
      */
-    public function testOverwriteName()
+    public function testOverwriteName(): void
     {
         $this->prepareData();
         $name = 'readPost';
@@ -148,7 +155,7 @@ class PhpManagerTest extends ManagerTestCase
         $this->auth->update($name, $permission);
     }
 
-    public function testSaveAssignments()
+    public function testSaveAssignments(): void
     {
         $this->auth->removeAll();
         $role = $this->auth->createRole('Admin');

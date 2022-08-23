@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -21,7 +24,7 @@ class ExistValidatorTest extends \yiiunit\framework\validators\ExistValidatorTes
     /**
      * @see https://github.com/yiisoft/yii2/issues/14274
      */
-    public function testWithCameCasedTableName()
+    public function testWithCameCasedTableName(): void
     {
         // The same target table
         $validator = new ExistValidator(['targetAttribute' => 'ref']);

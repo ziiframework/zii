@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,16 +10,17 @@
 
 namespace yiiunit\framework\console\widgets;
 
-use yii\console\widgets\Table;
-use yii\helpers\Console;
 use yiiunit\TestCase;
+use yii\helpers\Console;
+use PHPUnit_Framework_Assert;
+use yii\console\widgets\Table;
 
 /**
  * @group console
  */
 class TableTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->mockApplication();
@@ -30,22 +34,22 @@ class TableTest extends TestCase
                 [
                     ['testcontent1', 'testcontent2', 'testcontent3'],
                     ['testcontent21', 'testcontent22', 'testcontent23'],
-                ]
+                ],
             ],
             [
                 ['key1' => 'test1', 'key2' => 'test2', 'key3' => 'test3'],
                 [
                     ['key1' => 'testcontent1', 'key2' => 'testcontent2', 'key3' => 'testcontent3'],
                     ['key1' => 'testcontent21', 'key2' => 'testcontent22', 'key3' => 'testcontent23'],
-                ]
-            ]
+                ],
+            ],
         ];
     }
 
     /**
      * @dataProvider getTableData
      */
-    public function testTable($headers, $rows)
+    public function testTable($headers, $rows): void
     {
         $table = new Table();
 
@@ -68,7 +72,7 @@ EXPECTED;
         $this->assertEqualsWithoutLE($expected, $tableContent);
     }
 
-    public function testTableWithFullwidthChars()
+    public function testTableWithFullwidthChars(): void
     {
         $table = new Table();
 
@@ -89,11 +93,10 @@ EXPECTED;
             ->setRows([
                 ['testcontent1', 'testcontent2', 'testcontent3'],
                 ['testcontent２１', 'testcontent２２', 'testcontent２３'],
-            ])->setScreenWidth(200)->run()
-        );
+            ])->setScreenWidth(200)->run());
     }
 
-    public function testLists()
+    public function testLists(): void
     {
         $table = new Table();
 
@@ -113,11 +116,10 @@ EXPECTED;
             ->setRows([
                 ['testcontent1', 'testcontent2', 'testcontent3'],
                 ['testcontent21', 'testcontent22', ['col1', 'col2']],
-            ])->setScreenWidth(200)->run()
-        );
+            ])->setScreenWidth(200)->run());
     }
 
-    public function testListPrefix()
+    public function testListPrefix(): void
     {
         $table = new Table();
 
@@ -137,11 +139,10 @@ EXPECTED;
             ->setRows([
                 ['testcontent1', 'testcontent2', 'testcontent3'],
                 ['testcontent21', 'testcontent22', ['col1', 'col2']],
-            ])->setScreenWidth(200)->setListPrefix('* ')->run()
-        );
+            ])->setScreenWidth(200)->setListPrefix('* ')->run());
     }
 
-    public function testCustomChars()
+    public function testCustomChars(): void
     {
         $table = new Table();
 
@@ -166,11 +167,10 @@ EXPECTED;
                 Table::CHAR_BOTTOM_LEFT => '*', Table::CHAR_BOTTOM_RIGHT => '*', Table::CHAR_LEFT => '/',
                 Table::CHAR_LEFT_MID => '*', Table::CHAR_MID => '+', Table::CHAR_MID_MID => '*',
                 Table::CHAR_RIGHT => '/', Table::CHAR_RIGHT_MID => '*', Table::CHAR_MIDDLE => '/',
-            ])->setScreenWidth(200)->run()
-        );
+            ])->setScreenWidth(200)->run());
     }
 
-    public function testTableWidgetSyntax()
+    public function testTableWidgetSyntax(): void
     {
         $expected = <<<'EXPECTED'
 ╔═══════════════╤═══════════════╤═══════════════╗
@@ -183,20 +183,17 @@ EXPECTED;
 
 EXPECTED;
 
-        $this->assertEqualsWithoutLE(
-            $expected,
-            Table::widget([
+        $this->assertEqualsWithoutLE($expected, Table::widget([
                 'headers' => ['test1', 'test2', 'test3'],
                 'rows' => [
                     ['testcontent1', 'testcontent2', 'testcontent3'],
                     ['testcontent21', 'testcontent22', 'testcontent23'],
                 ],
                 'screenWidth' => 200,
-            ])
-        );
+            ]));
     }
 
-    public function testShortRow()
+    public function testShortRow(): void
     {
         $table = new Table();
 
@@ -224,11 +221,10 @@ EXPECTED;
                 ['testcontent31'],
                 ['testcontent41', null, 'testcontent43'],
                 [null, null, 'testcontent53'],
-            ])->setScreenWidth(200)->run()
-        );
+            ])->setScreenWidth(200)->run());
     }
 
-    public function testEmptyRow()
+    public function testEmptyRow(): void
     {
         $table = new Table();
 
@@ -247,11 +243,10 @@ EXPECTED;
             ->setRows([
                 [null, null, null],
                 [],
-            ])->setScreenWidth(200)->run()
-        );
+            ])->setScreenWidth(200)->run());
     }
 
-    public function testEmptyHeaders()
+    public function testEmptyHeaders(): void
     {
         $table = new Table();
 
@@ -266,12 +261,11 @@ EXPECTED;
 
         $this->assertEqualsWithoutLE($expected, $table->setRows([
             ['testcontent1', 'testcontent2'],
-            ['testcontent21', 'testcontent22']
-        ])->setScreenWidth(200)->run()
-        );
+            ['testcontent21', 'testcontent22'],
+        ])->setScreenWidth(200)->run());
     }
 
-    public function testEmptyTable()
+    public function testEmptyTable(): void
     {
         $table = new Table();
 
@@ -283,11 +277,10 @@ EXPECTED;
 EXPECTED;
 
         $this->assertEqualsWithoutLE($expected, $table->setHeaders(['test1', 'test2', 'test3'])
-            ->setRows([])->setScreenWidth(200)->run()
-        );
+            ->setRows([])->setScreenWidth(200)->run());
     }
 
-    public function testEmptyAndZeroTableCell()
+    public function testEmptyAndZeroTableCell(): void
     {
         $table = new Table();
 
@@ -302,20 +295,17 @@ EXPECTED;
 
 EXPECTED;
 
-        $this->assertEqualsWithoutLE(
-            $expected,
-            $table
+        $this->assertEqualsWithoutLE($expected, $table
                 ->setHeaders(['test1', 'test2'])
                 ->setRows([
                     ['0', []],
                     ['0.0', []],
                 ])
                 ->setScreenWidth(200)
-                ->run()
-        );
+                ->run());
     }
 
-    public function testColorizedInput()
+    public function testColorizedInput(): void
     {
         $table = new Table();
 
@@ -332,19 +322,16 @@ EXPECTED;
 
 EXPECTED;
 
-        $this->assertEqualsWithoutLE(
-            $expected,
-            $table
+        $this->assertEqualsWithoutLE($expected, $table
                 ->setHeaders(['test1', 'test2', 'test3'])
                 ->setRows([
                     ['col1', Console::renderColoredString('%ycol2%n'), 'col3'],
                     ['col1', 'col2', ['col3-0', Console::renderColoredString('%rcol3-1%n'), 'col3-2']],
                 ])
-                ->run()
-        );
+                ->run());
     }
 
-    public function testColorizedInputStripsANSIMarkersInternally()
+    public function testColorizedInputStripsANSIMarkersInternally(): void
     {
         $table = new Table();
 
@@ -357,15 +344,15 @@ EXPECTED;
             ->setScreenWidth(200)
             ->run();
 
-        $columnWidths = \PHPUnit_Framework_Assert::readAttribute($table, "columnWidths");
+        $columnWidths = PHPUnit_Framework_Assert::readAttribute($table, 'columnWidths');
 
         $this->assertArrayHasKey(1, $columnWidths);
-        $this->assertEquals(4+2, $columnWidths[1]);
+        $this->assertEquals(4 + 2, $columnWidths[1]);
         $this->assertArrayHasKey(2, $columnWidths);
-        $this->assertEquals(8+2, $columnWidths[2]);
+        $this->assertEquals(8 + 2, $columnWidths[2]);
     }
 
-    public function testCalculateRowHeightShouldNotThrowDivisionByZeroException()
+    public function testCalculateRowHeightShouldNotThrowDivisionByZeroException(): void
     {
         $rows = [
             ['XXXXXX', 'XXXXXXXXXXXXXXXXXXXX', '', '', 'XXXXXXXXXXXXXXXXXX', 'X', 'XXX'],
@@ -375,12 +362,12 @@ EXPECTED;
 
         $table = Table::widget([
             'headers' => ['XX', 'XXXX'],
-            'rows' => $rows
+            'rows' => $rows,
         ]);
         $this->assertEqualsWithoutLE($table, $table);
     }
 
-    public function testLineBreakTableCell()
+    public function testLineBreakTableCell(): void
     {
         $table = new Table();
 
@@ -400,9 +387,7 @@ EXPECTED;
 
 EXPECTED;
 
-        $this->assertEqualsWithoutLE(
-            $expected,
-            $table->setHeaders(['test'])
+        $this->assertEqualsWithoutLE($expected, $table->setHeaders(['test'])
                 ->setRows([
                     ['AAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBCCCCC'],
                     [[
@@ -411,11 +396,10 @@ EXPECTED;
                     ]],
                 ])
                 ->setScreenWidth(25)
-                ->run()
-        );
+                ->run());
     }
 
-    public function testColorizedLineBreakTableCell()
+    public function testColorizedLineBreakTableCell(): void
     {
         $table = new Table();
 
@@ -444,9 +428,7 @@ EXPECTED;
 
 EXPECTED;
 
-        $this->assertEqualsWithoutLE(
-            $expected,
-            $table->setHeaders(['test'])
+        $this->assertEqualsWithoutLE($expected, $table->setHeaders(['test'])
                 ->setRows([
                     [Console::renderColoredString('%yAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBCCCCC%n')],
                     [Console::renderColoredString('%rAAAAAAAAAAAAAAAAAAAA%gBBBBBBBBBBBBBBBBBBBB%bCCCCC%n')],
@@ -460,15 +442,14 @@ EXPECTED;
                     ]],
                 ])
                 ->setScreenWidth(25)
-                ->run()
-        );
+                ->run());
     }
 
     /**
      * @param $smallString
      * @dataProvider dataMinimumWidth
      */
-    public function testMinimumWidth($smallString)
+    public function testMinimumWidth($smallString): void
     {
         $bigString = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
 
@@ -491,11 +472,11 @@ EXPECTED;
             [''],
             [['X', 'X', 'X']],
             [[]],
-            [['']]
+            [['']],
         ];
     }
 
-    public function testTableWithAnsiFormat()
+    public function testTableWithAnsiFormat(): void
     {
         $table = new Table();
 
@@ -522,7 +503,6 @@ EXPECTED;
                     Console::ansiFormat('b', [Console::FG_PURPLE]),
                     Console::ansiFormat('c', [Console::FG_GREEN]),
                 ]],
-            ])->setScreenWidth(200)->run()
-        );
+            ])->setScreenWidth(200)->run());
     }
 }

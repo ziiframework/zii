@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -37,36 +40,40 @@ use yii\base\InvalidConfigException;
  * @see Mutex
  *
  * @author Alexander Zlakomanov <zlakomanoff@gmail.com>
+ *
  * @since 2.0.10
  */
 class OracleMutex extends DbMutex
 {
     /** available lock modes */
-    const MODE_X = 'X_MODE';
-    const MODE_NL = 'NL_MODE';
-    const MODE_S = 'S_MODE';
-    const MODE_SX = 'SX_MODE';
-    const MODE_SS = 'SS_MODE';
-    const MODE_SSX = 'SSX_MODE';
+    public const MODE_X = 'X_MODE';
+    public const MODE_NL = 'NL_MODE';
+    public const MODE_S = 'S_MODE';
+    public const MODE_SX = 'SX_MODE';
+    public const MODE_SS = 'SS_MODE';
+    public const MODE_SSX = 'SSX_MODE';
 
     /**
      * @var string lock mode to be used.
+     *
      * @see https://docs.oracle.com/cd/B19306_01/appdev.102/b14258/d_lock.htm#ARPLS021#CHDBCFDI
      */
     public $lockMode = self::MODE_X;
+
     /**
      * @var bool whether to release lock on commit.
      */
     public $releaseOnCommit = false;
 
-
     /**
      * Initializes Oracle specific mutex component implementation.
+     *
      * @throws InvalidConfigException if [[db]] is not Oracle connection.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
+
         if (strncmp($this->db->driverName, 'oci', 3) !== 0 && strncmp($this->db->driverName, 'odbc', 4) !== 0) {
             throw new InvalidConfigException('In order to use OracleMutex connection must be configured to use Oracle database.');
         }
@@ -74,9 +81,12 @@ class OracleMutex extends DbMutex
 
     /**
      * Acquires lock by given name.
+     *
      * @see https://docs.oracle.com/cd/B19306_01/appdev.102/b14258/d_lock.htm#ARPLS021
+     *
      * @param string $name of the lock to be acquired.
      * @param int $timeout time (in seconds) to wait for lock to become released.
+     *
      * @return bool acquiring result.
      */
     protected function acquireLock($name, $timeout = 0)
@@ -88,17 +98,14 @@ class OracleMutex extends DbMutex
         $timeout = abs((int) $timeout);
 
         // inside pl/sql scopes pdo binding not working correctly :(
-        $this->db->useMaster(function ($db) use ($name, $timeout, $releaseOnCommit, &$lockStatus) {
-            /** @var \yii\db\Connection $db */
-            $db->createCommand(
-                'DECLARE
+        $this->db->useMaster(function ($db) use ($name, $timeout, $releaseOnCommit, &$lockStatus): void {
+            /* @var \yii\db\Connection $db */
+            $db->createCommand('DECLARE
     handle VARCHAR2(128);
 BEGIN
     DBMS_LOCK.ALLOCATE_UNIQUE(:name, handle);
     :lockStatus := DBMS_LOCK.REQUEST(handle, DBMS_LOCK.' . $this->lockMode . ', ' . $timeout . ', ' . $releaseOnCommit . ');
-END;',
-                [':name' => $name]
-            )
+END;', [':name' => $name])
             ->bindParam(':lockStatus', $lockStatus, PDO::PARAM_INT, 1)
             ->execute();
         });
@@ -108,24 +115,24 @@ END;',
 
     /**
      * Releases lock by given name.
+     *
      * @param string $name of the lock to be released.
+     *
      * @return bool release result.
+     *
      * @see https://docs.oracle.com/cd/B19306_01/appdev.102/b14258/d_lock.htm#ARPLS021
      */
     protected function releaseLock($name)
     {
         $releaseStatus = null;
-        $this->db->useMaster(function ($db) use ($name, &$releaseStatus) {
-            /** @var \yii\db\Connection $db */
-            $db->createCommand(
-                'DECLARE
+        $this->db->useMaster(static function ($db) use ($name, &$releaseStatus): void {
+            /* @var \yii\db\Connection $db */
+            $db->createCommand('DECLARE
     handle VARCHAR2(128);
 BEGIN
     DBMS_LOCK.ALLOCATE_UNIQUE(:name, handle);
     :result := DBMS_LOCK.RELEASE(handle);
-END;',
-                [':name' => $name]
-            )
+END;', [':name' => $name])
             ->bindParam(':result', $releaseStatus, PDO::PARAM_INT, 1)
             ->execute();
         });

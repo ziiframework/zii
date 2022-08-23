@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,10 +11,10 @@
 namespace yii\validators;
 
 use Yii;
-use yii\base\InvalidConfigException;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\web\JsExpression;
+use yii\base\InvalidConfigException;
 
 /**
  * RegularExpressionValidator validates that the attribute value matches the specified [[pattern]].
@@ -19,6 +22,7 @@ use yii\web\JsExpression;
  * If the [[not]] property is set true, the validator will ensure the attribute value do NOT match the [[pattern]].
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class RegularExpressionValidator extends Validator
@@ -27,22 +31,24 @@ class RegularExpressionValidator extends Validator
      * @var string the regular expression to be matched with
      */
     public $pattern;
+
     /**
      * @var bool whether to invert the validation logic. Defaults to false. If set to true,
      * the regular expression defined via [[pattern]] should NOT match the attribute value.
      */
     public $not = false;
 
-
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
+
         if ($this->pattern === null) {
             throw new InvalidConfigException('The "pattern" property must be set.');
         }
+
         if ($this->message === null) {
             $this->message = Yii::t('yii', '{attribute} is invalid.');
         }
@@ -85,6 +91,7 @@ class RegularExpressionValidator extends Validator
                 'attribute' => $model->getAttributeLabel($attribute),
             ]),
         ];
+
         if ($this->skipOnEmpty) {
             $options['skipOnEmpty'] = 1;
         }

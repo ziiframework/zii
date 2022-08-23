@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,9 +11,9 @@
 namespace yii\filters;
 
 use Yii;
+use yii\web\Request;
 use yii\base\ActionFilter;
 use yii\web\BadRequestHttpException;
-use yii\web\Request;
 
 /**
  * AjaxFilter allow to limit access only for ajax requests.
@@ -28,6 +31,7 @@ use yii\web\Request;
  * ```
  *
  * @author Dmitry Dorogin <dmirogin@ya.ru>
+ *
  * @since 2.0.13
  */
 class AjaxFilter extends ActionFilter
@@ -36,16 +40,16 @@ class AjaxFilter extends ActionFilter
      * @var string the message to be displayed when request isn't ajax
      */
     public $errorMessage = 'Request must be XMLHttpRequest.';
+
     /**
      * @var Request|null the current request. If not set, the `request` application component will be used.
      */
     public $request;
 
-
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         if ($this->request === null) {
             $this->request = Yii::$app->getRequest();

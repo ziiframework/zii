@@ -1,9 +1,18 @@
 <?php
+
+declare(strict_types=1);
+
+/**
+ * @link https://www.yiiframework.com/
+ * @copyright Copyright (c) 2008 Yii Software LLC
+ * @license https://www.yiiframework.com/license/
+ */
+
 namespace yiiunit\framework\web;
 
 use yii\base\Component;
-use yii\base\NotSupportedException;
 use yii\web\IdentityInterface;
+use yii\base\NotSupportedException;
 
 class UserIdentity extends Component implements IdentityInterface
 {
@@ -20,11 +29,12 @@ class UserIdentity extends Component implements IdentityInterface
         if (in_array($id, static::$ids)) {
             $identitiy = new static();
             $identitiy->_id = $id;
+
             return $identitiy;
         }
     }
 
-    public static function findIdentityByAccessToken($token, $type = null)
+    public static function findIdentityByAccessToken($token, $type = null): void
     {
         throw new NotSupportedException();
     }

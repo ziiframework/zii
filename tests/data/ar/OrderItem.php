@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -58,6 +61,7 @@ class OrderItem extends ActiveRecord
         return $this->hasOne(self::className(), ['item_id' => 'item_id', 'order_id' => 'order_id'])
             ->joinWith('item');
     }
+
     public function getOrderItemCompositeNoJoin()
     {
         return $this->hasOne(self::className(), ['item_id' => 'item_id', 'order_id' => 'order_id']);

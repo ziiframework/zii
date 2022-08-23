@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -17,7 +20,7 @@ use yii\caching\ArrayCache;
  */
 class FragmentCacheTest extends \yiiunit\TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->mockWebApplication();
@@ -26,7 +29,7 @@ class FragmentCacheTest extends \yiiunit\TestCase
         ]);
     }
 
-    public function testCacheEnabled()
+    public function testCacheEnabled(): void
     {
         $expectedLevel = ob_get_level();
         ob_start();
@@ -46,7 +49,7 @@ class FragmentCacheTest extends \yiiunit\TestCase
         $this->assertEquals($expectedLevel, ob_get_level(), 'Output buffer not closed correctly.');
     }
 
-    public function testCacheDisabled1()
+    public function testCacheDisabled1(): void
     {
         $expectedLevel = ob_get_level();
         ob_start();
@@ -68,7 +71,7 @@ class FragmentCacheTest extends \yiiunit\TestCase
         $this->assertEquals($expectedLevel, ob_get_level(), 'Output buffer not closed correctly.');
     }
 
-    public function testCacheDisabled2()
+    public function testCacheDisabled2(): void
     {
         $expectedLevel = ob_get_level();
         ob_start();
@@ -90,13 +93,13 @@ class FragmentCacheTest extends \yiiunit\TestCase
         $this->assertEquals($expectedLevel, ob_get_level(), 'Output buffer not closed correctly.');
     }
 
-    public function testSingleDynamicFragment()
+    public function testSingleDynamicFragment(): void
     {
         Yii::$app->params['counter'] = 0;
 
         $view = new View();
 
-        for ($counter = 0; $counter < 42; $counter++) {
+        for ($counter = 0; $counter < 42; ++$counter) {
             ob_start();
             ob_implicit_flush(false);
 
@@ -121,13 +124,13 @@ class FragmentCacheTest extends \yiiunit\TestCase
         }
     }
 
-    public function testMultipleDynamicFragments()
+    public function testMultipleDynamicFragments(): void
     {
         Yii::$app->params['counter'] = 0;
 
         $view = new View();
 
-        for ($counter = 0; $counter < 42; $counter++) {
+        for ($counter = 0; $counter < 42; ++$counter) {
             ob_start();
             ob_implicit_flush(false);
 
@@ -154,13 +157,13 @@ class FragmentCacheTest extends \yiiunit\TestCase
         }
     }
 
-    public function testNestedDynamicFragments()
+    public function testNestedDynamicFragments(): void
     {
         Yii::$app->params['counter'] = 0;
 
         $view = new View();
 
-        for ($counter = 0; $counter < 42; $counter++) {
+        for ($counter = 0; $counter < 42; ++$counter) {
             ob_start();
             ob_implicit_flush(false);
 
@@ -194,11 +197,9 @@ class FragmentCacheTest extends \yiiunit\TestCase
         }
     }
 
-    public function testVariations()
+    public function testVariations(): void
     {
-        $this->setOutputCallback(function($output) {
-            return null;
-        });
+        $this->setOutputCallback(static fn ($output) => null);
 
         ob_start();
         ob_implicit_flush(false);
@@ -222,7 +223,7 @@ class FragmentCacheTest extends \yiiunit\TestCase
         $view->endCache();
         $this->assertFalse($view->beginCache('test', ['variations' => ['en']]), 'Cached fragment should be exist');
 
-        //without variations
+        // without variations
         ob_start();
         ob_implicit_flush(false);
         $view = new View();
@@ -232,7 +233,7 @@ class FragmentCacheTest extends \yiiunit\TestCase
         $cached = ob_get_clean();
         $this->assertEquals('cached fragment', $cached);
 
-        //with variations as a string
+        // with variations as a string
         ob_start();
         ob_implicit_flush(false);
         $this->assertTrue($view->beginCache('test', ['variations' => 'uz']), 'Cached fragment should not be exist');

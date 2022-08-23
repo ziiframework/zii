@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,18 +11,18 @@
 namespace yiiunit\framework\base;
 
 use Yii;
-use yii\base\BootstrapInterface;
-use yii\base\Component;
 use yii\base\Module;
-use yii\log\Dispatcher;
 use yiiunit\TestCase;
+use yii\base\Component;
+use yii\log\Dispatcher;
+use yii\base\BootstrapInterface;
 
 /**
  * @group base
  */
 class ApplicationTest extends TestCase
 {
-    public function testContainerSettingsAffectBootstrap()
+    public function testContainerSettingsAffectBootstrap(): void
     {
         $this->mockApplication([
             'container' => [
@@ -33,10 +36,9 @@ class ApplicationTest extends TestCase
         $this->assertInstanceOf(DispatcherMock::className(), Yii::$app->log);
     }
 
-    public function testBootstrap()
+    public function testBootstrap(): void
     {
         Yii::getLogger()->flush();
-
 
         $this->mockApplication([
             'components' => [
@@ -56,7 +58,7 @@ class ApplicationTest extends TestCase
                 'withoutBootstrapInterface',
                 'withBootstrapInterface',
                 'moduleX',
-                function () {
+                static function (): void {
                 },
             ],
         ]);
@@ -67,7 +69,7 @@ class ApplicationTest extends TestCase
         $this->assertSame('Bootstrap with Closure', Yii::getLogger()->messages[4][0]);
     }
 
-    public function testModuleId()
+    public function testModuleId(): void
     {
         $this->mockApplication(['id' => 'app-basic']);
         $child = new Module('child');
@@ -85,7 +87,7 @@ class DispatcherMock extends Dispatcher
 
 class BootstrapComponentMock extends Component implements BootstrapInterface
 {
-    public function bootstrap($app)
+    public function bootstrap($app): void
     {
     }
 }

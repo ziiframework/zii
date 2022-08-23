@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,10 +10,13 @@
 
 namespace yiiunit\framework\i18n;
 
-use DateInterval;
 use DateTime;
-use yii\i18n\Formatter;
+use DateInterval;
+use DateTimeZone;
 use yiiunit\TestCase;
+use DateTimeImmutable;
+use IntlDateFormatter;
+use yii\i18n\Formatter;
 
 /**
  * @group i18n
@@ -22,7 +28,7 @@ class FormatterDateTest extends TestCase
      */
     protected $formatter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -35,15 +41,14 @@ class FormatterDateTest extends TestCase
         $this->formatter = new Formatter(['locale' => 'en-US']);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         IntlTestHelper::resetIntlStatus();
         $this->formatter = null;
     }
 
-
-    public function testFormat()
+    public function testFormat(): void
     {
         $value = time();
         $this->assertSame(date('M j, Y', $value), $this->formatter->format($value, 'date'));
@@ -53,12 +58,12 @@ class FormatterDateTest extends TestCase
         $this->assertSame(date('Y-m-d', $value), $this->formatter->format($value, 'data'));
     }
 
-    public function testIntlAsDate()
+    public function testIntlAsDate(): void
     {
         $this->testAsDate();
     }
 
-    public function testAsDate()
+    public function testAsDate(): void
     {
         $value = time();
         $this->assertSame(date('M j, Y', $value), $this->formatter->asDate($value));
@@ -75,7 +80,7 @@ class FormatterDateTest extends TestCase
         $this->assertSame(date('F j, Y', $value->getTimestamp()), $this->formatter->asDate($value, 'long'));
 
         if (PHP_VERSION_ID >= 50500) {
-            $value = new \DateTimeImmutable();
+            $value = new DateTimeImmutable();
             $this->assertSame(date('M j, Y', $value->getTimestamp()), $this->formatter->asDate($value));
             $this->assertSame(date('Y/m/d', $value->getTimestamp()), $this->formatter->asDate($value, 'php:Y/m/d'));
             $this->assertSame(date('m/d/Y', $value->getTimestamp()), $this->formatter->asDate($value, 'MM/dd/yyyy'));
@@ -92,11 +97,11 @@ class FormatterDateTest extends TestCase
         $this->assertSame($this->formatter->nullDisplay, $this->formatter->asDate(null));
     }
 
-    public function testIntlAsDateOtherCalendars()
+    public function testIntlAsDateOtherCalendars(): void
     {
         // Persian calendar
         $this->formatter->locale = 'fa_IR@calendar=persian';
-        $this->formatter->calendar = \IntlDateFormatter::TRADITIONAL;
+        $this->formatter->calendar = IntlDateFormatter::TRADITIONAL;
         $this->formatter->timeZone = 'UTC';
 
         $value = 1451606400; // Fri, 01 Jan 2016 00:00:00 (UTC)
@@ -107,13 +112,13 @@ class FormatterDateTest extends TestCase
         $this->assertSame('۱۳۹۴', $this->formatter->asDate($value, 'php:Y'));
 
         if (version_compare(PHP_VERSION, '5.5.0', '>=')) {
-            $value = new \DateTimeImmutable('2016-01-01 00:00:00', new \DateTimeZone('UTC'));
+            $value = new DateTimeImmutable('2016-01-01 00:00:00', new DateTimeZone('UTC'));
             $this->assertSame('۱۳۹۴', $this->formatter->asDate($value, 'php:Y'));
         }
 
         // Buddhist calendar
         $this->formatter->locale = 'fr_FR@calendar=buddhist';
-        $this->formatter->calendar = \IntlDateFormatter::TRADITIONAL;
+        $this->formatter->calendar = IntlDateFormatter::TRADITIONAL;
         $this->formatter->timeZone = 'UTC';
 
         $value = 1451606400; // Fri, 01 Jan 2016 00:00:00 (UTC)
@@ -124,12 +129,12 @@ class FormatterDateTest extends TestCase
         $this->assertSame('2559', $this->formatter->asDate($value, 'php:Y'));
 
         if (version_compare(PHP_VERSION, '5.5.0', '>=')) {
-            $value = new \DateTimeImmutable('2016-01-01 00:00:00', new \DateTimeZone('UTC'));
+            $value = new DateTimeImmutable('2016-01-01 00:00:00', new DateTimeZone('UTC'));
             $this->assertSame('2559', $this->formatter->asDate($value, 'php:Y'));
         }
     }
 
-    public function testIntlAsTime()
+    public function testIntlAsTime(): void
     {
         $this->testAsTime();
 
@@ -140,7 +145,7 @@ class FormatterDateTest extends TestCase
         $this->assertSame('00:00:00', $this->formatter->asTime(false));
     }
 
-    public function testAsTime()
+    public function testAsTime(): void
     {
         $value = time();
         $this->assertSame(date('g:i:s A', $value), $this->formatter->asTime($value));
@@ -151,7 +156,7 @@ class FormatterDateTest extends TestCase
         $this->assertSame(date('h:i:s A', $value->getTimestamp()), $this->formatter->asTime($value, 'php:h:i:s A'));
 
         if (version_compare(PHP_VERSION, '5.5.0', '>=')) {
-            $value = new \DateTimeImmutable();
+            $value = new DateTimeImmutable();
             $this->assertSame(date('g:i:s A', $value->getTimestamp()), $this->formatter->asTime($value));
             $this->assertSame(date('h:i:s A', $value->getTimestamp()), $this->formatter->asTime($value, 'php:h:i:s A'));
         }
@@ -164,7 +169,7 @@ class FormatterDateTest extends TestCase
         $this->assertSame($this->formatter->nullDisplay, $this->formatter->asTime(null));
     }
 
-    public function testIntlAsDatetime()
+    public function testIntlAsDatetime(): void
     {
         $this->testAsDatetime();
 
@@ -175,7 +180,7 @@ class FormatterDateTest extends TestCase
         $this->assertRegExp('~01\.01\.1970,? 00:00:00~', $this->formatter->asDatetime(false));
     }
 
-    public function testAsDatetime()
+    public function testAsDatetime(): void
     {
         $value = time();
         $this->assertRegExp(date('~M j, Y,? g:i:s A~', $value), $this->formatter->asDatetime($value));
@@ -193,7 +198,7 @@ class FormatterDateTest extends TestCase
         $this->assertSame(date('Y/m/d h:i:s A', $value->getTimestamp()), $this->formatter->asDatetime($date, 'php:Y/m/d h:i:s A'));
 
         if (PHP_VERSION_ID >= 50500) {
-            $value = new \DateTimeImmutable();
+            $value = new DateTimeImmutable();
             $this->assertRegExp(date('~M j, Y,? g:i:s A~', $value->getTimestamp()), $this->formatter->asDatetime($value));
             $this->assertSame(date('Y/m/d h:i:s A', $value->getTimestamp()), $this->formatter->asDatetime($value, 'php:Y/m/d h:i:s A'));
         }
@@ -212,12 +217,12 @@ class FormatterDateTest extends TestCase
         $this->assertSame($this->formatter->nullDisplay, $this->formatter->asDatetime(null));
     }
 
-    public function testIntlAsTimestamp()
+    public function testIntlAsTimestamp(): void
     {
         $this->testAsTimestamp();
     }
 
-    public function testAsTimestamp()
+    public function testAsTimestamp(): void
     {
         $value = time();
         $this->assertSame("$value", $this->formatter->asTimestamp($value));
@@ -238,7 +243,7 @@ class FormatterDateTest extends TestCase
         $this->assertSame($this->formatter->nullDisplay, $this->formatter->asTimestamp(null));
     }
 
-    public function testIntlDateRangeLow()
+    public function testIntlDateRangeLow(): void
     {
         // intl does not support high date ranges on 32bit systems, the implementation uses a fallback to PHP formatter
         $this->testDateRangeLow();
@@ -246,9 +251,10 @@ class FormatterDateTest extends TestCase
 
     /**
      * Test for dates before 1970.
+     *
      * @see https://github.com/yiisoft/yii2/issues/3126
      */
-    public function testDateRangeLow()
+    public function testDateRangeLow(): void
     {
         // https://en.wikipedia.org/wiki/Year_2038_problem
         $this->assertSame('13-12-1901', $this->formatter->asDate('1901-12-13', 'dd-MM-yyyy'));
@@ -258,7 +264,7 @@ class FormatterDateTest extends TestCase
         $this->assertSame('14-01-1732', $this->formatter->asDate('1732-01-14', 'dd-MM-yyyy'));
     }
 
-    public function testIntlDateRangeHigh()
+    public function testIntlDateRangeHigh(): void
     {
         // intl does not support high date ranges on 32bit systems, the implementation uses a fallback to PHP formatter
         $this->testDateRangeHigh();
@@ -266,9 +272,10 @@ class FormatterDateTest extends TestCase
 
     /**
      * Test for dates after 2038.
+     *
      * @see https://github.com/yiisoft/yii2/issues/3126
      */
-    public function testDateRangeHigh()
+    public function testDateRangeHigh(): void
     {
         // https://en.wikipedia.org/wiki/Year_2038_problem
         $this->assertSame('19-01-2038', $this->formatter->asDate('2038-01-19', 'dd-MM-yyyy'));
@@ -282,6 +289,7 @@ class FormatterDateTest extends TestCase
     private function buildDateSubIntervals($referenceDate, $intervals)
     {
         $date = new DateTime($referenceDate);
+
         foreach ($intervals as $interval) {
             $date->sub($interval);
         }
@@ -289,12 +297,12 @@ class FormatterDateTest extends TestCase
         return $date;
     }
 
-    public function testIntlAsRelativeTime()
+    public function testIntlAsRelativeTime(): void
     {
         $this->testAsRelativeTime();
     }
 
-    public function testAsRelativeTime()
+    public function testAsRelativeTime(): void
     {
         $interval_1_second = new DateInterval('PT1S');
         $interval_244_seconds = new DateInterval('PT244S');
@@ -427,12 +435,12 @@ class FormatterDateTest extends TestCase
         $this->assertSame('a minute ago', $this->formatter->asRelativeTime($now));
     }
 
-    public function testIntlAsDuration()
+    public function testIntlAsDuration(): void
     {
         $this->testAsDuration();
     }
 
-    public function testAsDuration()
+    public function testAsDuration(): void
     {
         $interval_0_seconds = new DateInterval('PT0S');
         $interval_1_second = new DateInterval('PT1S');
@@ -534,22 +542,24 @@ class FormatterDateTest extends TestCase
 
     /**
      * @dataProvider dateInputs
+     *
      * @param mixed $expected
      * @param mixed $value
      * @param mixed|null $expectedException
      */
-    public function testIntlDateInput($expected, $value, $expectedException = null)
+    public function testIntlDateInput($expected, $value, $expectedException = null): void
     {
         $this->testDateInput($expected, $value, $expectedException);
     }
 
     /**
      * @dataProvider dateInputs
+     *
      * @param mixed $expected
      * @param mixed $value
      * @param mixed|null $expectedException
      */
-    public function testDateInput($expected, $value, $expectedException = null)
+    public function testDateInput($expected, $value, $expectedException = null): void
     {
         if ($expectedException !== null) {
             $this->expectException($expectedException);
@@ -558,7 +568,6 @@ class FormatterDateTest extends TestCase
         $this->assertSame($expected, $this->formatter->asTime($value, 'yyyy-MM-dd HH:mm:ss'));
         $this->assertSame($expected, $this->formatter->asDatetime($value, 'yyyy-MM-dd HH:mm:ss'));
     }
-
 
     public function provideTimezones()
     {
@@ -577,9 +586,10 @@ class FormatterDateTest extends TestCase
      */
     public function provideTimesAndTz()
     {
-        $utc = new \DateTimeZone('UTC');
-        $berlin = new \DateTimeZone('Europe/Berlin');
+        $utc = new DateTimeZone('UTC');
+        $berlin = new DateTimeZone('Europe/Berlin');
         $result = [];
+
         foreach ($this->provideTimezones() as $tz) {
             $result[] = [$tz[0], 1407674460,                          1388580060];
             $result[] = [$tz[0], '2014-08-10 12:41:00',               '2014-01-01 12:41:00'];
@@ -593,9 +603,10 @@ class FormatterDateTest extends TestCase
             $result[] = [$tz[0], '2014-08-10T14:41:00+02:00',         '2014-01-01T13:41:00+01:00']; // ISO 8601
             $result[] = [$tz[0], new DateTime('2014-08-10 12:41:00', $utc), new DateTime('2014-01-01 12:41:00', $utc)];
             $result[] = [$tz[0], new DateTime('2014-08-10 14:41:00', $berlin), new DateTime('2014-01-01 13:41:00', $berlin)];
+
             if (version_compare(PHP_VERSION, '5.5.0', '>=')) {
-                $result[] = [$tz[0], new \DateTimeImmutable('2014-08-10 12:41:00', $utc), new \DateTimeImmutable('2014-01-01 12:41:00', $utc)];
-                $result[] = [$tz[0], new \DateTimeImmutable('2014-08-10 14:41:00', $berlin), new \DateTimeImmutable('2014-01-01 13:41:00', $berlin)];
+                $result[] = [$tz[0], new DateTimeImmutable('2014-08-10 12:41:00', $utc), new DateTimeImmutable('2014-01-01 12:41:00', $utc)];
+                $result[] = [$tz[0], new DateTimeImmutable('2014-08-10 14:41:00', $berlin), new DateTimeImmutable('2014-01-01 13:41:00', $berlin)];
             }
         }
 
@@ -604,24 +615,28 @@ class FormatterDateTest extends TestCase
 
     /**
      * Test timezones with input date and time in other timezones.
+     *
      * @dataProvider provideTimesAndTz
+     *
      * @param string $defaultTz
      * @param mixed $inputTimeDst
      * @param mixed $inputTimeNonDst
      */
-    public function testIntlTimezoneInput($defaultTz, $inputTimeDst, $inputTimeNonDst)
+    public function testIntlTimezoneInput($defaultTz, $inputTimeDst, $inputTimeNonDst): void
     {
         $this->testTimezoneInput($defaultTz, $inputTimeDst, $inputTimeNonDst);
     }
 
     /**
      * Test timezones with input date and time in other timezones.
+     *
      * @dataProvider provideTimesAndTz
+     *
      * @param string $defaultTz
      * @param mixed $inputTimeDst
      * @param mixed $inputTimeNonDst
      */
-    public function testTimezoneInput($defaultTz, $inputTimeDst, $inputTimeNonDst)
+    public function testTimezoneInput($defaultTz, $inputTimeDst, $inputTimeNonDst): void
     {
         date_default_timezone_set($defaultTz); // formatting has to be independent of the default timezone set by PHP
         $this->formatter->datetimeFormat = 'yyyy-MM-dd HH:mm:ss';
@@ -661,7 +676,7 @@ class FormatterDateTest extends TestCase
         }
     }
 
-    public function testIntlTimezoneInputNonDefault()
+    public function testIntlTimezoneInputNonDefault(): void
     {
         $this->testTimezoneInputNonDefault();
     }
@@ -669,7 +684,7 @@ class FormatterDateTest extends TestCase
     /**
      * Test timezones with input date and time in other timezones.
      */
-    public function testTimezoneInputNonDefault()
+    public function testTimezoneInputNonDefault(): void
     {
         $this->formatter->datetimeFormat = 'yyyy-MM-dd HH:mm:ss';
         $this->formatter->dateFormat = 'yyyy-MM-dd';
@@ -712,13 +727,12 @@ class FormatterDateTest extends TestCase
         $this->assertSame('1407674460', $this->formatter->asTimestamp('2014-08-10 12:41:00 UTC'));
     }
 
-
-    public function testIntlDateOnlyValues()
+    public function testIntlDateOnlyValues(): void
     {
         $this->testDateOnlyValues();
     }
 
-    public function testDateOnlyValues()
+    public function testDateOnlyValues(): void
     {
         date_default_timezone_set('Pacific/Kiritimati');
         // timezones with exactly 24h difference, ensure this test does not fail on a certain time
@@ -745,7 +759,7 @@ class FormatterDateTest extends TestCase
      *
      * @see https://github.com/yiisoft/yii2/issues/13343
      */
-    public function testTimeOnlyValues()
+    public function testTimeOnlyValues(): void
     {
         $this->formatter->defaultTimeZone = 'UTC';
         $this->formatter->timeZone = 'Europe/Zurich'; // UTC+1 (DST UTC+2)
@@ -765,7 +779,7 @@ class FormatterDateTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/15286
      */
-    public function testTimeWithTimezoneInfo()
+    public function testTimeWithTimezoneInfo(): void
     {
         $this->formatter->defaultTimeZone = 'UTC';
         $this->formatter->timeZone = 'Etc/GMT-3';
@@ -779,7 +793,7 @@ class FormatterDateTest extends TestCase
         $this->assertSame('16:22:00', $this->formatter->asTime($time));
     }
 
-    public function testIntlTimeWithTimezoneInfo()
+    public function testIntlTimeWithTimezoneInfo(): void
     {
         $this->testTimeWithTimezoneInfo();
     }
@@ -792,9 +806,10 @@ class FormatterDateTest extends TestCase
      * Fixed in PHP >5.4.26 and >5.5.10. https://3v4l.org/mlZX7
      *
      * @dataProvider provideTimezones
+     *
      * @param string $dtz
      */
-    public function testIssue6263($dtz)
+    public function testIssue6263($dtz): void
     {
         $this->formatter->defaultTimeZone = $dtz;
 
@@ -809,12 +824,12 @@ class FormatterDateTest extends TestCase
         $this->assertFalse(DateTime::createFromFormat('Y-m-d H:i:s', '2014-05-08'));
     }
 
-    public function testIntlInputFractionSeconds()
+    public function testIntlInputFractionSeconds(): void
     {
         $this->testInputFractionSeconds();
     }
 
-    public function testInputFractionSeconds()
+    public function testInputFractionSeconds(): void
     {
         $this->formatter->defaultTimeZone = 'UTC';
 
@@ -831,12 +846,12 @@ class FormatterDateTest extends TestCase
         $this->assertEquals('2015-04-28 12:06:15+0200', $this->formatter->asDateTime($timeStamp, 'yyyy-MM-dd HH:mm:ssZ'));
     }
 
-    public function testIntlInputUnixTimestamp()
+    public function testIntlInputUnixTimestamp(): void
     {
         $this->testInputUnixTimestamp();
     }
 
-    public function testInputUnixTimestamp()
+    public function testInputUnixTimestamp(): void
     {
         $this->formatter->defaultTimeZone = 'UTC';
         $timeStamp = 1431907200;

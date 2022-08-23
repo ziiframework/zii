@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -17,6 +20,7 @@ namespace yii\caching;
  * For more details and usage information on Cache, see the [guide article on caching](guide:caching-overview).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class ChainedDependency extends Dependency
@@ -26,6 +30,7 @@ class ChainedDependency extends Dependency
      * Each array element must be a dependency object.
      */
     public $dependencies = [];
+
     /**
      * @var bool whether this dependency is depending on every dependency in [[dependencies]].
      * Defaults to true, meaning if any of the dependencies has changed, this dependency is considered changed.
@@ -34,12 +39,12 @@ class ChainedDependency extends Dependency
      */
     public $dependOnAll = true;
 
-
     /**
      * Evaluates the dependency by generating and saving the data related with dependency.
+     *
      * @param CacheInterface $cache the cache component that is currently evaluating this dependency
      */
-    public function evaluateDependency($cache)
+    public function evaluateDependency($cache): void
     {
         foreach ($this->dependencies as $dependency) {
             $dependency->evaluateDependency($cache);
@@ -49,7 +54,9 @@ class ChainedDependency extends Dependency
     /**
      * Generates the data needed to determine if dependency has been changed.
      * This method does nothing in this class.
+     *
      * @param CacheInterface $cache the cache component that is currently evaluating this dependency
+     *
      * @return mixed the data needed to determine if dependency has been changed.
      */
     protected function generateDependencyData($cache)

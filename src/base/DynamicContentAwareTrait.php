@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -12,6 +15,7 @@ namespace yii\base;
  * which support a [[View]] dynamic content feature.
  *
  * @author Sergey Makinen <sergey@makinen.ru>
+ *
  * @since 2.0.14
  */
 trait DynamicContentAwareTrait
@@ -23,6 +27,7 @@ trait DynamicContentAwareTrait
 
     /**
      * Returns the view object that can be used to render views or view files using dynamic contents.
+     *
      * @return View the view object that can be used to render views or view files.
      */
     abstract protected function getView();
@@ -38,7 +43,7 @@ trait DynamicContentAwareTrait
     /**
      * {@inheritdoc}
      */
-    public function setDynamicPlaceholders($placeholders)
+    public function setDynamicPlaceholders($placeholders): void
     {
         $this->_dynamicPlaceholders = $placeholders;
     }
@@ -46,16 +51,18 @@ trait DynamicContentAwareTrait
     /**
      * {@inheritdoc}
      */
-    public function addDynamicPlaceholder($name, $statements)
+    public function addDynamicPlaceholder($name, $statements): void
     {
         $this->_dynamicPlaceholders[$name] = $statements;
     }
 
     /**
      * Replaces placeholders in $content with results of evaluated dynamic statements.
+     *
      * @param string $content content to be parsed.
      * @param string[] $placeholders placeholders and their values.
      * @param bool $isRestoredFromCache whether content is going to be restored from cache.
+     *
      * @return string final content.
      */
     protected function updateDynamicContent($content, $placeholders, $isRestoredFromCache = false)
@@ -71,8 +78,10 @@ trait DynamicContentAwareTrait
             }
             $content = strtr($content, $placeholders);
         }
+
         if ($isRestoredFromCache) {
             $view = $this->getView();
+
             foreach ($placeholders as $name => $statements) {
                 $view->addDynamicPlaceholder($name, $statements);
             }

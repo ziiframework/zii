@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -27,6 +30,7 @@ use yii\base\Component;
  * For more details and usage information on Fixture, see the [guide article on fixtures](guide:test-fixtures).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class Fixture extends Component
@@ -37,27 +41,26 @@ class Fixture extends Component
      */
     public $depends = [];
 
-
     /**
      * Loads the fixture.
      * This method is called before performing every test method.
      * You should override this method with concrete implementation about how to set up the fixture.
      */
-    public function load()
+    public function load(): void
     {
     }
 
     /**
      * This method is called BEFORE any fixture data is loaded for the current test.
      */
-    public function beforeLoad()
+    public function beforeLoad(): void
     {
     }
 
     /**
      * This method is called AFTER all fixture data have been loaded for the current test.
      */
-    public function afterLoad()
+    public function afterLoad(): void
     {
     }
 
@@ -66,21 +69,21 @@ class Fixture extends Component
      * This method is called after every test method finishes.
      * You may override this method to perform necessary cleanup work for the fixture.
      */
-    public function unload()
+    public function unload(): void
     {
     }
 
     /**
      * This method is called BEFORE any fixture data is unloaded for the current test.
      */
-    public function beforeUnload()
+    public function beforeUnload(): void
     {
     }
 
     /**
      * This method is called AFTER all fixture data have been unloaded for the current test.
      */
-    public function afterUnload()
+    public function afterUnload(): void
     {
     }
 }

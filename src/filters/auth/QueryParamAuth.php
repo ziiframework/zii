@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,6 +14,7 @@ namespace yii\filters\auth;
  * QueryParamAuth is an action filter that supports the authentication based on the access token passed through a query parameter.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class QueryParamAuth extends AuthMethod
@@ -20,19 +24,21 @@ class QueryParamAuth extends AuthMethod
      */
     public $tokenParam = 'access-token';
 
-
     /**
      * {@inheritdoc}
      */
     public function authenticate($user, $request, $response)
     {
         $accessToken = $request->get($this->tokenParam);
+
         if (is_string($accessToken)) {
-            $identity = $user->loginByAccessToken($accessToken, get_class($this));
+            $identity = $user->loginByAccessToken($accessToken, static::class);
+
             if ($identity !== null) {
                 return $identity;
             }
         }
+
         if ($accessToken !== null) {
             $this->handleFailure($response);
         }

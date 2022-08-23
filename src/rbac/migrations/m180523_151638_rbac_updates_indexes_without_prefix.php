@@ -1,13 +1,16 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
 
-use yii\base\InvalidConfigException;
 use yii\db\Migration;
 use yii\rbac\DbManager;
+use yii\base\InvalidConfigException;
 
 /**
  * Updates indexes without a prefix.
@@ -15,17 +18,20 @@ use yii\rbac\DbManager;
  * @see https://github.com/yiisoft/yii2/pull/15548
  *
  * @author Sergey Gonimar <sergey.gonimar@gmail.com>
+ *
  * @since 2.0.16
  */
 class m180523_151638_rbac_updates_indexes_without_prefix extends Migration
 {
     /**
-     * @throws yii\base\InvalidConfigException
      * @return DbManager
+     *
+     * @throws yii\base\InvalidConfigException
      */
     protected function getAuthManager()
     {
         $authManager = Yii::$app->getAuthManager();
+
         if (!$authManager instanceof DbManager) {
             throw new InvalidConfigException('You should configure "authManager" component to use database before executing this migration.');
         }
@@ -36,7 +42,7 @@ class m180523_151638_rbac_updates_indexes_without_prefix extends Migration
     /**
      * {@inheritdoc}
      */
-    public function up()
+    public function up(): void
     {
         $authManager = $this->getAuthManager();
         $this->db = $authManager->db;
@@ -51,14 +57,13 @@ class m180523_151638_rbac_updates_indexes_without_prefix extends Migration
     /**
      * {@inheritdoc}
      */
-    public function down()
+    public function down(): void
     {
         $authManager = $this->getAuthManager();
         $this->db = $authManager->db;
 
         $this->dropIndex('{{%idx-auth_assignment-user_id}}', $authManager->assignmentTable);
         $this->createIndex('auth_assignment_user_id_idx', $authManager->assignmentTable, 'user_id');
-
 
         $this->dropIndex('{{%idx-auth_item-type}}', $authManager->itemTable);
         $this->createIndex('idx-auth_item-type', $authManager->itemTable, 'type');

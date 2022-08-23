@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -9,8 +12,8 @@ namespace yii\validators;
 
 use Yii;
 use yii\helpers\Json;
-use yii\helpers\StringHelper;
 use yii\web\JsExpression;
+use yii\helpers\StringHelper;
 
 /**
  * NumberValidator validates that the attribute value is a number.
@@ -20,61 +23,74 @@ use yii\web\JsExpression;
  * is within certain range.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class NumberValidator extends Validator
 {
     /**
      * @var bool whether to allow array type attribute. Defaults to false.
+     *
      * @since 2.0.42
      */
     public $allowArray = false;
+
     /**
      * @var bool whether the attribute value can only be an integer. Defaults to false.
      */
     public $integerOnly = false;
+
     /**
      * @var int|float|null upper limit of the number. Defaults to null, meaning no upper limit.
+     *
      * @see tooBig for the customized message used when the number is too big.
      */
     public $max;
+
     /**
      * @var int|float|null lower limit of the number. Defaults to null, meaning no lower limit.
+     *
      * @see tooSmall for the customized message used when the number is too small.
      */
     public $min;
+
     /**
      * @var string user-defined error message used when the value is bigger than [[max]].
      */
     public $tooBig;
+
     /**
      * @var string user-defined error message used when the value is smaller than [[min]].
      */
     public $tooSmall;
+
     /**
      * @var string the regular expression for matching integers.
      */
     public $integerPattern = '/^[+-]?\d+$/';
+
     /**
      * @var string the regular expression for matching numbers. It defaults to a pattern
      * that matches floating numbers with optional exponential part (e.g. -1.23e-10).
      */
     public $numberPattern = '/^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/';
 
-
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
+
         if ($this->message === null) {
             $this->message = $this->integerOnly ? Yii::t('yii', '{attribute} must be an integer.')
                 : Yii::t('yii', '{attribute} must be a number.');
         }
+
         if ($this->min !== null && $this->tooSmall === null) {
             $this->tooSmall = Yii::t('yii', '{attribute} must be no less than {min}.');
         }
+
         if ($this->max !== null && $this->tooBig === null) {
             $this->tooBig = Yii::t('yii', '{attribute} must be no greater than {max}.');
         }
@@ -83,17 +99,21 @@ class NumberValidator extends Validator
     /**
      * {@inheritdoc}
      */
-    public function validateAttribute($model, $attribute)
+    public function validateAttribute($model, $attribute): void
     {
         $value = $model->$attribute;
+
         if (is_array($value) && !$this->allowArray) {
             $this->addError($model, $attribute, $this->message);
+
             return;
         }
         $values = !is_array($value) ? [$value] : $value;
+
         foreach ($values as $value) {
             if ($this->isNotNumber($value)) {
                 $this->addError($model, $attribute, $this->message);
+
                 return;
             }
             $pattern = $this->integerOnly ? $this->integerPattern : $this->numberPattern;
@@ -101,9 +121,11 @@ class NumberValidator extends Validator
             if (!preg_match($pattern, StringHelper::normalizeNumber($value))) {
                 $this->addError($model, $attribute, $this->message);
             }
+
             if ($this->min !== null && $value < $this->min) {
                 $this->addError($model, $attribute, $this->tooSmall, ['min' => $this->min]);
             }
+
             if ($this->max !== null && $value > $this->max) {
                 $this->addError($model, $attribute, $this->tooBig, ['max' => $this->max]);
             }
@@ -119,11 +141,13 @@ class NumberValidator extends Validator
             return [Yii::t('yii', '{attribute} is invalid.'), []];
         }
         $values = !is_array($value) ? [$value] : $value;
+
         foreach ($values as $value) {
             if ($this->isNotNumber($value)) {
                 return [Yii::t('yii', '{attribute} is invalid.'), []];
             }
             $pattern = $this->integerOnly ? $this->integerPattern : $this->numberPattern;
+
             if (!preg_match($pattern, StringHelper::normalizeNumber($value))) {
                 return [$this->message, []];
             } elseif ($this->min !== null && $value < $this->min) {
@@ -181,6 +205,7 @@ class NumberValidator extends Validator
                 'min' => $this->min,
             ]);
         }
+
         if ($this->max !== null) {
             // ensure numeric value to make javascript comparison equal to PHP comparison
             // https://github.com/yiisoft/yii2/issues/3118
@@ -190,6 +215,7 @@ class NumberValidator extends Validator
                 'max' => $this->max,
             ]);
         }
+
         if ($this->skipOnEmpty) {
             $options['skipOnEmpty'] = 1;
         }

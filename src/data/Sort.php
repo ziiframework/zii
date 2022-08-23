@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,11 +11,12 @@
 namespace yii\data;
 
 use Yii;
-use yii\base\BaseObject;
-use yii\base\InvalidConfigException;
-use yii\helpers\Html;
-use yii\helpers\Inflector;
+use Traversable;
 use yii\web\Request;
+use yii\helpers\Html;
+use yii\base\BaseObject;
+use yii\helpers\Inflector;
+use yii\base\InvalidConfigException;
 
 /**
  * Sort represents information relevant to sorting.
@@ -75,6 +79,7 @@ use yii\web\Request;
  * be passed to [[\yii\db\Query::orderBy()]] to construct a DB query.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class Sort extends BaseObject
@@ -84,6 +89,7 @@ class Sort extends BaseObject
      * Defaults to `false`, which means each time the data can only be sorted by one attribute.
      */
     public $enableMultiSort = false;
+
     /**
      * @var array list of attributes that are allowed to be sorted. Its syntax can be
      * described using the following example:
@@ -138,12 +144,15 @@ class Sort extends BaseObject
      * to configure every attribute. Each attribute must include these elements: `asc` and `desc`.
      */
     public $attributes = [];
+
     /**
      * @var string the name of the parameter that specifies which attributes to be sorted
      * in which direction. Defaults to `sort`.
+     *
      * @see params
      */
     public $sortParam = 'sort';
+
     /**
      * @var array the order that should be used when the current request does not specify any order.
      * The array keys are attribute names and the array values are the corresponding sort directions. For example,
@@ -158,15 +167,18 @@ class Sort extends BaseObject
      * @see attributeOrders
      */
     public $defaultOrder;
+
     /**
      * @var string|null the route of the controller action for displaying the sorted contents.
      * If not set, it means using the currently requested route.
      */
     public $route;
+
     /**
      * @var string the character used to separate different attributes that need to be sorted by.
      */
     public $separator = ',';
+
     /**
      * @var array|null parameters (name => value) that should be used to obtain the current sort directions
      * and to create new sort URLs. If not set, `$_GET` will be used instead.
@@ -180,25 +192,28 @@ class Sort extends BaseObject
      * @see defaultOrder
      */
     public $params;
+
     /**
      * @var \yii\web\UrlManager|null the URL manager used for creating sort URLs. If not set,
      * the `urlManager` application component will be used.
      */
     public $urlManager;
+
     /**
      * @var int Allow to control a value of the fourth parameter which will be
      * passed to [[ArrayHelper::multisort()]]
+     *
      * @since 2.0.33
      */
     public $sortFlags = SORT_REGULAR;
 
-
     /**
      * Normalizes the [[attributes]] property.
      */
-    public function init()
+    public function init(): void
     {
         $attributes = [];
+
         foreach ($this->attributes as $name => $attribute) {
             if (!is_array($attribute)) {
                 $attributes[$attribute] = [
@@ -219,7 +234,9 @@ class Sort extends BaseObject
 
     /**
      * Returns the columns and their corresponding sort directions.
+     *
      * @param bool $recalculate whether to recalculate the sort directions
+     *
      * @return array the columns (keys) and their corresponding sort directions (values).
      * This can be passed to [[\yii\db\Query::orderBy()]] to construct a DB query.
      */
@@ -227,10 +244,12 @@ class Sort extends BaseObject
     {
         $attributeOrders = $this->getAttributeOrders($recalculate);
         $orders = [];
+
         foreach ($attributeOrders as $attribute => $direction) {
             $definition = $this->attributes[$attribute];
             $columns = $definition[$direction === SORT_ASC ? 'asc' : 'desc'];
-            if (is_array($columns) || $columns instanceof \Traversable) {
+
+            if (is_array($columns) || $columns instanceof Traversable) {
                 foreach ($columns as $name => $dir) {
                     $orders[$name] = $dir;
                 }
@@ -249,7 +268,9 @@ class Sort extends BaseObject
 
     /**
      * Returns the currently requested sort information.
+     *
      * @param bool $recalculate whether to recalculate the sort directions
+     *
      * @return array sort directions indexed by attribute names.
      * Sort direction can be either `SORT_ASC` for ascending order or
      * `SORT_DESC` for descending order.
@@ -258,13 +279,16 @@ class Sort extends BaseObject
     {
         if ($this->_attributeOrders === null || $recalculate) {
             $this->_attributeOrders = [];
+
             if (($params = $this->params) === null) {
                 $request = Yii::$app->getRequest();
                 $params = $request instanceof Request ? $request->getQueryParams() : [];
             }
+
             if (isset($params[$this->sortParam])) {
                 foreach ($this->parseSortParam($params[$this->sortParam]) as $attribute) {
                     $descending = false;
+
                     if (strncmp($attribute, '-', 1) === 0) {
                         $descending = true;
                         $attribute = substr($attribute, 1);
@@ -272,12 +296,14 @@ class Sort extends BaseObject
 
                     if (isset($this->attributes[$attribute])) {
                         $this->_attributeOrders[$attribute] = $descending ? SORT_DESC : SORT_ASC;
+
                         if (!$this->enableMultiSort) {
                             return $this->_attributeOrders;
                         }
                     }
                 }
             }
+
             if (empty($this->_attributeOrders) && is_array($this->defaultOrder)) {
                 $this->_attributeOrders = $this->defaultOrder;
             }
@@ -303,7 +329,9 @@ class Sort extends BaseObject
      * ```
      *
      * @param string $param the value of the [[sortParam]].
+     *
      * @return array the valid sort attributes.
+     *
      * @since 2.0.12
      * @see separator for the attribute name separator.
      * @see sortParam
@@ -315,22 +343,26 @@ class Sort extends BaseObject
 
     /**
      * Sets up the currently sort information.
+     *
      * @param array|null $attributeOrders sort directions indexed by attribute names.
      * Sort direction can be either `SORT_ASC` for ascending order or
      * `SORT_DESC` for descending order.
      * @param bool $validate whether to validate given attribute orders against [[attributes]] and [[enableMultiSort]].
      * If validation is enabled incorrect entries will be removed.
+     *
      * @since 2.0.10
      */
-    public function setAttributeOrders($attributeOrders, $validate = true)
+    public function setAttributeOrders($attributeOrders, $validate = true): void
     {
         if ($attributeOrders === null || !$validate) {
             $this->_attributeOrders = $attributeOrders;
         } else {
             $this->_attributeOrders = [];
+
             foreach ($attributeOrders as $attribute => $order) {
                 if (isset($this->attributes[$attribute])) {
                     $this->_attributeOrders[$attribute] = $order;
+
                     if (!$this->enableMultiSort) {
                         break;
                     }
@@ -341,7 +373,9 @@ class Sort extends BaseObject
 
     /**
      * Returns the sort direction of the specified attribute in the current request.
+     *
      * @param string $attribute the attribute name
+     *
      * @return int|null Sort direction of the attribute. Can be either `SORT_ASC`
      * for ascending order or `SORT_DESC` for descending order. Null is returned
      * if the attribute is invalid or does not need to be sorted.
@@ -350,26 +384,30 @@ class Sort extends BaseObject
     {
         $orders = $this->getAttributeOrders();
 
-        return isset($orders[$attribute]) ? $orders[$attribute] : null;
+        return $orders[$attribute] ?? null;
     }
 
     /**
      * Generates a hyperlink that links to the sort action to sort by the specified attribute.
      * Based on the sort direction, the CSS class of the generated hyperlink will be appended
      * with "asc" or "desc".
+     *
      * @param string $attribute the attribute name by which the data should be sorted by.
      * @param array $options additional HTML attributes for the hyperlink tag.
      * There is one special attribute `label` which will be used as the label of the hyperlink.
      * If this is not set, the label defined in [[attributes]] will be used.
      * If no label is defined, [[\yii\helpers\Inflector::camel2words()]] will be called to get a label.
      * Note that it will not be HTML-encoded.
+     *
      * @return string the generated hyperlink
+     *
      * @throws InvalidConfigException if the attribute is unknown
      */
     public function link($attribute, $options = [])
     {
         if (($direction = $this->getAttributeOrder($attribute)) !== null) {
             $class = $direction === SORT_DESC ? 'desc' : 'asc';
+
             if (isset($options['class'])) {
                 $options['class'] .= ' ' . $class;
             } else {
@@ -399,10 +437,14 @@ class Sort extends BaseObject
      * This method will consider the current sorting status given by [[attributeOrders]].
      * For example, if the current page already sorts the data by the specified attribute in ascending order,
      * then the URL created will lead to a page that sorts the data by the specified attribute in descending order.
+     *
      * @param string $attribute the attribute name
      * @param bool $absolute whether to create an absolute URL. Defaults to `false`.
+     *
      * @return string the URL for sorting. False if the attribute is invalid.
+     *
      * @throws InvalidConfigException if the attribute is unknown
+     *
      * @see attributeOrders
      * @see params
      */
@@ -415,6 +457,7 @@ class Sort extends BaseObject
         $params[$this->sortParam] = $this->createSortParam($attribute);
         $params[0] = $this->route === null ? Yii::$app->controller->getRoute() : $this->route;
         $urlManager = $this->urlManager === null ? Yii::$app->getUrlManager() : $this->urlManager;
+
         if ($absolute) {
             return $urlManager->createAbsoluteUrl($params);
         }
@@ -426,8 +469,11 @@ class Sort extends BaseObject
      * Creates the sort variable for the specified attribute.
      * The newly created sort variable can be used to create a URL that will lead to
      * sorting by the specified attribute.
+     *
      * @param string $attribute the attribute name
+     *
      * @return string the value of the sort variable
+     *
      * @throws InvalidConfigException if the specified attribute is not defined in [[attributes]]
      */
     public function createSortParam($attribute)
@@ -437,6 +483,7 @@ class Sort extends BaseObject
         }
         $definition = $this->attributes[$attribute];
         $directions = $this->getAttributeOrders();
+
         if (isset($directions[$attribute])) {
             if ($this->enableMultiSort) {
                 if ($directions[$attribute] === SORT_ASC) {
@@ -450,7 +497,7 @@ class Sort extends BaseObject
 
             unset($directions[$attribute]);
         } else {
-            $direction = isset($definition['default']) ? $definition['default'] : SORT_ASC;
+            $direction = $definition['default'] ?? SORT_ASC;
         }
 
         if ($this->enableMultiSort) {
@@ -462,6 +509,7 @@ class Sort extends BaseObject
         }
 
         $sorts = [];
+
         foreach ($directions as $attribute => $direction) {
             $sorts[] = $direction === SORT_DESC ? '-' . $attribute : $attribute;
         }
@@ -471,7 +519,9 @@ class Sort extends BaseObject
 
     /**
      * Returns a value indicating whether the sort definition supports sorting by the named attribute.
+     *
      * @param string $name the attribute name
+     *
      * @return bool whether the sort definition supports sorting by the named attribute.
      */
     public function hasAttribute($name)

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,8 +10,8 @@
 
 namespace yii\widgets;
 
-use yii\base\InvalidConfigException;
 use yii\base\Widget;
+use yii\base\InvalidConfigException;
 
 /**
  * ContentDecorator records all output between [[begin()]] and [[end()]] calls, passes it to the given view file
@@ -38,6 +41,7 @@ use yii\base\Widget;
  * ```
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class ContentDecorator extends Widget
@@ -47,16 +51,16 @@ class ContentDecorator extends Widget
      * This can be specified as either the view file path or [path alias](guide:concept-aliases).
      */
     public $viewFile;
+
     /**
      * @var array the parameters (name => value) to be extracted and made available in the decorative view.
      */
     public $params = [];
 
-
     /**
      * Starts recording a clip.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -71,7 +75,7 @@ class ContentDecorator extends Widget
      * Ends recording a clip.
      * This method stops output buffering and saves the rendering result as a named clip in the controller.
      */
-    public function run()
+    public function run(): void
     {
         $params = $this->params;
         $params['content'] = ob_get_clean();

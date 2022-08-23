@@ -1,5 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ * @link https://www.yiiframework.com/
+ * @copyright Copyright (c) 2008 Yii Software LLC
+ * @license https://www.yiiframework.com/license/
+ */
 
 namespace yiiunit\framework\web\session;
 
@@ -7,7 +14,7 @@ use yii\web\Session;
 
 trait SessionTestTrait
 {
-    public function initStrictModeTest($class)
+    public function initStrictModeTest($class): void
     {
         /** @var Session $session */
         $session = new $class();
@@ -18,6 +25,7 @@ trait SessionTestTrait
         if (PHP_VERSION_ID < 50502 && !$session->getUseCustomStorage()) {
             $this->expectException('yii\base\InvalidConfigException');
             $session->useStrictMode = true;
+
             return;
         }
 
@@ -28,17 +36,18 @@ trait SessionTestTrait
     /**
      * @param string $class
      */
-    protected function useStrictModeTest($class)
+    protected function useStrictModeTest($class): void
     {
         /** @var Session $session */
         $session = new $class();
 
         if (PHP_VERSION_ID < 50502 && !$session->getUseCustomStorage()) {
             $this->markTestSkipped('Can not be tested on PHP < 5.5.2 without custom storage class.');
+
             return;
         }
 
-        //non-strict-mode test
+        // non-strict-mode test
         $session->useStrictMode = false;
         $session->close();
         $session->destroySession('non-existing-non-strict');
@@ -47,7 +56,7 @@ trait SessionTestTrait
         $this->assertEquals('non-existing-non-strict', $session->getId());
         $session->close();
 
-        //strict-mode test
+        // strict-mode test
         $session->useStrictMode = true;
         $session->close();
         $session->destroySession('non-existing-strict');
@@ -57,12 +66,12 @@ trait SessionTestTrait
         $this->assertNotEquals('non-existing-strict', $id);
         $session->set('strict_mode_test', 'session data');
         $session->close();
-        //Ensure session was not stored under forced id
+        // Ensure session was not stored under forced id
         $session->setId('non-existing-strict');
         $session->open();
         $this->assertNotEquals('session data', $session->get('strict_mode_test'));
         $session->close();
-        //Ensure session can be accessed with the new (and thus existing) id.
+        // Ensure session can be accessed with the new (and thus existing) id.
         $session->setId($id);
         $session->open();
         $this->assertNotEmpty($id);

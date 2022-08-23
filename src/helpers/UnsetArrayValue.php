@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -45,6 +48,7 @@ namespace yii\helpers;
  * ```
  *
  * @author Robert Korulczyk <robert@korulczyk.pl>
+ *
  * @since 2.0.10
  */
 class UnsetArrayValue
@@ -53,7 +57,9 @@ class UnsetArrayValue
      * Restores class state after using `var_export()`.
      *
      * @param array $state
+     *
      * @return UnsetArrayValue
+     *
      * @see https://www.php.net/manual/en/function.var-export.php
      * @since 2.0.16
      */

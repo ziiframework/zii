@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,17 +10,18 @@
 
 namespace yiiunit\framework\validators;
 
+use Exception;
+use yiiunit\TestCase;
 use yii\base\InvalidConfigException;
 use yii\validators\CompareValidator;
 use yiiunit\data\validators\models\FakedValidationModel;
-use yiiunit\TestCase;
 
 /**
  * @group validators
  */
 class CompareValidatorTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -25,14 +29,14 @@ class CompareValidatorTest extends TestCase
         $this->destroyApplication();
     }
 
-    public function testValidateValueException()
+    public function testValidateValueException(): void
     {
         $this->expectException('yii\base\InvalidConfigException');
         $val = new CompareValidator();
         $val->validate('val');
     }
 
-    public function testValidateValue()
+    public function testValidateValue(): void
     {
         $value = 18449;
         // default config
@@ -42,9 +46,7 @@ class CompareValidatorTest extends TestCase
         $this->assertFalse($val->validate($value + 1));
 
         // Using a closure for compareValue
-        $val = new CompareValidator(['compareValue' => function() use ($value) {
-            return $value;
-        }]);
+        $val = new CompareValidator(['compareValue' => static fn () => $value]);
         $this->assertTrue($val->validate($value));
         $this->assertTrue($val->validate((string) $value));
         $this->assertFalse($val->validate($value + 1));
@@ -52,6 +54,7 @@ class CompareValidatorTest extends TestCase
         foreach ($this->getOperationTestData($value) as $op => $tests) {
             $val = new CompareValidator(['compareValue' => $value]);
             $val->operator = $op;
+
             foreach ($tests as $test) {
                 $this->assertEquals($test[1], $val->validate($test[0]), "Testing $op");
             }
@@ -108,7 +111,7 @@ class CompareValidatorTest extends TestCase
         ];
     }
 
-    public function testValidateAttribute()
+    public function testValidateAttribute(): void
     {
         // invalid-array
         $val = new CompareValidator();
@@ -158,7 +161,7 @@ class CompareValidatorTest extends TestCase
         $this->assertTrue($model->hasErrors('attr_o'));
     }
 
-    public function testAttributeErrorMessages()
+    public function testAttributeErrorMessages(): void
     {
         $model = FakedValidationModel::createWithAttributes([
             'attr1' => 1,
@@ -202,11 +205,13 @@ class CompareValidatorTest extends TestCase
         ];
     }
 
-    public function testValidateAttributeOperators()
+    public function testValidateAttributeOperators(): void
     {
         $value = 55;
+
         foreach ($this->getOperationTestData($value) as $operator => $tests) {
             $val = new CompareValidator(['operator' => $operator, 'compareValue' => $value]);
+
             foreach ($tests as $test) {
                 $model = new FakedValidationModel();
                 $model->attr_test = $test[0];
@@ -216,17 +221,18 @@ class CompareValidatorTest extends TestCase
         }
     }
 
-    public function testEnsureMessageSetOnInit()
+    public function testEnsureMessageSetOnInit(): void
     {
         foreach ($this->getOperationTestData(1337) as $operator => $tests) {
             $val = new CompareValidator(['operator' => $operator]);
             $this->assertTrue(strlen($val->message) > 1);
         }
+
         try {
             new CompareValidator(['operator' => '<>']);
         } catch (InvalidConfigException $e) {
             return;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->fail('InvalidConfigException expected' . get_class($e) . 'received');
 
             return;

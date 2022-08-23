@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,13 +11,14 @@
 namespace yiiunit\framework\i18n;
 
 use Yii;
-use yii\base\Event;
 use yii\i18n\I18N;
-use yii\i18n\PhpMessageSource;
+use yii\base\Event;
 use yiiunit\TestCase;
+use yii\i18n\PhpMessageSource;
 
 /**
  * @author Carsten Brandt <mail@cebe.cc>
+ *
  * @since 2.0
  * @group i18n
  */
@@ -25,14 +29,14 @@ class I18NTest extends TestCase
      */
     public $i18n;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->mockApplication();
         $this->setI18N();
     }
 
-    protected function setI18N()
+    protected function setI18N(): void
     {
         $this->i18n = new I18N([
             'translations' => [
@@ -49,7 +53,7 @@ class I18NTest extends TestCase
         return PhpMessageSource::className();
     }
 
-    public function testTranslate()
+    public function testTranslate(): void
     {
         $msg = 'The dog runs fast.';
 
@@ -66,7 +70,7 @@ class I18NTest extends TestCase
         $this->assertEquals('Hallo Welt!', $this->i18n->translate('test', 'Hello world!', [], 'de-DE'));
     }
 
-    public function testDefaultSource()
+    public function testDefaultSource(): void
     {
         $i18n = new I18N([
             'translations' => [
@@ -101,7 +105,7 @@ class I18NTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/7964
      */
-    public function testSourceLanguageFallback()
+    public function testSourceLanguageFallback(): void
     {
         $i18n = new I18N([
             'translations' => [
@@ -112,8 +116,7 @@ class I18NTest extends TestCase
                             'test' => 'test.php',
                             'foo' => 'test.php',
                         ],
-                    ]
-                ),
+                    ]),
             ],
         ]);
 
@@ -136,7 +139,7 @@ class I18NTest extends TestCase
         $this->assertEquals($msg, $i18n->translate('test', $msg, [], null));
     }
 
-    public function testTranslateParams()
+    public function testTranslateParams(): void
     {
         $msg = 'His speed is about {n} km/h.';
         $params = ['n' => 42];
@@ -144,7 +147,7 @@ class I18NTest extends TestCase
         $this->assertEquals('Seine Geschwindigkeit beträgt 42 km/h.', $this->i18n->translate('test', $msg, $params, 'de-DE'));
     }
 
-    public function testTranslateParams2()
+    public function testTranslateParams2(): void
     {
         if (!extension_loaded('intl')) {
             $this->markTestSkipped('intl not installed. Skipping.');
@@ -158,7 +161,7 @@ class I18NTest extends TestCase
         $this->assertEquals('Er heißt DA VINCI und ist 42 km/h schnell.', $this->i18n->translate('test', $msg, $params, 'de-DE'));
     }
 
-    public function testSpecialParams()
+    public function testSpecialParams(): void
     {
         $msg = 'His speed is about {0} km/h.';
 
@@ -173,7 +176,7 @@ class I18NTest extends TestCase
      *
      * @see https://github.com/yiisoft/yii2/issues/2209
      */
-    public function testMissingTranslationFormatting()
+    public function testMissingTranslationFormatting(): void
     {
         $this->assertEquals('1 item', $this->i18n->translate('test', '{0, number} {0, plural, one{item} other{items}}', 1, 'hu'));
     }
@@ -181,12 +184,12 @@ class I18NTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/7093
      */
-    public function testRussianPlurals()
+    public function testRussianPlurals(): void
     {
         $this->assertEquals('На диване лежит 6 кошек!', $this->i18n->translate('test', 'There {n, plural, =0{no cats} =1{one cat} other{are # cats}} on lying on the sofa!', ['n' => 6], 'ru'));
     }
 
-    public function testUsingSourceLanguageForMissingTranslation()
+    public function testUsingSourceLanguageForMissingTranslation(): void
     {
         Yii::$app->sourceLanguage = 'ru';
         Yii::$app->language = 'en';
@@ -202,19 +205,19 @@ class I18NTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/2519
      */
-    public function testMissingTranslationEvent()
+    public function testMissingTranslationEvent(): void
     {
         $this->assertEquals('Hallo Welt!', $this->i18n->translate('test', 'Hello world!', [], 'de-DE'));
         $this->assertEquals('Missing translation message.', $this->i18n->translate('test', 'Missing translation message.', [], 'de-DE'));
         $this->assertEquals('Hallo Welt!', $this->i18n->translate('test', 'Hello world!', [], 'de-DE'));
 
-        Event::on(PhpMessageSource::className(), PhpMessageSource::EVENT_MISSING_TRANSLATION, function ($event) {});
+        Event::on(PhpMessageSource::className(), PhpMessageSource::EVENT_MISSING_TRANSLATION, static function ($event): void {});
         $this->assertEquals('Hallo Welt!', $this->i18n->translate('test', 'Hello world!', [], 'de-DE'));
         $this->assertEquals('Missing translation message.', $this->i18n->translate('test', 'Missing translation message.', [], 'de-DE'));
         $this->assertEquals('Hallo Welt!', $this->i18n->translate('test', 'Hello world!', [], 'de-DE'));
         Event::off(PhpMessageSource::className(), PhpMessageSource::EVENT_MISSING_TRANSLATION);
 
-        Event::on(PhpMessageSource::className(), PhpMessageSource::EVENT_MISSING_TRANSLATION, function ($event) {
+        Event::on(PhpMessageSource::className(), PhpMessageSource::EVENT_MISSING_TRANSLATION, static function ($event): void {
             if ($event->message == 'New missing translation message.') {
                 $event->translatedMessage = 'TRANSLATION MISSING HERE!';
             }
@@ -237,9 +240,10 @@ class I18NTest extends TestCase
 
     /**
      * @dataProvider sourceLanguageDataProvider
+     *
      * @param $sourceLanguage
      */
-    public function testIssue11429($sourceLanguage)
+    public function testIssue11429($sourceLanguage): void
     {
         $this->mockApplication();
         $this->setI18N();
@@ -250,6 +254,7 @@ class I18NTest extends TestCase
         $filter = function ($array) {
             // Ensures that error message is related to PhpMessageSource
             $className = $this->getMessageSourceClass();
+
             return substr_compare($array[2], $className, 0, strlen($className)) === 0;
         };
 
@@ -273,15 +278,16 @@ class I18NTest extends TestCase
 
     /**
      * Formatting a message that contains params but they are not provided.
+     *
      * @see https://github.com/yiisoft/yii2/issues/10884
      */
-    public function testFormatMessageWithNoParam()
+    public function testFormatMessageWithNoParam(): void
     {
         $message = 'Incorrect password (length must be from {min, number} to {max, number} symbols).';
         $this->assertEquals($message, $this->i18n->format($message, ['attribute' => 'password'], 'en'));
     }
 
-    public function testFormatMessageWithDottedParameters()
+    public function testFormatMessageWithDottedParameters(): void
     {
         $message = 'date: {dt.test}';
         $this->assertEquals('date: 1510147434', $this->i18n->format($message, ['dt.test' => 1510147434], 'en'));

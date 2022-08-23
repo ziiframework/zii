@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,26 +10,29 @@
 
 namespace yii\db\conditions;
 
-use yii\base\InvalidArgumentException;
 use yii\db\ExpressionInterface;
+use yii\base\InvalidArgumentException;
 
 /**
  * Class InCondition represents `IN` condition.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ *
  * @since 2.0.14
  */
 class InCondition implements ConditionInterface
 {
     /**
-     * @var string $operator the operator to use (e.g. `IN` or `NOT IN`)
+     * @var string the operator to use (e.g. `IN` or `NOT IN`)
      */
     private $operator;
+
     /**
      * @var string|string[] the column name. If it is an array, a composite `IN` condition
      * will be generated.
      */
     private $column;
+
     /**
      * @var ExpressionInterface[]|string[]|int[] an array of values that [[column]] value should be among.
      * If it is an empty array the generated expression will be a `false` value if
@@ -34,9 +40,8 @@ class InCondition implements ConditionInterface
      */
     private $values;
 
-
     /**
-     * SimpleCondition constructor
+     * SimpleCondition constructor.
      *
      * @param string|string[] the column name. If it is an array, a composite `IN` condition
      * will be generated.
@@ -74,8 +79,10 @@ class InCondition implements ConditionInterface
     {
         return $this->values;
     }
+
     /**
      * {@inheritdoc}
+     *
      * @throws InvalidArgumentException if wrong number of operands have been given.
      */
     public static function fromArrayDefinition($operator, $operands)

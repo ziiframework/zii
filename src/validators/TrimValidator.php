@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -21,22 +24,25 @@ class TrimValidator extends Validator
      * For example, set '\/ ' to normalize path or namespace.
      */
     public $chars;
+
     /**
      * @var bool Whether the filter should be skipped if an array input is given.
      * If true and an array input is given, the filter will not be applied.
      */
     public $skipOnArray = false;
+
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public $skipOnEmpty = false;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function validateAttribute($model, $attribute)
+    public function validateAttribute($model, $attribute): void
     {
         $value = $model->$attribute;
+
         if (!$this->skipOnArray || !is_array($value)) {
             $model->$attribute = is_array($value)
                 ? array_map([$this, 'trimValue'], $value)
@@ -48,6 +54,7 @@ class TrimValidator extends Validator
      * Converts given value to string and strips declared characters.
      *
      * @param mixed $value the value to strip
+     *
      * @return string
      */
     protected function trimValue($value)
@@ -56,7 +63,7 @@ class TrimValidator extends Validator
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function clientValidateAttribute($model, $attribute, $view)
     {
@@ -71,7 +78,7 @@ class TrimValidator extends Validator
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getClientOptions($model, $attribute)
     {

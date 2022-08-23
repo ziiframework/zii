@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,15 +10,15 @@
 
 namespace yiiunit\framework\helpers;
 
-use yii\helpers\ReplaceArrayValue;
 use yiiunit\TestCase;
+use yii\helpers\ReplaceArrayValue;
 
 /**
  * @group helpers
  */
 class ReplaceArrayValueTest extends TestCase
 {
-    public function testSetStateWithoutValue()
+    public function testSetStateWithoutValue(): void
     {
         $this->expectException('yii\base\InvalidConfigException');
         $this->expectExceptionMessage('Failed to instantiate class "ReplaceArrayValue". Required parameter "value" is missing');
@@ -23,7 +26,7 @@ class ReplaceArrayValueTest extends TestCase
         $object::__set_state([]);
     }
 
-    public function testSetStateWithValue()
+    public function testSetStateWithValue(): void
     {
         $object = new ReplaceArrayValue('test');
         $result = $object::__set_state(['value' => 'test2']);

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -9,8 +12,11 @@ namespace yiiunit\framework\caching;
 
 use yii\caching\ArrayCache;
 
+use function microtime;
+
 /**
  * Class for testing file cache backend.
+ *
  * @group caching
  */
 class ArrayCacheTest extends CacheTestCase
@@ -29,45 +35,45 @@ class ArrayCacheTest extends CacheTestCase
         return $this->_cacheInstance;
     }
 
-    public function testExpire()
+    public function testExpire(): void
     {
         $cache = $this->getCacheInstance();
 
-        static::$microtime = \microtime(true);
+        static::$microtime = microtime(true);
         $this->assertTrue($cache->set('expire_test', 'expire_test', 2));
-        static::$microtime++;
+        ++static::$microtime;
         $this->assertEquals('expire_test', $cache->get('expire_test'));
-        static::$microtime++;
+        ++static::$microtime;
         $this->assertFalse($cache->get('expire_test'));
     }
 
-    public function testExpireAdd()
+    public function testExpireAdd(): void
     {
         $cache = $this->getCacheInstance();
 
-        static::$microtime = \microtime(true);
+        static::$microtime = microtime(true);
         $this->assertTrue($cache->add('expire_testa', 'expire_testa', 2));
-        static::$microtime++;
+        ++static::$microtime;
         $this->assertEquals('expire_testa', $cache->get('expire_testa'));
-        static::$microtime++;
+        ++static::$microtime;
         $this->assertFalse($cache->get('expire_testa'));
     }
 
     /**
      * @see https://github.com/yiisoft/yii2/issues/16028
      */
-    public function testSerializationOfComplexKeysThatContainNonUTFSequences()
+    public function testSerializationOfComplexKeysThatContainNonUTFSequences(): void
     {
         $cache = $this->getCacheInstance();
 
         $firstCacheKey = $cache->buildKey([
             "First example of invalid UTF-8 sequence: \xF5",
-            "Valid UTF-8 string",
+            'Valid UTF-8 string',
         ]);
 
         $secondCacheKey = $cache->buildKey([
             "Second example of invalid UTF-8 sequence: \xF6",
-            "Valid UTF-8 string",
+            'Valid UTF-8 string',
         ]);
 
         $this->assertNotEquals($firstCacheKey, $secondCacheKey);

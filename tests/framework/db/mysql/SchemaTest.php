@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -6,10 +9,11 @@
  */
 
 namespace yiiunit\framework\db\mysql;
-use yii\db\Expression;
 
-use yii\db\mysql\ColumnSchema;
+use PDO;
+use yii\db\Expression;
 use yii\db\mysql\Schema;
+use yii\db\mysql\ColumnSchema;
 use yiiunit\framework\db\AnyCaseValue;
 
 /**
@@ -20,9 +24,9 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
 {
     public $driverName = 'mysql';
 
-    public function testLoadDefaultDatetimeColumn()
+    public function testLoadDefaultDatetimeColumn(): void
     {
-        if (!version_compare($this->getConnection()->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION), '5.6', '>=')) {
+        if (!version_compare($this->getConnection()->pdo->getAttribute(PDO::ATTR_SERVER_VERSION), '5.6', '>=')) {
             $this->markTestSkipped('Default datetime columns are supported since MySQL 5.6.');
         }
         $sql = <<<SQL
@@ -41,12 +45,12 @@ SQL;
         $dt = $schema->columns['dt'];
 
         $this->assertInstanceOf(Expression::className(), $dt->defaultValue);
-        $this->assertEquals('CURRENT_TIMESTAMP', (string)$dt->defaultValue);
+        $this->assertEquals('CURRENT_TIMESTAMP', (string) $dt->defaultValue);
     }
 
-    public function testDefaultDatetimeColumnWithMicrosecs()
+    public function testDefaultDatetimeColumnWithMicrosecs(): void
     {
-        if (!version_compare($this->getConnection()->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION), '5.6.4', '>=')) {
+        if (!version_compare($this->getConnection()->pdo->getAttribute(PDO::ATTR_SERVER_VERSION), '5.6.4', '>=')) {
             $this->markTestSkipped('CURRENT_TIMESTAMP with microseconds as default column value is supported since MySQL 5.6.4.');
         }
         $sql = <<<SQL
@@ -62,14 +66,14 @@ SQL;
 
         $dt = $schema->columns['dt'];
         $this->assertInstanceOf(Expression::className(), $dt->defaultValue);
-        $this->assertEquals('CURRENT_TIMESTAMP(2)', (string)$dt->defaultValue);
+        $this->assertEquals('CURRENT_TIMESTAMP(2)', (string) $dt->defaultValue);
 
         $ts = $schema->columns['ts'];
         $this->assertInstanceOf(Expression::className(), $ts->defaultValue);
-        $this->assertEquals('CURRENT_TIMESTAMP(3)', (string)$ts->defaultValue);
+        $this->assertEquals('CURRENT_TIMESTAMP(3)', (string) $ts->defaultValue);
     }
 
-    public function testGetSchemaNames()
+    public function testGetSchemaNames(): void
     {
         $this->markTestSkipped('Schemas are not supported in MySQL.');
     }
@@ -87,6 +91,7 @@ SQL;
         $result['3: check'][2] = false;
 
         $result['4: check'][2] = false;
+
         return $result;
     }
 
@@ -97,17 +102,17 @@ SQL;
      * @see https://mariadb.com/kb/en/library/now/#description
      * @see https://github.com/yiisoft/yii2/issues/15167
      */
-    public function testAlternativeDisplayOfDefaultCurrentTimestampInMariaDB()
+    public function testAlternativeDisplayOfDefaultCurrentTimestampInMariaDB(): void
     {
         /**
          * We do not have a real database MariaDB >= 10.2.3 for tests, so we emulate the information that database
-         * returns in response to the query `SHOW FULL COLUMNS FROM ...`
+         * returns in response to the query `SHOW FULL COLUMNS FROM ...`.
          */
         $schema = new Schema();
         $column = $this->invokeMethod($schema, 'loadColumnSchema', [[
             'field' => 'emulated_MariaDB_field',
             'type' => 'timestamp',
-            'collation' => NULL,
+            'collation' => null,
             'null' => 'NO',
             'key' => '',
             'default' => 'current_timestamp()',
@@ -127,32 +132,30 @@ SQL;
      *
      * @see https://github.com/yiisoft/yii2/issues/19047
      */
-    public function testAlternativeDisplayOfDefaultCurrentTimestampAsNullInMariaDB()
+    public function testAlternativeDisplayOfDefaultCurrentTimestampAsNullInMariaDB(): void
     {
         $schema = new Schema();
         $column = $this->invokeMethod($schema, 'loadColumnSchema', [[
             'field' => 'emulated_MariaDB_field',
             'type' => 'timestamp',
-            'collation' => NULL,
+            'collation' => null,
             'null' => 'NO',
             'key' => '',
-            'default' => NULL,
+            'default' => null,
             'extra' => '',
             'privileges' => 'select,insert,update,references',
             'comment' => '',
         ]]);
 
         $this->assertInstanceOf(ColumnSchema::className(), $column);
-        $this->assertEquals(NULL, $column->defaultValue);
+        $this->assertNull($column->defaultValue);
     }
 
     public function getExpectedColumns()
     {
         $version = $this->getConnection()->getSchema()->getServerVersion();
 
-        $columns = array_merge(
-            parent::getExpectedColumns(),
-            [
+        $columns = array_merge(parent::getExpectedColumns(), [
                 'int_col' => [
                     'type' => 'integer',
                     'dbType' => \version_compare($version, '8.0.17', '>') ? 'int' : 'int(11)',
@@ -203,7 +206,7 @@ SQL;
                 ],
                 'smallint_col' => [
                     'type' => 'smallint',
-                    'dbType' =>  \version_compare($version, '8.0.17', '>') ? 'smallint' : 'smallint(1)',
+                    'dbType' => \version_compare($version, '8.0.17', '>') ? 'smallint' : 'smallint(1)',
                     'phpType' => 'integer',
                     'allowNull' => true,
                     'autoIncrement' => false,
@@ -225,8 +228,7 @@ SQL;
                     'scale' => null,
                     'defaultValue' => null,
                 ],
-            ]
-        );
+            ]);
 
         if (version_compare($version, '5.7', '<')) {
             $columns['int_col3']['phpType'] = 'string';

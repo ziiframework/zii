@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,19 +10,21 @@
 
 namespace yii\db\sqlite\conditions;
 
-use yii\base\NotSupportedException;
 use yii\db\Expression;
+use yii\base\NotSupportedException;
 
 /**
  * {@inheritdoc}
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ *
  * @since 2.0.14
  */
 class InConditionBuilder extends \yii\db\conditions\InConditionBuilder
 {
     /**
      * {@inheritdoc}
+     *
      * @throws NotSupportedException if `$columns` is an array
      */
     protected function buildSubqueryInCondition($operator, $columns, $values, &$params)
@@ -37,6 +42,7 @@ class InConditionBuilder extends \yii\db\conditions\InConditionBuilder
     protected function buildCompositeInCondition($operator, $columns, $values, &$params)
     {
         $quotedColumns = [];
+
         foreach ($columns as $i => $column) {
             if ($column instanceof Expression) {
                 $column = $column->expression;
@@ -44,12 +50,15 @@ class InConditionBuilder extends \yii\db\conditions\InConditionBuilder
             $quotedColumns[$i] = strpos($column, '(') === false ? $this->queryBuilder->db->quoteColumnName($column) : $column;
         }
         $vss = [];
+
         foreach ($values as $value) {
             $vs = [];
+
             foreach ($columns as $i => $column) {
                 if ($column instanceof Expression) {
                     $column = $column->expression;
                 }
+
                 if (isset($value[$column])) {
                     $phName = $this->queryBuilder->bindParam($value[$column], $params);
                     $vs[] = $quotedColumns[$i] . ($operator === 'IN' ? ' = ' : ' != ') . $phName;

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,18 +11,18 @@
 namespace yiiunit\framework\validators;
 
 use yii\base\Exception;
-use yii\validators\ExistValidator;
-use yiiunit\data\ar\ActiveRecord;
-use yiiunit\data\ar\Customer;
 use yiiunit\data\ar\Order;
+use yiiunit\data\ar\Customer;
 use yiiunit\data\ar\OrderItem;
-use yiiunit\data\validators\models\ValidatorTestMainModel;
-use yiiunit\data\validators\models\ValidatorTestRefModel;
+use yiiunit\data\ar\ActiveRecord;
+use yii\validators\ExistValidator;
 use yiiunit\framework\db\DatabaseTestCase;
+use yiiunit\data\validators\models\ValidatorTestRefModel;
+use yiiunit\data\validators\models\ValidatorTestMainModel;
 
 abstract class ExistValidatorTest extends DatabaseTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -28,7 +31,7 @@ abstract class ExistValidatorTest extends DatabaseTestCase
         ActiveRecord::$db = $this->getConnection();
     }
 
-    public function testValidateValueExpectedException()
+    public function testValidateValueExpectedException(): void
     {
         try {
             $val = new ExistValidator();
@@ -49,7 +52,7 @@ abstract class ExistValidatorTest extends DatabaseTestCase
         }
     }
 
-    public function testValidateValue()
+    public function testValidateValue(): void
     {
         $val = new ExistValidator(['targetClass' => ValidatorTestRefModel::className(), 'targetAttribute' => 'id']);
         $this->assertTrue($val->validate(2));
@@ -58,7 +61,7 @@ abstract class ExistValidatorTest extends DatabaseTestCase
         $this->assertFalse($val->validate(['1']));
     }
 
-    public function testValidateAttribute()
+    public function testValidateAttribute(): void
     {
         // existing value on different table
         $val = new ExistValidator(['targetClass' => ValidatorTestMainModel::className(), 'targetAttribute' => 'id']);
@@ -135,7 +138,7 @@ abstract class ExistValidatorTest extends DatabaseTestCase
         $this->assertTrue($m->hasErrors('test_val'));
     }
 
-    public function testValidateCompositeKeys()
+    public function testValidateCompositeKeys(): void
     {
         $val = new ExistValidator([
             'targetClass' => OrderItem::className(),
@@ -181,7 +184,7 @@ abstract class ExistValidatorTest extends DatabaseTestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/14150
      */
-    public function testTargetTableWithAlias()
+    public function testTargetTableWithAlias(): void
     {
         $oldTableName = OrderItem::$tableName;
         OrderItem::$tableName = '{{%order_item}}';
@@ -200,9 +203,10 @@ abstract class ExistValidatorTest extends DatabaseTestCase
 
     /**
      * Test expresssion in targetAttribute.
+     *
      * @see https://github.com/yiisoft/yii2/issues/14304
      */
-    public function testExpresionInAttributeColumnName()
+    public function testExpresionInAttributeColumnName(): void
     {
         $val = new ExistValidator([
            'targetClass' => OrderItem::className(),
@@ -214,7 +218,7 @@ abstract class ExistValidatorTest extends DatabaseTestCase
         $this->assertFalse($m->hasErrors('id'));
     }
 
-    public function testTargetRelation()
+    public function testTargetRelation(): void
     {
         $val = new ExistValidator(['targetRelation' => 'references']);
 
@@ -227,16 +231,16 @@ abstract class ExistValidatorTest extends DatabaseTestCase
         $this->assertTrue($m->hasErrors('id'));
     }
 
-    public function testTargetRelationWithFilter()
+    public function testTargetRelationWithFilter(): void
     {
-        $val = new ExistValidator(['targetRelation' => 'references', 'filter' => function ($query) {
+        $val = new ExistValidator(['targetRelation' => 'references', 'filter' => static function ($query): void {
             $query->andWhere(['a_field' => 'ref_to_2']);
         }]);
         $m = ValidatorTestMainModel::findOne(2);
         $val->validateAttribute($m, 'id');
         $this->assertFalse($m->hasErrors('id'));
 
-        $val = new ExistValidator(['targetRelation' => 'references', 'filter' => function ($query) {
+        $val = new ExistValidator(['targetRelation' => 'references', 'filter' => static function ($query): void {
             $query->andWhere(['a_field' => 'ref_to_3']);
         }]);
         $m = ValidatorTestMainModel::findOne(2);
@@ -244,13 +248,13 @@ abstract class ExistValidatorTest extends DatabaseTestCase
         $this->assertTrue($m->hasErrors('id'));
     }
 
-    public function testForceMaster()
+    public function testForceMaster(): void
     {
         $connection = $this->getConnectionWithInvalidSlave();
         ActiveRecord::$db = $connection;
 
         $model = null;
-        $connection->useMaster(function() use (&$model) {
+        $connection->useMaster(static function () use (&$model): void {
             $model = ValidatorTestMainModel::findOne(2);
         });
 
@@ -270,7 +274,7 @@ abstract class ExistValidatorTest extends DatabaseTestCase
         ActiveRecord::$db = $this->getConnection();
     }
 
-    public function testSecondTargetAttributeWithError()
+    public function testSecondTargetAttributeWithError(): void
     {
         $validator = new ExistValidator(['targetAttribute' => ['email', 'name']]);
         $customer = new Customer();

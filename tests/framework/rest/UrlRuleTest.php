@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,51 +11,56 @@
 namespace yiiunit\framework\rest;
 
 use Yii;
-use yii\helpers\VarDumper;
-use yii\rest\UrlRule;
 use yii\web\Request;
-use yii\web\UrlManager;
-use yii\web\UrlRule as WebUrlRule;
+use yii\rest\UrlRule;
 use yiiunit\TestCase;
+use yii\web\UrlManager;
+use yii\helpers\VarDumper;
+use yii\web\UrlRule as WebUrlRule;
 
 /**
  * @group rest
  */
 class UrlRuleTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->mockApplication();
     }
 
-    public function testInitControllerNamePluralization()
+    public function testInitControllerNamePluralization(): void
     {
         $suites = $this->getTestsForControllerNamePluralization();
+
         foreach ($suites as $i => $suite) {
-            list($name, $tests) = $suite;
+            [$name, $tests] = $suite;
+
             foreach ($tests as $j => $test) {
-                list($config, $expected) = $test;
+                [$config, $expected] = $test;
                 $rule = new UrlRule($config);
                 $this->assertEquals($expected, $rule->controller, "Test#$i-$j: $name");
             }
         }
     }
 
-    public function testParseRequest()
+    public function testParseRequest(): void
     {
         $manager = new UrlManager(['cache' => null]);
         $request = new Request(['hostInfo' => 'http://en.example.com', 'methodParam' => '_METHOD']);
         $suites = $this->getTestsForParseRequest();
+
         foreach ($suites as $i => $suite) {
-            list($name, $config, $tests) = $suite;
+            [$name, $config, $tests] = $suite;
             $rule = new UrlRule($config);
+
             foreach ($tests as $j => $test) {
                 $request->pathInfo = $test[0];
                 $route = $test[1];
-                $params = isset($test[2]) ? $test[2] : [];
-                $_POST['_METHOD'] = isset($test[3]) ? $test[3] : 'GET';
+                $params = $test[2] ?? [];
+                $_POST['_METHOD'] = $test[3] ?? 'GET';
                 $result = $rule->parseRequest($manager, $request);
+
                 if ($route === false) {
                     $this->assertFalse($result, "Test#$i-$j: $name");
                 } else {
@@ -274,7 +282,6 @@ class UrlRuleTest extends TestCase
                 ],
             ],
 
-
             // without pluralize
             [
                 [ // Rule properties
@@ -355,13 +362,14 @@ class UrlRuleTest extends TestCase
 
     /**
      * @dataProvider createUrlDataProvider
+     *
      * @param array $ruleConfig
      * @param array $tests
      */
-    public function testCreateUrl($ruleConfig, $tests)
+    public function testCreateUrl($ruleConfig, $tests): void
     {
         foreach ($tests as $test) {
-            list($params, $expected) = $test;
+            [$params, $expected] = $test;
 
             $this->mockWebApplication();
             Yii::$app->set('request', new Request(['hostInfo' => 'http://api.example.com', 'scriptUrl' => '/index.php']));
@@ -377,13 +385,14 @@ class UrlRuleTest extends TestCase
 
     /**
      * @dataProvider testGetCreateUrlStatusProvider
+     *
      * @param array $ruleConfig
      * @param array $tests
      */
-    public function testGetCreateUrlStatus($ruleConfig, $tests)
+    public function testGetCreateUrlStatus($ruleConfig, $tests): void
     {
         foreach ($tests as $test) {
-            list($params, $expected, $status) = $test;
+            [$params, $expected, $status] = $test;
 
             $this->mockWebApplication();
             Yii::$app->set('request', new Request(['hostInfo' => 'http://api.example.com', 'scriptUrl' => '/index.php']));
@@ -396,6 +405,7 @@ class UrlRuleTest extends TestCase
             $errorMessage = 'Failed test: ' . VarDumper::dumpAsString($test);
             $this->assertSame($expected, $rule->createUrl($manager, $route, $params), $errorMessage);
             $this->assertNotNull($status, $errorMessage);
+
             if ($status > 0) {
                 $this->assertSame($status, $rule->getCreateUrlStatus() & $status, $errorMessage);
             } else {

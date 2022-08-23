@@ -1,9 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 /**
- * MIME aliases.
- *
- * This file contains aliases for MIME types.
+ * @link https://www.yiiframework.com/
+ * @copyright Copyright (c) 2008 Yii Software LLC
+ * @license https://www.yiiframework.com/license/
  */
+
 return [
     'text/rtf' => 'application/rtf',
     'text/xml' => 'application/xml',

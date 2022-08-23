@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,15 +10,16 @@
 
 namespace yiiunit\framework\validators;
 
-use yii\validators\DefaultValueValidator;
+use stdClass;
 use yiiunit\TestCase;
+use yii\validators\DefaultValueValidator;
 
 /**
  * @group validators
  */
 class DefaultValueValidatorTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -23,11 +27,11 @@ class DefaultValueValidatorTest extends TestCase
         $this->destroyApplication();
     }
 
-    public function testValidateAttribute()
+    public function testValidateAttribute(): void
     {
         $val = new DefaultValueValidator();
         $val->value = 'test_value';
-        $obj = new \stdclass();
+        $obj = new stdClass();
         $obj->attrA = 'attrA';
         $obj->attrB = null;
         $obj->attrC = '';

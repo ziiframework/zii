@@ -1,28 +1,34 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
 
-use yii\base\InvalidConfigException;
 use yii\rbac\DbManager;
+use yii\base\InvalidConfigException;
 
 /**
  * Initializes RBAC tables.
  *
  * @author Alexander Kochetov <creocoder@gmail.com>
+ *
  * @since 2.0
  */
 class m140506_102106_rbac_init extends \yii\db\Migration
 {
     /**
-     * @throws yii\base\InvalidConfigException
      * @return DbManager
+     *
+     * @throws yii\base\InvalidConfigException
      */
     protected function getAuthManager()
     {
         $authManager = Yii::$app->getAuthManager();
+
         if (!$authManager instanceof DbManager) {
             throw new InvalidConfigException('You should configure "authManager" component to use database before executing this migration.');
         }
@@ -46,13 +52,14 @@ class m140506_102106_rbac_init extends \yii\db\Migration
     /**
      * {@inheritdoc}
      */
-    public function up()
+    public function up(): void
     {
         $authManager = $this->getAuthManager();
         $this->db = $authManager->db;
         $schema = $this->db->getSchema()->defaultSchema;
 
         $tableOptions = null;
+
         if ($this->db->driverName === 'mysql') {
             // https://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
@@ -140,7 +147,7 @@ class m140506_102106_rbac_init extends \yii\db\Migration
     /**
      * {@inheritdoc}
      */
-    public function down()
+    public function down(): void
     {
         $authManager = $this->getAuthManager();
         $this->db = $authManager->db;

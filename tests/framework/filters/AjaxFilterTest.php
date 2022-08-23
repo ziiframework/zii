@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -9,10 +12,10 @@ namespace yiiunit\framework\filters;
 
 use Yii;
 use yii\base\Action;
-use yii\filters\AjaxFilter;
-use yii\web\Controller;
 use yii\web\Request;
 use yiiunit\TestCase;
+use yii\web\Controller;
+use yii\filters\AjaxFilter;
 
 /**
  * @group filters
@@ -21,6 +24,7 @@ class AjaxFilterTest extends TestCase
 {
     /**
      * @param bool $isAjax
+     *
      * @return Request
      */
     protected function mockRequest($isAjax)
@@ -34,7 +38,7 @@ class AjaxFilterTest extends TestCase
         return $request;
     }
 
-    public function testFilter()
+    public function testFilter(): void
     {
         $this->mockWebApplication();
         $controller = new Controller('id', Yii::$app);

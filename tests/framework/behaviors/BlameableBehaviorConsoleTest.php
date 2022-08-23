@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,11 +11,9 @@
 namespace yiiunit\framework\behaviors;
 
 use Yii;
-use yii\base\BaseObject;
-use yii\behaviors\BlameableBehavior;
-use yii\db\ActiveRecord;
-use yii\db\BaseActiveRecord;
 use yiiunit\TestCase;
+use yii\db\ActiveRecord;
+use yii\behaviors\BlameableBehavior;
 
 /**
  * Unit test emulating console app (without user component) for [[\yii\behaviors\BlameableBehavior]].
@@ -21,14 +22,14 @@ use yiiunit\TestCase;
  */
 class BlameableBehaviorConsoleTest extends TestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         if (!extension_loaded('pdo') || !extension_loaded('pdo_sqlite')) {
             static::markTestSkipped('PDO and SQLite extensions are required.');
         }
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->mockApplication([
             'components' => [
@@ -47,7 +48,7 @@ class BlameableBehaviorConsoleTest extends TestCase
         Yii::$app->getDb()->createCommand()->createTable('test_blame', $columns)->execute();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         Yii::$app->getDb()->close();
         parent::tearDown();
@@ -55,12 +56,12 @@ class BlameableBehaviorConsoleTest extends TestCase
         gc_collect_cycles();
     }
 
-    public function testDefaultValue()
+    public function testDefaultValue(): void
     {
         $model = new ActiveRecordBlameableConsole([
             'as blameable' => [
                 'class' => BlameableBehavior::className(),
-                'defaultValue' => 2
+                'defaultValue' => 2,
             ],
         ]);
 
@@ -71,7 +72,7 @@ class BlameableBehaviorConsoleTest extends TestCase
         $this->assertEquals(2, $model->updated_by);
     }
 
-    public function testDefaultValueWithClosure()
+    public function testDefaultValueWithClosure(): void
     {
         $model = new ActiveRecordBlameableConsoleWithDefaultValueClosure();
         $model->name = __METHOD__;
@@ -89,9 +90,7 @@ class ActiveRecordBlameableConsoleWithDefaultValueClosure extends ActiveRecordBl
         return [
             'blameable' => [
                 'class' => BlameableBehavior::className(),
-                'defaultValue' => function () {
-                    return 10 + 1;
-                }
+                'defaultValue' => static fn () => 10 + 1,
             ],
         ];
     }
@@ -103,7 +102,6 @@ class ActiveRecordBlameableConsoleWithDefaultValueClosure extends ActiveRecordBl
  * @property string $name
  * @property int $created_by
  * @property int $updated_by
- *
  * @property BlameableBehavior $blameable
  */
 class ActiveRecordBlameableConsole extends ActiveRecord

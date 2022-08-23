@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,12 +11,13 @@
 namespace yii\validators;
 
 use Yii;
+use Closure;
 use yii\base\Model;
 use yii\db\ActiveQuery;
-use yii\db\ActiveQueryInterface;
 use yii\db\ActiveRecord;
-use yii\db\ActiveRecordInterface;
 use yii\helpers\Inflector;
+use yii\db\ActiveQueryInterface;
+use yii\db\ActiveRecordInterface;
 
 /**
  * UniqueValidator validates that the attribute value is unique in the specified database table.
@@ -37,6 +41,7 @@ use yii\helpers\Inflector;
  * ```
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class UniqueValidator extends Validator
@@ -44,9 +49,11 @@ class UniqueValidator extends Validator
     /**
      * @var string|null the name of the ActiveRecord class that should be used to validate the uniqueness
      * of the current attribute value. If not set, it will use the ActiveRecord class of the attribute being validated.
+     *
      * @see targetAttribute
      */
     public $targetClass;
+
     /**
      * @var string|array|null the name of the [[\yii\db\ActiveRecord|ActiveRecord]] attribute that should be used to
      * validate the uniqueness of the current attribute value. If not set, it will use the name
@@ -55,13 +62,15 @@ class UniqueValidator extends Validator
      * used to validate the uniqueness, while the array keys are the attributes whose values are to be validated.
      */
     public $targetAttribute;
+
     /**
-     * @var string|array|\Closure additional filter to be applied to the DB query used to check the uniqueness of the attribute value.
+     * @var string|array|Closure additional filter to be applied to the DB query used to check the uniqueness of the attribute value.
      * This can be a string or an array representing the additional query condition (refer to [[\yii\db\Query::where()]]
      * on the format of query condition), or an anonymous function with the signature `function ($query)`, where `$query`
      * is the [[\yii\db\Query|Query]] object that you can modify in the function.
      */
     public $filter;
+
     /**
      * @var string the user-defined error message.
      *
@@ -77,34 +86,41 @@ class UniqueValidator extends Validator
      * - `{values}`: the values of the attributes being validated.
      */
     public $message;
+
     /**
      * @var string
+     *
      * @since 2.0.9
      * @deprecated since version 2.0.10, to be removed in 2.1. Use [[message]] property
      * to setup custom message for multiple target attributes.
      */
     public $comboNotUnique;
+
     /**
      * @var string and|or define how target attributes are related
+     *
      * @since 2.0.11
      */
     public $targetAttributeJunction = 'and';
+
     /**
      * @var bool whether this validator is forced to always use master DB
+     *
      * @since 2.0.14
      */
-    public $forceMasterDb =  true;
-
+    public $forceMasterDb = true;
 
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
+
         if ($this->message !== null) {
             return;
         }
+
         if (is_array($this->targetAttribute) && count($this->targetAttribute) > 1) {
             // fallback for deprecated `comboNotUnique` property - use it as message if is set
             if ($this->comboNotUnique === null) {
@@ -120,11 +136,12 @@ class UniqueValidator extends Validator
     /**
      * {@inheritdoc}
      */
-    public function validateAttribute($model, $attribute)
+    public function validateAttribute($model, $attribute): void
     {
         $targetAttribute = $this->targetAttribute === null ? $attribute : $this->targetAttribute;
+
         if ($this->skipOnError) {
-            foreach ((array)$targetAttribute as $k => $v) {
+            foreach ((array) $targetAttribute as $k => $v) {
                 if ($model->hasErrors(is_int($k) ? $v : $k)) {
                     return;
                 }
@@ -137,6 +154,7 @@ class UniqueValidator extends Validator
         foreach ($rawConditions as $key => $value) {
             if (is_array($value)) {
                 $this->addError($model, $attribute, Yii::t('yii', '{attribute} is invalid.'));
+
                 return;
             }
             $conditions[] = [$key => $value];
@@ -149,7 +167,7 @@ class UniqueValidator extends Validator
         $modelExists = false;
 
         if ($this->forceMasterDb && method_exists($db, 'useMaster')) {
-            $db->useMaster(function () use ($targetClass, $conditions, $model, &$modelExists) {
+            $db->useMaster(function () use ($targetClass, $conditions, $model, &$modelExists): void {
                 $modelExists = $this->modelExists($targetClass, $conditions, $model);
             });
         } else {
@@ -167,6 +185,7 @@ class UniqueValidator extends Validator
 
     /**
      * @param Model $model the data model to be validated
+     *
      * @return string Target class name
      */
     private function getTargetClass($model)
@@ -214,11 +233,13 @@ class UniqueValidator extends Validator
             }
             $models = $query->limit(2)->asArray()->all();
             $n = count($models);
+
             if ($n === 1) {
                 // if there is one record, check if it is the currently validated model
                 $dbModel = reset($models);
                 $pks = $targetClass::primaryKey();
                 $pk = [];
+
                 foreach ($pks as $pkAttribute) {
                     $pk[$pkAttribute] = $dbModel[$pkAttribute];
                 }
@@ -246,7 +267,8 @@ class UniqueValidator extends Validator
     {
         $query = $targetClass::find();
         $query->andWhere($conditions);
-        if ($this->filter instanceof \Closure) {
+
+        if ($this->filter instanceof Closure) {
             call_user_func($this->filter, $query);
         } elseif ($this->filter !== null) {
             $query->andWhere($this->filter);
@@ -273,6 +295,7 @@ class UniqueValidator extends Validator
     {
         if (is_array($targetAttribute)) {
             $conditions = [];
+
             foreach ($targetAttribute as $k => $v) {
                 $conditions[$v] = is_int($k) ? $model->$v : $model->$k;
             }
@@ -281,23 +304,26 @@ class UniqueValidator extends Validator
         }
 
         $targetModelClass = $this->getTargetClass($model);
+
         if (!is_subclass_of($targetModelClass, 'yii\db\ActiveRecord')) {
             return $conditions;
         }
 
-        /** @var ActiveRecord $targetModelClass */
+        /* @var ActiveRecord $targetModelClass */
         return $this->applyTableAlias($targetModelClass::find(), $conditions);
     }
 
     /**
      * Builds and adds [[comboNotUnique]] error message to the specified model attribute.
+     *
      * @param \yii\base\Model $model the data model.
      * @param string $attribute the name of the attribute.
      */
-    private function addComboNotUniqueError($model, $attribute)
+    private function addComboNotUniqueError($model, $attribute): void
     {
         $attributeCombo = [];
         $valueCombo = [];
+
         foreach ($this->targetAttribute as $key => $value) {
             if (is_int($key)) {
                 $attributeCombo[] = $model->getAttributeLabel($value);
@@ -315,9 +341,11 @@ class UniqueValidator extends Validator
 
     /**
      * Returns conditions with alias.
+     *
      * @param ActiveQuery $query
      * @param array $conditions array of condition, keys to be modified
      * @param string|null $alias set empty string for no apply alias. Set null for apply primary table alias
+     *
      * @return array
      */
     private function applyTableAlias($query, $conditions, $alias = null)
@@ -326,9 +354,11 @@ class UniqueValidator extends Validator
             $alias = array_keys($query->getTablesUsedInFrom())[0];
         }
         $prefixedConditions = [];
+
         foreach ($conditions as $columnName => $columnValue) {
             if (strpos($columnName, '(') === false) {
                 $columnName = preg_replace('/^' . preg_quote($alias) . '\.(.*)$/', '$1', $columnName);
+
                 if (strncmp($columnName, '[[', 2) === 0) {
                     $prefixedColumn = "{$alias}.{$columnName}";
                 } else {

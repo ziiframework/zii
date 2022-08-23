@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -14,14 +17,7 @@ namespace yiiunit;
  */
 class ResultPrinter extends \PHPUnit\TextUI\ResultPrinter
 {
-    public function __construct(
-        $out = null,
-        $verbose = false,
-        $colors = \PHPUnit\TextUI\ResultPrinter::COLOR_DEFAULT,
-        $debug = false,
-        $numberOfColumns = 80,
-        $reverse = false
-    ) {
+    public function __construct($out = null, $verbose = false, $colors = \PHPUnit\TextUI\ResultPrinter::COLOR_DEFAULT, $debug = false, $numberOfColumns = 80, $reverse = false) {
         if ($out === null) {
             $out = STDOUT;
         }
@@ -29,7 +25,7 @@ class ResultPrinter extends \PHPUnit\TextUI\ResultPrinter
         parent::__construct($out, $verbose, $colors, $debug, $numberOfColumns, $reverse);
     }
 
-    public function flush()
+    public function flush(): void
     {
         if ($this->out !== STDOUT) {
             parent::flush();

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -14,10 +17,9 @@ use yiiunit\TestCase;
  */
 class MimeTest extends TestCase
 {
-    public function testMimeAliases()
+    public function testMimeAliases(): void
     {
-        $this->assertSame(
-            [
+        $this->assertSame([
                 'text/rtf' => 'application/rtf',
                 'text/xml' => 'application/xml',
                 'image/svg' => 'image/svg+xml',
@@ -31,12 +33,10 @@ class MimeTest extends TestCase
                 'application/bmp' => 'image/bmp',
                 'application/x-bmp' => 'image/bmp',
                 'application/x-win-bitmap' => 'image/bmp',
-            ],
-            require __DIR__ . '/../../../framework/helpers/mimeAliases.php'
-        );
+            ], require __DIR__ . '/../../../framework/helpers/mimeAliases.php');
     }
 
-    public function testMimeTypes()
+    public function testMimeTypes(): void
     {
         $coreMimeTypes = [
                 '3dml' => 'text/vnd.in3d.3dml',
@@ -1028,11 +1028,9 @@ class MimeTest extends TestCase
             ];
 
         if (PHP_VERSION_ID >= 80100) {
-            $coreMimeTypes = array_replace($coreMimeTypes, array('xz' => 'application/octet-stream'));
+            $coreMimeTypes = array_replace($coreMimeTypes, ['xz' => 'application/octet-stream']);
         }
 
-        $this->assertSame($coreMimeTypes,
-            require __DIR__ . '/../../../framework/helpers/mimeTypes.php'
-        );
+        $this->assertSame($coreMimeTypes, require __DIR__ . '/../../../framework/helpers/mimeTypes.php');
     }
 }

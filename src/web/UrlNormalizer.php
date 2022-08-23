@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -16,36 +19,44 @@ use yii\base\InvalidConfigException;
  *
  * @author Robert Korulczyk <robert@korulczyk.pl>
  * @author Cronfy <cronfy@gmail.com>
+ *
  * @since 2.0.10
  */
 class UrlNormalizer extends BaseObject
 {
     /**
      * Represents permament redirection during route normalization.
+     *
      * @see https://en.wikipedia.org/wiki/HTTP_301
      */
-    const ACTION_REDIRECT_PERMANENT = 301;
+    public const ACTION_REDIRECT_PERMANENT = 301;
+
     /**
      * Represents temporary redirection during route normalization.
+     *
      * @see https://en.wikipedia.org/wiki/HTTP_302
      */
-    const ACTION_REDIRECT_TEMPORARY = 302;
+    public const ACTION_REDIRECT_TEMPORARY = 302;
+
     /**
      * Represents showing 404 error page during route normalization.
+     *
      * @see https://en.wikipedia.org/wiki/HTTP_404
      */
-    const ACTION_NOT_FOUND = 404;
+    public const ACTION_NOT_FOUND = 404;
 
     /**
      * @var bool whether slashes should be collapsed, for example `site///index` will be
      * converted into `site/index`
      */
     public $collapseSlashes = true;
+
     /**
      * @var bool whether trailing slash should be normalized according to the suffix settings
      * of the rule
      */
     public $normalizeTrailingSlash = true;
+
     /**
      * @var int|callable|null action to perform during route normalization.
      * Available options are:
@@ -68,11 +79,13 @@ class UrlNormalizer extends BaseObject
      */
     public $action = self::ACTION_REDIRECT_PERMANENT;
 
-
     /**
      * Performs normalization action for the specified $route.
+     *
      * @param array $route route for normalization
+     *
      * @return array normalized route
+     *
      * @throws InvalidConfigException if invalid normalization action is used.
      * @throws UrlNormalizerRedirectException if normalization requires redirection.
      * @throws NotFoundHttpException if normalization suggests action matching route does not exist.
@@ -94,10 +107,12 @@ class UrlNormalizer extends BaseObject
 
     /**
      * Normalizes specified pathInfo.
+     *
      * @param string $pathInfo pathInfo for normalization
      * @param string $suffix current rule suffix
      * @param bool $normalized if specified, this variable will be set to `true` if $pathInfo
      * was changed during normalization
+     *
      * @return string normalized pathInfo
      */
     public function normalizePathInfo($pathInfo, $suffix, &$normalized = false)
@@ -107,6 +122,7 @@ class UrlNormalizer extends BaseObject
         }
 
         $sourcePathInfo = $pathInfo;
+
         if ($this->collapseSlashes) {
             $pathInfo = $this->collapseSlashes($pathInfo);
         }
@@ -122,7 +138,9 @@ class UrlNormalizer extends BaseObject
 
     /**
      * Collapse consecutive slashes in $pathInfo, for example converts `site///index` into `site/index`.
+     *
      * @param string $pathInfo raw path info.
+     *
      * @return string normalized path info.
      */
     protected function collapseSlashes($pathInfo)
@@ -133,8 +151,10 @@ class UrlNormalizer extends BaseObject
     /**
      * Adds or removes trailing slashes from $pathInfo depending on whether the $suffix has a
      * trailing slash or not.
+     *
      * @param string $pathInfo raw path info.
      * @param string $suffix
+     *
      * @return string normalized path info.
      */
     protected function normalizeTrailingSlash($pathInfo, $suffix)

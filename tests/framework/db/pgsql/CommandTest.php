@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,8 +10,10 @@
 
 namespace yii\tests\unit\framework\db\pgsql;
 
-use yii\db\ArrayExpression;
 use yii\db\JsonExpression;
+use yii\db\ArrayExpression;
+
+use function defined;
 
 /**
  * @group db
@@ -18,7 +23,7 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
 {
     public $driverName = 'pgsql';
 
-    public function testAutoQuoting()
+    public function testAutoQuoting(): void
     {
         $db = $this->getConnection(false);
 
@@ -27,7 +32,7 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
         $this->assertEquals('SELECT "id", "t"."name" FROM "customer" t', $command->sql);
     }
 
-    public function testBooleanValuesInsert()
+    public function testBooleanValuesInsert(): void
     {
         $db = $this->getConnection();
         $command = $db->createCommand();
@@ -44,16 +49,14 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
         $this->assertEquals(1, $command->queryScalar());
     }
 
-    public function testBooleanValuesBatchInsert()
+    public function testBooleanValuesBatchInsert(): void
     {
         $db = $this->getConnection();
         $command = $db->createCommand();
-        $command->batchInsert('bool_values',
-            ['bool_col'], [
+        $command->batchInsert('bool_values', ['bool_col'], [
                 [true],
                 [false],
-            ]
-        );
+            ]);
         $this->assertEquals(2, $command->execute());
 
         $command = $db->createCommand('SELECT COUNT(*) FROM "bool_values" WHERE bool_col = TRUE;');
@@ -62,7 +65,7 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
         $this->assertEquals(1, $command->queryScalar());
     }
 
-    public function testLastInsertId()
+    public function testLastInsertId(): void
     {
         $db = $this->getConnection();
 
@@ -91,9 +94,9 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
     /**
      * @see https://github.com/yiisoft/yii2/issues/11498
      */
-    public function testSaveSerializedObject()
+    public function testSaveSerializedObject(): void
     {
-        if (\defined('HHVM_VERSION')) {
+        if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('HHVMs PgSQL implementation does not seem to support blob colums in the way they are used here.');
         }
 
@@ -125,14 +128,14 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
             ['json_col'],
             [[new JsonExpression(['username' => 'silverfire', 'is_active' => true, 'langs' => ['Ukrainian', 'Russian', 'English']])]],
             'expected' => 'INSERT INTO "type" ("json_col") VALUES (:qp0)',
-            'expectedParams' => [':qp0' => '{"username":"silverfire","is_active":true,"langs":["Ukrainian","Russian","English"]}']
+            'expectedParams' => [':qp0' => '{"username":"silverfire","is_active":true,"langs":["Ukrainian","Russian","English"]}'],
         ];
         $data['batchInsert binds params from arrayExpression'] = [
             '{{%type}}',
             ['intarray_col'],
-            [[new ArrayExpression([1,null,3], 'int')]],
+            [[new ArrayExpression([1, null, 3], 'int')]],
             'expected' => 'INSERT INTO "type" ("intarray_col") VALUES (ARRAY[:qp0, :qp1, :qp2]::int[])',
-            'expectedParams' => [':qp0' => 1, ':qp1' => null, ':qp2' => 3]
+            'expectedParams' => [':qp0' => 1, ':qp1' => null, ':qp2' => 3],
         ];
         $data['batchInsert casts string to int according to the table schema'] = [
             '{{%type}}',
@@ -145,7 +148,7 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
             ['jsonb_col'],
             [[['a' => true]]],
             'expected' => 'INSERT INTO "type" ("jsonb_col") VALUES (:qp0::jsonb)',
-            'expectedParams' => [':qp0' => '{"a":true}']
+            'expectedParams' => [':qp0' => '{"a":true}'],
         ];
 
         return $data;
@@ -154,32 +157,28 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
     /**
      * @see https://github.com/yiisoft/yii2/issues/15827
      */
-    public function testIssue15827()
+    public function testIssue15827(): void
     {
         $db = $this->getConnection();
 
         $inserted = $db->createCommand()->insert('array_and_json_types', [
-            'jsonb_col' => new JsonExpression(['Solution date' => '13.01.2011'])
+            'jsonb_col' => new JsonExpression(['Solution date' => '13.01.2011']),
         ])->execute();
         $this->assertSame(1, $inserted);
-
 
         $found = $db->createCommand(<<<PGSQL
             SELECT *
             FROM array_and_json_types
             WHERE jsonb_col @> '{"Some not existing key": "random value"}'
-PGSQL
-        )->execute();
+PGSQL)->execute();
         $this->assertSame(0, $found);
 
         $found = $db->createCommand(<<<PGSQL
             SELECT *
             FROM array_and_json_types
             WHERE jsonb_col @> '{"Solution date": "13.01.2011"}'
-PGSQL
-        )->execute();
+PGSQL)->execute();
         $this->assertSame(1, $found);
-
 
         $this->assertSame(1, $db->createCommand()->delete('array_and_json_types')->execute());
     }

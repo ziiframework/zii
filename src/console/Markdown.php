@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,11 +10,11 @@
 
 namespace yii\console;
 
-use cebe\markdown\block\FencedCodeTrait;
-use cebe\markdown\inline\CodeTrait;
-use cebe\markdown\inline\EmphStrongTrait;
-use cebe\markdown\inline\StrikeoutTrait;
 use yii\helpers\Console;
+use cebe\markdown\inline\CodeTrait;
+use cebe\markdown\block\FencedCodeTrait;
+use cebe\markdown\inline\StrikeoutTrait;
+use cebe\markdown\inline\EmphStrongTrait;
 
 /**
  * A Markdown parser that enhances markdown for reading in console environments.
@@ -19,13 +22,14 @@ use yii\helpers\Console;
  * Based on [cebe/markdown](https://github.com/cebe/markdown).
  *
  * @author Carsten Brandt <mail@cebe.cc>
+ *
  * @since 2.0
  */
 class Markdown extends \cebe\markdown\Parser
 {
-    use FencedCodeTrait;
     use CodeTrait;
     use EmphStrongTrait;
+    use FencedCodeTrait;
     use StrikeoutTrait;
 
     /**
@@ -41,11 +45,11 @@ class Markdown extends \cebe\markdown\Parser
         '~', // tilde
     ];
 
-
     /**
      * Renders a code block.
      *
      * @param array $block
+     *
      * @return string
      */
     protected function renderCode($block)
@@ -57,6 +61,7 @@ class Markdown extends \cebe\markdown\Parser
      * Render a paragraph block.
      *
      * @param string $block
+     *
      * @return string
      */
     protected function renderParagraph($block)
@@ -66,7 +71,9 @@ class Markdown extends \cebe\markdown\Parser
 
     /**
      * Renders an inline code span `` ` ``.
+     *
      * @param array $element
+     *
      * @return string
      */
     protected function renderInlineCode($element)
@@ -76,7 +83,9 @@ class Markdown extends \cebe\markdown\Parser
 
     /**
      * Renders empathized elements.
+     *
      * @param array $element
+     *
      * @return string
      */
     protected function renderEmph($element)
@@ -86,7 +95,9 @@ class Markdown extends \cebe\markdown\Parser
 
     /**
      * Renders strong elements.
+     *
      * @param array $element
+     *
      * @return string
      */
     protected function renderStrong($element)
@@ -96,7 +107,9 @@ class Markdown extends \cebe\markdown\Parser
 
     /**
      * Renders the strike through feature.
+     *
      * @param array $element
+     *
      * @return string
      */
     protected function renderStrike($element)

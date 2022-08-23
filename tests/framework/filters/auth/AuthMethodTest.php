@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,15 +11,17 @@
 namespace yiiunit\framework\filters\auth;
 
 use Yii;
+use stdClass;
+use ReflectionClass;
 use yii\base\Action;
-use yii\filters\auth\AuthMethod;
-use yii\web\Controller;
-use yiiunit\framework\filters\stubs\UserIdentity;
 use yiiunit\TestCase;
+use yii\web\Controller;
+use yii\filters\auth\AuthMethod;
+use yiiunit\framework\filters\stubs\UserIdentity;
 
 class AuthMethodTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -31,7 +36,9 @@ class AuthMethodTest extends TestCase
 
     /**
      * Creates mock for [[AuthMethod]] filter.
+     *
      * @param callable $authenticateCallback callback, which result should [[authenticate()]] method return.
+     *
      * @return AuthMethod filter instance.
      */
     protected function createFilter($authenticateCallback)
@@ -46,36 +53,39 @@ class AuthMethodTest extends TestCase
 
     /**
      * Creates test action.
+     *
      * @param array $config action configuration.
+     *
      * @return Action action instance.
      */
     protected function createAction(array $config = [])
     {
         $controller = new Controller('test', Yii::$app);
+
         return new Action('index', $controller, $config);
     }
 
     // Tests :
 
-    public function testBeforeAction()
+    public function testBeforeAction(): void
     {
         $action = $this->createAction();
 
-        $filter = $this->createFilter(function () {return new \stdClass();});
+        $filter = $this->createFilter(static fn () => new stdClass());
         $this->assertTrue($filter->beforeAction($action));
 
-        $filter = $this->createFilter(function () {return null;});
+        $filter = $this->createFilter(static fn () => null);
         $this->expectException('yii\web\UnauthorizedHttpException');
         $this->assertTrue($filter->beforeAction($action));
     }
 
-    public function testIsOptional()
+    public function testIsOptional(): void
     {
-        $reflection = new \ReflectionClass(AuthMethod::className());
+        $reflection = new ReflectionClass(AuthMethod::className());
         $method = $reflection->getMethod('isOptional');
         $method->setAccessible(true);
 
-        $filter = $this->createFilter(function () {return new \stdClass();});
+        $filter = $this->createFilter(static fn () => new stdClass());
 
         $filter->optional = ['some'];
         $this->assertFalse($method->invokeArgs($filter, [$this->createAction(['id' => 'index'])]));

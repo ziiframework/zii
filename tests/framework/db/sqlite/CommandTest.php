@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -15,7 +18,7 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
 {
     protected $driverName = 'sqlite';
 
-    public function testAutoQuoting()
+    public function testAutoQuoting(): void
     {
         $db = $this->getConnection(false);
 
@@ -26,40 +29,39 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
 
     /**
      * @dataProvider upsertProvider
-     * @param array $firstData
-     * @param array $secondData
      */
-    public function testUpsert(array $firstData, array $secondData)
+    public function testUpsert(array $firstData, array $secondData): void
     {
         if (version_compare($this->getConnection(false)->getServerVersion(), '3.8.3', '<')) {
             $this->markTestSkipped('SQLite < 3.8.3 does not support "WITH" keyword.');
+
             return;
         }
 
         parent::testUpsert($firstData, $secondData);
     }
 
-    public function testAddDropPrimaryKey()
+    public function testAddDropPrimaryKey(): void
     {
         $this->markTestSkipped('SQLite does not support adding/dropping primary keys.');
     }
 
-    public function testAddDropForeignKey()
+    public function testAddDropForeignKey(): void
     {
         $this->markTestSkipped('SQLite does not support adding/dropping foreign keys.');
     }
 
-    public function testAddDropUnique()
+    public function testAddDropUnique(): void
     {
         $this->markTestSkipped('SQLite does not support adding/dropping unique constraints.');
     }
 
-    public function testAddDropCheck()
+    public function testAddDropCheck(): void
     {
         $this->markTestSkipped('SQLite does not support adding/dropping check constraints.');
     }
 
-    public function testMultiStatementSupport()
+    public function testMultiStatementSupport(): void
     {
         $db = $this->getConnection(false);
         $sql = <<<'SQL'

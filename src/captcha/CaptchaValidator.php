@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,10 +11,10 @@
 namespace yii\captcha;
 
 use Yii;
-use yii\base\InvalidConfigException;
 use yii\helpers\Json;
-use yii\validators\ValidationAsset;
 use yii\validators\Validator;
+use yii\validators\ValidationAsset;
+use yii\base\InvalidConfigException;
 
 /**
  * CaptchaValidator validates that the attribute value is the same as the verification code displayed in the CAPTCHA.
@@ -23,6 +26,7 @@ use yii\validators\Validator;
  * even if a user enters the same code as shown in the CAPTCHA image which is actually different from the latest CAPTCHA code.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class CaptchaValidator extends Validator
@@ -31,22 +35,24 @@ class CaptchaValidator extends Validator
      * @var bool whether to skip this validator if the input is empty.
      */
     public $skipOnEmpty = false;
+
     /**
      * @var bool whether the comparison is case sensitive. Defaults to false.
      */
     public $caseSensitive = false;
+
     /**
      * @var string the route of the controller action that renders the CAPTCHA image.
      */
     public $captchaAction = 'site/captcha';
 
-
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
+
         if ($this->message === null) {
             $this->message = Yii::t('yii', 'The verification code is incorrect.');
         }
@@ -65,20 +71,25 @@ class CaptchaValidator extends Validator
 
     /**
      * Creates the CAPTCHA action object from the route specified by [[captchaAction]].
+     *
      * @return \yii\captcha\CaptchaAction the action object
+     *
      * @throws InvalidConfigException
      */
     public function createCaptchaAction()
     {
         $ca = Yii::$app->createController($this->captchaAction);
+
         if ($ca !== false) {
             /* @var $controller \yii\base\Controller */
-            list($controller, $actionID) = $ca;
+            [$controller, $actionID] = $ca;
             $action = $controller->createAction($actionID);
+
             if ($action !== null) {
                 return $action;
             }
         }
+
         throw new InvalidConfigException('Invalid CAPTCHA action ID: ' . $this->captchaAction);
     }
 
@@ -109,6 +120,7 @@ class CaptchaValidator extends Validator
                 'attribute' => $model->getAttributeLabel($attribute),
             ], Yii::$app->language),
         ];
+
         if ($this->skipOnEmpty) {
             $options['skipOnEmpty'] = 1;
         }

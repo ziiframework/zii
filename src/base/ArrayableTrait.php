@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,9 +11,10 @@
 namespace yii\base;
 
 use Yii;
-use yii\helpers\ArrayHelper;
 use yii\web\Link;
+use JsonSerializable;
 use yii\web\Linkable;
+use yii\helpers\ArrayHelper;
 
 /**
  * ArrayableTrait provides a common implementation of the [[Arrayable]] interface.
@@ -19,6 +23,7 @@ use yii\web\Linkable;
  * in [[fields()]] and [[extraFields()]].
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 trait ArrayableTrait
@@ -66,11 +71,13 @@ trait ArrayableTrait
      * The default implementation of this method returns the public object member variables indexed by themselves.
      *
      * @return array the list of field names or field definitions.
+     *
      * @see toArray()
      */
     public function fields()
     {
         $fields = array_keys(Yii::getObjectVars($this));
+
         return array_combine($fields, $fields);
     }
 
@@ -89,6 +96,7 @@ trait ArrayableTrait
      *
      * @return array the list of expandable field names or field definitions. Please refer
      * to [[fields()]] on the format of the return value.
+     *
      * @see toArray()
      * @see fields()
      */
@@ -117,33 +125,34 @@ trait ArrayableTrait
      * Expand can also be nested, separated with dots (.). e.g.: item.expand1.expand2
      * `$recursive` must be true for nested expands to be extracted. If `$recursive` is false, only the root expands will be extracted.
      * @param bool $recursive whether to recursively return array representation of embedded objects.
+     *
      * @return array the array representation of the object
      */
     public function toArray(array $fields = [], array $expand = [], $recursive = true)
     {
         $data = [];
+
         foreach ($this->resolveFields($fields, $expand) as $field => $definition) {
             $attribute = is_string($definition) ? $this->$definition : $definition($this, $field);
 
             if ($recursive) {
                 $nestedFields = $this->extractFieldsFor($fields, $field);
                 $nestedExpand = $this->extractFieldsFor($expand, $field);
+
                 if ($attribute instanceof Arrayable) {
                     $attribute = $attribute->toArray($nestedFields, $nestedExpand);
-                } elseif ($attribute instanceof \JsonSerializable) {
+                } elseif ($attribute instanceof JsonSerializable) {
                     $attribute = $attribute->jsonSerialize();
                 } elseif (is_array($attribute)) {
-                    $attribute = array_map(
-                        function ($item) use ($nestedFields, $nestedExpand) {
+                    $attribute = array_map(static function ($item) use ($nestedFields, $nestedExpand) {
                             if ($item instanceof Arrayable) {
                                 return $item->toArray($nestedFields, $nestedExpand);
-                            } elseif ($item instanceof \JsonSerializable) {
+                            } elseif ($item instanceof JsonSerializable) {
                                 return $item->jsonSerialize();
                             }
+
                             return $item;
-                        },
-                        $attribute
-                    );
+                        }, $attribute);
                 }
             }
             $data[$field] = $attribute;
@@ -162,7 +171,9 @@ trait ArrayableTrait
      * The previous example would extract "item".
      *
      * @param array $fields The fields requested for extraction
+     *
      * @return array root fields extracted from the given nested fields
+     *
      * @since 2.0.14
      */
     protected function extractRootFields(array $fields)
@@ -187,7 +198,9 @@ trait ArrayableTrait
      *
      * @param array $fields The fields requested for extraction
      * @param string $rootField The root field for which we want to extract the nested fields
+     *
      * @return array nested fields extracted for the given field
+     *
      * @since 2.0.14
      */
     protected function extractFieldsFor(array $fields, $rootField)
@@ -208,8 +221,10 @@ trait ArrayableTrait
      * This method will first extract the root fields from the given fields.
      * Then it will check the requested root fields against those declared in [[fields()]] and [[extraFields()]]
      * to determine which fields can be returned.
+     *
      * @param array $fields the fields being requested for exporting
      * @param array $expand the additional fields being requested for exporting
+     *
      * @return array the list of fields to be exported. The array keys are the field names, and the array values
      * are the corresponding object property names or PHP callables returning the field values.
      */
@@ -223,6 +238,7 @@ trait ArrayableTrait
             if (is_int($field)) {
                 $field = $definition;
             }
+
             if (empty($fields) || in_array($field, $fields, true)) {
                 $result[$field] = $definition;
             }
@@ -236,6 +252,7 @@ trait ArrayableTrait
             if (is_int($field)) {
                 $field = $definition;
             }
+
             if (in_array($field, $expand, true)) {
                 $result[$field] = $definition;
             }

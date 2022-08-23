@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,9 +11,9 @@
 namespace yiiunit\framework\base;
 
 use Yii;
+use yiiunit\TestCase;
 use yii\base\Controller;
 use yii\base\InlineAction;
-use yiiunit\TestCase;
 
 /**
  * @group base
@@ -19,7 +22,7 @@ class ControllerTest extends TestCase
 {
     public static $actionRuns = [];
 
-    public function testRunAction()
+    public function testRunAction(): void
     {
         $this->mockApplication();
 
@@ -48,13 +51,15 @@ class ControllerTest extends TestCase
 
     /**
      * @dataProvider createInlineActionProvider
+     *
      * @param string $controllerClass
      * @param string $actionId
      * @param string|null $expectedActionMethod
      */
-    public function testCreateInlineAction($controllerClass, $actionId, $expectedActionMethod)
+    public function testCreateInlineAction($controllerClass, $actionId, $expectedActionMethod): void
     {
         $this->mockApplication();
+
         /** @var Controller $controller */
         $controller = new $controllerClass('test-controller', Yii::$app);
 
@@ -83,7 +88,7 @@ class ControllerTest extends TestCase
      *
      * @dataProvider actionIdMethodProvider
      */
-    public function testActionIdMethod($input, $expected)
+    public function testActionIdMethod($input, $expected): void
     {
         $this->assertSame($expected, preg_match('/^(?:[a-z0-9_]+-)*[a-z0-9_]+$/', $input));
     }
@@ -107,51 +112,46 @@ class ControllerTest extends TestCase
     }
 }
 
-
 class TestController extends Controller
 {
     public function actionTest1()
     {
         ControllerTest::$actionRuns[] = $this->action->uniqueId;
+
         return 'test1';
     }
 
     public function actionTest2()
     {
         ControllerTest::$actionRuns[] = $this->action->uniqueId;
+
         return 'test2';
     }
 
-    public function actionTest3()
+    public function actionTest3(): void
     {
-
     }
 
-    public function actionTestTest()
+    public function actionTestTest(): void
     {
-
     }
 
-    public function actionTest_test()
+    public function actionTest_test(): void
     {
-
     }
 }
 
 class Test1Controller extends Controller
 {
-    public function actionTest_1()
+    public function actionTest_1(): void
     {
-
     }
 
-    public function actionTest_test()
+    public function actionTest_test(): void
     {
-
     }
 
-    public function actionTestTest_test_2()
+    public function actionTestTest_test_2(): void
     {
-
     }
 }

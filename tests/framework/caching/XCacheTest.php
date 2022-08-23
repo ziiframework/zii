@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,6 +14,7 @@ use yii\caching\XCache;
 
 /**
  * Class for testing xcache backend.
+ *
  * @group xcache
  * @group caching
  */

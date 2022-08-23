@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,21 +10,21 @@
 
 namespace yiiunit\framework\base;
 
-use yii\base\DynamicModel;
 use yiiunit\TestCase;
+use yii\base\DynamicModel;
 
 /**
  * @group base
  */
 class DynamicModelTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->mockApplication();
     }
 
-    public function testValidateData()
+    public function testValidateData(): void
     {
         $email = 'invalid';
         $name = 'long name';
@@ -37,7 +40,7 @@ class DynamicModelTest extends TestCase
         $this->assertTrue($model->hasErrors('age'));
     }
 
-    public function testAddRule()
+    public function testAddRule(): void
     {
         $model = new DynamicModel();
         $this->assertEquals(0, $model->getValidators()->count());
@@ -49,7 +52,7 @@ class DynamicModelTest extends TestCase
         $this->assertEquals(3, $model->getValidators()->count());
     }
 
-    public function testValidateWithAddRule()
+    public function testValidateWithAddRule(): void
     {
         $email = 'invalid';
         $name = 'long name';
@@ -65,7 +68,7 @@ class DynamicModelTest extends TestCase
         $this->assertTrue($model->hasErrors('age'));
     }
 
-    public function testDynamicProperty()
+    public function testDynamicProperty(): void
     {
         $email = 'invalid';
         $name = 'long name';
@@ -80,10 +83,10 @@ class DynamicModelTest extends TestCase
         $age = $model->age;
     }
 
-    public function testLoad()
+    public function testLoad(): void
     {
         $dynamic = new DynamicModel();
-        //define two attributes
+        // define two attributes
         $dynamic->defineAttribute('name');
         $dynamic->defineAttribute('mobile');
         // define rule

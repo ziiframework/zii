@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -34,6 +37,7 @@ use yii\base\InvalidConfigException;
  * ```
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class CompositeAuth extends AuthMethod
@@ -47,7 +51,6 @@ class CompositeAuth extends AuthMethod
      * Note that an auth method class must implement the [[\yii\filters\auth\AuthInterface]] interface.
      */
     public $authMethods = [];
-
 
     /**
      * {@inheritdoc}
@@ -65,6 +68,7 @@ class CompositeAuth extends AuthMethod
         foreach ($this->authMethods as $i => $auth) {
             if (!$auth instanceof AuthInterface) {
                 $this->authMethods[$i] = $auth = Yii::createObject($auth);
+
                 if (!$auth instanceof AuthInterface) {
                     throw new InvalidConfigException(get_class($auth) . ' must implement yii\filters\auth\AuthInterface');
                 }
@@ -72,6 +76,7 @@ class CompositeAuth extends AuthMethod
 
             if (isset($this->owner->action) && $auth->isActive($this->owner->action)) {
                 $identity = $auth->authenticate($user, $request, $response);
+
                 if ($identity !== null) {
                     return $identity;
                 }
@@ -84,7 +89,7 @@ class CompositeAuth extends AuthMethod
     /**
      * {@inheritdoc}
      */
-    public function challenge($response)
+    public function challenge($response): void
     {
         foreach ($this->authMethods as $method) {
             /* @var $method AuthInterface */

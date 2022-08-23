@@ -1,13 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 /**
- * MIME types.
- *
- * This file contains most commonly used MIME types
- * according to file extension names.
- * Its content is generated from the apache http mime.types file.
- * https://svn.apache.org/viewvc/httpd/httpd/trunk/docs/conf/mime.types?view=markup
- * This file has been placed in the public domain for unlimited redistribution.
+ * @link https://www.yiiframework.com/
+ * @copyright Copyright (c) 2008 Yii Software LLC
+ * @license https://www.yiiframework.com/license/
  */
+
 $mimeTypes = [
     '3dml' => 'text/vnd.in3d.3dml',
     '3ds' => 'image/x-3ds',
@@ -998,7 +998,7 @@ $mimeTypes = [
 ];
 
 if (PHP_VERSION_ID >= 80100) {
-    $mimeTypes = array_replace($mimeTypes, array('xz' => 'application/octet-stream'));
+    $mimeTypes = array_replace($mimeTypes, ['xz' => 'application/octet-stream']);
 }
 
 return $mimeTypes;

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -40,7 +43,7 @@ namespace PHPUnit\Framework {
             /**
              * @param string $exception
              */
-            public function expectException($exception)
+            public function expectException($exception): void
             {
                 $this->setExpectedException($exception);
             }
@@ -48,11 +51,13 @@ namespace PHPUnit\Framework {
             /**
              * @param string $message
              */
-            public function expectExceptionMessage($message)
+            public function expectExceptionMessage($message): void
             {
                 $parentClassMethods = get_class_methods('PHPUnit_Framework_TestCase');
+
                 if (in_array('expectExceptionMessage', $parentClassMethods)) {
                     parent::expectExceptionMessage($message);
+
                     return;
                 }
                 $this->setExpectedException($this->getExpectedException(), $message);
@@ -61,11 +66,13 @@ namespace PHPUnit\Framework {
             /**
              * @param string $messageRegExp
              */
-            public function expectExceptionMessageRegExp($messageRegExp)
+            public function expectExceptionMessageRegExp($messageRegExp): void
             {
                 $parentClassMethods = get_class_methods('PHPUnit_Framework_TestCase');
+
                 if (in_array('expectExceptionMessageRegExp', $parentClassMethods)) {
                     parent::expectExceptionMessageRegExp($messageRegExp);
+
                     return;
                 }
                 $this->setExpectedExceptionRegExp($this->getExpectedException(), $messageRegExp);

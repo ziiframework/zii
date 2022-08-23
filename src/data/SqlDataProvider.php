@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,11 +11,11 @@
 namespace yii\data;
 
 use Yii;
-use yii\base\InvalidConfigException;
-use yii\db\Connection;
-use yii\db\Expression;
 use yii\db\Query;
 use yii\di\Instance;
+use yii\db\Connection;
+use yii\db\Expression;
+use yii\base\InvalidConfigException;
 
 /**
  * SqlDataProvider implements a data provider based on a plain SQL statement.
@@ -62,6 +65,7 @@ use yii\di\Instance;
  * For more details and usage information on SqlDataProvider, see the [guide article on data providers](guide:output-data-providers).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class SqlDataProvider extends BaseDataProvider
@@ -71,14 +75,17 @@ class SqlDataProvider extends BaseDataProvider
      * Starting from version 2.0.2, this can also be a configuration array for creating the object.
      */
     public $db = 'db';
+
     /**
      * @var string the SQL statement to be used for fetching data rows.
      */
     public $sql;
+
     /**
      * @var array parameters (name=>value) to be bound to the SQL statement.
      */
     public $params = [];
+
     /**
      * @var string|callable|null the column that is used as the key of the data models.
      * This can be either a column name, or a callable that returns the key value of a given data model.
@@ -87,16 +94,17 @@ class SqlDataProvider extends BaseDataProvider
      */
     public $key;
 
-
     /**
      * Initializes the DB connection component.
      * This method will initialize the [[db]] property to make sure it refers to a valid DB connection.
+     *
      * @throws InvalidConfigException if [[db]] is invalid.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->db = Instance::ensure($this->db, Connection::className());
+
         if ($this->sql === null) {
             throw new InvalidConfigException('The "sql" property must be set.');
         }
@@ -109,6 +117,7 @@ class SqlDataProvider extends BaseDataProvider
     {
         $sort = $this->getSort();
         $pagination = $this->getPagination();
+
         if ($pagination === false && $sort === false) {
             return $this->db->createCommand($this->sql, $this->params)->queryAll();
         }
@@ -120,6 +129,7 @@ class SqlDataProvider extends BaseDataProvider
         if ($sort !== false) {
             $orders = $sort->getOrders();
             $pattern = '/\s+order\s+by\s+([\w\s,\."`\[\]]+)$/i';
+
             if (preg_match($pattern, $sql, $matches)) {
                 array_unshift($orders, new Expression($matches[1]));
                 $sql = preg_replace($pattern, '', $sql);
@@ -143,6 +153,7 @@ class SqlDataProvider extends BaseDataProvider
     protected function prepareKeys($models)
     {
         $keys = [];
+
         if ($this->key !== null) {
             foreach ($models as $model) {
                 if (is_string($this->key)) {

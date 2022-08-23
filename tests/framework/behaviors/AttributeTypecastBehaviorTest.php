@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,28 +11,29 @@
 namespace yiiunit\framework\behaviors;
 
 use Yii;
-use yii\base\DynamicModel;
 use yii\base\Event;
-use yii\behaviors\AttributeTypecastBehavior;
-use yii\db\ActiveRecord;
 use yiiunit\TestCase;
+use yii\db\ActiveRecord;
+use yii\base\DynamicModel;
+use yii\behaviors\AttributeTypecastBehavior;
 
 /**
  * Unit test for [[\yii\behaviors\AttributeTypecastBehavior]].
+ *
  * @see AttributeTypecastBehavior
  *
  * @group behaviors
  */
 class AttributeTypecastBehaviorTest extends TestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         if (!extension_loaded('pdo') || !extension_loaded('pdo_sqlite')) {
             static::markTestSkipped('PDO and SQLite extensions are required.');
         }
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockApplication([
             'components' => [
@@ -51,7 +55,7 @@ class AttributeTypecastBehaviorTest extends TestCase
         Yii::$app->getDb()->createCommand()->createTable('test_attribute_typecast', $columns)->execute();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         AttributeTypecastBehavior::clearAutoDetectedAttributeTypes();
@@ -61,7 +65,7 @@ class AttributeTypecastBehaviorTest extends TestCase
 
     // Tests :
 
-    public function testTypecast()
+    public function testTypecast(): void
     {
         $model = new ActiveRecordAttributeTypecast();
 
@@ -83,7 +87,7 @@ class AttributeTypecastBehaviorTest extends TestCase
     /**
      * @depends testTypecast
      */
-    public function testSkipNull()
+    public function testSkipNull(): void
     {
         $model = new ActiveRecordAttributeTypecast();
         $model->getAttributeTypecastBehavior()->skipOnNull = true;
@@ -115,7 +119,7 @@ class AttributeTypecastBehaviorTest extends TestCase
     /**
      * @depends testTypecast
      */
-    public function testAfterFindEvent()
+    public function testAfterFindEvent(): void
     {
         $model = new ActiveRecordAttributeTypecast();
 
@@ -130,7 +134,7 @@ class AttributeTypecastBehaviorTest extends TestCase
     /**
      * @depends testTypecast
      */
-    public function testAfterValidateEvent()
+    public function testAfterValidateEvent(): void
     {
         $model = new ActiveRecordAttributeTypecast();
 
@@ -142,13 +146,13 @@ class AttributeTypecastBehaviorTest extends TestCase
     /**
      * @depends testTypecast
      */
-    public function testBeforeSaveEvent()
+    public function testBeforeSaveEvent(): void
     {
         $model = new ActiveRecordAttributeTypecast();
 
         $beforeInsertHappened = false;
         $model->callback = 'insert';
-        $model->on(ActiveRecordAttributeTypecast::EVENT_BEFORE_INSERT, function (Event $event) use (&$beforeInsertHappened) {
+        $model->on(ActiveRecordAttributeTypecast::EVENT_BEFORE_INSERT, static function (Event $event) use (&$beforeInsertHappened): void {
             $beforeInsertHappened = true;
         });
         $model->save(false);
@@ -158,7 +162,7 @@ class AttributeTypecastBehaviorTest extends TestCase
 
         $beforeUpdateHappened = false;
         $model->callback = 'update';
-        $model->on(ActiveRecordAttributeTypecast::EVENT_BEFORE_UPDATE, function (Event $event) use (&$beforeUpdateHappened) {
+        $model->on(ActiveRecordAttributeTypecast::EVENT_BEFORE_UPDATE, static function (Event $event) use (&$beforeUpdateHappened): void {
             $beforeUpdateHappened = true;
         });
         $model->save(false);
@@ -170,20 +174,20 @@ class AttributeTypecastBehaviorTest extends TestCase
     /**
      * @depends testTypecast
      */
-    public function testAfterSaveEvent()
+    public function testAfterSaveEvent(): void
     {
         $model = new ActiveRecordAttributeTypecast([
-            'typecastAfterSave' => true
+            'typecastAfterSave' => true,
         ]);
 
         $model->callback = 'insert';
 
         $beforeInsertHappened = false;
-        $model->on(ActiveRecordAttributeTypecast::EVENT_BEFORE_INSERT, function (Event $event) use (&$beforeInsertHappened) {
+        $model->on(ActiveRecordAttributeTypecast::EVENT_BEFORE_INSERT, static function (Event $event) use (&$beforeInsertHappened): void {
             $beforeInsertHappened = true;
         });
         $afterInsertHappened = false;
-        $model->on(ActiveRecordAttributeTypecast::EVENT_AFTER_INSERT, function (Event $event) use (&$afterInsertHappened) {
+        $model->on(ActiveRecordAttributeTypecast::EVENT_AFTER_INSERT, static function (Event $event) use (&$afterInsertHappened): void {
             $afterInsertHappened = true;
         });
         $model->save(false);
@@ -192,14 +196,13 @@ class AttributeTypecastBehaviorTest extends TestCase
         $this->assertSame('callback: callback: insert', $model->callback);
         $beforeInsertHappened = $afterInsertHappened = false;
 
-
         $model->callback = 'update';
         $beforeUpdateHappened = false;
-        $model->on(ActiveRecordAttributeTypecast::EVENT_BEFORE_UPDATE, function (Event $event) use (&$beforeUpdateHappened) {
+        $model->on(ActiveRecordAttributeTypecast::EVENT_BEFORE_UPDATE, static function (Event $event) use (&$beforeUpdateHappened): void {
             $beforeUpdateHappened = true;
         });
         $afterUpdateHappened = false;
-        $model->on(ActiveRecordAttributeTypecast::EVENT_AFTER_UPDATE, function (Event $event) use (&$afterUpdateHappened) {
+        $model->on(ActiveRecordAttributeTypecast::EVENT_AFTER_UPDATE, static function (Event $event) use (&$afterUpdateHappened): void {
             $afterUpdateHappened = true;
         });
         $model->save(false);
@@ -210,7 +213,7 @@ class AttributeTypecastBehaviorTest extends TestCase
         $this->assertFalse($afterInsertHappened);
     }
 
-    public function testAutoDetectAttributeTypes()
+    public function testAutoDetectAttributeTypes(): void
     {
         $model = (new DynamicModel(['name' => null, 'amount' => null, 'price' => null, 'isActive' => null]))
             ->addRule('name', 'string')
@@ -236,7 +239,7 @@ class AttributeTypecastBehaviorTest extends TestCase
      *
      * @see https://github.com/yiisoft/yii2/issues/12880
      */
-    public function testSkipNotSelectedAttribute()
+    public function testSkipNotSelectedAttribute(): void
     {
         $model = new ActiveRecordAttributeTypecast();
         $model->name = 'skip-not-selected';
@@ -269,7 +272,6 @@ class AttributeTypecastBehaviorTest extends TestCase
  * @property float $price
  * @property bool $isActive
  * @property string $callback
- *
  * @property AttributeTypecastBehavior $attributeTypecastBehavior
  */
 class ActiveRecordAttributeTypecast extends ActiveRecord
@@ -286,9 +288,7 @@ class ActiveRecordAttributeTypecast extends ActiveRecord
                     'amount' => AttributeTypecastBehavior::TYPE_INTEGER,
                     'price' => AttributeTypecastBehavior::TYPE_FLOAT,
                     'isActive' => AttributeTypecastBehavior::TYPE_BOOLEAN,
-                    'callback' => function ($value) {
-                        return 'callback: ' . $value;
-                    },
+                    'callback' => static fn ($value) => 'callback: ' . $value,
                 ],
                 'typecastAfterValidate' => true,
                 'typecastBeforeSave' => true,

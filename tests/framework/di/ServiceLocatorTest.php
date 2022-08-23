@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,9 +10,9 @@
 
 namespace yiiunit\framework\di;
 
+use yiiunit\TestCase;
 use yii\base\BaseObject;
 use yii\di\ServiceLocator;
-use yiiunit\TestCase;
 
 class Creator
 {
@@ -31,17 +34,18 @@ class TestSubclass extends TestClass
 
 /**
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  * @group di
  */
 class ServiceLocatorTest extends TestCase
 {
-    public function testCallable()
+    public function testCallable(): void
     {
         // anonymous function
         $container = new ServiceLocator();
         $className = TestClass::className();
-        $container->set($className, function () {
+        $container->set($className, static function () {
             return new TestClass([
                 'prop1' => 100,
                 'prop2' => 200,
@@ -62,7 +66,7 @@ class ServiceLocatorTest extends TestCase
         $this->assertNull($object->prop2);
     }
 
-    public function testObject()
+    public function testObject(): void
     {
         $object = new TestClass();
         $className = TestClass::className();
@@ -71,7 +75,7 @@ class ServiceLocatorTest extends TestCase
         $this->assertSame($container->get($className), $object);
     }
 
-    public function testDi3Compatibility()
+    public function testDi3Compatibility(): void
     {
         $config = [
             'components' => [
@@ -88,8 +92,7 @@ class ServiceLocatorTest extends TestCase
         $this->assertInstanceOf(TestSubclass::className(), $app->get('test'));
     }
 
-
-    public function testShared()
+    public function testShared(): void
     {
         // with configuration: shared
         $container = new ServiceLocator();
@@ -112,7 +115,7 @@ class ServiceLocatorTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/11771
      */
-    public function testModulePropertyIsset()
+    public function testModulePropertyIsset(): void
     {
         $config = [
             'components' => [

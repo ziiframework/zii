@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,11 +10,10 @@
 
 namespace yii\widgets;
 
-use Yii;
-use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\base\Widget;
 use yii\helpers\Html;
+use yii\base\InvalidConfigException;
 
 /**
  * InputWidget is the base class for widgets that collect user inputs.
@@ -32,6 +34,7 @@ use yii\helpers\Html;
  * For more details and usage information on InputWidget, see the [guide article on forms](guide:input-forms).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class InputWidget extends Widget
@@ -39,41 +42,48 @@ class InputWidget extends Widget
     /**
      * @var \yii\widgets\ActiveField active input field, which triggers this widget rendering.
      * This field will be automatically filled up in case widget instance is created via [[\yii\widgets\ActiveField::widget()]].
+     *
      * @since 2.0.11
      */
     public $field;
+
     /**
      * @var Model|null the data model that this widget is associated with.
      */
     public $model;
+
     /**
      * @var string|null the model attribute that this widget is associated with.
      */
     public $attribute;
+
     /**
      * @var string|null the input name. This must be set if [[model]] and [[attribute]] are not set.
      */
     public $name;
+
     /**
      * @var string the input value.
      */
     public $value;
+
     /**
      * @var array the HTML attributes for the input tag.
+     *
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $options = [];
-
 
     /**
      * Initializes the widget.
      * If you override this method, make sure you call the parent implementation first.
      */
-    public function init()
+    public function init(): void
     {
         if ($this->name === null && !$this->hasModel()) {
             throw new InvalidConfigException("Either 'name', or 'model' and 'attribute' properties must be specified.");
         }
+
         if (!isset($this->options['id'])) {
             $this->options['id'] = $this->hasModel() ? Html::getInputId($this->model, $this->attribute) : $this->getId();
         }
@@ -95,7 +105,9 @@ class InputWidget extends Widget
      * or [[Html::input()]] if not.
      *
      * @param string $type the type of the input to create.
+     *
      * @return string the HTML of the input field.
+     *
      * @since 2.0.13
      * @see Html::activeInput()
      * @see Html::input()
@@ -105,6 +117,7 @@ class InputWidget extends Widget
         if ($this->hasModel()) {
             return Html::activeInput($type, $this->model, $this->attribute, $this->options);
         }
+
         return Html::input($type, $this->name, $this->value, $this->options);
     }
 }

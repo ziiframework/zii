@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,9 +10,9 @@
 
 namespace yii\rest;
 
-use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\web\ForbiddenHttpException;
+use yii\base\InvalidConfigException;
 
 /**
  * ActiveController implements a common set of actions for supporting RESTful access to ActiveRecord.
@@ -35,6 +38,7 @@ use yii\web\ForbiddenHttpException;
  * For more details and usage information on ActiveController, see the [guide article on rest controllers](guide:rest-controllers).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class ActiveController extends Controller
@@ -43,24 +47,28 @@ class ActiveController extends Controller
      * @var string the model class name. This property must be set.
      */
     public $modelClass;
+
     /**
      * @var string the scenario used for updating a model.
+     *
      * @see \yii\base\Model::scenarios()
      */
     public $updateScenario = Model::SCENARIO_DEFAULT;
+
     /**
      * @var string the scenario used for creating a model.
+     *
      * @see \yii\base\Model::scenarios()
      */
     public $createScenario = Model::SCENARIO_DEFAULT;
 
-
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
+
         if ($this->modelClass === null) {
             throw new InvalidConfigException('The "modelClass" property must be set.');
         }
@@ -129,9 +137,10 @@ class ActiveController extends Controller
      * @param string $action the ID of the action to be executed
      * @param object|null $model the model to be accessed. If null, it means no specific model is being accessed.
      * @param array $params additional parameters
+     *
      * @throws ForbiddenHttpException if the user does not have access
      */
-    public function checkAccess($action, $model = null, $params = [])
+    public function checkAccess($action, $model = null, $params = []): void
     {
     }
 }

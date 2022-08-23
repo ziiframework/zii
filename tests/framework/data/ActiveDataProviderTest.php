@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,18 +10,19 @@
 
 namespace yiiunit\framework\data;
 
-use yii\base\InvalidCallException;
-use yii\data\ActiveDataProvider;
 use yii\db\Query;
-use yiiunit\data\ar\ActiveRecord;
-use yiiunit\data\ar\Customer;
 use yiiunit\data\ar\Item;
 use yiiunit\data\ar\Order;
+use yiiunit\data\ar\Customer;
+use yii\data\ActiveDataProvider;
+use yiiunit\data\ar\ActiveRecord;
+use yii\base\InvalidCallException;
 use yiiunit\framework\db\DatabaseTestCase;
 use yiiunit\framework\db\UnqueryableQueryMock;
 
 /**
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  *
  * @group data
@@ -26,13 +30,13 @@ use yiiunit\framework\db\UnqueryableQueryMock;
  */
 abstract class ActiveDataProviderTest extends DatabaseTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         ActiveRecord::$db = $this->getConnection();
     }
 
-    public function testActiveQuery()
+    public function testActiveQuery(): void
     {
         $provider = new ActiveDataProvider([
             'query' => Order::find()->orderBy('id'),
@@ -54,7 +58,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertCount(2, $orders);
     }
 
-    public function testActiveRelation()
+    public function testActiveRelation(): void
     {
         /* @var $customer Customer */
         $customer = Customer::findOne(2);
@@ -77,7 +81,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertCount(1, $orders);
     }
 
-    public function testActiveRelationVia()
+    public function testActiveRelationVia(): void
     {
         /* @var $order Order */
         $order = Order::findOne(2);
@@ -101,7 +105,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertCount(2, $items);
     }
 
-    public function testActiveRelationViaTable()
+    public function testActiveRelationViaTable(): void
     {
         /* @var $order Order */
         $order = Order::findOne(1);
@@ -123,7 +127,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertCount(1, $items);
     }
 
-    public function testQuery()
+    public function testQuery(): void
     {
         $query = new Query();
         $provider = new ActiveDataProvider([
@@ -147,7 +151,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertCount(2, $orders);
     }
 
-    public function testRefresh()
+    public function testRefresh(): void
     {
         $query = new Query();
         $provider = new ActiveDataProvider([
@@ -162,7 +166,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertCount(2, $provider->getModels());
     }
 
-    public function testPaginationBeforeModels()
+    public function testPaginationBeforeModels(): void
     {
         $query = new Query();
         $provider = new ActiveDataProvider([
@@ -180,7 +184,7 @@ abstract class ActiveDataProviderTest extends DatabaseTestCase
         $this->assertCount(2, $provider->getModels());
     }
 
-    public function testDoesNotPerformQueryWhenHasNoModels()
+    public function testDoesNotPerformQueryWhenHasNoModels(): void
     {
         $query = new UnqueryableQueryMock();
         $provider = new ActiveDataProvider([

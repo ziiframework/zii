@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -8,6 +11,7 @@
 namespace yii\web;
 
 use Yii;
+use Throwable;
 use yii\base\Action;
 use yii\base\Exception;
 use yii\base\UserException;
@@ -46,6 +50,7 @@ use yii\base\UserException;
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @author Dmitry Naumenko <d.naumenko.a@gmail.com>
+ *
  * @since 2.0
  */
 class ErrorAction extends Action
@@ -56,36 +61,40 @@ class ErrorAction extends Action
      * would be "error", and the corresponding view file would be "views/site/error.php".
      */
     public $view;
+
     /**
      * @var string the name of the error when the exception name cannot be determined.
      * Defaults to "Error".
      */
     public $defaultName;
+
     /**
      * @var string the message to be displayed when the exception message contains sensitive information.
      * Defaults to "An internal server error occurred.".
      */
     public $defaultMessage;
+
     /**
-     * @var string|null|false the name of the layout to be applied to this error action view.
+     * @var string|false|null the name of the layout to be applied to this error action view.
      * If not set, the layout configured in the controller will be used.
+     *
      * @see \yii\base\Controller::$layout
      * @since 2.0.14
      */
     public $layout;
 
     /**
-     * @var \Throwable the exception object, normally is filled on [[init()]] method call.
+     * @var Throwable the exception object, normally is filled on [[init()]] method call.
+     *
      * @see findException() to know default way of obtaining exception.
      * @since 2.0.11
      */
     protected $exception;
 
-
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         $this->exception = $this->findException();
 
@@ -121,7 +130,9 @@ class ErrorAction extends Action
     /**
      * Builds string that represents the exception.
      * Normally used to generate a response to AJAX request.
+     *
      * @return string
+     *
      * @since 2.0.11
      */
     protected function renderAjaxResponse()
@@ -131,7 +142,9 @@ class ErrorAction extends Action
 
     /**
      * Renders a view that represents the exception.
+     *
      * @return string
+     *
      * @since 2.0.11
      */
     protected function renderHtmlResponse()
@@ -141,7 +154,9 @@ class ErrorAction extends Action
 
     /**
      * Builds array of parameters that will be passed to the view.
+     *
      * @return array
+     *
      * @since 2.0.11
      */
     protected function getViewRenderParams()
@@ -157,7 +172,9 @@ class ErrorAction extends Action
      * Gets exception from the [[yii\web\ErrorHandler|ErrorHandler]] component.
      * In case there is no exception in the component, treat as the action has been invoked
      * not from error handler, but by direct route, so '404 Not Found' error will be displayed.
-     * @return \Throwable
+     *
+     * @return Throwable
+     *
      * @since 2.0.11
      */
     protected function findException()
@@ -171,7 +188,9 @@ class ErrorAction extends Action
 
     /**
      * Gets the code from the [[exception]].
+     *
      * @return mixed
+     *
      * @since 2.0.11
      */
     protected function getExceptionCode()
@@ -187,6 +206,7 @@ class ErrorAction extends Action
      * Returns the exception name, followed by the code (if present).
      *
      * @return string
+     *
      * @since 2.0.11
      */
     protected function getExceptionName()
@@ -207,7 +227,9 @@ class ErrorAction extends Action
     /**
      * Returns the [[exception]] message for [[yii\base\UserException]] only.
      * For other cases [[defaultMessage]] will be returned.
+     *
      * @return string
+     *
      * @since 2.0.11
      */
     protected function getExceptionMessage()

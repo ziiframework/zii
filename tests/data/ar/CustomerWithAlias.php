@@ -1,5 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ * @link https://www.yiiframework.com/
+ * @copyright Copyright (c) 2008 Yii Software LLC
+ * @license https://www.yiiframework.com/license/
+ */
+
 namespace yiiunit\data\ar;
 
 /**
@@ -15,26 +23,28 @@ namespace yiiunit\data\ar;
  */
 class CustomerWithAlias extends ActiveRecord
 {
-    const STATUS_ACTIVE = 1;
-    const STATUS_INACTIVE = 2;
+    public const STATUS_ACTIVE = 1;
+    public const STATUS_INACTIVE = 2;
 
     public $status2;
 
     public $sumTotal;
-    
+
     public static function tableName()
     {
         return 'customer';
     }
-    
+
     /**
      * {@inheritdoc}
+     *
      * @return CustomerQuery
      */
     public static function find()
     {
-        $activeQuery = new CustomerQuery(get_called_class());
+        $activeQuery = new CustomerQuery(static::class);
         $activeQuery->alias('csr');
+
         return $activeQuery;
     }
 }

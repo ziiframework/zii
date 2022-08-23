@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -9,6 +12,7 @@ namespace yii\caching;
 
 /**
  * Mock for the time() function for caching classes.
+ *
  * @return int
  */
 function time()
@@ -18,7 +22,9 @@ function time()
 
 /**
  * Mock for the microtime() function for caching classes.
+ *
  * @param bool $float
+ *
  * @return float
  */
 function microtime($float = false)
@@ -28,9 +34,9 @@ function microtime($float = false)
 
 namespace yiiunit\framework\caching;
 
-use yii\caching\CacheInterface;
-use yii\caching\TagDependency;
 use yiiunit\TestCase;
+use yii\caching\TagDependency;
+use yii\caching\CacheInterface;
 
 /**
  * Base class for testing cache backends.
@@ -42,25 +48,25 @@ abstract class CacheTestCase extends TestCase
      * Null means normal time() behavior.
      */
     public static $time;
+
     /**
      * @var float virtual time to be returned by mocked microtime() function.
      * Null means normal microtime() behavior.
      */
     public static $microtime;
 
-
     /**
      * @return CacheInterface
      */
     abstract protected function getCacheInstance();
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->mockApplication();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         static::$time = null;
         static::$microtime = null;
@@ -82,7 +88,7 @@ abstract class CacheTestCase extends TestCase
         return $cache;
     }
 
-    public function testSet()
+    public function testSet(): void
     {
         $cache = $this->getCacheInstance();
 
@@ -91,7 +97,7 @@ abstract class CacheTestCase extends TestCase
         $this->assertTrue($cache->set('array_test', ['array_test' => 'array_test']));
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $cache = $this->prepare();
 
@@ -114,9 +120,10 @@ abstract class CacheTestCase extends TestCase
 
     /**
      * @dataProvider multiSetExpiry
+     *
      * @param int $expiry
      */
-    public function testMultiset($expiry)
+    public function testMultiset($expiry): void
     {
         $cache = $this->getCacheInstance();
         $cache->flush();
@@ -136,7 +143,7 @@ abstract class CacheTestCase extends TestCase
         $this->assertEquals('array_test', $array['array_test']);
     }
 
-    public function testExists()
+    public function testExists(): void
     {
         $cache = $this->prepare();
 
@@ -148,7 +155,7 @@ abstract class CacheTestCase extends TestCase
         $this->assertFalse($cache->exists('not_exists'));
     }
 
-    public function testArrayAccess()
+    public function testArrayAccess(): void
     {
         $cache = $this->getCacheInstance();
 
@@ -156,21 +163,21 @@ abstract class CacheTestCase extends TestCase
         $this->assertInstanceOf('stdClass', $cache['arrayaccess_test']);
     }
 
-    public function testGetValueNonExistent()
+    public function testGetValueNonExistent(): void
     {
         $cache = $this->getCacheInstance();
 
         $this->assertFalse($this->invokeMethod($cache, 'getValue', ['non_existent_key']));
     }
 
-    public function testGetNonExistent()
+    public function testGetNonExistent(): void
     {
         $cache = $this->getCacheInstance();
 
         $this->assertFalse($cache->get('non_existent_key'));
     }
 
-    public function testStoreSpecialValues()
+    public function testStoreSpecialValues(): void
     {
         $cache = $this->getCacheInstance();
 
@@ -181,7 +188,7 @@ abstract class CacheTestCase extends TestCase
         $this->assertTrue($cache->get('bool_value'));
     }
 
-    public function testMultiGet()
+    public function testMultiGet(): void
     {
         $cache = $this->prepare();
 
@@ -191,14 +198,14 @@ abstract class CacheTestCase extends TestCase
         $this->assertSame(['number_test' => 42, 'non_existent_key' => false], $cache->multiGet(['number_test', 'non_existent_key']));
     }
 
-    public function testDefaultTtl()
+    public function testDefaultTtl(): void
     {
         $cache = $this->getCacheInstance();
 
         $this->assertSame(0, $cache->defaultDuration);
     }
 
-    public function testExpire()
+    public function testExpire(): void
     {
         $cache = $this->getCacheInstance();
 
@@ -209,7 +216,7 @@ abstract class CacheTestCase extends TestCase
         $this->assertFalse($cache->get('expire_test'));
     }
 
-    public function testExpireAdd()
+    public function testExpireAdd(): void
     {
         $cache = $this->getCacheInstance();
 
@@ -220,7 +227,7 @@ abstract class CacheTestCase extends TestCase
         $this->assertFalse($cache->get('expire_testa'));
     }
 
-    public function testAdd()
+    public function testAdd(): void
     {
         $cache = $this->prepare();
 
@@ -234,7 +241,7 @@ abstract class CacheTestCase extends TestCase
         $this->assertEquals(13, $cache->get('add_test'));
     }
 
-    public function testMultiAdd()
+    public function testMultiAdd(): void
     {
         $cache = $this->prepare();
 
@@ -249,7 +256,7 @@ abstract class CacheTestCase extends TestCase
         $this->assertEquals(13, $cache->get('add_test'));
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $cache = $this->prepare();
 
@@ -258,14 +265,14 @@ abstract class CacheTestCase extends TestCase
         $this->assertFalse($cache->get('number_test'));
     }
 
-    public function testFlush()
+    public function testFlush(): void
     {
         $cache = $this->prepare();
         $this->assertTrue($cache->flush());
         $this->assertFalse($cache->get('number_test'));
     }
 
-    public function testGetOrSet()
+    public function testGetOrSet(): void
     {
         $cache = $this->prepare();
 
@@ -282,17 +289,17 @@ abstract class CacheTestCase extends TestCase
         return get_class($cache);
     }
 
-    public function testGetOrSetWithDependencies()
+    public function testGetOrSetWithDependencies(): void
     {
         $cache = $this->prepare();
         $dependency = new TagDependency(['tags' => 'test']);
 
         $expected = 'SilverFire';
-        $loginClosure = function ($cache) use (&$login) { return 'SilverFire'; };
+        $loginClosure = static function ($cache) use (&$login) { return 'SilverFire'; };
         $this->assertEquals($expected, $cache->getOrSet('some-login', $loginClosure, null, $dependency));
 
         // Call again with another login to make sure that value is cached
-        $loginClosure = function ($cache) use (&$login) { return 'SamDark'; };
+        $loginClosure = static function ($cache) use (&$login) { return 'SamDark'; };
         $this->assertEquals($expected, $cache->getOrSet('some-login', $loginClosure, null, $dependency));
 
         $dependency->invalidate($cache, 'test');
