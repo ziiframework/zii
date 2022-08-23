@@ -41,11 +41,6 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
     public $columnSchemaClass = 'yii\db\mysql\ColumnSchema';
 
     /**
-     * @var bool whether MySQL used is older than 5.1.
-     */
-    private $_oldMysql;
-
-    /**
      * @var array mapping from physical column types (keys) to abstract column types (values)
      */
     public $typeMap = [
@@ -507,24 +502,6 @@ SQL;
     public function createColumnSchemaBuilder($type, $length = null)
     {
         return new ColumnSchemaBuilder($type, $length, $this->db);
-    }
-
-    /**
-     * @return bool whether the version of the MySQL being used is older than 5.1.
-     *
-     * @throws InvalidConfigException
-     * @throws Exception
-     *
-     * @since 2.0.13
-     */
-    protected function isOldMysql()
-    {
-        if ($this->_oldMysql === null) {
-            $version = $this->db->getSlavePdo()->getAttribute(PDO::ATTR_SERVER_VERSION);
-            $this->_oldMysql = version_compare($version, '5.1', '<=');
-        }
-
-        return $this->_oldMysql;
     }
 
     /**
