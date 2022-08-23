@@ -40,7 +40,7 @@ class FileTargetTest extends TestCase
         new FileTarget([
             'logFile' => Yii::getAlias('@yiiunit/runtime/log/filetargettest.log'),
         ]);
-        $this->assertFileNotExists(dirname($logFile), 'Log directory should not be created during init process');
+        $this->assertFileDoesNotExist(dirname($logFile), 'Log directory should not be created during init process');
     }
 
     public function testRotate(): void
@@ -72,10 +72,10 @@ class FileTargetTest extends TestCase
         clearstatcache();
 
         $this->assertFileExists($logFile);
-        $this->assertFileNotExists($logFile . '.1');
-        $this->assertFileNotExists($logFile . '.2');
-        $this->assertFileNotExists($logFile . '.3');
-        $this->assertFileNotExists($logFile . '.4');
+        $this->assertFileDoesNotExist($logFile . '.1');
+        $this->assertFileDoesNotExist($logFile . '.2');
+        $this->assertFileDoesNotExist($logFile . '.3');
+        $this->assertFileDoesNotExist($logFile . '.4');
 
         // exceed max size
         for ($i = 0; $i < 1024; ++$i) {
@@ -92,9 +92,9 @@ class FileTargetTest extends TestCase
 
         $this->assertFileExists($logFile);
         $this->assertFileExists($logFile . '.1');
-        $this->assertFileNotExists($logFile . '.2');
-        $this->assertFileNotExists($logFile . '.3');
-        $this->assertFileNotExists($logFile . '.4');
+        $this->assertFileDoesNotExist($logFile . '.2');
+        $this->assertFileDoesNotExist($logFile . '.3');
+        $this->assertFileDoesNotExist($logFile . '.4');
 
         // second rotate
 
@@ -107,8 +107,8 @@ class FileTargetTest extends TestCase
 
         $this->assertFileExists($logFile);
         $this->assertFileExists($logFile . '.1');
-        $this->assertFileNotExists($logFile . '.2');
-        $this->assertFileNotExists($logFile . '.3');
-        $this->assertFileNotExists($logFile . '.4');
+        $this->assertFileDoesNotExist($logFile . '.2');
+        $this->assertFileDoesNotExist($logFile . '.3');
+        $this->assertFileDoesNotExist($logFile . '.4');
     }
 }
