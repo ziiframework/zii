@@ -12,25 +12,48 @@ namespace yiiunit\framework\filters\auth;
 
 use Yii;
 use yii\rest\Controller;
-use yii\filters\auth\AuthMethod;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
+use yii\filters\auth\HttpHeaderAuth;
 use yiiunit\framework\web\UserIdentity;
 
 /**
  * @author Ezekiel Fernandez <ezekiel_p_fernandez@yahoo.com>
  */
-class TestAuth extends AuthMethod
+class TestAuth extends HttpHeaderAuth
 {
     public function authenticate($user, $request, $response)
     {
-        return $user;
+        $authHeader = $request->getHeaders()->get($this->header);
+
+        if ($authHeader !== null) {
+            if ($this->pattern !== null) {
+                if (preg_match($this->pattern, $authHeader, $matches)) {
+                    $authHeader = $matches[1];
+                } else {
+                    return null;
+                }
+            }
+
+            $identity = \yiiunit\framework\filters\stubs\UserIdentity::findIdentity($authHeader);
+
+            if ($identity === null) {
+                $this->challenge($response);
+                $this->handleFailure($response);
+            }
+
+            return $identity;
+        }
+
+        return null;
     }
 }
 
 class TestController extends Controller
 {
     public $authMethods = [];
+
+    public $optional = [];
 
     public function actionA()
     {
@@ -75,6 +98,7 @@ class TestController extends Controller
                 'authMethods' => $this->authMethods ?: [
                     TestAuth::className(),
                 ],
+                'optional' => $this->optional,
             ],
         ];
     }
@@ -109,6 +133,7 @@ class CompositeAuthTest extends \yiiunit\TestCase
     public function testCallingRunWithCompleteRoute(): void
     {
         /** @var TestController $controller */
+        Yii::$app->request->headers->set('X-Api-Key', 'user1');
         $controller = Yii::$app->createController('test')[0];
         $this->assertEquals('success', $controller->run('test/d'));
     }
@@ -119,6 +144,7 @@ class CompositeAuthTest extends \yiiunit\TestCase
     public function testRunAction(): void
     {
         /** @var TestController $controller */
+        Yii::$app->request->headers->set('X-Api-Key', 'user1');
         $controller = Yii::$app->createController('test')[0];
         $this->assertEquals('success', $controller->run('b'));
     }
@@ -126,24 +152,125 @@ class CompositeAuthTest extends \yiiunit\TestCase
     public function testRunButWithActionIdOnly(): void
     {
         /** @var TestController $controller */
+        Yii::$app->request->headers->set('X-Api-Key', 'user1');
         $controller = Yii::$app->createController('test')[0];
         $this->assertEquals('success', $controller->run('c'));
     }
 
-    public function testCompositeAuth(): void
+    public function testRunWithWrongToken(): void
     {
-        Yii::$app->request->headers->set('Authorization', base64_encode('foo:bar'));
-
-        /** @var TestAuthController $controller */
+        /** @var TestController $controller */
+        Yii::$app->request->headers->set('X-Api-Key', 'wrong-user');
         $controller = Yii::$app->createController('test')[0];
-        $controller->authMethods = [
-            HttpBearerAuth::className(),
-            TestAuth::className(),
-        ];
+        $this->expectException('yii\web\UnauthorizedHttpException');
+        $controller->run('a');
+    }
 
-        try {
-            $this->assertEquals('success', $controller->run('b'));
-        } catch (UnauthorizedHttpException $e) {
+    public function testRunWithoutAuthHeader(): void
+    {
+        /** @var TestController $controller */
+        $controller = Yii::$app->createController('test')[0];
+        $this->expectException('yii\web\UnauthorizedHttpException');
+        $controller->run('a');
+    }
+
+    public function testRunWithOptionalAction(): void
+    {
+        /** @var TestController $controller */
+        $controller = Yii::$app->createController('test')[0];
+        $controller->optional = ['a'];
+        $this->assertEquals('success', $controller->run('a'));
+    }
+
+    public function compositeAuthDataProvider()
+    {
+        return [
+            // base usage
+            [
+                [
+                    HttpBearerAuth::className(),
+                    TestAuth::className(),
+                ],
+                'b',
+                true,
+            ],
+            // empty auth methods
+            [
+                [],
+                'b',
+                true,
+            ],
+            // only "a", run "b"
+            [
+                [
+                    HttpBearerAuth::className(),
+                    [
+                        'class' => TestAuth::className(),
+                        'only' => ['a'],
+                    ],
+                ],
+                'b',
+                false,
+            ],
+            // only "a", run "a"
+            [
+                [
+                    HttpBearerAuth::className(),
+                    [
+                        'class' => TestAuth::className(),
+                        'only' => ['a'],
+                    ],
+                ],
+                'a',
+                true,
+            ],
+            // except "b", run "a"
+            [
+                [
+                    HttpBearerAuth::className(),
+                    [
+                        'class' => TestAuth::className(),
+                        'except' => ['b'],
+                    ],
+                ],
+                'a',
+                true,
+            ],
+            // except "b", run "b"
+            [
+                [
+                    HttpBearerAuth::className(),
+                    [
+                        'class' => TestAuth::className(),
+                        'except' => ['b'],
+                    ],
+                ],
+                'b',
+                false,
+            ],
+        ];
+    }
+
+    /**
+     * @param array $authMethods
+     * @param string $actionId
+     * @param bool $expectedAuth
+     *
+     * @dataProvider compositeAuthDataProvider
+     */
+    public function testCompositeAuth($authMethods, $actionId, $expectedAuth): void
+    {
+        Yii::$app->request->headers->set('X-Api-Key', 'user1');
+
+        /** @var TestController $controller */
+        $controller = Yii::$app->createController('test')[0];
+        $controller->authMethods = $authMethods;
+
+        if ($expectedAuth) {
+            $this->assertEquals('success', $controller->run($actionId));
+        } else {
+            $this->expectException('yii\web\UnauthorizedHttpException');
+            $controller->run($actionId);
         }
     }
 }
