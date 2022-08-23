@@ -54,7 +54,7 @@ class QueryTest extends \yiiunit\framework\db\QueryTest
             }
         }
 
-        $this->assertStringNotContainsString('1', $columnValues);
+        $this->assertNotContains('1', $columnValues);
         $this->assertStringContainsString('2', $columnValues);
         $this->assertStringContainsString('3', $columnValues);
     }
