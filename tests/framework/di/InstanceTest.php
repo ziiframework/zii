@@ -63,7 +63,7 @@ class InstanceTest extends TestCase
     {
         $container = new Container();
         $this->expectException('yii\base\InvalidConfigException');
-        $this->expectExceptionMessageRegExp('/^Failed to instantiate component or class/i');
+        $this->expectExceptionMessageMatches('/^Failed to instantiate component or class/i');
         Instance::ensure('cache', 'yii\cache\Cache', $container);
     }
 
@@ -74,7 +74,7 @@ class InstanceTest extends TestCase
     {
         $container = new Container();
         $this->expectException('yii\base\InvalidConfigException');
-        $this->expectExceptionMessageRegExp('/^Failed to instantiate component or class/i');
+        $this->expectExceptionMessageMatches('/^Failed to instantiate component or class/i');
         Instance::ensure('yii\cache\DoesNotExist', 'yii\cache\Cache', $container);
     }
 
