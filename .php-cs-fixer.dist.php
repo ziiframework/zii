@@ -18,6 +18,7 @@ return (new PhpCsFixer\Config())
         '@Symfony' => true,
         '@Symfony:risky' => true,
         'yoda_style' => false,
+        'declare_strict_types' => true,
         'is_null' => false,
         'void_return' => true,
         'concat_space' => ['spacing' => 'one'],
@@ -54,6 +55,9 @@ return (new PhpCsFixer\Config())
             'sort_algorithm' => 'length',
             'imports_order' => ['const', 'class', 'function']
         ],
+        'phpdoc_order' => [
+            'order' => ['param', 'return', 'throws'],
+        ],
         'single_line_after_imports' => true,
         'strict_comparison' => false, // TODO remove
         'echo_tag_syntax' => ['format' => 'short'],
@@ -89,12 +93,24 @@ return (new PhpCsFixer\Config())
         'php_unit_test_case_static_method_calls' => [
             'call_type' => 'this',
         ],
+        'php_unit_construct' => true,
+        // 'php_unit_dedicate_assert' => true,
+        'php_unit_dedicate_assert_internal_type' => true,
+        'php_unit_expectation' => true,
+        'php_unit_mock' => true,
+        'php_unit_mock_short_will_return' => true,
+        // 'php_unit_namespaced' => true,
+        'php_unit_no_expectation_annotation' => true,
         'native_constant_invocation' => false,
         'native_function_casing' => true,
         'native_function_invocation' => false,
         'native_function_type_declaration_casing' => true,
         'fopen_flags' => ['b_mode' => true],
         'get_class_to_class_keyword' => false, // TODO: as of php 8.0
+        'single_line_comment_spacing' => true,
+        'no_trailing_comma_in_singleline_function_call' => true,
+        'class_reference_name_casing' => true,
+        'no_unneeded_import_alias' => false,
     ])
     ->setFinder(
         PhpCsFixer\Finder::create()
