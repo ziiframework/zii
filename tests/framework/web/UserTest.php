@@ -29,7 +29,7 @@ use yii\base\BaseObject;
 use yii\rbac\PhpManager;
 use yii\web\CookieCollection;
 use yii\rbac\CheckAccessInterface;
-use yii\web\ForbiddenHttpException;
+use yii\web\LoginRequiredException;
 
 /**
  * @group web
@@ -38,7 +38,7 @@ class UserTest extends TestCase
 {
     /**
      * @var int virtual time to be returned by mocked time() function.
-     * Null means normal time() behavior.
+     *          Null means normal time() behavior.
      */
     public static $time;
 
@@ -237,6 +237,7 @@ class UserTest extends TestCase
             ],
         ];
         $this->mockWebApplication($appConfig);
+
         $id = Yii::$app->session->id;
 
         $user = Yii::$app->user;
@@ -292,7 +293,7 @@ class UserTest extends TestCase
 
         try {
             $user->loginRequired();
-        } catch (ForbiddenHttpException $e) {
+        } catch (LoginRequiredException $e) {
         }
         $this->assertFalse(Yii::$app->response->getIsRedirection());
         $this->assertSame($id, Yii::$app->session->id);
@@ -336,14 +337,14 @@ class UserTest extends TestCase
 
         try {
             $user->loginRequired();
-        } catch (ForbiddenHttpException $e) {
+        } catch (LoginRequiredException $e) {
         }
         $this->assertNotEquals('json-only', $user->getReturnUrl());
         $this->assertSame($id, Yii::$app->session->id);
 
         $this->reset();
         $_SERVER['HTTP_ACCEPT'] = 'text/json;q=0.1';
-        $this->expectException('yii\\web\\ForbiddenHttpException');
+        $this->expectException('yii\\web\\LoginRequiredException');
         $user->loginRequired();
         $this->assertSame($id, Yii::$app->session->id);
     }
@@ -367,7 +368,7 @@ class UserTest extends TestCase
         $this->mockWebApplication($appConfig);
         $this->reset();
         $_SERVER['HTTP_ACCEPT'] = 'text/json,q=0.1';
-        $this->expectException('yii\\web\\ForbiddenHttpException');
+        $this->expectException('yii\\web\\LoginRequiredException');
         Yii::$app->user->loginRequired();
     }
 
@@ -411,7 +412,7 @@ class UserTest extends TestCase
 
     public function testGetIdentityException(): void
     {
-        $session = $this->getMock('yii\web\Session');
+        $session = $this->createMock('yii\web\Session');
         $session->method('getHasSessionId')->willReturn(true);
         $session->method('get')->with($this->equalTo('__id'))->willReturn('1');
 
