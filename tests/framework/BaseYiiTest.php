@@ -76,7 +76,7 @@ class BaseYiiTest extends TestCase
 
     public function testPowered(): void
     {
-        $this->assertInternalType('string', Yii::powered());
+        $this->assertIsString(Yii::powered());
     }
 
     public function testCreateObjectArray(): void

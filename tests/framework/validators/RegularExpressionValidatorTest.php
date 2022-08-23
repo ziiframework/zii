@@ -53,7 +53,7 @@ class RegularExpressionValidatorTest extends TestCase
     public function testMessageSetOnInit(): void
     {
         $val = new RegularExpressionValidator(['pattern' => '/^[a-zA-Z0-9](\.)?([^\/]*)$/m']);
-        $this->assertInternalType('string', $val->message);
+        $this->assertIsString($val->message);
     }
 
     public function testInitException(): void
