@@ -606,6 +606,10 @@ abstract class BaseMigrateController extends Controller
             }
 
             foreach ($migrations as $version => $time) {
+                if (is_string($time) && is_numeric($time)) {
+                    $time = (int) $time;
+                }
+
                 $this->stdout("\t(" . date('Y-m-d H:i:s', $time) . ') ' . $version . "\n");
             }
         }
@@ -1024,7 +1028,7 @@ abstract class BaseMigrateController extends Controller
                 }
                 $path = $migrationPath . DIRECTORY_SEPARATOR . $file;
 
-                if (preg_match('/^(m(\d{6}_?\d{6})\D.*?)\.php$/is', $file, $matches) && is_file($path)) {
+                if (preg_match('/^([mM](\d{6}[_V]?\d{6})\D.*?)\.php$/is', $file, $matches) && is_file($path)) {
                     $class = $matches[1];
 
                     if (!empty($namespace)) {
