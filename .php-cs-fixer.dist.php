@@ -19,6 +19,7 @@ return (new PhpCsFixer\Config())
         '@Symfony:risky' => true,
         'yoda_style' => false,
         'is_null' => false,
+        'void_return' => true,
         'concat_space' => ['spacing' => 'one'],
         'header_comment' => ['header' => $header_comment_block, 'comment_type' => 'PHPDoc'], // TODO change to: comment_type => comment
         'heredoc_indentation' => false,
