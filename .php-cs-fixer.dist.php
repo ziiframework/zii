@@ -11,8 +11,6 @@ EOF;
 return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
     ->setRules([
-        '@PSR12' => true,
-        '@PSR12:risky' => true,
         '@PHP74Migration' => true,
         '@PHP74Migration:risky' => true,
         '@Symfony' => true,
@@ -21,6 +19,7 @@ return (new PhpCsFixer\Config())
         'declare_strict_types' => true,
         'is_null' => false,
         'void_return' => true,
+        'single_quote' => ['strings_containing_single_quote_chars' => false],
         'concat_space' => ['spacing' => 'one'],
         'header_comment' => ['header' => $header_comment_block, 'comment_type' => 'PHPDoc'], // TODO change to: comment_type => comment
         'heredoc_indentation' => false,
@@ -93,14 +92,14 @@ return (new PhpCsFixer\Config())
         'php_unit_test_case_static_method_calls' => [
             'call_type' => 'this',
         ],
-        'php_unit_construct' => true,
+        // 'php_unit_construct' => true,
         // 'php_unit_dedicate_assert' => true,
-        'php_unit_dedicate_assert_internal_type' => true,
+        // 'php_unit_dedicate_assert_internal_type' => true,
+        'php_unit_no_expectation_annotation' => true,
         'php_unit_expectation' => true,
         'php_unit_mock' => true,
         'php_unit_mock_short_will_return' => true,
         // 'php_unit_namespaced' => true,
-        'php_unit_no_expectation_annotation' => true,
         'native_constant_invocation' => false,
         'native_function_casing' => true,
         'native_function_invocation' => false,
@@ -124,6 +123,7 @@ return (new PhpCsFixer\Config())
             ->exclude('tests/data/console/migrate_create')
             ->exclude('tests/data/views')
             ->notName('add_columns_fk.php')
+            ->notName('typed_error.php')
             ->notName('DetailViewTest.php')
             ->notName('VarDumperTest.php')
             ->notName('MaskedInput.php')
