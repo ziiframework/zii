@@ -1,16 +1,16 @@
 <?php
 
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\base;
 
 use Exception;
-use ReflectionProperty;
 use Throwable;
+use ReflectionProperty;
 
 /**
  * ErrorException represents a PHP error.

@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\web;
@@ -26,12 +26,14 @@ class UrlNormalizerRedirectException extends \yii\base\Exception
      * @see \yii\helpers\Url::to()
      */
     public $url;
+
     /**
      * @var bool|string the URI scheme to use in the generated URL for redirection
      *
      * @see \yii\helpers\Url::to()
      */
     public $scheme;
+
     /**
      * @var int the HTTP status code
      */
