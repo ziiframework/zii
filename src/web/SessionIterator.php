@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,40 +7,39 @@ declare(strict_types=1);
 
 namespace yii\web;
 
-use Iterator;
-
 /**
  * SessionIterator implements an [[\Iterator|iterator]] for traversing session variables managed by [[Session]].
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
-class SessionIterator implements Iterator
+class SessionIterator implements \Iterator
 {
     /**
      * @var array list of keys in the map
      */
     private $_keys;
-
     /**
-     * @var mixed current key
+     * @var string|int|false current key
      */
     private $_key;
+
 
     /**
      * Constructor.
      */
     public function __construct()
     {
-        $this->_keys = array_keys($_SESSION);
+        $this->_keys = array_keys(isset($_SESSION) ? $_SESSION : []);
+        $this->rewind();
     }
 
     /**
      * Rewinds internal array pointer.
      * This method is required by the interface [[\Iterator]].
      */
-    public function rewind(): void
+    #[\ReturnTypeWillChange]
+    public function rewind()
     {
         $this->_key = reset($this->_keys);
     }
@@ -51,42 +47,43 @@ class SessionIterator implements Iterator
     /**
      * Returns the key of the current array element.
      * This method is required by the interface [[\Iterator]].
-     *
-     * @return mixed the key of the current array element
+     * @return string|int|null the key of the current array element
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
-        return $this->_key;
+        return $this->_key === false ? null : $this->_key;
     }
 
     /**
      * Returns the current array element.
      * This method is required by the interface [[\Iterator]].
-     *
      * @return mixed the current array element
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
-        return $_SESSION[$this->_key] ?? null;
+        return $this->_key !== false && isset($_SESSION[$this->_key]) ? $_SESSION[$this->_key] : null;
     }
 
     /**
      * Moves the internal pointer to the next array element.
      * This method is required by the interface [[\Iterator]].
      */
-    public function next(): void
+    #[\ReturnTypeWillChange]
+    public function next()
     {
         do {
             $this->_key = next($this->_keys);
-        } while (!isset($_SESSION[$this->_key]) && $this->_key !== false);
+        } while ($this->_key !== false && !isset($_SESSION[$this->_key]));
     }
 
     /**
      * Returns whether there is an element at current position.
      * This method is required by the interface [[\Iterator]].
-     *
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return $this->_key !== false;

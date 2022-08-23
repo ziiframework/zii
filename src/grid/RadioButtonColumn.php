@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,8 +8,8 @@ declare(strict_types=1);
 namespace yii\grid;
 
 use Closure;
-use yii\helpers\Html;
 use yii\base\InvalidConfigException;
+use yii\helpers\Html;
 
 /**
  * RadioButtonColumn displays a column of radio buttons in a grid view.
@@ -35,7 +32,6 @@ use yii\base\InvalidConfigException;
  * ```
  *
  * @author Kirk Hansen <hanski07@luther.edu>
- *
  * @since 2.0.11
  */
 class RadioButtonColumn extends Column
@@ -44,9 +40,8 @@ class RadioButtonColumn extends Column
      * @var string the name of the input radio button input fields.
      */
     public $name = 'radioButtonSelection';
-
     /**
-     * @var array|Closure the HTML attributes for the radio buttons. This can either be an array of
+     * @var array|\Closure the HTML attributes for the radio buttons. This can either be an array of
      * attributes or an anonymous function ([[Closure]]) returning such an array.
      *
      * The signature of the function should be as follows: `function ($model, $key, $index, $column)`
@@ -67,15 +62,14 @@ class RadioButtonColumn extends Column
      */
     public $radioOptions = [];
 
+
     /**
      * {@inheritdoc}
-     *
      * @throws \yii\base\InvalidConfigException if [[name]] is not set.
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
-
         if (empty($this->name)) {
             throw new InvalidConfigException('The "name" property must be set.');
         }
@@ -94,13 +88,11 @@ class RadioButtonColumn extends Column
             $options = call_user_func($this->radioOptions, $model, $key, $index, $this);
         } else {
             $options = $this->radioOptions;
-
             if (!isset($options['value'])) {
                 $options['value'] = is_array($key) ? json_encode($key, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) : $key;
             }
         }
-        $checked = $options['checked'] ?? false;
-
+        $checked = isset($options['checked']) ? $options['checked'] : false;
         return Html::radio($this->name, $checked, $options);
     }
 }

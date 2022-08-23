@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -14,12 +11,12 @@ use yii\test\Fixture;
 
 class SecondFixture extends Fixture
 {
-    public function load(): void
+    public function load()
     {
         FixtureStorage::$secondFixtureData[] = 'some data set for second fixture';
     }
 
-    public function unload(): void
+    public function unload()
     {
         FixtureStorage::$secondFixtureData = [];
     }

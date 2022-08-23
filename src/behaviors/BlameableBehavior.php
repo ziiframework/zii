@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,7 +8,6 @@ declare(strict_types=1);
 namespace yii\behaviors;
 
 use Yii;
-use Closure;
 use yii\db\BaseActiveRecord;
 
 /**
@@ -56,7 +52,6 @@ use yii\db\BaseActiveRecord;
  * @author Luciano Baraglia <luciano.baraglia@gmail.com>
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @author Alexander Kochetov <creocoder@gmail.com>
- *
  * @since 2.0
  */
 class BlameableBehavior extends AttributeBehavior
@@ -66,31 +61,28 @@ class BlameableBehavior extends AttributeBehavior
      * Set this property to false if you do not want to record the creator ID.
      */
     public $createdByAttribute = 'created_by';
-
     /**
      * @var string the attribute that will receive current user ID value
      * Set this property to false if you do not want to record the updater ID.
      */
     public $updatedByAttribute = 'updated_by';
-
     /**
      * {@inheritdoc}
      *
      * In case, when the property is `null`, the value of `Yii::$app->user->id` will be used as the value.
      */
     public $value;
-
     /**
      * @var mixed Default value for cases when the user is guest
-     *
      * @since 2.0.14
      */
     public $defaultValue;
 
+
     /**
      * {@inheritdoc}
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
 
@@ -111,7 +103,6 @@ class BlameableBehavior extends AttributeBehavior
     {
         if ($this->value === null && Yii::$app->has('user')) {
             $userId = Yii::$app->get('user')->id;
-
             if ($userId === null) {
                 return $this->getDefaultValue($event);
             }
@@ -125,17 +116,14 @@ class BlameableBehavior extends AttributeBehavior
     }
 
     /**
-     * Get default value.
-     *
+     * Get default value
      * @param \yii\base\Event $event
-     *
      * @return array|mixed
-     *
      * @since 2.0.14
      */
     protected function getDefaultValue($event)
     {
-        if ($this->defaultValue instanceof Closure || (is_array($this->defaultValue) && is_callable($this->defaultValue))) {
+        if ($this->defaultValue instanceof \Closure || (is_array($this->defaultValue) && is_callable($this->defaultValue))) {
             return call_user_func($this->defaultValue, $event);
         }
 

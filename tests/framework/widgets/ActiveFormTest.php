@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,9 +7,9 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\widgets;
 
-use yii\web\View;
-use yii\base\Widget;
 use yii\base\DynamicModel;
+use yii\base\Widget;
+use yii\web\View;
 use yii\widgets\ActiveForm;
 
 /**
@@ -20,13 +17,13 @@ use yii\widgets\ActiveForm;
  */
 class ActiveFormTest extends \yiiunit\TestCase
 {
-    protected function setUp(): void
+    protected function setUp()
     {
         parent::setUp();
         $this->mockApplication();
     }
 
-    public function testBooleanAttributes(): void
+    public function testBooleanAttributes()
     {
         $o = ['template' => '{input}'];
 
@@ -41,7 +38,7 @@ class ActiveFormTest extends \yiiunit\TestCase
 <input type="email" id="dynamicmodel-name" class="form-control" name="DynamicModel[name]" required>
 </div>
 EOF
-            , (string) $form->field($model, 'name', $o)->input('email', ['required' => true]));
+, (string) $form->field($model, 'name', $o)->input('email', ['required' => true]));
 
         $this->assertEqualsWithoutLE(<<<'EOF'
 <div class="form-group field-dynamicmodel-name">
@@ -49,6 +46,7 @@ EOF
 </div>
 EOF
             , (string) $form->field($model, 'name', $o)->input('email', ['required' => false]));
+
 
         $this->assertEqualsWithoutLE(<<<'EOF'
 <div class="form-group field-dynamicmodel-name">
@@ -58,7 +56,7 @@ EOF
             , (string) $form->field($model, 'name', $o)->input('email', ['required' => 'test']));
     }
 
-    public function testIssue5356(): void
+    public function testIssue5356()
     {
         $o = ['template' => '{input}'];
 
@@ -79,10 +77,10 @@ EOF
 </select>
 </div>
 EOF
-            , (string) $form->field($model, 'categories', $o)->listBox(['apple', 'banana', 'avocado'], ['multiple' => true]));
+             , (string) $form->field($model, 'categories', $o)->listBox(['apple', 'banana', 'avocado'], ['multiple' => true]));
     }
 
-    public function testOutputBuffering(): void
+    public function testOutputBuffering()
     {
         $obLevel = ob_get_level();
         ob_start();
@@ -107,10 +105,10 @@ EOF
 </div>
 </form>
 HTML
-            , $content);
+, $content);
     }
 
-    public function testRegisterClientScript(): void
+    public function testRegisterClientScript()
     {
         $this->mockWebApplication();
         $_SERVER['REQUEST_URI'] = 'http://example.com/';
@@ -124,7 +122,7 @@ HTML
 
         Widget::$counter = 0;
         ob_start();
-        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
+        ob_implicit_flush(false);
 
         $form = ActiveForm::begin(['view' => $view, 'validateOnSubmit' => false]);
         $form->field($model, 'name');
@@ -140,17 +138,19 @@ HTML
     /**
      * @see https://github.com/yiisoft/yii2/issues/15536
      */
-    public function testShouldTriggerInitEvent(): void
+    public function testShouldTriggerInitEvent()
     {
         $initTriggered = false;
         ob_start();
-        $form = ActiveForm::begin([
+        $form = ActiveForm::begin(
+            [
                 'action' => '/something',
                 'enableClientScript' => false,
-                'on init' => static function () use (&$initTriggered): void {
+                'on init' => function () use (&$initTriggered) {
                     $initTriggered = true;
-                },
-            ]);
+                }
+            ]
+        );
         ActiveForm::end();
         ob_end_clean();
         $this->assertTrue($initTriggered);
@@ -160,7 +160,7 @@ HTML
      * @see https://github.com/yiisoft/yii2/issues/15476
      * @see https://github.com/yiisoft/yii2/issues/16892
      */
-    public function testValidationStateOnInput(): void
+    public function testValidationStateOnInput()
     {
         $model = new DynamicModel(['name']);
         $model->addError('name', 'I have an error!');
@@ -181,7 +181,8 @@ HTML
 <div class="help-block">I have an error!</div>
 </div>
 EOF
-            , (string) $form->field($model, 'name'));
+        , (string) $form->field($model, 'name'));
+
 
         $this->assertEqualsWithoutLE(<<<'EOF'
 <div class="form-group field-dynamicmodel-name">

@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,8 +8,8 @@ declare(strict_types=1);
 namespace yiiunit\framework\web\session;
 
 use Yii;
-use yii\web\CacheSession;
 use yii\caching\FileCache;
+use yii\web\CacheSession;
 
 /**
  * @group web
@@ -21,14 +18,14 @@ class CacheSessionTest extends \yiiunit\TestCase
 {
     use SessionTestTrait;
 
-    protected function setUp(): void
+    protected function setUp()
     {
         parent::setUp();
         $this->mockApplication();
         Yii::$app->set('cache', new FileCache());
     }
 
-    public function testCacheSession(): void
+    public function testCacheSession()
     {
         $session = new CacheSession();
 
@@ -38,7 +35,7 @@ class CacheSessionTest extends \yiiunit\TestCase
         $this->assertEquals('', $session->readSession('test'));
     }
 
-    public function testInvalidCache(): void
+    public function testInvalidCache()
     {
         $this->expectException('\Exception');
         new CacheSession(['cache' => 'invalid']);
@@ -47,7 +44,7 @@ class CacheSessionTest extends \yiiunit\TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/13537
      */
-    public function testNotWrittenSessionDestroying(): void
+    public function testNotWrittenSessionDestroying()
     {
         $session = new CacheSession();
 
@@ -57,12 +54,12 @@ class CacheSessionTest extends \yiiunit\TestCase
         $this->assertTrue($session->destroySession($session->getId()));
     }
 
-    public function testInitUseStrictMode(): void
+    public function testInitUseStrictMode()
     {
         $this->initStrictModeTest(CacheSession::className());
     }
 
-    public function testUseStrictMode(): void
+    public function testUseStrictMode()
     {
         $this->useStrictModeTest(CacheSession::className());
     }

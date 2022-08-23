@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,6 +8,7 @@ declare(strict_types=1);
 namespace yiiunit\framework\console;
 
 use yii\console\controllers\HelpController;
+use yii\helpers\Console;
 
 class FakeHelpControllerWithoutOutput extends HelpController
 {

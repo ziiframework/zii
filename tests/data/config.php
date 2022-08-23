@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -23,6 +20,12 @@ declare(strict_types=1);
  */
 $config = [
     'databases' => [
+        'cubrid' => [
+            'dsn' => 'cubrid:dbname=demodb;host=localhost;port=33000',
+            'username' => 'dba',
+            'password' => '',
+            'fixture' => __DIR__ . '/cubrid.sql',
+        ],
         'mysql' => [
             'dsn' => 'mysql:host=127.0.0.1;dbname=yiitest',
             'username' => 'root',
@@ -44,6 +47,12 @@ $config = [
             'username' => 'postgres',
             'password' => 'postgres',
             'fixture' => __DIR__ . '/postgres.sql',
+        ],
+        'oci' => [
+            'dsn' => 'oci:dbname=localhost/XE;charset=AL32UTF8;',
+            'username' => 'system',
+            'password' => 'oracle',
+            'fixture' => __DIR__ . '/oci.sql',
         ],
     ],
 ];

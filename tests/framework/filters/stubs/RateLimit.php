@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -42,6 +39,7 @@ class RateLimit extends BaseObject implements RateLimitInterface
 
         return $this;
     }
+
 
     public function saveAllowance($request, $action, $allowance, $timestamp)
     {

@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -15,7 +12,6 @@ namespace yii\db;
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @author Carsten Brandt <mail@cebe.cc>
- *
  * @since 2.0
  */
 trait ActiveQueryTrait
@@ -24,29 +20,25 @@ trait ActiveQueryTrait
      * @var string the name of the ActiveRecord class.
      */
     public $modelClass;
-
     /**
      * @var array a list of relations that this query should be performed with
      */
     public $with;
-
     /**
      * @var bool whether to return each record as an array. If false (default), an object
      * of [[modelClass]] will be created to represent each record.
      */
     public $asArray;
 
+
     /**
      * Sets the [[asArray]] property.
-     *
      * @param bool $value whether to return the query results in terms of arrays instead of Active Records.
-     *
      * @return $this the query object itself
      */
     public function asArray($value = true)
     {
         $this->asArray = $value;
-
         return $this;
     }
 
@@ -90,7 +82,6 @@ trait ActiveQueryTrait
     public function with()
     {
         $with = func_get_args();
-
         if (isset($with[0]) && is_array($with[0])) {
             // the parameter is given as an array
             $with = $with[0];
@@ -114,11 +105,8 @@ trait ActiveQueryTrait
 
     /**
      * Converts found rows into model instances.
-     *
      * @param array $rows
-     *
      * @return array|ActiveRecord[]
-     *
      * @since 2.0.11
      */
     protected function createModels($rows)
@@ -129,29 +117,25 @@ trait ActiveQueryTrait
             $models = [];
             /* @var $class ActiveRecord */
             $class = $this->modelClass;
-
             foreach ($rows as $row) {
                 $model = $class::instantiate($row);
                 $modelClass = get_class($model);
                 $modelClass::populateRecord($model, $row);
                 $models[] = $model;
             }
-
             return $models;
         }
     }
 
     /**
      * Finds records corresponding to one or multiple relations and populates them into the primary models.
-     *
      * @param array $with a list of relations that this query should be performed with. Please
      * refer to [[with()]] for details about specifying this parameter.
      * @param array|ActiveRecord[] $models the primary models (can be either AR instances or arrays)
      */
-    public function findWith($with, &$models): void
+    public function findWith($with, &$models)
     {
         $primaryModel = reset($models);
-
         if (!$primaryModel instanceof ActiveRecordInterface) {
             /* @var $modelClass ActiveRecordInterface */
             $modelClass = $this->modelClass;
@@ -171,19 +155,16 @@ trait ActiveQueryTrait
     /**
      * @param ActiveRecord $model
      * @param array $with
-     *
      * @return ActiveQueryInterface[]
      */
     private function normalizeRelations($model, $with)
     {
         $relations = [];
-
         foreach ($with as $name => $callback) {
             if (is_int($name)) {
                 $name = $callback;
                 $callback = null;
             }
-
             if (($pos = strpos($name, '.')) !== false) {
                 // with sub-relations
                 $childName = substr($name, $pos + 1);

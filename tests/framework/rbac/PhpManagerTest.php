@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -12,9 +9,7 @@ namespace yii\rbac;
 
 /**
  * Mock for the filemtime() function for rbac classes. Avoid random test fails.
- *
  * @param string $file
- *
  * @return int
  */
 function filemtime($file)
@@ -24,7 +19,6 @@ function filemtime($file)
 
 /**
  * Mock for the time() function for rbac classes. Avoid random test fails.
- *
  * @return int
  */
 function time()
@@ -38,7 +32,6 @@ use Yii;
 
 /**
  * @group rbac
- *
  * @property ExposedPhpManager $auth
  */
 class PhpManagerTest extends ManagerTestCase
@@ -61,7 +54,7 @@ class PhpManagerTest extends ManagerTestCase
         return Yii::$app->getRuntimePath() . '/rbac-rules.php';
     }
 
-    protected function removeDataFiles(): void
+    protected function removeDataFiles()
     {
         @unlink($this->getItemFile());
         @unlink($this->getAssignmentFile());
@@ -81,7 +74,7 @@ class PhpManagerTest extends ManagerTestCase
         ]);
     }
 
-    protected function setUp(): void
+    protected function setUp()
     {
         static::$filemtime = null;
         static::$time = null;
@@ -96,7 +89,7 @@ class PhpManagerTest extends ManagerTestCase
         $this->auth = $this->createManager();
     }
 
-    protected function tearDown(): void
+    protected function tearDown()
     {
         $this->removeDataFiles();
         static::$filemtime = null;
@@ -104,7 +97,7 @@ class PhpManagerTest extends ManagerTestCase
         parent::tearDown();
     }
 
-    public function testSaveLoad(): void
+    public function testSaveLoad()
     {
         static::$time = static::$filemtime = \time();
 
@@ -124,7 +117,7 @@ class PhpManagerTest extends ManagerTestCase
         $this->assertEquals($rules, $this->auth->rules);
     }
 
-    public function testUpdateItemName(): void
+    public function testUpdateItemName()
     {
         $this->prepareData();
 
@@ -134,7 +127,7 @@ class PhpManagerTest extends ManagerTestCase
         $this->assertTrue($this->auth->update($name, $permission), 'You should be able to update name.');
     }
 
-    public function testUpdateDescription(): void
+    public function testUpdateDescription()
     {
         $this->prepareData();
         $name = 'readPost';
@@ -143,10 +136,11 @@ class PhpManagerTest extends ManagerTestCase
         $this->assertTrue($this->auth->update($name, $permission), 'You should be able to save w/o changing name.');
     }
 
-    public function testOverwriteName(): void
+    /**
+     * @expectedException \yii\base\InvalidParamException
+     */
+    public function testOverwriteName()
     {
-        $this->expectException('\yii\base\InvalidArgumentException');
-
         $this->prepareData();
         $name = 'readPost';
         $permission = $this->auth->getPermission($name);
@@ -154,17 +148,17 @@ class PhpManagerTest extends ManagerTestCase
         $this->auth->update($name, $permission);
     }
 
-    public function testSaveAssignments(): void
+    public function testSaveAssignments()
     {
         $this->auth->removeAll();
         $role = $this->auth->createRole('Admin');
         $this->auth->add($role);
         $this->auth->assign($role, 13);
-        $this->assertStringContainsString('Admin', file_get_contents($this->getAssignmentFile()));
+        $this->assertContains('Admin', file_get_contents($this->getAssignmentFile()));
         $role->name = 'NewAdmin';
         $this->auth->update('Admin', $role);
-        $this->assertStringContainsString('NewAdmin', file_get_contents($this->getAssignmentFile()));
+        $this->assertContains('NewAdmin', file_get_contents($this->getAssignmentFile()));
         $this->auth->remove($role);
-        $this->assertStringNotContainsString('NewAdmin', file_get_contents($this->getAssignmentFile()));
+        $this->assertNotContains('NewAdmin', file_get_contents($this->getAssignmentFile()));
     }
 }

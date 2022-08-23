@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,20 +8,19 @@ declare(strict_types=1);
 namespace yii\filters;
 
 use Closure;
-use yii\web\User;
 use yii\base\Action;
-use yii\web\Request;
 use yii\base\Component;
 use yii\base\Controller;
+use yii\base\InvalidConfigException;
 use yii\helpers\IpHelper;
 use yii\helpers\StringHelper;
-use yii\base\InvalidConfigException;
+use yii\web\Request;
+use yii\web\User;
 
 /**
  * This class represents an access rule defined by the [[AccessControl]] action filter.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class AccessRule extends Component
@@ -32,16 +28,14 @@ class AccessRule extends Component
     /**
      * @var bool whether this is an 'allow' rule or 'deny' rule.
      */
-    public $allow;
-
+    public $allow = false;
     /**
-     * @var array list of action IDs that this rule applies to. The comparison is case-sensitive.
+     * @var array|null list of action IDs that this rule applies to. The comparison is case-sensitive.
      * If not set or empty, it means this rule applies to all actions.
      */
     public $actions;
-
     /**
-     * @var array list of the controller IDs that this rule applies to.
+     * @var array|null list of the controller IDs that this rule applies to.
      *
      * The comparison uses [[\yii\base\Controller::uniqueId]], so each controller ID is prefixed
      * with the module ID (if any). For a `product` controller in the application, you would specify
@@ -55,9 +49,8 @@ class AccessRule extends Component
      * Since version 2.0.12 controller IDs can be specified as wildcards, e.g. `module/*`.
      */
     public $controllers;
-
     /**
-     * @var array list of roles that this rule applies to (requires properly configured User component).
+     * @var array|null list of roles that this rule applies to (requires properly configured User component).
      * Two special roles are recognized, and they are checked via [[User::isGuest]]:
      *
      * - `?`: matches a guest user (not authenticated yet)
@@ -69,24 +62,20 @@ class AccessRule extends Component
      * Note that it is preferred to check for permissions instead.
      *
      * If this property is not set or empty, it means this rule applies regardless of roles.
-     *
      * @see permissions
      * @see roleParams
      */
     public $roles;
-
     /**
-     * @var array list of RBAC (Role-Based Access Control) permissions that this rules applies to.
+     * @var array|null list of RBAC (Role-Based Access Control) permissions that this rules applies to.
      * [[User::can()]] will be called to check access.
      *
      * If this property is not set or empty, it means this rule applies regardless of permissions.
-     *
      * @since 2.0.12
      * @see roles
      * @see roleParams
      */
     public $permissions;
-
     /**
      * @var array|Closure parameters to pass to the [[User::can()]] function for evaluating
      * user permissions in [[$roles]].
@@ -121,28 +110,23 @@ class AccessRule extends Component
      * @since 2.0.12
      */
     public $roleParams = [];
-
     /**
-     * @var array list of user IP addresses that this rule applies to. An IP address
+     * @var array|null list of user IP addresses that this rule applies to. An IP address
      * can contain the wildcard `*` at the end so that it matches IP addresses with the same prefix.
      * For example, '192.168.*' matches all IP addresses in the segment '192.168.'.
      * It may also contain a pattern/mask like '172.16.0.0/12' which would match all IPs from the
      * 20-bit private network block in RFC1918.
      * If not set or empty, it means this rule applies to all IP addresses.
-     *
      * @see Request::userIP
      * @see IpHelper::inRange
      */
     public $ips;
-
     /**
-     * @var array list of request methods (e.g. `GET`, `POST`) that this rule applies to.
+     * @var array|null list of request methods (e.g. `GET`, `POST`) that this rule applies to.
      * If not set or empty, it means this rule applies to all request methods.
-     *
      * @see \yii\web\Request::method
      */
     public $verbs;
-
     /**
      * @var callable a callback that will be called to determine if the rule should be applied.
      * The signature of the callback should be as follows:
@@ -155,9 +139,8 @@ class AccessRule extends Component
      * The callback should return a boolean value indicating whether this rule should be applied.
      */
     public $matchCallback;
-
     /**
-     * @var callable a callback that will be called if this rule determines the access to
+     * @var callable|null a callback that will be called if this rule determines the access to
      * the current action should be denied. This is the case when this rule matches
      * and [[$allow]] is set to `false`.
      *
@@ -172,18 +155,16 @@ class AccessRule extends Component
      * ```
      *
      * where `$rule` is this rule, and `$action` is the current [[Action|action]] object.
-     *
      * @see AccessControl::$denyCallback
      */
     public $denyCallback;
 
+
     /**
      * Checks whether the Web user is allowed to perform the specified action.
-     *
      * @param Action $action the action to be performed
      * @param User|false $user the user object or `false` in case of detached User component
      * @param Request $request
-     *
      * @return bool|null `true` if the user is allowed, `false` if the user is denied, `null` if the rule does not apply to the user
      */
     public function allows($action, $user, $request)
@@ -203,7 +184,6 @@ class AccessRule extends Component
 
     /**
      * @param Action $action the action
-     *
      * @return bool whether the rule applies to the action
      */
     protected function matchAction($action)
@@ -213,7 +193,6 @@ class AccessRule extends Component
 
     /**
      * @param Controller $controller the controller
-     *
      * @return bool whether the rule applies to the controller
      */
     protected function matchController($controller)
@@ -223,7 +202,6 @@ class AccessRule extends Component
         }
 
         $id = $controller->getUniqueId();
-
         foreach ($this->controllers as $pattern) {
             if (StringHelper::matchWildcard($pattern, $id)) {
                 return true;
@@ -235,9 +213,7 @@ class AccessRule extends Component
 
     /**
      * @param User $user the user object
-     *
      * @return bool whether the rule applies to the role
-     *
      * @throws InvalidConfigException if User component is detached
      */
     protected function matchRole($user)
@@ -269,7 +245,6 @@ class AccessRule extends Component
                 if (!isset($roleParams)) {
                     $roleParams = !is_array($this->roleParams) && is_callable($this->roleParams) ? call_user_func($this->roleParams, $this) : $this->roleParams;
                 }
-
                 if ($user->can($item, $roleParams)) {
                     return true;
                 }
@@ -281,7 +256,6 @@ class AccessRule extends Component
 
     /**
      * @param string|null $ip the IP address
-     *
      * @return bool whether the rule applies to the IP address
      */
     protected function matchIP($ip)
@@ -289,16 +263,19 @@ class AccessRule extends Component
         if (empty($this->ips)) {
             return true;
         }
-
         foreach ($this->ips as $rule) {
             if (
                 $rule === '*'
                 || $rule === $ip
-                || ($ip !== null
+                || (
+                    $ip !== null
                     && ($pos = strpos($rule, '*')) !== false
-                    && strncmp($ip, $rule, $pos) === 0)
-                || (strpos($rule, '/') !== false
-                    && IpHelper::inRange($ip, $rule) === true)
+                    && strncmp($ip, $rule, $pos) === 0
+                )
+                || (
+                    strpos($rule, '/') !== false
+                    && IpHelper::inRange($ip, $rule) === true
+                )
             ) {
                 return true;
             }
@@ -309,7 +286,6 @@ class AccessRule extends Component
 
     /**
      * @param string $verb the request method.
-     *
      * @return bool whether the rule applies to the request
      */
     protected function matchVerb($verb)
@@ -319,7 +295,6 @@ class AccessRule extends Component
 
     /**
      * @param Action $action the action to be performed
-     *
      * @return bool whether the rule should be applied
      */
     protected function matchCustom($action)

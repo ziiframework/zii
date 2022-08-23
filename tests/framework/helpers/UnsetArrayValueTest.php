@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,15 +7,15 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\helpers;
 
-use yiiunit\TestCase;
 use yii\helpers\UnsetArrayValue;
+use yiiunit\TestCase;
 
 /**
  * @group helpers
  */
 class UnsetArrayValueTest extends TestCase
 {
-    public function testSetState(): void
+    public function testSetState()
     {
         $object = new UnsetArrayValue();
         $result = $object::__set_state([]);

@@ -57,7 +57,7 @@ describe('yii.validation', function () {
             };
         }
 
-        var path = 'src/assets/yii.validation.js';
+        var path = 'framework/assets/yii.validation.js';
 
         if (code === undefined) {
             code = fs.readFileSync(path);

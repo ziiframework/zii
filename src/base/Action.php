@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -36,7 +33,6 @@ use Yii;
  * @property-read string $uniqueId The unique ID of this action among the whole application.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class Action extends Component
@@ -45,11 +41,11 @@ class Action extends Component
      * @var string ID of the action
      */
     public $id;
-
     /**
      * @var Controller|\yii\web\Controller|\yii\console\Controller the controller that owns this action
      */
     public $controller;
+
 
     /**
      * Constructor.
@@ -80,23 +76,19 @@ class Action extends Component
      * This method is mainly invoked by the controller.
      *
      * @param array $params the parameters to be bound to the action's run() method.
-     *
      * @return mixed the result of the action
-     *
      * @throws InvalidConfigException if the action class does not have a run() method
      */
     public function runWithParams($params)
     {
         if (!method_exists($this, 'run')) {
-            throw new InvalidConfigException(static::class . ' must define a "run()" method.');
+            throw new InvalidConfigException(get_class($this) . ' must define a "run()" method.');
         }
         $args = $this->controller->bindActionParams($this, $params);
-        Yii::debug('Running action: ' . static::class . '::run(), invoked by ' . get_class($this->controller), __METHOD__);
-
+        Yii::debug('Running action: ' . get_class($this) . '::run(), invoked by '  . get_class($this->controller), __METHOD__);
         if (Yii::$app->requestedParams === null) {
             Yii::$app->requestedParams = $args;
         }
-
         if ($this->beforeRun()) {
             $result = call_user_func_array([$this, 'run'], $args);
             $this->afterRun();
@@ -123,7 +115,7 @@ class Action extends Component
      * This method is called right after `run()` is executed.
      * You may override this method to do post-processing work for the action run.
      */
-    protected function afterRun(): void
+    protected function afterRun()
     {
     }
 }

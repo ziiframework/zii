@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,16 +7,17 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\validators;
 
-use yiiunit\TestCase;
+use yii\base\Model;
 use yii\validators\RequiredValidator;
 use yiiunit\data\validators\models\FakedValidationModel;
+use yiiunit\TestCase;
 
 /**
  * @group validators
  */
 class RequiredValidatorTest extends TestCase
 {
-    protected function setUp(): void
+    protected function setUp()
     {
         parent::setUp();
 
@@ -27,7 +25,7 @@ class RequiredValidatorTest extends TestCase
         $this->destroyApplication();
     }
 
-    public function testValidateValueWithDefaults(): void
+    public function testValidateValueWithDefaults()
     {
         $val = new RequiredValidator();
         $this->assertFalse($val->validate(null));
@@ -36,7 +34,7 @@ class RequiredValidatorTest extends TestCase
         $this->assertTrue($val->validate(['with', 'elements']));
     }
 
-    public function testValidateValueWithValue(): void
+    public function testValidateValueWithValue()
     {
         $val = new RequiredValidator(['requiredValue' => 55]);
         $this->assertTrue($val->validate(55));
@@ -51,7 +49,7 @@ class RequiredValidatorTest extends TestCase
         $this->assertFalse($val->validate(true));
     }
 
-    public function testValidateAttribute(): void
+    public function testValidateAttribute()
     {
         // empty req-value
         $val = new RequiredValidator();
@@ -68,5 +66,34 @@ class RequiredValidatorTest extends TestCase
         $m = FakedValidationModel::createWithAttributes(['attr_val' => 55]);
         $val->validateAttribute($m, 'attr_val');
         $this->assertFalse($m->hasErrors('attr_val'));
+    }
+
+    public function testErrorClientMessage()
+    {
+        $validator = new RequiredValidator(['message' => '<strong>error</strong> for {attribute}']);
+
+        $obj = new ModelForReqValidator();
+
+        $this->assertEquals(
+            'yii.validation.required(value, messages, {"message":"\u003Cstrong\u003Eerror\u003C\/strong\u003E for \u003Cb\u003EAttr\u003C\/b\u003E"});',
+            $validator->clientValidateAttribute($obj, 'attr', new ViewStub())
+        );
+    }
+}
+
+class ModelForReqValidator extends Model
+{
+    public $attr;
+
+    public function rules()
+    {
+        return [
+            [['attr'], 'required'],
+        ];
+    }
+
+    public function attributeLabels()
+    {
+        return ['attr' => '<b>Attr</b>'];
     }
 }

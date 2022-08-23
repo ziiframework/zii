@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,9 +7,9 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\base;
 
-use yiiunit\TestCase;
 use yii\base\Behavior;
 use yii\base\Component;
+use yiiunit\TestCase;
 
 class BarClass extends Component
 {
@@ -58,15 +55,15 @@ class BarBehavior extends Behavior
         return parent::hasMethod($name);
     }
 
-    public function attach($owner): void
+    public function attach($owner)
     {
-        ++self::$attachCount;
+        self::$attachCount++;
         parent::attach($owner);
     }
 
-    public function detach(): void
+    public function detach()
     {
-        ++self::$detachCount;
+        self::$detachCount++;
         parent::detach();
     }
 }
@@ -76,20 +73,20 @@ class BarBehavior extends Behavior
  */
 class BehaviorTest extends TestCase
 {
-    protected function setUp(): void
+    protected function setUp()
     {
         parent::setUp();
         $this->mockApplication();
     }
 
-    protected function tearDown(): void
+    protected function tearDown()
     {
         parent::tearDown();
         gc_enable();
         gc_collect_cycles();
     }
 
-    public function testAttachAndAccessingWithName(): void
+    public function testAttachAndAccessingWithName()
     {
         BarBehavior::$attachCount = 0;
         BarBehavior::$detachCount = 0;
@@ -111,7 +108,7 @@ class BehaviorTest extends TestCase
         $this->assertEquals('reattached', $bar->behaviorProperty);
     }
 
-    public function testAttachAndAccessingAnonymous(): void
+    public function testAttachAndAccessingAnonymous()
     {
         BarBehavior::$attachCount = 0;
         BarBehavior::$detachCount = 0;
@@ -125,7 +122,7 @@ class BehaviorTest extends TestCase
         $this->assertEquals('behavior method', $bar->behaviorMethod());
     }
 
-    public function testAutomaticAttach(): void
+    public function testAutomaticAttach()
     {
         BarBehavior::$attachCount = 0;
         BarBehavior::$detachCount = 0;
@@ -139,7 +136,7 @@ class BehaviorTest extends TestCase
         $this->assertEquals(0, BarBehavior::$detachCount);
     }
 
-    public function testMagicMethods(): void
+    public function testMagicMethods()
     {
         $bar = new BarClass();
         $behavior = new BarBehavior();
@@ -152,7 +149,7 @@ class BehaviorTest extends TestCase
         $this->assertEquals('Magic Behavior Method Result!', $bar->magicBehaviorMethod());
     }
 
-    public function testCallUnknownMethod(): void
+    public function testCallUnknownMethod()
     {
         $bar = new BarClass();
         $behavior = new BarBehavior();

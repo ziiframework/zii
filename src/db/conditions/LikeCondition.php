@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -16,17 +13,17 @@ use yii\base\InvalidArgumentException;
  * Class LikeCondition represents a `LIKE` condition.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
- *
  * @since 2.0.14
  */
 class LikeCondition extends SimpleCondition
 {
     /**
-     * @var array|false map of chars to their replacements, false if characters should not be escaped
+     * @var array|null|false map of chars to their replacements, false if characters should not be escaped
      * or either null or empty array if escaping is condition builder responsibility.
      * By default it's set to `null`.
      */
     protected $escapingReplacements;
+
 
     /**
      * @param string $column the column name.
@@ -48,7 +45,7 @@ class LikeCondition extends SimpleCondition
      * should be applied. Note that when using an escape mapping (or the third operand is not provided),
      * the values will be automatically enclosed within a pair of percentage characters.
      */
-    public function setEscapingReplacements($escapingReplacements): void
+    public function setEscapingReplacements($escapingReplacements)
     {
         $this->escapingReplacements = $escapingReplacements;
     }
@@ -63,7 +60,6 @@ class LikeCondition extends SimpleCondition
 
     /**
      * {@inheritdoc}
-     *
      * @throws InvalidArgumentException if wrong number of operands have been given.
      */
     public static function fromArrayDefinition($operator, $operands)
@@ -73,7 +69,6 @@ class LikeCondition extends SimpleCondition
         }
 
         $condition = new static($operands[0], $operator, $operands[1]);
-
         if (isset($operands[2])) {
             $condition->escapingReplacements = $operands[2];
         }

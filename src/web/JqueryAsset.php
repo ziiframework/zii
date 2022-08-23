@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,10 +8,9 @@ declare(strict_types=1);
 namespace yii\web;
 
 /**
- * This asset bundle provides the [jQuery](http://jquery.com/) JavaScript library.
+ * This asset bundle provides the [jQuery](https://jquery.com/) JavaScript library.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class JqueryAsset extends AssetBundle

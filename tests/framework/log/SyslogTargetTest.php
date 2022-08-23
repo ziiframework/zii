@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -9,6 +6,7 @@ declare(strict_types=1);
  */
 
 namespace yii\log {
+
     function openlog()
     {
         return \yiiunit\framework\log\SyslogTargetTest::openlog(func_get_args());
@@ -26,10 +24,11 @@ namespace yii\log {
 }
 
 namespace yiiunit\framework\log {
+
+    use PHPUnit_Framework_MockObject_MockObject;
+    use yii\helpers\VarDumper;
     use yii\log\Logger;
     use yiiunit\TestCase;
-    use yii\helpers\VarDumper;
-    use PHPUnit_Framework_MockObject_MockObject;
 
     /**
      * Class SyslogTargetTest.
@@ -53,7 +52,7 @@ namespace yiiunit\framework\log {
         /**
          * Set up syslogTarget as the mock object.
          */
-        protected function setUp(): void
+        protected function setUp()
         {
             $this->syslogTarget = $this->getMockBuilder('yii\\log\\SyslogTarget')
                 ->setMethods(['getMessagePrefix'])
@@ -63,7 +62,7 @@ namespace yiiunit\framework\log {
         /**
          * @covers \yii\log\SyslogTarget::export()
          */
-        public function testExport(): void
+        public function testExport()
         {
             $identity = 'identity string';
             $options = LOG_ODELAY | LOG_PID;
@@ -88,11 +87,23 @@ namespace yiiunit\framework\log {
 
             $syslogTarget->expects($this->once())
                 ->method('openlog')
-                ->with($this->equalTo($identity), $this->equalTo($options), $this->equalTo($facility));
+                ->with(
+                    $this->equalTo($identity),
+                    $this->equalTo($options),
+                    $this->equalTo($facility)
+                );
 
             $syslogTarget->expects($this->exactly(7))
                 ->method('formatMessage')
-                ->withConsecutive([$this->equalTo($messages[0])], [$this->equalTo($messages[1])], [$this->equalTo($messages[2])], [$this->equalTo($messages[3])], [$this->equalTo($messages[4])], [$this->equalTo($messages[5])], [$this->equalTo($messages[6])])->willReturnMap([
+                ->withConsecutive(
+                    [$this->equalTo($messages[0])],
+                    [$this->equalTo($messages[1])],
+                    [$this->equalTo($messages[2])],
+                    [$this->equalTo($messages[3])],
+                    [$this->equalTo($messages[4])],
+                    [$this->equalTo($messages[5])],
+                    [$this->equalTo($messages[6])]
+                )->willReturnMap([
                     [$messages[0], 'formatted message 1'],
                     [$messages[1], 'formatted message 2'],
                     [$messages[2], 'formatted message 3'],
@@ -104,25 +115,30 @@ namespace yiiunit\framework\log {
 
             $syslogTarget->expects($this->exactly(7))
                 ->method('syslog')
-                ->withConsecutive([$this->equalTo(LOG_INFO), $this->equalTo('formatted message 1')], [$this->equalTo(LOG_ERR), $this->equalTo('formatted message 2')], [$this->equalTo(LOG_WARNING), $this->equalTo('formatted message 3')], [$this->equalTo(LOG_DEBUG), $this->equalTo('formatted message 4')], [$this->equalTo(LOG_DEBUG), $this->equalTo('formatted message 5')], [$this->equalTo(LOG_DEBUG), $this->equalTo('formatted message 6')], [$this->equalTo(LOG_DEBUG), $this->equalTo('formatted message 7')]);
+                ->withConsecutive(
+                    [$this->equalTo(LOG_INFO), $this->equalTo('formatted message 1')],
+                    [$this->equalTo(LOG_ERR), $this->equalTo('formatted message 2')],
+                    [$this->equalTo(LOG_WARNING), $this->equalTo('formatted message 3')],
+                    [$this->equalTo(LOG_DEBUG), $this->equalTo('formatted message 4')],
+                    [$this->equalTo(LOG_DEBUG), $this->equalTo('formatted message 5')],
+                    [$this->equalTo(LOG_DEBUG), $this->equalTo('formatted message 6')],
+                    [$this->equalTo(LOG_DEBUG), $this->equalTo('formatted message 7')]
+                );
 
             $syslogTarget->expects($this->once())->method('closelog');
 
             static::$functions['openlog'] = function ($arguments) use ($syslogTarget) {
                 $this->assertCount(3, $arguments);
-                [$identity, $option, $facility] = $arguments;
-
+                list($identity, $option, $facility) = $arguments;
                 return $syslogTarget->openlog($identity, $option, $facility);
             };
             static::$functions['syslog'] = function ($arguments) use ($syslogTarget) {
                 $this->assertCount(2, $arguments);
-                [$priority, $message] = $arguments;
-
+                list($priority, $message) = $arguments;
                 return $syslogTarget->syslog($priority, $message);
             };
             static::$functions['closelog'] = function ($arguments) use ($syslogTarget) {
                 $this->assertCount(0, $arguments);
-
                 return $syslogTarget->closelog();
             };
 
@@ -134,7 +150,7 @@ namespace yiiunit\framework\log {
          *
          * See https://github.com/yiisoft/yii2/issues/14296
          */
-        public function testFailedExport(): void
+        public function testFailedExport()
         {
             $syslogTarget = $this->getMockBuilder('yii\\log\\SyslogTarget')
                 ->setMethods(['openlog', 'syslog', 'formatMessage', 'closelog'])
@@ -150,19 +166,16 @@ namespace yiiunit\framework\log {
 
             static::$functions['openlog'] = function ($arguments) use ($syslogTarget) {
                 $this->assertCount(3, $arguments);
-                [$identity, $option, $facility] = $arguments;
-
+                list($identity, $option, $facility) = $arguments;
                 return $syslogTarget->openlog($identity, $option, $facility);
             };
             static::$functions['syslog'] = function ($arguments) use ($syslogTarget) {
                 $this->assertCount(2, $arguments);
-                [$priority, $message] = $arguments;
-
+                list($priority, $message) = $arguments;
                 return $syslogTarget->syslog($priority, $message);
             };
             static::$functions['closelog'] = function ($arguments) use ($syslogTarget) {
                 $this->assertCount(0, $arguments);
-
                 return $syslogTarget->closelog();
             };
 
@@ -173,14 +186,12 @@ namespace yiiunit\framework\log {
         /**
          * @param $name
          * @param $arguments
-         *
          * @return mixed
          */
         public static function __callStatic($name, $arguments)
         {
             if (isset(static::$functions[$name]) && is_callable(static::$functions[$name])) {
-                $arguments = $arguments[0] ?? $arguments;
-
+                $arguments = isset($arguments[0]) ? $arguments[0] : $arguments;
                 return forward_static_call(static::$functions[$name], $arguments);
             }
             static::fail("Function '$name' has not implemented yet!");
@@ -189,7 +200,7 @@ namespace yiiunit\framework\log {
         /**
          * @covers \yii\log\SyslogTarget::formatMessage()
          */
-        public function testFormatMessageWhereTextIsString(): void
+        public function testFormatMessageWhereTextIsString()
         {
             $message = ['text', Logger::LEVEL_INFO, 'category', 'timestamp'];
 
@@ -206,7 +217,7 @@ namespace yiiunit\framework\log {
         /**
          * @covers \yii\log\SyslogTarget::formatMessage()
          */
-        public function testFormatMessageWhereTextIsException(): void
+        public function testFormatMessageWhereTextIsException()
         {
             $exception = new \Exception('exception text');
             $message = [$exception, Logger::LEVEL_INFO, 'category', 'timestamp'];
@@ -224,7 +235,7 @@ namespace yiiunit\framework\log {
         /**
          * @covers \yii\log\SyslogTarget::formatMessage()
          */
-        public function testFormatMessageWhereTextIsNotStringAndNotThrowable(): void
+        public function testFormatMessageWhereTextIsNotStringAndNotThrowable()
         {
             $text = new \stdClass();
             $text->var = 'some text';

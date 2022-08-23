@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -23,7 +20,7 @@ class LocaleTest extends TestCase
      */
     protected $locale;
 
-    protected function setUp(): void
+    protected function setUp()
     {
         parent::setUp();
 
@@ -34,13 +31,13 @@ class LocaleTest extends TestCase
         $this->locale = new Locale(['locale' => 'en-US']);
     }
 
-    protected function tearDown(): void
+    protected function tearDown()
     {
         parent::tearDown();
         $this->locale = null;
     }
 
-    public function testGetCurrencyCode(): void
+    public function testGetCurrencyCode()
     {
         $this->locale->locale = 'de-DE';
         $this->assertSame('€', $this->locale->getCurrencySymbol('EUR'));

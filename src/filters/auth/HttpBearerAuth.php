@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -27,7 +24,6 @@ namespace yii\filters\auth;
  * ```
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class HttpBearerAuth extends HttpHeaderAuth
@@ -36,21 +32,20 @@ class HttpBearerAuth extends HttpHeaderAuth
      * {@inheritdoc}
      */
     public $header = 'Authorization';
-
     /**
      * {@inheritdoc}
      */
     public $pattern = '/^Bearer\s+(.*?)$/';
-
     /**
      * @var string the HTTP authentication realm
      */
     public $realm = 'api';
 
+
     /**
      * {@inheritdoc}
      */
-    public function challenge($response): void
+    public function challenge($response)
     {
         $response->getHeaders()->set('WWW-Authenticate', "Bearer realm=\"{$this->realm}\"");
     }

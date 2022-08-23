@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -15,9 +12,9 @@ use yii\behaviors\AttributeTypecastBehavior;
 /**
  * Class OrderItem.
  *
- * @property int    $order_id
- * @property int    $item_id
- * @property int    $quantity
+ * @property int $order_id
+ * @property int $item_id
+ * @property int $quantity
  * @property string $subtotal
  */
 class OrderItem extends ActiveRecord
@@ -61,7 +58,6 @@ class OrderItem extends ActiveRecord
         return $this->hasOne(self::className(), ['item_id' => 'item_id', 'order_id' => 'order_id'])
             ->joinWith('item');
     }
-
     public function getOrderItemCompositeNoJoin()
     {
         return $this->hasOne(self::className(), ['item_id' => 'item_id', 'order_id' => 'order_id']);

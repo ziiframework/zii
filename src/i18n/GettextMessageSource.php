@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -28,33 +25,30 @@ use yii\base\InvalidArgumentException;
  * [[catalog]] property, which defaults to 'messages'.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class GettextMessageSource extends MessageSource
 {
-    public const MO_FILE_EXT = '.mo';
-    public const PO_FILE_EXT = '.po';
+    const MO_FILE_EXT = '.mo';
+    const PO_FILE_EXT = '.po';
 
     /**
      * @var string base directory of messages files
      */
     public $basePath = '@app/messages';
-
     /**
      * @var string sub-directory of messages files
      */
     public $catalog = 'messages';
-
     /**
      * @var bool whether to use generated MO files
      */
     public $useMoFile = true;
-
     /**
      * @var bool whether to use big-endian when reading and writing an integer
      */
     public $useBigEndian = false;
+
 
     /**
      * Loads the message translation for the specified $language and $category.
@@ -67,9 +61,7 @@ class GettextMessageSource extends MessageSource
      *
      * @param string $category the message category
      * @param string $language the target language
-     *
      * @return array the loaded messages. The keys are original messages, and the values are translated messages.
-     *
      * @see loadFallbackMessages
      * @see sourceLanguage
      */
@@ -78,7 +70,7 @@ class GettextMessageSource extends MessageSource
         $messageFile = $this->getMessageFilePath($language);
         $messages = $this->loadMessagesFromFile($messageFile, $category);
 
-        $fallbackLanguage = substr($language ?? '', 0, 2);
+        $fallbackLanguage = substr($language, 0, 2);
         $fallbackSourceLanguage = substr($this->sourceLanguage, 0, 2);
 
         if ($fallbackLanguage !== '' && $fallbackLanguage !== $language) {
@@ -102,9 +94,7 @@ class GettextMessageSource extends MessageSource
      * The keys are original messages, and the values are the translated messages.
      * @param string $originalMessageFile the path to the file with messages. Used to log an error message
      * in case when no translations were found.
-     *
      * @return array the loaded messages. The keys are original messages, and the values are the translated messages.
-     *
      * @since 2.0.7
      */
     protected function loadFallbackMessages($category, $fallbackLanguage, $messages, $originalMessageFile)
@@ -136,18 +126,15 @@ class GettextMessageSource extends MessageSource
      * Returns message file path for the specified language and category.
      *
      * @param string $language the target language
-     *
      * @return string path to message file
      */
     protected function getMessageFilePath($language)
     {
         $language = (string) $language;
-
         if ($language !== '' && !preg_match('/^[a-z0-9_-]+$/i', $language)) {
             throw new InvalidArgumentException(sprintf('Invalid language code: "%s".', $language));
         }
         $messageFile = Yii::getAlias($this->basePath) . '/' . $language . '/' . $this->catalog;
-
         if ($this->useMoFile) {
             $messageFile .= self::MO_FILE_EXT;
         } else {
@@ -162,7 +149,6 @@ class GettextMessageSource extends MessageSource
      *
      * @param string $messageFile path to message file
      * @param string $category the message category
-     *
      * @return array|null array of messages or null if file not found
      */
     protected function loadMessagesFromFile($messageFile, $category)
@@ -174,7 +160,6 @@ class GettextMessageSource extends MessageSource
                 $gettextFile = new GettextPoFile();
             }
             $messages = $gettextFile->load($messageFile, $category);
-
             if (!is_array($messages)) {
                 $messages = [];
             }

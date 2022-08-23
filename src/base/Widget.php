@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,9 +7,8 @@ declare(strict_types=1);
 
 namespace yii\base;
 
-use Yii;
-use Exception;
 use ReflectionClass;
+use Yii;
 
 /**
  * Widget is the base class for widgets.
@@ -26,61 +22,51 @@ use ReflectionClass;
  * @property-read string $viewPath The directory containing the view files for this widget.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class Widget extends Component implements ViewContextInterface
 {
     /**
      * @event Event an event that is triggered when the widget is initialized via [[init()]].
-     *
      * @since 2.0.11
      */
-    public const EVENT_INIT = 'init';
-
+    const EVENT_INIT = 'init';
     /**
      * @event WidgetEvent an event raised right before executing a widget.
      * You may set [[WidgetEvent::isValid]] to be false to cancel the widget execution.
-     *
      * @since 2.0.11
      */
-    public const EVENT_BEFORE_RUN = 'beforeRun';
-
+    const EVENT_BEFORE_RUN = 'beforeRun';
     /**
      * @event WidgetEvent an event raised right after executing a widget.
-     *
      * @since 2.0.11
      */
-    public const EVENT_AFTER_RUN = 'afterRun';
+    const EVENT_AFTER_RUN = 'afterRun';
 
     /**
      * @var int a counter used to generate [[id]] for widgets.
-     *
      * @internal
      */
     public static $counter = 0;
-
     /**
      * @var string the prefix to the automatically generated widget IDs.
-     *
      * @see getId()
      */
     public static $autoIdPrefix = 'w';
-
     /**
      * @var Widget[] the widgets that are currently being rendered (not ended). This property
      * is maintained by [[begin()]] and [[end()]] methods.
-     *
      * @internal
      */
     public static $stack = [];
+
 
     /**
      * Initializes the object.
      * This method is called at the end of the constructor.
      * The default implementation will trigger an [[EVENT_INIT]] event.
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
         $this->trigger(self::EVENT_INIT);
@@ -92,16 +78,13 @@ class Widget extends Component implements ViewContextInterface
      * to the created instance. A matching [[end()]] call should be called later.
      * As some widgets may use output buffering, the [[end()]] call should be made in the same view
      * to avoid breaking the nesting of output buffers.
-     *
      * @param array $config name-value pairs that will be used to initialize the object properties
-     *
      * @return static the newly created widget instance
-     *
      * @see end()
      */
     public static function begin($config = [])
     {
-        $config['class'] = static::class;
+        $config['class'] = get_called_class();
         /* @var $widget Widget */
         $widget = Yii::createObject($config);
         self::$stack[] = $widget;
@@ -112,11 +95,8 @@ class Widget extends Component implements ViewContextInterface
     /**
      * Ends a widget.
      * Note that the rendering result of the widget is directly echoed out.
-     *
      * @return static the widget instance that is ended.
-     *
      * @throws InvalidCallException if [[begin()]] and [[end()]] calls are not properly nested
-     *
      * @see begin()
      */
     public static function end()
@@ -124,8 +104,7 @@ class Widget extends Component implements ViewContextInterface
         if (!empty(self::$stack)) {
             $widget = array_pop(self::$stack);
 
-            $calledClass = static::class;
-
+            $calledClass = get_called_class();
             if (Yii::$container->has($calledClass) && isset(Yii::$container->getDefinitions()[$calledClass]['class'])) {
                 $calledClass = Yii::$container->getDefinitions()[$calledClass]['class'];
             }
@@ -141,43 +120,43 @@ class Widget extends Component implements ViewContextInterface
                 return $widget;
             }
 
-            throw new InvalidCallException('Expecting end() of ' . get_class($widget) . ', found ' . static::class);
+            throw new InvalidCallException('Expecting end() of ' . get_class($widget) . ', found ' . get_called_class());
         }
 
-        throw new InvalidCallException('Unexpected ' . static::class . '::end() call. A matching begin() is not found.');
+        throw new InvalidCallException('Unexpected ' . get_called_class() . '::end() call. A matching begin() is not found.');
     }
 
     /**
      * Creates a widget instance and runs it.
      * The widget rendering result is returned by this method.
-     *
      * @param array $config name-value pairs that will be used to initialize the object properties
-     *
      * @return string the rendering result of the widget.
-     *
-     * @throws Exception
+     * @throws \Throwable
      */
     public static function widget($config = [])
     {
         ob_start();
-        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
-
+        ob_implicit_flush(false);
         try {
             /* @var $widget Widget */
-            $config['class'] = static::class;
+            $config['class'] = get_called_class();
             $widget = Yii::createObject($config);
             $out = '';
-
             if ($widget->beforeRun()) {
                 $result = $widget->run();
                 $out = $widget->afterRun($result);
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // close the output buffer opened above if it has not been closed already
             if (ob_get_level() > 0) {
                 ob_end_clean();
             }
-
+            throw $e;
+        } catch (\Throwable $e) {
+            // close the output buffer opened above if it has not been closed already
+            if (ob_get_level() > 0) {
+                ob_end_clean();
+            }
             throw $e;
         }
 
@@ -188,9 +167,7 @@ class Widget extends Component implements ViewContextInterface
 
     /**
      * Returns the ID of the widget.
-     *
      * @param bool $autoGenerate whether to generate an ID if it is not set previously
-     *
      * @return string|null ID of the widget.
      */
     public function getId($autoGenerate = true)
@@ -204,10 +181,9 @@ class Widget extends Component implements ViewContextInterface
 
     /**
      * Sets the ID of the widget.
-     *
      * @param string $value id of the widget.
      */
-    public function setId($value): void
+    public function setId($value)
     {
         $this->_id = $value;
     }
@@ -219,7 +195,6 @@ class Widget extends Component implements ViewContextInterface
      * The [[render()]] and [[renderFile()]] methods will use
      * this view object to implement the actual view rendering.
      * If not set, it will default to the "view" application component.
-     *
      * @return \yii\web\View the view object that can be used to render views or view files.
      */
     public function getView()
@@ -233,10 +208,9 @@ class Widget extends Component implements ViewContextInterface
 
     /**
      * Sets the view object to be used by this widget.
-     *
      * @param View $view the view object that can be used to render views or view files.
      */
-    public function setView($view): void
+    public function setView($view)
     {
         $this->_view = $view;
     }
@@ -244,7 +218,7 @@ class Widget extends Component implements ViewContextInterface
     /**
      * Executes the widget.
      *
-     * @return string the result of widget execution to be outputted.
+     * @return string|void the rendering result may be directly "echoed" or returned as a string
      */
     public function run()
     {
@@ -267,9 +241,7 @@ class Widget extends Component implements ViewContextInterface
      *
      * @param string $view the view name.
      * @param array $params the parameters (name-value pairs) that should be made available in the view.
-     *
      * @return string the rendering result.
-     *
      * @throws InvalidArgumentException if the view file does not exist.
      */
     public function render($view, $params = [])
@@ -279,12 +251,9 @@ class Widget extends Component implements ViewContextInterface
 
     /**
      * Renders a view file.
-     *
      * @param string $file the view file to be rendered. This can be either a file path or a [path alias](guide:concept-aliases).
      * @param array $params the parameters (name-value pairs) that should be made available in the view.
-     *
      * @return string the rendering result.
-     *
      * @throws InvalidArgumentException if the view file does not exist.
      */
     public function renderFile($file, $params = [])
@@ -295,7 +264,6 @@ class Widget extends Component implements ViewContextInterface
     /**
      * Returns the directory containing the view files for this widget.
      * The default implementation returns the 'views' subdirectory under the directory containing the widget class file.
-     *
      * @return string the directory containing the view files for this widget.
      */
     public function getViewPath()
@@ -327,14 +295,12 @@ class Widget extends Component implements ViewContextInterface
      * ```
      *
      * @return bool whether the widget should continue to be executed.
-     *
      * @since 2.0.11
      */
     public function beforeRun()
     {
         $event = new WidgetEvent();
         $this->trigger(self::EVENT_BEFORE_RUN, $event);
-
         return $event->isValid;
     }
 
@@ -356,9 +322,7 @@ class Widget extends Component implements ViewContextInterface
      * ```
      *
      * @param mixed $result the widget return result.
-     *
      * @return mixed the processed widget result.
-     *
      * @since 2.0.11
      */
     public function afterRun($result)
@@ -366,7 +330,6 @@ class Widget extends Component implements ViewContextInterface
         $event = new WidgetEvent();
         $event->result = $result;
         $this->trigger(self::EVENT_AFTER_RUN, $event);
-
         return $event->result;
     }
 }

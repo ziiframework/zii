@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,23 +8,23 @@ declare(strict_types=1);
 namespace yiiunit\framework\base;
 
 use Yii;
-use yii\base\Module;
-use yiiunit\TestCase;
 use yii\base\BaseObject;
 use yii\base\Controller;
+use yii\base\Module;
+use yiiunit\TestCase;
 
 /**
  * @group base
  */
 class ModuleTest extends TestCase
 {
-    protected function setUp(): void
+    protected function setUp()
     {
         parent::setUp();
         $this->mockApplication();
     }
 
-    public function testTrueParentModule(): void
+    public function testTrueParentModule()
     {
         $parent = new Module('parent');
         $child = new Module('child');
@@ -40,7 +37,7 @@ class ModuleTest extends TestCase
         $this->assertEquals('parent', $child2->module->id);
     }
 
-    public function testGetControllerPath(): void
+    public function testGetControllerPath()
     {
         $module = new TestModule('test');
         $controllerPath = __DIR__ . DIRECTORY_SEPARATOR . 'controllers';
@@ -49,7 +46,7 @@ class ModuleTest extends TestCase
         $this->assertEquals($controllerPath, str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $module->getControllerPath()));
     }
 
-    public function testSetControllerPath(): void
+    public function testSetControllerPath()
     {
         $module = new TestModule('test');
         $controllerPath = __DIR__ . DIRECTORY_SEPARATOR . 'controllers';
@@ -58,7 +55,7 @@ class ModuleTest extends TestCase
         $this->assertEquals($controllerPath, $module->getControllerPath());
     }
 
-    public function testSetupVersion(): void
+    public function testSetupVersion()
     {
         $module = new TestModule('test');
 
@@ -66,7 +63,7 @@ class ModuleTest extends TestCase
         $module->setVersion($version);
         $this->assertEquals($version, $module->getVersion());
 
-        $module->setVersion(static function ($module) {
+        $module->setVersion(function ($module) {
             /* @var $module TestModule */
             return 'version.' . $module->getUniqueId();
         });
@@ -76,7 +73,7 @@ class ModuleTest extends TestCase
     /**
      * @depends testSetupVersion
      */
-    public function testDefaultVersion(): void
+    public function testDefaultVersion()
     {
         $module = new TestModule('test');
 
@@ -86,7 +83,7 @@ class ModuleTest extends TestCase
 
     public static $actionRuns = [];
 
-    public function testRunControllerAction(): void
+    public function testRunControllerAction()
     {
         $module = new TestModule('test');
         $this->assertNull(Yii::$app->controller);
@@ -114,7 +111,8 @@ class ModuleTest extends TestCase
         $this->assertEquals('test/test-controller1/test1', Yii::$app->controller->action->uniqueId);
     }
 
-    public function testServiceLocatorTraversal(): void
+
+    public function testServiceLocatorTraversal()
     {
         $parent = new Module('parent');
         $child = new Module('child', $parent);
@@ -147,7 +145,7 @@ class ModuleTest extends TestCase
         $this->assertFalse($parent->has('test'));
     }
 
-    public function testCreateControllerByID(): void
+    public function testCreateControllerByID()
     {
         $module = new TestModule('test');
         $module->controllerNamespace = 'yiiunit\framework\base';
@@ -174,7 +172,7 @@ class ModuleTest extends TestCase
         $this->assertNotInstanceOf(VeryComplexNameTestController::className(), $module->createControllerByID($route));
     }
 
-    public function testCreateController(): void
+    public function testCreateController()
     {
         // app module has a submodule "base" which has two controllers: "default" and "other"
         $module = new Module('app');
@@ -186,27 +184,27 @@ class ModuleTest extends TestCase
             'other' => $otherController,
         ];
 
-        [$controller, $action] = $module->createController('base');
+        list($controller, $action) = $module->createController('base');
         $this->assertSame('', $action);
         $this->assertSame('app/base/default', $controller->uniqueId);
 
-        [$controller, $action] = $module->createController('base/default');
+        list($controller, $action) = $module->createController('base/default');
         $this->assertSame('', $action);
         $this->assertSame('app/base/default', $controller->uniqueId);
 
-        [$controller, $action] = $module->createController('base/other');
+        list($controller, $action) = $module->createController('base/other');
         $this->assertSame('', $action);
         $this->assertSame('app/base/other', $controller->uniqueId);
 
-        [$controller, $action] = $module->createController('base/default/index');
+        list($controller, $action) = $module->createController('base/default/index');
         $this->assertSame('index', $action);
         $this->assertSame('app/base/default', $controller->uniqueId);
 
-        [$controller, $action] = $module->createController('base/other/index');
+        list($controller, $action) = $module->createController('base/other/index');
         $this->assertSame('index', $action);
         $this->assertSame('app/base/other', $controller->uniqueId);
 
-        [$controller, $action] = $module->createController('base/other/someaction');
+        list($controller, $action) = $module->createController('base/other/someaction');
         $this->assertSame('someaction', $action);
         $this->assertSame('app/base/other', $controller->uniqueId);
 
@@ -228,12 +226,11 @@ class TestModule extends \yii\base\Module
 
 class ModuleTestController extends Controller
 {
-    public function actionTest1(): void
+    public function actionTest1()
     {
         ModuleTest::$actionRuns[] = $this->action->uniqueId;
     }
-
-    public function actionTest2(): void
+    public function actionTest2()
     {
         ModuleTest::$actionRuns[] = $this->action->uniqueId;
     }
@@ -241,7 +238,7 @@ class ModuleTestController extends Controller
 
 class VeryComplexNameTestController extends Controller
 {
-    public function actionIndex(): void
+    public function actionIndex()
     {
         ModuleTest::$actionRuns[] = $this->action->uniqueId;
     }

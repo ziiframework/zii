@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,13 +8,13 @@ declare(strict_types=1);
 namespace yii\i18n;
 
 use Yii;
-use yii\db\Query;
-use yii\di\Instance;
+use yii\base\InvalidConfigException;
+use yii\caching\CacheInterface;
 use yii\db\Connection;
 use yii\db\Expression;
+use yii\db\Query;
+use yii\di\Instance;
 use yii\helpers\ArrayHelper;
-use yii\caching\CacheInterface;
-use yii\base\InvalidConfigException;
 
 /**
  * DbMessageSource extends [[MessageSource]] and represents a message source that stores translated
@@ -38,17 +35,15 @@ use yii\base\InvalidConfigException;
  * If you don't want to use migration and need SQL instead, files for all databases are in migrations directory.
  *
  * @author resurtm <resurtm@gmail.com>
- *
  * @since 2.0
  */
 class DbMessageSource extends MessageSource
 {
     /**
      * Prefix which would be used when generating cache key.
-     *
      * @deprecated This constant has never been used and will be removed in 2.1.0.
      */
-    public const CACHE_KEY_PREFIX = 'DbMessageSource';
+    const CACHE_KEY_PREFIX = 'DbMessageSource';
 
     /**
      * @var Connection|array|string the DB connection object or the application component ID of the DB connection.
@@ -59,7 +54,6 @@ class DbMessageSource extends MessageSource
      * Starting from version 2.0.2, this can also be a configuration array for creating the object.
      */
     public $db = 'db';
-
     /**
      * @var CacheInterface|array|string the cache object or the application component ID of the cache object.
      * The messages data will be cached using this cache object.
@@ -69,47 +63,40 @@ class DbMessageSource extends MessageSource
      * it with a cache object.
      *
      * Starting from version 2.0.2, this can also be a configuration array for creating the object.
-     *
      * @see cachingDuration
      * @see enableCaching
      */
     public $cache = 'cache';
-
     /**
      * @var string the name of the source message table.
      */
     public $sourceMessageTable = '{{%source_message}}';
-
     /**
      * @var string the name of the translated message table.
      */
     public $messageTable = '{{%message}}';
-
     /**
      * @var int the time in seconds that the messages can remain valid in cache.
      * Use 0 to indicate that the cached data will never expire.
-     *
      * @see enableCaching
      */
     public $cachingDuration = 0;
-
     /**
      * @var bool whether to enable caching translated messages
      */
     public $enableCaching = false;
 
+
     /**
      * Initializes the DbMessageSource component.
      * This method will initialize the [[db]] property to make sure it refers to a valid DB connection.
      * Configured [[cache]] component would also be initialized.
-     *
      * @throws InvalidConfigException if [[db]] is invalid or [[cache]] is invalid.
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
         $this->db = Instance::ensure($this->db, Connection::className());
-
         if ($this->enableCaching) {
             $this->cache = Instance::ensure($this->cache, 'yii\caching\CacheInterface');
         }
@@ -122,7 +109,6 @@ class DbMessageSource extends MessageSource
      *
      * @param string $category the message category
      * @param string $language the target language
-     *
      * @return array the loaded messages. The keys are original messages, and the values
      * are translated messages.
      */
@@ -135,7 +121,6 @@ class DbMessageSource extends MessageSource
                 $language,
             ];
             $messages = $this->cache->get($key);
-
             if ($messages === false) {
                 $messages = $this->loadMessagesFromDb($category, $language);
                 $this->cache->set($key, $messages, $this->cachingDuration);
@@ -150,10 +135,8 @@ class DbMessageSource extends MessageSource
     /**
      * Loads the messages from database.
      * You may override this method to customize the message storage in the database.
-     *
      * @param string $category the message category.
      * @param string $language the target language.
-     *
      * @return array the messages loaded from database.
      */
     protected function loadMessagesFromDb($category, $language)
@@ -166,7 +149,7 @@ class DbMessageSource extends MessageSource
                 't2.language' => $language,
             ]);
 
-        $fallbackLanguage = substr($language ?? '', 0, 2);
+        $fallbackLanguage = substr($language, 0, 2);
         $fallbackSourceLanguage = substr($this->sourceLanguage, 0, 2);
 
         if ($fallbackLanguage !== $language) {
@@ -187,9 +170,7 @@ class DbMessageSource extends MessageSource
      * @param string $category the message category
      * @param string $language the originally requested language
      * @param string $fallbackLanguage the target fallback language
-     *
      * @return Query
-     *
      * @see loadMessagesFromDb
      * @since 2.0.7
      */

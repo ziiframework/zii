@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,12 +7,11 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\rbac;
 
-use yii\rbac\DbManager;
 use yii\caching\FileCache;
+use yii\rbac\DbManager;
 
 /**
  * PgSQLManagerTest.
- *
  * @group db
  * @group rbac
  * @group pgsql

@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -23,7 +20,7 @@ class SessionTest extends TestCase
     /**
      * Test to prove that after Session::destroy session id set to old value.
      */
-    public function testDestroySessionId(): void
+    public function testDestroySessionId()
     {
         $session = new Session();
         $session->open();
@@ -42,7 +39,7 @@ class SessionTest extends TestCase
      * Test to prove that after Session::open changing session parameters will not throw exceptions
      * and its values will be changed as expected.
      */
-    public function testParamsAfterSessionStart(): void
+    public function testParamsAfterSessionStart()
     {
         $session = new Session();
         $session->open();
@@ -52,7 +49,7 @@ class SessionTest extends TestCase
         $newUseTransparentSession = $session->getUseTransparentSessionID();
         $this->assertNotEquals($oldUseTransparentSession, $newUseTransparentSession);
         $this->assertTrue($newUseTransparentSession);
-        // without this line phpunit will complain about risky tests due to unclosed buffer
+        //without this line phpunit will complain about risky tests due to unclosed buffer
         $session->setUseTransparentSessionID(false);
 
         $oldTimeout = $session->getTimeout();
@@ -64,7 +61,6 @@ class SessionTest extends TestCase
         $oldUseCookies = $session->getUseCookies();
         $session->setUseCookies(false);
         $newUseCookies = $session->getUseCookies();
-
         if (null !== $newUseCookies) {
             $this->assertNotEquals($oldUseCookies, $newUseCookies);
             $this->assertFalse($newUseCookies);
@@ -79,9 +75,9 @@ class SessionTest extends TestCase
     }
 
     /**
-     * Test set name. Also check set name twice and after open.
+     * Test set name. Also check set name twice and after open
      */
-    public function testSetName(): void
+    public function testSetName()
     {
         $session = new Session();
         $session->setName('oldName');
@@ -96,14 +92,14 @@ class SessionTest extends TestCase
         $session->destroy();
     }
 
-    public function testInitUseStrictMode(): void
+    public function testInitUseStrictMode()
     {
         $this->initStrictModeTest(Session::className());
     }
 
-    public function testUseStrictMode(): void
+    public function testUseStrictMode()
     {
-        // Manual garbage collection since native storage module might not support removing data via Session::destroySession()
+        //Manual garbage collection since native storage module might not support removing data via Session::destroySession()
         $sessionSavePath = session_save_path() ?: sys_get_temp_dir();
         // Only perform garbage collection if "N argument" is not used,
         // see https://www.php.net/manual/en/session.configuration.php#ini.session.save-path

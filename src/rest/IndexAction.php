@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,11 +8,11 @@ declare(strict_types=1);
 namespace yii\rest;
 
 use Yii;
-use yii\data\Sort;
+use yii\data\ActiveDataProvider;
 use yii\data\DataFilter;
 use yii\data\Pagination;
+use yii\data\Sort;
 use yii\helpers\ArrayHelper;
-use yii\data\ActiveDataProvider;
 
 /**
  * IndexAction implements the API endpoint for listing multiple models.
@@ -23,13 +20,12 @@ use yii\data\ActiveDataProvider;
  * For more details and usage information on IndexAction, see the [guide article on rest controllers](guide:rest-controllers).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class IndexAction extends Action
 {
     /**
-     * @var callable a PHP callable that will be called to prepare a data provider that
+     * @var callable|null a PHP callable that will be called to prepare a data provider that
      * should return a collection of the models. If not set, [[prepareDataProvider()]] will be used instead.
      * The signature of the callable should be:
      *
@@ -52,10 +48,9 @@ class IndexAction extends Action
      * ```
      */
     public $prepareDataProvider;
-
     /**
-     * @var callable a PHP callable that will be called to prepare query in prepareDataProvider
-     * Should return $query
+     * @var callable a PHP callable that will be called to prepare query in prepareDataProvider.
+     * Should return $query.
      * For example:
      *
      * ```php
@@ -69,10 +64,9 @@ class IndexAction extends Action
      * @since 2.0.42
      */
     public $prepareSearchQuery;
-
     /**
      * @var DataFilter|null data filter to be used for the search filter composition.
-     * You must setup this field explicitly in order to enable filter processing.
+     * You must set up this field explicitly in order to enable filter processing.
      * For example:
      *
      * ```php
@@ -89,29 +83,27 @@ class IndexAction extends Action
      * ```
      *
      * @see DataFilter
+     *
      * @since 2.0.13
      */
     public $dataFilter;
-
     /**
      * @var array|Pagination|false The pagination to be used by [[prepareDataProvider()]].
      * If this is `false`, it means pagination is disabled.
      * Note: if a Pagination object is passed, it's `params` will be set to the request parameters.
-     *
      * @see Pagination
      * @since 2.0.45
      */
     public $pagination = [];
-
     /**
      * @var array|Sort|false The sorting to be used by [[prepareDataProvider()]].
      * If this is `false`, it means sorting is disabled.
      * Note: if a Sort object is passed, it's `params` will be set to the request parameters.
-     *
      * @see Sort
      * @since 2.0.45
      */
     public $sort = [];
+
 
     /**
      * @return ActiveDataProvider
@@ -127,25 +119,20 @@ class IndexAction extends Action
 
     /**
      * Prepares the data provider that should return the requested collection of the models.
-     *
      * @return ActiveDataProvider
      */
     protected function prepareDataProvider()
     {
         $requestParams = Yii::$app->getRequest()->getBodyParams();
-
         if (empty($requestParams)) {
             $requestParams = Yii::$app->getRequest()->getQueryParams();
         }
 
         $filter = null;
-
         if ($this->dataFilter !== null) {
             $this->dataFilter = Yii::createObject($this->dataFilter);
-
             if ($this->dataFilter->load($requestParams)) {
                 $filter = $this->dataFilter->build();
-
                 if ($filter === false) {
                     return $this->dataFilter;
                 }
@@ -160,34 +147,36 @@ class IndexAction extends Action
         $modelClass = $this->modelClass;
 
         $query = $modelClass::find();
-
         if (!empty($filter)) {
             $query->andWhere($filter);
         }
-
         if (is_callable($this->prepareSearchQuery)) {
             $query = call_user_func($this->prepareSearchQuery, $query, $requestParams);
         }
 
         if (is_array($this->pagination)) {
-            $pagination = ArrayHelper::merge([
+            $pagination = ArrayHelper::merge(
+                [
                     'params' => $requestParams,
-                ], $this->pagination);
+                ],
+                $this->pagination
+            );
         } else {
             $pagination = $this->pagination;
-
             if ($this->pagination instanceof Pagination) {
                 $pagination->params = $requestParams;
             }
         }
 
         if (is_array($this->sort)) {
-            $sort = ArrayHelper::merge([
+            $sort = ArrayHelper::merge(
+                [
                     'params' => $requestParams,
-                ], $this->sort);
+                ],
+                $this->sort
+            );
         } else {
             $sort = $this->sort;
-
             if ($this->sort instanceof Sort) {
                 $sort->params = $requestParams;
             }

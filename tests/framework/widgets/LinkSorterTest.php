@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,12 +7,12 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\widgets;
 
-use yii\widgets\ListView;
-use yiiunit\data\ar\Order;
-use yii\widgets\LinkSorter;
-use yii\widgets\Breadcrumbs;
 use yii\data\ActiveDataProvider;
+use yii\widgets\Breadcrumbs;
+use yii\widgets\LinkSorter;
+use yii\widgets\ListView;
 use yiiunit\data\ar\ActiveRecord;
+use yiiunit\data\ar\Order;
 use yiiunit\framework\db\DatabaseTestCase;
 
 /**
@@ -26,7 +23,7 @@ class LinkSorterTest extends DatabaseTestCase
 {
     protected $driverName = 'sqlite';
 
-    protected function setUp(): void
+    protected function setUp()
     {
         parent::setUp();
         ActiveRecord::$db = $this->getConnection();
@@ -34,7 +31,7 @@ class LinkSorterTest extends DatabaseTestCase
         $this->breadcrumbs = new Breadcrumbs();
     }
 
-    public function testLabelsSimple(): void
+    public function testLabelsSimple()
     {
         $dataProvider = new ActiveDataProvider([
             'query' => Order::find(),
@@ -52,11 +49,13 @@ class LinkSorterTest extends DatabaseTestCase
         ]);
         $actualHtml = ob_get_clean();
 
-        $this->assertNotFalse(strpos($actualHtml, '<a href="/index.php?r=site%2Findex&amp;sort=customer_id" data-sort="customer_id">Customer</a>'));
-        $this->assertNotFalse(strpos($actualHtml, '<a href="/index.php?r=site%2Findex&amp;sort=total" data-sort="total">Invoice Total</a>'));
+        $this->assertNotFalse(strpos($actualHtml,
+            '<a href="/index.php?r=site%2Findex&amp;sort=customer_id" data-sort="customer_id">Customer</a>'));
+        $this->assertNotFalse(strpos($actualHtml,
+            '<a href="/index.php?r=site%2Findex&amp;sort=total" data-sort="total">Invoice Total</a>'));
     }
 
-    public function testLabelsExplicit(): void
+    public function testLabelsExplicit()
     {
         $dataProvider = new ActiveDataProvider([
             'query' => Order::find(),
@@ -75,25 +74,29 @@ class LinkSorterTest extends DatabaseTestCase
         ]);
         $actualHtml = ob_get_clean();
 
-        $this->assertFalse(strpos($actualHtml, '<a href="/index.php?r=site%2Findex&amp;sort=customer_id" data-sort="customer_id">Customer</a>'));
-        $this->assertNotFalse(strpos($actualHtml, '<a href="/index.php?r=site%2Findex&amp;sort=total" data-sort="total">Invoice Total</a>'));
+        $this->assertFalse(strpos($actualHtml,
+            '<a href="/index.php?r=site%2Findex&amp;sort=customer_id" data-sort="customer_id">Customer</a>'));
+        $this->assertNotFalse(strpos($actualHtml,
+            '<a href="/index.php?r=site%2Findex&amp;sort=total" data-sort="total">Invoice Total</a>'));
     }
 
     /**
      * @see https://github.com/yiisoft/yii2/issues/15536
      */
-    public function testShouldTriggerInitEvent(): void
+    public function testShouldTriggerInitEvent()
     {
         $initTriggered = false;
-        new LinkSorter([
+        new LinkSorter(
+            [
                 'sort' => [
                     'attributes' => ['total'],
                     'route' => 'site/index',
                 ],
-                'on init' => static function () use (&$initTriggered): void {
+                'on init' => function () use (&$initTriggered) {
                     $initTriggered = true;
-                },
-            ]);
+                }
+            ]
+        );
 
         $this->assertTrue($initTriggered);
     }

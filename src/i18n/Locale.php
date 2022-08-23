@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,7 +8,6 @@ declare(strict_types=1);
 namespace yii\i18n;
 
 use Yii;
-use NumberFormatter;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
 
@@ -27,15 +23,16 @@ use yii\base\InvalidConfigException;
 class Locale extends Component
 {
     /**
-     * @var string the locale ID.
+     * @var string|null the locale ID.
      * If not set, [[\yii\base\Application::language]] will be used.
      */
     public $locale;
 
+
     /**
      * {@inheritdoc}
      */
-    public function init(): void
+    public function init()
     {
         if (!extension_loaded('intl')) {
             throw new InvalidConfigException('Locale component requires PHP intl extension to be installed.');
@@ -47,11 +44,10 @@ class Locale extends Component
     }
 
     /**
-     * Returns a currency symbol.
+     * Returns a currency symbol
      *
-     * @param string $currencyCode the 3-letter ISO 4217 currency code to get symbol for. If null,
+     * @param string|null $currencyCode the 3-letter ISO 4217 currency code to get symbol for. If null,
      * method will attempt using currency code from [[locale]].
-     *
      * @return string
      */
     public function getCurrencySymbol($currencyCode = null)
@@ -62,8 +58,7 @@ class Locale extends Component
             $locale .= '@currency=' . $currencyCode;
         }
 
-        $formatter = new NumberFormatter($locale, NumberFormatter::CURRENCY);
-
-        return $formatter->getSymbol(NumberFormatter::CURRENCY_SYMBOL);
+        $formatter = new \NumberFormatter($locale, \NumberFormatter::CURRENCY);
+        return $formatter->getSymbol(\NumberFormatter::CURRENCY_SYMBOL);
     }
 }

@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,8 +8,8 @@ declare(strict_types=1);
 namespace yii\mutex;
 
 use Yii;
-use yii\helpers\FileHelper;
 use yii\base\InvalidConfigException;
+use yii\helpers\FileHelper;
 
 /**
  * FileMutex implements mutex "lock" mechanism via local file system files.
@@ -40,7 +37,6 @@ use yii\base\InvalidConfigException;
  * @see Mutex
  *
  * @author resurtm <resurtm@gmail.com>
- *
  * @since 2.0
  */
 class FileMutex extends Mutex
@@ -52,14 +48,12 @@ class FileMutex extends Mutex
      * Defaults to the "mutex" subdirectory under the application runtime path.
      */
     public $mutexPath = '@runtime/mutex';
-
     /**
-     * @var int the permission to be set for newly created mutex files.
+     * @var int|null the permission to be set for newly created mutex files.
      * This value will be used by PHP chmod() function. No umask will be applied.
      * If not set, the permission will be determined by the current environment.
      */
     public $fileMode;
-
     /**
      * @var int the permission to be set for newly created directories.
      * This value will be used by PHP chmod() function. No umask will be applied.
@@ -67,12 +61,10 @@ class FileMutex extends Mutex
      * but read-only for other users.
      */
     public $dirMode = 0775;
-
     /**
-     * @var bool whether file handling should assume a Windows file system.
+     * @var bool|null whether file handling should assume a Windows file system.
      * This value will determine how [[releaseLock()]] goes about deleting the lock file.
      * If not set, it will be determined by checking the DIRECTORY_SEPARATOR constant.
-     *
      * @since 2.0.16
      */
     public $isWindows;
@@ -82,21 +74,19 @@ class FileMutex extends Mutex
      */
     private $_files = [];
 
+
     /**
      * Initializes mutex component implementation dedicated for UNIX, GNU/Linux, Mac OS X, and other UNIX-like
      * operating systems.
-     *
      * @throws InvalidConfigException
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
         $this->mutexPath = Yii::getAlias($this->mutexPath);
-
         if (!is_dir($this->mutexPath)) {
             FileHelper::createDirectory($this->mutexPath, $this->dirMode, true);
         }
-
         if ($this->isWindows === null) {
             $this->isWindows = DIRECTORY_SEPARATOR === '\\';
         }
@@ -104,19 +94,15 @@ class FileMutex extends Mutex
 
     /**
      * Acquires lock by given name.
-     *
      * @param string $name of the lock to be acquired.
      * @param int $timeout time (in seconds) to wait for lock to become released.
-     *
      * @return bool acquiring result.
      */
     protected function acquireLock($name, $timeout = 0)
     {
         $filePath = $this->getLockFilePath($name);
-
         return $this->retryAcquire($timeout, function () use ($filePath, $name) {
-            $file = fopen($filePath, 'w+b');
-
+            $file = fopen($filePath, 'w+');
             if ($file === false) {
                 return false;
             }
@@ -127,7 +113,6 @@ class FileMutex extends Mutex
 
             if (!flock($file, LOCK_EX | LOCK_NB)) {
                 fclose($file);
-
                 return false;
             }
 
@@ -145,21 +130,17 @@ class FileMutex extends Mutex
                 clearstatcache(true, $filePath);
                 flock($file, LOCK_UN);
                 fclose($file);
-
                 return false;
             }
 
             $this->_files[$name] = $file;
-
             return true;
         });
     }
 
     /**
      * Releases lock by given name.
-     *
      * @param string $name of the lock to be released.
-     *
      * @return bool release result.
      */
     protected function releaseLock($name)
@@ -183,17 +164,13 @@ class FileMutex extends Mutex
         }
 
         unset($this->_files[$name]);
-
         return true;
     }
 
     /**
      * Generate path for lock file.
-     *
      * @param string $name
-     *
      * @return string
-     *
      * @since 2.0.10
      */
     protected function getLockFilePath($name)

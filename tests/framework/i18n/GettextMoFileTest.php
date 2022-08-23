@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,15 +7,15 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\i18n;
 
-use yiiunit\TestCase;
 use yii\i18n\GettextMoFile;
+use yiiunit\TestCase;
 
 /**
  * @group i18n
  */
 class GettextMoFileTest extends TestCase
 {
-    public function testLoad(): void
+    public function testLoad()
     {
         $moFile = new GettextMoFile();
         $moFilePath = __DIR__ . '/../../data/i18n/test.mo';
@@ -48,7 +45,7 @@ class GettextMoFileTest extends TestCase
         $this->assertTrue(in_array("тест1\\nтест2\n\\\nтест3", $context2));
     }
 
-    public function testSave(): void
+    public function testSave()
     {
         // initial data
         $s = chr(4);
@@ -65,11 +62,9 @@ class GettextMoFileTest extends TestCase
 
         // create temporary directory and dump messages
         $poFileDirectory = __DIR__ . '/../../runtime/i18n';
-
         if (!is_dir($poFileDirectory)) {
             mkdir($poFileDirectory);
         }
-
         if (is_file($poFileDirectory . '/test.mo')) {
             unlink($poFileDirectory . '/test.mo');
         }

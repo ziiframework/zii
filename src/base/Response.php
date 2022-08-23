@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -16,7 +13,6 @@ namespace yii\base;
  * For more details and usage information on Response, see the [guide article on responses](guide:runtime-responses).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class Response extends Component
@@ -27,17 +23,18 @@ class Response extends Component
      */
     public $exitStatus = 0;
 
+
     /**
      * Sends the response to client.
      */
-    public function send(): void
+    public function send()
     {
     }
 
     /**
      * Removes all existing output buffers.
      */
-    public function clearOutputBuffers(): void
+    public function clearOutputBuffers()
     {
         // the following manual level counting is to deal with zlib.output_compression set to On
         for ($level = ob_get_level(); $level > 0; --$level) {

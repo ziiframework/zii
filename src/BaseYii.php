@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,47 +7,46 @@ declare(strict_types=1);
 
 namespace yii;
 
-use Yii;
-use yii\log\Logger;
-use yii\di\Container;
-use yii\base\UnknownClassException;
-use yii\base\InvalidConfigException;
 use yii\base\InvalidArgumentException;
+use yii\base\InvalidConfigException;
+use yii\base\UnknownClassException;
+use yii\di\Container;
+use yii\log\Logger;
 
-/*
+/**
  * Gets the application start timestamp.
  */
-defined('YII_BEGIN_TIME') || define('YII_BEGIN_TIME', microtime(true));
-/*
+defined('YII_BEGIN_TIME') or define('YII_BEGIN_TIME', microtime(true));
+/**
  * This constant defines the framework installation directory.
  */
-defined('YII2_PATH') || define('YII2_PATH', __DIR__);
-/*
+defined('YII2_PATH') or define('YII2_PATH', __DIR__);
+/**
  * This constant defines whether the application should be in debug mode or not. Defaults to false.
  */
-defined('YII_DEBUG') || define('YII_DEBUG', false);
-/*
+defined('YII_DEBUG') or define('YII_DEBUG', false);
+/**
  * This constant defines in which environment the application is running. Defaults to 'prod', meaning production environment.
  * You may define this constant in the bootstrap script. The value could be 'prod' (production), 'dev' (development), 'test', 'staging', etc.
  */
-defined('YII_ENV') || define('YII_ENV', 'prod');
-/*
+defined('YII_ENV') or define('YII_ENV', 'prod');
+/**
  * Whether the application is running in the production environment.
  */
-defined('YII_ENV_PROD') || define('YII_ENV_PROD', YII_ENV === 'prod');
-/*
+defined('YII_ENV_PROD') or define('YII_ENV_PROD', YII_ENV === 'prod');
+/**
  * Whether the application is running in the development environment.
  */
-defined('YII_ENV_DEV') || define('YII_ENV_DEV', YII_ENV === 'dev');
-/*
+defined('YII_ENV_DEV') or define('YII_ENV_DEV', YII_ENV === 'dev');
+/**
  * Whether the application is running in the testing environment.
  */
-defined('YII_ENV_TEST') || define('YII_ENV_TEST', YII_ENV === 'test');
+defined('YII_ENV_TEST') or define('YII_ENV_TEST', YII_ENV === 'test');
 
-/*
+/**
  * This constant defines whether error handling should be enabled. Defaults to true.
  */
-defined('YII_ENABLE_ERROR_HANDLER') || define('YII_ENABLE_ERROR_HANDLER', true);
+defined('YII_ENABLE_ERROR_HANDLER') or define('YII_ENABLE_ERROR_HANDLER', true);
 
 /**
  * BaseYii is the core helper class for the Yii framework.
@@ -59,7 +55,6 @@ defined('YII_ENABLE_ERROR_HANDLER') || define('YII_ENABLE_ERROR_HANDLER', true);
  * customize methods of BaseYii.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class BaseYii
@@ -69,42 +64,36 @@ class BaseYii
      * The array keys are the class names (without leading backslashes), and the array values
      * are the corresponding class file paths (or [path aliases](guide:concept-aliases)). This property mainly affects
      * how [[autoload()]] works.
-     *
      * @see autoload()
      */
     public static $classMap = [];
-
     /**
      * @var \yii\console\Application|\yii\web\Application|\yii\base\Application the application instance
      */
     public static $app;
-
     /**
      * @var array registered path aliases
-     *
      * @see getAlias()
      * @see setAlias()
      */
     public static $aliases = ['@yii' => __DIR__];
-
     /**
      * @var Container the dependency injection (DI) container used by [[createObject()]].
      * You may use [[Container::set()]] to set up the needed dependencies of classes and
      * their initial property values.
-     *
      * @see createObject()
      * @see Container
      */
     public static $container;
 
+
     /**
      * Returns a string representing the current version of the Yii framework.
-     *
      * @return string the version of Yii framework
      */
     public static function getVersion()
     {
-        return '2.0.44';
+        return '2.0.47-dev';
     }
 
     /**
@@ -135,20 +124,13 @@ class BaseYii
      * @param string $alias the alias to be translated.
      * @param bool $throwException whether to throw an exception if the given alias is invalid.
      * If this is false and an invalid alias is given, false will be returned by this method.
-     *
      * @return string|false the path corresponding to the alias, false if the root alias is not previously registered.
-     *
      * @throws InvalidArgumentException if the alias is invalid while $throwException is true.
-     *
      * @see setAlias()
      */
-    public static function getAlias(?string $alias, $throwException = true)
+    public static function getAlias($alias, $throwException = true)
     {
-        if ($alias === null) {
-            return null;
-        }
-
-        if (strncmp($alias, '@', 1) !== 0) {
+        if (strncmp((string)$alias, '@', 1) !== 0) {
             // not an alias
             return $alias;
         }
@@ -179,9 +161,7 @@ class BaseYii
      * Returns the root alias part of a given alias.
      * A root alias is an alias that has been registered via [[setAlias()]] previously.
      * If a given alias matches multiple root aliases, the longest one will be returned.
-     *
      * @param string $alias the alias
-     *
      * @return string|false the root alias, or false if no root alias is found
      */
     public static function getRootAlias($alias)
@@ -223,29 +203,26 @@ class BaseYii
      * @param string $alias the alias name (e.g. "@yii"). It must start with a '@' character.
      * It may contain the forward-slash '/' which serves as a boundary character when performing
      * alias translation by [[getAlias()]].
-     * @param string $path the path corresponding to the alias. If this is null, the alias will
+     * @param string|null $path the path corresponding to the alias. If this is null, the alias will
      * be removed. Trailing '/' and '\' characters will be trimmed. This can be
      *
      * - a directory or a file path (e.g. `/tmp`, `/tmp/main.txt`)
-     * - a URL (e.g. `http://www.yiiframework.com`)
+     * - a URL (e.g. `https://www.yiiframework.com`)
      * - a path alias (e.g. `@yii/base`). In this case, the path alias will be converted into the
      *   actual path first by calling [[getAlias()]].
      *
      * @throws InvalidArgumentException if $path is an invalid alias.
-     *
      * @see getAlias()
      */
-    public static function setAlias($alias, $path): void
+    public static function setAlias($alias, $path)
     {
         if (strncmp($alias, '@', 1)) {
             $alias = '@' . $alias;
         }
         $pos = strpos($alias, '/');
         $root = $pos === false ? $alias : substr($alias, 0, $pos);
-
         if ($path !== null) {
             $path = strncmp($path, '@', 1) ? rtrim($path, '\\/') : static::getAlias($path);
-
             if (!isset(static::$aliases[$root])) {
                 if ($pos === false) {
                     static::$aliases[$root] = $path;
@@ -285,7 +262,7 @@ class BaseYii
      *    to include the file associated with the corresponding path alias
      *    (e.g. `@yii/base/Component.php`);
      *
-     * This autoloader allows loading classes that follow the [PSR-4 standard](http://www.php-fig.org/psr/psr-4/)
+     * This autoloader allows loading classes that follow the [PSR-4 standard](https://www.php-fig.org/psr/psr-4/)
      * and have its top-level namespace or sub-namespaces defined as path aliases.
      *
      * Example: When aliases `@yii` and `@yii/bootstrap` are defined, classes in the `yii\bootstrap` namespace
@@ -295,20 +272,17 @@ class BaseYii
      * Also the [guide section on autoloading](guide:concept-autoloading).
      *
      * @param string $className the fully qualified class name without a leading backslash "\"
-     *
      * @throws UnknownClassException if the class does not exist in the class file
      */
-    public static function autoload($className): void
+    public static function autoload($className)
     {
         if (isset(static::$classMap[$className])) {
             $classFile = static::$classMap[$className];
-
             if (strncmp($classFile, '@', 1) === 0) {
                 $classFile = static::getAlias($classFile);
             }
         } elseif (strpos($className, '\\') !== false) {
             $classFile = static::getAlias('@' . str_replace('\\', '/', $className) . '.php', false);
-
             if ($classFile === false || !is_file($classFile)) {
                 return;
             }
@@ -359,12 +333,10 @@ class BaseYii
      *   and the rest of the name-value pairs will be used to initialize the corresponding object properties
      * - a PHP callable: either an anonymous function or an array representing a class method (`[$class or $object, $method]`).
      *   The callable should return a new instance of the object being created.
+     *
      * @param array $params the constructor parameters
-     *
      * @return object the created object
-     *
      * @throws InvalidConfigException if the configuration is invalid.
-     *
      * @see \yii\di\Container
      */
     public static function createObject($type, array $params = [])
@@ -384,14 +356,12 @@ class BaseYii
         if (isset($type['__class'])) {
             $class = $type['__class'];
             unset($type['__class'], $type['class']);
-
             return static::$container->get($class, $params, $type);
         }
 
         if (isset($type['class'])) {
             $class = $type['class'];
             unset($type['class']);
-
             return static::$container->get($class, $params, $type);
         }
 
@@ -414,10 +384,9 @@ class BaseYii
 
     /**
      * Sets the logger object.
-     *
-     * @param Logger $logger the logger object.
+     * @param Logger|null $logger the logger object.
      */
-    public static function setLogger($logger): void
+    public static function setLogger($logger)
     {
         self::$_logger = $logger;
     }
@@ -427,14 +396,12 @@ class BaseYii
      * Trace messages are logged mainly for development purposes to see
      * the execution workflow of some code. This method will only log
      * a message when the application is in debug mode.
-     *
      * @param string|array $message the message to be logged. This can be a simple string or a more
      * complex data structure, such as an array.
      * @param string $category the category of the message.
-     *
      * @since 2.0.14
      */
-    public static function debug($message, $category = 'application'): void
+    public static function debug($message, $category = 'application')
     {
         if (YII_DEBUG) {
             static::getLogger()->log($message, Logger::LEVEL_TRACE, $category);
@@ -443,14 +410,12 @@ class BaseYii
 
     /**
      * Alias of [[debug()]].
-     *
      * @param string|array $message the message to be logged. This can be a simple string or a more
      * complex data structure, such as an array.
      * @param string $category the category of the message.
-     *
      * @deprecated since 2.0.14. Use [[debug()]] instead.
      */
-    public static function trace($message, $category = 'application'): void
+    public static function trace($message, $category = 'application')
     {
         static::debug($message, $category);
     }
@@ -459,12 +424,11 @@ class BaseYii
      * Logs an error message.
      * An error message is typically logged when an unrecoverable error occurs
      * during the execution of an application.
-     *
      * @param string|array $message the message to be logged. This can be a simple string or a more
      * complex data structure, such as an array.
      * @param string $category the category of the message.
      */
-    public static function error($message, $category = 'application'): void
+    public static function error($message, $category = 'application')
     {
         static::getLogger()->log($message, Logger::LEVEL_ERROR, $category);
     }
@@ -473,12 +437,11 @@ class BaseYii
      * Logs a warning message.
      * A warning message is typically logged when an error occurs while the execution
      * can still continue.
-     *
      * @param string|array $message the message to be logged. This can be a simple string or a more
      * complex data structure, such as an array.
      * @param string $category the category of the message.
      */
-    public static function warning($message, $category = 'application'): void
+    public static function warning($message, $category = 'application')
     {
         static::getLogger()->log($message, Logger::LEVEL_WARNING, $category);
     }
@@ -487,12 +450,11 @@ class BaseYii
      * Logs an informative message.
      * An informative message is typically logged by an application to keep record of
      * something important (e.g. an administrator logs in).
-     *
      * @param string|array $message the message to be logged. This can be a simple string or a more
      * complex data structure, such as an array.
      * @param string $category the category of the message.
      */
-    public static function info($message, $category = 'application'): void
+    public static function info($message, $category = 'application')
     {
         static::getLogger()->log($message, Logger::LEVEL_INFO, $category);
     }
@@ -511,13 +473,11 @@ class BaseYii
      *     \Yii::endProfile('block2');
      * \Yii::endProfile('block1');
      * ```
-     *
      * @param string $token token for the code block
      * @param string $category the category of this log message
-     *
      * @see endProfile()
      */
-    public static function beginProfile($token, $category = 'application'): void
+    public static function beginProfile($token, $category = 'application')
     {
         static::getLogger()->log($token, Logger::LEVEL_PROFILE_BEGIN, $category);
     }
@@ -525,28 +485,25 @@ class BaseYii
     /**
      * Marks the end of a code block for profiling.
      * This has to be matched with a previous call to [[beginProfile]] with the same category name.
-     *
      * @param string $token token for the code block
      * @param string $category the category of this log message
-     *
      * @see beginProfile()
      */
-    public static function endProfile($token, $category = 'application'): void
+    public static function endProfile($token, $category = 'application')
     {
         static::getLogger()->log($token, Logger::LEVEL_PROFILE_END, $category);
     }
 
     /**
      * Returns an HTML hyperlink that can be displayed on your Web page showing "Powered by Yii Framework" information.
-     *
      * @return string an HTML hyperlink that can be displayed on your Web page showing "Powered by Yii Framework" information
-     *
      * @deprecated since 2.0.14, this method will be removed in 2.1.0.
      */
     public static function powered()
     {
-        return Yii::t('yii', 'Powered by {yii}', [
-            'yii' => '<a href="http://www.yiiframework.com/" rel="external">' . Yii::t('yii', 'Yii Framework') . '</a>',
+        return \Yii::t('yii', 'Powered by {yii}', [
+            'yii' => '<a href="https://www.yiiframework.com/" rel="external">' . \Yii::t('yii',
+                    'Yii Framework') . '</a>',
         ]);
     }
 
@@ -571,9 +528,8 @@ class BaseYii
      * @param string $category the message category.
      * @param string $message the message to be translated.
      * @param array $params the parameters that will be used to replace the corresponding placeholders in the message.
-     * @param string $language the language code (e.g. `en-US`, `en`). If this is null, the current
+     * @param string|null $language the language code (e.g. `en-US`, `en`). If this is null, the current
      * [[\yii\base\Application::language|application language]] will be used.
-     *
      * @return string the translated message.
      */
     public static function t($category, $message, $params = [], $language = null)
@@ -583,7 +539,6 @@ class BaseYii
         }
 
         $placeholders = [];
-
         foreach ((array) $params as $name => $value) {
             $placeholders['{' . $name . '}'] = $value;
         }
@@ -593,10 +548,8 @@ class BaseYii
 
     /**
      * Configures an object with the initial property values.
-     *
      * @param object $object the object to be configured
      * @param array $properties the property initial values given in terms of name-value pairs.
-     *
      * @return object the object itself
      */
     public static function configure($object, $properties)
@@ -613,9 +566,7 @@ class BaseYii
      * This method is provided such that we can get the public member variables of an object.
      * It is different from "get_object_vars()" because the latter will return private
      * and protected variables if it is called within the object itself.
-     *
      * @param object $object the object to be handled
-     *
      * @return array the public member variables of the object
      */
     public static function getObjectVars($object)

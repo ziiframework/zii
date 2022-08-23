@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,17 +7,16 @@ declare(strict_types=1);
 
 namespace yii\db\mssql;
 
+use yii\base\InvalidArgumentException;
+use yii\base\NotSupportedException;
 use yii\db\Constraint;
 use yii\db\Expression;
 use yii\db\TableSchema;
-use yii\base\NotSupportedException;
-use yii\base\InvalidArgumentException;
 
 /**
  * QueryBuilder is the query builder for MS SQL Server databases (version 2008 and above).
  *
  * @author Timur Ruziev <resurtm@gmail.com>
- *
  * @since 2.0
  */
 class QueryBuilder extends \yii\db\QueryBuilder
@@ -52,6 +48,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
         Schema::TYPE_MONEY => 'decimal(19,4)',
     ];
 
+
     /**
      * {@inheritdoc}
      */
@@ -70,7 +67,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         if (!$this->hasOffset($offset) && !$this->hasLimit($limit)) {
             $orderBy = $this->buildOrderBy($orderBy);
-
             return $orderBy === '' ? $sql : $sql . $this->separator . $orderBy;
         }
 
@@ -83,18 +79,15 @@ class QueryBuilder extends \yii\db\QueryBuilder
 
     /**
      * Builds the ORDER BY/LIMIT/OFFSET clauses for SQL SERVER 2012 or newer.
-     *
      * @param string $sql the existing SQL (without ORDER BY/LIMIT/OFFSET)
      * @param array $orderBy the order by columns. See [[\yii\db\Query::orderBy]] for more details on how to specify this parameter.
      * @param int $limit the limit number. See [[\yii\db\Query::limit]] for more details.
      * @param int $offset the offset number. See [[\yii\db\Query::offset]] for more details.
-     *
      * @return string the SQL completed with ORDER BY/LIMIT/OFFSET (if any)
      */
     protected function newBuildOrderByAndLimit($sql, $orderBy, $limit, $offset)
     {
         $orderBy = $this->buildOrderBy($orderBy);
-
         if ($orderBy === '') {
             // ORDER BY clause is required when FETCH and OFFSET are in the SQL
             $orderBy = 'ORDER BY (SELECT NULL)';
@@ -104,7 +97,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
         // http://technet.microsoft.com/en-us/library/gg699618.aspx
         $offset = $this->hasOffset($offset) ? $offset : '0';
         $sql .= $this->separator . "OFFSET $offset ROWS";
-
         if ($this->hasLimit($limit)) {
             $sql .= $this->separator . "FETCH NEXT $limit ROWS ONLY";
         }
@@ -114,18 +106,15 @@ class QueryBuilder extends \yii\db\QueryBuilder
 
     /**
      * Builds the ORDER BY/LIMIT/OFFSET clauses for SQL SERVER 2005 to 2008.
-     *
      * @param string $sql the existing SQL (without ORDER BY/LIMIT/OFFSET)
      * @param array $orderBy the order by columns. See [[\yii\db\Query::orderBy]] for more details on how to specify this parameter.
      * @param int|Expression $limit the limit number. See [[\yii\db\Query::limit]] for more details.
      * @param int $offset the offset number. See [[\yii\db\Query::offset]] for more details.
-     *
      * @return string the SQL completed with ORDER BY/LIMIT/OFFSET (if any)
      */
     protected function oldBuildOrderByAndLimit($sql, $orderBy, $limit, $offset)
     {
         $orderBy = $this->buildOrderBy($orderBy);
-
         if ($orderBy === '') {
             // ROW_NUMBER() requires an ORDER BY clause
             $orderBy = 'ORDER BY (SELECT NULL)';
@@ -135,13 +124,12 @@ class QueryBuilder extends \yii\db\QueryBuilder
 
         if ($this->hasLimit($limit)) {
             if ($limit instanceof Expression) {
-                $limit = '(' . (string) $limit . ')';
+                $limit = '('. (string)$limit . ')';
             }
             $sql = "SELECT TOP $limit * FROM ($sql) sub";
         } else {
             $sql = "SELECT * FROM ($sql) sub";
         }
-
         if ($this->hasOffset($offset)) {
             $sql .= $this->separator . "WHERE rowNum > $offset";
         }
@@ -151,10 +139,8 @@ class QueryBuilder extends \yii\db\QueryBuilder
 
     /**
      * Builds a SQL statement for renaming a DB table.
-     *
      * @param string $oldName the table to be renamed. The name will be properly quoted by the method.
      * @param string $newName the new table name. The name will be properly quoted by the method.
-     *
      * @return string the SQL statement for renaming a DB table.
      */
     public function renameTable($oldName, $newName)
@@ -164,11 +150,9 @@ class QueryBuilder extends \yii\db\QueryBuilder
 
     /**
      * Builds a SQL statement for renaming a column.
-     *
      * @param string $table the table whose column is to be renamed. The name will be properly quoted by the method.
      * @param string $oldName the old name of the column. The name will be properly quoted by the method.
      * @param string $newName the new name of the column. The name will be properly quoted by the method.
-     *
      * @return string the SQL statement for renaming a DB column.
      */
     public function renameColumn($table, $oldName, $newName)
@@ -176,21 +160,17 @@ class QueryBuilder extends \yii\db\QueryBuilder
         $table = $this->db->quoteTableName($table);
         $oldName = $this->db->quoteColumnName($oldName);
         $newName = $this->db->quoteColumnName($newName);
-
         return "sp_rename '{$table}.{$oldName}', {$newName}, 'COLUMN'";
     }
 
     /**
      * Builds a SQL statement for changing the definition of a column.
-     *
      * @param string $table the table whose column is to be changed. The table name will be properly quoted by the method.
      * @param string $column the name of the column to be changed. The name will be properly quoted by the method.
      * @param string $type the new column type. The [[getColumnType]] method will be invoked to convert abstract column type (if any)
      * into the physical one. Anything that is not recognized as abstract type will be kept in the generated SQL.
      * For example, 'string' will be turned into 'varchar(255)', while 'string not null' will become 'varchar(255) not null'.
-     *
      * @return string the SQL statement for changing the definition of a column.
-     *
      * @throws NotSupportedException if this is not supported by the underlying DBMS.
      */
     public function alterColumn($table, $column, $type)
@@ -204,18 +184,22 @@ class QueryBuilder extends \yii\db\QueryBuilder
         if ($type instanceof \yii\db\mssql\ColumnSchemaBuilder) {
             $type->setAlterColumnFormat();
 
-            $defaultValue = $type->getDefaultValue();
 
+            $defaultValue = $type->getDefaultValue();
             if ($defaultValue !== null) {
-                $sqlAfter[] = $this->addDefaultValue("DF_{$constraintBase}", $table, $column, $defaultValue instanceof Expression ? $defaultValue : new Expression($defaultValue));
+                $sqlAfter[] = $this->addDefaultValue(
+                    "DF_{$constraintBase}",
+                    $table,
+                    $column,
+                    $defaultValue instanceof Expression ? $defaultValue : new Expression($defaultValue)
+                );
             }
 
             $checkValue = $type->getCheckValue();
-
             if ($checkValue !== null) {
                 $sqlAfter[] = "ALTER TABLE {$tableName} ADD CONSTRAINT " .
                     $this->db->quoteColumnName("CK_{$constraintBase}") .
-                    ' CHECK (' . ($defaultValue instanceof Expression ? $checkValue : new Expression($checkValue)) . ')';
+                    " CHECK (" . ($defaultValue instanceof Expression ?  $checkValue : new Expression($checkValue)) . ")";
             }
 
             if ($type->isUnique()) {
@@ -252,22 +236,17 @@ class QueryBuilder extends \yii\db\QueryBuilder
      * Creates a SQL statement for resetting the sequence value of a table's primary key.
      * The sequence will be reset such that the primary key of the next new row inserted
      * will have the specified value or 1.
-     *
      * @param string $tableName the name of the table whose primary key sequence will be reset
      * @param mixed $value the value for the primary key of the next new row inserted. If this is not set,
      * the next new row's primary key will have a value 1.
-     *
      * @return string the SQL statement for resetting sequence
-     *
      * @throws InvalidArgumentException if the table does not exist or there is no sequence associated with the table.
      */
     public function resetSequence($tableName, $value = null)
     {
         $table = $this->db->getTableSchema($tableName);
-
         if ($table !== null && $table->sequenceName !== null) {
             $tableName = $this->db->quoteTableName($tableName);
-
             if ($value === null) {
                 $key = $this->db->quoteColumnName(reset($table->primaryKey));
                 $value = "(SELECT COALESCE(MAX({$key}),0) FROM {$tableName})+1";
@@ -285,11 +264,9 @@ class QueryBuilder extends \yii\db\QueryBuilder
 
     /**
      * Builds a SQL statement for enabling or disabling integrity check.
-     *
      * @param bool $check whether to turn on or off the integrity check.
      * @param string $schema the schema of the tables.
      * @param string $table the table name.
-     *
      * @return string the SQL statement for checking integrity
      */
     public function checkIntegrity($check = true, $schema = '', $table = '')
@@ -309,22 +286,19 @@ class QueryBuilder extends \yii\db\QueryBuilder
         return $command;
     }
 
-    /**
-     * Builds a SQL command for adding or updating a comment to a table or a column. The command built will check if a comment
-     * already exists. If so, it will be updated, otherwise, it will be added.
-     *
-     * @param string $comment the text of the comment to be added. The comment will be properly quoted by the method.
-     * @param string $table the table to be commented or whose column is to be commented. The table name will be
-     * properly quoted by the method.
-     * @param string $column optional. The name of the column to be commented. If empty, the command will add the
-     * comment to the table instead. The column name will be properly quoted by the method.
-     *
-     * @return string the SQL statement for adding a comment.
-     *
-     * @throws InvalidArgumentException if the table does not exist.
-     *
-     * @since 2.0.24
-     */
+     /**
+      * Builds a SQL command for adding or updating a comment to a table or a column. The command built will check if a comment
+      * already exists. If so, it will be updated, otherwise, it will be added.
+      *
+      * @param string $comment the text of the comment to be added. The comment will be properly quoted by the method.
+      * @param string $table the table to be commented or whose column is to be commented. The table name will be
+      * properly quoted by the method.
+      * @param string|null $column optional. The name of the column to be commented. If empty, the command will add the
+      * comment to the table instead. The column name will be properly quoted by the method.
+      * @return string the SQL statement for adding a comment.
+      * @throws InvalidArgumentException if the table does not exist.
+      * @since 2.0.24
+      */
     protected function buildAddCommentSql($comment, $table, $column = null)
     {
         $tableSchema = $this->db->schema->getTableSchema($table);
@@ -333,10 +307,10 @@ class QueryBuilder extends \yii\db\QueryBuilder
             throw new InvalidArgumentException("Table not found: $table");
         }
 
-        $schemaName = $tableSchema->schemaName ? "N'" . $tableSchema->schemaName . "'" : 'SCHEMA_NAME()';
-        $tableName = 'N' . $this->db->quoteValue($tableSchema->name);
-        $columnName = $column ? 'N' . $this->db->quoteValue($column) : null;
-        $comment = 'N' . $this->db->quoteValue($comment);
+        $schemaName = $tableSchema->schemaName ? "N'" . $tableSchema->schemaName . "'": 'SCHEMA_NAME()';
+        $tableName = "N" . $this->db->quoteValue($tableSchema->name);
+        $columnName = $column ? "N" . $this->db->quoteValue($column) : null;
+        $comment = "N" . $this->db->quoteValue($comment);
 
         $functionParams = "
             @name = N'MS_description',
@@ -363,7 +337,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
 
     /**
      * {@inheritdoc}
-     *
      * @since 2.0.8
      */
     public function addCommentOnColumn($table, $column, $comment)
@@ -373,7 +346,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
 
     /**
      * {@inheritdoc}
-     *
      * @since 2.0.8
      */
     public function addCommentOnTable($table, $comment)
@@ -387,13 +359,10 @@ class QueryBuilder extends \yii\db\QueryBuilder
      *
      * @param string $table the table that will have the comment removed or whose column will have the comment removed.
      * The table name will be properly quoted by the method.
-     * @param string $column optional. The name of the column whose comment will be removed. If empty, the command
+     * @param string|null $column optional. The name of the column whose comment will be removed. If empty, the command
      * will remove the comment from the table instead. The column name will be properly quoted by the method.
-     *
      * @return string the SQL statement for removing the comment.
-     *
      * @throws InvalidArgumentException if the table does not exist.
-     *
      * @since 2.0.24
      */
     protected function buildRemoveCommentSql($table, $column = null)
@@ -404,9 +373,9 @@ class QueryBuilder extends \yii\db\QueryBuilder
             throw new InvalidArgumentException("Table not found: $table");
         }
 
-        $schemaName = $tableSchema->schemaName ? "N'" . $tableSchema->schemaName . "'" : 'SCHEMA_NAME()';
-        $tableName = 'N' . $this->db->quoteValue($tableSchema->name);
-        $columnName = $column ? 'N' . $this->db->quoteValue($column) : null;
+        $schemaName = $tableSchema->schemaName ? "N'" . $tableSchema->schemaName . "'": 'SCHEMA_NAME()';
+        $tableName = "N" . $this->db->quoteValue($tableSchema->name);
+        $columnName = $column ? "N" . $this->db->quoteValue($column) : null;
 
         return "
             IF EXISTS (
@@ -427,7 +396,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
 
     /**
      * {@inheritdoc}
-     *
      * @since 2.0.8
      */
     public function dropCommentFromColumn($table, $column)
@@ -437,7 +405,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
 
     /**
      * {@inheritdoc}
-     *
      * @since 2.0.8
      */
     public function dropCommentFromTable($table)
@@ -448,8 +415,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
     /**
      * Returns an array of column names given model name.
      *
-     * @param string $modelClass name of the model class
-     *
+     * @param string|null $modelClass name of the model class
      * @return array|null array of column names
      */
     protected function getAllColumnNames($modelClass = null)
@@ -459,16 +425,13 @@ class QueryBuilder extends \yii\db\QueryBuilder
         }
         /* @var $modelClass \yii\db\ActiveRecord */
         $schema = $modelClass::getTableSchema();
-
         return array_keys($schema->columns);
     }
 
     /**
      * @return bool whether the version of the MSSQL being used is older than 2012.
-     *
      * @throws \yii\base\InvalidConfigException
      * @throws \yii\db\Exception
-     *
      * @deprecated 2.0.14 Use [[Schema::getServerVersion]] with [[\version_compare()]].
      */
     protected function isOldMssql()
@@ -478,7 +441,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
 
     /**
      * {@inheritdoc}
-     *
      * @since 2.0.8
      */
     public function selectExists($rawSql)
@@ -488,17 +450,14 @@ class QueryBuilder extends \yii\db\QueryBuilder
 
     /**
      * Normalizes data to be saved into the table, performing extra preparations and type converting, if necessary.
-     *
      * @param string $table the table that data will be saved into.
      * @param array $columns the column data (name => value) to be saved into the table.
-     *
      * @return array normalized columns
      */
     private function normalizeTableRowData($table, $columns, &$params)
     {
         if (($tableSchema = $this->db->getSchema()->getTableSchema($table)) !== null) {
             $columnSchemas = $tableSchema->columns;
-
             foreach ($columns as $name => $value) {
                 // @see https://github.com/yiisoft/yii2/issues/12599
                 if (isset($columnSchemas[$name]) && $columnSchemas[$name]->type === Schema::TYPE_BINARY && $columnSchemas[$name]->dbType === 'varbinary' && (is_string($value) || $value === null)) {
@@ -524,14 +483,12 @@ class QueryBuilder extends \yii\db\QueryBuilder
 
         $version2005orLater = version_compare($this->db->getSchema()->getServerVersion(), '9', '>=');
 
-        [$names, $placeholders, $values, $params] = $this->prepareInsertValues($table, $columns, $params);
+        list($names, $placeholders, $values, $params) = $this->prepareInsertValues($table, $columns, $params);
         $cols = [];
         $columns = [];
-
         if ($version2005orLater) {
             /* @var $schema TableSchema */
             $schema = $this->db->getTableSchema($table);
-
             foreach ($schema->columns as $column) {
                 if ($column->isComputed) {
                     continue;
@@ -539,8 +496,8 @@ class QueryBuilder extends \yii\db\QueryBuilder
                 $quoteColumnName = $this->db->quoteColumnName($column->name);
                 $cols[] = $quoteColumnName . ' '
                     . $column->dbType
-                    . (in_array($column->dbType, ['char', 'varchar', 'nchar', 'nvarchar', 'binary', 'varbinary']) ? '(MAX)' : '')
-                    . ' ' . ($column->allowNull ? 'NULL' : '');
+                    . (in_array($column->dbType, ['char', 'varchar', 'nchar', 'nvarchar', 'binary', 'varbinary']) ? "(MAX)" : "")
+                    . ' ' . ($column->allowNull ? "NULL" : "");
                 $columns[] = 'INSERTED.' . $quoteColumnName;
             }
         }
@@ -561,21 +518,18 @@ class QueryBuilder extends \yii\db\QueryBuilder
 
     /**
      * {@inheritdoc}
-     *
      * @see https://docs.microsoft.com/en-us/sql/t-sql/statements/merge-transact-sql
-     * @see http://weblogs.sqlteam.com/dang/archive/2009/01/31/UPSERT-Race-Condition-With-MERGE.aspx
+     * @see https://weblogs.sqlteam.com/dang/2009/01/31/upsert-race-condition-with-merge/
      */
     public function upsert($table, $insertColumns, $updateColumns, &$params)
     {
         $insertColumns = $this->normalizeTableRowData($table, $insertColumns, $params);
 
-        /* @var Constraint[] $constraints */
-        [$uniqueNames, $insertNames, $updateNames] = $this->prepareUpsertColumns($table, $insertColumns, $updateColumns, $constraints);
-
+        /** @var Constraint[] $constraints */
+        list($uniqueNames, $insertNames, $updateNames) = $this->prepareUpsertColumns($table, $insertColumns, $updateColumns, $constraints);
         if (empty($uniqueNames)) {
             return $this->insert($table, $insertColumns, $params);
         }
-
         if ($updateNames === []) {
             // there are no columns to update
             $updateColumns = false;
@@ -583,10 +537,8 @@ class QueryBuilder extends \yii\db\QueryBuilder
 
         $onCondition = ['or'];
         $quotedTableName = $this->db->quoteTableName($table);
-
         foreach ($constraints as $constraint) {
             $constraintCondition = ['and'];
-
             foreach ($constraint->columnNames as $name) {
                 $quotedName = $this->db->quoteColumnName($name);
                 $constraintCondition[] = "$quotedTableName.$quotedName=[EXCLUDED].$quotedName";
@@ -594,15 +546,13 @@ class QueryBuilder extends \yii\db\QueryBuilder
             $onCondition[] = $constraintCondition;
         }
         $on = $this->buildCondition($onCondition, $params);
-        [, $placeholders, $values, $params] = $this->prepareInsertValues($table, $insertColumns, $params);
+        list(, $placeholders, $values, $params) = $this->prepareInsertValues($table, $insertColumns, $params);
 
         /**
          * Fix number of select query params for old MSSQL version that does not support offset correctly.
-         *
          * @see QueryBuilder::oldBuildOrderByAndLimit
          */
         $insertNamesUsing = $insertNames;
-
         if (strstr($values, 'rowNum = ROW_NUMBER()') !== false) {
             $insertNamesUsing = array_merge(['[rowNum]'], $insertNames);
         }
@@ -611,10 +561,8 @@ class QueryBuilder extends \yii\db\QueryBuilder
             . 'USING (' . (!empty($placeholders) ? 'VALUES (' . implode(', ', $placeholders) . ')' : ltrim($values, ' ')) . ') AS [EXCLUDED] (' . implode(', ', $insertNamesUsing) . ') '
             . "ON ($on)";
         $insertValues = [];
-
         foreach ($insertNames as $name) {
             $quotedName = $this->db->quoteColumnName($name);
-
             if (strrpos($quotedName, '.') === false) {
                 $quotedName = '[EXCLUDED].' . $quotedName;
             }
@@ -622,17 +570,14 @@ class QueryBuilder extends \yii\db\QueryBuilder
         }
         $insertSql = 'INSERT (' . implode(', ', $insertNames) . ')'
             . ' VALUES (' . implode(', ', $insertValues) . ')';
-
         if ($updateColumns === false) {
             return "$mergeSql WHEN NOT MATCHED THEN $insertSql;";
         }
 
         if ($updateColumns === true) {
             $updateColumns = [];
-
             foreach ($updateNames as $name) {
                 $quotedName = $this->db->quoteColumnName($name);
-
                 if (strrpos($quotedName, '.') === false) {
                     $quotedName = '[EXCLUDED].' . $quotedName;
                 }
@@ -641,9 +586,8 @@ class QueryBuilder extends \yii\db\QueryBuilder
         }
         $updateColumns = $this->normalizeTableRowData($table, $updateColumns, $params);
 
-        [$updates, $params] = $this->prepareUpdateSets($table, $updateColumns, $params);
+        list($updates, $params) = $this->prepareUpdateSets($table, $updateColumns, $params);
         $updateSql = 'UPDATE SET ' . implode(', ', $updates);
-
         return "$mergeSql WHEN MATCHED THEN $updateSql WHEN NOT MATCHED THEN $insertSql;";
     }
 
@@ -686,12 +630,10 @@ class QueryBuilder extends \yii\db\QueryBuilder
      * @param string $table the table whose constraint is to be dropped. The name will be properly quoted by the method.
      * @param string $column the column whose constraint is to be dropped. The name will be properly quoted by the method.
      * @param string $type type of constraint, leave empty for all type of constraints(for example: D - default, 'UQ' - unique, 'C' - check)
-     *
      * @see https://docs.microsoft.com/sql/relational-databases/system-catalog-views/sys-objects-transact-sql
-     *
      * @return string the DROP CONSTRAINTS SQL
      */
-    private function dropConstraintsForColumn($table, $column, $type = '')
+    private function dropConstraintsForColumn($table, $column, $type='')
     {
         return "DECLARE @tableName VARCHAR(MAX) = '" . $this->db->quoteTableName($table) . "'
 DECLARE @columnName VARCHAR(MAX) = '{$column}'
@@ -711,7 +653,7 @@ WHILE 1=1 BEGIN
             WHERE i.[is_unique_constraint]=1 and i.[object_id]=OBJECT_ID(@tableName)
         ) cons
         JOIN [sys].[objects] so ON so.[object_id]=cons.[object_id]
-        " . (!empty($type) ? " WHERE so.[type]='{$type}'" : '') . ")
+        " . (!empty($type) ? " WHERE so.[type]='{$type}'" : "") . ")
     IF @constraintName IS NULL BREAK
     EXEC (N'ALTER TABLE ' + @tableName + ' DROP CONSTRAINT [' + @constraintName + ']')
 END";
@@ -724,6 +666,6 @@ END";
     public function dropColumn($table, $column)
     {
         return $this->dropConstraintsForColumn($table, $column) . "\nALTER TABLE " . $this->db->quoteTableName($table)
-            . ' DROP COLUMN ' . $this->db->quoteColumnName($column);
+            . " DROP COLUMN " . $this->db->quoteColumnName($column);
     }
 }

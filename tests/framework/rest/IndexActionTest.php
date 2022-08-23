@@ -1,32 +1,24 @@
 <?php
 
-declare(strict_types=1);
-
-/**
- * @link https://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license https://www.yiiframework.com/license/
- */
-
 namespace yiiunit\framework\rest;
 
 use Yii;
-use yii\db\Query;
-use yii\data\Sort;
-use yiiunit\TestCase;
-use yii\data\Pagination;
-use yii\db\ActiveRecord;
-use yii\rest\IndexAction;
-use yii\rest\ActiveController;
 use yii\data\ActiveDataProvider;
+use yii\data\Pagination;
+use yii\data\Sort;
+use yii\db\ActiveRecord;
+use yii\db\Query;
+use yii\rest\ActiveController;
+use yii\rest\IndexAction;
 use yiiunit\framework\filters\stubs\UserIdentity;
+use yiiunit\TestCase;
 
 /**
  * @group rest
  */
 class IndexActionTest extends TestCase
 {
-    protected function setUp(): void
+    protected function setUp()
     {
         parent::setUp();
         $this->mockWebApplication([
@@ -47,10 +39,12 @@ class IndexActionTest extends TestCase
         Yii::$app->getDb()->createCommand()->createTable(IndexActionModel::tableName(), $columns)->execute();
     }
 
-    public function testPrepareSearchQueryAttribute(): void
+    public function testPrepareSearchQueryAttribute()
     {
         $sql = '';
-        Yii::$app->controller = new RestController('rest', new Module('rest'), [
+        Yii::$app->controller = new RestController(
+            'rest',
+            new Module('rest'), [
             'modelClass' => IndexActionModel::className(),
             'actions' => [
                 'index' => [
@@ -67,7 +61,10 @@ class IndexActionTest extends TestCase
         ]);
         Yii::$app->controller->run('index');
 
-        $this->assertEquals('SELECT * FROM `' . IndexActionModel::tableName() . '`', $sql);
+        $this->assertEquals(
+            'SELECT * FROM `' . IndexActionModel::tableName() . '`',
+            $sql
+        );
     }
 
     /**
@@ -77,14 +74,22 @@ class IndexActionTest extends TestCase
      * @param array $params
      * @param string $expectedRawSql
      */
-    public function testPrepareDataProviderWithPaginationAndSorting($pagination, $sort, $expectedPaginationPageSize = null, $expectedPaginationDefaultPageSize = null, $expectedSortOrders = [], $expectedSortDefaultOrder = null): void
-    {
+    public function testPrepareDataProviderWithPaginationAndSorting(
+        $pagination,
+        $sort,
+        $expectedPaginationPageSize = null,
+        $expectedPaginationDefaultPageSize = null,
+        $expectedSortOrders = [],
+        $expectedSortDefaultOrder = null
+    ) {
         Yii::$app->getRequest()->setBodyParams([
             'per-page' => 11,
-            'sort' => '-test-sort',
+            'sort' => '-test-sort'
         ]);
 
-        $controller = new RestController('rest', new Module('rest'), [
+        $controller = new RestController(
+            'rest',
+            new Module('rest'), [
             'modelClass' => IndexActionModel::className(),
             'actions' => [
                 'index' => [
@@ -118,7 +123,6 @@ class IndexActionTest extends TestCase
 
     /**
      * Data provider for [[testPrepareDataProviderWithPaginationAndSorting()]].
-     *
      * @return array test data
      */
     public function dataProviderTestPrepareDataProviderWithPaginationAndSorting()
@@ -130,7 +134,7 @@ class IndexActionTest extends TestCase
                 11, // page size set as param in test
                 (new Pagination())->defaultPageSize,
                 [],
-                null,
+                null
             ],
             [ // Default config
                 [],
@@ -140,7 +144,7 @@ class IndexActionTest extends TestCase
                 11, // page size set as param in test
                 (new Pagination())->defaultPageSize,
                 ['test-sort' => SORT_DESC], // test sort set as param in test
-                null,
+                null
             ],
             [ // Config via array
                 [
@@ -156,7 +160,7 @@ class IndexActionTest extends TestCase
                 12,
                 991,
                 ['test-sort' => SORT_DESC], // test sort set as param in test
-                ['created_at_1' => SORT_DESC],
+                ['created_at_1' => SORT_DESC]
             ],
             [ // Config via objects
                 new Pagination([
@@ -171,12 +175,12 @@ class IndexActionTest extends TestCase
                 11, // page size set as param in test
                 992,
                 ['created_at_2' => SORT_DESC], // test sort set as param in test is ignored
-                ['created_at_2' => SORT_DESC],
+                ['created_at_2' => SORT_DESC]
             ],
             [ // Disable pagination and sort
                 false,
                 false,
-            ],
+            ]
         ];
     }
 }
@@ -193,6 +197,7 @@ class RestController extends ActiveController
 
 class Module extends \yii\base\Module
 {
+
 }
 
 /**

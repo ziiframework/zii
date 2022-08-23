@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -58,7 +55,6 @@ namespace yii\filters\auth;
  * ```
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class HttpBasicAuth extends AuthMethod
@@ -67,9 +63,8 @@ class HttpBasicAuth extends AuthMethod
      * @var string the HTTP authentication realm
      */
     public $realm = 'api';
-
     /**
-     * @var callable a PHP callable that will authenticate the user with the HTTP basic auth information.
+     * @var callable|null a PHP callable that will authenticate the user with the HTTP basic auth information.
      * The callable receives a username and a password as its parameters. It should return an identity object
      * that matches the username and password. Null should be returned if there is no such identity.
      * The callable will be called only if current user is not authenticated.
@@ -91,12 +86,13 @@ class HttpBasicAuth extends AuthMethod
      */
     public $auth;
 
+
     /**
      * {@inheritdoc}
      */
     public function authenticate($user, $request, $response)
     {
-        [$username, $password] = $request->getAuthCredentials();
+        list($username, $password) = $request->getAuthCredentials();
 
         if ($this->auth) {
             if ($username !== null || $password !== null) {
@@ -111,8 +107,7 @@ class HttpBasicAuth extends AuthMethod
                 return $identity;
             }
         } elseif ($username !== null) {
-            $identity = $user->loginByAccessToken($username, static::class);
-
+            $identity = $user->loginByAccessToken($username, get_class($this));
             if ($identity === null) {
                 $this->handleFailure($response);
             }
@@ -126,7 +121,7 @@ class HttpBasicAuth extends AuthMethod
     /**
      * {@inheritdoc}
      */
-    public function challenge($response): void
+    public function challenge($response)
     {
         $response->getHeaders()->set('WWW-Authenticate', "Basic realm=\"{$this->realm}\"");
     }

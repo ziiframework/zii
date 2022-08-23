@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -13,16 +11,16 @@ namespace yiiunit\data\ar;
 use yii\db\ActiveQuery;
 
 /**
- * Class Dossier.
+ * Class Dossier
  *
- * @property int      $id
- * @property int      $department_id
- * @property int      $employee_id
- * @property string   $summary
+ * @property int $id
+ * @property int $department_id
+ * @property int $employee_id
+ * @property string $summary
+ *
  * @property Employee $employee
  *
  * @author Kolyunya <OleynikovNY@mail.ru>
- *
  * @since 2.0.12
  */
 class Dossier extends ActiveRecord

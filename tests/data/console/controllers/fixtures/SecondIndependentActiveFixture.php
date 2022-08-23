@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -16,7 +13,7 @@ class SecondIndependentActiveFixture extends ActiveFixture
 {
     public $modelClass = 'yiiunit\data\ar\Animal';
 
-    public function load(): void
+    public function load()
     {
         FixtureStorage::$activeFixtureSequence[] = self::className();
         parent::load();

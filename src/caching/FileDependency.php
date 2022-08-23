@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -22,7 +19,6 @@ use yii\base\InvalidConfigException;
  * For more details and usage information on Cache, see the [guide article on caching](guide:caching-overview).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class FileDependency extends Dependency
@@ -33,14 +29,12 @@ class FileDependency extends Dependency
      */
     public $fileName;
 
+
     /**
      * Generates the data needed to determine if dependency has been changed.
      * This method returns the file's last modification time.
-     *
      * @param CacheInterface $cache the cache component that is currently evaluating this dependency
-     *
      * @return mixed the data needed to determine if dependency has been changed.
-     *
      * @throws InvalidConfigException if [[fileName]] is not set
      */
     protected function generateDependencyData($cache)
@@ -51,7 +45,6 @@ class FileDependency extends Dependency
 
         $fileName = Yii::getAlias($this->fileName);
         clearstatcache(false, $fileName);
-
         return @filemtime($fileName);
     }
 }

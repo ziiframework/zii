@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,8 +7,8 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\base;
 
-use yiiunit\TestCase;
 use yii\base\BaseObject;
+use yiiunit\TestCase;
 
 /**
  * @group base
@@ -23,20 +20,20 @@ class BaseObjectTest extends TestCase
      */
     protected $object;
 
-    protected function setUp(): void
+    protected function setUp()
     {
         parent::setUp();
         $this->mockApplication();
         $this->object = new NewObject();
     }
 
-    protected function tearDown(): void
+    protected function tearDown()
     {
         parent::tearDown();
         $this->object = null;
     }
 
-    public function testHasProperty(): void
+    public function testHasProperty()
     {
         $this->assertTrue($this->object->hasProperty('Text'));
         $this->assertTrue($this->object->hasProperty('text'));
@@ -46,7 +43,7 @@ class BaseObjectTest extends TestCase
         $this->assertFalse($this->object->hasProperty('Content'));
     }
 
-    public function testCanGetProperty(): void
+    public function testCanGetProperty()
     {
         $this->assertTrue($this->object->canGetProperty('Text'));
         $this->assertTrue($this->object->canGetProperty('text'));
@@ -56,7 +53,7 @@ class BaseObjectTest extends TestCase
         $this->assertFalse($this->object->canGetProperty('Content'));
     }
 
-    public function testCanSetProperty(): void
+    public function testCanSetProperty()
     {
         $this->assertTrue($this->object->canSetProperty('Text'));
         $this->assertTrue($this->object->canSetProperty('text'));
@@ -67,14 +64,14 @@ class BaseObjectTest extends TestCase
         $this->assertFalse($this->object->canSetProperty('Content'));
     }
 
-    public function testGetProperty(): void
+    public function testGetProperty()
     {
         $this->assertSame('default', $this->object->Text);
         $this->expectException('yii\base\UnknownPropertyException');
         $value2 = $this->object->Caption;
     }
 
-    public function testSetProperty(): void
+    public function testSetProperty()
     {
         $value = 'new value';
         $this->object->Text = $value;
@@ -83,13 +80,13 @@ class BaseObjectTest extends TestCase
         $this->object->NewMember = $value;
     }
 
-    public function testSetReadOnlyProperty(): void
+    public function testSetReadOnlyProperty()
     {
         $this->expectException('yii\base\InvalidCallException');
         $this->object->object = 'test';
     }
 
-    public function testIsset(): void
+    public function testIsset()
     {
         $this->assertTrue(isset($this->object->Text));
         $this->assertNotEmpty($this->object->Text);
@@ -107,26 +104,26 @@ class BaseObjectTest extends TestCase
         $this->assertTrue($isEmpty);
     }
 
-    public function testUnset(): void
+    public function testUnset()
     {
         unset($this->object->Text);
         $this->assertFalse(isset($this->object->Text));
         $this->assertEmpty($this->object->Text);
     }
 
-    public function testUnsetReadOnlyProperty(): void
+    public function testUnsetReadOnlyProperty()
     {
         $this->expectException('yii\base\InvalidCallException');
         unset($this->object->object);
     }
 
-    public function testCallUnknownMethod(): void
+    public function testCallUnknownMethod()
     {
         $this->expectException('yii\base\UnknownMethodException');
         $this->object->unknownMethod();
     }
 
-    public function testArrayProperty(): void
+    public function testArrayProperty()
     {
         $this->assertEquals([], $this->object->items);
         // the following won't work
@@ -136,7 +133,7 @@ class BaseObjectTest extends TestCase
         */
     }
 
-    public function testObjectProperty(): void
+    public function testObjectProperty()
     {
         $this->assertInstanceOf(NewObject::className(), $this->object->object);
         $this->assertEquals('object text', $this->object->object->text);
@@ -144,25 +141,39 @@ class BaseObjectTest extends TestCase
         $this->assertEquals('new text', $this->object->object->text);
     }
 
-    public function testConstruct(): void
+    public function testConstruct()
     {
         $object = new NewObject(['text' => 'test text']);
         $this->assertEquals('test text', $object->getText());
     }
 
-    public function testGetClassName(): void
+    public function testGetClassName()
     {
         $object = $this->object;
         $this->assertSame(get_class($object), $object::className());
     }
 
-    public function testReadingWriteOnlyProperty(): void
+    public function testReadingWriteOnlyProperty()
     {
         $this->expectException('yii\base\InvalidCallException');
         $this->expectExceptionMessage('Getting write-only property: yiiunit\framework\base\NewObject::writeOnly');
         $this->object->writeOnly;
     }
+
+    public function testBackwardCompatibilityWithObject()
+    {
+        if (PHP_MAJOR_VERSION > 7 || (PHP_MAJOR_VERSION == 7 && PHP_MINOR_VERSION >= 2)) {
+            $this->markTestSkipped('This test is meant to run on PHP <7.2.0 to check BC with yii\base\Object');
+        }
+        $this->assertInstanceOf('yii\base\Object', new BCObject());
+        $this->assertInstanceOf('yii\base\BaseObject', new BCObject());
+
+        BCObject::$initCalled = false;
+        new BCObject();
+        $this->assertTrue(BCObject::$initCalled);
+    }
 }
+
 
 class NewObject extends BaseObject
 {
@@ -176,7 +187,7 @@ class NewObject extends BaseObject
         return $this->_text;
     }
 
-    public function setText($value): void
+    public function setText($value)
     {
         $this->_text = $value;
     }
@@ -193,7 +204,9 @@ class NewObject extends BaseObject
 
     public function getExecute()
     {
-        return static fn ($param) => $param * 2;
+        return function ($param) {
+            return $param * 2;
+        };
     }
 
     public function getItems()
@@ -201,7 +214,7 @@ class NewObject extends BaseObject
         return $this->_items;
     }
 
-    public function setWriteOnly(): void
+    public function setWriteOnly()
     {
     }
 }

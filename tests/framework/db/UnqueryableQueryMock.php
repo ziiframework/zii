@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,15 +7,15 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\db;
 
-use yii\db\Query;
 use yii\base\InvalidCallException;
+use yii\db\Query;
 
 class UnqueryableQueryMock extends Query
 {
     /**
      * {@inheritdoc}
      */
-    public function one($db = null): void
+    public function one($db = null)
     {
         throw new InvalidCallException();
     }
@@ -26,7 +23,7 @@ class UnqueryableQueryMock extends Query
     /**
      * {@inheritdoc}
      */
-    public function all($db = null): void
+    public function all($db = null)
     {
         throw new InvalidCallException();
     }

@@ -1,11 +1,8 @@
 <?php
-
-declare(strict_types=1);
-
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\widgets;
@@ -44,7 +41,6 @@ use yii\web\View;
  * [jQuery input masked plugin](https://github.com/RobinHerbots/Inputmask).
  *
  * @author Kartik Visweswaran <kartikv2@gmail.com>
- *
  * @since 2.0
  */
 class MaskedInput extends InputWidget
@@ -52,7 +48,7 @@ class MaskedInput extends InputWidget
     /**
      * The name of the jQuery plugin to use for this widget.
      */
-    public const PLUGIN_NAME = 'inputmask';
+    const PLUGIN_NAME = 'inputmask';
 
     /**
      * @var string|array|JsExpression the input mask (e.g. '99/99/9999' for date input). The following characters
@@ -87,19 +83,16 @@ class MaskedInput extends InputWidget
     public $aliases;
     /**
      * @var array the JQuery plugin options for the input mask plugin.
-     *
      * @see https://github.com/RobinHerbots/Inputmask
      */
     public $clientOptions = [];
     /**
      * @var array the HTML attributes for the input tag.
-     *
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $options = ['class' => 'form-control'];
     /**
      * @var string the type of the input tag. Currently only 'text' and 'tel' are supported.
-     *
      * @see https://github.com/RobinHerbots/Inputmask
      * @since 2.0.6
      */
@@ -109,16 +102,35 @@ class MaskedInput extends InputWidget
      * @var string the hashed variable to store the pluginOptions
      */
     protected $_hashVar;
+    /**
+     * @var string[] the inputmask properties can be contained callbacks
+     */
+    protected $_jsCallbacks = [
+        'oncomplete',
+        'onincomplete',
+        'oncleared',
+        'onKeyDown',
+        'onBeforeMask',
+        'onBeforePaste',
+        'onBeforeWrite',
+        'onUnMask',
+        'onKeyValidation',
+        'isComplete',
+        // @deprecated removed in 5.0:
+        'preValidation',
+        'postValidation',
+        // @deprecated removed in 4.0:
+        'canClearPosition'
+    ];
 
     /**
      * Initializes the widget.
      *
      * @throws InvalidConfigException if the "mask" property is not set.
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
-
         if (empty($this->mask) && empty($this->clientOptions['alias'])) {
             throw new InvalidConfigException("Either the 'mask' property or the 'clientOptions[\"alias\"]' property must be set.");
         }
@@ -143,10 +155,9 @@ class MaskedInput extends InputWidget
      * - 'data-plugin-inputmask' will store the hashed variable storing the plugin options.
      *
      * @param View $view the view instance
-     *
      * @author [Thiago Talma](https://github.com/thiagotalma)
      */
-    protected function hashPluginOptions($view): void
+    protected function hashPluginOptions($view)
     {
         $encOptions = empty($this->clientOptions) ? '{}' : Json::htmlEncode($this->clientOptions);
         $this->_hashVar = self::PLUGIN_NAME . '_' . hash('crc32', $encOptions);
@@ -157,17 +168,14 @@ class MaskedInput extends InputWidget
     /**
      * Initializes client options.
      */
-    protected function initClientOptions(): void
+    protected function initClientOptions()
     {
         $options = $this->clientOptions;
-
         foreach ($options as $key => $value) {
             if (
-                !$value instanceof JsExpression
-                && in_array($key, [
-                    'oncomplete', 'onincomplete', 'oncleared', 'onKeyUp', 'onKeyDown', 'onBeforeMask',
-                    'onBeforePaste', 'onUnMask', 'isComplete', 'determineActiveMasksetIndex',
-                ], true)
+                !empty($value)
+                && !$value instanceof JsExpression
+                && in_array($key, $this->_jsCallbacks, true)
             ) {
                 $options[$key] = new JsExpression($value);
             }
@@ -178,22 +186,19 @@ class MaskedInput extends InputWidget
     /**
      * Registers the needed client script and options.
      */
-    public function registerClientScript(): void
+    public function registerClientScript()
     {
         $js = '';
         $view = $this->getView();
         $this->initClientOptions();
-
         if (!empty($this->mask)) {
             $this->clientOptions['mask'] = $this->mask;
         }
         $this->hashPluginOptions($view);
-
-        if (is_array($this->definitions) && !empty($this->definitions)) {
+        if (!empty($this->definitions) && is_array($this->definitions)) {
             $js .= ucfirst(self::PLUGIN_NAME) . '.extendDefinitions(' . Json::htmlEncode($this->definitions) . ');';
         }
-
-        if (is_array($this->aliases) && !empty($this->aliases)) {
+        if (!empty($this->aliases) && is_array($this->aliases)) {
             $js .= ucfirst(self::PLUGIN_NAME) . '.extendAliases(' . Json::htmlEncode($this->aliases) . ');';
         }
         $id = $this->options['id'];

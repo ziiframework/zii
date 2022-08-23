@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -44,12 +41,10 @@ use yii\base\Widget;
  *
  * Note, never use this method with `pre` or `textarea` tags. It's not that trivial to deal with such tags
  * as it may seem at first sight. For this case you should consider using
- * [HTML Tidy Project](http://tidy.sourceforge.net/) instead.
+ * [HTML Tidy Project](https://www.html-tidy.org/) instead.
  *
- * @see http://tidy.sourceforge.net/
- *
+ * @see https://www.html-tidy.org/
  * @author resurtm <resurtm@gmail.com>
- *
  * @since 2.0
  */
 class Spaceless extends Widget
@@ -57,18 +52,18 @@ class Spaceless extends Widget
     /**
      * Starts capturing an output to be cleaned from whitespace characters between HTML tags.
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
         ob_start();
-        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
+        ob_implicit_flush(false);
     }
 
     /**
      * Marks the end of content to be cleaned from whitespace characters between HTML tags.
      * Stops capturing an output and echoes cleaned result.
      */
-    public function run(): void
+    public function run()
     {
         echo trim(preg_replace('/>\s+</', '><', ob_get_clean()));
     }

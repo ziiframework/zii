@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,6 +7,7 @@ declare(strict_types=1);
 
 namespace yii\rbac;
 
+use Yii;
 use yii\base\BaseObject;
 
 /**
@@ -19,7 +17,6 @@ use yii\base\BaseObject;
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @author Alexander Kochetov <creocoder@gmail.com>
- *
  * @since 2.0
  */
 class Assignment extends BaseObject
@@ -28,12 +25,10 @@ class Assignment extends BaseObject
      * @var string|int user ID (see [[\yii\web\User::id]])
      */
     public $userId;
-
     /**
      * @var string the role name
      */
     public $roleName;
-
     /**
      * @var int UNIX timestamp representing the assignment creation time
      */

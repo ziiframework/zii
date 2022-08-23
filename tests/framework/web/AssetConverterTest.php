@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,7 +7,6 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\web;
 
-use Yii;
 use yii\helpers\FileHelper;
 use yii\web\AssetConverter;
 
@@ -24,18 +20,17 @@ class AssetConverterTest extends \yiiunit\TestCase
      */
     protected $tmpPath;
 
-    protected function setUp(): void
+    protected function setUp()
     {
         parent::setUp();
         $this->mockApplication();
-        $this->tmpPath = Yii::$app->runtimePath . '/assetConverterTest_' . getmypid();
-
+        $this->tmpPath = \Yii::$app->runtimePath . '/assetConverterTest_' . getmypid();
         if (!is_dir($this->tmpPath)) {
             mkdir($this->tmpPath, 0777, true);
         }
     }
 
-    protected function tearDown(): void
+    protected function tearDown()
     {
         if (is_dir($this->tmpPath)) {
             FileHelper::removeDirectory($this->tmpPath);
@@ -45,7 +40,7 @@ class AssetConverterTest extends \yiiunit\TestCase
 
     // Tests :
 
-    public function testConvert(): void
+    public function testConvert()
     {
         $tmpPath = $this->tmpPath;
         file_put_contents($tmpPath . '/test.php', <<<EOF
@@ -53,7 +48,8 @@ class AssetConverterTest extends \yiiunit\TestCase
 
 echo "Hello World!\n";
 echo "Hello Yii!";
-EOF);
+EOF
+        );
 
         $converter = new AssetConverter();
         $converter->commands['php'] = ['txt', 'php {from} > {to}'];
@@ -66,14 +62,15 @@ EOF);
     /**
      * @depends testConvert
      */
-    public function testForceConvert(): void
+    public function testForceConvert()
     {
         $tmpPath = $this->tmpPath;
         file_put_contents($tmpPath . '/test.php', <<<'EOF'
 <?php
 
 echo microtime();
-EOF);
+EOF
+        );
 
         $converter = new AssetConverter();
         $converter->commands['php'] = ['txt', 'php {from} > {to}'];

@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -46,7 +43,6 @@ use yii\base\InvalidConfigException;
  * by simply checking if the prefix matches.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class GroupUrlRule extends CompositeUrlRule
@@ -54,37 +50,34 @@ class GroupUrlRule extends CompositeUrlRule
     /**
      * @var array the rules contained within this composite rule. Please refer to [[UrlManager::rules]]
      * for the format of this property.
-     *
      * @see prefix
      * @see routePrefix
      */
     public $rules = [];
-
     /**
      * @var string the prefix for the pattern part of every rule declared in [[rules]].
      * The prefix and the pattern will be separated with a slash.
      */
     public $prefix;
-
     /**
-     * @var string the prefix for the route part of every rule declared in [[rules]].
+     * @var string|null the prefix for the route part of every rule declared in [[rules]].
      * The prefix and the route will be separated with a slash.
      * If this property is not set, it will take the value of [[prefix]].
      */
     public $routePrefix;
-
     /**
      * @var array the default configuration of URL rules. Individual rule configurations
      * specified via [[rules]] will take precedence when the same property of the rule is configured.
      */
     public $ruleConfig = ['class' => 'yii\web\UrlRule'];
 
+
     /**
      * {@inheritdoc}
      */
-    public function init(): void
+    public function init()
     {
-        $this->prefix = trim($this->prefix ?? '', '/');
+        $this->prefix = trim((string)$this->prefix, '/');
         $this->routePrefix = $this->routePrefix === null ? $this->prefix : trim($this->routePrefix, '/');
         parent::init();
     }
@@ -95,12 +88,10 @@ class GroupUrlRule extends CompositeUrlRule
     protected function createRules()
     {
         $rules = [];
-
         foreach ($this->rules as $key => $rule) {
             if (!is_array($rule)) {
                 $verbs = 'GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS';
                 $verb = null;
-
                 if (preg_match("/^((?:(?:$verbs),)*(?:$verbs))\\s+(.*)$/", $key, $matches)) {
                     $verb = explode(',', $matches[1]);
                     $key = $matches[2];
@@ -108,7 +99,7 @@ class GroupUrlRule extends CompositeUrlRule
                 $rule = [
                     'pattern' => ltrim($this->prefix . '/' . $key, '/'),
                     'route' => ltrim($this->routePrefix . '/' . $rule, '/'),
-                    'verb' => $verb,
+                    'verb' => $verb
                 ];
             } elseif (isset($rule['pattern'], $rule['route'])) {
                 $rule['pattern'] = ltrim($this->prefix . '/' . $rule['pattern'], '/');
@@ -116,7 +107,6 @@ class GroupUrlRule extends CompositeUrlRule
             }
 
             $rule = Yii::createObject(array_merge($this->ruleConfig, $rule));
-
             if (!$rule instanceof UrlRuleInterface) {
                 throw new InvalidConfigException('URL rule class must implement UrlRuleInterface.');
             }
@@ -132,7 +122,6 @@ class GroupUrlRule extends CompositeUrlRule
     public function parseRequest($manager, $request)
     {
         $pathInfo = $request->getPathInfo();
-
         if ($this->prefix === '' || strpos($pathInfo . '/', $this->prefix . '/') === 0) {
             return parent::parseRequest($manager, $request);
         }
@@ -150,7 +139,6 @@ class GroupUrlRule extends CompositeUrlRule
         }
 
         $this->createStatus = UrlRule::CREATE_STATUS_ROUTE_MISMATCH;
-
         return false;
     }
 }

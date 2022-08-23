@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,13 +8,13 @@ declare(strict_types=1);
 namespace yii\validators;
 
 use Yii;
+use yii\helpers\Json;
 use yii\web\UploadedFile;
 
 /**
  * ImageValidator verifies if an attribute is receiving a valid image.
  *
  * @author Taras Gudz <gudz.taras@gmail.com>
- *
  * @since 2.0
  */
 class ImageValidator extends FileValidator
@@ -30,39 +27,30 @@ class ImageValidator extends FileValidator
      * - {file}: the uploaded file name
      */
     public $notImage;
-
     /**
-     * @var int the minimum width in pixels.
+     * @var int|null the minimum width in pixels.
      * Defaults to null, meaning no limit.
-     *
      * @see underWidth for the customized message used when image width is too small.
      */
     public $minWidth;
-
     /**
-     * @var int the maximum width in pixels.
+     * @var int|null the maximum width in pixels.
      * Defaults to null, meaning no limit.
-     *
      * @see overWidth for the customized message used when image width is too big.
      */
     public $maxWidth;
-
     /**
-     * @var int the minimum height in pixels.
+     * @var int|null the minimum height in pixels.
      * Defaults to null, meaning no limit.
-     *
      * @see underHeight for the customized message used when image height is too small.
      */
     public $minHeight;
-
     /**
-     * @var int the maximum width in pixels.
+     * @var int|null the maximum width in pixels.
      * Defaults to null, meaning no limit.
-     *
      * @see overHeight for the customized message used when image height is too big.
      */
     public $maxHeight;
-
     /**
      * @var string the error message used when the image is under [[minWidth]].
      * You may use the following tokens in the message:
@@ -72,7 +60,6 @@ class ImageValidator extends FileValidator
      * - {limit}: the value of [[minWidth]]
      */
     public $underWidth;
-
     /**
      * @var string the error message used when the image is over [[maxWidth]].
      * You may use the following tokens in the message:
@@ -82,7 +69,6 @@ class ImageValidator extends FileValidator
      * - {limit}: the value of [[maxWidth]]
      */
     public $overWidth;
-
     /**
      * @var string the error message used when the image is under [[minHeight]].
      * You may use the following tokens in the message:
@@ -92,7 +78,6 @@ class ImageValidator extends FileValidator
      * - {limit}: the value of [[minHeight]]
      */
     public $underHeight;
-
     /**
      * @var string the error message used when the image is over [[maxHeight]].
      * You may use the following tokens in the message:
@@ -103,29 +88,26 @@ class ImageValidator extends FileValidator
      */
     public $overHeight;
 
+
     /**
      * {@inheritdoc}
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
 
         if ($this->notImage === null) {
             $this->notImage = Yii::t('yii', 'The file "{file}" is not an image.');
         }
-
         if ($this->underWidth === null) {
             $this->underWidth = Yii::t('yii', 'The image "{file}" is too small. The width cannot be smaller than {limit, number} {limit, plural, one{pixel} other{pixels}}.');
         }
-
         if ($this->underHeight === null) {
             $this->underHeight = Yii::t('yii', 'The image "{file}" is too small. The height cannot be smaller than {limit, number} {limit, plural, one{pixel} other{pixels}}.');
         }
-
         if ($this->overWidth === null) {
             $this->overWidth = Yii::t('yii', 'The image "{file}" is too large. The width cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.');
         }
-
         if ($this->overHeight === null) {
             $this->overHeight = Yii::t('yii', 'The image "{file}" is too large. The height cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.');
         }
@@ -143,9 +125,7 @@ class ImageValidator extends FileValidator
 
     /**
      * Validates an image file.
-     *
      * @param UploadedFile $image uploaded file passed to check against a set of rules
-     *
      * @return array|null the error message and the parameters to be inserted into the error message.
      * Null should be returned if the data is valid.
      */
@@ -155,7 +135,7 @@ class ImageValidator extends FileValidator
             return [$this->notImage, ['file' => $image->name]];
         }
 
-        [$width, $height] = $imageInfo;
+        list($width, $height) = $imageInfo;
 
         if ($width == 0 || $height == 0) {
             return [$this->notImage, ['file' => $image->name]];
@@ -187,8 +167,7 @@ class ImageValidator extends FileValidator
     {
         ValidationAsset::register($view);
         $options = $this->getClientOptions($model, $attribute);
-
-        return 'yii.validation.image(attribute, messages, ' . json_encode($options, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . ', deferred);';
+        return 'yii.validation.image(attribute, messages, ' . Json::htmlEncode($options) . ', deferred);';
     }
 
     /**

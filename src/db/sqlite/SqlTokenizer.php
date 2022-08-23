@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -14,11 +11,9 @@ namespace yii\db\sqlite;
  * SqlTokenizer splits SQLite query into individual SQL tokens.
  * It's used to obtain a `CHECK` constraint information from a `CREATE TABLE` SQL code.
  *
- * @see http://www.sqlite.org/draft/tokenreq.html
+ * @see https://www.sqlite.org/draft/tokenreq.html
  * @see https://sqlite.org/lang.html
- *
  * @author Sergey Makinen <sergey@makinen.ru>
- *
  * @since 2.0.13
  */
 class SqlTokenizer extends \yii\db\SqlTokenizer
@@ -37,7 +32,6 @@ class SqlTokenizer extends \yii\db\SqlTokenizer
         ];
 
         $length = 1;
-
         return isset($whitespaces[$this->substring($length)]);
     }
 
@@ -52,7 +46,6 @@ class SqlTokenizer extends \yii\db\SqlTokenizer
         ];
 
         $length = 2;
-
         if (!isset($comments[$this->substring($length)])) {
             return false;
         }
@@ -118,17 +111,14 @@ class SqlTokenizer extends \yii\db\SqlTokenizer
 
         $delimiter = $identifierDelimiters[$this->substring(1)];
         $offset = $this->offset;
-
         while (true) {
             $offset = $this->indexAfter($delimiter, $offset + 1);
-
             if ($delimiter === ']' || $this->substring(1, true, $offset) !== $delimiter) {
                 break;
             }
         }
         $length = $offset - $this->offset;
         $content = $this->substring($length - 2, true, $this->offset + 1);
-
         if ($delimiter !== ']') {
             $content = strtr($content, ["$delimiter$delimiter" => $delimiter]);
         }
@@ -146,17 +136,14 @@ class SqlTokenizer extends \yii\db\SqlTokenizer
         }
 
         $offset = $this->offset;
-
         while (true) {
             $offset = $this->indexAfter("'", $offset + 1);
-
             if ($this->substring(1, true, $offset) !== "'") {
                 break;
             }
         }
         $length = $offset - $this->offset;
         $content = strtr($this->substring($length - 2, true, $this->offset + 1), ["''" => "'"]);
-
         return true;
     }
 
@@ -293,13 +280,11 @@ class SqlTokenizer extends \yii\db\SqlTokenizer
         ];
 
         $string = mb_strtoupper($string, 'UTF-8');
-
         if (!isset($keywords[$string])) {
             return false;
         }
 
         $content = $string;
-
         return true;
     }
 }

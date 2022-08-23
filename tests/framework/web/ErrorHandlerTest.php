@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,14 +8,13 @@ declare(strict_types=1);
 namespace yiiunit\framework\web;
 
 use Yii;
-use Exception;
+use yii\web\NotFoundHttpException;
 use yii\web\View;
 use yiiunit\TestCase;
-use yii\web\NotFoundHttpException;
 
 class ErrorHandlerTest extends TestCase
 {
-    protected function setUp(): void
+    protected function setUp()
     {
         parent::setUp();
         $this->mockWebApplication([
@@ -33,7 +29,7 @@ class ErrorHandlerTest extends TestCase
         ]);
     }
 
-    public function testCorrectResponseCodeInErrorView(): void
+    public function testCorrectResponseCodeInErrorView()
     {
         /** @var ErrorHandler $handler */
         $handler = Yii::$app->getErrorHandler();
@@ -41,26 +37,25 @@ class ErrorHandlerTest extends TestCase
         $this->invokeMethod($handler, 'renderException', [new NotFoundHttpException('This message is displayed to end user')]);
         ob_get_clean();
         $out = Yii::$app->response->data;
-        $this->assertEqualsWithoutLE('Code: 404
+        $this->assertEquals('Code: 404
 Message: This message is displayed to end user
 Exception: yii\web\NotFoundHttpException', $out);
     }
 
-    public function testClearAssetFilesInErrorView(): void
+    public function testClearAssetFilesInErrorView()
     {
         Yii::$app->getView()->registerJsFile('somefile.js');
-
         /** @var ErrorHandler $handler */
         $handler = Yii::$app->getErrorHandler();
         ob_start(); // suppress response output
-        $this->invokeMethod($handler, 'renderException', [new Exception('Some Exception')]);
+        $this->invokeMethod($handler, 'renderException', [new \Exception('Some Exception')]);
         ob_get_clean();
         $out = Yii::$app->response->data;
-        $this->assertEqualsWithoutLE('Exception View
+        $this->assertEquals('Exception View
 ', $out);
     }
 
-    public function testClearAssetFilesInErrorActionView(): void
+    public function testClearAssetFilesInErrorActionView()
     {
         Yii::$app->getErrorHandler()->errorAction = 'test/error';
         Yii::$app->getView()->registerJs("alert('hide me')", View::POS_END);
@@ -71,10 +66,10 @@ Exception: yii\web\NotFoundHttpException', $out);
         $this->invokeMethod($handler, 'renderException', [new NotFoundHttpException()]);
         ob_get_clean();
         $out = Yii::$app->response->data;
-        $this->assertStringNotContainsString('<script', $out);
+        $this->assertNotContains('<script', $out);
     }
 
-    public function testRenderCallStackItem(): void
+    public function testRenderCallStackItem()
     {
         $handler = Yii::$app->getErrorHandler();
         $handler->traceLine = '<a href="netbeans://open?file={file}&line={line}">{html}</a>';
@@ -82,7 +77,7 @@ Exception: yii\web\NotFoundHttpException', $out);
 
         $out = $handler->renderCallStackItem($file, 63, \yii\web\Application::className(), null, null, null);
 
-        $this->assertStringContainsString('<a href="netbeans://open?file=' . $file . '&line=63">', $out);
+        $this->assertContains('<a href="netbeans://open?file=' . $file . '&line=63">', $out);
     }
 
     public function dataHtmlEncode()
@@ -118,18 +113,17 @@ Exception: yii\web\NotFoundHttpException', $out);
     /**
      * @dataProvider dataHtmlEncode
      */
-    public function testHtmlEncode($text, $expected): void
+    public function testHtmlEncode($text, $expected)
     {
         $handler = Yii::$app->getErrorHandler();
 
         $this->assertSame($expected, $handler->htmlEncode($text));
     }
 
-    public function testHtmlEncodeWithUnicodeSequence(): void
+    public function testHtmlEncodeWithUnicodeSequence()
     {
         if (PHP_VERSION_ID < 70000) {
             $this->markTestSkipped('Can not be tested on PHP < 7.0');
-
             return;
         }
 

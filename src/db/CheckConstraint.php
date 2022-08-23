@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -14,7 +11,6 @@ namespace yii\db;
  * CheckConstraint represents the metadata of a table `CHECK` constraint.
  *
  * @author Sergey Makinen <sergey@makinen.ru>
- *
  * @since 2.0.13
  */
 class CheckConstraint extends Constraint

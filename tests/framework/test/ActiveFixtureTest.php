@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -12,10 +9,10 @@ namespace yiiunit\framework\test;
 
 use Yii;
 use yii\db\Connection;
-use yii\test\FixtureTrait;
 use yii\test\ActiveFixture;
-use yiiunit\data\ar\Customer;
+use yii\test\FixtureTrait;
 use yiiunit\data\ar\ActiveRecord;
+use yiiunit\data\ar\Customer;
 use yiiunit\framework\db\DatabaseTestCase;
 
 /**
@@ -26,7 +23,7 @@ class ActiveFixtureTest extends DatabaseTestCase
 {
     protected $driverName = 'mysql';
 
-    public function setUp(): void
+    public function setUp()
     {
         parent::setUp();
         $db = $this->getConnection();
@@ -34,12 +31,12 @@ class ActiveFixtureTest extends DatabaseTestCase
         ActiveRecord::$db = $db;
     }
 
-    public function tearDown(): void
+    public function tearDown()
     {
         parent::tearDown();
     }
 
-    public function testGetData(): void
+    public function testGetData()
     {
         $test = new CustomerDbTestCase();
         $test->setUp();
@@ -58,7 +55,7 @@ class ActiveFixtureTest extends DatabaseTestCase
         $test->tearDown();
     }
 
-    public function testGetModel(): void
+    public function testGetModel()
     {
         $test = new CustomerDbTestCase();
         $test->setUp();
@@ -76,7 +73,7 @@ class ActiveFixtureTest extends DatabaseTestCase
         $test->tearDown();
     }
 
-    public function testDataDirectory(): void
+    public function testDataDirectory()
     {
         $test = new CustomDirectoryDbTestCase();
 
@@ -87,9 +84,10 @@ class ActiveFixtureTest extends DatabaseTestCase
         $this->assertEquals(1, $directory->id);
         $this->assertEquals('directory@example.com', $directory['email']);
         $test->tearDown();
+
     }
 
-    public function testDataPath(): void
+    public function testDataPath()
     {
         $test = new DataPathDbTestCase();
 
@@ -102,7 +100,7 @@ class ActiveFixtureTest extends DatabaseTestCase
         $test->tearDown();
     }
 
-    public function testTruncate(): void
+    public function testTruncate()
     {
         $test = new TruncateTestCase();
 
@@ -115,7 +113,7 @@ class ActiveFixtureTest extends DatabaseTestCase
     /**
      * @see https://github.com/yiisoft/yii2/pull/14343
      */
-    public function testDifferentModelDb(): void
+    public function testDifferentModelDb()
     {
         $fixture = new DifferentDbFixture();
 
@@ -128,7 +126,7 @@ class ProfileFixture extends ActiveFixture
 {
     public $modelClass = 'yiiunit\data\ar\Profile';
 
-    public function beforeLoad(): void
+    public function beforeLoad()
     {
         if ($this->db->driverName === 'sqlsrv') {
             $this->db->createCommand()->truncateTable('profile')->execute();
@@ -142,7 +140,7 @@ class ProfileFixture extends ActiveFixture
         $data = parent::getData();
 
         if ($this->db->driverName === 'sqlsrv') {
-            array_walk($data, static function (&$item): void {
+            array_walk($data, static function (&$item) {
                 unset($item['id']);
             });
         }
@@ -159,7 +157,7 @@ class CustomerFixture extends ActiveFixture
         'yiiunit\framework\test\ProfileFixture',
     ];
 
-    public function beforeLoad(): void
+    public function beforeLoad()
     {
         if ($this->db->driverName === 'sqlsrv') {
             $this->db->createCommand()->truncateTable('customer')->execute();
@@ -175,7 +173,7 @@ class CustomDirectoryFixture extends ActiveFixture
 
     public $dataDirectory = '@app/framework/test/custom';
 
-    public function beforeLoad(): void
+    public function beforeLoad()
     {
         if ($this->db->driverName === 'sqlsrv') {
             $this->db->createCommand()->truncateTable('customer')->execute();
@@ -207,12 +205,12 @@ class BaseDbTestCase
 {
     use FixtureTrait;
 
-    public function setUp(): void
+    public function setUp()
     {
         $this->initFixtures();
     }
 
-    public function tearDown(): void
+    public function tearDown()
     {
     }
 }
@@ -244,8 +242,8 @@ class DataPathDbTestCase extends BaseDbTestCase
         return [
             'customers' => [
                 'class' => CustomDirectoryFixture::className(),
-                'dataFile' => '@app/framework/test/data/customer.php',
-            ],
+                'dataFile' => '@app/framework/test/data/customer.php'
+            ]
         ];
     }
 }
@@ -257,7 +255,7 @@ class TruncateTestCase extends BaseDbTestCase
         return [
             'animals' => [
                 'class' => AnimalFixture::className(),
-            ],
+            ]
         ];
     }
 }

@@ -1,34 +1,28 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
 
-use yii\rbac\DbManager;
 use yii\base\InvalidConfigException;
+use yii\rbac\DbManager;
 
 /**
  * Initializes RBAC tables.
  *
  * @author Alexander Kochetov <creocoder@gmail.com>
- *
  * @since 2.0
  */
 class m140506_102106_rbac_init extends \yii\db\Migration
 {
     /**
-     * @return DbManager
-     *
      * @throws yii\base\InvalidConfigException
+     * @return DbManager
      */
     protected function getAuthManager()
     {
         $authManager = Yii::$app->getAuthManager();
-
         if (!$authManager instanceof DbManager) {
             throw new InvalidConfigException('You should configure "authManager" component to use database before executing this migration.');
         }
@@ -44,19 +38,23 @@ class m140506_102106_rbac_init extends \yii\db\Migration
         return $this->db->driverName === 'mssql' || $this->db->driverName === 'sqlsrv' || $this->db->driverName === 'dblib';
     }
 
+    protected function isOracle()
+    {
+        return $this->db->driverName === 'oci' || $this->db->driverName === 'oci8';
+    }
+
     /**
      * {@inheritdoc}
      */
-    public function up(): void
+    public function up()
     {
         $authManager = $this->getAuthManager();
         $this->db = $authManager->db;
         $schema = $this->db->getSchema()->defaultSchema;
 
         $tableOptions = null;
-
         if ($this->db->driverName === 'mysql') {
-            // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
+            // https://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
 
@@ -142,7 +140,7 @@ class m140506_102106_rbac_init extends \yii\db\Migration
     /**
      * {@inheritdoc}
      */
-    public function down(): void
+    public function down()
     {
         $authManager = $this->getAuthManager();
         $this->db = $authManager->db;
@@ -162,6 +160,10 @@ class m140506_102106_rbac_init extends \yii\db\Migration
     {
         if ($this->isMSSQL()) {
             return '';
+        }
+
+        if ($this->isOracle()) {
+            return ' ' . $delete;
         }
 
         return implode(' ', ['', $delete, $update]);

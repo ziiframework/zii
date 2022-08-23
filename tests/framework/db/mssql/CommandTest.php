@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -20,7 +17,7 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
 {
     protected $driverName = 'sqlsrv';
 
-    public function testAutoQuoting(): void
+    public function testAutoQuoting()
     {
         $db = $this->getConnection(false);
 
@@ -29,12 +26,12 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
         $this->assertEquals('SELECT [id], [t].[name] FROM [customer] t', $command->sql);
     }
 
-    public function testPrepareCancel(): void
+    public function testPrepareCancel()
     {
         $this->markTestSkipped('MSSQL driver does not support this feature.');
     }
 
-    public function testBindParamValue(): void
+    public function testBindParamValue()
     {
         $db = $this->getConnection();
 
@@ -74,7 +71,7 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
         $row = $db->createCommand($sql)->queryOne();
         $this->assertEquals($intCol, $row['int_col']);
         $this->assertEquals($charCol, trim($row['char_col']));
-        $this->assertContains($row['float_col'], [$floatCol, sprintf('%.3f', $floatCol)]);
+        $this->assertEquals($floatCol, $row['float_col']);
         $this->assertEquals($blobCol, $row['blob_col']);
         $this->assertEquals($numericCol, $row['numeric_col']);
 
@@ -92,19 +89,18 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
 
     public function paramsNonWhereProvider()
     {
-        return [
+        return[
             ['SELECT SUBSTRING(name, :len, 6) AS name FROM {{customer}} WHERE [[email]] = :email GROUP BY name'],
             ['SELECT SUBSTRING(name, :len, 6) as name FROM {{customer}} WHERE [[email]] = :email ORDER BY name'],
             ['SELECT SUBSTRING(name, :len, 6) FROM {{customer}} WHERE [[email]] = :email'],
         ];
     }
 
-    public function testAddDropDefaultValue(): void
+    public function testAddDropDefaultValue()
     {
         $db = $this->getConnection(false);
         $tableName = 'test_def';
         $name = 'test_def_constraint';
-
         /** @var \yii\db\pgsql\Schema $schema */
         $schema = $db->getSchema();
 
@@ -117,7 +113,7 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
 
         $this->assertEmpty($schema->getTableDefaultValues($tableName, true));
         $db->createCommand()->addDefaultValue($name, $tableName, 'int1', 41)->execute();
-        $this->assertMatchesRegularExpression('/^.*41.*$/', $schema->getTableDefaultValues($tableName, true)[0]->value);
+        $this->assertRegExp('/^.*41.*$/', $schema->getTableDefaultValues($tableName, true)[0]->value);
 
         $db->createCommand()->dropDefaultValue($name, $tableName)->execute();
         $this->assertEmpty($schema->getTableDefaultValues($tableName, true));
@@ -134,7 +130,7 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
         return $data;
     }
 
-    public function testUpsertVarbinary(): void
+    public function testUpsertVarbinary()
     {
         $db = $this->getConnection();
 
@@ -142,7 +138,7 @@ class CommandTest extends \yiiunit\framework\db\CommandTest
         $params = [];
 
         $qb = $db->getQueryBuilder();
-        $sql = $qb->upsert('T_upsert_varbinary', ['id' => 1, 'blob_col' => $testData], ['blob_col' => $testData], $params);
+        $sql = $qb->upsert('T_upsert_varbinary', ['id' => 1, 'blob_col' => $testData] , ['blob_col' => $testData], $params);
 
         $result = $db->createCommand($sql, $params)->execute();
 

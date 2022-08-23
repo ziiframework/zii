@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,29 +7,29 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\validators;
 
-use yiiunit\TestCase;
 use yii\validators\FilterValidator;
 use yiiunit\data\validators\models\FakedValidationModel;
+use yiiunit\TestCase;
 
 /**
  * @group validators
  */
 class FilterValidatorTest extends TestCase
 {
-    protected function setUp(): void
+    protected function setUp()
     {
         parent::setUp();
         // destroy application, Validator must work without Yii::$app
         $this->destroyApplication();
     }
 
-    public function testAssureExceptionOnInit(): void
+    public function testAssureExceptionOnInit()
     {
         $this->expectException('yii\base\InvalidConfigException');
         new FilterValidator();
     }
 
-    public function testValidateAttribute(): void
+    public function testValidateAttribute()
     {
         $m = FakedValidationModel::createWithAttributes([
                 'attr_one' => '  to be trimmed  ',
@@ -45,7 +42,9 @@ class FilterValidatorTest extends TestCase
         $val = new FilterValidator(['filter' => 'trim']);
         $val->validateAttribute($m, 'attr_one');
         $this->assertSame('to be trimmed', $m->attr_one);
-        $val->filter = static fn ($value) => null;
+        $val->filter = function ($value) {
+            return null;
+        };
         $val->validateAttribute($m, 'attr_two');
         $this->assertNull($m->attr_two);
         $val->filter = [$this, 'notToBeNull'];
@@ -54,7 +53,9 @@ class FilterValidatorTest extends TestCase
         $val->skipOnEmpty = true;
         $val->validateAttribute($m, 'attr_empty2');
         $this->assertNotNull($m->attr_empty2);
-        $val->filter = static fn ($value) => implode(',', $value);
+        $val->filter = function ($value) {
+            return implode(',', $value);
+        };
         $val->skipOnArray = false;
         $val->validateAttribute($m, 'attr_array');
         $this->assertSame('Maria,Anna,Elizabeth', $m->attr_array);

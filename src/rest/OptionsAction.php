@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -18,7 +15,6 @@ use Yii;
  * For more details and usage information on OptionsAction, see the [guide article on rest controllers](guide:rest-controllers).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class OptionsAction extends \yii\base\Action
@@ -27,18 +23,17 @@ class OptionsAction extends \yii\base\Action
      * @var array the HTTP verbs that are supported by the collection URL
      */
     public $collectionOptions = ['GET', 'POST', 'HEAD', 'OPTIONS'];
-
     /**
      * @var array the HTTP verbs that are supported by the resource URL
      */
     public $resourceOptions = ['GET', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'];
 
+
     /**
      * Responds to the OPTIONS request.
-     *
-     * @param string $id
+     * @param string|null $id
      */
-    public function run($id = null): void
+    public function run($id = null)
     {
         if (Yii::$app->getRequest()->getMethod() !== 'OPTIONS') {
             Yii::$app->getResponse()->setStatusCode(405);

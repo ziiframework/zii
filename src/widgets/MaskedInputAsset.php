@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -18,7 +15,6 @@ use yii\web\AssetBundle;
  * Includes client assets of [jQuery input mask plugin](https://github.com/RobinHerbots/Inputmask).
  *
  * @author Kartik Visweswaran <kartikv2@gmail.com>
- *
  * @since 2.0
  */
 class MaskedInputAsset extends AssetBundle

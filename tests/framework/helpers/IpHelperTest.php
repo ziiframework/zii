@@ -1,21 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
-/**
- * @link https://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license https://www.yiiframework.com/license/
- */
-
 namespace yiiunit\framework\helpers;
 
-use Exception;
-use yiiunit\TestCase;
 use yii\helpers\IpHelper;
+use yiiunit\TestCase;
 
 /**
- * Class IpHelperTest.
+ * Class IpHelperTest
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -23,11 +14,10 @@ class IpHelperTest extends TestCase
 {
     /**
      * @dataProvider getIpVersionProvider
-     *
      * @param $value
      * @param $expected
      */
-    public function testGetIpVersion($value, $expected, $message = ''): void
+    public function testGetIpVersion($value, $expected, $message = '')
     {
         $version = IpHelper::getIpVersion($value);
         $this->assertSame($expected, $version, $message);
@@ -47,7 +37,7 @@ class IpHelperTest extends TestCase
     /**
      * @dataProvider expandIpv6Provider
      */
-    public function testExpandIpv6($value, $expected, $message = ''): void
+    public function testExpandIpv6($value, $expected, $message = '')
     {
         $expanded = IpHelper::expandIPv6($value);
         $this->assertSame($expected, $expanded, $message);
@@ -61,11 +51,11 @@ class IpHelperTest extends TestCase
         ];
     }
 
-    public function testIpv6ExpandingWithInvalidValue(): void
+    public function testIpv6ExpandingWithInvalidValue()
     {
         try {
             IpHelper::expandIPv6('fa01::1/64');
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             $this->assertStringEndsWith('Unrecognized address fa01::1/64', $exception->getMessage());
         }
     }
@@ -77,7 +67,7 @@ class IpHelperTest extends TestCase
      *
      * @dataProvider ip2binProvider
      */
-    public function testIp2bin($value, $expected, $message = ''): void
+    public function testIp2bin($value, $expected, $message = '')
     {
         $result = IpHelper::ip2bin($value);
         $this->assertSame($expected, $result, $message);
@@ -101,7 +91,7 @@ class IpHelperTest extends TestCase
      *
      * @dataProvider inRangeProvider
      */
-    public function testInRange($value, $range, $expected): void
+    public function testInRange($value, $range, $expected)
     {
         $result = IpHelper::inRange($value, $range);
         $this->assertSame($expected, $result);

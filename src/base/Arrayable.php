@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -21,7 +18,6 @@ namespace yii\base;
  * should be formatted and put into the result of [[toArray()]].
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 interface Arrayable
@@ -63,7 +59,6 @@ interface Arrayable
      * ```
      *
      * @return array the list of field names or field definitions.
-     *
      * @see toArray()
      */
     public function fields();
@@ -77,7 +72,6 @@ interface Arrayable
      *
      * @return array the list of expandable field names or field definitions. Please refer
      * to [[fields()]] on the format of the return value.
-     *
      * @see toArray()
      * @see fields()
      */
@@ -92,7 +86,6 @@ interface Arrayable
      * Fields not specified in [[extraFields()]] will be ignored. If this parameter is empty, no extra fields
      * will be returned.
      * @param bool $recursive whether to recursively return array representation of embedded objects.
-     *
      * @return array the array representation of the object
      */
     public function toArray(array $fields = [], array $expand = [], $recursive = true);

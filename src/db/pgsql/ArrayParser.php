@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,11 +8,10 @@ declare(strict_types=1);
 namespace yii\db\pgsql;
 
 /**
- * The class converts PostgreSQL array representation to PHP array.
+ * The class converts PostgreSQL array representation to PHP array
  *
  * @author Sergei Tigrov <rrr-r@ya.ru>
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
- *
  * @since 2.0.14
  */
 class ArrayParser
@@ -25,11 +21,11 @@ class ArrayParser
      */
     private $delimiter = ',';
 
+
     /**
-     * Convert array from PostgreSQL to PHP.
+     * Convert array from PostgreSQL to PHP
      *
      * @param string $value string to be converted
-     *
      * @return array|null
      */
     public function parse($value)
@@ -46,39 +42,31 @@ class ArrayParser
     }
 
     /**
-     * Pares PgSQL array encoded in string.
+     * Pares PgSQL array encoded in string
      *
      * @param string $value
      * @param int $i parse starting position
-     *
      * @return array
      */
     private function parseArray($value, &$i = 0)
     {
         $result = [];
         $len = strlen($value);
-
         for (++$i; $i < $len; ++$i) {
             switch ($value[$i]) {
                 case '{':
                     $result[] = $this->parseArray($value, $i);
-
                     break;
-
                 case '}':
                     break 2;
-
                 case $this->delimiter:
                     if (empty($result)) { // `{}` case
                         $result[] = null;
                     }
-
                     if (in_array($value[$i + 1], [$this->delimiter, '}'], true)) { // `{,}` case
                         $result[] = null;
                     }
-
                     break;
-
                 default:
                     $result[] = $this->parseString($value, $i);
             }
@@ -88,11 +76,10 @@ class ArrayParser
     }
 
     /**
-     * Parses PgSQL encoded string.
+     * Parses PgSQL encoded string
      *
      * @param string $value
      * @param int $i parse starting position
-     *
      * @return string|null
      */
     private function parseString($value, &$i)
@@ -101,7 +88,6 @@ class ArrayParser
         $stringEndChars = $isQuoted ? ['"'] : [$this->delimiter, '}'];
         $result = '';
         $len = strlen($value);
-
         for ($i += $isQuoted ? 1 : 0; $i < $len; ++$i) {
             if (in_array($value[$i], ['\\', '"'], true) && in_array($value[$i + 1], [$value[$i], '"'], true)) {
                 ++$i;

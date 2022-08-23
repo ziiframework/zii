@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,13 +8,11 @@ declare(strict_types=1);
 namespace yii\i18n;
 
 use Yii;
-use Exception;
-use IntlException;
 use yii\base\Component;
 use yii\base\NotSupportedException;
 
 /**
- * MessageFormatter allows formatting messages via [ICU message format](http://userguide.icu-project.org/formatparse/messages).
+ * MessageFormatter allows formatting messages via [ICU message format](https://unicode-org.github.io/icu/userguide/format_parse/messages/).
  *
  * This class enhances the message formatter class provided by the PHP intl extension.
  *
@@ -46,7 +41,6 @@ use yii\base\NotSupportedException;
  *
  * @author Alexander Makarov <sam@rmcreative.ru>
  * @author Carsten Brandt <mail@cebe.cc>
- *
  * @since 2.0
  */
 class MessageFormatter extends Component
@@ -54,11 +48,10 @@ class MessageFormatter extends Component
     private $_errorCode = 0;
     private $_errorMessage = '';
 
+
     /**
      * Get the error code from the last operation.
-     *
      * @link https://www.php.net/manual/en/messageformatter.geterrorcode.php
-     *
      * @return string Code of the last error.
      */
     public function getErrorCode()
@@ -68,9 +61,7 @@ class MessageFormatter extends Component
 
     /**
      * Get the error text from the last operation.
-     *
      * @link https://www.php.net/manual/en/messageformatter.geterrormessage.php
-     *
      * @return string Description of the last error.
      */
     public function getErrorMessage()
@@ -79,7 +70,7 @@ class MessageFormatter extends Component
     }
 
     /**
-     * Formats a message via [ICU message format](http://userguide.icu-project.org/formatparse/messages).
+     * Formats a message via [ICU message format](https://unicode-org.github.io/icu/userguide/format_parse/messages/).
      *
      * It uses the PHP intl extension's [MessageFormatter](https://www.php.net/manual/en/class.messageformatter.php)
      * and works around some issues.
@@ -88,7 +79,6 @@ class MessageFormatter extends Component
      * @param string $pattern The pattern string to insert parameters into.
      * @param array $params The array of name value pairs to insert into the format string.
      * @param string $language The locale to use for formatting locale-dependent parts
-     *
      * @return string|false The formatted pattern string or `false` if an error occurred
      */
     public function format($pattern, $params, $language)
@@ -109,10 +99,6 @@ class MessageFormatter extends Component
         $pattern = $this->replaceNamedArguments($pattern, $params, $newParams);
         $params = $newParams;
 
-        if ($pattern === false) {
-            return false;
-        }
-
         try {
             $formatter = new \MessageFormatter($language, $pattern);
 
@@ -120,20 +106,17 @@ class MessageFormatter extends Component
                 // formatter may be null in PHP 5.x
                 $this->_errorCode = intl_get_error_code();
                 $this->_errorMessage = 'Message pattern is invalid: ' . intl_get_error_message();
-
                 return false;
             }
-        } catch (IntlException $e) {
+        } catch (\IntlException $e) {
             // IntlException is thrown since PHP 7
             $this->_errorCode = $e->getCode();
             $this->_errorMessage = 'Message pattern is invalid: ' . $e->getMessage();
-
             return false;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // Exception is thrown by HHVM
             $this->_errorCode = $e->getCode();
             $this->_errorMessage = 'Message pattern is invalid: ' . $e->getMessage();
-
             return false;
         }
 
@@ -142,7 +125,6 @@ class MessageFormatter extends Component
         if ($result === false) {
             $this->_errorCode = $formatter->getErrorCode();
             $this->_errorMessage = $formatter->getErrorMessage();
-
             return false;
         }
 
@@ -150,7 +132,7 @@ class MessageFormatter extends Component
     }
 
     /**
-     * Parses an input string according to an [ICU message format](http://userguide.icu-project.org/formatparse/messages) pattern.
+     * Parses an input string according to an [ICU message format](https://unicode-org.github.io/icu/userguide/format_parse/messages/) pattern.
      *
      * It uses the PHP intl extension's [MessageFormatter::parse()](https://www.php.net/manual/en/messageformatter.parsemessage.php)
      * and adds support for named arguments.
@@ -159,9 +141,7 @@ class MessageFormatter extends Component
      * @param string $pattern The pattern to use for parsing the message.
      * @param string $message The message to parse, conforming to the pattern.
      * @param string $language The locale to use for formatting locale-dependent parts
-     *
      * @return array|bool An array containing items extracted, or `FALSE` on error.
-     *
      * @throws \yii\base\NotSupportedException when PHP intl extension is not installed.
      */
     public function parse($pattern, $message, $language)
@@ -181,11 +161,9 @@ class MessageFormatter extends Component
             return false;
         }
         $map = [];
-
         foreach ($tokens as $i => $token) {
             if (is_array($token)) {
                 $param = trim($token[0]);
-
                 if (!isset($map[$param])) {
                     $map[$param] = count($map);
                 }
@@ -197,7 +175,6 @@ class MessageFormatter extends Component
         $map = array_flip($map);
 
         $formatter = new \MessageFormatter($language, $pattern);
-
         if ($formatter === null) {
             $this->_errorCode = -1;
             $this->_errorMessage = 'Message pattern is invalid.';
@@ -205,7 +182,6 @@ class MessageFormatter extends Component
             return false;
         }
         $result = $formatter->parse($message);
-
         if ($result === false) {
             $this->_errorCode = $formatter->getErrorCode();
             $this->_errorMessage = $formatter->getErrorMessage();
@@ -214,7 +190,6 @@ class MessageFormatter extends Component
         }
 
         $values = [];
-
         foreach ($result as $key => $value) {
             $values[$map[$key]] = $value;
         }
@@ -229,7 +204,6 @@ class MessageFormatter extends Component
      * @param array $givenParams The array of values to insert into the format string.
      * @param array $resultingParams Modified array of parameters.
      * @param array $map
-     *
      * @return string The pattern string with placeholders replaced.
      */
     private function replaceNamedArguments($pattern, $givenParams, &$resultingParams = [], &$map = [])
@@ -237,13 +211,11 @@ class MessageFormatter extends Component
         if (($tokens = self::tokenizePattern($pattern)) === false) {
             return false;
         }
-
         foreach ($tokens as $i => $token) {
             if (!is_array($token)) {
                 continue;
             }
             $param = trim($token[0]);
-
             if (array_key_exists($param, $givenParams)) {
                 // if param is given, replace it with a number
                 if (!isset($map[$param])) {
@@ -263,13 +235,11 @@ class MessageFormatter extends Component
                 if (!isset($token[2])) {
                     return false;
                 }
-
                 if (($subtokens = self::tokenizePattern($token[2])) === false) {
                     return false;
                 }
                 $c = count($subtokens);
-
-                for ($k = 0; $k + 1 < $c; ++$k) {
+                for ($k = 0; $k + 1 < $c; $k++) {
                     if (is_array($subtokens[$k]) || !is_array($subtokens[++$k])) {
                         return false;
                     }
@@ -286,11 +256,9 @@ class MessageFormatter extends Component
 
     /**
      * Fallback implementation for MessageFormatter::formatMessage.
-     *
      * @param string $pattern The pattern string to insert things into.
      * @param array $args The array of values to insert into the format string
      * @param string $locale The locale to use for formatting locale-dependent parts
-     *
      * @return false|string The formatted pattern string or `false` if an error occurred
      */
     protected function fallbackFormat($pattern, $args, $locale)
@@ -301,7 +269,6 @@ class MessageFormatter extends Component
 
             return false;
         }
-
         foreach ($tokens as $i => $token) {
             if (is_array($token)) {
                 if (($tokens[$i] = $this->parseToken($token, $args, $locale)) === false) {
@@ -318,41 +285,33 @@ class MessageFormatter extends Component
 
     /**
      * Tokenizes a pattern by separating normal text from replaceable patterns.
-     *
      * @param string $pattern patter to tokenize
-     *
      * @return array|bool array of tokens or false on failure
      */
     private static function tokenizePattern($pattern)
     {
         $charset = Yii::$app ? Yii::$app->charset : 'UTF-8';
         $depth = 1;
-
         if (($start = $pos = mb_strpos($pattern, '{', 0, $charset)) === false) {
             return [$pattern];
         }
         $tokens = [mb_substr($pattern, 0, $pos, $charset)];
-
         while (true) {
             $open = mb_strpos($pattern, '{', $pos + 1, $charset);
             $close = mb_strpos($pattern, '}', $pos + 1, $charset);
-
             if ($open === false && $close === false) {
                 break;
             }
-
             if ($open === false) {
                 $open = mb_strlen($pattern, $charset);
             }
-
             if ($close > $open) {
-                ++$depth;
+                $depth++;
                 $pos = $open;
             } else {
-                --$depth;
+                $depth--;
                 $pos = $close;
             }
-
             if ($depth === 0) {
                 $tokens[] = explode(',', mb_substr($pattern, $start + 1, $pos - $start - 1, $charset), 3);
                 $start = $pos + 1;
@@ -364,7 +323,6 @@ class MessageFormatter extends Component
                 break;
             }
         }
-
         if ($depth !== 0) {
             return false;
         }
@@ -374,29 +332,24 @@ class MessageFormatter extends Component
 
     /**
      * Parses a token.
-     *
      * @param array $token the token to parse
      * @param array $args arguments to replace
      * @param string $locale the locale
-     *
      * @return bool|string parsed token or false on failure
-     *
      * @throws \yii\base\NotSupportedException when unsupported formatting is used.
      */
     private function parseToken($token, $args, $locale)
     {
         // parsing pattern based on ICU grammar:
-        // http://icu-project.org/apiref/icu4c/classMessageFormat.html#details
+        // https://unicode-org.github.io/icu-docs/#/icu4c/classMessageFormat.html
         $charset = Yii::$app ? Yii::$app->charset : 'UTF-8';
         $param = trim($token[0]);
-
         if (isset($args[$param])) {
             $arg = $args[$param];
         } else {
             return '{' . implode(',', $token) . '}';
         }
         $type = isset($token[1]) ? trim($token[1]) : 'none';
-
         switch ($type) {
             case 'date':
             case 'time':
@@ -406,28 +359,22 @@ class MessageFormatter extends Component
             case 'choice':
             case 'selectordinal':
                 throw new NotSupportedException("Message format '$type' is not supported. You have to install PHP intl extension to use this feature.");
-
             case 'number':
                 $format = isset($token[2]) ? trim($token[2]) : null;
-
                 if (is_numeric($arg) && ($format === null || $format === 'integer')) {
                     $number = number_format($arg);
-
-                    if ($format === null && ($pos = strpos((string) $arg, '.')) !== false) {
+                    if ($format === null && ($pos = strpos($arg, '.')) !== false) {
                         // add decimals with unknown length
-                        $number .= '.' . substr((string) $arg, $pos + 1);
+                        $number .= '.' . substr($arg, $pos + 1);
                     }
 
                     return $number;
                 }
-
                 throw new NotSupportedException("Message format 'number' is only supported for integer values. You have to install PHP intl extension to use this feature.");
-
             case 'none':
                 return $arg;
-
             case 'select':
-                /* http://icu-project.org/apiref/icu4c/classicu_1_1SelectFormat.html
+                /* https://unicode-org.github.io/icu-docs/#/icu4c/classicu_1_1SelectFormat.html
                 selectStyle = (selector '{' message '}')+
                 */
                 if (!isset($token[2])) {
@@ -436,26 +383,21 @@ class MessageFormatter extends Component
                 $select = self::tokenizePattern($token[2]);
                 $c = count($select);
                 $message = false;
-
-                for ($i = 0; $i + 1 < $c; ++$i) {
+                for ($i = 0; $i + 1 < $c; $i++) {
                     if (is_array($select[$i]) || !is_array($select[$i + 1])) {
                         return false;
                     }
                     $selector = trim($select[$i++]);
-
                     if ($message === false && $selector === 'other' || $selector == $arg) {
                         $message = implode(',', $select[$i]);
                     }
                 }
-
                 if ($message !== false) {
                     return $this->fallbackFormat($message, $args, $locale);
                 }
-
                 break;
-
             case 'plural':
-                /* http://icu-project.org/apiref/icu4c/classicu_1_1PluralFormat.html
+                /* https://unicode-org.github.io/icu-docs/#/icu4c/classicu_1_1PluralFormat.html
                 pluralStyle = [offsetValue] (selector '{' message '}')+
                 offsetValue = "offset:" number
                 selector = explicitValue | keyword
@@ -470,8 +412,7 @@ class MessageFormatter extends Component
                 $c = count($plural);
                 $message = false;
                 $offset = 0;
-
-                for ($i = 0; $i + 1 < $c; ++$i) {
+                for ($i = 0; $i + 1 < $c; $i++) {
                     if (is_array($plural[$i]) || !is_array($plural[$i + 1])) {
                         return false;
                     }
@@ -481,19 +422,16 @@ class MessageFormatter extends Component
                         $offset = (int) trim(mb_substr($selector, 7, ($pos = mb_strpos(str_replace(["\n", "\r", "\t"], ' ', $selector), ' ', 7, $charset)) - 7, $charset));
                         $selector = trim(mb_substr($selector, $pos + 1, mb_strlen($selector, $charset), $charset));
                     }
-
                     if ($message === false && $selector === 'other' ||
                         strncmp($selector, '=', 1) === 0 && (int) mb_substr($selector, 1, mb_strlen($selector, $charset), $charset) === $arg ||
                         $selector === 'one' && $arg - $offset == 1
                     ) {
-                        $message = implode(',', str_replace('#', (string) ($arg - $offset), $plural[$i]));
+                        $message = implode(',', str_replace('#', $arg - $offset, $plural[$i]));
                     }
                 }
-
                 if ($message !== false) {
                     return $this->fallbackFormat($message, $args, $locale);
                 }
-
                 break;
         }
 

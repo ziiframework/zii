@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,8 +8,6 @@ declare(strict_types=1);
 namespace yii\filters;
 
 use Yii;
-use Closure;
-use Traversable;
 use yii\base\ActionFilter;
 use yii\helpers\StringHelper;
 use yii\web\NotFoundHttpException;
@@ -67,13 +62,12 @@ use yii\web\NotFoundHttpException;
  * This filter should be used only if this configuration is not available or compromised.
  *
  * @author Paul Klimov <klimov.paul@gmail.com>
- *
  * @since 2.0.11
  */
 class HostControl extends ActionFilter
 {
     /**
-     * @var array|Closure|null list of host names, which are allowed.
+     * @var array|\Closure|null list of host names, which are allowed.
      * Each host can be specified as a wildcard pattern. For example:
      *
      * ```php
@@ -96,9 +90,8 @@ class HostControl extends ActionFilter
      * If this field is not set - no host name check will be performed.
      */
     public $allowedHosts;
-
     /**
-     * @var callable a callback that will be called if the current host does not match [[allowedHosts]].
+     * @var callable|null a callback that will be called if the current host does not match [[allowedHosts]].
      * If not set, [[denyAccess()]] will be called.
      *
      * The signature of the callback should be as follows:
@@ -113,16 +106,15 @@ class HostControl extends ActionFilter
      * host name, creation of absolute URL links, caching page parts and so on.
      */
     public $denyCallback;
-
     /**
-     * @var string|null fallback host info (e.g. `http://www.yiiframework.com`) used when [[\yii\web\Request::$hostInfo|Request::$hostInfo]] is invalid.
+     * @var string|null fallback host info (e.g. `https://www.yiiframework.com`) used when [[\yii\web\Request::$hostInfo|Request::$hostInfo]] is invalid.
      * This value will replace [[\yii\web\Request::$hostInfo|Request::$hostInfo]] before [[$denyCallback]] is called to make sure that
      * an invalid host will not be used for further processing. You can set it to `null` to leave [[\yii\web\Request::$hostInfo|Request::$hostInfo]] untouched.
      * Default value is empty string (this will result creating relative URLs instead of absolute).
-     *
      * @see \yii\web\Request::getHostInfo()
      */
     public $fallbackHostInfo = '';
+
 
     /**
      * {@inheritdoc}
@@ -130,26 +122,22 @@ class HostControl extends ActionFilter
     public function beforeAction($action)
     {
         $allowedHosts = $this->allowedHosts;
-
-        if ($allowedHosts instanceof Closure) {
+        if ($allowedHosts instanceof \Closure) {
             $allowedHosts = call_user_func($allowedHosts, $action);
         }
-
         if ($allowedHosts === null) {
             return true;
         }
 
-        if (!is_array($allowedHosts) && !$allowedHosts instanceof Traversable) {
+        if (!is_array($allowedHosts) && !$allowedHosts instanceof \Traversable) {
             $allowedHosts = (array) $allowedHosts;
         }
 
         $currentHost = Yii::$app->getRequest()->getHostName();
 
-        if ($currentHost !== null) {
-            foreach ($allowedHosts as $allowedHost) {
-                if (StringHelper::matchWildcard($allowedHost, $currentHost)) {
-                    return true;
-                }
+        foreach ($allowedHosts as $allowedHost) {
+            if (StringHelper::matchWildcard($allowedHost, $currentHost)) {
+                return true;
             }
         }
 
@@ -172,12 +160,10 @@ class HostControl extends ActionFilter
      * The default implementation will display 404 page right away, terminating the program execution.
      * You may override this method, creating your own deny access handler. While doing so, make sure you
      * avoid usage of the current requested host name, creation of absolute URL links, caching page parts and so on.
-     *
      * @param \yii\base\Action $action the action to be executed.
-     *
      * @throws NotFoundHttpException
      */
-    protected function denyAccess($action): void
+    protected function denyAccess($action)
     {
         $exception = new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
 

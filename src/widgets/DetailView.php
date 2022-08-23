@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,15 +8,14 @@ declare(strict_types=1);
 namespace yii\widgets;
 
 use Yii;
-use Closure;
+use yii\base\Arrayable;
+use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\base\Widget;
-use yii\helpers\Html;
-use yii\base\Arrayable;
-use yii\i18n\Formatter;
-use yii\helpers\Inflector;
 use yii\helpers\ArrayHelper;
-use yii\base\InvalidConfigException;
+use yii\helpers\Html;
+use yii\helpers\Inflector;
+use yii\i18n\Formatter;
 
 /**
  * DetailView displays the detail of a single data [[model]].
@@ -51,7 +47,6 @@ use yii\base\InvalidConfigException;
  * For more details and usage information on DetailView, see the [guide article on data widgets](guide:output-data-widgets).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class DetailView extends Widget
@@ -62,7 +57,6 @@ class DetailView extends Widget
      * public accessible non-static properties.
      */
     public $model;
-
     /**
      * @var array a list of attributes to be displayed in the detail view. Each array element
      * represents the specification for displaying one particular attribute.
@@ -97,7 +91,6 @@ class DetailView extends Widget
      *   Please refer to [[\yii\helpers\BaseHtml::renderTagAttributes()]] for the supported syntax.
      */
     public $attributes;
-
     /**
      * @var string|callable the template used to render a single attribute. If a string, the token `{label}`
      * and `{value}` will be replaced with the label and the value of the corresponding attribute.
@@ -114,40 +107,36 @@ class DetailView extends Widget
      * HTML attributes of HTML container elements for the label and value.
      */
     public $template = '<tr><th{captionOptions}>{label}</th><td{contentOptions}>{value}</td></tr>';
-
     /**
-     * @var array the HTML attributes for the container tag of this widget. The `tag` option specifies
+     * @var array|null the HTML attributes for the container tag of this widget. The `tag` option specifies
      * what container tag should be used. It defaults to `table` if not set.
-     *
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $options = ['class' => 'table table-striped table-bordered detail-view'];
-
     /**
-     * @var array|Formatter the formatter used to format model attribute values into displayable texts.
+     * @var array|Formatter|null the formatter used to format model attribute values into displayable texts.
      * This can be either an instance of [[Formatter]] or an configuration array for creating the [[Formatter]]
      * instance. If this property is not set, the `formatter` application component will be used.
      */
     public $formatter;
 
+
     /**
      * Initializes the detail view.
      * This method will initialize required property values.
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
 
         if ($this->model === null) {
             throw new InvalidConfigException('Please specify the "model" property.');
         }
-
         if ($this->formatter === null) {
             $this->formatter = Yii::$app->getFormatter();
         } elseif (is_array($this->formatter)) {
             $this->formatter = Yii::createObject($this->formatter);
         }
-
         if (!$this->formatter instanceof Formatter) {
             throw new InvalidConfigException('The "formatter" property must be either a Format object or a configuration array.');
         }
@@ -162,11 +151,10 @@ class DetailView extends Widget
      * Renders the detail view.
      * This is the main entry of the whole detail view rendering.
      */
-    public function run(): void
+    public function run()
     {
         $rows = [];
         $i = 0;
-
         foreach ($this->attributes as $attribute) {
             $rows[] = $this->renderAttribute($attribute, $i++);
         }
@@ -178,10 +166,8 @@ class DetailView extends Widget
 
     /**
      * Renders a single attribute.
-     *
      * @param array $attribute the specification of the attribute to be rendered.
      * @param int $index the zero-based index of the attribute in the [[attributes]] array
-     *
      * @return string the rendering result
      */
     protected function renderAttribute($attribute, $index)
@@ -189,7 +175,6 @@ class DetailView extends Widget
         if (is_string($this->template)) {
             $captionOptions = Html::renderTagAttributes(ArrayHelper::getValue($attribute, 'captionOptions', []));
             $contentOptions = Html::renderTagAttributes(ArrayHelper::getValue($attribute, 'contentOptions', []));
-
             return strtr($this->template, [
                 '{label}' => $attribute['label'],
                 '{value}' => $this->formatter->format($attribute['value'], $attribute['format']),
@@ -203,10 +188,9 @@ class DetailView extends Widget
 
     /**
      * Normalizes the attribute specifications.
-     *
      * @throws InvalidConfigException
      */
-    protected function normalizeAttributes(): void
+    protected function normalizeAttributes()
     {
         if ($this->attributes === null) {
             if ($this->model instanceof Model) {
@@ -228,8 +212,8 @@ class DetailView extends Widget
                 }
                 $attribute = [
                     'attribute' => $matches[1],
-                    'format' => $matches[3] ?? 'text',
-                    'label' => $matches[5] ?? null,
+                    'format' => isset($matches[3]) ? $matches[3] : 'text',
+                    'label' => isset($matches[5]) ? $matches[5] : null,
                 ];
             }
 
@@ -239,21 +223,17 @@ class DetailView extends Widget
 
             if (isset($attribute['visible']) && !$attribute['visible']) {
                 unset($this->attributes[$i]);
-
                 continue;
             }
 
             if (!isset($attribute['format'])) {
                 $attribute['format'] = 'text';
             }
-
             if (isset($attribute['attribute'])) {
                 $attributeName = $attribute['attribute'];
-
                 if (!isset($attribute['label'])) {
                     $attribute['label'] = $this->model instanceof Model ? $this->model->getAttributeLabel($attributeName) : Inflector::camel2words($attributeName, true);
                 }
-
                 if (!array_key_exists('value', $attribute)) {
                     $attribute['value'] = ArrayHelper::getValue($this->model, $attributeName);
                 }
@@ -261,7 +241,7 @@ class DetailView extends Widget
                 throw new InvalidConfigException('The attribute configuration requires the "attribute" element to determine the value and display label.');
             }
 
-            if ($attribute['value'] instanceof Closure) {
+            if ($attribute['value'] instanceof \Closure) {
                 $attribute['value'] = call_user_func($attribute['value'], $this->model, $this);
             }
 

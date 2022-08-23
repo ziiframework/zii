@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,9 +8,9 @@ declare(strict_types=1);
 namespace yii\web;
 
 use Yii;
-use yii\helpers\Url;
 use yii\base\BaseObject;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 
 /**
  * AssetBundle represents a collection of asset files, such as CSS, JS, images.
@@ -28,13 +25,12 @@ use yii\helpers\ArrayHelper;
  * For more details and usage information on AssetBundle, see the [guide article on assets](guide:structure-assets).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class AssetBundle extends BaseObject
 {
     /**
-     * @var string the directory that contains the source asset files for this asset bundle.
+     * @var string|null the directory that contains the source asset files for this asset bundle.
      * A source asset file is a file that is part of your source code repository of your Web application.
      *
      * You must set this property if the directory containing the source asset files is not Web accessible.
@@ -44,11 +40,9 @@ class AssetBundle extends BaseObject
      * If you do not set this property, it means the source asset files are located under [[basePath]].
      *
      * You can use either a directory or an alias of the directory.
-     *
      * @see publishOptions
      */
     public $sourcePath;
-
     /**
      * @var string the Web-accessible directory that contains the asset files in this bundle.
      *
@@ -58,7 +52,6 @@ class AssetBundle extends BaseObject
      * You can use either a directory or an alias of the directory.
      */
     public $basePath;
-
     /**
      * @var string the base URL for the relative asset files listed in [[js]] and [[css]].
      *
@@ -68,7 +61,6 @@ class AssetBundle extends BaseObject
      * You can use either a URL or an alias of the URL.
      */
     public $baseUrl;
-
     /**
      * @var array list of bundle class names that this bundle depends on.
      *
@@ -82,13 +74,12 @@ class AssetBundle extends BaseObject
      * ```
      */
     public $depends = [];
-
     /**
      * @var array list of JavaScript files that this bundle contains. Each JavaScript file can be
      * specified in one of the following formats:
      *
      * - an absolute URL representing an external asset. For example,
-     *   `http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js` or
+     *   `https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js` or
      *   `//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js`.
      * - a relative path representing a local asset (e.g. `js/main.js`). The actual file path of a local
      *   asset can be determined by prefixing [[basePath]] to the relative path, and the actual URL
@@ -100,7 +91,6 @@ class AssetBundle extends BaseObject
      * Note that only a forward slash "/" should be used as directory separator.
      */
     public $js = [];
-
     /**
      * @var array list of CSS files that this bundle contains. Each CSS file can be specified
      * in one of the three formats as explained in [[js]].
@@ -108,51 +98,45 @@ class AssetBundle extends BaseObject
      * Note that only a forward slash "/" should be used as directory separator.
      */
     public $css = [];
-
     /**
      * @var array the options that will be passed to [[View::registerJsFile()]]
      * when registering the JS files in this bundle.
      */
     public $jsOptions = [];
-
     /**
      * @var array the options that will be passed to [[View::registerCssFile()]]
      * when registering the CSS files in this bundle.
      */
     public $cssOptions = [];
-
     /**
      * @var array the options to be passed to [[AssetManager::publish()]] when the asset bundle
      * is being published. This property is used only when [[sourcePath]] is set.
      */
     public $publishOptions = [];
 
+
     /**
      * Registers this asset bundle with a view.
-     *
      * @param View $view the view to be registered with
-     *
      * @return static the registered asset bundle instance
      */
     public static function register($view)
     {
-        return $view->registerAssetBundle(static::class);
+        return $view->registerAssetBundle(get_called_class());
     }
 
     /**
      * Initializes the bundle.
      * If you override this method, make sure you call the parent implementation in the last.
      */
-    public function init(): void
+    public function init()
     {
         if ($this->sourcePath !== null) {
             $this->sourcePath = rtrim(Yii::getAlias($this->sourcePath), '/\\');
         }
-
         if ($this->basePath !== null) {
             $this->basePath = rtrim(Yii::getAlias($this->basePath), '/\\');
         }
-
         if ($this->baseUrl !== null) {
             $this->baseUrl = rtrim(Yii::getAlias($this->baseUrl), '/');
         }
@@ -160,13 +144,11 @@ class AssetBundle extends BaseObject
 
     /**
      * Registers the CSS and JS files with the given view.
-     *
      * @param \yii\web\View $view the view that the asset files are to be registered with.
      */
-    public function registerAssetFiles($view): void
+    public function registerAssetFiles($view)
     {
         $manager = $view->getAssetManager();
-
         foreach ($this->js as $js) {
             if (is_array($js)) {
                 $file = array_shift($js);
@@ -176,7 +158,6 @@ class AssetBundle extends BaseObject
                 $view->registerJsFile($manager->getAssetUrl($this, $js), $this->jsOptions);
             }
         }
-
         foreach ($this->css as $css) {
             if (is_array($css)) {
                 $file = array_shift($css);
@@ -192,20 +173,18 @@ class AssetBundle extends BaseObject
      * Publishes the asset bundle if its source code is not under Web-accessible directory.
      * It will also try to convert non-CSS or JS files (e.g. LESS, Sass) into the corresponding
      * CSS or JS files using [[AssetManager::converter|asset converter]].
-     *
      * @param AssetManager $am the asset manager to perform the asset publishing
      */
-    public function publish($am): void
+    public function publish($am)
     {
         if ($this->sourcePath !== null && !isset($this->basePath, $this->baseUrl)) {
-            [$this->basePath, $this->baseUrl] = $am->publish($this->sourcePath, $this->publishOptions);
+            list($this->basePath, $this->baseUrl) = $am->publish($this->sourcePath, $this->publishOptions);
         }
 
         if (isset($this->basePath, $this->baseUrl) && ($converter = $am->getConverter()) !== null) {
             foreach ($this->js as $i => $js) {
                 if (is_array($js)) {
                     $file = array_shift($js);
-
                     if (Url::isRelative($file)) {
                         $js = ArrayHelper::merge($this->jsOptions, $js);
                         array_unshift($js, $converter->convert($file, $this->basePath));
@@ -215,11 +194,9 @@ class AssetBundle extends BaseObject
                     $this->js[$i] = $converter->convert($js, $this->basePath);
                 }
             }
-
             foreach ($this->css as $i => $css) {
                 if (is_array($css)) {
                     $file = array_shift($css);
-
                     if (Url::isRelative($file)) {
                         $css = ArrayHelper::merge($this->cssOptions, $css);
                         array_unshift($css, $converter->convert($file, $this->basePath));

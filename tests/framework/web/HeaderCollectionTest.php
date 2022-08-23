@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,15 +7,15 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\web;
 
-use yiiunit\TestCase;
 use yii\web\HeaderCollection;
+use yiiunit\TestCase;
 
 /**
  * @group web
  */
 class HeaderCollectionTest extends TestCase
 {
-    public function testFromArray(): void
+    public function testFromArray()
     {
         $headerCollection = new HeaderCollection();
         $location = 'my-test-location';
@@ -28,7 +25,7 @@ class HeaderCollectionTest extends TestCase
         $this->assertEquals($location, $headerCollection->get('Location'));
     }
 
-    public function testSetter(): void
+    public function testSetter()
     {
         $headerCollection = new HeaderCollection();
 
@@ -59,7 +56,7 @@ class HeaderCollectionTest extends TestCase
         $this->assertSame('3', $headerCollection->get('X-Header'));
     }
 
-    public function testSetterDefault(): void
+    public function testSetterDefault()
     {
         $headerCollection = new HeaderCollection();
         $headerCollection->setDefault('X-Header', '1');
@@ -69,7 +66,7 @@ class HeaderCollectionTest extends TestCase
         $this->assertSame(['1'], $headerCollection->get('X-Header', null, false));
     }
 
-    public function testAdder(): void
+    public function testAdder()
     {
         $headerCollection = new HeaderCollection();
         $headerCollection->add('X-Header', '1');
@@ -91,7 +88,7 @@ class HeaderCollectionTest extends TestCase
         $this->assertSame(['X-Header' => ['1', '2']], $headerCollection->toOriginalArray());
     }
 
-    public function testRemover(): void
+    public function testRemover()
     {
         $headerCollection = new HeaderCollection();
         $headerCollection->add('X-Header', '1');

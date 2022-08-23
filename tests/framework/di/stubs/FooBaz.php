@@ -1,8 +1,8 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yiiunit\framework\di\stubs;
@@ -15,7 +15,7 @@ class FooBaz extends \yii\base\BaseObject
 {
     public $fooDependent = [];
 
-    public function init(): void
+    public function init()
     {
         // default config usually used by Yii
         $dependentConfig = array_merge(['class' => FooDependent::className()], $this->fooDependent);

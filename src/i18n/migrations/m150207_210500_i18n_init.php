@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -13,18 +10,18 @@ use yii\db\Migration;
 /**
  * Initializes i18n messages tables.
  *
- * @author Dmitry Naumenko <d.naumenko.a@gmail.com>
  *
+ *
+ * @author Dmitry Naumenko <d.naumenko.a@gmail.com>
  * @since 2.0.7
  */
 class m150207_210500_i18n_init extends Migration
 {
-    public function up(): void
+    public function up()
     {
         $tableOptions = null;
-
         if ($this->db->driverName === 'mysql') {
-            // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
+            // https://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
 
@@ -42,7 +39,6 @@ class m150207_210500_i18n_init extends Migration
 
         $this->addPrimaryKey('pk_message_id_language', '{{%message}}', ['id', 'language']);
         $onUpdateConstraint = 'RESTRICT';
-
         if ($this->db->driverName === 'sqlsrv') {
             // 'NO ACTION' is equivalent to 'RESTRICT' in MSSQL
             $onUpdateConstraint = 'NO ACTION';
@@ -52,7 +48,7 @@ class m150207_210500_i18n_init extends Migration
         $this->createIndex('idx_message_language', '{{%message}}', 'language');
     }
 
-    public function down(): void
+    public function down()
     {
         $this->dropForeignKey('fk_message_source_message', '{{%message}}');
         $this->dropTable('{{%message}}');

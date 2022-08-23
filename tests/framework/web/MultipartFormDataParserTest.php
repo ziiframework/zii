@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,15 +7,15 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\web;
 
-use yiiunit\TestCase;
 use yii\web\MultipartFormDataParser;
+use yiiunit\TestCase;
 
 class MultipartFormDataParserTest extends TestCase
 {
-    public function testParse(): void
+    public function testParse()
     {
         if (defined('HHVM_VERSION')) {
-            $this->markTestSkipped('Can not test on HHVM because it does not support proper handling of the temporary files.');
+            static::markTestSkipped('Can not test on HHVM because it does not support proper handling of the temporary files.');
         }
 
         $parser = new MultipartFormDataParser();
@@ -55,10 +52,10 @@ class MultipartFormDataParserTest extends TestCase
         $this->assertStringEqualsFile($_FILES['Item']['tmp_name']['file'], 'item file content');
     }
 
-    public function testParseWithDoubleQuotes(): void
+    public function testParseWithDoubleQuotes()
     {
         if (defined('HHVM_VERSION')) {
-            $this->markTestSkipped('Can not test on HHVM because it does not support proper handling of the temporary files.');
+            static::markTestSkipped('Can not test on HHVM because it does not support proper handling of the temporary files.');
         }
 
         $parser = new MultipartFormDataParser();
@@ -94,11 +91,10 @@ class MultipartFormDataParserTest extends TestCase
         $this->assertEquals('text/plain', $_FILES['Item']['type']['file']);
         $this->assertStringEqualsFile($_FILES['Item']['tmp_name']['file'], 'item file content');
     }
-
     /**
      * @depends testParse
      */
-    public function testNotEmptyPost(): void
+    public function testNotEmptyPost()
     {
         $parser = new MultipartFormDataParser();
 
@@ -114,7 +110,7 @@ class MultipartFormDataParserTest extends TestCase
     /**
      * @depends testParse
      */
-    public function testNotEmptyFiles(): void
+    public function testNotEmptyFiles()
     {
         $parser = new MultipartFormDataParser();
 
@@ -136,7 +132,7 @@ class MultipartFormDataParserTest extends TestCase
     /**
      * @depends testParse
      */
-    public function testUploadFileMaxCount(): void
+    public function testUploadFileMaxCount()
     {
         $parser = new MultipartFormDataParser();
         $parser->setUploadFileMaxCount(2);
@@ -155,7 +151,7 @@ class MultipartFormDataParserTest extends TestCase
     /**
      * @depends testParse
      */
-    public function testUploadFileMaxSize(): void
+    public function testUploadFileMaxSize()
     {
         $parser = new MultipartFormDataParser();
         $parser->setUploadFileMaxSize(20);
@@ -172,8 +168,7 @@ class MultipartFormDataParserTest extends TestCase
         $this->assertEquals(UPLOAD_ERR_INI_SIZE, $_FILES['thirdFile']['error']);
     }
 
-    public function testUploadFileAsArray(): void
-    {
+    public function testUploadFileAsArray(){
         $parser = new MultipartFormDataParser();
 
         $boundary = '---------------------------22472926011618';
@@ -194,7 +189,7 @@ class MultipartFormDataParserTest extends TestCase
      * @depends testNotEmptyPost
      * @depends testNotEmptyFiles
      */
-    public function testForce(): void
+    public function testForce()
     {
         $parser = new MultipartFormDataParser();
         $parser->force = true;
@@ -225,7 +220,7 @@ class MultipartFormDataParserTest extends TestCase
         $this->assertFalse(isset($_FILES['existingFile']));
     }
 
-    public function testParseUnicodeInFileName(): void
+    public function testParseUnicodeInFileName()
     {
         $unicodeName = 'х.jpg'; // this is Russian "х"
 

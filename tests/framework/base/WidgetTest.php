@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -12,9 +9,9 @@ namespace yiiunit\framework\base;
 
 use Yii;
 use yii\base\Widget;
+use yii\base\WidgetEvent;
 use yii\di\Container;
 use yiiunit\TestCase;
-use yii\base\WidgetEvent;
 
 /**
  * @group base
@@ -24,23 +21,23 @@ class WidgetTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    protected function tearDown(): void
+    protected function tearDown()
     {
         parent::tearDown();
         Widget::$counter = 0;
         Widget::$stack = [];
     }
 
-    public function testWidget(): void
+    public function testWidget()
     {
         $output = TestWidget::widget(['id' => 'test']);
         $this->assertSame('<run-test>', $output);
     }
 
-    public function testBeginEnd(): void
+    public function testBeginEnd()
     {
         ob_start();
-        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
+        ob_implicit_flush(false);
 
         $widget = TestWidget::begin(['id' => 'test']);
         $this->assertTrue($widget instanceof TestWidget);
@@ -54,17 +51,17 @@ class WidgetTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/19030
      */
-    public function testDependencyInjection(): void
+    public function testDependencyInjection()
     {
         Yii::$container = new Container();
         Yii::$container->setDefinitions([
             TestWidgetB::className() => [
-                'class' => TestWidget::className(),
-            ],
+                'class' => TestWidget::className()
+            ]
         ]);
 
         ob_start();
-        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
+        ob_implicit_flush(false);
 
         $widget = TestWidgetB::begin(['id' => 'test']);
         $this->assertTrue($widget instanceof TestWidget);
@@ -78,7 +75,7 @@ class WidgetTest extends TestCase
     /**
      * @depends testBeginEnd
      */
-    public function testStackTracking(): void
+    public function testStackTracking()
     {
         $this->expectException('yii\base\InvalidCallException');
         TestWidget::end();
@@ -87,7 +84,7 @@ class WidgetTest extends TestCase
     /**
      * @depends testBeginEnd
      */
-    public function testStackTrackingDisorder(): void
+    public function testStackTrackingDisorder()
     {
         $this->expectException('yii\base\InvalidCallException');
         TestWidgetA::begin();
@@ -96,20 +93,21 @@ class WidgetTest extends TestCase
         TestWidgetB::end();
     }
 
+
     /**
      * @depends testWidget
      */
-    public function testEvents(): void
+    public function testEvents()
     {
         $output = TestWidget::widget([
             'id' => 'test',
-            'on init' => static function ($event): void {
+            'on init' => function ($event) {
                 echo '<init>';
             },
-            'on beforeRun' => static function (WidgetEvent $event): void {
+            'on beforeRun' => function (WidgetEvent $event) {
                 echo '<before-run>';
             },
-            'on afterRun' => static function (WidgetEvent $event): void {
+            'on afterRun' => function (WidgetEvent $event) {
                 $event->result .= '<after-run>';
             },
         ]);
@@ -119,11 +117,11 @@ class WidgetTest extends TestCase
     /**
      * @depends testEvents
      */
-    public function testPreventRun(): void
+    public function testPreventRun()
     {
         $output = TestWidget::widget([
             'id' => 'test',
-            'on beforeRun' => static function (WidgetEvent $event): void {
+            'on beforeRun' => function (WidgetEvent $event) {
                 $event->isValid = false;
             },
         ]);

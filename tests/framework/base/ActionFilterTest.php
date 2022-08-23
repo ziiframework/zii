@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,25 +8,24 @@ declare(strict_types=1);
 namespace yiiunit\framework\base;
 
 use Yii;
-use yii\web\User;
-use ReflectionClass;
 use yii\base\Action;
-use yiiunit\TestCase;
-use yii\base\Controller;
 use yii\base\ActionFilter;
+use yii\base\Controller;
+use yii\web\User;
+use yiiunit\TestCase;
 
 /**
  * @group base
  */
 class ActionFilterTest extends TestCase
 {
-    protected function setUp(): void
+    protected function setUp()
     {
         parent::setUp();
         $this->mockApplication();
     }
 
-    public function testFilter(): void
+    public function testFilter()
     {
         // no filters
         $controller = new FakeController('fake', Yii::$app);
@@ -90,6 +86,7 @@ class ActionFilterTest extends TestCase
         $this->assertEquals([1, 3, 2], $controller->result);
     }
 
+
     public function actionFilterProvider()
     {
         return [
@@ -104,16 +101,15 @@ class ActionFilterTest extends TestCase
 
     /**
      * @dataProvider actionFilterProvider
-     *
      * @param string|array $filterClass
      */
-    public function testActive($filterClass): void
+    public function testActive($filterClass)
     {
         $this->mockWebApplication();
 
         /** @var $filter ActionFilter */
         $filter = Yii::createObject($filterClass);
-        $reflection = new ReflectionClass($filter);
+        $reflection = new \ReflectionClass($filter);
         $method = $reflection->getMethod('isActive');
         $method->setAccessible(true);
 
@@ -142,12 +138,12 @@ class ActionFilterTest extends TestCase
     /**
      * @depends testActive
      */
-    public function testActiveWildcard(): void
+    public function testActiveWildcard()
     {
         $this->mockWebApplication();
 
         $filter = new ActionFilter();
-        $reflection = new ReflectionClass($filter);
+        $reflection = new \ReflectionClass($filter);
         $method = $reflection->getMethod('isActive');
         $method->setAccessible(true);
 
@@ -189,7 +185,6 @@ class Filter1 extends ActionFilter
     public function beforeAction($action)
     {
         $action->controller->result[] = 1;
-
         return true;
     }
 
@@ -210,7 +205,6 @@ class Filter2 extends ActionFilter
     public function beforeAction($action)
     {
         $action->controller->result[] = 2;
-
         return false;
     }
 
@@ -231,7 +225,6 @@ class Filter3 extends ActionFilter
     public function beforeAction($action)
     {
         $action->controller->result[] = 3;
-
         return true;
     }
 
@@ -246,7 +239,7 @@ class Filter3 extends ActionFilter
 
 class MockUser extends User
 {
-    public function init(): void
+    public function init()
     {
         // do not call parent to avoid the need to mock configuration
     }

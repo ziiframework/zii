@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -16,18 +13,18 @@ use yiiunit\framework\db\ActiveRecordTest;
 /**
  * Class Customer.
  *
- * @property int    $id
+ * @property int $id
  * @property string $name
  * @property string $email
  * @property string $address
- * @property int    $status
+ * @property int $status
  *
  * @method CustomerQuery findBySql($sql, $params = []) static
  */
 class Customer extends ActiveRecord
 {
-    public const STATUS_ACTIVE = 1;
-    public const STATUS_INACTIVE = 2;
+    const STATUS_ACTIVE = 1;
+    const STATUS_INACTIVE = 2;
 
     public $status2;
 
@@ -84,13 +81,13 @@ class Customer extends ActiveRecord
         /* @var $rel ActiveQuery */
         $rel = $this->hasMany(Item::className(), ['id' => 'item_id']);
 
-        return $rel->viaTable('order_item', ['order_id' => 'id'], static function ($q): void {
+        return $rel->viaTable('order_item', ['order_id' => 'id'], function ($q) {
             /* @var $q ActiveQuery */
             $q->viaTable('order', ['customer_id' => 'id']);
         })->orderBy('id');
     }
 
-    public function afterSave($insert, $changedAttributes): void
+    public function afterSave($insert, $changedAttributes)
     {
         ActiveRecordTest::$afterSaveInsert = $insert;
         ActiveRecordTest::$afterSaveNewRecord = $this->isNewRecord;
@@ -99,11 +96,10 @@ class Customer extends ActiveRecord
 
     /**
      * {@inheritdoc}
-     *
      * @return CustomerQuery
      */
     public static function find()
     {
-        return new CustomerQuery(static::class);
+        return new CustomerQuery(\get_called_class());
     }
 }

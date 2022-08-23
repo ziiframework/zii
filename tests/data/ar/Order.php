@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -15,10 +12,11 @@ use yii\db\ActiveQuery;
 /**
  * Class Order.
  *
- * @property int    $id
- * @property int    $customer_id
- * @property int    $created_at
+ * @property int $id
+ * @property int $customer_id
+ * @property int $created_at
  * @property string $total
+ *
  * @property-read Item[] $expensiveItemsUsingViaWithCallable
  * @property-read Item[] $cheapItemsUsingViaWithCallable
  * @property-read Item[] $itemsFor8
@@ -26,6 +24,8 @@ use yii\db\ActiveQuery;
 class Order extends ActiveRecord
 {
     public static $tableName;
+
+    public $virtualCustomerId = null;
 
     public static function tableName()
     {
@@ -68,7 +68,9 @@ class Order extends ActiveRecord
     public function getOrderItems3()
     {
         return $this->hasMany(OrderItem::className(), ['order_id' => 'id'])
-            ->indexBy(static fn ($row) => $row['order_id'] . '_' . $row['item_id']);
+            ->indexBy(function ($row) {
+                return $row['order_id'] . '_' . $row['item_id'];
+            });
     }
 
     public function getOrderItemsWithNullFK()
@@ -79,7 +81,7 @@ class Order extends ActiveRecord
     public function getItems()
     {
         return $this->hasMany(Item::className(), ['id' => 'item_id'])
-            ->via('orderItems', static function ($q): void {
+            ->via('orderItems', function ($q) {
                 // additional query configuration
             })->orderBy('item.id');
     }
@@ -87,7 +89,7 @@ class Order extends ActiveRecord
     public function getExpensiveItemsUsingViaWithCallable()
     {
         return $this->hasMany(Item::className(), ['id' => 'item_id'])
-            ->via('orderItems', static function (ActiveQuery $q): void {
+            ->via('orderItems', function (ActiveQuery $q) {
                 $q->where(['>=', 'subtotal', 10]);
             });
     }
@@ -95,7 +97,7 @@ class Order extends ActiveRecord
     public function getCheapItemsUsingViaWithCallable()
     {
         return $this->hasMany(Item::className(), ['id' => 'item_id'])
-            ->via('orderItems', static function (ActiveQuery $q): void {
+            ->via('orderItems', function (ActiveQuery $q) {
                 $q->where(['<', 'subtotal', 10]);
             });
     }
@@ -115,7 +117,7 @@ class Order extends ActiveRecord
     public function getItemsInOrder1()
     {
         return $this->hasMany(Item::className(), ['id' => 'item_id'])
-            ->via('orderItems', static function ($q): void {
+            ->via('orderItems', function ($q) {
                 $q->orderBy(['subtotal' => SORT_ASC]);
             })->orderBy('name');
     }
@@ -123,7 +125,7 @@ class Order extends ActiveRecord
     public function getItemsInOrder2()
     {
         return $this->hasMany(Item::className(), ['id' => 'item_id'])
-            ->via('orderItems', static function ($q): void {
+            ->via('orderItems', function ($q) {
                 $q->orderBy(['subtotal' => SORT_DESC]);
             })->orderBy('name');
     }
@@ -238,4 +240,10 @@ class Order extends ActiveRecord
     {
         return $this->hasMany(Item::className(), ['id' => 'item_id'])->via('orderItemsFor8');
     }
+
+    public function getVirtualCustomer()
+    {
+        return $this->hasOne(Customer::className(), ['id' => 'virtualCustomerId']);
+    }
+
 }

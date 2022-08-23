@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,13 +7,13 @@ declare(strict_types=1);
 
 namespace yii\behaviors;
 
-use yii\base\Widget;
-use yii\di\Instance;
 use yii\base\Behavior;
-use yii\base\WidgetEvent;
-use yii\caching\Dependency;
-use yii\caching\CacheInterface;
 use yii\base\InvalidConfigException;
+use yii\base\Widget;
+use yii\base\WidgetEvent;
+use yii\caching\CacheInterface;
+use yii\caching\Dependency;
+use yii\di\Instance;
 
 /**
  * Cacheable widget behavior automatically caches widget contents according to duration and dependencies specified.
@@ -45,7 +42,6 @@ use yii\base\InvalidConfigException;
  * ```
  *
  * @author Nikolay Oleynikov <oleynikovny@mail.ru>
- *
  * @since 2.0.14
  */
 class CacheableWidgetBehavior extends Behavior
@@ -56,14 +52,12 @@ class CacheableWidgetBehavior extends Behavior
      * Defaults to the `cache` application component.
      */
     public $cache = 'cache';
-
     /**
      * @var int cache duration in seconds.
      * Set to `0` to indicate that the cached data will never expire.
      * Defaults to 60 seconds or 1 minute.
      */
     public $cacheDuration = 60;
-
     /**
      * @var Dependency|array|null a cache dependency or a configuration array
      * for creating a cache dependency or `null` meaning no cache dependency.
@@ -81,7 +75,6 @@ class CacheableWidgetBehavior extends Behavior
      * If any post has its modification time changed, the cached content would be invalidated.
      */
     public $cacheDependency;
-
     /**
      * @var string[]|string an array of strings or a single string which would cause
      * the variation of the content being cached (e.g. an application language, a GET parameter).
@@ -96,7 +89,6 @@ class CacheableWidgetBehavior extends Behavior
      * ```
      */
     public $cacheKeyVariations = [];
-
     /**
      * @var bool whether to enable caching or not. Allows to turn the widget caching
      * on and off according to specific conditions.
@@ -108,10 +100,11 @@ class CacheableWidgetBehavior extends Behavior
      */
     public $cacheEnabled = true;
 
+
     /**
      * {@inheritdoc}
      */
-    public function attach($owner): void
+    public function attach($owner)
     {
         parent::attach($owner);
 
@@ -124,7 +117,7 @@ class CacheableWidgetBehavior extends Behavior
      *
      * @param WidgetEvent $event `Widget::EVENT_BEFORE_RUN` event.
      */
-    public function beforeRun($event): void
+    public function beforeRun($event)
     {
         $cacheKey = $this->getCacheKey();
         $fragmentCacheConfiguration = $this->getFragmentCacheConfiguration();
@@ -139,7 +132,7 @@ class CacheableWidgetBehavior extends Behavior
      *
      * @param WidgetEvent $event `Widget::EVENT_AFTER_RUN` event.
      */
-    public function afterRun($event): void
+    public function afterRun($event)
     {
         echo $event->result;
         $event->result = null;
@@ -150,7 +143,7 @@ class CacheableWidgetBehavior extends Behavior
     /**
      * Initializes widget event handlers.
      */
-    private function initializeEventHandlers(): void
+    private function initializeEventHandlers()
     {
         $this->owner->on(Widget::EVENT_BEFORE_RUN, [$this, 'beforeRun']);
         $this->owner->on(Widget::EVENT_AFTER_RUN, [$this, 'afterRun']);
@@ -160,13 +153,11 @@ class CacheableWidgetBehavior extends Behavior
      * Returns the cache instance.
      *
      * @return CacheInterface cache instance.
-     *
      * @throws InvalidConfigException if cache instance instantiation fails.
      */
     private function getCacheInstance()
     {
         $cacheInterface = 'yii\caching\CacheInterface';
-
         return Instance::ensure($this->cache, $cacheInterface);
     }
 
@@ -178,7 +169,10 @@ class CacheableWidgetBehavior extends Behavior
     private function getCacheKey()
     {
         // `$cacheKeyVariations` may be a `string` and needs to be cast to an `array`.
-        $cacheKey = array_merge((array) get_class($this->owner), (array) $this->cacheKeyVariations);
+        $cacheKey = array_merge(
+            (array)get_class($this->owner),
+            (array)$this->cacheKeyVariations
+        );
 
         return $cacheKey;
     }

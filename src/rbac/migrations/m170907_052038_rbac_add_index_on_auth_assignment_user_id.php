@@ -1,16 +1,13 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
 
+use yii\base\InvalidConfigException;
 use yii\db\Migration;
 use yii\rbac\DbManager;
-use yii\base\InvalidConfigException;
 
 /**
  * Adds index on `user_id` column in `auth_assignment` table for performance reasons.
@@ -18,7 +15,6 @@ use yii\base\InvalidConfigException;
  * @see https://github.com/yiisoft/yii2/pull/14765
  *
  * @author Ivan Buttinoni <ivan.buttinoni@cibi.it>
- *
  * @since 2.0.13
  */
 class m170907_052038_rbac_add_index_on_auth_assignment_user_id extends Migration
@@ -27,14 +23,12 @@ class m170907_052038_rbac_add_index_on_auth_assignment_user_id extends Migration
     public $index = 'auth_assignment_user_id_idx';
 
     /**
-     * @return DbManager
-     *
      * @throws yii\base\InvalidConfigException
+     * @return DbManager
      */
     protected function getAuthManager()
     {
         $authManager = Yii::$app->getAuthManager();
-
         if (!$authManager instanceof DbManager) {
             throw new InvalidConfigException('You should configure "authManager" component to use database before executing this migration.');
         }
@@ -45,7 +39,7 @@ class m170907_052038_rbac_add_index_on_auth_assignment_user_id extends Migration
     /**
      * {@inheritdoc}
      */
-    public function up(): void
+    public function up()
     {
         $authManager = $this->getAuthManager();
         $this->db = $authManager->db;
@@ -56,7 +50,7 @@ class m170907_052038_rbac_add_index_on_auth_assignment_user_id extends Migration
     /**
      * {@inheritdoc}
      */
-    public function down(): void
+    public function down()
     {
         $authManager = $this->getAuthManager();
         $this->db = $authManager->db;

@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -37,7 +34,6 @@ use yii\base\Widget;
  * desired when redefining it in subviews.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class Block extends Widget
@@ -48,25 +44,25 @@ class Block extends Widget
      */
     public $renderInPlace = false;
 
+
     /**
      * Starts recording a block.
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
 
         ob_start();
-        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
+        ob_implicit_flush(false);
     }
 
     /**
      * Ends recording a block.
      * This method stops output buffering and saves the rendering result as a named block in the view.
      */
-    public function run(): void
+    public function run()
     {
         $block = ob_get_clean();
-
         if ($this->renderInPlace) {
             echo $block;
         }

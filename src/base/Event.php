@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -27,7 +24,6 @@ use yii\helpers\StringHelper;
  * For more details and usage information on Event, see the [guide article on events](guide:concept-events).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class Event extends BaseObject
@@ -37,22 +33,19 @@ class Event extends BaseObject
      * Event handlers may use this property to check what event it is handling.
      */
     public $name;
-
     /**
-     * @var object the sender of this event. If not set, this property will be
+     * @var object|null the sender of this event. If not set, this property will be
      * set as the object whose `trigger()` method is called.
      * This property may also be a `null` when this event is a
      * class-level event which is triggered in a static context.
      */
     public $sender;
-
     /**
      * @var bool whether the event is handled. Defaults to `false`.
      * When a handler sets this to be `true`, the event processing will stop and
      * ignore the rest of the uninvoked event handlers.
      */
     public $handled = false;
-
     /**
      * @var mixed the data that is passed to [[Component::on()]] when attaching an event handler.
      * Note that this varies according to which event handler is currently executing.
@@ -63,13 +56,12 @@ class Event extends BaseObject
      * @var array contains all globally registered event handlers.
      */
     private static $_events = [];
-
     /**
      * @var array the globally registered event handlers attached for wildcard patterns (event name wildcard => handlers)
-     *
      * @since 2.0.14
      */
     private static $_eventWildcards = [];
+
 
     /**
      * Attaches an event handler to a class-level event.
@@ -106,10 +98,9 @@ class Event extends BaseObject
      * @param bool $append whether to append new event handler to the end of the existing
      * handler list. If `false`, the new handler will be inserted at the beginning of the existing
      * handler list.
-     *
      * @see off()
      */
-    public static function on($class, $name, $handler, $data = null, $append = true): void
+    public static function on($class, $name, $handler, $data = null, $append = true)
     {
         $class = ltrim($class, '\\');
 
@@ -119,7 +110,6 @@ class Event extends BaseObject
             } else {
                 array_unshift(self::$_eventWildcards[$name][$class], [$handler, $data]);
             }
-
             return;
         }
 
@@ -140,49 +130,40 @@ class Event extends BaseObject
      *
      * @param string $class the fully qualified class name from which the event handler needs to be detached.
      * @param string $name the event name.
-     * @param callable $handler the event handler to be removed.
+     * @param callable|null $handler the event handler to be removed.
      * If it is `null`, all handlers attached to the named event will be removed.
-     *
      * @return bool whether a handler is found and detached.
-     *
      * @see on()
      */
     public static function off($class, $name, $handler = null)
     {
         $class = ltrim($class, '\\');
-
         if (empty(self::$_events[$name][$class]) && empty(self::$_eventWildcards[$name][$class])) {
             return false;
         }
-
         if ($handler === null) {
             unset(self::$_events[$name][$class]);
             unset(self::$_eventWildcards[$name][$class]);
-
             return true;
         }
 
         // plain event names
         if (isset(self::$_events[$name][$class])) {
             $removed = false;
-
             foreach (self::$_events[$name][$class] as $i => $event) {
                 if ($event[0] === $handler) {
                     unset(self::$_events[$name][$class][$i]);
                     $removed = true;
                 }
             }
-
             if ($removed) {
                 self::$_events[$name][$class] = array_values(self::$_events[$name][$class]);
-
                 return true;
             }
         }
 
         // wildcard event names
         $removed = false;
-
         if (isset(self::$_eventWildcards[$name][$class])) {
             foreach (self::$_eventWildcards[$name][$class] as $i => $event) {
                 if ($event[0] === $handler) {
@@ -190,13 +171,11 @@ class Event extends BaseObject
                     $removed = true;
                 }
             }
-
             if ($removed) {
                 self::$_eventWildcards[$name][$class] = array_values(self::$_eventWildcards[$name][$class]);
                 // remove empty wildcards to save future redundant regex checks :
                 if (empty(self::$_eventWildcards[$name][$class])) {
                     unset(self::$_eventWildcards[$name][$class]);
-
                     if (empty(self::$_eventWildcards[$name])) {
                         unset(self::$_eventWildcards[$name]);
                     }
@@ -209,12 +188,11 @@ class Event extends BaseObject
 
     /**
      * Detaches all registered class-level event handlers.
-     *
      * @see on()
      * @see off()
      * @since 2.0.10
      */
-    public static function offAll(): void
+    public static function offAll()
     {
         self::$_events = [];
         self::$_eventWildcards = [];
@@ -224,10 +202,8 @@ class Event extends BaseObject
      * Returns a value indicating whether there is any handler attached to the specified class-level event.
      * Note that this method will also check all parent classes to see if there is any handler attached
      * to the named event.
-     *
      * @param string|object $class the object or the fully qualified class name specifying the class-level event.
      * @param string $name the event name.
-     *
      * @return bool whether there is any handler attached to the event.
      */
     public static function hasHandlers($class, $name)
@@ -242,7 +218,11 @@ class Event extends BaseObject
             $class = ltrim($class, '\\');
         }
 
-        $classes = array_merge([$class], class_parents($class, true), class_implements($class, true));
+        $classes = array_merge(
+            [$class],
+            class_parents($class, true),
+            class_implements($class, true)
+        );
 
         // regular events
         foreach ($classes as $className) {
@@ -256,12 +236,10 @@ class Event extends BaseObject
             if (!StringHelper::matchWildcard($nameWildcard, $name, ['escape' => false])) {
                 continue;
             }
-
             foreach ($classHandlers as $classWildcard => $handlers) {
                 if (empty($handlers)) {
                     continue;
                 }
-
                 foreach ($classes as $className) {
                     if (StringHelper::matchWildcard($classWildcard, $className, ['escape' => false])) {
                         return true;
@@ -277,15 +255,13 @@ class Event extends BaseObject
      * Triggers a class-level event.
      * This method will cause invocation of event handlers that are attached to the named event
      * for the specified class and all its parent classes.
-     *
      * @param string|object $class the object or the fully qualified class name specifying the class-level event.
      * @param string $name the event name.
-     * @param Event $event the event parameter. If not set, a default [[Event]] object will be created.
+     * @param Event|null $event the event parameter. If not set, a default [[Event]] object will be created.
      */
-    public static function trigger($class, $name, $event = null): void
+    public static function trigger($class, $name, $event = null)
     {
         $wildcardEventHandlers = [];
-
         foreach (self::$_eventWildcards as $nameWildcard => $classHandlers) {
             if (!StringHelper::matchWildcard($nameWildcard, $name)) {
                 continue;
@@ -312,11 +288,14 @@ class Event extends BaseObject
             $class = ltrim($class, '\\');
         }
 
-        $classes = array_merge([$class], class_parents($class, true), class_implements($class, true));
+        $classes = array_merge(
+            [$class],
+            class_parents($class, true),
+            class_implements($class, true)
+        );
 
         foreach ($classes as $class) {
             $eventHandlers = [];
-
             foreach ($wildcardEventHandlers as $classWildcard => $handlers) {
                 if (StringHelper::matchWildcard($classWildcard, $class, ['escape' => false])) {
                     $eventHandlers = array_merge($eventHandlers, $handlers);
@@ -331,7 +310,6 @@ class Event extends BaseObject
             foreach ($eventHandlers as $handler) {
                 $event->data = $handler[1];
                 call_user_func($handler[0], $event);
-
                 if ($event->handled) {
                     return;
                 }

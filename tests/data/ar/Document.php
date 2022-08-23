@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,11 +8,11 @@ declare(strict_types=1);
 namespace yiiunit\data\ar;
 
 /**
- * @property int    $id
+ * @property int $id
  * @property string $title
  * @property string $content
- * @property int    $version
- * @property array  $properties
+ * @property int $version
+ * @property array $properties
  */
 class Document extends ActiveRecord
 {

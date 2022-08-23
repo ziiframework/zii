@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -19,7 +16,7 @@ namespace yiiunit\data\ar;
 class CroppedType extends ActiveRecord
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public static function tableName()
     {
@@ -27,7 +24,7 @@ class CroppedType extends ActiveRecord
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function attributes()
     {

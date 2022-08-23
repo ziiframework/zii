@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,13 +7,13 @@ declare(strict_types=1);
 
 namespace yii\validators;
 
-use Yii;
 use DateTime;
-use Exception;
 use DateTimeZone;
+use Exception;
 use IntlDateFormatter;
-use yii\helpers\FormatConverter;
+use Yii;
 use yii\base\InvalidConfigException;
+use yii\helpers\FormatConverter;
 
 /**
  * DateValidator verifies if the attribute represents a date, time or datetime in a proper [[format]].
@@ -35,34 +32,28 @@ use yii\base\InvalidConfigException;
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @author Carsten Brandt <mail@cebe.cc>
- *
  * @since 2.0
  */
 class DateValidator extends Validator
 {
     /**
      * Constant for specifying the validation [[type]] as a date value, used for validation with intl short format.
-     *
      * @since 2.0.8
      * @see type
      */
-    public const TYPE_DATE = 'date';
-
+    const TYPE_DATE = 'date';
     /**
      * Constant for specifying the validation [[type]] as a datetime value, used for validation with intl short format.
-     *
      * @since 2.0.8
      * @see type
      */
-    public const TYPE_DATETIME = 'datetime';
-
+    const TYPE_DATETIME = 'datetime';
     /**
      * Constant for specifying the validation [[type]] as a time value, used for validation with intl short format.
-     *
      * @since 2.0.8
      * @see type
      */
-    public const TYPE_TIME = 'time';
+    const TYPE_TIME = 'time';
 
     /**
      * @var string the type of the validator. Indicates, whether a date, time or datetime value should be validated.
@@ -80,10 +71,9 @@ class DateValidator extends Validator
      * @since 2.0.8
      */
     public $type = self::TYPE_DATE;
-
     /**
-     * @var string the date format that the value being validated should follow.
-     * This can be a date time pattern as described in the [ICU manual](http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax).
+     * @var string|null the date format that the value being validated should follow.
+     * This can be a date time pattern as described in the [ICU manual](https://unicode-org.github.io/icu/userguide/format_parse/datetime/#datetime-format-syntax).
      *
      * Alternatively this can be a string prefixed with `php:` representing a format that can be recognized by the PHP Datetime class.
      * Please refer to <https://www.php.net/manual/en/datetime.createfromformat.php> on supported formats.
@@ -113,26 +103,23 @@ class DateValidator extends Validator
      * If you need to use the IntlDateFormatter you can avoid this problem by specifying a [[min|minimum date]].
      */
     public $format;
-
     /**
-     * @var string the locale ID that is used to localize the date parsing.
+     * @var string|null the locale ID that is used to localize the date parsing.
      * This is only effective when the [PHP intl extension](https://www.php.net/manual/en/book.intl.php) is installed.
      * If not set, the locale of the [[\yii\base\Application::formatter|formatter]] will be used.
      * See also [[\yii\i18n\Formatter::locale]].
      */
     public $locale;
-
     /**
-     * @var string the timezone to use for parsing date and time values.
+     * @var string|null the timezone to use for parsing date and time values.
      * This can be any value that may be passed to [date_default_timezone_set()](https://www.php.net/manual/en/function.date-default-timezone-set.php)
      * e.g. `UTC`, `Europe/Berlin` or `America/Chicago`.
      * Refer to the [php manual](https://www.php.net/manual/en/timezones.php) for available timezones.
      * If this property is not set, [[\yii\base\Application::timeZone]] will be used.
      */
     public $timeZone;
-
     /**
-     * @var string the name of the attribute to receive the parsing result.
+     * @var string|null the name of the attribute to receive the parsing result.
      * When this property is not null and the validation is successful, the named attribute will
      * receive the parsing result.
      *
@@ -149,20 +136,17 @@ class DateValidator extends Validator
      * @see timestampAttributeTimeZone
      */
     public $timestampAttribute;
-
     /**
-     * @var string the format to use when populating the [[timestampAttribute]].
+     * @var string|null the format to use when populating the [[timestampAttribute]].
      * The format can be specified in the same way as for [[format]].
      *
      * If not set, [[timestampAttribute]] will receive a UNIX timestamp.
      * If [[timestampAttribute]] is not set, this property will be ignored.
-     *
      * @see format
      * @see timestampAttribute
      * @since 2.0.4
      */
     public $timestampAttributeFormat;
-
     /**
      * @var string the timezone to use when populating the [[timestampAttribute]] with [[timestampAttributeFormat]]. Defaults to `UTC`.
      *
@@ -171,75 +155,58 @@ class DateValidator extends Validator
      * Refer to the [php manual](https://www.php.net/manual/en/timezones.php) for available timezones.
      *
      * If [[timestampAttributeFormat]] is not set, this property will be ignored.
-     *
      * @see timestampAttributeFormat
      * @since 2.0.4
      */
     public $timestampAttributeTimeZone = 'UTC';
-
     /**
-     * @var int|string upper limit of the date. Defaults to null, meaning no upper limit.
+     * @var int|string|null upper limit of the date. Defaults to null, meaning no upper limit.
      * This can be a unix timestamp or a string representing a date time value.
      * If this property is a string, [[format]] will be used to parse it.
-     *
      * @see tooBig for the customized message used when the date is too big.
      * @since 2.0.4
      */
     public $max;
-
     /**
-     * @var int|string lower limit of the date. Defaults to null, meaning no lower limit.
+     * @var int|string|null lower limit of the date. Defaults to null, meaning no lower limit.
      * This can be a unix timestamp or a string representing a date time value.
      * If this property is a string, [[format]] will be used to parse it.
-     *
      * @see tooSmall for the customized message used when the date is too small.
      * @since 2.0.4
      */
     public $min;
-
     /**
      * @var string user-defined error message used when the value is bigger than [[max]].
-     *
      * @since 2.0.4
      */
     public $tooBig;
-
     /**
      * @var string user-defined error message used when the value is smaller than [[min]].
-     *
      * @since 2.0.4
      */
     public $tooSmall;
-
     /**
-     * @var string user friendly value of upper limit to display in the error message.
+     * @var string|null user friendly value of upper limit to display in the error message.
      * If this property is null, the value of [[max]] will be used (before parsing).
-     *
      * @since 2.0.4
      */
     public $maxString;
-
     /**
-     * @var string user friendly value of lower limit to display in the error message.
+     * @var string|null user friendly value of lower limit to display in the error message.
      * If this property is null, the value of [[min]] will be used (before parsing).
-     *
      * @since 2.0.4
      */
     public $minString;
-
     /**
      * @var bool set this parameter to true if you need strict date format validation (e.g. only such dates pass
      * validation for the following format 'yyyy-MM-dd': '0011-03-25', '2019-04-30' etc. and not '18-05-15',
      * '2017-Mar-14' etc. which pass validation if this parameter is set to false)
-     *
      * @since 2.0.22
      */
     public $strictDateFormat = false;
-
     /**
      * @var string the default timezone used for parsing when no time parts are provided in the format.
      * See [[timestampAttributeTimeZone]] for more description.
-     *
      * @since 2.0.39
      */
     public $defaultTimeZone = 'UTC';
@@ -254,17 +221,16 @@ class DateValidator extends Validator
         'full' => 0, // IntlDateFormatter::FULL,
     ];
 
+
     /**
      * {@inheritdoc}
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
-
         if ($this->message === null) {
             $this->message = Yii::t('yii', 'The format of {attribute} is invalid.');
         }
-
         if ($this->format === null) {
             if ($this->type === self::TYPE_DATE) {
                 $this->format = Yii::$app->formatter->dateFormat;
@@ -276,43 +242,33 @@ class DateValidator extends Validator
                 throw new InvalidConfigException('Unknown validation type set for DateValidator::$type: ' . $this->type);
             }
         }
-
         if ($this->locale === null) {
             $this->locale = Yii::$app->language;
         }
-
         if ($this->timeZone === null) {
             $this->timeZone = Yii::$app->timeZone;
         }
-
         if ($this->min !== null && $this->tooSmall === null) {
             $this->tooSmall = Yii::t('yii', '{attribute} must be no less than {min}.');
         }
-
         if ($this->max !== null && $this->tooBig === null) {
             $this->tooBig = Yii::t('yii', '{attribute} must be no greater than {max}.');
         }
-
         if ($this->maxString === null) {
-            $this->maxString = (string) $this->max;
+            $this->maxString = (string)$this->max;
         }
-
         if ($this->minString === null) {
-            $this->minString = (string) $this->min;
+            $this->minString = (string)$this->min;
         }
-
         if ($this->max !== null && is_string($this->max)) {
             $timestamp = $this->parseDateValue($this->max);
-
             if ($timestamp === false) {
                 throw new InvalidConfigException("Invalid max date value: {$this->max}");
             }
             $this->max = $timestamp;
         }
-
         if ($this->min !== null && is_string($this->min)) {
             $timestamp = $this->parseDateValue($this->min);
-
             if ($timestamp === false) {
                 throw new InvalidConfigException("Invalid min date value: {$this->min}");
             }
@@ -323,20 +279,17 @@ class DateValidator extends Validator
     /**
      * {@inheritdoc}
      */
-    public function validateAttribute($model, $attribute): void
+    public function validateAttribute($model, $attribute)
     {
         $value = $model->$attribute;
-
         if ($this->isEmpty($value)) {
             if ($this->timestampAttribute !== null) {
                 $model->{$this->timestampAttribute} = null;
             }
-
             return;
         }
 
         $timestamp = $this->parseDateValue($value);
-
         if ($timestamp === false) {
             if ($this->timestampAttribute === $attribute) {
                 if ($this->timestampAttributeFormat === null) {
@@ -367,7 +320,6 @@ class DateValidator extends Validator
     protected function validateValue($value)
     {
         $timestamp = $this->parseDateValue($value);
-
         if ($timestamp === false) {
             return [$this->message, []];
         } elseif ($this->min !== null && $timestamp < $this->min) {
@@ -383,7 +335,6 @@ class DateValidator extends Validator
      * Parses date string into UNIX timestamp.
      *
      * @param mixed $value string representing date
-     *
      * @return int|false a UNIX timestamp or `false` on failure.
      */
     protected function parseDateValue($value)
@@ -397,9 +348,7 @@ class DateValidator extends Validator
      *
      * @param mixed $value string representing date
      * @param string $format expected date format
-     *
      * @return int|false a UNIX timestamp or `false` on failure.
-     *
      * @throws InvalidConfigException
      */
     private function parseDateValueFormat($value, $format)
@@ -407,7 +356,6 @@ class DateValidator extends Validator
         if (is_array($value)) {
             return false;
         }
-
         if (strncmp($format, 'php:', 4) === 0) {
             $format = substr($format, 4);
         } else {
@@ -424,12 +372,9 @@ class DateValidator extends Validator
 
     /**
      * Parses a date value using the IntlDateFormatter::parse().
-     *
      * @param string $value string representing date
      * @param string $format the expected date format
-     *
      * @return int|bool a UNIX timestamp or `false` on failure.
-     *
      * @throws InvalidConfigException
      */
     private function parseDateValueIntl($value, $format)
@@ -441,9 +386,8 @@ class DateValidator extends Validator
         // There should not be a warning thrown by parse() but this seems to be the case on windows so we suppress it here
         // See https://github.com/yiisoft/yii2/issues/5962 and https://bugs.php.net/bug.php?id=68528
         $parsePos = 0;
-        $parsedDate = @$formatter->parse(is_int($value) ? (string) $value : $value, $parsePos);
-        $valueLength = mb_strlen(is_int($value) ? (string) $value : $value, Yii::$app ? Yii::$app->charset : 'UTF-8');
-
+        $parsedDate = @$formatter->parse($value, $parsePos);
+        $valueLength = mb_strlen($value, Yii::$app ? Yii::$app->charset : 'UTF-8');
         if ($parsedDate === false || $parsePos !== $valueLength || ($this->strictDateFormat && $formatter->format($parsedDate) !== $value)) {
             return false;
         }
@@ -452,12 +396,10 @@ class DateValidator extends Validator
     }
 
     /**
-     * Creates IntlDateFormatter.
+     * Creates IntlDateFormatter
      *
      * @param $format string date format
-     *
      * @return IntlDateFormatter
-     *
      * @throws InvalidConfigException
      */
     private function getIntlDateFormatter($format)
@@ -465,7 +407,6 @@ class DateValidator extends Validator
         if (!isset($this->_dateFormats[$format])) {
             // if no time was provided in the format string set timezone to default one to match yii\i18n\Formatter::formatDateTimeValue()
             $timezone = strpbrk($format, 'ahHkKmsSA') !== false ? $this->timeZone : $this->defaultTimeZone;
-
             return new IntlDateFormatter($this->locale, IntlDateFormatter::NONE, IntlDateFormatter::NONE, $timezone, null, $format);
         }
 
@@ -490,10 +431,8 @@ class DateValidator extends Validator
 
     /**
      * Parses a date value using the DateTime::createFromFormat().
-     *
      * @param string $value string representing date
      * @param string $format the expected date format
-     *
      * @return int|bool a UNIX timestamp or `false` on failure.
      */
     private function parseDateValuePHP($value, $format)
@@ -501,9 +440,8 @@ class DateValidator extends Validator
         $hasTimeInfo = strpbrk($format, 'HhGgisU') !== false;
         // if no time was provided in the format string set timezone to default one to match yii\i18n\Formatter::formatDateTimeValue()
         $timezone = $hasTimeInfo ? $this->timeZone : $this->defaultTimeZone;
-        $date = DateTime::createFromFormat($format, is_int($value) ? (string) $value : $value, new DateTimeZone($timezone));
+        $date = DateTime::createFromFormat($format, $value, new DateTimeZone($timezone));
         $errors = DateTime::getLastErrors();
-
         if ($date === false || $errors['error_count'] || $errors['warning_count'] || ($this->strictDateFormat && $date->format($format) !== $value)) {
             return false;
         }
@@ -518,12 +456,9 @@ class DateValidator extends Validator
 
     /**
      * Formats a timestamp using the specified format.
-     *
      * @param int $timestamp
      * @param string $format
-     *
      * @return string
-     *
      * @throws Exception
      */
     private function formatTimestamp($timestamp, $format)

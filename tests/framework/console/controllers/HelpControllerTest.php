@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,13 +7,12 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\console\controllers;
 
-use yiiunit\TestCase;
-use yii\helpers\Console;
 use yii\console\controllers\HelpController;
+use yii\helpers\Console;
+use yiiunit\TestCase;
 
 /**
  * Unit test for [[\yii\console\controllers\HelpController]].
- *
  * @see HelpController
  * @group console
  */
@@ -25,14 +21,13 @@ class HelpControllerTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    public function setUp()
     {
         $this->mockApplication();
     }
 
     /**
      * Creates controller instance.
-     *
      * @return BufferedHelpController
      */
     protected function createController()
@@ -41,28 +36,24 @@ class HelpControllerTest extends TestCase
             ->setMethods(['fake'])
             ->setConstructorArgs(['console'])
             ->getMock();
-
         return new BufferedHelpController('help', $module);
     }
 
     /**
      * Emulates running controller action.
-     *
-     * @param string $actionID     id of action to be run
-     * @param array  $actionParams action arguments
-     *
-     * @return string command output
+     * @param string $actionID id of action to be run.
+     * @param array $actionParams action arguments.
+     * @return string command output.
      */
     protected function runControllerAction($actionID, $actionParams = [])
     {
         $controller = $this->createController();
         $action = $controller->createAction($actionID);
         $action->runWithParams($actionParams);
-
         return $controller->flushStdOutBuffer();
     }
 
-    public function testModuleControllersList(): void
+    public function testModuleControllersList()
     {
         $this->mockApplication([
             'enableCoreCommands' => false,
@@ -85,7 +76,7 @@ STRING
             , $result);
     }
 
-    public function testActionList(): void
+    public function testActionList()
     {
         $this->mockApplication([
             'enableCoreCommands' => false,
@@ -118,10 +109,10 @@ migrate/to
 migrate/up
 
 STRING
-            , $result);
+        , $result);
     }
 
-    public function testActionListActionOptions(): void
+    public function testActionListActionOptions()
     {
         $this->mockApplication([
             'enableCoreCommands' => false,
@@ -140,10 +131,10 @@ action: route to action
 --silent-exit-on-exception: if true - script finish with `ExitCode\:\:OK` in case of exception.false - `ExitCode\:\:UNSPECIFIED_ERROR`.Default\: `YII_ENV_TEST`
 
 STRING
-            , $result);
+        , $result);
     }
 
-    public function testActionUsage(): void
+    public function testActionUsage()
     {
         $this->mockApplication([
             'enableCoreCommands' => false,
@@ -160,67 +151,68 @@ STRING
             , $result);
     }
 
-    public function testActionIndex(): void
+    public function testActionIndex()
     {
         $result = Console::stripAnsiFormat($this->runControllerAction('index'));
-        $this->assertStringContainsString('This is Yii version ', $result);
-        $this->assertStringContainsString('The following commands are available:', $result);
-        $this->assertStringContainsString('To see the help of each command, enter:', $result);
-        $this->assertStringContainsString('bootstrap.php help', $result);
+        $this->assertContains('This is Yii version ', $result);
+        $this->assertContains('The following commands are available:', $result);
+        $this->assertContains('To see the help of each command, enter:', $result);
+        $this->assertContains('bootstrap.php help', $result);
     }
 
-    public function testActionIndexWithHelpCommand(): void
+    public function testActionIndexWithHelpCommand()
     {
         $result = Console::stripAnsiFormat($this->runControllerAction('index', ['command' => 'help/index']));
-        $this->assertStringContainsString('Displays available commands or the detailed information', $result);
-        $this->assertStringContainsString('bootstrap.php help [command] [...options...]', $result);
-        $this->assertStringContainsString('--appconfig: string', $result);
-        $this->assertStringContainsString('- command: string', $result);
-        $this->assertStringContainsString('--color: boolean, 0 or 1', $result);
-        $this->assertStringContainsString('--help, -h: boolean, 0 or 1', $result);
-        $this->assertStringContainsString('--interactive: boolean, 0 or 1 (defaults to 1)', $result);
+        $this->assertContains('Displays available commands or the detailed information', $result);
+        $this->assertContains('bootstrap.php help [command] [...options...]', $result);
+        $this->assertContains('--appconfig: string', $result);
+        $this->assertContains('- command: string', $result);
+        $this->assertContains('--color: boolean, 0 or 1', $result);
+        $this->assertContains('--help, -h: boolean, 0 or 1', $result);
+        $this->assertContains('--interactive: boolean, 0 or 1 (defaults to 1)', $result);
     }
 
-    public function testActionIndexWithServeCommand(): void
+    public function testActionIndexWithServeCommand()
     {
         $result = Console::stripAnsiFormat($this->runControllerAction('index', ['command' => 'serve']));
-        $this->assertStringContainsString('Runs PHP built-in web server', $result);
-        $this->assertStringContainsString('bootstrap.php serve [address] [...options...]', $result);
-        $this->assertStringContainsString('- address: string (defaults to \'localhost\')', $result);
-        $this->assertStringContainsString('--appconfig: string', $result);
-        $this->assertStringContainsString('--color: boolean, 0 or 1', $result);
-        $this->assertStringContainsString('--docroot, -t: string (defaults to \'@app/web\')', $result);
-        $this->assertStringContainsString('--help, -h: boolean, 0 or 1', $result);
-        $this->assertStringContainsString('--interactive: boolean, 0 or 1 (defaults to 1)', $result);
-        $this->assertStringContainsString('--port, -p: int (defaults to 8080)', $result);
-        $this->assertStringContainsString('--router, -r: string', $result);
+        $this->assertContains('Runs PHP built-in web server', $result);
+        $this->assertContains('bootstrap.php serve [address] [...options...]', $result);
+        $this->assertContains('- address: string (defaults to \'localhost\')', $result);
+        $this->assertContains('--appconfig: string', $result);
+        $this->assertContains('--color: boolean, 0 or 1', $result);
+        $this->assertContains('--docroot, -t: string (defaults to \'@app/web\')', $result);
+        $this->assertContains('--help, -h: boolean, 0 or 1', $result);
+        $this->assertContains('--interactive: boolean, 0 or 1 (defaults to 1)', $result);
+        $this->assertContains('--port, -p: int (defaults to 8080)', $result);
+        $this->assertContains('--router, -r: string', $result);
     }
 
-    public function testActionListContainsNoEmptyCommands(): void
+    public function testActionListContainsNoEmptyCommands()
     {
         $this->mockApplication([
             'enableCoreCommands' => false,
             'controllerNamespace' => 'yiiunit\data\console\controllers',
         ]);
         $result = Console::stripAnsiFormat($this->runControllerAction('list'));
-        $this->assertStringNotContainsString("fake-empty\n", $result);
-        $this->assertStringNotContainsString("fake-no-default\n", $result);
-        $this->assertStringContainsString("fake-no-default/index\n", $result);
+        $this->assertNotContains("fake-empty\n", $result);
+        $this->assertNotContains("fake-no-default\n", $result);
+        $this->assertContains("fake-no-default/index\n", $result);
     }
 
-    public function testActionIndexContainsNoEmptyCommands(): void
+    public function testActionIndexContainsNoEmptyCommands()
     {
         $this->mockApplication([
             'enableCoreCommands' => false,
             'controllerNamespace' => 'yiiunit\data\console\controllers',
         ]);
         $result = Console::stripAnsiFormat($this->runControllerAction('index'));
-        $this->assertStringNotContainsString('- fake-empty', $result);
-        $this->assertStringContainsString('- fake-no-default', $result);
-        $this->assertStringContainsString('    fake-no-default/index', $result);
-        $this->assertStringNotContainsString('    fake-no-default/index (default)', $result);
+        $this->assertNotContains("- fake-empty", $result);
+        $this->assertContains("- fake-no-default", $result);
+        $this->assertContains("    fake-no-default/index", $result);
+        $this->assertNotContains("    fake-no-default/index (default)", $result);
     }
 }
+
 
 class BufferedHelpController extends HelpController
 {

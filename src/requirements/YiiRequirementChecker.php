@@ -1,12 +1,14 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
+
+if (version_compare(PHP_VERSION, '4.3', '<')) {
+    echo 'At least PHP 4.3 is required to run this script!';
+    exit(1);
+}
 
 /**
  * YiiRequirementChecker allows checking, if current system meets the requirements for running the Yii application.
@@ -50,7 +52,6 @@ declare(strict_types=1);
  * @property array|null $result the check results, this property is for internal usage only.
  *
  * @author Paul Klimov <klimov.paul@gmail.com>
- *
  * @since 2.0
  */
 class YiiRequirementChecker
@@ -59,47 +60,41 @@ class YiiRequirementChecker
      * Check the given requirements, collecting results into internal field.
      * This method can be invoked several times checking different requirement sets.
      * Use [[getResult()]] or [[render()]] to get the results.
-     *
      * @param array|string $requirements requirements to be checked.
      * If an array, it is treated as the set of requirements;
      * If a string, it is treated as the path of the file, which contains the requirements;
-     *
      * @return $this self instance.
      */
-    public function check($requirements)
+    function check($requirements)
     {
         if (is_string($requirements)) {
             $requirements = require $requirements;
         }
-
         if (!is_array($requirements)) {
             $this->usageError('Requirements must be an array, "' . gettype($requirements) . '" has been given!');
         }
-
         if (!isset($this->result) || !is_array($this->result)) {
-            $this->result = [
-                'summary' => [
+            $this->result = array(
+                'summary' => array(
                     'total' => 0,
                     'errors' => 0,
                     'warnings' => 0,
-                ],
-                'requirements' => [],
-            ];
+                ),
+                'requirements' => array(),
+            );
         }
-
         foreach ($requirements as $key => $rawRequirement) {
             $requirement = $this->normalizeRequirement($rawRequirement, $key);
-            ++$this->result['summary']['total'];
-
+            $this->result['summary']['total']++;
             if (!$requirement['condition']) {
                 if ($requirement['mandatory']) {
                     $requirement['error'] = true;
                     $requirement['warning'] = true;
-                    ++$this->result['summary']['errors'];
+                    $this->result['summary']['errors']++;
                 } else {
                     $requirement['error'] = false;
                     $requirement['warning'] = true;
-                    ++$this->result['summary']['warnings'];
+                    $this->result['summary']['warnings']++;
                 }
             } else {
                 $requirement['error'] = false;
@@ -113,17 +108,15 @@ class YiiRequirementChecker
 
     /**
      * Performs the check for the Yii core requirements.
-     *
      * @return YiiRequirementChecker self instance.
      */
-    public function checkYii()
+    function checkYii()
     {
-        return $this->check(__DIR__ . DIRECTORY_SEPARATOR . 'requirements.php');
+        return $this->check(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'requirements.php');
     }
 
     /**
      * Return the check results.
-     *
      * @return array|null check results in format:
      *
      * ```php
@@ -144,7 +137,7 @@ class YiiRequirementChecker
      * )
      * ```
      */
-    public function getResult()
+    function getResult()
     {
         if (isset($this->result)) {
             return $this->result;
@@ -157,13 +150,12 @@ class YiiRequirementChecker
      * Renders the requirements check result.
      * The output will vary depending is a script running from web or from console.
      */
-    public function render(): void
+    function render()
     {
         if (!isset($this->result)) {
             $this->usageError('Nothing to render!');
         }
-        $baseViewFilePath = __DIR__ . DIRECTORY_SEPARATOR . 'views';
-
+        $baseViewFilePath = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'views';
         if (!empty($_SERVER['argv'])) {
             $viewFileName = $baseViewFilePath . DIRECTORY_SEPARATOR . 'console' . DIRECTORY_SEPARATOR . 'index.php';
         } else {
@@ -174,24 +166,20 @@ class YiiRequirementChecker
 
     /**
      * Checks if the given PHP extension is available and its version matches the given one.
-     *
      * @param string $extensionName PHP extension name.
      * @param string $version required PHP extension version.
      * @param string $compare comparison operator, by default '>='
-     *
      * @return bool if PHP extension version matches.
      */
-    public function checkPhpExtensionVersion($extensionName, $version, $compare = '>=')
+    function checkPhpExtensionVersion($extensionName, $version, $compare = '>=')
     {
         if (!extension_loaded($extensionName)) {
             return false;
         }
         $extensionVersion = phpversion($extensionName);
-
         if (empty($extensionVersion)) {
             return false;
         }
-
         if (strncasecmp($extensionVersion, 'PECL-', 5) === 0) {
             $extensionVersion = substr($extensionVersion, 5);
         }
@@ -201,51 +189,43 @@ class YiiRequirementChecker
 
     /**
      * Checks if PHP configuration option (from php.ini) is on.
-     *
      * @param string $name configuration option name.
-     *
      * @return bool option is on.
      */
-    public function checkPhpIniOn($name)
+    function checkPhpIniOn($name)
     {
         $value = ini_get($name);
-
         if (empty($value)) {
             return false;
         }
 
-        return (int) $value === 1 || strtolower($value) === 'on';
+        return ((int) $value === 1 || strtolower($value) === 'on');
     }
 
     /**
      * Checks if PHP configuration option (from php.ini) is off.
-     *
      * @param string $name configuration option name.
-     *
      * @return bool option is off.
      */
-    public function checkPhpIniOff($name)
+    function checkPhpIniOff($name)
     {
         $value = ini_get($name);
-
         if (empty($value)) {
             return true;
         }
 
-        return strtolower($value) === 'off';
+        return (strtolower($value) === 'off');
     }
 
     /**
      * Compare byte sizes of values given in the verbose representation,
      * like '5M', '15K' etc.
-     *
      * @param string $a first value.
      * @param string $b second value.
      * @param string $compare comparison operator, by default '>='.
-     *
      * @return bool comparison result.
      */
-    public function compareByteSize($a, $b, $compare = '>=')
+    function compareByteSize($a, $b, $compare = '>=')
     {
         $compareExpression = '(' . $this->getByteSize($a) . $compare . $this->getByteSize($b) . ')';
 
@@ -254,41 +234,33 @@ class YiiRequirementChecker
 
     /**
      * Gets the size in bytes from verbose size representation.
-     * For example: '5K' => 5*1024.
-     *
+     * For example: '5K' => 5*1024
      * @param string $verboseSize verbose size representation.
-     *
      * @return int actual size in bytes.
      */
-    public function getByteSize($verboseSize)
+    function getByteSize($verboseSize)
     {
         if (empty($verboseSize)) {
             return 0;
         }
-
         if (is_numeric($verboseSize)) {
             return (int) $verboseSize;
         }
         $sizeUnit = trim($verboseSize, '0123456789');
         $size = trim(str_replace($sizeUnit, '', $verboseSize));
-
         if (!is_numeric($size)) {
             return 0;
         }
-
         switch (strtolower($sizeUnit)) {
             case 'kb':
             case 'k':
                 return $size * 1024;
-
             case 'mb':
             case 'm':
                 return $size * 1024 * 1024;
-
             case 'gb':
             case 'g':
                 return $size * 1024 * 1024 * 1024;
-
             default:
                 return 0;
         }
@@ -296,44 +268,38 @@ class YiiRequirementChecker
 
     /**
      * Checks if upload max file size matches the given range.
-     *
      * @param string|null $min verbose file size minimum required value, pass null to skip minimum check.
      * @param string|null $max verbose file size maximum required value, pass null to skip maximum check.
-     *
      * @return bool success.
      */
-    public function checkUploadMaxFileSize($min = null, $max = null)
+    function checkUploadMaxFileSize($min = null, $max = null)
     {
         $postMaxSize = ini_get('post_max_size');
         $uploadMaxFileSize = ini_get('upload_max_filesize');
-
         if ($min !== null) {
             $minCheckResult = $this->compareByteSize($postMaxSize, $min, '>=') && $this->compareByteSize($uploadMaxFileSize, $min, '>=');
         } else {
             $minCheckResult = true;
         }
-
         if ($max !== null) {
             $maxCheckResult = $this->compareByteSize($postMaxSize, $max, '<=') && $this->compareByteSize($uploadMaxFileSize, $max, '<=');
         } else {
             $maxCheckResult = true;
         }
 
-        return $minCheckResult && $maxCheckResult;
+        return ($minCheckResult && $maxCheckResult);
     }
 
     /**
      * Renders a view file.
      * This method includes the view file as a PHP script
      * and captures the display result if required.
-     *
      * @param string $_viewFile_ view file
-     * @param array $_data_ data to be extracted and made available to the view file
+     * @param array|null $_data_ data to be extracted and made available to the view file
      * @param bool $_return_ whether the rendering result should be returned as a string
-     *
-     * @return string the rendering result. Null if the rendering result is not required.
+     * @return string|null the rendering result. Null if the rendering result is not required.
      */
-    public function renderViewFile($_viewFile_, $_data_ = null, $_return_ = false)
+    function renderViewFile($_viewFile_, $_data_ = null, $_return_ = false)
     {
         // we use special variable names here to avoid conflict when extracting data
         if (is_array($_data_)) {
@@ -341,11 +307,9 @@ class YiiRequirementChecker
         } else {
             $data = $_data_;
         }
-
         if ($_return_) {
             ob_start();
-            ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
-
+            ob_implicit_flush(false);
             require $_viewFile_;
 
             return ob_get_clean();
@@ -356,33 +320,27 @@ class YiiRequirementChecker
 
     /**
      * Normalizes requirement ensuring it has correct format.
-     *
      * @param array $requirement raw requirement.
      * @param int $requirementKey requirement key in the list.
-     *
      * @return array normalized requirement.
      */
-    public function normalizeRequirement($requirement, $requirementKey = 0)
+    function normalizeRequirement($requirement, $requirementKey = 0)
     {
         if (!is_array($requirement)) {
             $this->usageError('Requirement must be an array!');
         }
-
         if (!array_key_exists('condition', $requirement)) {
             $this->usageError("Requirement '{$requirementKey}' has no condition!");
         } else {
             $evalPrefix = 'eval:';
-
             if (is_string($requirement['condition']) && strpos($requirement['condition'], $evalPrefix) === 0) {
                 $expression = substr($requirement['condition'], strlen($evalPrefix));
                 $requirement['condition'] = $this->evaluateExpression($expression);
             }
         }
-
         if (!array_key_exists('name', $requirement)) {
             $requirement['name'] = is_numeric($requirementKey) ? 'Requirement #' . $requirementKey : $requirementKey;
         }
-
         if (!array_key_exists('mandatory', $requirement)) {
             if (array_key_exists('required', $requirement)) {
                 $requirement['mandatory'] = $requirement['required'];
@@ -390,11 +348,9 @@ class YiiRequirementChecker
                 $requirement['mandatory'] = false;
             }
         }
-
         if (!array_key_exists('by', $requirement)) {
             $requirement['by'] = 'Unknown';
         }
-
         if (!array_key_exists('memo', $requirement)) {
             $requirement['memo'] = '';
         }
@@ -405,44 +361,38 @@ class YiiRequirementChecker
     /**
      * Displays a usage error.
      * This method will then terminate the execution of the current application.
-     *
      * @param string $message the error message
      */
-    public function usageError($message): void
+    function usageError($message)
     {
         echo "Error: $message\n\n";
-
         exit(1);
     }
 
     /**
      * Evaluates a PHP expression under the context of this class.
-     *
      * @param string $expression a PHP expression to be evaluated.
-     *
      * @return mixed the expression result.
      */
-    public function evaluateExpression($expression)
+    function evaluateExpression($expression)
     {
         return eval('return ' . $expression . ';');
     }
 
     /**
      * Returns the server information.
-     *
      * @return string server information.
      */
-    public function getServerInfo()
+    function getServerInfo()
     {
-        return $_SERVER['SERVER_SOFTWARE'] ?? '';
+        return isset($_SERVER['SERVER_SOFTWARE']) ? $_SERVER['SERVER_SOFTWARE'] : '';
     }
 
     /**
      * Returns the now date if possible in string representation.
-     *
      * @return string now date.
      */
-    public function getNowDate()
+    function getNowDate()
     {
         return @strftime('%Y-%m-%d %H:%M', time());
     }

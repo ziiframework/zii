@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,16 +8,16 @@ declare(strict_types=1);
 namespace yiiunit\framework\mail;
 
 use Yii;
-use yiiunit\TestCase;
 use yii\mail\BaseMailer;
 use yii\mail\BaseMessage;
+use yiiunit\TestCase;
 
 /**
  * @group mail
  */
 class BaseMessageTest extends TestCase
 {
-    public function setUp(): void
+    public function setUp()
     {
         $this->mockApplication([
             'components' => [
@@ -30,7 +27,7 @@ class BaseMessageTest extends TestCase
     }
 
     /**
-     * @return Mailer test email component instance
+     * @return Mailer test email component instance.
      */
     protected function createTestEmailComponent()
     {
@@ -40,7 +37,7 @@ class BaseMessageTest extends TestCase
     }
 
     /**
-     * @return TestMailer mailer instance
+     * @return TestMailer mailer instance.
      */
     protected function getMailer()
     {
@@ -49,7 +46,7 @@ class BaseMessageTest extends TestCase
 
     // Tests :
 
-    public function testSend(): void
+    public function testSend()
     {
         $mailer = $this->getMailer();
         $message = $mailer->compose();
@@ -57,7 +54,7 @@ class BaseMessageTest extends TestCase
         $this->assertEquals($message, $mailer->sentMessages[0], 'Unable to send message!');
     }
 
-    public function testToString(): void
+    public function testToString()
     {
         $mailer = $this->getMailer();
         $message = $mailer->compose();
@@ -73,7 +70,7 @@ class TestMailer extends BaseMailer
     public $messageClass = 'yiiunit\framework\mail\TestMessage';
     public $sentMessages = [];
 
-    protected function sendMessage($message): void
+    protected function sendMessage($message)
     {
         $this->sentMessages[] = $message;
     }
@@ -92,7 +89,7 @@ class TestMessage extends BaseMessage
         return '';
     }
 
-    public function setCharset($charset): void
+    public function setCharset($charset)
     {
     }
 
@@ -101,7 +98,7 @@ class TestMessage extends BaseMessage
         return '';
     }
 
-    public function setFrom($from): void
+    public function setFrom($from)
     {
     }
 
@@ -110,7 +107,7 @@ class TestMessage extends BaseMessage
         return '';
     }
 
-    public function setReplyTo($replyTo): void
+    public function setReplyTo($replyTo)
     {
     }
 
@@ -119,7 +116,7 @@ class TestMessage extends BaseMessage
         return '';
     }
 
-    public function setTo($to): void
+    public function setTo($to)
     {
     }
 
@@ -128,7 +125,7 @@ class TestMessage extends BaseMessage
         return '';
     }
 
-    public function setCc($cc): void
+    public function setCc($cc)
     {
     }
 
@@ -137,7 +134,7 @@ class TestMessage extends BaseMessage
         return '';
     }
 
-    public function setBcc($bcc): void
+    public function setBcc($bcc)
     {
     }
 
@@ -146,38 +143,38 @@ class TestMessage extends BaseMessage
         return '';
     }
 
-    public function setSubject($subject): void
+    public function setSubject($subject)
     {
     }
 
-    public function setTextBody($text): void
+    public function setTextBody($text)
     {
         $this->text = $text;
     }
 
-    public function setHtmlBody($html): void
+    public function setHtmlBody($html)
     {
         $this->html = $html;
     }
 
-    public function attachContent($content, array $options = []): void
+    public function attachContent($content, array $options = [])
     {
     }
 
-    public function attach($fileName, array $options = []): void
+    public function attach($fileName, array $options = [])
     {
     }
 
-    public function embed($fileName, array $options = []): void
+    public function embed($fileName, array $options = [])
     {
     }
 
-    public function embedContent($content, array $options = []): void
+    public function embedContent($content, array $options = [])
     {
     }
 
     public function toString()
     {
-        return static::class;
+        return get_class($this);
     }
 }

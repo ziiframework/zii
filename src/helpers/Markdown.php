@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -29,7 +26,6 @@ namespace yii\helpers;
  * > PHP `opcache` make sure [it does not strip comments](https://www.php.net/manual/en/opcache.configuration.php#ini.opcache.save-comments).
  *
  * @author Carsten Brandt <mail@cebe.cc>
- *
  * @since 2.0
  */
 class Markdown extends BaseMarkdown

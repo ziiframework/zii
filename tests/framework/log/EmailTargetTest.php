@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,12 +7,11 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\log;
 
-use yiiunit\TestCase;
 use yii\log\EmailTarget;
+use yiiunit\TestCase;
 
 /**
  * Class EmailTargetTest.
- *
  * @group log
  */
 class EmailTargetTest extends TestCase
@@ -28,7 +24,7 @@ class EmailTargetTest extends TestCase
     /**
      * Set up mailer.
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         parent::setUp();
         $this->mailer = $this->getMockBuilder('yii\\mail\\BaseMailer')
@@ -39,20 +35,19 @@ class EmailTargetTest extends TestCase
     /**
      * @covers \yii\log\EmailTarget::init()
      */
-    public function testInitWithOptionTo(): void
+    public function testInitWithOptionTo()
     {
         $target = new EmailTarget(['mailer' => $this->mailer, 'message' => ['to' => 'developer1@example.com']]);
-        $this->assertIsObject($target); // should be no exception during `init()`
+        $this->assertInternalType('object', $target); // should be no exception during `init()`
     }
 
     /**
      * @covers \yii\log\EmailTarget::init()
+     * @expectedException \yii\base\InvalidConfigException
+     * @expectedExceptionMessage The "to" option must be set for EmailTarget::message.
      */
-    public function testInitWithoutOptionTo(): void
+    public function testInitWithoutOptionTo()
     {
-        $this->expectException('\yii\base\InvalidConfigException');
-        $this->expectExceptionMessage('The "to" option must be set for EmailTarget::message.');
-
         new EmailTarget(['mailer' => $this->mailer]);
     }
 
@@ -60,7 +55,7 @@ class EmailTargetTest extends TestCase
      * @covers \yii\log\EmailTarget::export()
      * @covers \yii\log\EmailTarget::composeMessage()
      */
-    public function testExportWithSubject(): void
+    public function testExportWithSubject()
     {
         $message1 = ['A very looooooooooooooooooooooooooooooooooooooooooooooooooooooooooong message 1'];
         $message2 = ['A very looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong message 2'];
@@ -92,10 +87,12 @@ class EmailTargetTest extends TestCase
             ->getMock();
 
         $mailTarget->messages = $messages;
-        $mailTarget->expects($this->exactly(2))->method('formatMessage')->willReturnMap([
+        $mailTarget->expects($this->exactly(2))->method('formatMessage')->willReturnMap(
+            [
                 [$message1, $message1[0]],
                 [$message2, $message2[0]],
-            ]);
+            ]
+        );
         $mailTarget->export();
     }
 
@@ -103,7 +100,7 @@ class EmailTargetTest extends TestCase
      * @covers \yii\log\EmailTarget::export()
      * @covers \yii\log\EmailTarget::composeMessage()
      */
-    public function testExportWithoutSubject(): void
+    public function testExportWithoutSubject()
     {
         $message1 = ['A veeeeery loooooooooooooooooooooooooooooooooooooooooooooooooooooooong message 3'];
         $message2 = ['Message 4'];
@@ -134,10 +131,12 @@ class EmailTargetTest extends TestCase
             ->getMock();
 
         $mailTarget->messages = $messages;
-        $mailTarget->expects($this->exactly(2))->method('formatMessage')->willReturnMap([
+        $mailTarget->expects($this->exactly(2))->method('formatMessage')->willReturnMap(
+            [
                 [$message1, $message1[0]],
                 [$message2, $message2[0]],
-            ]);
+            ]
+        );
         $mailTarget->export();
     }
 
@@ -146,7 +145,7 @@ class EmailTargetTest extends TestCase
      *
      * See https://github.com/yiisoft/yii2/issues/14296
      */
-    public function testExportWithSendFailure(): void
+    public function testExportWithSendFailure()
     {
         $message = $this->getMockBuilder('yii\\mail\\BaseMessage')
             ->setMethods(['send'])

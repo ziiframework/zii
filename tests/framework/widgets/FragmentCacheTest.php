@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -20,7 +17,7 @@ use yii\caching\ArrayCache;
  */
 class FragmentCacheTest extends \yiiunit\TestCase
 {
-    protected function setUp(): void
+    protected function setUp()
     {
         parent::setUp();
         $this->mockWebApplication();
@@ -29,11 +26,11 @@ class FragmentCacheTest extends \yiiunit\TestCase
         ]);
     }
 
-    public function testCacheEnabled(): void
+    public function testCacheEnabled()
     {
         $expectedLevel = ob_get_level();
         ob_start();
-        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
+        ob_implicit_flush(false);
 
         $view = new View();
         $this->assertTrue($view->beginCache('test'));
@@ -41,7 +38,7 @@ class FragmentCacheTest extends \yiiunit\TestCase
         $view->endCache();
 
         ob_start();
-        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
+        ob_implicit_flush(false);
         $this->assertFalse($view->beginCache('test'));
         $this->assertEquals('cached fragment', ob_get_clean());
 
@@ -49,11 +46,11 @@ class FragmentCacheTest extends \yiiunit\TestCase
         $this->assertEquals($expectedLevel, ob_get_level(), 'Output buffer not closed correctly.');
     }
 
-    public function testCacheDisabled1(): void
+    public function testCacheDisabled1()
     {
         $expectedLevel = ob_get_level();
         ob_start();
-        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
+        ob_implicit_flush(false);
 
         $view = new View();
         $this->assertTrue($view->beginCache('test', ['enabled' => false]));
@@ -61,7 +58,7 @@ class FragmentCacheTest extends \yiiunit\TestCase
         $view->endCache();
 
         ob_start();
-        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
+        ob_implicit_flush(false);
         $this->assertTrue($view->beginCache('test', ['enabled' => false]));
         echo 'cached fragment';
         $view->endCache();
@@ -71,11 +68,11 @@ class FragmentCacheTest extends \yiiunit\TestCase
         $this->assertEquals($expectedLevel, ob_get_level(), 'Output buffer not closed correctly.');
     }
 
-    public function testCacheDisabled2(): void
+    public function testCacheDisabled2()
     {
         $expectedLevel = ob_get_level();
         ob_start();
-        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
+        ob_implicit_flush(false);
 
         $view = new View();
         $this->assertTrue($view->beginCache('test'));
@@ -83,7 +80,7 @@ class FragmentCacheTest extends \yiiunit\TestCase
         $view->endCache();
 
         ob_start();
-        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
+        ob_implicit_flush(false);
         $this->assertTrue($view->beginCache('test', ['enabled' => false]));
         echo 'cached fragment other';
         $view->endCache();
@@ -93,15 +90,15 @@ class FragmentCacheTest extends \yiiunit\TestCase
         $this->assertEquals($expectedLevel, ob_get_level(), 'Output buffer not closed correctly.');
     }
 
-    public function testSingleDynamicFragment(): void
+    public function testSingleDynamicFragment()
     {
         Yii::$app->params['counter'] = 0;
 
         $view = new View();
 
-        for ($counter = 0; $counter < 42; ++$counter) {
+        for ($counter = 0; $counter < 42; $counter++) {
             ob_start();
-            ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
+            ob_implicit_flush(false);
 
             $cacheUnavailable = $view->beginCache('test');
 
@@ -124,15 +121,15 @@ class FragmentCacheTest extends \yiiunit\TestCase
         }
     }
 
-    public function testMultipleDynamicFragments(): void
+    public function testMultipleDynamicFragments()
     {
         Yii::$app->params['counter'] = 0;
 
         $view = new View();
 
-        for ($counter = 0; $counter < 42; ++$counter) {
+        for ($counter = 0; $counter < 42; $counter++) {
             ob_start();
-            ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
+            ob_implicit_flush(false);
 
             $cacheUnavailable = $view->beginCache('test');
 
@@ -150,22 +147,22 @@ class FragmentCacheTest extends \yiiunit\TestCase
             }
 
             $expectedContent = vsprintf('multiple dynamic cached fragments: %s%d', [
-                md5((string) $counter),
+                md5($counter),
                 $counter,
             ]);
             $this->assertEquals($expectedContent, ob_get_clean());
         }
     }
 
-    public function testNestedDynamicFragments(): void
+    public function testNestedDynamicFragments()
     {
         Yii::$app->params['counter'] = 0;
 
         $view = new View();
 
-        for ($counter = 0; $counter < 42; ++$counter) {
+        for ($counter = 0; $counter < 42; $counter++) {
             ob_start();
-            ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
+            ob_implicit_flush(false);
 
             $cacheUnavailable = $view->beginCache('test');
 
@@ -189,20 +186,22 @@ class FragmentCacheTest extends \yiiunit\TestCase
             }
 
             $expectedContent = vsprintf('nested dynamic cached fragments: %s%s%d', [
-                md5((string) $counter),
-                sha1((string) $counter),
+                md5($counter),
+                sha1($counter),
                 $counter,
             ]);
             $this->assertEquals($expectedContent, ob_get_clean());
         }
     }
 
-    public function testVariations(): void
+    public function testVariations()
     {
-        $this->setOutputCallback(static fn ($output) => null);
+        $this->setOutputCallback(function($output) {
+            return null;
+        });
 
         ob_start();
-        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
+        ob_implicit_flush(false);
         $view = new View();
         $this->assertTrue($view->beginCache('test', ['variations' => ['ru']]), 'Cached fragment should not be exist');
         echo 'cached fragment';
@@ -212,7 +211,7 @@ class FragmentCacheTest extends \yiiunit\TestCase
         $this->assertEquals('cached fragment', $cached);
 
         ob_start();
-        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
+        ob_implicit_flush(false);
         $this->assertFalse($view->beginCache('test', ['variations' => ['ru']]), 'Cached fragment should be exist');
 
         $cachedEn = ob_get_clean();
@@ -223,9 +222,9 @@ class FragmentCacheTest extends \yiiunit\TestCase
         $view->endCache();
         $this->assertFalse($view->beginCache('test', ['variations' => ['en']]), 'Cached fragment should be exist');
 
-        // without variations
+        //without variations
         ob_start();
-        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
+        ob_implicit_flush(false);
         $view = new View();
         $this->assertTrue($view->beginCache('test'), 'Cached fragment should not be exist');
         echo 'cached fragment';
@@ -233,9 +232,9 @@ class FragmentCacheTest extends \yiiunit\TestCase
         $cached = ob_get_clean();
         $this->assertEquals('cached fragment', $cached);
 
-        // with variations as a string
+        //with variations as a string
         ob_start();
-        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
+        ob_implicit_flush(false);
         $this->assertTrue($view->beginCache('test', ['variations' => 'uz']), 'Cached fragment should not be exist');
         echo 'cached fragment';
         $view->endCache();

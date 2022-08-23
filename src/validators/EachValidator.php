@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,10 +8,9 @@ declare(strict_types=1);
 namespace yii\validators;
 
 use Yii;
-use ArrayAccess;
-use yii\base\Model;
 use yii\base\DynamicModel;
 use yii\base\InvalidConfigException;
+use yii\base\Model;
 
 /**
  * EachValidator validates an array by checking each of its elements against an embedded validation rule.
@@ -41,7 +37,6 @@ use yii\base\InvalidConfigException;
  *   using several models for the more complex case.
  *
  * @author Paul Klimov <klimov.paul@gmail.com>
- *
  * @since 2.0.4
  */
 class EachValidator extends Validator
@@ -60,32 +55,29 @@ class EachValidator extends Validator
      * Please refer to [[\yii\base\Model::rules()]] for more details.
      */
     public $rule;
-
     /**
      * @var bool whether to use error message composed by validator declared via [[rule]] if its validation fails.
      * If enabled, error message specified for this validator itself will appear only if attribute value is not an array.
      * If disabled, own error message value will be used always.
      */
     public $allowMessageFromRule = true;
-
     /**
      * @var bool whether to stop validation once first error among attribute value elements is detected.
      * When enabled validation will produce single error message on attribute, when disabled - multiple
      * error messages mya appear: one per each invalid value.
      * Note that this option will affect only [[validateAttribute()]] value, while [[validateValue()]] will
      * not be affected.
-     *
      * @since 2.0.11
      */
     public $stopOnFirstError = true;
 
+
     /**
      * {@inheritdoc}
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
-
         if ($this->message === null) {
             $this->message = Yii::t('yii', '{attribute} is invalid.');
         }
@@ -93,18 +85,14 @@ class EachValidator extends Validator
 
     /**
      * Creates validator object based on the validation rule specified in [[rule]].
-     *
      * @param Model|null $model model in which context validator should be created.
      * @param mixed|null $current value being currently validated.
-     *
-     * @return Validator validator instance
-     *
      * @throws \yii\base\InvalidConfigException
+     * @return Validator validator instance
      */
     private function createEmbeddedValidator($model = null, $current = null)
     {
         $rule = $this->rule;
-
         if ($rule instanceof Validator) {
             return $rule;
         }
@@ -116,7 +104,6 @@ class EachValidator extends Validator
 
             $params = array_slice($rule, 1);
             $params['current'] = $current;
-
             return Validator::createValidator($rule[0], $model, $this->attributes, $params);
         }
 
@@ -126,13 +113,11 @@ class EachValidator extends Validator
     /**
      * {@inheritdoc}
      */
-    public function validateAttribute($model, $attribute): void
+    public function validateAttribute($model, $attribute)
     {
         $arrayOfValues = $model->$attribute;
-
-        if (!is_array($arrayOfValues) && !$arrayOfValues instanceof ArrayAccess) {
+        if (!is_array($arrayOfValues) && !$arrayOfValues instanceof \ArrayAccess) {
             $this->addError($model, $attribute, $this->message, []);
-
             return;
         }
 
@@ -169,22 +154,19 @@ class EachValidator extends Validator
      */
     protected function validateValue($value)
     {
-        if (!is_array($value) && !$value instanceof ArrayAccess) {
+        if (!is_array($value) && !$value instanceof \ArrayAccess) {
             return [$this->message, []];
         }
 
         $validator = $this->createEmbeddedValidator();
-
         foreach ($value as $v) {
             if ($validator->skipOnEmpty && $validator->isEmpty($v)) {
                 continue;
             }
             $result = $validator->validateValue($v);
-
             if ($result !== null) {
                 if ($this->allowMessageFromRule) {
                     $result[1]['value'] = $v;
-
                     return $result;
                 }
 

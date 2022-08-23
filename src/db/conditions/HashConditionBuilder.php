@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,22 +7,22 @@ declare(strict_types=1);
 
 namespace yii\db\conditions;
 
+use yii\db\ExpressionBuilderInterface;
+use yii\db\ExpressionBuilderTrait;
+use yii\db\ExpressionInterface;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
-use yii\db\ExpressionInterface;
-use yii\db\ExpressionBuilderTrait;
-use yii\db\ExpressionBuilderInterface;
 
 /**
- * Class HashConditionBuilder builds objects of [[HashCondition]].
+ * Class HashConditionBuilder builds objects of [[HashCondition]]
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
- *
  * @since 2.0.14
  */
 class HashConditionBuilder implements ExpressionBuilderInterface
 {
     use ExpressionBuilderTrait;
+
 
     /**
      * Method builds the raw SQL from the $expression that will not be additionally
@@ -33,14 +30,12 @@ class HashConditionBuilder implements ExpressionBuilderInterface
      *
      * @param ExpressionInterface|HashCondition $expression the expression to be built.
      * @param array $params the binding parameters.
-     *
      * @return string the raw SQL that will not be additionally escaped or quoted.
      */
     public function build(ExpressionInterface $expression, array &$params = [])
     {
         $hash = $expression->getHash();
         $parts = [];
-
         foreach ($hash as $column => $value) {
             if (ArrayHelper::isTraversable($value) || $value instanceof Query) {
                 // IN condition
@@ -49,7 +44,6 @@ class HashConditionBuilder implements ExpressionBuilderInterface
                 if (strpos($column, '(') === false) {
                     $column = $this->queryBuilder->db->quoteColumnName($column);
                 }
-
                 if ($value === null) {
                     $parts[] = "$column IS NULL";
                 } elseif ($value instanceof ExpressionInterface) {

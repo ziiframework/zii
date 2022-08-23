@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,13 +7,13 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\data;
 
-use yiiunit\TestCase;
 use yii\base\DynamicModel;
 use yii\data\ActiveDataFilter;
+use yiiunit\TestCase;
 
 class ActiveDataFilterTest extends TestCase
 {
-    protected function setUp(): void
+    protected function setUp()
     {
         parent::setUp();
 
@@ -155,7 +152,7 @@ class ActiveDataFilterTest extends TestCase
             [
                 [
                     'number' => [
-                        'neq' => 'NULL',
+                        'neq' => 'NULL'
                     ],
                 ],
                 ['!=', 'number', null],
@@ -169,7 +166,7 @@ class ActiveDataFilterTest extends TestCase
      * @param array $filter
      * @param array $expectedResult
      */
-    public function testBuild($filter, $expectedResult): void
+    public function testBuild($filter, $expectedResult)
     {
         $builder = new ActiveDataFilter();
         $searchModel = (new DynamicModel(['name' => null, 'number' => null, 'price' => null, 'tags' => null]))
@@ -188,7 +185,7 @@ class ActiveDataFilterTest extends TestCase
     /**
      * @depends testBuild
      */
-    public function testBuildCallback(): void
+    public function testBuildCallback()
     {
         $builder = new ActiveDataFilter();
         $searchModel = (new DynamicModel(['name' => null]))
@@ -197,8 +194,12 @@ class ActiveDataFilterTest extends TestCase
 
         $builder->setSearchModel($searchModel);
 
-        $builder->conditionBuilders['OR'] = static fn ($operator, $condition) => ['CALLBACK-OR', $condition];
-        $builder->conditionBuilders['LIKE'] = static fn ($operator, $condition, $attribute) => ['CALLBACK-LIKE', $operator, $condition, $attribute];
+        $builder->conditionBuilders['OR'] = function ($operator, $condition) {
+            return ['CALLBACK-OR', $condition];
+        };
+        $builder->conditionBuilders['LIKE'] = function ($operator, $condition, $attribute) {
+            return ['CALLBACK-LIKE', $operator, $condition, $attribute];
+        };
 
         $builder->filter = [
             'or' => [

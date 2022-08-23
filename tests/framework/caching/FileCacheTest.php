@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,14 +7,10 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\caching;
 
-use ReflectionClass;
 use yii\caching\FileCache;
-
-use function time;
 
 /**
  * Class for testing file cache backend.
- *
  * @group caching
  */
 class FileCacheTest extends CacheTestCase
@@ -36,31 +29,31 @@ class FileCacheTest extends CacheTestCase
         return $this->_cacheInstance;
     }
 
-    public function testExpire(): void
+    public function testExpire()
     {
         $cache = $this->getCacheInstance();
 
-        static::$time = time();
+        static::$time = \time();
         $this->assertTrue($cache->set('expire_test', 'expire_test', 2));
-        ++static::$time;
+        static::$time++;
         $this->assertEquals('expire_test', $cache->get('expire_test'));
-        ++static::$time;
+        static::$time++;
         $this->assertFalse($cache->get('expire_test'));
     }
 
-    public function testExpireAdd(): void
+    public function testExpireAdd()
     {
         $cache = $this->getCacheInstance();
 
-        static::$time = time();
+        static::$time = \time();
         $this->assertTrue($cache->add('expire_testa', 'expire_testa', 2));
-        ++static::$time;
+        static::$time++;
         $this->assertEquals('expire_testa', $cache->get('expire_testa'));
-        ++static::$time;
+        static::$time++;
         $this->assertFalse($cache->get('expire_testa'));
     }
 
-    public function testKeyPrefix(): void
+    public function testKeyPrefix()
     {
         $keyPrefix = 'foobar';
         $key = uniqid('uid-cache_');
@@ -72,9 +65,9 @@ class FileCacheTest extends CacheTestCase
         $normalizeKey = $cache->buildKey($key);
         $expectedDirectoryName = substr($normalizeKey, 6, 2);
 
-        $value = time();
+        $value = \time();
 
-        $refClass = new ReflectionClass($cache);
+        $refClass = new \ReflectionClass($cache);
 
         $refMethodGetCacheFile = $refClass->getMethod('getCacheFile');
         $refMethodGetCacheFile->setAccessible(true);
@@ -84,16 +77,15 @@ class FileCacheTest extends CacheTestCase
         $cacheFile = $refMethodGetCacheFile->invoke($cache, $normalizeKey);
 
         $this->assertTrue($refMethodSet->invoke($cache, $key, $value));
-        $this->assertStringContainsString($keyPrefix, basename($cacheFile));
+        $this->assertContains($keyPrefix, basename($cacheFile));
         $this->assertEquals($expectedDirectoryName, basename(dirname($cacheFile)), $cacheFile);
         $this->assertTrue(is_dir(dirname($cacheFile)), 'File not found ' . $cacheFile);
         $this->assertEquals($value, $refMethodGet->invoke($cache, $key));
     }
 
-    public function testCacheRenewalOnDifferentOwnership(): void
+    public function testCacheRenewalOnDifferentOwnership()
     {
         $TRAVIS_SECOND_USER = getenv('TRAVIS_SECOND_USER');
-
         if (empty($TRAVIS_SECOND_USER)) {
             $this->markTestSkipped('Travis second user not found');
         }
@@ -104,19 +96,22 @@ class FileCacheTest extends CacheTestCase
         $cachePublicKey = uniqid('key_');
         $cacheInternalKey = $cache->buildKey($cachePublicKey);
 
-        static::$time = time();
+        static::$time = \time();
         $this->assertTrue($cache->set($cachePublicKey, $cacheValue, 2));
         $this->assertSame($cacheValue, $cache->get($cachePublicKey));
 
-        $refClass = new ReflectionClass($cache);
+        $refClass = new \ReflectionClass($cache);
         $refMethodGetCacheFile = $refClass->getMethod('getCacheFile');
         $refMethodGetCacheFile->setAccessible(true);
         $cacheFile = $refMethodGetCacheFile->invoke($cache, $cacheInternalKey);
         $refMethodGetCacheFile->setAccessible(false);
 
-        $output = [];
+        $output = array();
         $returnVar = null;
-        exec(sprintf('sudo chown %s %s', escapeshellarg($TRAVIS_SECOND_USER), escapeshellarg($cacheFile)), $output, $returnVar);
+        exec(sprintf('sudo chown %s %s',
+            escapeshellarg($TRAVIS_SECOND_USER),
+            escapeshellarg($cacheFile)
+        ), $output, $returnVar);
 
         $this->assertSame(0, $returnVar, 'Cannot change ownership of cache file to test cache renewal');
 

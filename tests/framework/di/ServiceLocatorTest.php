@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,9 +7,9 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\di;
 
-use yiiunit\TestCase;
 use yii\base\BaseObject;
 use yii\di\ServiceLocator;
+use yiiunit\TestCase;
 
 class Creator
 {
@@ -34,18 +31,17 @@ class TestSubclass extends TestClass
 
 /**
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  * @group di
  */
 class ServiceLocatorTest extends TestCase
 {
-    public function testCallable(): void
+    public function testCallable()
     {
         // anonymous function
         $container = new ServiceLocator();
         $className = TestClass::className();
-        $container->set($className, static function () {
+        $container->set($className, function () {
             return new TestClass([
                 'prop1' => 100,
                 'prop2' => 200,
@@ -66,7 +62,7 @@ class ServiceLocatorTest extends TestCase
         $this->assertNull($object->prop2);
     }
 
-    public function testObject(): void
+    public function testObject()
     {
         $object = new TestClass();
         $className = TestClass::className();
@@ -75,7 +71,7 @@ class ServiceLocatorTest extends TestCase
         $this->assertSame($container->get($className), $object);
     }
 
-    public function testDi3Compatibility(): void
+    public function testDi3Compatibility()
     {
         $config = [
             'components' => [
@@ -92,7 +88,8 @@ class ServiceLocatorTest extends TestCase
         $this->assertInstanceOf(TestSubclass::className(), $app->get('test'));
     }
 
-    public function testShared(): void
+
+    public function testShared()
     {
         // with configuration: shared
         $container = new ServiceLocator();
@@ -115,7 +112,7 @@ class ServiceLocatorTest extends TestCase
     /**
      * @see https://github.com/yiisoft/yii2/issues/11771
      */
-    public function testModulePropertyIsset(): void
+    public function testModulePropertyIsset()
     {
         $config = [
             'components' => [

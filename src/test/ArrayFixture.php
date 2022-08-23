@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,9 +7,6 @@ declare(strict_types=1);
 
 namespace yii\test;
 
-use Countable;
-use ArrayAccess;
-use IteratorAggregate;
 use yii\base\ArrayAccessTrait;
 use yii\base\InvalidConfigException;
 
@@ -22,10 +16,9 @@ use yii\base\InvalidConfigException;
  * For more details and usage information on ArrayFixture, see the [guide article on fixtures](guide:test-fixtures).
  *
  * @author Mark Jebri <mark.github@yandex.ru>
- *
  * @since 2.0
  */
-class ArrayFixture extends Fixture implements IteratorAggregate, ArrayAccess, Countable
+class ArrayFixture extends Fixture implements \IteratorAggregate, \ArrayAccess, \Countable
 {
     use ArrayAccessTrait;
     use FileFixtureTrait;
@@ -35,13 +28,14 @@ class ArrayFixture extends Fixture implements IteratorAggregate, ArrayAccess, Co
      */
     public $data = [];
 
+
     /**
      * Loads the fixture.
      *
      * The default implementation simply stores the data returned by [[getData()]] in [[data]].
      * You should usually override this method by putting the data into the underlying database.
      */
-    public function load(): void
+    public function load()
     {
         $this->data = $this->getData();
     }
@@ -53,7 +47,6 @@ class ArrayFixture extends Fixture implements IteratorAggregate, ArrayAccess, Co
      * The file should return the data array that will be stored in [[data]] after inserting into the database.
      *
      * @return array the data to be put into the database
-     *
      * @throws InvalidConfigException if the specified data file does not exist.
      */
     protected function getData()
@@ -64,7 +57,7 @@ class ArrayFixture extends Fixture implements IteratorAggregate, ArrayAccess, Co
     /**
      * {@inheritdoc}
      */
-    public function unload(): void
+    public function unload()
     {
         parent::unload();
         $this->data = [];

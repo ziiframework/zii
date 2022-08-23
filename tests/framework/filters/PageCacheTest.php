@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,31 +8,31 @@ declare(strict_types=1);
 namespace yiiunit\framework\filters;
 
 use Yii;
-use yii\web\View;
-use yii\web\Cookie;
 use yii\base\Action;
-use yii\helpers\Json;
-use yiiunit\TestCase;
-use yii\web\Controller;
-use yii\filters\PageCache;
 use yii\caching\ArrayCache;
-use yii\helpers\ArrayHelper;
 use yii\caching\ExpressionDependency;
+use yii\filters\PageCache;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
+use yii\web\Controller;
+use yii\web\Cookie;
+use yii\web\View;
 use yiiunit\framework\caching\CacheTestCase;
+use yiiunit\TestCase;
 
 /**
  * @group filters
  */
 class PageCacheTest extends TestCase
 {
-    protected function setUp(): void
+    protected function setUp()
     {
         parent::setUp();
         $_SERVER['SCRIPT_FILENAME'] = '/index.php';
         $_SERVER['SCRIPT_NAME'] = '/index.php';
     }
 
-    protected function tearDown(): void
+    protected function tearDown()
     {
         CacheTestCase::$time = null;
         CacheTestCase::$microtime = null;
@@ -151,16 +148,14 @@ class PageCacheTest extends TestCase
 
     /**
      * @dataProvider cacheTestCaseProvider
-     *
      * @param array $testCase
      */
-    public function testCache($testCase): void
+    public function testCache($testCase)
     {
         $testCase = ArrayHelper::merge([
             'properties' => [],
             'cacheable' => true,
         ], $testCase);
-
         if (isset(Yii::$app)) {
             $this->destroyApplication();
         }
@@ -175,7 +170,6 @@ class PageCacheTest extends TestCase
         $this->assertTrue($filter->beforeAction($action), $testCase['name']);
         // Cookies
         $cookies = [];
-
         if (isset($testCase['cookies'])) {
             foreach (array_keys($testCase['cookies']) as $name) {
                 $value = Yii::$app->security->generateRandomString();
@@ -189,7 +183,6 @@ class PageCacheTest extends TestCase
         }
         // Headers
         $headers = [];
-
         if (isset($testCase['headers'])) {
             foreach (array_keys($testCase['headers']) as $name) {
                 $value = Yii::$app->security->generateRandomString();
@@ -212,12 +205,10 @@ class PageCacheTest extends TestCase
             'statusCode' => Yii::$app->response->statusCode,
             'statusText' => Yii::$app->response->statusText,
         ];
-
         if ($testCase['cacheable']) {
             $this->assertNotEmpty($this->getInaccessibleProperty($filter->cache, '_cache'), $testCase['name']);
         } else {
             $this->assertEmpty($this->getInaccessibleProperty($filter->cache, '_cache'), $testCase['name']);
-
             return;
         }
 
@@ -245,7 +236,6 @@ class PageCacheTest extends TestCase
         if (isset($testCase['cookies'])) {
             foreach ($testCase['cookies'] as $name => $expected) {
                 $this->assertSame($expected, Yii::$app->response->cookies->has($name), $testCase['name']);
-
                 if ($expected) {
                     $this->assertSame($cookies[$name], Yii::$app->response->cookies->getValue($name), $testCase['name']);
                 }
@@ -254,10 +244,8 @@ class PageCacheTest extends TestCase
         // Headers
         if (isset($testCase['headers'])) {
             $headersExpected = Yii::$app->response->headers->toOriginalArray();
-
             foreach ($testCase['headers'] as $name => $expected) {
                 $this->assertSame($expected, Yii::$app->response->headers->has($name), $testCase['name']);
-
                 if ($expected) {
                     $this->assertSame($headers[$name], Yii::$app->response->headers->get($name), $testCase['name']);
                     $this->assertArrayHasKey($name, $headersExpected);
@@ -266,7 +254,7 @@ class PageCacheTest extends TestCase
         }
     }
 
-    public function testExpired(): void
+    public function testExpired()
     {
         CacheTestCase::$time = time();
         CacheTestCase::$microtime = microtime(true);
@@ -311,7 +299,7 @@ class PageCacheTest extends TestCase
         ob_end_clean();
     }
 
-    public function testVaryByRoute(): void
+    public function testVaryByRoute()
     {
         $testCases = [
             false,
@@ -355,14 +343,14 @@ class PageCacheTest extends TestCase
                 'varyByRoute' => $enabled,
             ]);
             Yii::$app->params['dynamic'] = $dynamic = Yii::$app->security->generateRandomString();
-            $this->assertSame($enabled, $filter->beforeAction($action));
+            $this->assertSame($enabled, $filter->beforeAction($action), $enabled);
             ob_start();
             Yii::$app->response->send();
             ob_end_clean();
         }
     }
 
-    public function testVariations(): void
+    public function testVariations()
     {
         $testCases = [
             [true, 'name' => 'value'],
@@ -407,14 +395,14 @@ class PageCacheTest extends TestCase
                 'variations' => $testCase,
             ]);
             Yii::$app->params['dynamic'] = $dynamic = Yii::$app->security->generateRandomString();
-            $this->assertNotSame($expected, $filter->beforeAction($action));
+            $this->assertNotSame($expected, $filter->beforeAction($action), $expected);
             ob_start();
             Yii::$app->response->send();
             ob_end_clean();
         }
     }
 
-    public function testDependency(): void
+    public function testDependency()
     {
         $testCases = [
             false,
@@ -459,20 +447,19 @@ class PageCacheTest extends TestCase
                 'view' => new View(),
             ]);
             Yii::$app->params['dynamic'] = $dynamic = Yii::$app->security->generateRandomString();
-
             if ($changed) {
                 Yii::$app->params['dependency'] = Yii::$app->security->generateRandomString();
             } else {
                 Yii::$app->params['dependency'] = $dependency;
             }
-            $this->assertSame($changed, $filter->beforeAction($action));
+            $this->assertSame($changed, $filter->beforeAction($action), $changed);
             ob_start();
             Yii::$app->response->send();
             ob_end_clean();
         }
     }
 
-    public function testCalculateCacheKey(): void
+    public function testCalculateCacheKey()
     {
         $expected = ['yii\filters\PageCache', 'test', 'ru'];
         Yii::$app->requestedRoute = 'test';

@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -23,12 +20,12 @@ namespace yii\caching;
  * For more details and usage information on Cache, see the [guide article on caching](guide:caching-overview).
  *
  * @author Carsten Brandt <mail@cebe.cc>
- *
  * @since 2.0
  */
 class ArrayCache extends Cache
 {
     private $_cache = [];
+
 
     /**
      * {@inheritdoc}
@@ -36,7 +33,6 @@ class ArrayCache extends Cache
     public function exists($key)
     {
         $key = $this->buildKey($key);
-
         return isset($this->_cache[$key]) && ($this->_cache[$key][1] === 0 || $this->_cache[$key][1] > microtime(true));
     }
 
@@ -58,7 +54,6 @@ class ArrayCache extends Cache
     protected function setValue($key, $value, $duration)
     {
         $this->_cache[$key] = [$value, $duration === 0 ? 0 : microtime(true) + $duration];
-
         return true;
     }
 
@@ -71,7 +66,6 @@ class ArrayCache extends Cache
             return false;
         }
         $this->_cache[$key] = [$value, $duration === 0 ? 0 : microtime(true) + $duration];
-
         return true;
     }
 
@@ -81,7 +75,6 @@ class ArrayCache extends Cache
     protected function deleteValue($key)
     {
         unset($this->_cache[$key]);
-
         return true;
     }
 
@@ -91,7 +84,6 @@ class ArrayCache extends Cache
     protected function flushValues()
     {
         $this->_cache = [];
-
         return true;
     }
 }

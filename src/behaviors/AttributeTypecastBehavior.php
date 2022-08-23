@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,14 +7,14 @@ declare(strict_types=1);
 
 namespace yii\behaviors;
 
-use yii\base\Model;
 use yii\base\Behavior;
+use yii\base\InvalidArgumentException;
+use yii\base\Model;
 use yii\db\BaseActiveRecord;
 use yii\helpers\StringHelper;
+use yii\validators\BooleanValidator;
 use yii\validators\NumberValidator;
 use yii\validators\StringValidator;
-use yii\validators\BooleanValidator;
-use yii\base\InvalidArgumentException;
 
 /**
  * AttributeTypecastBehavior provides an ability of automatic model attribute typecasting.
@@ -110,23 +107,21 @@ use yii\base\InvalidArgumentException;
  * ```
  *
  * @author Paul Klimov <klimov.paul@gmail.com>
- *
  * @since 2.0.10
  */
 class AttributeTypecastBehavior extends Behavior
 {
-    public const TYPE_INTEGER = 'integer';
-    public const TYPE_FLOAT = 'float';
-    public const TYPE_BOOLEAN = 'boolean';
-    public const TYPE_STRING = 'string';
+    const TYPE_INTEGER = 'integer';
+    const TYPE_FLOAT = 'float';
+    const TYPE_BOOLEAN = 'boolean';
+    const TYPE_STRING = 'string';
 
     /**
      * @var Model|BaseActiveRecord the owner of this behavior.
      */
     public $owner;
-
     /**
-     * @var array attribute typecast map in format: attributeName => type.
+     * @var array|null attribute typecast map in format: attributeName => type.
      * Type can be set via PHP callable, which accept raw value as an argument and should return
      * typecast result.
      * For example:
@@ -145,14 +140,12 @@ class AttributeTypecastBehavior extends Behavior
      * If not set, attribute type map will be composed automatically from the owner validation rules.
      */
     public $attributeTypes;
-
     /**
      * @var bool whether to skip typecasting of `null` values.
      * If enabled attribute value which equals to `null` will not be type-casted (e.g. `null` remains `null`),
      * otherwise it will be converted according to the type configured at [[attributeTypes]].
      */
     public $skipOnNull = true;
-
     /**
      * @var bool whether to perform typecasting after owner model validation.
      * Note that typecasting will be performed only if validation was successful, e.g.
@@ -160,7 +153,6 @@ class AttributeTypecastBehavior extends Behavior
      * Note that changing this option value will have no effect after this behavior has been attached to the model.
      */
     public $typecastAfterValidate = true;
-
     /**
      * @var bool whether to perform typecasting before saving owner model (insert or update).
      * This option may be disabled in order to achieve better performance.
@@ -169,18 +161,15 @@ class AttributeTypecastBehavior extends Behavior
      * Note that changing this option value will have no effect after this behavior has been attached to the model.
      */
     public $typecastBeforeSave = false;
-
     /**
      * @var bool whether to perform typecasting after saving owner model (insert or update).
      * This option may be disabled in order to achieve better performance.
      * For example, in case of [[\yii\db\ActiveRecord]] usage, typecasting after save
      * will grant no benefit an thus can be disabled.
      * Note that changing this option value will have no effect after this behavior has been attached to the model.
-     *
      * @since 2.0.14
      */
     public $typecastAfterSave = false;
-
     /**
      * @var bool whether to perform typecasting after retrieving owner model data from
      * the database (after find or refresh).
@@ -197,11 +186,12 @@ class AttributeTypecastBehavior extends Behavior
      */
     private static $autoDetectedAttributeTypes = [];
 
+
     /**
      * Clears internal static cache of auto detected [[attributeTypes]] values
      * over all affected owner classes.
      */
-    public static function clearAutoDetectedAttributeTypes(): void
+    public static function clearAutoDetectedAttributeTypes()
     {
         self::$autoDetectedAttributeTypes = [];
     }
@@ -209,13 +199,12 @@ class AttributeTypecastBehavior extends Behavior
     /**
      * {@inheritdoc}
      */
-    public function attach($owner): void
+    public function attach($owner)
     {
         parent::attach($owner);
 
         if ($this->attributeTypes === null) {
             $ownerClass = get_class($this->owner);
-
             if (!isset(self::$autoDetectedAttributeTypes[$ownerClass])) {
                 self::$autoDetectedAttributeTypes[$ownerClass] = $this->detectAttributeTypes();
             }
@@ -225,12 +214,11 @@ class AttributeTypecastBehavior extends Behavior
 
     /**
      * Typecast owner attributes according to [[attributeTypes]].
-     *
-     * @param array $attributeNames list of attribute names that should be type-casted.
+     * @param array|null $attributeNames list of attribute names that should be type-casted.
      * If this parameter is empty, it means any attribute listed in the [[attributeTypes]]
      * should be type-casted.
      */
-    public function typecastAttributes($attributeNames = null): void
+    public function typecastAttributes($attributeNames = null)
     {
         $attributeTypes = [];
 
@@ -247,7 +235,6 @@ class AttributeTypecastBehavior extends Behavior
 
         foreach ($attributeTypes as $attribute => $type) {
             $value = $this->owner->{$attribute};
-
             if ($this->skipOnNull && $value === null) {
                 continue;
             }
@@ -257,10 +244,8 @@ class AttributeTypecastBehavior extends Behavior
 
     /**
      * Casts the given value to the specified type.
-     *
      * @param mixed $value value to be type-casted.
      * @param string|callable $type type name or typecast callable.
-     *
      * @return mixed typecast result.
      */
     protected function typecastValue($value, $type)
@@ -273,20 +258,15 @@ class AttributeTypecastBehavior extends Behavior
             switch ($type) {
                 case self::TYPE_INTEGER:
                     return (int) $value;
-
                 case self::TYPE_FLOAT:
                     return (float) $value;
-
                 case self::TYPE_BOOLEAN:
                     return (bool) $value;
-
                 case self::TYPE_STRING:
                     if (is_float($value)) {
                         return StringHelper::floatToString($value);
                     }
-
                     return (string) $value;
-
                 default:
                     throw new InvalidArgumentException("Unsupported type '{$type}'");
             }
@@ -297,16 +277,13 @@ class AttributeTypecastBehavior extends Behavior
 
     /**
      * Composes default value for [[attributeTypes]] from the owner validation rules.
-     *
      * @return array attribute type map.
      */
     protected function detectAttributeTypes()
     {
         $attributeTypes = [];
-
         foreach ($this->owner->getValidators() as $validator) {
             $type = null;
-
             if ($validator instanceof BooleanValidator) {
                 $type = self::TYPE_BOOLEAN;
             } elseif ($validator instanceof NumberValidator) {
@@ -335,17 +312,14 @@ class AttributeTypecastBehavior extends Behavior
         if ($this->typecastAfterValidate) {
             $events[Model::EVENT_AFTER_VALIDATE] = 'afterValidate';
         }
-
         if ($this->typecastBeforeSave) {
             $events[BaseActiveRecord::EVENT_BEFORE_INSERT] = 'beforeSave';
             $events[BaseActiveRecord::EVENT_BEFORE_UPDATE] = 'beforeSave';
         }
-
         if ($this->typecastAfterSave) {
             $events[BaseActiveRecord::EVENT_AFTER_INSERT] = 'afterSave';
             $events[BaseActiveRecord::EVENT_AFTER_UPDATE] = 'afterSave';
         }
-
         if ($this->typecastAfterFind) {
             $events[BaseActiveRecord::EVENT_AFTER_FIND] = 'afterFind';
         }
@@ -355,10 +329,9 @@ class AttributeTypecastBehavior extends Behavior
 
     /**
      * Handles owner 'afterValidate' event, ensuring attribute typecasting.
-     *
      * @param \yii\base\Event $event event instance.
      */
-    public function afterValidate($event): void
+    public function afterValidate($event)
     {
         if (!$this->owner->hasErrors()) {
             $this->typecastAttributes();
@@ -367,32 +340,28 @@ class AttributeTypecastBehavior extends Behavior
 
     /**
      * Handles owner 'beforeInsert' and 'beforeUpdate' events, ensuring attribute typecasting.
-     *
      * @param \yii\base\Event $event event instance.
      */
-    public function beforeSave($event): void
+    public function beforeSave($event)
     {
         $this->typecastAttributes();
     }
 
     /**
      * Handles owner 'afterInsert' and 'afterUpdate' events, ensuring attribute typecasting.
-     *
      * @param \yii\base\Event $event event instance.
-     *
      * @since 2.0.14
      */
-    public function afterSave($event): void
+    public function afterSave($event)
     {
         $this->typecastAttributes();
     }
 
     /**
      * Handles owner 'afterFind' event, ensuring attribute typecasting.
-     *
      * @param \yii\base\Event $event event instance.
      */
-    public function afterFind($event): void
+    public function afterFind($event)
     {
         $this->typecastAttributes();
     }

@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,18 +7,12 @@ declare(strict_types=1);
 
 namespace yii\helpers;
 
-use Yii;
-use Closure;
-use HTMLPurifier;
-use HTMLPurifier_Config;
-
 /**
  * BaseHtmlPurifier provides concrete implementation for [[HtmlPurifier]].
  *
  * Do not use BaseHtmlPurifier. Use [[HtmlPurifier]] instead.
  *
  * @author Alexander Makarov <sam@rmcreative.ru>
- *
  * @since 2.0
  */
 class BaseHtmlPurifier
@@ -30,7 +21,7 @@ class BaseHtmlPurifier
      * Passes markup through HTMLPurifier making it safe to output to end user.
      *
      * @param string $content The HTML content to purify
-     * @param array|Closure|null $config The config to use for HtmlPurifier.
+     * @param array|\Closure|null $config The config to use for HtmlPurifier.
      * If not specified or `null` the default config will be used.
      * You can use an array or an anonymous function to provide configuration options:
      *
@@ -53,15 +44,14 @@ class BaseHtmlPurifier
      */
     public static function process($content, $config = null)
     {
-        $configInstance = HTMLPurifier_Config::create($config instanceof Closure ? null : $config);
+        $configInstance = \HTMLPurifier_Config::create($config instanceof \Closure ? null : $config);
         $configInstance->autoFinalize = false;
-        $purifier = HTMLPurifier::instance($configInstance);
-        $purifier->config->set('Cache.SerializerPath', Yii::$app->getRuntimePath());
+        $purifier = \HTMLPurifier::instance($configInstance);
+        $purifier->config->set('Cache.SerializerPath', \Yii::$app->getRuntimePath());
         $purifier->config->set('Cache.SerializerPermissions', 0775);
 
         static::configure($configInstance);
-
-        if ($config instanceof Closure) {
+        if ($config instanceof \Closure) {
             call_user_func($config, $configInstance);
         }
 
@@ -70,12 +60,10 @@ class BaseHtmlPurifier
 
     /**
      * Allow the extended HtmlPurifier class to set some default config options.
-     *
-     * @param HTMLPurifier_Config $config
-     *
+     * @param \HTMLPurifier_Config $config
      * @since 2.0.3
      */
-    protected static function configure($config): void
+    protected static function configure($config)
     {
     }
 }

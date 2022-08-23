@@ -1,20 +1,16 @@
 <?php
-
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\db;
-
-use Throwable;
 
 /**
  * Exception represents an exception that is caused by some DB-related operations.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class Exception extends \yii\base\Exception
@@ -25,13 +21,13 @@ class Exception extends \yii\base\Exception
      */
     public $errorInfo = [];
 
+
     /**
      * Constructor.
-     *
      * @param string $message PDO error message
      * @param array $errorInfo PDO error info
      * @param string $code PDO error code
-     * @param Throwable|\Exception $previous The previous exception used for the exception chaining.
+     * @param \Throwable|null $previous The previous exception used for the exception chaining.
      */
     public function __construct($message, $errorInfo = [], $code = '', $previous = null)
     {

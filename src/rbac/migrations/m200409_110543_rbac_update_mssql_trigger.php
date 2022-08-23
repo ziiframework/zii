@@ -1,17 +1,14 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
 
-use yii\db\Query;
-use yii\db\Migration;
-use yii\rbac\DbManager;
 use yii\base\InvalidConfigException;
+use yii\db\Migration;
+use yii\db\Query;
+use yii\rbac\DbManager;
 
 /**
  * Fix MSSQL trigger.
@@ -19,20 +16,17 @@ use yii\base\InvalidConfigException;
  * @see https://github.com/yiisoft/yii2/pull/17966
  *
  * @author Aurelien Chretien <chretien.aurelien@gmail.com>
- *
  * @since 2.0.35
  */
 class m200409_110543_rbac_update_mssql_trigger extends Migration
 {
     /**
-     * @return DbManager
-     *
      * @throws yii\base\InvalidConfigException
+     * @return DbManager
      */
     protected function getAuthManager()
     {
         $authManager = Yii::$app->getAuthManager();
-
         if (!$authManager instanceof DbManager) {
             throw new InvalidConfigException('You should configure "authManager" component to use database before executing this migration.');
         }
@@ -47,8 +41,8 @@ class m200409_110543_rbac_update_mssql_trigger extends Migration
             ->from(['fkc' => 'sys.foreign_key_columns'])
             ->innerJoin(['c' => 'sys.columns'], 'fkc.parent_object_id = c.object_id AND fkc.parent_column_id = c.column_id')
             ->innerJoin(['r' => 'sys.columns'], 'fkc.referenced_object_id = r.object_id AND fkc.referenced_column_id = r.column_id')
-            ->andWhere('fkc.parent_object_id=OBJECT_ID(:fkc_parent_object_id)', [':fkc_parent_object_id' => $this->db->schema->getRawTableName($table)])
-            ->andWhere('fkc.referenced_object_id=OBJECT_ID(:fkc_referenced_object_id)', [':fkc_referenced_object_id' => $this->db->schema->getRawTableName($referenceTable)])
+            ->andWhere('fkc.parent_object_id=OBJECT_ID(:fkc_parent_object_id)',[':fkc_parent_object_id' => $this->db->schema->getRawTableName($table)])
+            ->andWhere('fkc.referenced_object_id=OBJECT_ID(:fkc_referenced_object_id)',[':fkc_referenced_object_id' => $this->db->schema->getRawTableName($referenceTable)])
             ->andWhere(['c.name' => $column])
             ->andWhere(['r.name' => $referenceColumn])
             ->scalar($this->db);
@@ -65,7 +59,7 @@ class m200409_110543_rbac_update_mssql_trigger extends Migration
     /**
      * {@inheritdoc}
      */
-    public function up(): void
+    public function up()
     {
         if ($this->isMSSQL()) {
             $authManager = $this->getAuthManager();
@@ -83,7 +77,8 @@ class m200409_110543_rbac_update_mssql_trigger extends Migration
             BEGIN
                   DELETE FROM {$schema}.{$authManager->itemChildTable} WHERE parent IN (SELECT name FROM deleted) OR child IN (SELECT name FROM deleted);
                   DELETE FROM {$schema}.{$authManager->itemTable} WHERE name IN (SELECT name FROM deleted);
-            END;");
+            END;"
+            );
 
             $foreignKey = $this->findForeignKeyName($authManager->itemChildTable, 'child', $authManager->itemTable, 'name');
             $this->execute("CREATE TRIGGER {$schema}.trigger_update_{$triggerSuffix}
@@ -111,14 +106,15 @@ class m200409_110543_rbac_update_mssql_trigger extends Migration
                 BEGIN
                     ALTER TABLE {$authManager->itemChildTable} CHECK CONSTRAINT {$foreignKey};
                 END
-            END;");
+            END;"
+            );
         }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function down(): void
+    public function down()
     {
         if ($this->isMSSQL()) {
             $authManager = $this->getAuthManager();

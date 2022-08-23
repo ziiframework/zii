@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,6 +8,7 @@ declare(strict_types=1);
 namespace yii\validators;
 
 use Yii;
+use yii\helpers\Json;
 
 /**
  * BooleanValidator checks if the attribute value is a boolean value.
@@ -19,7 +17,6 @@ use Yii;
  * And the comparison can be either [[strict]] or not.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class BooleanValidator extends Validator
@@ -28,12 +25,10 @@ class BooleanValidator extends Validator
      * @var mixed the value representing true status. Defaults to '1'.
      */
     public $trueValue = '1';
-
     /**
      * @var mixed the value representing false status. Defaults to '0'.
      */
     public $falseValue = '0';
-
     /**
      * @var bool whether the comparison to [[trueValue]] and [[falseValue]] is strict.
      * When this is true, the attribute value and type must both match those of [[trueValue]] or [[falseValue]].
@@ -41,13 +36,13 @@ class BooleanValidator extends Validator
      */
     public $strict = false;
 
+
     /**
      * {@inheritdoc}
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
-
         if ($this->message === null) {
             $this->message = Yii::t('yii', '{attribute} must be either "{true}" or "{false}".');
         }
@@ -82,7 +77,7 @@ class BooleanValidator extends Validator
         ValidationAsset::register($view);
         $options = $this->getClientOptions($model, $attribute);
 
-        return 'yii.validation.boolean(value, messages, ' . json_encode($options, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . ');';
+        return 'yii.validation.boolean(value, messages, ' . Json::htmlEncode($options) . ');';
     }
 
     /**
@@ -99,11 +94,9 @@ class BooleanValidator extends Validator
                 'false' => $this->falseValue === false ? 'false' : $this->falseValue,
             ]),
         ];
-
         if ($this->skipOnEmpty) {
             $options['skipOnEmpty'] = 1;
         }
-
         if ($this->strict) {
             $options['strict'] = 1;
         }

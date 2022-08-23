@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,6 +8,7 @@ declare(strict_types=1);
 namespace yii\validators;
 
 use yii\base\InvalidConfigException;
+use yii\helpers\Json;
 
 /**
  * FilterValidator converts the attribute value according to a filter.
@@ -28,11 +26,12 @@ use yii\base\InvalidConfigException;
  * ```
  *
  * Many PHP functions qualify this signature (e.g. `trim()`).
+ * If the callback function requires non-null argument (important since PHP 8.1)
+ * remember to set [[skipOnEmpty]] to `true` otherwise you may trigger an error.
  *
  * To specify the filter, set [[filter]] property to be the callback.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class FilterValidator extends Validator
@@ -49,26 +48,24 @@ class FilterValidator extends Validator
      * ```
      */
     public $filter;
-
     /**
      * @var bool whether the filter should be skipped if an array input is given.
      * If true and an array input is given, the filter will not be applied.
      */
     public $skipOnArray = false;
-
     /**
      * @var bool this property is overwritten to be false so that this validator will
      * be applied when the value being validated is empty.
      */
     public $skipOnEmpty = false;
 
+
     /**
      * {@inheritdoc}
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
-
         if ($this->filter === null) {
             throw new InvalidConfigException('The "filter" property must be set.');
         }
@@ -77,12 +74,10 @@ class FilterValidator extends Validator
     /**
      * {@inheritdoc}
      */
-    public function validateAttribute($model, $attribute): void
+    public function validateAttribute($model, $attribute)
     {
         $value = $model->$attribute;
-
         if (!$this->skipOnArray || !is_array($value)) {
-            $value ??= '';
             $model->$attribute = call_user_func($this->filter, $value);
         }
     }
@@ -99,7 +94,7 @@ class FilterValidator extends Validator
         ValidationAsset::register($view);
         $options = $this->getClientOptions($model, $attribute);
 
-        return 'value = yii.validation.trim($form, attribute, ' . json_encode($options, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . ', value);';
+        return 'value = yii.validation.trim($form, attribute, ' . Json::htmlEncode($options) . ', value);';
     }
 
     /**
@@ -108,7 +103,6 @@ class FilterValidator extends Validator
     public function getClientOptions($model, $attribute)
     {
         $options = [];
-
         if ($this->skipOnEmpty) {
             $options['skipOnEmpty'] = 1;
         }

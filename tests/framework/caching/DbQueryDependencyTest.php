@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,9 +7,9 @@ declare(strict_types=1);
 
 namespace yiiunit\framework\caching;
 
-use yii\db\Query;
 use yii\caching\ArrayCache;
 use yii\caching\DbQueryDependency;
+use yii\db\Query;
 use yiiunit\framework\db\DatabaseTestCase;
 
 class DbQueryDependencyTest extends DatabaseTestCase
@@ -22,10 +19,11 @@ class DbQueryDependencyTest extends DatabaseTestCase
      */
     protected $driverName = 'sqlite';
 
+
     /**
      * {@inheritdoc}
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         parent::setUp();
 
@@ -39,7 +37,7 @@ class DbQueryDependencyTest extends DatabaseTestCase
         $db->createCommand()->insert('dependency_item', ['value' => 'initial'])->execute();
     }
 
-    public function testIsChanged(): void
+    public function testIsChanged()
     {
         $db = $this->getConnection(false);
         $cache = new ArrayCache();
@@ -64,7 +62,7 @@ class DbQueryDependencyTest extends DatabaseTestCase
     /**
      * @depends testIsChanged
      */
-    public function testCustomMethod(): void
+    public function testCustomMethod()
     {
         $db = $this->getConnection(false);
         $cache = new ArrayCache();
@@ -88,7 +86,7 @@ class DbQueryDependencyTest extends DatabaseTestCase
     /**
      * @depends testCustomMethod
      */
-    public function testCustomMethodCallback(): void
+    public function testCustomMethodCallback()
     {
         $db = $this->getConnection(false);
         $cache = new ArrayCache();
@@ -99,7 +97,35 @@ class DbQueryDependencyTest extends DatabaseTestCase
             ->from('dependency_item')
             ->andWhere(['value' => 'not exist']);
         $dependency->reusable = false;
-        $dependency->method = static fn (Query $query, $db) => $query->orWhere(['value' => 'initial'])->exists($db);
+        $dependency->method = function (Query $query, $db) {
+            return $query->orWhere(['value' => 'initial'])->exists($db);
+        };
+
+        $dependency->evaluateDependency($cache);
+        $this->assertFalse($dependency->isChanged($cache));
+
+        $db->createCommand()->delete('dependency_item')->execute();
+
+        $this->assertTrue($dependency->isChanged($cache));
+    }
+
+    /**
+     * @depends testCustomMethod
+     */
+    public function testReusableAndCustomMethodCallback()
+    {
+        $db = $this->getConnection(false);
+        $cache = new ArrayCache();
+
+        $dependency = new DbQueryDependency();
+        $dependency->db = $db;
+        $dependency->query = (new Query())
+            ->from('dependency_item')
+            ->andWhere(['value' => 'not exist']);
+        $dependency->reusable = true;
+        $dependency->method = function (Query $query, $db) {
+            return $query->orWhere(['value' => 'initial'])->exists($db);
+        };
 
         $dependency->evaluateDependency($cache);
         $this->assertFalse($dependency->isChanged($cache));

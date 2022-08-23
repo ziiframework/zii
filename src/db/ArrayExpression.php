@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,12 +7,7 @@ declare(strict_types=1);
 
 namespace yii\db;
 
-use Countable;
-use ArrayAccess;
 use Traversable;
-use ArrayIterator;
-use IteratorAggregate;
-use ReturnTypeWillChange;
 use yii\base\InvalidConfigException;
 
 /**
@@ -31,10 +23,9 @@ use yii\base\InvalidConfigException;
  * PostgreSQL it will be compiled to `WHERE "items" @> ARRAY[1, 2, 3]::integer[]`.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
- *
  * @since 2.0.14
  */
-class ArrayExpression implements ExpressionInterface, ArrayAccess, Countable, IteratorAggregate
+class ArrayExpression implements ExpressionInterface, \ArrayAccess, \Countable, \IteratorAggregate
 {
     /**
      * @var string|null the type of the array elements. Defaults to `null` which means the type is
@@ -44,17 +35,16 @@ class ArrayExpression implements ExpressionInterface, ArrayAccess, Countable, It
      * SQL error will be raised.
      */
     private $type;
-
     /**
      * @var array|QueryInterface the array's content.
      * In can be represented as an array of values or a [[Query]] that returns these values.
      */
     private $value;
-
     /**
      * @var int the number of indices needed to select an element
      */
     private $dimension;
+
 
     /**
      * ArrayExpression constructor.
@@ -102,126 +92,111 @@ class ArrayExpression implements ExpressionInterface, ArrayAccess, Countable, It
     }
 
     /**
-     * Whether a offset exists.
+     * Whether a offset exists
      *
      * @link https://www.php.net/manual/en/arrayaccess.offsetexists.php
-     *
      * @param mixed $offset <p>
      * An offset to check for.
      * </p>
-     *
      * @return bool true on success or false on failure.
      * </p>
      * <p>
      * The return value will be casted to boolean if non-boolean was returned.
-     *
      * @since 2.0.14
      */
-    #[ReturnTypeWillChange]
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return isset($this->value[$offset]);
     }
 
     /**
-     * Offset to retrieve.
+     * Offset to retrieve
      *
      * @link https://www.php.net/manual/en/arrayaccess.offsetget.php
-     *
      * @param mixed $offset <p>
      * The offset to retrieve.
      * </p>
-     *
      * @return mixed Can return all value types.
-     *
      * @since 2.0.14
      */
-    #[ReturnTypeWillChange]
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->value[$offset];
     }
 
     /**
-     * Offset to set.
+     * Offset to set
      *
      * @link https://www.php.net/manual/en/arrayaccess.offsetset.php
-     *
      * @param mixed $offset <p>
      * The offset to assign the value to.
      * </p>
      * @param mixed $value <p>
      * The value to set.
      * </p>
-     *
+     * @return void
      * @since 2.0.14
      */
-    #[ReturnTypeWillChange]
-    public function offsetSet($offset, $value): void
+    #[\ReturnTypeWillChange]
+    public function offsetSet($offset, $value)
     {
         $this->value[$offset] = $value;
     }
 
     /**
-     * Offset to unset.
+     * Offset to unset
      *
      * @link https://www.php.net/manual/en/arrayaccess.offsetunset.php
-     *
      * @param mixed $offset <p>
      * The offset to unset.
      * </p>
-     *
+     * @return void
      * @since 2.0.14
      */
-    #[ReturnTypeWillChange]
-    public function offsetUnset($offset): void
+    #[\ReturnTypeWillChange]
+    public function offsetUnset($offset)
     {
         unset($this->value[$offset]);
     }
 
     /**
-     * Count elements of an object.
+     * Count elements of an object
      *
      * @link https://www.php.net/manual/en/countable.count.php
-     *
      * @return int The custom count as an integer.
      * </p>
      * <p>
      * The return value is cast to an integer.
-     *
      * @since 2.0.14
      */
-    #[ReturnTypeWillChange]
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return count($this->value);
     }
 
     /**
-     * Retrieve an external iterator.
+     * Retrieve an external iterator
      *
      * @link https://www.php.net/manual/en/iteratoraggregate.getiterator.php
-     *
      * @return Traversable An instance of an object implementing <b>Iterator</b> or
      * <b>Traversable</b>
-     *
      * @since 2.0.14.1
-     *
      * @throws InvalidConfigException when ArrayExpression contains QueryInterface object
      */
-    #[ReturnTypeWillChange]
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         $value = $this->getValue();
-
         if ($value instanceof QueryInterface) {
             throw new InvalidConfigException('The ArrayExpression class can not be iterated when the value is a QueryInterface object');
         }
-
         if ($value === null) {
             $value = [];
         }
 
-        return new ArrayIterator($value);
+        return new \ArrayIterator($value);
     }
 }

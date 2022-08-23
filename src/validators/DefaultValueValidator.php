@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,8 +7,6 @@ declare(strict_types=1);
 
 namespace yii\validators;
 
-use Closure;
-
 /**
  * DefaultValueValidator sets the attribute to be the specified default value.
  *
@@ -19,7 +14,6 @@ use Closure;
  * specifying attribute default values when they are empty.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class DefaultValueValidator extends Validator
@@ -37,20 +31,20 @@ class DefaultValueValidator extends Validator
      * ```
      */
     public $value;
-
     /**
      * @var bool this property is overwritten to be false so that this validator will
      * be applied when the value being validated is empty.
      */
     public $skipOnEmpty = false;
 
+
     /**
      * {@inheritdoc}
      */
-    public function validateAttribute($model, $attribute): void
+    public function validateAttribute($model, $attribute)
     {
         if ($this->isEmpty($model->$attribute)) {
-            if ($this->value instanceof Closure) {
+            if ($this->value instanceof \Closure) {
                 $model->$attribute = call_user_func($this->value, $model, $attribute);
             } else {
                 $model->$attribute = $this->value;

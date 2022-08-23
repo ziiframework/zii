@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,10 +8,10 @@ declare(strict_types=1);
 namespace yii\web;
 
 use Yii;
-use yii\helpers\Url;
-use yii\helpers\Html;
-use yii\helpers\ArrayHelper;
 use yii\base\InvalidConfigException;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
+use yii\helpers\Url;
 
 /**
  * View represents a view object in the MVC pattern.
@@ -43,7 +40,6 @@ use yii\base\InvalidConfigException;
  * component.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- *
  * @since 2.0
  */
 class View extends \yii\base\View
@@ -51,126 +47,102 @@ class View extends \yii\base\View
     /**
      * @event Event an event that is triggered by [[beginBody()]].
      */
-    public const EVENT_BEGIN_BODY = 'beginBody';
-
+    const EVENT_BEGIN_BODY = 'beginBody';
     /**
      * @event Event an event that is triggered by [[endBody()]].
      */
-    public const EVENT_END_BODY = 'endBody';
-
+    const EVENT_END_BODY = 'endBody';
     /**
      * The location of registered JavaScript code block or files.
      * This means the location is in the head section.
      */
-    public const POS_HEAD = 1;
-
+    const POS_HEAD = 1;
     /**
      * The location of registered JavaScript code block or files.
      * This means the location is at the beginning of the body section.
      */
-    public const POS_BEGIN = 2;
-
+    const POS_BEGIN = 2;
     /**
      * The location of registered JavaScript code block or files.
      * This means the location is at the end of the body section.
      */
-    public const POS_END = 3;
-
+    const POS_END = 3;
     /**
      * The location of registered JavaScript code block.
      * This means the JavaScript code block will be enclosed within `jQuery(document).ready()`.
      */
-    public const POS_READY = 4;
-
+    const POS_READY = 4;
     /**
      * The location of registered JavaScript code block.
      * This means the JavaScript code block will be enclosed within `jQuery(window).load()`.
      */
-    public const POS_LOAD = 5;
-
+    const POS_LOAD = 5;
     /**
      * This is internally used as the placeholder for receiving the content registered for the head section.
      */
-    public const PH_HEAD = '<![CDATA[YII-BLOCK-HEAD]]>';
-
+    const PH_HEAD = '<![CDATA[YII-BLOCK-HEAD]]>';
     /**
      * This is internally used as the placeholder for receiving the content registered for the beginning of the body section.
      */
-    public const PH_BODY_BEGIN = '<![CDATA[YII-BLOCK-BODY-BEGIN]]>';
-
+    const PH_BODY_BEGIN = '<![CDATA[YII-BLOCK-BODY-BEGIN]]>';
     /**
      * This is internally used as the placeholder for receiving the content registered for the end of the body section.
      */
-    public const PH_BODY_END = '<![CDATA[YII-BLOCK-BODY-END]]>';
+    const PH_BODY_END = '<![CDATA[YII-BLOCK-BODY-END]]>';
 
     /**
      * @var AssetBundle[] list of the registered asset bundles. The keys are the bundle names, and the values
      * are the registered [[AssetBundle]] objects.
-     *
      * @see registerAssetBundle()
      */
     public $assetBundles = [];
-
     /**
      * @var string the page title
      */
     public $title;
-
     /**
      * @var array the registered meta tags.
-     *
      * @see registerMetaTag()
      */
     public $metaTags = [];
-
     /**
      * @var array the registered link tags.
-     *
      * @see registerLinkTag()
      */
     public $linkTags = [];
-
     /**
      * @var array the registered CSS code blocks.
-     *
      * @see registerCss()
      */
     public $css = [];
-
     /**
      * @var array the registered CSS files.
-     *
      * @see registerCssFile()
      */
     public $cssFiles = [];
-
     /**
      * @var array the registered JS code blocks
-     *
      * @see registerJs()
      */
     public $js = [];
-
     /**
      * @var array the registered JS files.
-     *
      * @see registerJsFile()
      */
     public $jsFiles = [];
 
     private $_assetManager;
-
     /**
-     * Whether [[endPage()]] has been called and all files have been registered.
-     *
+     * Whether [[endPage()]] has been called and all files have been registered
      * @var bool
      */
     private $_isPageEnded = false;
 
+
     /**
      * Marks the position of an HTML head section.
      */
-    public function head(): void
+    public function head()
     {
         echo self::PH_HEAD;
     }
@@ -178,7 +150,7 @@ class View extends \yii\base\View
     /**
      * Marks the beginning of an HTML body section.
      */
-    public function beginBody(): void
+    public function beginBody()
     {
         echo self::PH_BODY_BEGIN;
         $this->trigger(self::EVENT_BEGIN_BODY);
@@ -187,7 +159,7 @@ class View extends \yii\base\View
     /**
      * Marks the ending of an HTML body section.
      */
-    public function endBody(): void
+    public function endBody()
     {
         $this->trigger(self::EVENT_END_BODY);
         echo self::PH_BODY_END;
@@ -199,12 +171,11 @@ class View extends \yii\base\View
 
     /**
      * Marks the ending of an HTML page.
-     *
      * @param bool $ajaxMode whether the view is rendering in AJAX mode.
      * If true, the JS scripts registered at [[POS_READY]] and [[POS_LOAD]] positions
      * will be rendered at the end of the view like normal scripts.
      */
-    public function endPage($ajaxMode = false): void
+    public function endPage($ajaxMode = false)
     {
         $this->trigger(self::EVENT_END_PAGE);
 
@@ -231,11 +202,9 @@ class View extends \yii\base\View
      *
      * @param string $view the view name. Please refer to [[render()]] on how to specify this parameter.
      * @param array $params the parameters (name-value pairs) that will be extracted and made available in the view file.
-     * @param object $context the context that the view should use for rendering the view. If null,
+     * @param object|null $context the context that the view should use for rendering the view. If null,
      * existing [[context]] will be used.
-     *
      * @return string the rendering result
-     *
      * @see render()
      */
     public function renderAjax($view, $params = [], $context = null)
@@ -243,7 +212,7 @@ class View extends \yii\base\View
         $viewFile = $this->findViewFile($view, $context);
 
         ob_start();
-        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
+        ob_implicit_flush(false);
 
         $this->beginPage();
         $this->head();
@@ -257,7 +226,6 @@ class View extends \yii\base\View
 
     /**
      * Registers the asset manager being used by this view object.
-     *
      * @return \yii\web\AssetManager the asset manager. Defaults to the "assetManager" application component.
      */
     public function getAssetManager()
@@ -267,10 +235,9 @@ class View extends \yii\base\View
 
     /**
      * Sets the asset manager.
-     *
      * @param \yii\web\AssetManager $value the asset manager
      */
-    public function setAssetManager($value): void
+    public function setAssetManager($value)
     {
         $this->_assetManager = $value;
     }
@@ -278,7 +245,7 @@ class View extends \yii\base\View
     /**
      * Clears up the registered meta tags, link tags, css/js scripts and files.
      */
-    public function clear(): void
+    public function clear()
     {
         $this->metaTags = [];
         $this->linkTags = [];
@@ -292,16 +259,14 @@ class View extends \yii\base\View
     /**
      * Registers all files provided by an asset bundle including depending bundles files.
      * Removes a bundle from [[assetBundles]] once files are registered.
-     *
      * @param string $name name of the bundle to register
      */
-    protected function registerAssetFiles($name): void
+    protected function registerAssetFiles($name)
     {
         if (!isset($this->assetBundles[$name])) {
             return;
         }
         $bundle = $this->assetBundles[$name];
-
         if ($bundle) {
             foreach ($bundle->depends as $dep) {
                 $this->registerAssetFiles($dep);
@@ -314,15 +279,12 @@ class View extends \yii\base\View
     /**
      * Registers the named asset bundle.
      * All dependent asset bundles will be registered.
-     *
      * @param string $name the class name of the asset bundle (without the leading backslash)
      * @param int|null $position if set, this forces a minimum position for javascript files.
      * This will adjust depending assets javascript file position or fail if requirement can not be met.
      * If this is null, asset bundles position settings will not be changed.
      * See [[registerJsFile]] for more details on javascript position.
-     *
      * @return AssetBundle the registered asset bundle instance
-     *
      * @throws InvalidConfigException if the asset bundle does not exist or a circular dependency is detected
      */
     public function registerAssetBundle($name, $position = null)
@@ -332,8 +294,7 @@ class View extends \yii\base\View
             $bundle = $am->getBundle($name);
             $this->assetBundles[$name] = false;
             // register dependencies
-            $pos = $bundle->jsOptions['position'] ?? null;
-
+            $pos = isset($bundle->jsOptions['position']) ? $bundle->jsOptions['position'] : null;
             foreach ($bundle->depends as $dep) {
                 $this->registerAssetBundle($dep, $pos);
             }
@@ -345,8 +306,7 @@ class View extends \yii\base\View
         }
 
         if ($position !== null) {
-            $pos = $bundle->jsOptions['position'] ?? null;
-
+            $pos = isset($bundle->jsOptions['position']) ? $bundle->jsOptions['position'] : null;
             if ($pos === null) {
                 $bundle->jsOptions['position'] = $pos = $position;
             } elseif ($pos > $position) {
@@ -376,11 +336,11 @@ class View extends \yii\base\View
      * will result in the meta tag `<meta name="description" content="This website is about funny raccoons.">`.
      *
      * @param array $options the HTML attributes for the meta tag.
-     * @param string $key the key that identifies the meta tag. If two meta tags are registered
+     * @param string|null $key the key that identifies the meta tag. If two meta tags are registered
      * with the same key, the latter will overwrite the former. If this is null, the new meta tag
      * will be appended to the existing ones.
      */
-    public function registerMetaTag($options, $key = null): void
+    public function registerMetaTag($options, $key = null)
     {
         if ($key === null) {
             $this->metaTags[] = Html::tag('meta', '', $options);
@@ -405,7 +365,7 @@ class View extends \yii\base\View
      *
      * @since 2.0.13
      */
-    public function registerCsrfMetaTags(): void
+    public function registerCsrfMetaTags()
     {
         $this->metaTags['csrf_meta_tags'] = $this->renderDynamic('return yii\helpers\Html::csrfMetaTags();');
     }
@@ -413,7 +373,7 @@ class View extends \yii\base\View
     /**
      * Registers a link tag.
      *
-     * For example, a link tag for a custom [favicon](http://www.w3.org/2005/10/howto-favicon)
+     * For example, a link tag for a custom [favicon](https://www.w3.org/2005/10/howto-favicon)
      * can be added like the following:
      *
      * ```php
@@ -426,11 +386,11 @@ class View extends \yii\base\View
      * has more options for this kind of link tag.
      *
      * @param array $options the HTML attributes for the link tag.
-     * @param string $key the key that identifies the link tag. If two link tags are registered
+     * @param string|null $key the key that identifies the link tag. If two link tags are registered
      * with the same key, the latter will overwrite the former. If this is null, the new link tag
      * will be appended to the existing ones.
      */
-    public function registerLinkTag($options, $key = null): void
+    public function registerLinkTag($options, $key = null)
     {
         if ($key === null) {
             $this->linkTags[] = Html::tag('link', '', $options);
@@ -441,14 +401,13 @@ class View extends \yii\base\View
 
     /**
      * Registers a CSS code block.
-     *
      * @param string $css the content of the CSS code block to be registered
      * @param array $options the HTML attributes for the `<style>`-tag.
-     * @param string $key the key that identifies the CSS code block. If null, it will use
+     * @param string|null $key the key that identifies the CSS code block. If null, it will use
      * $css as the key. If two CSS code blocks are registered with the same key, the latter
      * will overwrite the former.
      */
-    public function registerCss($css, $options = [], $key = null): void
+    public function registerCss($css, $options = [], $key = null)
     {
         $key = $key ?: md5($css);
         $this->css[$key] = Html::style($css, $options);
@@ -467,20 +426,19 @@ class View extends \yii\base\View
      *
      * - `depends`: array, specifies the names of the asset bundles that this CSS file depends on.
      * - `appendTimestamp`: bool whether to append a timestamp to the URL.
-     * @param string $key the key that identifies the CSS script file. If null, it will use
+     *
+     * @param string|null $key the key that identifies the CSS script file. If null, it will use
      * $url as the key. If two CSS files are registered with the same key, the latter
      * will overwrite the former.
-     *
      * @throws InvalidConfigException
      */
-    public function registerCssFile($url, $options = [], $key = null): void
+    public function registerCssFile($url, $options = [], $key = null)
     {
         $this->registerFile('css', $url, $options, $key);
     }
 
     /**
      * Registers a JS code block.
-     *
      * @param string $js the JS code block to be registered
      * @param int $position the position at which the JS script tag should be inserted
      * in a page. The possible values are:
@@ -492,15 +450,15 @@ class View extends \yii\base\View
      *   Note that by using this position, the method will automatically register the jQuery js file.
      * - [[POS_READY]]: enclosed within jQuery(document).ready(). This is the default value.
      *   Note that by using this position, the method will automatically register the jQuery js file.
-     * @param string $key the key that identifies the JS code block. If null, it will use
+     *
+     * @param string|null $key the key that identifies the JS code block. If null, it will use
      * $js as the key. If two JS code blocks are registered with the same key, the latter
      * will overwrite the former.
      */
-    public function registerJs($js, $position = self::POS_READY, $key = null): void
+    public function registerJs($js, $position = self::POS_READY, $key = null)
     {
         $key = $key ?: md5($js);
         $this->js[$position][$key] = $js;
-
         if ($position === self::POS_READY || $position === self::POS_LOAD) {
             JqueryAsset::register($this);
         }
@@ -516,14 +474,14 @@ class View extends \yii\base\View
      *
      * - `depends`: array, specifies the names of the asset bundles that this CSS file depends on.
      * - `appendTimestamp`: bool whether to append a timestamp to the URL.
-     * @param string $key the key that identifies the JS script file. If null, it will use
+     *
+     * @param string|null $key the key that identifies the JS script file. If null, it will use
      * $url as the key. If two JS files are registered with the same key at the same position, the latter
      * will overwrite the former. Note that position option takes precedence, thus files registered with the same key,
      * but different position option will not override each other.
-     *
      * @throws InvalidConfigException
      */
-    private function registerFile($type, $url, $options = [], $key = null): void
+    private function registerFile($type, $url, $options = [], $key = null)
     {
         $url = Yii::getAlias($url);
         $key = $key ?: $url;
@@ -550,12 +508,10 @@ class View extends \yii\base\View
                 $prefixLength = strlen($prefix);
                 $trimmedUrl = ltrim((substr($url, 0, $prefixLength) === $prefix) ? substr($url, $prefixLength) : $url, '/');
                 $timestamp = @filemtime(Yii::getAlias('@webroot/' . $trimmedUrl, false));
-
                 if ($timestamp > 0) {
                     $url = $timestamp ? "$url?v=$timestamp" : $url;
                 }
             }
-
             if ($type === 'js') {
                 $this->jsFiles[$position][$key] = Html::jsFile($url, $options);
             } else {
@@ -566,9 +522,9 @@ class View extends \yii\base\View
                 'class' => AssetBundle::className(),
                 'baseUrl' => '',
                 'basePath' => '@webroot',
-                (string) $type => [ArrayHelper::merge([!Url::isRelative($url) ? $url : ltrim($url, '/')], $originalOptions)],
+                (string)$type => [ArrayHelper::merge([!Url::isRelative($url) ? $url : ltrim($url, '/')], $originalOptions)],
                 "{$type}Options" => $options,
-                'depends' => (array) $depends,
+                'depends' => (array)$depends,
             ]);
             $this->registerAssetBundle($key);
         }
@@ -593,14 +549,14 @@ class View extends \yii\base\View
      * - `appendTimestamp`: bool whether to append a timestamp to the URL.
      *
      * Please refer to [[Html::jsFile()]] for other supported options.
-     * @param string $key the key that identifies the JS script file. If null, it will use
+     *
+     * @param string|null $key the key that identifies the JS script file. If null, it will use
      * $url as the key. If two JS files are registered with the same key at the same position, the latter
      * will overwrite the former. Note that position option takes precedence, thus files registered with the same key,
      * but different position option will not override each other.
-     *
      * @throws InvalidConfigException
      */
-    public function registerJsFile($url, $options = [], $key = null): void
+    public function registerJsFile($url, $options = [], $key = null)
     {
         $this->registerFile('js', $url, $options, $key);
     }
@@ -624,7 +580,7 @@ class View extends \yii\base\View
      *
      * @since 2.0.14
      */
-    public function registerJsVar($name, $value, $position = self::POS_HEAD): void
+    public function registerJsVar($name, $value, $position = self::POS_HEAD)
     {
         $js = sprintf('var %s = %s;', $name, \yii\helpers\Json::htmlEncode($value));
         $this->registerJs($js, $position, $name);
@@ -633,13 +589,11 @@ class View extends \yii\base\View
     /**
      * Renders the content to be inserted in the head section.
      * The content is rendered using the registered meta tags, link tags, CSS/JS code blocks and files.
-     *
      * @return string the rendered content
      */
     protected function renderHeadHtml()
     {
         $lines = [];
-
         if (!empty($this->metaTags)) {
             $lines[] = implode("\n", $this->metaTags);
         }
@@ -647,19 +601,15 @@ class View extends \yii\base\View
         if (!empty($this->linkTags)) {
             $lines[] = implode("\n", $this->linkTags);
         }
-
         if (!empty($this->cssFiles)) {
             $lines[] = implode("\n", $this->cssFiles);
         }
-
         if (!empty($this->css)) {
             $lines[] = implode("\n", $this->css);
         }
-
         if (!empty($this->jsFiles[self::POS_HEAD])) {
             $lines[] = implode("\n", $this->jsFiles[self::POS_HEAD]);
         }
-
         if (!empty($this->js[self::POS_HEAD])) {
             $lines[] = Html::script(implode("\n", $this->js[self::POS_HEAD]));
         }
@@ -670,17 +620,14 @@ class View extends \yii\base\View
     /**
      * Renders the content to be inserted at the beginning of the body section.
      * The content is rendered using the registered JS code blocks and files.
-     *
      * @return string the rendered content
      */
     protected function renderBodyBeginHtml()
     {
         $lines = [];
-
         if (!empty($this->jsFiles[self::POS_BEGIN])) {
             $lines[] = implode("\n", $this->jsFiles[self::POS_BEGIN]);
         }
-
         if (!empty($this->js[self::POS_BEGIN])) {
             $lines[] = Html::script(implode("\n", $this->js[self::POS_BEGIN]));
         }
@@ -691,11 +638,9 @@ class View extends \yii\base\View
     /**
      * Renders the content to be inserted at the end of the body section.
      * The content is rendered using the registered JS code blocks and files.
-     *
      * @param bool $ajaxMode whether the view is rendering in AJAX mode.
      * If true, the JS scripts registered at [[POS_READY]] and [[POS_LOAD]] positions
      * will be rendered at the end of the view like normal scripts.
-     *
      * @return string the rendered content
      */
     protected function renderBodyEndHtml($ajaxMode)
@@ -708,19 +653,15 @@ class View extends \yii\base\View
 
         if ($ajaxMode) {
             $scripts = [];
-
             if (!empty($this->js[self::POS_END])) {
                 $scripts[] = implode("\n", $this->js[self::POS_END]);
             }
-
             if (!empty($this->js[self::POS_READY])) {
                 $scripts[] = implode("\n", $this->js[self::POS_READY]);
             }
-
             if (!empty($this->js[self::POS_LOAD])) {
                 $scripts[] = implode("\n", $this->js[self::POS_LOAD]);
             }
-
             if (!empty($scripts)) {
                 $lines[] = Html::script(implode("\n", $scripts));
             }
@@ -728,12 +669,10 @@ class View extends \yii\base\View
             if (!empty($this->js[self::POS_END])) {
                 $lines[] = Html::script(implode("\n", $this->js[self::POS_END]));
             }
-
             if (!empty($this->js[self::POS_READY])) {
                 $js = "jQuery(function ($) {\n" . implode("\n", $this->js[self::POS_READY]) . "\n});";
                 $lines[] = Html::script($js);
             }
-
             if (!empty($this->js[self::POS_LOAD])) {
                 $js = "jQuery(window).on('load', function () {\n" . implode("\n", $this->js[self::POS_LOAD]) . "\n});";
                 $lines[] = Html::script($js);

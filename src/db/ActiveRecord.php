@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,18 +8,16 @@ declare(strict_types=1);
 namespace yii\db;
 
 use Yii;
-use Exception;
-use Throwable;
-use yii\helpers\Inflector;
-use yii\helpers\ArrayHelper;
-use yii\helpers\StringHelper;
-use yii\base\InvalidConfigException;
 use yii\base\InvalidArgumentException;
+use yii\base\InvalidConfigException;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Inflector;
+use yii\helpers\StringHelper;
 
 /**
  * ActiveRecord is the base class for classes representing relational data in terms of objects.
  *
- * Active Record implements the [Active Record design pattern](http://en.wikipedia.org/wiki/Active_record).
+ * Active Record implements the [Active Record design pattern](https://en.wikipedia.org/wiki/Active_record_pattern).
  * The premise behind Active Record is that an individual [[ActiveRecord]] object is associated with a specific
  * row in a database table. The object's attributes are mapped to the columns of the corresponding table.
  * Referencing an Active Record attribute is equivalent to accessing the corresponding table column for that record.
@@ -75,12 +70,11 @@ use yii\base\InvalidArgumentException;
  *
  * For more details and usage information on ActiveRecord, see the [guide article on ActiveRecord](guide:db-active-record).
  *
- * @method ActiveQuery hasMany($class, array $link) see [[BaseActiveRecord::hasMany()]] for more info
- * @method ActiveQuery hasOne($class, array $link) see [[BaseActiveRecord::hasOne()]] for more info
+ * @method ActiveQuery hasMany($class, array $link) See [[BaseActiveRecord::hasMany()]] for more info.
+ * @method ActiveQuery hasOne($class, array $link) See [[BaseActiveRecord::hasOne()]] for more info.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @author Carsten Brandt <mail@cebe.cc>
- *
  * @since 2.0
  */
 class ActiveRecord extends BaseActiveRecord
@@ -88,23 +82,21 @@ class ActiveRecord extends BaseActiveRecord
     /**
      * The insert operation. This is mainly used when overriding [[transactions()]] to specify which operations are transactional.
      */
-    public const OP_INSERT = 0x01;
-
+    const OP_INSERT = 0x01;
     /**
      * The update operation. This is mainly used when overriding [[transactions()]] to specify which operations are transactional.
      */
-    public const OP_UPDATE = 0x02;
-
+    const OP_UPDATE = 0x02;
     /**
      * The delete operation. This is mainly used when overriding [[transactions()]] to specify which operations are transactional.
      */
-    public const OP_DELETE = 0x04;
-
+    const OP_DELETE = 0x04;
     /**
      * All three operations: insert, update, delete.
      * This is a shortcut of the expression: OP_INSERT | OP_UPDATE | OP_DELETE.
      */
-    public const OP_ALL = 0x07;
+    const OP_ALL = 0x07;
+
 
     /**
      * Loads default values from database table schema.
@@ -119,17 +111,14 @@ class ActiveRecord extends BaseActiveRecord
      *
      * @param bool $skipIfSet whether existing value should be preserved.
      * This will only set defaults for attributes that are `null`.
-     *
      * @return $this the model instance itself.
      */
     public function loadDefaultValues($skipIfSet = true)
     {
         $columns = static::getTableSchema()->columns;
-
         foreach ($this->attributes() as $name) {
             if (isset($columns[$name])) {
                 $defaultValue = $columns[$name]->defaultValue;
-
                 if ($defaultValue !== null && (!$skipIfSet || $this->getAttribute($name) === null)) {
                     $this->setAttribute($name, $defaultValue);
                 }
@@ -143,7 +132,6 @@ class ActiveRecord extends BaseActiveRecord
      * Returns the database connection used by this AR class.
      * By default, the "db" application component is used as the database connection.
      * You may override this method if you want to use a different database connection.
-     *
      * @return Connection the database connection used by this AR class.
      */
     public static function getDb()
@@ -167,7 +155,6 @@ class ActiveRecord extends BaseActiveRecord
      *
      * @param string $sql the SQL statement to be executed
      * @param array $params parameters to be bound to the SQL statement during execution.
-     *
      * @return ActiveQuery the newly created [[ActiveQuery]] instance
      */
     public static function findBySql($sql, $params = [])
@@ -181,13 +168,9 @@ class ActiveRecord extends BaseActiveRecord
     /**
      * Finds ActiveRecord instance(s) by the given condition.
      * This method is internally called by [[findOne()]] and [[findAll()]].
-     *
      * @param mixed $condition please refer to [[findOne()]] for the explanation of this parameter
-     *
      * @return ActiveQueryInterface the newly created [[ActiveQueryInterface|ActiveQuery]] instance.
-     *
      * @throws InvalidConfigException if there is no primary key defined.
-     *
      * @internal
      */
     protected static function findByCondition($condition)
@@ -197,17 +180,15 @@ class ActiveRecord extends BaseActiveRecord
         if (!ArrayHelper::isAssociative($condition) && !$condition instanceof ExpressionInterface) {
             // query by primary key
             $primaryKey = static::primaryKey();
-
             if (isset($primaryKey[0])) {
                 $pk = $primaryKey[0];
-
                 if (!empty($query->join) || !empty($query->joinWith)) {
                     $pk = static::tableName() . '.' . $pk;
                 }
                 // if condition is scalar, search for a single primary key, if it is array, search for multiple primary key values
                 $condition = [$pk => is_array($condition) ? array_values($condition) : $condition];
             } else {
-                throw new InvalidConfigException('"' . static::class . '" must have a primary key.');
+                throw new InvalidConfigException('"' . get_called_class() . '" must have a primary key.');
             }
         } elseif (is_array($condition)) {
             $aliases = static::filterValidAliases($query);
@@ -220,12 +201,10 @@ class ActiveRecord extends BaseActiveRecord
     /**
      * Returns table aliases which are not the same as the name of the tables.
      *
+     * @param Query $query
      * @return array
-     *
      * @throws InvalidConfigException
-     *
      * @since 2.0.17
-     *
      * @internal
      */
     protected static function filterValidAliases(Query $query)
@@ -234,7 +213,9 @@ class ActiveRecord extends BaseActiveRecord
 
         $aliases = array_diff(array_keys($tables), $tables);
 
-        return array_map(static fn ($alias) => preg_replace('/{{([\w]+)}}/', '$1', $alias), array_values($aliases));
+        return array_map(function ($alias) {
+            return preg_replace('/{{([\w]+)}}/', '$1', $alias);
+        }, array_values($aliases));
     }
 
     /**
@@ -243,14 +224,11 @@ class ActiveRecord extends BaseActiveRecord
      * This method will ensure that an array condition only filters on existing table columns.
      *
      * @param array $condition condition to filter.
-     *
+     * @param array $aliases
      * @return array filtered condition.
-     *
      * @throws InvalidArgumentException in case array contains unsafe values.
      * @throws InvalidConfigException
-     *
      * @since 2.0.15
-     *
      * @internal
      */
     protected static function filterCondition(array $condition, array $aliases = [])
@@ -270,16 +248,13 @@ class ActiveRecord extends BaseActiveRecord
     }
 
     /**
-     * Valid column names are table column names or column names prefixed with table name or table alias.
+     * Valid column names are table column names or column names prefixed with table name or table alias
      *
      * @param Connection $db
-     *
+     * @param array $aliases
      * @return array
-     *
      * @throws InvalidConfigException
-     *
      * @since 2.0.17
-     *
      * @internal
      */
     protected static function filterValidColumnNames($db, array $aliases)
@@ -293,7 +268,6 @@ class ActiveRecord extends BaseActiveRecord
             $columnNames[] = $db->quoteColumnName($columnName);
             $columnNames[] = "$tableName.$columnName";
             $columnNames[] = $db->quoteSql("$quotedTableName.[[$columnName]]");
-
             foreach ($aliases as $tableAlias) {
                 $columnNames[] = "$tableAlias.$columnName";
                 $quotedTableAlias = $db->quoteTableName($tableAlias);
@@ -320,7 +294,6 @@ class ActiveRecord extends BaseActiveRecord
 
         /* @var $record BaseActiveRecord */
         $record = $query->noCache()->one();
-
         return $this->refreshInternal($record);
     }
 
@@ -353,7 +326,6 @@ class ActiveRecord extends BaseActiveRecord
      * @param string|array $condition the conditions that will be put in the WHERE part of the UPDATE SQL.
      * Please refer to [[Query::where()]] on how to specify this parameter.
      * @param array $params the parameters (name => value) to be bound to the query.
-     *
      * @return int the number of rows updated
      */
     public static function updateAll($attributes, $condition = '', $params = [])
@@ -381,16 +353,14 @@ class ActiveRecord extends BaseActiveRecord
      * Please refer to [[Query::where()]] on how to specify this parameter.
      * @param array $params the parameters (name => value) to be bound to the query.
      * Do not name the parameters as `:bp0`, `:bp1`, etc., because they are used internally by this method.
-     *
      * @return int the number of rows updated
      */
     public static function updateAllCounters($counters, $condition = '', $params = [])
     {
         $n = 0;
-
         foreach ($counters as $name => $value) {
             $counters[$name] = new Expression("[[$name]]+:bp{$n}", [":bp{$n}" => $value]);
-            ++$n;
+            $n++;
         }
         $command = static::getDb()->createCommand();
         $command->update(static::tableName(), $counters, $condition, $params);
@@ -422,10 +392,9 @@ class ActiveRecord extends BaseActiveRecord
      *
      * For a large set of models you might consider using [[ActiveQuery::each()]] to keep memory usage within limits.
      *
-     * @param string|array $condition the conditions that will be put in the WHERE part of the DELETE SQL.
+     * @param string|array|null $condition the conditions that will be put in the WHERE part of the DELETE SQL.
      * Please refer to [[Query::where()]] on how to specify this parameter.
      * @param array $params the parameters (name => value) to be bound to the query.
-     *
      * @return int the number of rows deleted
      */
     public static function deleteAll($condition = null, $params = [])
@@ -438,12 +407,11 @@ class ActiveRecord extends BaseActiveRecord
 
     /**
      * {@inheritdoc}
-     *
      * @return ActiveQuery the newly created [[ActiveQuery]] instance.
      */
     public static function find()
     {
-        return Yii::createObject(ActiveQuery::className(), [static::class]);
+        return Yii::createObject(ActiveQuery::className(), [get_called_class()]);
     }
 
     /**
@@ -452,19 +420,16 @@ class ActiveRecord extends BaseActiveRecord
      * with prefix [[Connection::tablePrefix]]. For example if [[Connection::tablePrefix]] is `tbl_`,
      * `Customer` becomes `tbl_customer`, and `OrderItem` becomes `tbl_order_item`. You may override this method
      * if the table is not named after this convention.
-     *
      * @return string the table name
      */
     public static function tableName()
     {
-        return '{{%' . Inflector::camel2id(StringHelper::basename(static::class), '_') . '}}';
+        return '{{%' . Inflector::camel2id(StringHelper::basename(get_called_class()), '_') . '}}';
     }
 
     /**
      * Returns the schema information of the DB table associated with this AR class.
-     *
      * @return TableSchema the schema information of the DB table associated with this AR class.
-     *
      * @throws InvalidConfigException if the table for the AR class does not exist.
      */
     public static function getTableSchema()
@@ -501,12 +466,11 @@ class ActiveRecord extends BaseActiveRecord
     /**
      * Returns the list of all attribute names of the model.
      * The default implementation will return all column names of the table associated with this AR class.
-     *
      * @return array list of attribute names.
      */
     public function attributes()
     {
-        return array_keys(static::getTableSchema()->columns);
+        return static::getTableSchema()->getColumnNames();
     }
 
     /**
@@ -544,10 +508,9 @@ class ActiveRecord extends BaseActiveRecord
     /**
      * {@inheritdoc}
      */
-    public static function populateRecord($record, $row): void
+    public static function populateRecord($record, $row)
     {
         $columns = static::getTableSchema()->columns;
-
         foreach ($row as $name => $value) {
             if (isset($columns[$name])) {
                 $row[$name] = $columns[$name]->phpTypecast($value);
@@ -591,18 +554,15 @@ class ActiveRecord extends BaseActiveRecord
      * @param bool $runValidation whether to perform validation (calling [[validate()]])
      * before saving the record. Defaults to `true`. If the validation fails, the record
      * will not be saved to the database and this method will return `false`.
-     * @param array $attributes list of attributes that need to be saved. Defaults to `null`,
+     * @param array|null $attributes list of attributes that need to be saved. Defaults to `null`,
      * meaning all attributes that are loaded from DB will be saved.
-     *
      * @return bool whether the attributes are valid and the record is inserted successfully.
-     *
-     * @throws Exception in case insert failed.
+     * @throws \Throwable in case insert failed.
      */
     public function insert($runValidation = true, $attributes = null)
     {
         if ($runValidation && !$this->validate($attributes)) {
             Yii::info('Model not inserted due to validation error.', __METHOD__);
-
             return false;
         }
 
@@ -611,10 +571,8 @@ class ActiveRecord extends BaseActiveRecord
         }
 
         $transaction = static::getDb()->beginTransaction();
-
         try {
             $result = $this->insertInternal($attributes);
-
             if ($result === false) {
                 $transaction->rollBack();
             } else {
@@ -622,23 +580,19 @@ class ActiveRecord extends BaseActiveRecord
             }
 
             return $result;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $transaction->rollBack();
-
             throw $e;
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             $transaction->rollBack();
-
             throw $e;
         }
     }
 
     /**
      * Inserts an ActiveRecord into DB without considering transaction.
-     *
-     * @param array $attributes list of attributes that need to be saved. Defaults to `null`,
+     * @param array|null $attributes list of attributes that need to be saved. Defaults to `null`,
      * meaning all attributes that are loaded from DB will be saved.
-     *
      * @return bool whether the record is inserted successfully.
      */
     protected function insertInternal($attributes = null)
@@ -647,11 +601,9 @@ class ActiveRecord extends BaseActiveRecord
             return false;
         }
         $values = $this->getDirtyAttributes($attributes);
-
         if (($primaryKeys = static::getDb()->schema->insert(static::tableName(), $values)) === false) {
             return false;
         }
-
         foreach ($primaryKeys as $name => $value) {
             $id = static::getTableSchema()->columns[$name]->phpTypecast($value);
             $this->setAttribute($name, $id);
@@ -709,21 +661,18 @@ class ActiveRecord extends BaseActiveRecord
      * @param bool $runValidation whether to perform validation (calling [[validate()]])
      * before saving the record. Defaults to `true`. If the validation fails, the record
      * will not be saved to the database and this method will return `false`.
-     * @param array $attributeNames list of attributes that need to be saved. Defaults to `null`,
+     * @param array|null $attributeNames list of attributes that need to be saved. Defaults to `null`,
      * meaning all attributes that are loaded from DB will be saved.
-     *
      * @return int|false the number of rows affected, or false if validation fails
      * or [[beforeSave()]] stops the updating process.
-     *
      * @throws StaleObjectException if [[optimisticLock|optimistic locking]] is enabled and the data
      * being updated is outdated.
-     * @throws Exception in case update failed.
+     * @throws \Throwable in case update failed.
      */
     public function update($runValidation = true, $attributeNames = null)
     {
         if ($runValidation && !$this->validate($attributeNames)) {
             Yii::info('Model not updated due to validation error.', __METHOD__);
-
             return false;
         }
 
@@ -732,10 +681,8 @@ class ActiveRecord extends BaseActiveRecord
         }
 
         $transaction = static::getDb()->beginTransaction();
-
         try {
             $result = $this->updateInternal($attributeNames);
-
             if ($result === false) {
                 $transaction->rollBack();
             } else {
@@ -743,13 +690,11 @@ class ActiveRecord extends BaseActiveRecord
             }
 
             return $result;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $transaction->rollBack();
-
             throw $e;
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             $transaction->rollBack();
-
             throw $e;
         }
     }
@@ -769,10 +714,9 @@ class ActiveRecord extends BaseActiveRecord
      *
      * @return int|false the number of rows deleted, or `false` if the deletion is unsuccessful for some reason.
      * Note that it is possible the number of rows deleted is 0, even though the deletion execution is successful.
-     *
      * @throws StaleObjectException if [[optimisticLock|optimistic locking]] is enabled and the data
      * being deleted is outdated.
-     * @throws Exception in case delete failed.
+     * @throws \Throwable in case delete failed.
      */
     public function delete()
     {
@@ -781,10 +725,8 @@ class ActiveRecord extends BaseActiveRecord
         }
 
         $transaction = static::getDb()->beginTransaction();
-
         try {
             $result = $this->deleteInternal();
-
             if ($result === false) {
                 $transaction->rollBack();
             } else {
@@ -792,23 +734,19 @@ class ActiveRecord extends BaseActiveRecord
             }
 
             return $result;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $transaction->rollBack();
-
             throw $e;
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             $transaction->rollBack();
-
             throw $e;
         }
     }
 
     /**
      * Deletes an ActiveRecord without considering transaction.
-     *
      * @return int|false the number of rows deleted, or `false` if the deletion is unsuccessful for some reason.
      * Note that it is possible the number of rows deleted is 0, even though the deletion execution is successful.
-     *
      * @throws StaleObjectException
      */
     protected function deleteInternal()
@@ -821,12 +759,10 @@ class ActiveRecord extends BaseActiveRecord
         // the record is already deleted in the database and thus the method will return 0
         $condition = $this->getOldPrimaryKey(true);
         $lock = $this->optimisticLock();
-
         if ($lock !== null) {
             $condition[$lock] = $this->$lock;
         }
         $result = static::deleteAll($condition);
-
         if ($lock !== null && !$result) {
             throw new StaleObjectException('The object being deleted is outdated.');
         }
@@ -840,9 +776,7 @@ class ActiveRecord extends BaseActiveRecord
      * Returns a value indicating whether the given active record is the same as the current one.
      * The comparison is made by comparing the table names and the primary key values of the two active records.
      * If one of the records [[isNewRecord|is new]] they are also considered not equal.
-     *
      * @param ActiveRecord $record record to compare to
-     *
      * @return bool whether the two active records refer to the same row in the same database table.
      */
     public function equals($record)
@@ -856,9 +790,7 @@ class ActiveRecord extends BaseActiveRecord
 
     /**
      * Returns a value indicating whether the specified operation is transactional in the current [[$scenario]].
-     *
      * @param int $operation the operation to check. Possible values are [[OP_INSERT]], [[OP_UPDATE]] and [[OP_DELETE]].
-     *
      * @return bool whether the specified operation is transactional in the current [[scenario]].
      */
     public function isTransactional($operation)

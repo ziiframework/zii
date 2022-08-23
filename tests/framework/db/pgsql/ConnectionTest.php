@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -20,12 +17,12 @@ class ConnectionTest extends \yiiunit\framework\db\ConnectionTest
 {
     protected $driverName = 'pgsql';
 
-    public function testConnection(): void
+    public function testConnection()
     {
-        $this->assertIsObject($this->getConnection(true));
+        $this->assertInternalType('object', $this->getConnection(true));
     }
 
-    public function testQuoteValue(): void
+    public function testQuoteValue()
     {
         $connection = $this->getConnection(false);
         $this->assertEquals(123, $connection->quoteValue(123));
@@ -33,7 +30,7 @@ class ConnectionTest extends \yiiunit\framework\db\ConnectionTest
         $this->assertEquals("'It''s interesting'", $connection->quoteValue("It's interesting"));
     }
 
-    public function testQuoteTableName(): void
+    public function testQuoteTableName()
     {
         $connection = $this->getConnection(false);
         $this->assertEquals('"table"', $connection->quoteTableName('table'));
@@ -45,7 +42,7 @@ class ConnectionTest extends \yiiunit\framework\db\ConnectionTest
         $this->assertEquals('(table)', $connection->quoteTableName('(table)'));
     }
 
-    public function testQuoteColumnName(): void
+    public function testQuoteColumnName()
     {
         $connection = $this->getConnection(false);
         $this->assertEquals('"column"', $connection->quoteColumnName('column'));
@@ -58,7 +55,7 @@ class ConnectionTest extends \yiiunit\framework\db\ConnectionTest
         $this->assertEquals('"column"', $connection->quoteSql('{{column}}'));
     }
 
-    public function testQuoteFullColumnName(): void
+    public function testQuoteFullColumnName()
     {
         $connection = $this->getConnection(false, false);
         $this->assertEquals('"table"."column"', $connection->quoteColumnName('table.column'));
@@ -80,7 +77,7 @@ class ConnectionTest extends \yiiunit\framework\db\ConnectionTest
         $this->assertEquals('"table"."column"', $connection->quoteSql('{{%table}}."column"'));
     }
 
-    public function testTransactionIsolation(): void
+    public function testTransactionIsolation()
     {
         $connection = $this->getConnection(true);
 
@@ -104,6 +101,6 @@ class ConnectionTest extends \yiiunit\framework\db\ConnectionTest
         $transaction->setIsolationLevel(Transaction::SERIALIZABLE . ' READ ONLY DEFERRABLE');
         $transaction->commit();
 
-        $this->assertTrue(true); // No error occurred – assert passed.
+        $this->assertTrue(true); // No error occurred – assert passed.
     }
 }

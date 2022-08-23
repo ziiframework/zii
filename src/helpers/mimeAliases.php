@@ -1,14 +1,11 @@
 <?php
-
-declare(strict_types=1);
-
 /**
- * @link https://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license https://www.yiiframework.com/license/
+ * MIME aliases.
+ *
+ * This file contains aliases for MIME types.
  */
-
 return [
+    'text/rtf' => 'application/rtf',
     'text/xml' => 'application/xml',
     'image/svg' => 'image/svg+xml',
     'image/x-bmp' => 'image/bmp',

@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -30,7 +27,6 @@ namespace yii\helpers;
  * For more details please refer to [HTMLPurifier documentation](http://htmlpurifier.org/).
  *
  * @author Alexander Makarov <sam@rmcreative.ru>
- *
  * @since 2.0
  */
 class HtmlPurifier extends BaseHtmlPurifier

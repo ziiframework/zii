@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -13,14 +11,14 @@ namespace yiiunit\data\ar;
 use yii\db\ActiveQuery;
 
 /**
- * Class Department.
+ * Class Department
  *
- * @property int        $id
- * @property string     $title
+ * @property int $id
+ * @property string $title
+ *
  * @property Employee[] $employees
  *
  * @author Kolyunya <OleynikovNY@mail.ru>
- *
  * @since 2.0.12
  */
 class Department extends ActiveRecord

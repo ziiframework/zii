@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,14 +7,13 @@ declare(strict_types=1);
 
 namespace yii\db\mysql;
 
-use yii\db\JsonExpression;
 use yii\db\ExpressionInterface;
+use yii\db\JsonExpression;
 
 /**
- * Class ColumnSchema for MySQL database.
+ * Class ColumnSchema for MySQL database
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
- *
  * @since 2.0.14.1
  */
 class ColumnSchema extends \yii\db\ColumnSchema
@@ -31,6 +27,7 @@ class ColumnSchema extends \yii\db\ColumnSchema
      * @deprecated Since 2.0.14.1 and will be removed in 2.1.
      */
     public $disableJsonSupport = false;
+
 
     /**
      * {@inheritdoc}

@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -14,8 +11,7 @@ namespace yiiunit\data\ar;
  * DefaultMultiplePk.
  *
  * @author mankwok <astleykwok@gmail.com>
- *
- * @property int    $id
+ * @property int $id
  * @property string $second_key_column
  * @property string $type
  */
