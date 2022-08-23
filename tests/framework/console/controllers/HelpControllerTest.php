@@ -163,37 +163,37 @@ STRING
     public function testActionIndex(): void
     {
         $result = Console::stripAnsiFormat($this->runControllerAction('index'));
-        $this->assertContains('This is Yii version ', $result);
-        $this->assertContains('The following commands are available:', $result);
-        $this->assertContains('To see the help of each command, enter:', $result);
-        $this->assertContains('bootstrap.php help', $result);
+        $this->assertStringContainsString('This is Yii version ', $result);
+        $this->assertStringContainsString('The following commands are available:', $result);
+        $this->assertStringContainsString('To see the help of each command, enter:', $result);
+        $this->assertStringContainsString('bootstrap.php help', $result);
     }
 
     public function testActionIndexWithHelpCommand(): void
     {
         $result = Console::stripAnsiFormat($this->runControllerAction('index', ['command' => 'help/index']));
-        $this->assertContains('Displays available commands or the detailed information', $result);
-        $this->assertContains('bootstrap.php help [command] [...options...]', $result);
-        $this->assertContains('--appconfig: string', $result);
-        $this->assertContains('- command: string', $result);
-        $this->assertContains('--color: boolean, 0 or 1', $result);
-        $this->assertContains('--help, -h: boolean, 0 or 1', $result);
-        $this->assertContains('--interactive: boolean, 0 or 1 (defaults to 1)', $result);
+        $this->assertStringContainsString('Displays available commands or the detailed information', $result);
+        $this->assertStringContainsString('bootstrap.php help [command] [...options...]', $result);
+        $this->assertStringContainsString('--appconfig: string', $result);
+        $this->assertStringContainsString('- command: string', $result);
+        $this->assertStringContainsString('--color: boolean, 0 or 1', $result);
+        $this->assertStringContainsString('--help, -h: boolean, 0 or 1', $result);
+        $this->assertStringContainsString('--interactive: boolean, 0 or 1 (defaults to 1)', $result);
     }
 
     public function testActionIndexWithServeCommand(): void
     {
         $result = Console::stripAnsiFormat($this->runControllerAction('index', ['command' => 'serve']));
-        $this->assertContains('Runs PHP built-in web server', $result);
-        $this->assertContains('bootstrap.php serve [address] [...options...]', $result);
-        $this->assertContains('- address: string (defaults to \'localhost\')', $result);
-        $this->assertContains('--appconfig: string', $result);
-        $this->assertContains('--color: boolean, 0 or 1', $result);
-        $this->assertContains('--docroot, -t: string (defaults to \'@app/web\')', $result);
-        $this->assertContains('--help, -h: boolean, 0 or 1', $result);
-        $this->assertContains('--interactive: boolean, 0 or 1 (defaults to 1)', $result);
-        $this->assertContains('--port, -p: int (defaults to 8080)', $result);
-        $this->assertContains('--router, -r: string', $result);
+        $this->assertStringContainsString('Runs PHP built-in web server', $result);
+        $this->assertStringContainsString('bootstrap.php serve [address] [...options...]', $result);
+        $this->assertStringContainsString('- address: string (defaults to \'localhost\')', $result);
+        $this->assertStringContainsString('--appconfig: string', $result);
+        $this->assertStringContainsString('--color: boolean, 0 or 1', $result);
+        $this->assertStringContainsString('--docroot, -t: string (defaults to \'@app/web\')', $result);
+        $this->assertStringContainsString('--help, -h: boolean, 0 or 1', $result);
+        $this->assertStringContainsString('--interactive: boolean, 0 or 1 (defaults to 1)', $result);
+        $this->assertStringContainsString('--port, -p: int (defaults to 8080)', $result);
+        $this->assertStringContainsString('--router, -r: string', $result);
     }
 
     public function testActionListContainsNoEmptyCommands(): void
@@ -205,7 +205,7 @@ STRING
         $result = Console::stripAnsiFormat($this->runControllerAction('list'));
         $this->assertNotContains("fake-empty\n", $result);
         $this->assertNotContains("fake-no-default\n", $result);
-        $this->assertContains("fake-no-default/index\n", $result);
+        $this->assertStringContainsString("fake-no-default/index\n", $result);
     }
 
     public function testActionIndexContainsNoEmptyCommands(): void
@@ -216,8 +216,8 @@ STRING
         ]);
         $result = Console::stripAnsiFormat($this->runControllerAction('index'));
         $this->assertNotContains('- fake-empty', $result);
-        $this->assertContains('- fake-no-default', $result);
-        $this->assertContains('    fake-no-default/index', $result);
+        $this->assertStringContainsString('- fake-no-default', $result);
+        $this->assertStringContainsString('    fake-no-default/index', $result);
         $this->assertNotContains('    fake-no-default/index (default)', $result);
     }
 }

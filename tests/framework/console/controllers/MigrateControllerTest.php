@@ -400,8 +400,8 @@ class MigrateControllerTest extends TestCase
         $result = $this->runMigrateControllerAction('up');
         $this->assertSame(ExitCode::UNSPECIFIED_ERROR, $this->getExitCode());
 
-        $this->assertContains('The migration name', $result);
-        $this->assertContains('is too long. Its not possible to apply this migration.', $result);
+        $this->assertStringContainsString('The migration name', $result);
+        $this->assertStringContainsString('is too long. Its not possible to apply this migration.', $result);
     }
 
     public function testNamedMigrationWithCustomLimit(): void
@@ -416,8 +416,8 @@ class MigrateControllerTest extends TestCase
         $result = $this->runMigrateControllerAction('up');
         $this->assertSame(ExitCode::OK, $this->getExitCode());
 
-        $this->assertContains('1 migration was applied.', $result);
-        $this->assertContains('Migrated up successfully.', $result);
+        $this->assertStringContainsString('1 migration was applied.', $result);
+        $this->assertStringContainsString('Migrated up successfully.', $result);
     }
 
     public function testCreateLongNamedMigration(): void
@@ -460,11 +460,11 @@ class MigrateControllerTest extends TestCase
         $this->assertSame(ExitCode::OK, $this->getExitCode());
 
         // Drop worked
-        $this->assertContains('Table hall_of_fame dropped.', $result);
-        $this->assertContains('View view_hall_of_fame dropped.', $result);
+        $this->assertStringContainsString('Table hall_of_fame dropped.', $result);
+        $this->assertStringContainsString('View view_hall_of_fame dropped.', $result);
 
         // Migration was restarted
-        $this->assertContains('No new migrations found. Your system is up-to-date.', $result);
+        $this->assertStringContainsString('No new migrations found. Your system is up-to-date.', $result);
     }
 
     public function refreshMigrationDataProvider()

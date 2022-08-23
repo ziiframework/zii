@@ -2031,7 +2031,7 @@ HTML;
 
         $html = Html::activeTextInput($model, 'name', ['placeholder' => true]);
 
-        $this->assertContains('placeholder="Name"', $html);
+        $this->assertStringContainsString('placeholder="Name"', $html);
     }
 
     public function testActiveTextInputCustomPlaceholder(): void
@@ -2040,7 +2040,7 @@ HTML;
 
         $html = Html::activeTextInput($model, 'name', ['placeholder' => 'Custom placeholder']);
 
-        $this->assertContains('placeholder="Custom placeholder"', $html);
+        $this->assertStringContainsString('placeholder="Custom placeholder"', $html);
     }
 
     public function testActiveTextInputPlaceholderFillFromModelTabular(): void
@@ -2049,7 +2049,7 @@ HTML;
 
         $html = Html::activeTextInput($model, '[0]name', ['placeholder' => true]);
 
-        $this->assertContains('placeholder="Name"', $html);
+        $this->assertStringContainsString('placeholder="Name"', $html);
     }
 
     public function testOverrideSetActivePlaceholder(): void
@@ -2058,7 +2058,7 @@ HTML;
 
         $html = MyHtml::activeTextInput($model, 'name', ['placeholder' => true]);
 
-        $this->assertContains('placeholder="My placeholder: Name"', $html);
+        $this->assertStringContainsString('placeholder="My placeholder: Name"', $html);
     }
 
     public function testGetInputIdDataProvider()

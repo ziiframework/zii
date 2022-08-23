@@ -70,12 +70,12 @@ class RadiobuttonColumnTest extends TestCase
         $column = new RadioButtonColumn([
             'content' => static fn ($model, $key, $index, $column) => null,
         ]);
-        $this->assertContains('<td></td>', $column->renderDataCell([], 1, 0));
+        $this->assertStringContainsString('<td></td>', $column->renderDataCell([], 1, 0));
 
         $column = new RadioButtonColumn([
             'content' => static fn ($model, $key, $index, $column) => Html::radio('radioButtonInput', false),
         ]);
-        $this->assertContains(Html::radio('radioButtonInput', false), $column->renderDataCell([], 1, 0));
+        $this->assertStringContainsString(Html::radio('radioButtonInput', false), $column->renderDataCell([], 1, 0));
     }
 
     public function testMultipleInGrid(): void

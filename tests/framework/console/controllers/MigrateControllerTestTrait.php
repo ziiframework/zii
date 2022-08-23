@@ -255,7 +255,7 @@ CODE;
         $this->assertSame(ExitCode::OK, $this->getExitCode());
         $files = FileHelper::findFiles($this->migrationPath);
         $this->assertCount(1, $files, 'Unable to create new migration!');
-        $this->assertContains($migrationName, basename($files[0]), 'Wrong migration name!');
+        $this->assertStringContainsString($migrationName, basename($files[0]), 'Wrong migration name!');
     }
 
     public function testUp(): void
@@ -321,7 +321,7 @@ CODE;
     public function testHistory(): void
     {
         $output = $this->runMigrateControllerAction('history');
-        $this->assertContains('No migration', $output);
+        $this->assertStringContainsString('No migration', $output);
 
         $this->createMigration('test_history1');
         $this->createMigration('test_history2');
@@ -330,8 +330,8 @@ CODE;
 
         $output = $this->runMigrateControllerAction('history');
         $this->assertSame(ExitCode::OK, $this->getExitCode());
-        $this->assertContains('_test_history1', $output);
-        $this->assertContains('_test_history2', $output);
+        $this->assertStringContainsString('_test_history1', $output);
+        $this->assertStringContainsString('_test_history2', $output);
     }
 
     /**
@@ -343,7 +343,7 @@ CODE;
 
         $output = $this->runMigrateControllerAction('new');
         $this->assertSame(ExitCode::OK, $this->getExitCode());
-        $this->assertContains('_test_new1', $output);
+        $this->assertStringContainsString('_test_new1', $output);
 
         $this->runMigrateControllerAction('up');
         $this->assertSame(ExitCode::OK, $this->getExitCode());
@@ -420,7 +420,7 @@ CODE;
         $this->assertSame(ExitCode::OK, $this->getExitCode());
         $files = FileHelper::findFiles($this->migrationPath);
         $fileContent = file_get_contents($files[0]);
-        $this->assertContains("namespace {$this->migrationNamespace};", $fileContent);
+        $this->assertStringContainsString("namespace {$this->migrationNamespace};", $fileContent);
         $this->assertRegExp('/class M[0-9]{12}' . ucfirst($migrationName) . '/s', $fileContent);
         unlink($files[0]);
 
@@ -433,7 +433,7 @@ CODE;
         $this->assertSame(ExitCode::OK, $this->getExitCode());
         $files = FileHelper::findFiles($this->migrationPath);
         $fileContent = file_get_contents($files[0]);
-        $this->assertContains("namespace {$this->migrationNamespace};", $fileContent);
+        $this->assertStringContainsString("namespace {$this->migrationNamespace};", $fileContent);
         unlink($files[0]);
 
         // no namespace:
@@ -505,7 +505,7 @@ CODE;
         ];
 
         $output = $this->runMigrateControllerAction('history', [], $controllerConfig);
-        $this->assertContains('No migration', $output);
+        $this->assertStringContainsString('No migration', $output);
 
         $this->createNamespaceMigration('history1');
         $this->createNamespaceMigration('history2');

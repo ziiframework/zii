@@ -150,8 +150,8 @@ abstract class ManagerTestCase extends TestCase
             $ruleNames[] = $rule->name;
         }
 
-        $this->assertContains('isReallyReallyAuthor', $ruleNames);
-        $this->assertContains('isAuthor', $ruleNames);
+        $this->assertStringContainsString('isReallyReallyAuthor', $ruleNames);
+        $this->assertStringContainsString('isAuthor', $ruleNames);
     }
 
     public function testRemoveRule(): void
@@ -334,7 +334,7 @@ abstract class ManagerTestCase extends TestCase
         $this->assertInstanceOf(Role::className(), reset($roles));
         $this->assertEquals($roles['reader']->name, 'reader');
 
-        $this->assertContains('myDefaultRole', array_keys($roles));
+        $this->assertStringContainsString('myDefaultRole', array_keys($roles));
     }
 
     public function testGetChildRoles(): void
@@ -381,8 +381,8 @@ abstract class ManagerTestCase extends TestCase
             $roleNames[] = $role->name;
         }
 
-        $this->assertContains('reader', $roleNames, 'Roles should contain reader. Currently it has: ' . implode(', ', $roleNames));
-        $this->assertContains('author', $roleNames, 'Roles should contain author. Currently it has: ' . implode(', ', $roleNames));
+        $this->assertStringContainsString('reader', $roleNames, 'Roles should contain reader. Currently it has: ' . implode(', ', $roleNames));
+        $this->assertStringContainsString('author', $roleNames, 'Roles should contain author. Currently it has: ' . implode(', ', $roleNames));
     }
 
     public function testAssignmentsToIntegerId(): void
