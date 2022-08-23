@@ -35,10 +35,10 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * Returns a test configuration param from /data/config.php.
      *
-     * @param string $name    params name
-     * @param mixed  $default default value to use when param is not set
+     * @param string $name params name
+     * @param mixed $default default value to use when param is not set.
      *
-     * @return mixed the value of the configuration param
+     * @return mixed  the value of the configuration param
      */
     public static function getParam($name, $default = null)
     {
@@ -63,7 +63,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * Populates Yii::$app with a new application
      * The application will be destroyed on tearDown() automatically.
      *
-     * @param array  $config   The application configuration, if needed
+     * @param array $config The application configuration, if needed
      * @param string $appClass name of the application class to create
      */
     protected function mockApplication($config = [], $appClass = '\yii\console\Application'): void
@@ -136,8 +136,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * Asserts that a haystack contains a needle ignoring line endings.
      *
-     * @param mixed  $needle
-     * @param mixed  $haystack
+     * @param mixed $needle
+     * @param mixed $haystack
      * @param string $message
      */
     protected function assertContainsWithoutLE($needle, $haystack, $message = ''): void
@@ -154,7 +154,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * @param $object
      * @param $method
      * @param array $args
-     * @param bool  $revoke whether to make method inaccessible after execution
+     * @param bool $revoke whether to make method inaccessible after execution
      *
      * @return mixed
      *
@@ -230,7 +230,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * Asserts that value is one of expected values.
      *
-     * @param mixed  $actual
+     * @param mixed $actual
      * @param string $message
      */
     public function assertIsOneOf($actual, array $expected, $message = ''): void

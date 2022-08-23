@@ -543,8 +543,8 @@ class FormatterDateTest extends TestCase
     /**
      * @dataProvider dateInputs
      *
-     * @param mixed      $expected
-     * @param mixed      $value
+     * @param mixed $expected
+     * @param mixed $value
      * @param mixed|null $expectedException
      */
     public function testIntlDateInput($expected, $value, $expectedException = null): void
@@ -555,8 +555,8 @@ class FormatterDateTest extends TestCase
     /**
      * @dataProvider dateInputs
      *
-     * @param mixed      $expected
-     * @param mixed      $value
+     * @param mixed $expected
+     * @param mixed $value
      * @param mixed|null $expectedException
      */
     public function testDateInput($expected, $value, $expectedException = null): void
@@ -619,8 +619,8 @@ class FormatterDateTest extends TestCase
      * @dataProvider provideTimesAndTz
      *
      * @param string $defaultTz
-     * @param mixed  $inputTimeDst
-     * @param mixed  $inputTimeNonDst
+     * @param mixed $inputTimeDst
+     * @param mixed $inputTimeNonDst
      */
     public function testIntlTimezoneInput($defaultTz, $inputTimeDst, $inputTimeNonDst): void
     {
@@ -633,8 +633,8 @@ class FormatterDateTest extends TestCase
      * @dataProvider provideTimesAndTz
      *
      * @param string $defaultTz
-     * @param mixed  $inputTimeDst
-     * @param mixed  $inputTimeNonDst
+     * @param mixed $inputTimeDst
+     * @param mixed $inputTimeNonDst
      */
     public function testTimezoneInput($defaultTz, $inputTimeDst, $inputTimeNonDst): void
     {

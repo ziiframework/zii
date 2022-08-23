@@ -28,14 +28,6 @@ class FileTargetTest extends TestCase
         $this->mockApplication();
     }
 
-    public function booleanDataProvider()
-    {
-        return [
-            [true],
-            [false],
-        ];
-    }
-
     /**
      * Tests that log directory isn't created during init process.
      *
@@ -51,12 +43,7 @@ class FileTargetTest extends TestCase
         $this->assertFileDoesNotExist(dirname($logFile), 'Log directory should not be created during init process');
     }
 
-    /**
-     * @dataProvider booleanDataProvider
-     *
-     * @param bool $rotateByCopy
-     */
-    public function testRotate($rotateByCopy): void
+    public function testRotate(): void
     {
         $logFile = Yii::getAlias('@yiiunit/runtime/log/filetargettest.log');
         FileHelper::removeDirectory(dirname($logFile));
@@ -73,7 +60,6 @@ class FileTargetTest extends TestCase
                     'maxFileSize' => 1024, // 1 MB
                     'maxLogFiles' => 1, // one file for rotation and one normal log file
                     'logVars' => [],
-                    'rotateByCopy' => $rotateByCopy,
                 ],
             ],
         ]);

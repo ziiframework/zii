@@ -57,7 +57,6 @@ abstract class AbstractDbSessionTest extends TestCase
         foreach ($driverNames as $driverName) {
             if (in_array($driverName, PDO::getAvailableDrivers()) && array_key_exists($driverName, $databases)) {
                 $driverAvailable = $driverName;
-
                 break;
             }
         }

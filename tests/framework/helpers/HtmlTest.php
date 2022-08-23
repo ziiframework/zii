@@ -314,7 +314,7 @@ class HtmlTest extends TestCase
      *
      * @param string $expected
      * @param string $src
-     * @param array  $options
+     * @param array $options
      */
     public function testImg($expected, $src, $options): void
     {
@@ -434,7 +434,7 @@ class HtmlTest extends TestCase
      * @param string $expected
      * @param string $name
      * @param string $value
-     * @param array  $options
+     * @param array $options
      */
     public function testTextarea($expected, $name, $value, $options): void
     {
@@ -776,6 +776,14 @@ EOD;
 <label><input type="checkbox" name="test[]" value="1.10"> 1.10</label></div>
 EOD;
         $this->assertEqualsWithoutLE($expected, Html::checkboxList('test', ['1.1'], ['1' => '1', '1.1' => '1.1', '1.10' => '1.10'], ['strict' => true]));
+        $this->assertEqualsWithoutLE($expected, Html::checkboxList('test', [1.1], ['1' => '1', '1.1' => '1.1', '1.10' => '1.10'], ['strict' => true]));
+
+        $expected = <<<'EOD'
+<div><label><input type="checkbox" name="test[]" value="1"> 1</label>
+<label><input type="checkbox" name="test[]" value="1.1" checked> 1.1</label>
+<label><input type="checkbox" name="test[]" value="1.10" checked> 1.10</label></div>
+EOD;
+        $this->assertEqualsWithoutLE($expected, Html::checkboxList('test', [1.1], ['1' => '1', '1.1' => '1.1', '1.10' => '1.10']));
     }
 
     public function testRadioListWithArrayExpression(): void
@@ -907,6 +915,14 @@ EOD;
 <label><input type="radio" name="test" value="1.10"> 1.10</label></div>
 EOD;
         $this->assertEqualsWithoutLE($expected, Html::radioList('test', ['1.1'], ['1' => '1', '1.1' => '1.1', '1.10' => '1.10'], ['strict' => true]));
+        $this->assertEqualsWithoutLE($expected, Html::radioList('test', [1.1], ['1' => '1', '1.1' => '1.1', '1.10' => '1.10'], ['strict' => true]));
+
+        $expected = <<<'EOD'
+<div><label><input type="radio" name="test" value="1"> 1</label>
+<label><input type="radio" name="test" value="1.1" checked> 1.1</label>
+<label><input type="radio" name="test" value="1.10" checked> 1.10</label></div>
+EOD;
+        $this->assertEqualsWithoutLE($expected, Html::radioList('test', ['1.1'], ['1' => '1', '1.1' => '1.1', '1.10' => '1.10']));
     }
 
     public function testUl(): void
@@ -1049,6 +1065,15 @@ EOD;
         $data = ['1' => '1', '1.1' => '1.1', '1.10' => '1.10'];
         $attributes = ['strict' => true];
         $this->assertEqualsWithoutLE($expected, Html::renderSelectOptions(['1.1'], $data, $attributes));
+        $attributes = ['strict' => true];
+        $this->assertEqualsWithoutLE($expected, Html::renderSelectOptions([1.1], $data, $attributes));
+
+        $expected = <<<'EOD'
+<option value="1">1</option>
+<option value="1.1" selected>1.1</option>
+<option value="1.10" selected>1.10</option>
+EOD;
+        $this->assertEqualsWithoutLE($expected, Html::renderSelectOptions([1.1], $data));
 
         $expected = <<<'EOD'
 <option value="1">1</option>
@@ -1060,6 +1085,27 @@ EOD;
         $data = ['1' => '1', '1.1' => '1.1', 'group' => ['1.10' => '1.10']];
         $attributes = ['strict' => true];
         $this->assertEqualsWithoutLE($expected, Html::renderSelectOptions(['1.10'], $data, $attributes));
+
+        $expected = <<<'EOD'
+<option value="">Please select</option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+EOD;
+        $data = [true => 'Yes', false => 'No'];
+        $attributes = ['prompt' => 'Please select'];
+        $this->assertEqualsWithoutLE($expected, Html::renderSelectOptions(false, $data, $attributes));
+        // $attributes = ['prompt' => 'Please select'];
+        // $this->assertEqualsWithoutLE($expected, Html::renderSelectOptions([false], $data, $attributes));
+
+        $expected = <<<'EOD'
+<option value="">Please select</option>
+<option value="1">Yes</option>
+<option value="0">No</option>
+EOD;
+        $attributes = ['prompt' => 'Please select', 'strict' => true];
+        $this->assertEqualsWithoutLE($expected, Html::renderSelectOptions(false, $data, $attributes));
+        $attributes = ['prompt' => 'Please select', 'strict' => true];
+        $this->assertEqualsWithoutLE($expected, Html::renderSelectOptions([false], $data, $attributes));
     }
 
     public function testRenderTagAttributes(): void
@@ -1533,8 +1579,8 @@ EOD;
     /**
      * @dataProvider errorSummaryDataProvider
      *
-     * @param string  $value
-     * @param string  $expectedHtml
+     * @param string $value
+     * @param string $expectedHtml
      * @param Closure $beforeValidate
      */
     public function testErrorSummary($value, array $options, $expectedHtml, $beforeValidate = null): void
@@ -1829,8 +1875,9 @@ EOD;
 
     public function testGetAttributeValueInvalidArgumentException(): void
     {
-        $this->expectException('yii\base\InvalidArgumentException');
+        $this->expectException(\yii\base\InvalidArgumentException::class);
         $this->expectExceptionMessage('Attribute name must contain word characters only.');
+
         $model = new HtmlTestModel();
         Html::getAttributeValue($model, '-');
     }
@@ -1862,16 +1909,18 @@ EOD;
 
     public function testGetInputNameInvalidArgumentExceptionAttribute(): void
     {
-        $this->expectException('yii\base\InvalidArgumentException');
+        $this->expectException(\yii\base\InvalidArgumentException::class);
         $this->expectExceptionMessage('Attribute name must contain word characters only.');
+
         $model = new HtmlTestModel();
         Html::getInputName($model, '-');
     }
 
     public function testGetInputNameInvalidArgumentExceptionFormName(): void
     {
-        $this->expectException('yii\base\InvalidArgumentException');
+        $this->expectException(\yii\base\InvalidArgumentException::class);
         $this->expectExceptionMessageMatches('/(.*)formName\(\) cannot be empty for tabular inputs.$/');
+
         $model = $this->getMockBuilder('yii\\base\\Model')->getMock();
         $model->method('formName')->willReturn('');
         Html::getInputName($model, '[foo]bar');
@@ -2095,8 +2144,8 @@ class MyHtml extends Html
 {
     /**
      * @param \yii\base\Model $model
-     * @param string          $attribute
-     * @param array           $options
+     * @param string $attribute
+     * @param array $options
      */
     protected static function setActivePlaceholder($model, $attribute, &$options = []): void
     {

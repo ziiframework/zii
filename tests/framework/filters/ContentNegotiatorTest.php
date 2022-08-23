@@ -60,7 +60,7 @@ class ContentNegotiatorTest extends TestCase
 
     public function testWhenFormatGETParamIsArray(): void
     {
-        $this->expectException('yii\web\BadRequestHttpException');
+        $this->expectException(\yii\web\BadRequestHttpException::class);
         $this->expectExceptionMessageMatches("|Invalid data received for GET parameter '.+'|");
         [$action, $filter] = $this->mockActionAndFilter();
 

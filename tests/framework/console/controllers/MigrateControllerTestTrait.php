@@ -27,17 +27,17 @@ trait MigrateControllerTestTrait
     /* @var $this TestCase */
 
     /**
-     * @var string name of the migration controller class, which is under test
+     * @var string name of the migration controller class, which is under test.
      */
     protected $migrateControllerClass;
 
     /**
-     * @var string name of the migration base class
+     * @var string name of the migration base class.
      */
     protected $migrationBaseClass;
 
     /**
-     * @var string test migration path
+     * @var string test migration path.
      */
     protected $migrationPath;
 
@@ -82,9 +82,9 @@ trait MigrateControllerTestTrait
     /**
      * Creates test migrate controller instance.
      *
-     * @param array $config controller configuration
+     * @param array $config controller configuration.
      *
-     * @return BaseMigrateController migrate command instance
+     * @return BaseMigrateController migrate command instance.
      */
     protected function createMigrateController(array $config = [])
     {
@@ -103,11 +103,11 @@ trait MigrateControllerTestTrait
     /**
      * Emulates running of the migrate controller action.
      *
-     * @param string $actionID id of action to be run
-     * @param array  $args     action arguments
-     * @param array  $config   controller configuration
+     * @param string $actionID id of action to be run.
+     * @param array $args action arguments.
+     * @param array $config controller configuration.
      *
-     * @return string command output
+     * @return string command output.
      */
     protected function runMigrateControllerAction($actionID, array $args = [], array $config = [])
     {
@@ -120,7 +120,7 @@ trait MigrateControllerTestTrait
     }
 
     /**
-     * @param string      $name
+     * @param string $name
      * @param string|null $date
      * @param string|null $path
      *
@@ -154,7 +154,7 @@ CODE;
     }
 
     /**
-     * @param string      $name
+     * @param string $name
      * @param string|null $date
      *
      * @return string generated class name
@@ -214,8 +214,8 @@ CODE;
     /**
      * Checks if applied migration history matches expected one.
      *
-     * @param array  $expectedMigrations migration names in expected order
-     * @param string $message            failure message
+     * @param array $expectedMigrations migration names in expected order
+     * @param string $message failure message
      */
     protected function assertMigrationHistory(array $expectedMigrations, $message = ''): void
     {
@@ -228,7 +228,6 @@ CODE;
 
             if (!StringHelper::matchWildcard(strtr($expectedMigrationName, ['\\' => DIRECTORY_SEPARATOR]), strtr($appliedMigration['version'], ['\\' => DIRECTORY_SEPARATOR]))) {
                 $success = false;
-
                 break;
             }
         }

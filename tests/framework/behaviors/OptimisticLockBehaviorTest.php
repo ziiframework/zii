@@ -211,70 +211,70 @@ class OptimisticLockBehaviorTest extends TestCase
         $this->assertEquals(3, $model->version, 'updated version should equal 3');
     }
 
-    public function testDeleteRecord(): void
-    {
-        $request = new Request();
-        Yii::$app->set('request', $request);
+     public function testDeleteRecord(): void
+     {
+         $request = new Request();
+         Yii::$app->set('request', $request);
 
-        ActiveRecordLockVersion::$behaviors = [
-            OptimisticLockBehavior::className(),
-        ];
-        $model = new ActiveRecordLockVersion();
-        $this->assertTrue($model->save(false), 'model is successfully saved');
+         ActiveRecordLockVersion::$behaviors = [
+             OptimisticLockBehavior::className(),
+         ];
+         $model = new ActiveRecordLockVersion();
+         $this->assertTrue($model->save(false), 'model is successfully saved');
 
-        // upgrade model version to 1
+         // upgrade model version to 1
 
-        $model->upgrade();
+         $model->upgrade();
 
-        // delete stale data without sending version
+         // delete stale data without sending version
 
-        $thrown = false;
+         $thrown = false;
 
-        try {
-            $model->delete();
-        } catch (\yii\db\StaleObjectException $e) {
-            $this->assertStringContainsString('The object being deleted is outdated.', $e->getMessage());
-            $thrown = true;
-        }
+         try {
+             $model->delete();
+         } catch (\yii\db\StaleObjectException $e) {
+             $this->assertStringContainsString('The object being deleted is outdated.', $e->getMessage());
+             $thrown = true;
+         }
 
-        $this->assertTrue($thrown, 'A StaleObjectException exception should have been thrown.');
+         $this->assertTrue($thrown, 'A StaleObjectException exception should have been thrown.');
 
-        // delete stale data by sending an outdated version
+         // delete stale data by sending an outdated version
 
-        $request->setBodyParams(['version' => 0]);
-        Yii::$app->set('request', $request);
+         $request->setBodyParams(['version' => 0]);
+         Yii::$app->set('request', $request);
 
-        $thrown = false;
+         $thrown = false;
 
-        try {
-            $model->delete();
-        } catch (\yii\db\StaleObjectException $e) {
-            $this->assertStringContainsString('The object being deleted is outdated.', $e->getMessage());
-            $thrown = true;
-        }
+         try {
+             $model->delete();
+         } catch (\yii\db\StaleObjectException $e) {
+             $this->assertStringContainsString('The object being deleted is outdated.', $e->getMessage());
+             $thrown = true;
+         }
 
-        $this->assertTrue($thrown, 'A StaleObjectException exception should have been thrown.');
+         $this->assertTrue($thrown, 'A StaleObjectException exception should have been thrown.');
 
-        // a successful delete by sending the correct version
+         // a successful delete by sending the correct version
 
-        $request->setBodyParams(['version' => '1']);
-        Yii::$app->set('request', $request);
+         $request->setBodyParams(['version' => '1']);
+         Yii::$app->set('request', $request);
 
-        $this->assertSame(1, $model->delete(), 'model is successfully deleted');
-        $this->assertEquals(1, $model->version, 'deleted version should remain 1');
+         $this->assertTrue($model->delete(), 'model is successfully deleted');
+         $this->assertEquals(1, $model->version, 'deleted version should remain 1');
 
-        // save it again, upgrade then remove it one more time but mocking a HTML web form
+         // save it again, upgrade then remove it one more time but mocking a HTML web form
 
-        $this->assertTrue($model->save(false), 'model is successfully saved');
+         $this->assertTrue($model->save(false), 'model is successfully saved');
 
-        $model->upgrade();
+         $model->upgrade();
 
-        $request->setBodyParams(['ActiveRecordLockVersion' => ['version' => '2']]);
-        Yii::$app->set('request', $request);
+         $request->setBodyParams(['ActiveRecordLockVersion' => ['version' => '2']]);
+         Yii::$app->set('request', $request);
 
-        $this->assertStringContainsString($model->delete(), [1, true], 'model is successfully deleted'); // TODO type hint
-        $this->assertEquals(2, $model->version, 'deleted version should remain 2');
-    }
+         $this->assertContains($model->delete(), [1, true], 'model is successfully deleted'); // TODO type hint
+         $this->assertEquals(2, $model->version, 'deleted version should remain 2');
+     }
 }
 
 /**

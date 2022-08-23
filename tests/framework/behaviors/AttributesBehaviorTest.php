@@ -100,9 +100,9 @@ class AttributesBehaviorTest extends TestCase
     /**
      * @dataProvider preserveNonEmptyValuesDataProvider
      *
-     * @param string      $aliasExpected
-     * @param bool        $preserveNonEmptyValues
-     * @param string      $name
+     * @param string $aliasExpected
+     * @param bool $preserveNonEmptyValues
+     * @param string $name
      * @param string|null $alias
      */
     public function testPreserveNonEmptyValues($aliasExpected, $preserveNonEmptyValues, $name, $alias): void
@@ -143,7 +143,7 @@ class AttributesBehaviorTest extends TestCase
      * @dataProvider orderProvider
      *
      * @param string $aliasExpected
-     * @param array  $order
+     * @param array $order
      * @param string $name
      * @param string $alias
      */
@@ -162,9 +162,9 @@ class AttributesBehaviorTest extends TestCase
 /**
  * Test Active Record class with [[AttributesBehavior]] behavior attached.
  *
- * @property int                $id
- * @property string             $name
- * @property string             $alias
+ * @property int $id
+ * @property string $name
+ * @property string $alias
  * @property AttributesBehavior $attributesBehavior
  */
 class ActiveRecordWithAttributesBehavior extends ActiveRecord

@@ -87,7 +87,7 @@ class BasicAuthTest extends AuthTest
         $filter = [
             'class' => HttpBasicAuth::className(),
             'auth' => static function ($username, $password) {
-                if (is_string($username) && preg_match('/\d$/', $username)) {
+                if (preg_match('/\d$/', (string) $username)) {
                     return UserIdentity::findIdentity($username);
                 }
 

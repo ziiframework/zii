@@ -281,7 +281,7 @@ EOF;
     /**
      * @dataProvider positionProvider
      *
-     * @param int  $pos
+     * @param int $pos
      * @param bool $jqAlreadyRegistered
      */
     public function testPositionDependency($pos, $jqAlreadyRegistered): void
@@ -323,7 +323,6 @@ EOF;
 <script src="/js/jquery.js"></script>
 <script src="/files/jsFile.js"></script>234
 EOF;
-
                 break;
 
             case View::POS_BEGIN:
@@ -331,7 +330,6 @@ EOF;
 1<link href="/files/cssFile.css" rel="stylesheet">2<script src="/js/jquery.js"></script>
 <script src="/files/jsFile.js"></script>34
 EOF;
-
                 break;
 
             default:
@@ -340,7 +338,6 @@ EOF;
 1<link href="/files/cssFile.css" rel="stylesheet">23<script src="/js/jquery.js"></script>
 <script src="/files/jsFile.js"></script>4
 EOF;
-
                 break;
         }
         $this->assertEqualsWithoutLE($expected, $view->renderFile('@yiiunit/data/views/rawlayout.php'));
@@ -359,7 +356,7 @@ EOF;
     /**
      * @dataProvider positionProvider
      *
-     * @param int  $pos
+     * @param int $pos
      * @param bool $jqAlreadyRegistered
      */
     public function testPositionDependencyConflict($pos, $jqAlreadyRegistered): void
@@ -532,10 +529,10 @@ EOF;
     /**
      * @dataProvider registerFileDataProvider
      *
-     * @param string      $type            either `js` or `css`
-     * @param string      $path
+     * @param string $type either `js` or `css`
+     * @param string $path
      * @param string|bool $appendTimestamp
-     * @param string      $expected
+     * @param string $expected
      * @param string|null $webAlias
      */
     public function testRegisterFileAppendTimestamp($type, $path, $appendTimestamp, $expected, $webAlias = null): void

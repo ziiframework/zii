@@ -19,7 +19,7 @@ namespace yiiunit\data\ar;
 class CroppedType extends ActiveRecord
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public static function tableName()
     {
@@ -27,7 +27,7 @@ class CroppedType extends ActiveRecord
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function attributes()
     {

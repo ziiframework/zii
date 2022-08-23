@@ -30,12 +30,12 @@ use yii\console\controllers\AssetController;
 class AssetControllerTest extends TestCase
 {
     /**
-     * @var string path for the test files
+     * @var string path for the test files.
      */
     protected $testFilePath = '';
 
     /**
-     * @var string test assets path
+     * @var string test assets path.
      */
     protected $testAssetsBasePath = '';
 
@@ -56,7 +56,7 @@ class AssetControllerTest extends TestCase
     /**
      * Creates directory.
      *
-     * @param string $dirName directory full name
+     * @param string $dirName directory full name.
      */
     protected function createDir($dirName): void
     {
@@ -97,10 +97,10 @@ class AssetControllerTest extends TestCase
     /**
      * Emulates running of the asset controller action.
      *
-     * @param string $actionID id of action to be run
-     * @param array  $args     action arguments
+     * @param  string $actionID id of action to be run.
+     * @param  array  $args     action arguments.
      *
-     * @return string command output
+     * @return string command output.
      */
     protected function runAssetControllerAction($actionID, array $args = [])
     {
@@ -113,10 +113,10 @@ class AssetControllerTest extends TestCase
     /**
      * Creates test compress config.
      *
-     * @param array[] $bundles asset bundles config
-     * @param array   $config  additional config
+     * @param array[] $bundles asset bundles config.
+     * @param array $config additional config.
      *
-     * @return array config array
+     * @return array config array.
      */
     protected function createCompressConfig(array $bundles, array $config = [])
     {
@@ -146,11 +146,11 @@ class AssetControllerTest extends TestCase
     /**
      * Creates test compress config file.
      *
-     * @param string  $fileName output file name
-     * @param array[] $bundles  asset bundles config
-     * @param array   $config   additional config parameters
+     * @param string $fileName output file name.
+     * @param array[] $bundles asset bundles config.
+     * @param array $config additional config parameters.
      *
-     * @throws Exception on failure
+     * @throws Exception on failure.
      */
     protected function createCompressConfigFile($fileName, array $bundles, array $config = []): void
     {
@@ -165,10 +165,10 @@ class AssetControllerTest extends TestCase
      * Creates test asset file.
      *
      * @param string $fileRelativeName file name relative to [[testFilePath]]
-     * @param string $content          file content
-     * @param string $fileBasePath     base path for the created files, if not set [[testFilePath]] is used
+     * @param string $content file content
+     * @param string $fileBasePath base path for the created files, if not set [[testFilePath]] is used.
      *
-     * @throws Exception on failure
+     * @throws Exception on failure.
      */
     protected function createAssetSourceFile($fileRelativeName, $content, $fileBasePath = null): void
     {
@@ -186,7 +186,7 @@ class AssetControllerTest extends TestCase
     /**
      * Creates a list of asset source files.
      *
-     * @param array  $files        assert source files in format: file/relative/name => fileContent
+     * @param array $files assert source files in format: file/relative/name => fileContent
      * @param string $fileBasePath base path for the created files, if not set [[testFilePath]]
      */
     protected function createAssetSourceFiles(array $files, $fileBasePath = null): void
@@ -199,10 +199,10 @@ class AssetControllerTest extends TestCase
     /**
      * Invokes the asset controller method even if it is protected.
      *
-     * @param string $methodName name of the method to be invoked
-     * @param array  $args       method arguments
+     * @param  string $methodName name of the method to be invoked.
+     * @param  array  $args       method arguments.
      *
-     * @return mixed method invoke result
+     * @return mixed  method invoke result.
      */
     protected function invokeAssetControllerMethod($methodName, array $args = [])
     {
@@ -219,9 +219,9 @@ class AssetControllerTest extends TestCase
     /**
      * Composes asset bundle class source code.
      *
-     * @param array $config asset bundle config
+     * @param  array  $config asset bundle config.
      *
-     * @return string class source code
+     * @return string class source code.
      */
     protected function composeAssetBundleClassSource(array &$config)
     {
@@ -264,9 +264,9 @@ EOL;
     /**
      * Declares asset bundle class according to given configuration.
      *
-     * @param array $config asset bundle config
+     * @param  array  $config asset bundle config.
      *
-     * @return string new class full name
+     * @return string new class full name.
      */
     protected function declareAssetBundleClass(array $config)
     {
@@ -482,7 +482,7 @@ EOL;
     /**
      * Data provider for [[testAdjustCssUrl()]].
      *
-     * @return array test data
+     * @return array test data.
      */
     public function adjustCssUrlDataProvider()
     {

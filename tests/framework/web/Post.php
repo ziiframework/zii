@@ -13,7 +13,7 @@ namespace yiiunit\framework\web;
 use yii\base\BaseObject;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  */
 class Post extends BaseObject
 {

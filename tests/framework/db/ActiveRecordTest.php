@@ -1354,19 +1354,17 @@ abstract class ActiveRecordTest extends DatabaseTestCase
         $this->assertEquals('something', $model->char_col2);
         $this->assertEquals(1.23, $model->float_col2);
         $this->assertEquals(33.22, $model->numeric_col);
-        $this->assertStringContainsString($model->bool_col2, [1, true]); // TODO type hint
+        $this->assertContains($model->bool_col2, [1, true]); // TODO type hint
 
         $this->assertEquals('2002-01-01 00:00:00', $model->time);
 
         $model = new Type();
         $model->char_col2 = 'not something';
-
         $model->loadDefaultValues();
         $this->assertEquals('not something', $model->char_col2);
 
         $model = new Type();
         $model->char_col2 = 'not something';
-
         $model->loadDefaultValues(false);
         $this->assertEquals('something', $model->char_col2);
 
@@ -1629,10 +1627,10 @@ abstract class ActiveRecordTest extends DatabaseTestCase
     public function testBit(): void
     {
         $falseBit = BitValues::findOne(1);
-        $this->assertStringContainsString($falseBit->val, [0, false]); // TODO type hint
+        $this->assertContains($falseBit->val, [0, false]); // TODO type hint
 
         $trueBit = BitValues::findOne(2);
-        $this->assertStringContainsString($trueBit->val, [1, true]); // TODO type hint
+        $this->assertContains($trueBit->val, [1, true]); // TODO type hint
     }
 
     public function testLinkWhenRelationIsIndexed2(): void
@@ -1929,9 +1927,7 @@ abstract class ActiveRecordTest extends DatabaseTestCase
     {
         /** @var Query $query */
         $query = $this->invokeMethod(Yii::createObject($modelClassName), 'findByCondition', [$validFilter]);
-        $product = Customer::getDb()->queryBuilder->build($query);
-
-        $this->assertIsArray($product);
+        Customer::getDb()->queryBuilder->build($query);
     }
 
     public function illegalValuesForFindByCondition()
@@ -1987,13 +1983,11 @@ abstract class ActiveRecordTest extends DatabaseTestCase
             case 'pgsql':
             case 'sqlite':
                 $selectExpression = "(customer.name || ' in ' || p.description) AS name";
-
                 break;
 
             case 'cubird':
             case 'mysql':
                 $selectExpression = "concat(customer.name,' in ', p.description) name";
-
                 break;
 
             default:
@@ -2180,5 +2174,15 @@ abstract class ActiveRecordTest extends DatabaseTestCase
             'order_id' => null,
             'item_id' => null,
         ]));
+    }
+
+    public function testVirtualRelation(): void
+    {
+        /* @var $orderClass ActiveRecordInterface */
+        $orderClass = $this->getOrderClass();
+        $order = $orderClass::findOne(2);
+        $order->virtualCustomerId = $order->customer_id;
+
+        $this->assertNotNull($order->virtualCustomer);
     }
 }
