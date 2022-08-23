@@ -48,7 +48,7 @@ TEXT;
 
     public function testProcessInvalidParamException(): void
     {
-        $this->expectException('\yii\base\InvalidParamException');
+        $this->expectException('yii\base\InvalidParamException');
         $this->expectExceptionMessage("Markdown flavor 'undefined' is not defined.");
         Markdown::process('foo', 'undefined');
     }

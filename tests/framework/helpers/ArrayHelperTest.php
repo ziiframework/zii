@@ -328,14 +328,14 @@ class ArrayHelperTest extends TestCase
 
     public function testMultisortInvalidParamExceptionDirection(): void
     {
-        $this->expectException('\yii\base\InvalidParamException');
+        $this->expectException('yii\base\InvalidParamException');
         $data = ['foo' => 'bar'];
         ArrayHelper::multisort($data, ['foo'], []);
     }
 
     public function testMultisortInvalidParamExceptionSortFlag(): void
     {
-        $this->expectException('\yii\base\InvalidParamException');
+        $this->expectException('yii\base\InvalidParamException');
         $data = ['foo' => 'bar'];
         ArrayHelper::multisort($data, ['foo'], ['foo'], []);
     }
@@ -725,7 +725,7 @@ class ArrayHelperTest extends TestCase
 
     public function testKeyExistsArrayAccessCaseInsensitiveThrowsError(): void
     {
-        $this->expectException('\yii\base\InvalidArgumentException');
+        $this->expectException('yii\base\InvalidArgumentException');
         $this->expectExceptionMessage('Second parameter($array) cannot be ArrayAccess in case insensitive mode');
         $array = new TraversableArrayAccessibleObject([
             'a' => 1,
@@ -1225,7 +1225,7 @@ class ArrayHelperTest extends TestCase
 
     public function testInException(): void
     {
-        $this->expectException('\yii\base\InvalidParamException');
+        $this->expectException('yii\base\InvalidParamException');
         $this->expectExceptionMessage('Argument $haystack must be an array or implement Traversable');
         ArrayHelper::isIn('value', null);
     }
@@ -1244,7 +1244,7 @@ class ArrayHelperTest extends TestCase
 
     public function testIsSubsetException(): void
     {
-        $this->expectException('\yii\base\InvalidParamException');
+        $this->expectException('yii\base\InvalidParamException');
         $this->expectExceptionMessage('Argument $needles must be an array or implement Traversable');
         ArrayHelper::isSubset('a', new ArrayObject(['a', 'b']));
     }

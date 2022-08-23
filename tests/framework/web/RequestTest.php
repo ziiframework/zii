@@ -435,7 +435,7 @@ class RequestTest extends TestCase
 
     public function testGetScriptFileWithEmptyServer(): void
     {
-        $this->expectException('\yii\base\InvalidConfigException');
+        $this->expectException('yii\base\InvalidConfigException');
         $request = new Request();
         $_SERVER = [];
 
@@ -444,7 +444,7 @@ class RequestTest extends TestCase
 
     public function testGetScriptUrlWithEmptyServer(): void
     {
-        $this->expectException('\yii\base\InvalidConfigException');
+        $this->expectException('yii\base\InvalidConfigException');
 
         $request = new Request();
         $_SERVER = [];

@@ -475,7 +475,7 @@ class UserTest extends TestCase
         $this->assertNull(Yii::$app->user->identity);
         $this->assertFalse(Yii::$app->user->can('doSomething'));
 
-        $this->expectException('\yii\base\InvalidValueException');
+        $this->expectException('yii\base\InvalidValueException');
         Yii::$app->user->setIdentity(new \stdClass());
     }
 

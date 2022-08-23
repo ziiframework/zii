@@ -194,7 +194,7 @@ class JsonTest extends TestCase
 
         // exception
         $json = '{"a":1,"b":2';
-        $this->expectException('\yii\base\InvalidArgumentException');
+        $this->expectException('yii\base\InvalidArgumentException');
         Json::decode($json);
     }
 

@@ -91,7 +91,7 @@ abstract class CommandTest extends DatabaseTestCase
         $this->assertEquals(1, $command->queryScalar());
 
         $command = $db->createCommand('bad SQL');
-        $this->expectException('\yii\db\Exception');
+        $this->expectException('yii\db\Exception');
         $command->execute();
     }
 
@@ -152,7 +152,7 @@ abstract class CommandTest extends DatabaseTestCase
         $this->assertFalse($command->queryScalar());
 
         $command = $db->createCommand('bad SQL');
-        $this->expectException('\yii\db\Exception');
+        $this->expectException('yii\db\Exception');
         $command->query();
     }
 
@@ -602,7 +602,7 @@ SQL;
      */
     public function testInsertSelectFailed($invalidSelectColumns): void
     {
-        $this->expectException('\yii\base\InvalidParamException');
+        $this->expectException('yii\base\InvalidParamException');
         $this->expectExceptionMessage('Expected select query object with enumerated (named) parameters');
         $query = new \yii\db\Query();
         $query->select($invalidSelectColumns)->from('{{customer}}');
@@ -1207,7 +1207,7 @@ SQL;
 
     public function testIntegrityViolation(): void
     {
-        $this->expectException('\yii\db\IntegrityException');
+        $this->expectException('yii\db\IntegrityException');
 
         $db = $this->getConnection();
 

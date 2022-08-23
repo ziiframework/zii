@@ -145,13 +145,13 @@ class FormatterNumberTest extends TestCase
 
     public function testAsIntegerException(): void
     {
-        $this->expectException('\yii\base\InvalidParamException');
+        $this->expectException('yii\base\InvalidParamException');
         $this->formatter->asInteger('a');
     }
 
     public function testAsIntegerException2(): void
     {
-        $this->expectException('\yii\base\InvalidParamException');
+        $this->expectException('yii\base\InvalidParamException');
         $this->formatter->asInteger('-123abc');
     }
 
@@ -423,7 +423,7 @@ class FormatterNumberTest extends TestCase
 
     public function testAsCurrencyStringFallbackException(): void
     {
-        $this->expectException('\yii\base\InvalidConfigException');
+        $this->expectException('yii\base\InvalidConfigException');
         $this->formatter->asCurrency('87654321098765436');
     }
 
@@ -554,7 +554,7 @@ class FormatterNumberTest extends TestCase
 
     public function testAsSpellout(): void
     {
-        $this->expectException('\yii\base\InvalidConfigException');
+        $this->expectException('yii\base\InvalidConfigException');
         $this->expectExceptionMessage('Format as Spellout is only supported when PHP intl extension is installed.');
         $this->formatter->asSpellout(123);
     }

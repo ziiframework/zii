@@ -29,7 +29,7 @@ class RadiobuttonColumnTest extends TestCase
 {
     public function testException(): void
     {
-        $this->expectException('\yii\base\InvalidConfigException');
+        $this->expectException('yii\base\InvalidConfigException');
         $this->expectExceptionMessage('The "name" property must be set.');
         new RadioButtonColumn([
             'name' => null,

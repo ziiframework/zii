@@ -264,7 +264,7 @@ abstract class ExistValidatorTest extends DatabaseTestCase
         ]);
         $validator->validateAttribute($model, 'id');
 
-        $this->expectException('\yii\base\InvalidConfigException');
+        $this->expectException('yii\base\InvalidConfigException');
         $validator = new ExistValidator([
             'forceMasterDb' => false,
             'targetRelation' => 'references',

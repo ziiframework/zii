@@ -129,7 +129,7 @@ class ContentNegotiatorTest extends TestCase
         Yii::$app->request->setAcceptableContentTypes(['application/json' => ['q' => 1, 'version' => '1.0']]);
         $filter->negotiate();
         $this->assertSame('json', Yii::$app->response->format);
-        $this->expectException('\yii\web\NotAcceptableHttpException');
+        $this->expectException('yii\web\NotAcceptableHttpException');
         Yii::$app->request->setAcceptableContentTypes(['application/xml' => ['q' => 1, 'version' => '2.0']]);
         $filter->negotiate();
     }
