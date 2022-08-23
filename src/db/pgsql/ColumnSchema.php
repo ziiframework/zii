@@ -134,6 +134,10 @@ class ColumnSchema extends \yii\db\ColumnSchema
 
         switch ($this->type) {
             case Schema::TYPE_BOOLEAN:
+                if (is_bool($value)) {
+                    return $value;
+                }
+
                 switch (strtolower($value)) {
                     case 't':
                     case 'true':
