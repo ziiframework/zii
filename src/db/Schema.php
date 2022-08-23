@@ -550,6 +550,10 @@ abstract class Schema extends BaseObject
      */
     public function quoteTableName($name)
     {
+        if (is_int($name)) {
+            $name = (string) $name;
+        }
+
         if (strncmp($name, '(', 1) === 0 && strpos($name, ')') === strlen($name) - 1) {
             return $name;
         }
