@@ -32,12 +32,12 @@ class TrimValidator extends Validator
     public $skipOnArray = false;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public $skipOnEmpty = false;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function validateAttribute($model, $attribute): void
     {
@@ -63,7 +63,7 @@ class TrimValidator extends Validator
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function clientValidateAttribute($model, $attribute, $view)
     {
@@ -78,7 +78,7 @@ class TrimValidator extends Validator
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getClientOptions($model, $attribute)
     {

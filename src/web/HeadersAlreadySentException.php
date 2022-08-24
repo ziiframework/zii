@@ -25,7 +25,7 @@ class HeadersAlreadySentException extends Exception
      */
     public function __construct($file, $line)
     {
-        $message = YII_DEBUG || YII_ENV_TEST ? "Headers already sent in {$file} on line {$line}." : 'Headers already sent.';
+        $message = YII_DEBUG ? "Headers already sent in {$file} on line {$line}." : 'Headers already sent.';
         parent::__construct($message);
     }
 }

@@ -40,9 +40,9 @@ class ExitException extends Exception
         $this->statusCode = $status;
 
         if ($previous === null) {
-            parent::__construct($message ?? '', $code);
+            parent::__construct((string) $message, $code);
         } else {
-            parent::__construct($message ?? '', $code, $previous);
+            parent::__construct((string) $message, $code, $previous);
         }
     }
 }

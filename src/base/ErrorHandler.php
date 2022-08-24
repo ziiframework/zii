@@ -13,7 +13,6 @@ namespace yii\base;
 use Yii;
 use Error;
 use Throwable;
-use ReflectionProperty;
 use yii\helpers\VarDumper;
 use yii\web\HttpException;
 

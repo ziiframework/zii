@@ -36,7 +36,7 @@ class JsonModel extends DynamicModel implements JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function init(): void
     {
@@ -44,7 +44,7 @@ class JsonModel extends DynamicModel implements JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {

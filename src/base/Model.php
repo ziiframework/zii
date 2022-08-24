@@ -16,7 +16,6 @@ use ArrayObject;
 use ArrayIterator;
 use ReflectionClass;
 use IteratorAggregate;
-use ReflectionProperty;
 use ReturnTypeWillChange;
 use yii\helpers\Inflector;
 use yii\validators\Validator;
@@ -45,11 +44,12 @@ use yii\validators\RequiredValidator;
  * @property-read \yii\validators\Validator[] $activeValidators The validators applicable to the current
  * [[scenario]].
  * @property array $attributes Attribute values (name => value).
- * @property-read array $errors An array of errors for all attributes. Empty array is returned if no error.
- * The result is a two-dimensional array. See [[getErrors()]] for detailed description.
+ * @property-read array $errors Errors for all attributes or the specified attribute. Empty array is returned
+ * if no error. See [[getErrors()]] for detailed description. Note that when returning errors for all attributes,
+ * the result is a two-dimensional array, like the following: ```php [ 'username' => [ 'Username is required.',
+ * 'Username must contain only word characters.', ], 'email' => [ 'Email address is invalid.', ] ] ``` .
  * @property-read array $firstErrors The first errors. The array keys are the attribute names, and the array
  * values are the corresponding error messages. An empty array will be returned if there is no error.
- * @property-read ArrayIterator $iterator An iterator for traversing the items in the list.
  * @property string $scenario The scenario that this model is in. Defaults to [[SCENARIO_DEFAULT]].
  * @property-read ArrayObject|\yii\validators\Validator[] $validators All the validators declared in the
  * model.
@@ -274,23 +274,15 @@ class Model extends Component implements StaticInstanceInterface, IteratorAggreg
 
     /**
      * Returns the list of attribute names.
+     *
      * By default, this method returns all public non-static properties of the class.
      * You may override this method to change the default behavior.
      *
-     * @return array list of attribute names.
+     * @return string[] list of attribute names.
      */
     public function attributes()
     {
-        $class = new ReflectionClass($this);
-        $names = [];
-
-        foreach ($class->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {
-            if (!$property->isStatic()) {
-                $names[] = $property->getName();
-            }
-        }
-
-        return $names;
+        return array_keys(Yii::getObjectVars($this));
     }
 
     /**
@@ -1154,5 +1146,16 @@ class Model extends Component implements StaticInstanceInterface, IteratorAggreg
     public function offsetUnset($offset): void
     {
         $this->$offset = null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __clone()
+    {
+        parent::__clone();
+
+        $this->_errors = null;
+        $this->_validators = null;
     }
 }

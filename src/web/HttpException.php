@@ -48,7 +48,7 @@ class HttpException extends UserException
     public function __construct($status, $message = null, $code = 0, $previous = null)
     {
         $this->statusCode = $status;
-        parent::__construct($message ?? '', $code, $previous);
+        parent::__construct((string) $message, $code, $previous);
     }
 
     /**

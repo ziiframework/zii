@@ -12,7 +12,6 @@ namespace yii\db\mysql;
 
 use PDO;
 use PDOException;
-use yii\db\Exception;
 use yii\db\Constraint;
 use yii\db\Expression;
 use yii\db\TableSchema;
@@ -21,7 +20,6 @@ use yii\helpers\ArrayHelper;
 use yii\db\ForeignKeyConstraint;
 use yii\db\ConstraintFinderTrait;
 use yii\base\NotSupportedException;
-use yii\base\InvalidConfigException;
 use yii\db\ConstraintFinderInterface;
 
 /**

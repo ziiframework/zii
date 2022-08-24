@@ -35,7 +35,7 @@ class TestRequestComponent extends Request
     public $getIsPjaxOverride;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getMethod()
     {
@@ -47,7 +47,7 @@ class TestRequestComponent extends Request
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getIsAjax()
     {
@@ -59,7 +59,7 @@ class TestRequestComponent extends Request
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getIsPjax()
     {
@@ -71,7 +71,7 @@ class TestRequestComponent extends Request
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getUserAgent()
     {

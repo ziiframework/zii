@@ -1431,8 +1431,6 @@ class ArrayHelperTest extends TestCase
 
     /**
      * @dataProvider dataProviderRecursiveSort
-     *
-     * @return void
      */
     public function testRecursiveSort($expected_result, $input_array): void
     {

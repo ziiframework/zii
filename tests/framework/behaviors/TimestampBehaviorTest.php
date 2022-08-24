@@ -124,8 +124,8 @@ class TimestampBehaviorTest extends TestCase
         $model->save(false);
 
         $model->on(ActiveRecordTimestamp::EVENT_AFTER_UPDATE, function ($event): void {
-                $this->assertEmpty($event->changedAttributes);
-            });
+            $this->assertEmpty($event->changedAttributes);
+        });
 
         $model->save(false);
     }
