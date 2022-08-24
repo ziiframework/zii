@@ -19,7 +19,9 @@ use yii\base\Component;
 use ReflectionException;
 use ReflectionNamedType;
 use ReflectionParameter;
+use ReflectionUnionType;
 use yii\helpers\ArrayHelper;
+use ReflectionIntersectionType;
 use yii\base\InvalidConfigException;
 
 /**
@@ -102,8 +104,7 @@ use yii\base\InvalidConfigException;
  *
  * @property-read array $definitions The list of the object definitions or the loaded shared objects (type or
  * ID => definition or instance).
- * @property-write bool $resolveArrays Whether to attempt to resolve elements in array dependencies. This
- * property is write-only.
+ * @property-write bool $resolveArrays Whether to attempt to resolve elements in array dependencies.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  *
@@ -725,7 +726,20 @@ class Container extends Component
 
             if (PHP_VERSION_ID >= 80000) {
                 $class = $param->getType();
-                $isClass = $class !== null && !$param->getType()->isBuiltin();
+
+                if ($class instanceof ReflectionUnionType || (PHP_VERSION_ID >= 80100 && $class instanceof ReflectionIntersectionType)) {
+                    $isClass = false;
+
+                    foreach ($class->getTypes() as $type) {
+                        if (!$type->isBuiltin()) {
+                            $class = $type;
+                            $isClass = true;
+                            break;
+                        }
+                    }
+                } else {
+                    $isClass = $class !== null && !$class->isBuiltin();
+                }
             } else {
                 $class = $param->getClass();
                 $isClass = $class !== null;
@@ -736,7 +750,6 @@ class Container extends Component
 
                 if (PHP_VERSION_ID >= 50600 && $param->isVariadic()) {
                     $args = array_merge($args, array_values($params));
-
                     break;
                 }
 

@@ -254,12 +254,10 @@ class ColumnSchemaBuilder extends BaseObject
         switch ($this->type) {
             case Schema::TYPE_PK:
                 $this->type = Schema::TYPE_UPK;
-
                 break;
 
             case Schema::TYPE_BIGPK:
                 $this->type = Schema::TYPE_UBIGPK;
-
                 break;
         }
         $this->isUnsigned = true;
@@ -342,7 +340,6 @@ class ColumnSchemaBuilder extends BaseObject
         switch ($this->getTypeCategory()) {
             case self::CATEGORY_PK:
                 $format = '{type}{check}{comment}{append}';
-
                 break;
 
             default:
@@ -432,18 +429,15 @@ class ColumnSchemaBuilder extends BaseObject
             case 'double':
                 // ensure type cast always has . as decimal separator in all locales
                 $defaultValue = StringHelper::floatToString($this->default);
-
                 break;
 
             case 'boolean':
                 $defaultValue = $this->default ? 'TRUE' : 'FALSE';
-
                 break;
 
             case 'integer':
             case 'object':
                 $defaultValue = (string) $this->default;
-
                 break;
 
             default:

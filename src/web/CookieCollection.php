@@ -123,7 +123,7 @@ class CookieCollection extends BaseObject implements IteratorAggregate, ArrayAcc
 
     /**
      * Returns whether there is a cookie with the specified name.
-     * Note that if a cookie is marked for deletion from browser, this method will return false.
+     * Note that if a cookie is marked for deletion from browser or its value is an empty string, this method will return false.
      *
      * @param string $name the cookie name
      *

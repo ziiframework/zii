@@ -311,11 +311,11 @@ class Command extends Component
             $message = $e->getMessage() . "\nFailed to prepare SQL: $sql";
             $errorInfo = $e instanceof PDOException ? $e->errorInfo : null;
 
-            throw new Exception($message, $errorInfo, (int) $e->getCode(), $e);
+            throw new Exception($message, $errorInfo, $e->getCode(), $e);
         } catch (Throwable $e) {
             $message = $e->getMessage() . "\nFailed to prepare SQL: $sql";
 
-            throw new Exception($message, null, (int) $e->getCode(), $e);
+            throw new Exception($message, null, $e->getCode(), $e);
         }
     }
 
@@ -820,7 +820,7 @@ class Command extends Component
      * @param string $table the table whose column is to be changed. The table name will be properly quoted by the method.
      * @param string $column the name of the column to be changed. The name will be properly quoted by the method.
      * @param string $type the column type. [[\yii\db\QueryBuilder::getColumnType()]] will be called
-     * to convert the given column type to the physical one. For example, `string` will be converted
+     * to convert the give column type to the physical one. For example, `string` will be converted
      * as `varchar(255)`, and `string not null` becomes `varchar(255) not null`.
      *
      * @return $this the command object itself
@@ -1469,7 +1469,6 @@ class Command extends Component
                 } else {
                     $this->pdoStatement->execute();
                 }
-
                 break;
             } catch (\Exception $e) {
                 $rawSql = $rawSql ?: $this->getRawSql();

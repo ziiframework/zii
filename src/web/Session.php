@@ -59,7 +59,7 @@ use yii\base\InvalidArgumentException;
  * @property-read int $count The number of session variables.
  * @property-write string $flash The key identifying the flash message. Note that flash messages and normal
  * session variables share the same name space. If you have a normal session variable using the same name, its
- * value will be overwritten by this method. This property is write-only.
+ * value will be overwritten by this method.
  * @property float $gCProbability The probability (percentage) that the GC (garbage collection) process is
  * started on every session initialization.
  * @property bool $hasSessionId Whether the current request has sent the session ID.
@@ -72,7 +72,7 @@ use yii\base\InvalidArgumentException;
  * default value is 1440 seconds (or the value of "session.gc_maxlifetime" set in php.ini).
  * @property bool|null $useCookies The value indicating whether cookies should be used to store session IDs.
  * @property-read bool $useCustomStorage Whether to use custom storage.
- * @property-read bool $useStrictMode Whether strict mode is enabled or not.
+ * @property bool $useStrictMode Whether strict mode is enabled or not.
  * @property bool $useTransparentSessionID Whether transparent sid support is enabled or not, defaults to
  * false.
  *
@@ -556,7 +556,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
     }
 
     /**
-     * @param string|int $value the number of seconds after which data will be seen as 'garbage' and cleaned up
+     * @param int $value the number of seconds after which data will be seen as 'garbage' and cleaned up
      */
     public function setTimeout($value): void
     {

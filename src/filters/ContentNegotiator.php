@@ -229,7 +229,6 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
             $response->format = $format;
             $response->acceptMimeType = $type;
             $response->acceptParams = [];
-
             break;
         }
 

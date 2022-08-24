@@ -10,6 +10,9 @@ declare(strict_types=1);
 
 namespace yii\caching;
 
+use Closure;
+use Exception;
+
 /**
  * Dependency is the base class for cache dependency classes.
  *
@@ -119,12 +122,22 @@ abstract class Dependency extends \yii\base\BaseObject
      */
     protected function generateReusableHash()
     {
-        $data = $this->data;
-        $this->data = null;  // https://github.com/yiisoft/yii2/issues/3052
-        $key = sha1(serialize($this));
-        $this->data = $data;
+        $clone = clone $this;
+        $clone->data = null; // https://github.com/yiisoft/yii2/issues/3052
 
-        return $key;
+        try {
+            $serialized = serialize($clone);
+        } catch (Exception $e) {
+            // unserializable properties are nulled
+            foreach ($clone as $name => $value) {
+                if (is_object($value) && $value instanceof Closure) {
+                    $clone->{$name} = null;
+                }
+            }
+            $serialized = serialize($clone);
+        }
+
+        return sha1($serialized);
     }
 
     /**

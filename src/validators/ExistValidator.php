@@ -170,6 +170,15 @@ class ExistValidator extends Validator
     private function checkTargetAttributeExistence($model, $attribute): void
     {
         $targetAttribute = $this->targetAttribute === null ? $attribute : $this->targetAttribute;
+
+        if ($this->skipOnError) {
+            foreach ((array) $targetAttribute as $k => $v) {
+                if ($model->hasErrors(is_int($k) ? $v : $k)) {
+                    return;
+                }
+            }
+        }
+
         $params = $this->prepareConditions($targetAttribute, $model, $attribute);
         $conditions = [$this->targetAttributeJunction == 'or' ? 'or' : 'and'];
 

@@ -146,7 +146,7 @@ class Column extends BaseObject
      */
     protected function renderHeaderCellContent()
     {
-        return trim($this->header ?? '') !== '' ? $this->header : $this->getHeaderCellLabel();
+        return $this->header !== null && trim($this->header) !== '' ? $this->header : $this->getHeaderCellLabel();
     }
 
     /**
@@ -171,7 +171,7 @@ class Column extends BaseObject
      */
     protected function renderFooterCellContent()
     {
-        return trim($this->footer ?? '') !== '' ? $this->footer : $this->grid->emptyCell;
+        return $this->footer !== null && trim($this->footer) !== '' ? $this->footer : $this->grid->emptyCell;
     }
 
     /**

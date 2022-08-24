@@ -115,21 +115,22 @@ use yii\base\InvalidConfigException;
  * ],
  * ```
  *
- * @property string $driverName Name of the DB driver.
+ * @property string|null $driverName Name of the DB driver. Note that the type of this property differs in
+ * getter and setter. See [[getDriverName()]] and [[setDriverName()]] for details.
  * @property-read bool $isActive Whether the DB connection is established.
  * @property-read string $lastInsertID The row ID of the last row inserted, or the last value retrieved from
  * the sequence object.
- * @property-read Connection $master The currently active master connection. `null` is returned if there is no
- * master available.
+ * @property-read Connection|null $master The currently active master connection. `null` is returned if there
+ * is no master available.
  * @property-read PDO $masterPdo The PDO instance for the currently active master connection.
  * @property QueryBuilder $queryBuilder The query builder for the current DB connection. Note that the type of
  * this property differs in getter and setter. See [[getQueryBuilder()]] and [[setQueryBuilder()]] for details.
  * @property-read Schema $schema The schema information for the database opened by this connection.
  * @property-read string $serverVersion Server version as a string.
- * @property-read Connection $slave The currently active slave connection. `null` is returned if there is no
- * slave available and `$fallbackToMaster` is false.
- * @property-read PDO $slavePdo The PDO instance for the currently active slave connection. `null` is returned
- * if no slave connection is available and `$fallbackToMaster` is false.
+ * @property-read Connection|null $slave The currently active slave connection. `null` is returned if there is
+ * no slave available and `$fallbackToMaster` is false.
+ * @property-read PDO|null $slavePdo The PDO instance for the currently active slave connection. `null` is
+ * returned if no slave connection is available and `$fallbackToMaster` is false.
  * @property-read Transaction|null $transaction The currently active transaction. Null if no active
  * transaction.
  *
@@ -266,7 +267,7 @@ class Connection extends Component
 
     /**
      * @var string the charset used for database connection. The property is only used
-     * for MySQL, PostgreSQL and CUBRID databases. Defaults to null, meaning using default charset
+     * for MySQL, PostgreSQL databases. Defaults to null, meaning using default charset
      * as configured by the database.
      *
      * For Oracle Database, the charset must be specified in the [[dsn]], for example for UTF-8 by appending `;charset=UTF-8`
@@ -729,7 +730,7 @@ class Connection extends Component
                 Yii::endProfile($token, __METHOD__);
             }
 
-            throw new Exception($e->getMessage(), $e->errorInfo, (int) $e->getCode(), $e);
+            throw new Exception($e->getMessage(), $e->errorInfo, $e->getCode(), $e);
         }
     }
 
@@ -790,17 +791,14 @@ class Connection extends Component
             switch ($driver) {
                 case 'mssql':
                     $pdoClass = 'yii\db\mssql\PDO';
-
                     break;
 
                 case 'dblib':
                     $pdoClass = 'yii\db\mssql\DBLibPDO';
-
                     break;
 
                 case 'sqlsrv':
                     $pdoClass = 'yii\db\mssql\SqlsrvPDO';
-
                     break;
 
                 default:
@@ -1123,12 +1121,12 @@ class Connection extends Component
     public function quoteSql($sql)
     {
         return preg_replace_callback('/(\\{\\{(%?[\w\-\. ]+%?)\\}\\}|\\[\\[([\w\-\. ]+)\\]\\])/', function ($matches) {
-            if (isset($matches[3])) {
-                return $this->quoteColumnName($matches[3]);
-            }
+                if (isset($matches[3])) {
+                    return $this->quoteColumnName($matches[3]);
+                }
 
-            return str_replace('%', $this->tablePrefix, $this->quoteTableName($matches[2]));
-        }, $sql);
+                return str_replace('%', $this->tablePrefix, $this->quoteTableName($matches[2]));
+            }, $sql);
     }
 
     /**
@@ -1140,7 +1138,7 @@ class Connection extends Component
     public function getDriverName()
     {
         if ($this->_driverName === null) {
-            if (($pos = strpos($this->dsn ?? '', ':')) !== false) {
+            if (($pos = strpos((string) $this->dsn, ':')) !== false) {
                 $this->_driverName = strtolower(substr($this->dsn, 0, $pos));
             } else {
                 $this->_driverName = strtolower($this->getSlavePdo()->getAttribute(PDO::ATTR_DRIVER_NAME));

@@ -22,9 +22,6 @@ use yii\base\InlineAction;
  *
  * For more details and usage information on Controller, see the [guide article on controllers](guide:structure-controllers).
  *
- * @property Request $request
- * @property Response $response
- *
  * @author Qiang Xue <qiang.xue@gmail.com>
  *
  * @since 2.0
@@ -177,17 +174,14 @@ class Controller extends \yii\base\Controller
                         switch ($typeName) {
                             case 'int':
                                 $params[$name] = filter_var($params[$name], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
-
                                 break;
 
                             case 'float':
                                 $params[$name] = filter_var($params[$name], FILTER_VALIDATE_FLOAT, FILTER_NULL_ON_FAILURE);
-
                                 break;
 
                             case 'bool':
                                 $params[$name] = filter_var($params[$name], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-
                                 break;
                         }
 

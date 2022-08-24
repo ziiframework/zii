@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace yii\validators;
 
+use yii\helpers\Json;
 use yii\base\InvalidConfigException;
 
 /**
@@ -28,6 +29,8 @@ use yii\base\InvalidConfigException;
  * ```
  *
  * Many PHP functions qualify this signature (e.g. `trim()`).
+ * If the callback function requires non-null argument (important since PHP 8.1)
+ * remember to set [[skipOnEmpty]] to `true` otherwise you may trigger an error.
  *
  * To specify the filter, set [[filter]] property to be the callback.
  *
@@ -82,7 +85,6 @@ class FilterValidator extends Validator
         $value = $model->$attribute;
 
         if (!$this->skipOnArray || !is_array($value)) {
-            $value ??= '';
             $model->$attribute = call_user_func($this->filter, $value);
         }
     }
@@ -99,7 +101,7 @@ class FilterValidator extends Validator
         ValidationAsset::register($view);
         $options = $this->getClientOptions($model, $attribute);
 
-        return 'value = yii.validation.trim($form, attribute, ' . json_encode($options, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . ', value);';
+        return 'value = yii.validation.trim($form, attribute, ' . Json::htmlEncode($options) . ', value);';
     }
 
     /**

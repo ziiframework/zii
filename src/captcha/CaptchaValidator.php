@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace yii\captcha;
 
 use Yii;
+use yii\helpers\Json;
 use yii\validators\Validator;
 use yii\validators\ValidationAsset;
 use yii\base\InvalidConfigException;
@@ -100,7 +101,7 @@ class CaptchaValidator extends Validator
         ValidationAsset::register($view);
         $options = $this->getClientOptions($model, $attribute);
 
-        return 'yii.validation.captcha(value, messages, ' . json_encode($options, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . ');';
+        return 'yii.validation.captcha(value, messages, ' . Json::htmlEncode($options) . ');';
     }
 
     /**

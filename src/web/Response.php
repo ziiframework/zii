@@ -44,7 +44,7 @@ use yii\base\InvalidArgumentException;
  * For more details and usage information on Response, see the [guide article on responses](guide:runtime-responses).
  *
  * @property-read CookieCollection $cookies The cookie collection.
- * @property-write string $downloadHeaders The attachment file name. This property is write-only.
+ * @property-write string $downloadHeaders The attachment file name.
  * @property-read HeaderCollection $headers The header collection.
  * @property-read bool $isClientError Whether this response indicates a client error.
  * @property-read bool $isEmpty Whether this response is empty.
@@ -58,8 +58,7 @@ use yii\base\InvalidArgumentException;
  * @property-read bool $isServerError Whether this response indicates a server error.
  * @property-read bool $isSuccessful Whether this response is successful.
  * @property int $statusCode The HTTP status code to send with the response.
- * @property-write Exception|Error|Throwable $statusCodeByException The exception object. This property is
- * write-only.
+ * @property-write Exception|Error|Throwable $statusCodeByException The exception object.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @author Carsten Brandt <mail@cebe.cc>
@@ -946,28 +945,31 @@ class Response extends \yii\base\Response
             $url[0] = '/' . ltrim($url[0], '/');
         }
         $request = Yii::$app->getRequest();
-        $url = Url::to($url);
+        $normalizedUrl = Url::to($url);
 
-        if (strncmp($url, '/', 1) === 0 && strncmp($url, '//', 2) !== 0) {
-            $url = $request->getHostInfo() . $url;
+        if (
+            $normalizedUrl !== null
+            && strncmp($normalizedUrl, '/', 1) === 0
+            && strncmp($normalizedUrl, '//', 2) !== 0
+        ) {
+            $normalizedUrl = $request->getHostInfo() . $normalizedUrl;
         }
 
-        if ($checkAjax) {
-            if ($request->getIsAjax()) {
-                if (in_array($statusCode, [301, 302]) && is_string($request->userAgent) && preg_match('/Trident\/|MSIE[ ]/', $request->userAgent)) {
-                    $statusCode = 200;
-                }
+        if ($checkAjax && $request->getIsAjax()) {
+            if (
+                in_array($statusCode, [301, 302])
+                && preg_match('/Trident\/|MSIE[ ]/', (string) $request->userAgent)
+            ) {
+                $statusCode = 200;
+            }
 
-                if ($request->getIsPjax()) {
-                    $this->getHeaders()->set('X-Pjax-Url', $url);
-                } else {
-                    $this->getHeaders()->set('X-Redirect', $url);
-                }
+            if ($request->getIsPjax()) {
+                $this->getHeaders()->set('X-Pjax-Url', $normalizedUrl);
             } else {
-                $this->getHeaders()->set('Location', $url);
+                $this->getHeaders()->set('X-Redirect', $normalizedUrl);
             }
         } else {
-            $this->getHeaders()->set('Location', $url);
+            $this->getHeaders()->set('Location', $normalizedUrl);
         }
 
         $this->setStatusCode($statusCode);

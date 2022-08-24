@@ -649,7 +649,6 @@ class ActiveQuery extends Query implements ActiveQueryInterface
                 if (is_string($alias)) {
                     return [$tableName, $alias];
                 }
-
                 break;
             }
         }

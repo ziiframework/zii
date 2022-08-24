@@ -156,7 +156,7 @@ class Formatter extends Component
      * @var string the default format string to be used to format a [[asDate()|date]].
      * This can be "short", "medium", "long", or "full", which represents a preset format of different lengths.
      *
-     * It can also be a custom format as specified in the [ICU manual](http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax).
+     * It can also be a custom format as specified in the [ICU manual](https://unicode-org.github.io/icu/userguide/format_parse/datetime/).
      * Alternatively this can be a string prefixed with `php:` representing a format that can be recognized by the
      * PHP [date()](https://www.php.net/manual/en/function.date.php)-function.
      *
@@ -173,7 +173,7 @@ class Formatter extends Component
      * @var string the default format string to be used to format a [[asTime()|time]].
      * This can be "short", "medium", "long", or "full", which represents a preset format of different lengths.
      *
-     * It can also be a custom format as specified in the [ICU manual](http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax).
+     * It can also be a custom format as specified in the [ICU manual](https://unicode-org.github.io/icu/userguide/format_parse/datetime/).
      * Alternatively this can be a string prefixed with `php:` representing a format that can be recognized by the
      * PHP [date()](https://www.php.net/manual/en/function.date.php)-function.
      *
@@ -190,10 +190,10 @@ class Formatter extends Component
      * @var string the default format string to be used to format a [[asDatetime()|date and time]].
      * This can be "short", "medium", "long", or "full", which represents a preset format of different lengths.
      *
-     * It can also be a custom format as specified in the [ICU manual](http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax).
+     * It can also be a custom format as specified in the [ICU manual](https://unicode-org.github.io/icu/userguide/format_parse/datetime/).
      *
      * Alternatively this can be a string prefixed with `php:` representing a format that can be recognized by the
-     * PHP [date()](https://www.php.net/manual/en/function.date.php)-function.
+     * PHP [date()](https://www.php.net/manual/en/function.date.php) function.
      *
      * For example:
      *
@@ -693,7 +693,7 @@ class Formatter extends Component
     /**
      * Formats the value as a date.
      *
-     * @param int|string|DateTime|DateTimeInterface $value the value to be formatted. The following
+     * @param int|string|DateTime|DateTimeInterface|null $value the value to be formatted. The following
      * types of value are supported:
      *
      * - an integer representing a UNIX timestamp. A UNIX timestamp is always in UTC by its definition.
@@ -733,7 +733,7 @@ class Formatter extends Component
     /**
      * Formats the value as a time.
      *
-     * @param int|string|DateTime|DateTimeInterface $value the value to be formatted. The following
+     * @param int|string|DateTime|DateTimeInterface|null $value the value to be formatted. The following
      * types of value are supported:
      *
      * - an integer representing a UNIX timestamp. A UNIX timestamp is always in UTC by its definition.
@@ -772,7 +772,7 @@ class Formatter extends Component
     /**
      * Formats the value as a datetime.
      *
-     * @param int|string|DateTime|DateTimeInterface $value the value to be formatted. The following
+     * @param int|string|DateTime|DateTimeInterface|null $value the value to be formatted. The following
      * types of value are supported:
      *
      * - an integer representing a UNIX timestamp. A UNIX timestamp is always in UTC by its definition.
@@ -1007,7 +1007,7 @@ class Formatter extends Component
      * 2. Using a timestamp that is relative to the `$referenceTime`.
      * 3. Using a `DateInterval` object.
      *
-     * @param int|string|DateTime|DateTimeInterface|DateInterval $value the value to be formatted. The following
+     * @param int|string|DateTime|DateTimeInterface|DateInterval|null $value the value to be formatted. The following
      * types of value are supported:
      *
      * - an integer representing a UNIX timestamp
@@ -1788,8 +1788,8 @@ class Formatter extends Component
      */
     private function getUnitMessage($unitType, $unitFormat, $system, $position)
     {
-        if (isset($this->_unitMessages[$unitType][$system][$position])) {
-            return $this->_unitMessages[$unitType][$system][$position];
+        if (isset($this->_unitMessages[$unitType][$unitFormat][$system][$position])) {
+            return $this->_unitMessages[$unitType][$unitFormat][$system][$position];
         }
 
         if (!$this->_intlLoaded) {
@@ -1821,7 +1821,7 @@ class Formatter extends Component
             $message[] = "$key{{$value}}";
         }
 
-        return $this->_unitMessages[$unitType][$system][$position] = '{n, plural, ' . implode(' ', $message) . '}';
+        return $this->_unitMessages[$unitType][$unitFormat][$system][$position] = '{n, plural, ' . implode(' ', $message) . '}';
     }
 
     /**

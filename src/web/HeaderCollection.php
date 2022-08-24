@@ -74,6 +74,7 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      *
      * @return int the number of headers in the collection.
      */
+    #[ReturnTypeWillChange]
     public function getCount()
     {
         return count($this->_headers);

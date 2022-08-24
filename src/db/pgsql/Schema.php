@@ -753,7 +753,6 @@ SQL;
                             'name' => $name,
                             'columnNames' => ArrayHelper::getColumn($constraint, 'column_name'),
                         ]);
-
                         break;
 
                     case 'f':
@@ -766,7 +765,6 @@ SQL;
                             'onDelete' => $actionTypes[$constraint[0]['on_delete']] ?? null,
                             'onUpdate' => $actionTypes[$constraint[0]['on_update']] ?? null,
                         ]);
-
                         break;
 
                     case 'u':
@@ -774,7 +772,6 @@ SQL;
                             'name' => $name,
                             'columnNames' => ArrayHelper::getColumn($constraint, 'column_name'),
                         ]);
-
                         break;
 
                     case 'c':
@@ -783,7 +780,6 @@ SQL;
                             'columnNames' => ArrayHelper::getColumn($constraint, 'column_name'),
                             'expression' => $constraint[0]['check_expr'],
                         ]);
-
                         break;
                 }
             }

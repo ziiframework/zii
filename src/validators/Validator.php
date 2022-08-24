@@ -45,7 +45,7 @@ use yii\base\NotSupportedException;
  * - `required`: [[RequiredValidator]]
  * - `safe`: [[SafeValidator]]
  * - `string`: [[StringValidator]]
- * - `trim`: [[FilterValidator]]
+ * - `trim`: [[TrimValidator]]
  * - `unique`: [[UniqueValidator]]
  * - `url`: [[UrlValidator]]
  * - `ip`: [[IpValidator]]
@@ -53,7 +53,7 @@ use yii\base\NotSupportedException;
  * For more details and usage information on Validator, see the [guide article on validators](guide:input-validation).
  *
  * @property-read array $attributeNames Attribute names.
- * @property-read array $validationAttributes List of attribute names.
+ * @property-read array|null $validationAttributes List of attribute names.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  *
@@ -96,8 +96,7 @@ class Validator extends Component
         'safe' => 'yii\validators\SafeValidator',
         'string' => 'yii\validators\StringValidator',
         'trim' => [
-            'class' => 'yii\validators\FilterValidator',
-            'filter' => 'trim',
+            'class' => 'yii\validators\TrimValidator',
             'skipOnArray' => true,
         ],
         'unique' => 'yii\validators\UniqueValidator',

@@ -28,8 +28,7 @@ use yii\db\ConstraintFinderInterface;
  * Schema is the class for retrieving metadata from a SQLite (2/3) database.
  *
  * @property-write string $transactionIsolationLevel The transaction isolation level to use for this
- * transaction. This can be either [[Transaction::READ_UNCOMMITTED]] or [[Transaction::SERIALIZABLE]]. This
- * property is write-only.
+ * transaction. This can be either [[Transaction::READ_UNCOMMITTED]] or [[Transaction::SERIALIZABLE]].
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  *
@@ -404,12 +403,10 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
         switch ($level) {
             case Transaction::SERIALIZABLE:
                 $this->db->createCommand('PRAGMA read_uncommitted = False;')->execute();
-
                 break;
 
             case Transaction::READ_UNCOMMITTED:
                 $this->db->createCommand('PRAGMA read_uncommitted = True;')->execute();
-
                 break;
 
             default:
@@ -510,7 +507,6 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
                     $result['primaryKey'] = new Constraint([
                         'columnNames' => [$tableColumn['name']],
                     ]);
-
                     break;
                 }
             }

@@ -354,7 +354,7 @@ class BaseConsole
      */
     public static function stripAnsiFormat($string)
     {
-        return preg_replace(self::ansiCodesPattern(), '', $string ?? '');
+        return preg_replace(self::ansiCodesPattern(), '', (string) $string);
     }
 
     /**
@@ -400,9 +400,9 @@ class BaseConsole
             return '';
         }
 
-        $textItems = preg_split(self::ansiCodesPattern(), $string ?? '');
+        $textItems = preg_split(self::ansiCodesPattern(), (string) $string);
 
-        preg_match_all(self::ansiCodesPattern(), $string ?? '', $colors);
+        preg_match_all(self::ansiCodesPattern(), (string) $string, $colors);
         $colors = count($colors) ? $colors[0] : [];
         array_unshift($colors, '');
 
@@ -433,7 +433,6 @@ class BaseConsole
                     if ($color && $color != $defaultColor) {
                         $result .= $defaultColor;
                     }
-
                     break;
                 }
             }
@@ -496,71 +495,71 @@ class BaseConsole
 
         $tags = 0;
         $result = preg_replace_callback('/\033\[([\d;]+)m/', static function ($ansi) use (&$tags, $styleMap) {
-            $style = [];
-            $reset = false;
-            $negative = false;
+                $style = [];
+                $reset = false;
+                $negative = false;
 
-            foreach (explode(';', $ansi[1]) as $controlCode) {
-                if ($controlCode == 0) {
-                    $style = [];
-                    $reset = true;
-                } elseif ($controlCode == self::NEGATIVE) {
-                    $negative = true;
-                } elseif (isset($styleMap[$controlCode])) {
-                    $style[] = $styleMap[$controlCode];
-                }
-            }
-
-            $return = '';
-
-            while ($reset && $tags > 0) {
-                $return .= '</span>';
-                --$tags;
-            }
-
-            if (empty($style)) {
-                return $return;
-            }
-
-            $currentStyle = [];
-
-            foreach ($style as $content) {
-                $currentStyle = ArrayHelper::merge($currentStyle, $content);
-            }
-
-            // if negative is set, invert background and foreground
-            if ($negative) {
-                if (isset($currentStyle['color'])) {
-                    $fgColor = $currentStyle['color'];
-                    unset($currentStyle['color']);
+                foreach (explode(';', $ansi[1]) as $controlCode) {
+                    if ($controlCode == 0) {
+                        $style = [];
+                        $reset = true;
+                    } elseif ($controlCode == self::NEGATIVE) {
+                        $negative = true;
+                    } elseif (isset($styleMap[$controlCode])) {
+                        $style[] = $styleMap[$controlCode];
+                    }
                 }
 
-                if (isset($currentStyle['background-color'])) {
-                    $bgColor = $currentStyle['background-color'];
-                    unset($currentStyle['background-color']);
+                $return = '';
+
+                while ($reset && $tags > 0) {
+                    $return .= '</span>';
+                    --$tags;
                 }
 
-                if (isset($fgColor)) {
-                    $currentStyle['background-color'] = $fgColor;
+                if (empty($style)) {
+                    return $return;
                 }
 
-                if (isset($bgColor)) {
-                    $currentStyle['color'] = $bgColor;
+                $currentStyle = [];
+
+                foreach ($style as $content) {
+                    $currentStyle = ArrayHelper::merge($currentStyle, $content);
                 }
-            }
 
-            $styleString = '';
+                // if negative is set, invert background and foreground
+                if ($negative) {
+                    if (isset($currentStyle['color'])) {
+                        $fgColor = $currentStyle['color'];
+                        unset($currentStyle['color']);
+                    }
 
-            foreach ($currentStyle as $name => $value) {
-                if (is_array($value)) {
-                    $value = implode(' ', $value);
+                    if (isset($currentStyle['background-color'])) {
+                        $bgColor = $currentStyle['background-color'];
+                        unset($currentStyle['background-color']);
+                    }
+
+                    if (isset($fgColor)) {
+                        $currentStyle['background-color'] = $fgColor;
+                    }
+
+                    if (isset($bgColor)) {
+                        $currentStyle['color'] = $bgColor;
+                    }
                 }
-                $styleString .= "$name: $value;";
-            }
-            ++$tags;
 
-            return "$return<span style=\"$styleString\">";
-        }, $string);
+                $styleString = '';
+
+                foreach ($currentStyle as $name => $value) {
+                    if (is_array($value)) {
+                        $value = implode(' ', $value);
+                    }
+                    $styleString .= "$name: $value;";
+                }
+                ++$tags;
+
+                return "$return<span style=\"$styleString\">";
+            }, $string);
 
         while ($tags > 0) {
             $result .= '</span>';
@@ -732,9 +731,18 @@ class BaseConsole
     public static function getScreenSize($refresh = false)
     {
         static $size;
+        static $execDisabled;
 
-        if ($size !== null && !$refresh) {
+        if ($size !== null && ($execDisabled || !$refresh)) {
             return $size;
+        }
+
+        if ($execDisabled === null) {
+            $execDisabled = !function_exists('ini_get') || preg_match('/(\bexec\b)/i', ini_get('disable_functions'));
+
+            if ($execDisabled) {
+                return $size = false;
+            }
         }
 
         if (static::isRunningOnWindows()) {
@@ -1059,7 +1067,7 @@ class BaseConsole
      * @param int $total the total value of items that are to be done.
      * @param string $prefix an optional string to display before the progress bar.
      * Default to empty string which results in no prefix to be displayed.
-     * @param int|bool $width optional width of the progressbar. This can be an integer representing
+     * @param int|float|bool $width optional width of the progressbar. This can be an integer representing
      * the number of characters to display for the progress bar or a float between 0 and 1 representing the
      * percentage of screen with the progress bar may take. It can also be set to false to disable the
      * bar and only show progress information like percent, number of items and ETA.

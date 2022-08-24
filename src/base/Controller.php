@@ -189,7 +189,6 @@ class Controller extends Component implements ViewContextInterface
                 array_unshift($modules, $module);
             } else {
                 $runAction = false;
-
                 break;
             }
         }

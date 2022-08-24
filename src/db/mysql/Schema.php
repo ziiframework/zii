@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace yii\db\mysql;
 
 use PDO;
-use Exception;
 use PDOException;
+use yii\db\Exception;
 use yii\db\Constraint;
 use yii\db\Expression;
 use yii\db\TableSchema;
@@ -21,6 +21,7 @@ use yii\helpers\ArrayHelper;
 use yii\db\ForeignKeyConstraint;
 use yii\db\ConstraintFinderTrait;
 use yii\base\NotSupportedException;
+use yii\base\InvalidConfigException;
 use yii\db\ConstraintFinderInterface;
 
 /**
@@ -313,7 +314,8 @@ SQL;
              * See details here: https://mariadb.com/kb/en/library/now/#description
              */
             if (($column->type === 'timestamp' || $column->type === 'datetime')
-                && preg_match('/^current_timestamp(?:\(([0-9]*)\))?$/i', $info['default'] ?? '', $matches)) {
+                && isset($info['default'])
+                && preg_match('/^current_timestamp(?:\(([0-9]*)\))?$/i', $info['default'], $matches)) {
                 $column->defaultValue = new Expression('CURRENT_TIMESTAMP' . (!empty($matches[1]) ? '(' . $matches[1] . ')' : ''));
             } elseif (isset($type) && $type === 'bit') {
                 $column->defaultValue = bindec(trim($info['default'] ?? '', 'b\''));
@@ -332,7 +334,7 @@ SQL;
      *
      * @return bool whether the table exists in the database
      *
-     * @throws Exception if DB query fails
+     * @throws \Exception if DB query fails
      */
     protected function findColumns($table)
     {
@@ -340,7 +342,7 @@ SQL;
 
         try {
             $columns = $this->db->createCommand($sql)->queryAll();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $previous = $e->getPrevious();
 
             if ($previous instanceof PDOException && strpos($previous->getMessage(), 'SQLSTATE[42S02') !== false) {
@@ -397,7 +399,7 @@ SQL;
      *
      * @param TableSchema $table the table metadata
      *
-     * @throws Exception
+     * @throws \Exception
      */
     protected function findConstraints($table): void
     {
@@ -433,7 +435,7 @@ SQL;
             foreach ($constraints as $name => $constraint) {
                 $table->foreignKeys[$name] = array_merge([$constraint['referenced_table_name']], $constraint['columns']);
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $previous = $e->getPrevious();
 
             if (!$previous instanceof PDOException || strpos($previous->getMessage(), 'SQLSTATE[42S02') === false) {
@@ -583,7 +585,6 @@ SQL;
                         $result['primaryKey'] = new Constraint([
                             'columnNames' => ArrayHelper::getColumn($constraint, 'column_name'),
                         ]);
-
                         break;
 
                     case 'FOREIGN KEY':
@@ -596,7 +597,6 @@ SQL;
                             'onDelete' => $constraint[0]['on_delete'],
                             'onUpdate' => $constraint[0]['on_update'],
                         ]);
-
                         break;
 
                     case 'UNIQUE':
@@ -604,7 +604,6 @@ SQL;
                             'name' => $name,
                             'columnNames' => ArrayHelper::getColumn($constraint, 'column_name'),
                         ]);
-
                         break;
                 }
             }

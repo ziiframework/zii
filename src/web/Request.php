@@ -44,12 +44,12 @@ use function ord;
  * @property-read string|null $authUser The username sent via HTTP authentication, `null` if the username is
  * not given.
  * @property string $baseUrl The relative URL for the application.
- * @property array $bodyParams The request parameters given in the request body.
- * @property-read string $contentType Request content-type. Null is returned if this information is not
- * available.
+ * @property array|object $bodyParams The request parameters given in the request body.
+ * @property-read string $contentType Request content-type. Empty string is returned if this information is
+ * not available.
  * @property-read CookieCollection $cookies The cookie collection.
  * @property-read string $csrfToken The token used to perform CSRF validation.
- * @property-read string $csrfTokenFromHeader The CSRF token sent via [[CSRF_HEADER]] by browser. Null is
+ * @property-read string|null $csrfTokenFromHeader The CSRF token sent via [[CSRF_HEADER]] by browser. Null is
  * returned if no such header is sent.
  * @property-read array $eTags The entity tags.
  * @property-read HeaderCollection $headers The header collection.
@@ -83,7 +83,7 @@ use function ord;
  * @property string $scriptFile The entry script file path.
  * @property string $scriptUrl The relative URL of the entry script.
  * @property int $securePort Port number for secure requests.
- * @property-read string $serverName Server name, null if not available.
+ * @property-read string|null $serverName Server name, null if not available.
  * @property-read int|null $serverPort Server port number, null if not available.
  * @property string $url The currently requested relative URL. Note that the URI returned may be URL-encoded
  * depending on the client.
@@ -241,6 +241,7 @@ class Request extends \yii\base\Request
         'X-Forwarded-For',
         'X-Forwarded-Host',
         'X-Forwarded-Proto',
+        'X-Forwarded-Port',
 
         // Microsoft:
         'Front-End-Https',
@@ -262,6 +263,20 @@ class Request extends \yii\base\Request
      */
     public $ipHeaders = [
         'X-Forwarded-For', // Common
+    ];
+
+    /**
+     * @var string[] List of headers where proxies store the real request port.
+     * It's not advisable to put insecure headers here.
+     * To use the `Forwarded Port`, the header must be added to [[secureHeaders]] list.
+     * The match of header names is case-insensitive.
+     *
+     * @see trustedHosts
+     * @see secureHeaders
+     * @since 2.0.46
+     */
+    public $portHeaders = [
+        'X-Forwarded-Port', // Common
     ];
 
     /**
@@ -358,7 +373,6 @@ class Request extends \yii\base\Request
 
                 if ($validator->validate($ip)) {
                     $trustedHeaders = $headers;
-
                     break;
                 }
             }
@@ -622,7 +636,7 @@ class Request extends \yii\base\Request
 
             $rawContentType = $this->getContentType();
 
-            if (($rawContentType !== null) && ($pos = strpos($rawContentType, ';')) !== false) {
+            if (($pos = strpos((string) $rawContentType, ';')) !== false) {
                 // e.g. text/html; charset=UTF-8
                 $contentType = substr($rawContentType, 0, $pos);
             } else {
@@ -658,9 +672,8 @@ class Request extends \yii\base\Request
     /**
      * Sets the request body parameters.
      *
-     * @param array $values the request body parameters (name-value pairs)
+     * @param array|object $values the request body parameters (name-value pairs)
      *
-     * @see getBodyParam()
      * @see getBodyParams()
      */
     public function setBodyParams($values): void
@@ -670,6 +683,7 @@ class Request extends \yii\base\Request
 
     /**
      * Returns the named request body parameter value.
+     *
      * If the parameter does not exist, the second parameter passed to this method will be returned.
      *
      * @param string $name the parameter name
@@ -687,7 +701,7 @@ class Request extends \yii\base\Request
         if (is_object($params)) {
             // unable to use `ArrayHelper::getValue()` due to different dots in key logic and lack of exception handling
             try {
-                return $params->{$name};
+                return $params->{$name} ?? $defaultValue;
             } catch (Exception $e) {
                 return $defaultValue;
             }
@@ -870,7 +884,7 @@ class Request extends \yii\base\Request
     public function getHostName()
     {
         if ($this->_hostName === null) {
-            $this->_hostName = parse_url($this->getHostInfo() ?? '', PHP_URL_HOST);
+            $this->_hostName = parse_url((string) $this->getHostInfo(), PHP_URL_HOST);
         }
 
         return $this->_hostName;
@@ -1095,15 +1109,15 @@ class Request extends \yii\base\Request
         for ($i = $len >> 1, $j = 0; $i < $len; ++$i, ++$j) {
             switch (true) {
                 case $s[$i] < "\x80": $s[$j] = $s[$i];
-                    break;
+                break;
 
                 case $s[$i] < "\xC0": $s[$j] = "\xC2";
-                    $s[++$j] = $s[$i];
-                    break;
+                $s[++$j] = $s[$i];
+                break;
 
                 default: $s[$j] = "\xC3";
-                    $s[++$j] = chr(ord($s[$i]) - 64);
-                    break;
+                $s[++$j] = chr(ord($s[$i]) - 64);
+                break;
             }
         }
 
@@ -1205,9 +1219,10 @@ class Request extends \yii\base\Request
     {
         if (
             isset($_SERVER['HTTPS'])
-            && ((is_string($_SERVER['HTTPS']) && strcasecmp($_SERVER['HTTPS'], 'on') === 0)
-                ||
-                in_array($_SERVER['HTTPS'], [1, '1', true], true))
+            && (
+                (is_string($_SERVER['HTTPS']) && strcasecmp($_SERVER['HTTPS'], 'on') === 0)
+                || in_array($_SERVER['HTTPS'], [1, '1', true], true)
+            )
         ) {
             return true;
         }
@@ -1240,12 +1255,26 @@ class Request extends \yii\base\Request
     }
 
     /**
-     * Returns the server port number.
+     * Returns the server port number. If a port is specified via a forwarding header (e.g. 'X-Forwarded-Port')
+     * and the remote host is a "trusted host" the that port will be used (see [[portHeaders]]),
+     * otherwise the default server port will be returned.
      *
      * @return int|null server port number, null if not available
+     *
+     * @see portHeaders
      */
     public function getServerPort()
     {
+        foreach ($this->portHeaders as $portHeader) {
+            if ($this->headers->has($portHeader)) {
+                $port = $this->headers->get($portHeader);
+
+                if ($port !== null) {
+                    return $port;
+                }
+            }
+        }
+
         return isset($_SERVER['SERVER_PORT']) ? (int) $_SERVER['SERVER_PORT'] : null;
     }
 
@@ -1377,7 +1406,6 @@ class Request extends \yii\base\Request
 
                 if ($validator->validate($ip) /* checking trusted range */) {
                     $isTrusted = true;
-
                     break;
                 }
             }
@@ -1631,14 +1659,14 @@ class Request extends \yii\base\Request
      * @link https://tools.ietf.org/html/rfc2616#section-14.17
      * HTTP 1.1 header field definitions
      */
-    public function getContentType(): string
+    public function getContentType()
     {
         if (isset($_SERVER['CONTENT_TYPE'])) {
             return $_SERVER['CONTENT_TYPE'];
         }
 
         // fix bug https://bugs.php.net/bug.php?id=66606
-        return $this->headers->get('Content-Type') ?? '';
+        return $this->headers->get('Content-Type') ?: '';
     }
 
     private $_languages;

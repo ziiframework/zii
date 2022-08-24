@@ -204,7 +204,6 @@ class BatchQueryResult extends Component implements Iterator
                 } else {
                     // we've reached the end
                     $this->trigger(self::EVENT_FINISH);
-
                     break;
                 }
             }

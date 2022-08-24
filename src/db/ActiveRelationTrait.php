@@ -24,8 +24,8 @@ use yii\base\InvalidArgumentException;
  *
  * @since 2.0
  *
- * @method ActiveRecordInterface one($db = null)
- * @method ActiveRecordInterface[] all($db = null)
+ * @method ActiveRecordInterface|array|null one($db = null) See [[ActiveQueryInterface::one()]] for more info.
+ * @method ActiveRecordInterface[] all($db = null) See [[ActiveQueryInterface::all()]] for more info.
  *
  * @property ActiveRecord $modelClass
  */
@@ -554,7 +554,6 @@ trait ActiveRelationTrait
                     if (!is_string($alias)) {
                         $alias = $table;
                     }
-
                     break;
                 }
             }
@@ -585,7 +584,7 @@ trait ActiveRelationTrait
             $attribute = reset($this->link);
 
             foreach ($models as $model) {
-                $value = $model[$attribute] ?? null;
+                $value = isset($model[$attribute]) || (is_object($model) && property_exists($model, $attribute)) ? $model[$attribute] : null;
 
                 if ($value !== null) {
                     if (is_array($value)) {
@@ -651,7 +650,7 @@ trait ActiveRelationTrait
         $key = [];
 
         foreach ($attributes as $attribute) {
-            if (isset($model[$attribute])) {
+            if (isset($model[$attribute]) || (is_object($model) && property_exists($model, $attribute))) {
                 $key[] = $this->normalizeModelKey($model[$attribute]);
             }
         }

@@ -49,7 +49,7 @@ use yii\base\InvalidCallException;
  * for more details about possible fetch mode.
  *
  * @property-read int $columnCount The number of columns in the result set.
- * @property-write int $fetchMode Fetch mode. This property is write-only.
+ * @property-write int $fetchMode Fetch mode.
  * @property-read bool $isClosed Whether the reader is closed or not.
  * @property-read int $rowCount Number of rows contained in the result.
  *

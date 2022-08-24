@@ -29,9 +29,9 @@ use yii\di\ServiceLocator;
  *
  * @property-write array $aliases List of path aliases to be defined. The array keys are alias names (must
  * start with `@`) and the array values are the corresponding paths or aliases. See [[setAliases()]] for an
- * example. This property is write-only.
+ * example.
  * @property string $basePath The root directory of the module.
- * @property string $controllerPath The root directory that contains the controller classes.
+ * @property string $controllerPath The directory that contains the controller classes.
  * @property string $layoutPath The root directory of layout files. Defaults to "[[viewPath]]/layouts".
  * @property array $modules The modules (indexed by their IDs).
  * @property-read string $uniqueId The unique ID of the module.

@@ -35,11 +35,11 @@ use yii\base\InvalidArgumentException;
  * @property array $oldAttributes The old attribute values (name-value pairs). Note that the type of this
  * property differs in getter and setter. See [[getOldAttributes()]] and [[setOldAttributes()]] for details.
  * @property-read mixed $oldPrimaryKey The old primary key value. An array (column name => column value) is
- * returned if the primary key is composite. A string is returned otherwise (null will be returned if the key
- * value is null).
+ * returned if the primary key is composite or `$asArray` is `true`. A string is returned otherwise (null will be
+ * returned if the key value is null).
  * @property-read mixed $primaryKey The primary key value. An array (column name => column value) is returned
- * if the primary key is composite. A string is returned otherwise (null will be returned if the key value is
- * null).
+ * if the primary key is composite or `$asArray` is `true`. A string is returned otherwise (null will be returned
+ * if the key value is null).
  * @property-read array $relatedRecords An array of related records indexed by relation names.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
@@ -715,7 +715,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
             }
         } else {
             foreach ($this->_attributes as $name => $value) {
-                if (isset($names[$name]) && (!array_key_exists($name, $this->_oldAttributes) || $value !== $this->_oldAttributes[$name])) {
+                if (isset($names[$name]) && (!array_key_exists($name, $this->_oldAttributes) || $this->isAttributeDirty($name, $value))) {
                     $attributes[$name] = $value;
                 }
             }
@@ -1938,5 +1938,23 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
             [$viaRelationName, $viaQuery] = $relation->via;
             $this->setRelationDependencies($name, $viaQuery, $viaRelationName);
         }
+    }
+
+    /**
+     * @param string $attribute
+     * @param mixed $value
+     *
+     * @return bool
+     */
+    private function isAttributeDirty($attribute, $value)
+    {
+        $old_attribute = $this->oldAttributes[$attribute];
+
+        if (is_array($value) && is_array($this->oldAttributes[$attribute])) {
+            $value = ArrayHelper::recursiveSort($value);
+            $old_attribute = ArrayHelper::recursiveSort($old_attribute);
+        }
+
+        return $value !== $old_attribute;
     }
 }

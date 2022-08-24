@@ -145,11 +145,9 @@ class HostControl extends ActionFilter
 
         $currentHost = Yii::$app->getRequest()->getHostName();
 
-        if ($currentHost !== null) {
-            foreach ($allowedHosts as $allowedHost) {
-                if (StringHelper::matchWildcard($allowedHost, $currentHost)) {
-                    return true;
-                }
+        foreach ($allowedHosts as $allowedHost) {
+            if (StringHelper::matchWildcard($allowedHost, $currentHost)) {
+                return true;
             }
         }
 

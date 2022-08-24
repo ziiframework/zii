@@ -217,7 +217,7 @@ class FileValidator extends Validator
         }
 
         if (!is_array($this->extensions)) {
-            $this->extensions = preg_split('/[\s,]+/', strtolower($this->extensions ?? ''), -1, PREG_SPLIT_NO_EMPTY);
+            $this->extensions = preg_split('/[\s,]+/', strtolower((string) $this->extensions), -1, PREG_SPLIT_NO_EMPTY);
         } else {
             $this->extensions = array_map('strtolower', $this->extensions);
         }
@@ -227,7 +227,7 @@ class FileValidator extends Validator
         }
 
         if (!is_array($this->mimeTypes)) {
-            $this->mimeTypes = preg_split('/[\s,]+/', strtolower($this->mimeTypes ?? ''), -1, PREG_SPLIT_NO_EMPTY);
+            $this->mimeTypes = preg_split('/[\s,]+/', strtolower((string) $this->mimeTypes), -1, PREG_SPLIT_NO_EMPTY);
         } else {
             $this->mimeTypes = array_map('strtolower', $this->mimeTypes);
         }
@@ -347,22 +347,18 @@ class FileValidator extends Validator
 
             case UPLOAD_ERR_PARTIAL:
                 Yii::warning('File was only partially uploaded: ' . $value->name, __METHOD__);
-
                 break;
 
             case UPLOAD_ERR_NO_TMP_DIR:
                 Yii::warning('Missing the temporary folder to store the uploaded file: ' . $value->name, __METHOD__);
-
                 break;
 
             case UPLOAD_ERR_CANT_WRITE:
                 Yii::warning('Failed to write the uploaded file to disk: ' . $value->name, __METHOD__);
-
                 break;
 
             case UPLOAD_ERR_EXTENSION:
                 Yii::warning('File upload was stopped by some PHP extension: ' . $value->name, __METHOD__);
-
                 break;
 
             default:
@@ -491,7 +487,7 @@ class FileValidator extends Validator
         ValidationAsset::register($view);
         $options = $this->getClientOptions($model, $attribute);
 
-        return 'yii.validation.file(attribute, messages, ' . Json::encode($options) . ');';
+        return 'yii.validation.file(attribute, messages, ' . Json::htmlEncode($options) . ');';
     }
 
     /**
@@ -597,6 +593,10 @@ class FileValidator extends Validator
     {
         $fileMimeType = $this->getMimeTypeByFile($file->tempName);
 
+        if ($fileMimeType === null) {
+            return false;
+        }
+
         foreach ($this->mimeTypes as $mimeType) {
             if (strcasecmp($mimeType, $fileMimeType) === 0) {
                 return true;
@@ -615,7 +615,7 @@ class FileValidator extends Validator
      *
      * @param string $filePath
      *
-     * @return string
+     * @return string|null
      *
      * @throws \yii\base\InvalidConfigException
      *

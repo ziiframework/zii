@@ -42,7 +42,7 @@ class BaseStringHelper
      */
     public static function byteLength($string)
     {
-        return mb_strlen($string ?? '', '8bit');
+        return mb_strlen((string) $string, '8bit');
     }
 
     /**
@@ -126,6 +126,10 @@ class BaseStringHelper
     /**
      * Truncates a string to the number of characters specified.
      *
+     * In order to truncate for an exact length, the $suffix char length must be counted towards the $length. For example
+     * to have a string which is exactly 255 long with $suffix `...` of 3 chars, then `StringHelper::truncate($string, 252, '...')`
+     * must be used to ensure you have 255 long string afterwards.
+     *
      * @param string $string The string to truncate.
      * @param int $length How many characters from original string to include into truncated string.
      * @param string $suffix String to append to the end of truncated string.
@@ -169,7 +173,7 @@ class BaseStringHelper
             return static::truncateHtml($string, $count, $suffix);
         }
 
-        $words = preg_split('/(\s+)/u', trim($string), -1, PREG_SPLIT_DELIM_CAPTURE);
+        $words = preg_split('/(\s+)/u', trim($string), 0, PREG_SPLIT_DELIM_CAPTURE);
 
         if (count($words) / 2 > $count) {
             return implode('', array_slice($words, 0, ($count * 2) - 1)) . $suffix;
@@ -238,7 +242,6 @@ class BaseStringHelper
                         $truncated[] = new HTMLPurifier_Token_End($name);
                     }
                 }
-
                 break;
             }
         }
@@ -352,7 +355,7 @@ class BaseStringHelper
      */
     public static function countWords($string)
     {
-        return count(preg_split('/\s+/u', $string, -1, PREG_SPLIT_NO_EMPTY));
+        return count(preg_split('/\s+/u', $string, 0, PREG_SPLIT_NO_EMPTY));
     }
 
     /**
@@ -481,7 +484,7 @@ class BaseStringHelper
             $pattern .= 'i';
         }
 
-        return preg_match($pattern, $string ?? '') === 1;
+        return preg_match($pattern, (string) $string) === 1;
     }
 
     /**
@@ -497,8 +500,8 @@ class BaseStringHelper
      */
     public static function mb_ucfirst($string, $encoding = 'UTF-8')
     {
-        $firstChar = mb_substr($string ?? '', 0, 1, $encoding);
-        $rest = mb_substr($string ?? '', 1, null, $encoding);
+        $firstChar = mb_substr((string) $string, 0, 1, $encoding);
+        $rest = mb_substr((string) $string, 1, null, $encoding);
 
         return mb_strtoupper($firstChar, $encoding) . $rest;
     }
