@@ -30,6 +30,7 @@
         "ext-mbstring": "*",
         "ext-pdo": "*",
         "lib-pcre": "*",
+        "charescape/php-functions": "1.0.x-dev",
         "cebe/markdown": "^1.2",
         "ezyang/htmlpurifier": "^4.13",
         "symfony/polyfill-php80": "^1.26",

@@ -1095,7 +1095,7 @@ class BaseHtml
 
         foreach ($items as $value => $label) {
             $checked = $selection !== null &&
-                (!ArrayHelper::isTraversable($selection) && !strcmp($value, $selection)
+                (!ArrayHelper::isTraversable($selection) && !strcmp(pf_string_argument($value), $selection)
                     || ArrayHelper::isTraversable($selection) && ArrayHelper::isIn((string) $value, $selection, $strict));
 
             if ($formatter !== null) {
@@ -2086,7 +2086,7 @@ class BaseHtml
 
                 if (!array_key_exists('selected', $attrs)) {
                     $attrs['selected'] = $selection !== null &&
-                        (!ArrayHelper::isTraversable($selection) && ($strict ? !strcmp($key, $selection) : $selection == $key)
+                        (!ArrayHelper::isTraversable($selection) && ($strict ? !strcmp(pf_string_argument($key), $selection) : $selection == $key)
                         || ArrayHelper::isTraversable($selection) && ArrayHelper::isIn((string) $key, $selection, $strict));
                 }
                 $text = $encode ? static::encode($value) : $value;
