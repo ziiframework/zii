@@ -2086,9 +2086,12 @@ class BaseHtml
                 $attrs['value'] = (string) $key;
 
                 if (!array_key_exists('selected', $attrs)) {
-                    $attrs['selected'] = $selection !== null && ((!ArrayHelper::isTraversable($selection) && ($strict ? !strcmp(pf_string_argument($key), pf_string_argument($selection)) : $selection == $key))
+                    $attrs['selected'] = $selection !== null
+                        && (
+                            (!ArrayHelper::isTraversable($selection) && ($strict ? !strcmp(pf_string_argument($key), pf_string_argument($selection, '', '1', '')) : $selection == $key))
                             ||
-                            (ArrayHelper::isTraversable($selection) && ArrayHelper::isIn((string) $key, $selection, $strict)));
+                            (ArrayHelper::isTraversable($selection) && ArrayHelper::isIn((string) $key, $selection, $strict))
+                        );
                 }
                 $text = $encode ? static::encode($value) : $value;
 
