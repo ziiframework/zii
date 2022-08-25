@@ -721,12 +721,12 @@ class FileHelperTest extends TestCase
         $resourceSourceLocation = "{$phpunitPath}{$ds}framework{$ds}validators{$ds}data{$ds}mimeType";
 
         $pngFile = "{$runtimeLocation}{$ds}php1234";
-        copy("{$resourceSourceLocation}{$ds}test.png", $pngFile);
+        $this->assertTrue(copy("{$resourceSourceLocation}{$ds}test.png", $pngFile));
 
         $this->assertEquals('image/png', FileHelper::getMimeType($pngFile));
 
         $jpgFile = "{$runtimeLocation}{$ds}php4567";
-        copy("{$resourceSourceLocation}{$ds}test.jpg", $jpgFile);
+        $this->assertTrue(copy("{$resourceSourceLocation}{$ds}test.jpg", $jpgFile));
 
         $this->assertEquals('image/jpeg', FileHelper::getMimeType($jpgFile));
     }
