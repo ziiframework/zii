@@ -127,6 +127,14 @@ class DeadLockTest extends \yiiunit\framework\db\mysql\ConnectionTest
                     ++$deadlockHitCount;
                 } elseif (0 !== $exitStatus) {
                     $errors[] = 'child exited with error status';
+                } else {
+                    dump([
+                        'errors' => $errors,
+                        'status' => $status,
+                        'exitStatus' => $exitStatus,
+                        'deadlockHitCount' => $deadlockHitCount,
+                    ]);
+                    ob_flush();
                 }
             }
         }
