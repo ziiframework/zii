@@ -138,7 +138,7 @@ class DeadLockTest extends \yiiunit\framework\db\mysql\ConnectionTest
         }
 
         if ($deadlockHitCount === 0) {
-            $this->addWarning("deadlockHitCount === 0");
+            $this->markTestIncomplete("deadlockHitCount === 0; shared children log:\n" . $logContent);
         } else {
             $this->assertEquals(1, $deadlockHitCount, "exactly one child must hit deadlock; shared children log:\n" . $logContent);
         }
