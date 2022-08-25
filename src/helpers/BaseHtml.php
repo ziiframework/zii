@@ -2086,7 +2086,7 @@ class BaseHtml
                 $attrs['value'] = (string) $key;
 
                 if (!array_key_exists('selected', $attrs)) {
-                    $attrs['selected'] = $selection !== null && ((!ArrayHelper::isTraversable($selection) && !strcmp((string) $key, is_int($selection) ? (string) $selection : $selection))
+                    $attrs['selected'] = $selection !== null && ((!ArrayHelper::isTraversable($selection) && ($strict ? !strcmp(pf_string_argument($key), pf_string_argument($selection)) : $selection == $key))
                             ||
                             (ArrayHelper::isTraversable($selection) && ArrayHelper::isIn((string) $key, $selection, $strict)));
                 }
