@@ -10,14 +10,14 @@ declare(strict_types=1);
 
 namespace yii\helpers;
 
-use Yii;
 use ArrayAccess;
 use Traversable;
+use Yii;
+use yii\base\InvalidArgumentException;
 use yii\base\Model;
-use yii\web\Request;
 use yii\db\ActiveRecordInterface;
 use yii\validators\StringValidator;
-use yii\base\InvalidArgumentException;
+use yii\web\Request;
 
 /**
  * BaseHtml provides concrete implementation for [[Html]].
@@ -1094,9 +1094,9 @@ class BaseHtml
         $index = 0;
 
         foreach ($items as $value => $label) {
-            $checked = $selection !== null &&
-                (!ArrayHelper::isTraversable($selection) && !strcmp(pf_string_argument($value), $selection)
-                    || ArrayHelper::isTraversable($selection) && ArrayHelper::isIn((string) $value, $selection, $strict));
+            $checked = $selection !== null && ((!ArrayHelper::isTraversable($selection) && !strcmp((string) $value, is_int($selection) ? (string) $selection : $selection))
+                    ||
+                    (ArrayHelper::isTraversable($selection) && ArrayHelper::isIn((string) $value, $selection, $strict)));
 
             if ($formatter !== null) {
                 $lines[] = call_user_func($formatter, $index, $label, $name, $checked, $value);
@@ -1200,9 +1200,9 @@ class BaseHtml
         $index = 0;
 
         foreach ($items as $value => $label) {
-            $checked = $selection !== null &&
-                (!ArrayHelper::isTraversable($selection) && !strcmp($value, $selection)
-                    || ArrayHelper::isTraversable($selection) && ArrayHelper::isIn((string) $value, $selection, $strict));
+            $checked = $selection !== null && ((!ArrayHelper::isTraversable($selection) && !strcmp((string) $value, is_int($selection) ? (string) $selection : $selection))
+                    ||
+                    (ArrayHelper::isTraversable($selection) && ArrayHelper::isIn((string) $value, $selection, $strict)));
 
             if ($formatter !== null) {
                 $lines[] = call_user_func($formatter, $index, $label, $name, $checked, $value);
@@ -1533,6 +1533,7 @@ class BaseHtml
             foreach ($model->getActiveValidators($attrName) as $validator) {
                 if ($validator instanceof StringValidator && ($validator->max !== null || $validator->length !== null)) {
                     $options['maxlength'] = max($validator->max, $validator->length);
+
                     break;
                 }
             }
@@ -2085,9 +2086,9 @@ class BaseHtml
                 $attrs['value'] = (string) $key;
 
                 if (!array_key_exists('selected', $attrs)) {
-                    $attrs['selected'] = $selection !== null &&
-                        (!ArrayHelper::isTraversable($selection) && ($strict ? !strcmp(pf_string_argument($key), $selection) : $selection == $key)
-                        || ArrayHelper::isTraversable($selection) && ArrayHelper::isIn((string) $key, $selection, $strict));
+                    $attrs['selected'] = $selection !== null && ((!ArrayHelper::isTraversable($selection) && !strcmp((string) $key, is_int($selection) ? (string) $selection : $selection))
+                            ||
+                            (ArrayHelper::isTraversable($selection) && ArrayHelper::isIn((string) $key, $selection, $strict)));
                 }
                 $text = $encode ? static::encode($value) : $value;
 
