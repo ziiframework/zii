@@ -32,7 +32,7 @@
         "lib-pcre": "*",
         "charescape/php-functions": "1.0.x-dev",
         "cebe/markdown": "^1.2",
-        "ezyang/htmlpurifier": "^4.13",
+        "ezyang/htmlpurifier": "^4.16",
         "symfony/polyfill-php80": "^1.26",
         "symfony/polyfill-php81": "^1.26",
         "ziiframework/composer": ">=3.6.0"
