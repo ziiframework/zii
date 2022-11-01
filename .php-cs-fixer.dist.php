@@ -47,6 +47,7 @@ return (new PhpCsFixer\Config())
             'import_constants' => true,
             'import_functions' => true,
         ],
+        'no_useless_concat_operator' => false,
         'no_leading_import_slash' => true,
         'no_unused_imports' => true,
         'single_import_per_statement' => true,
