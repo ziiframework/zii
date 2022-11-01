@@ -344,7 +344,7 @@ class BaseHtml
      */
     private static function wrapIntoCondition($content, $condition)
     {
-        if (strpos($condition, '!IE') !== false) {
+        if (str_contains($condition, '!IE')) {
             return "<!--[if $condition]><!-->\n" . $content . "\n<!--<![endif]-->";
         }
 

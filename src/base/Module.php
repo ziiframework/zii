@@ -656,11 +656,11 @@ class Module extends ServiceLocator
         // double slashes or leading/ending slashes may cause substr problem
         $route = trim($route, '/');
 
-        if (strpos($route, '//') !== false) {
+        if (str_contains($route, '//')) {
             return false;
         }
 
-        if (strpos($route, '/') !== false) {
+        if (str_contains($route, '/')) {
             [$id, $route] = explode('/', $route, 2);
         } else {
             $id = $route;
@@ -728,7 +728,7 @@ class Module extends ServiceLocator
         $className = preg_replace_callback('%-([a-z0-9_])%i', static fn ($matches) => ucfirst($matches[1]), ucfirst($className)) . 'Controller';
         $className = ltrim($this->controllerNamespace . '\\' . str_replace('/', '\\', $prefix) . $className, '\\');
 
-        if (strpos($className, '-') !== false || !class_exists($className)) {
+        if (str_contains($className, '-') || !class_exists($className)) {
             return null;
         }
 

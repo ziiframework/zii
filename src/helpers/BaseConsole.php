@@ -749,7 +749,7 @@ class BaseConsole
             $output = [];
             exec('mode con', $output);
 
-            if (isset($output[1]) && strpos($output[1], 'CON') !== false) {
+            if (isset($output[1]) && str_contains($output[1], 'CON')) {
                 return $size = [(int) preg_replace('~\D~', '', $output[4]), (int) preg_replace('~\D~', '', $output[3])];
             }
         } else {

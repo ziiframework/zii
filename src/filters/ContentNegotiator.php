@@ -295,6 +295,6 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
         $supported = str_replace('_', '-', strtolower($supported));
         $requested = str_replace('_', '-', strtolower($requested));
 
-        return strpos($requested . '-', $supported . '-') === 0;
+        return str_starts_with($requested . '-', $supported . '-');
     }
 }

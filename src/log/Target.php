@@ -285,7 +285,7 @@ abstract class Target extends Component
             $matched = empty($categories);
 
             foreach ($categories as $category) {
-                if ($message[2] === $category || !empty($category) && substr_compare($category, '*', -1, 1) === 0 && strpos($message[2], rtrim($category, '*')) === 0) {
+                if ($message[2] === $category || !empty($category) && substr_compare($category, '*', -1, 1) === 0 && str_starts_with($message[2], rtrim($category, '*'))) {
                     $matched = true;
 
                     break;
@@ -296,7 +296,7 @@ abstract class Target extends Component
                 foreach ($except as $category) {
                     $prefix = rtrim($category, '*');
 
-                    if (($message[2] === $category || $prefix !== $category) && strpos($message[2], $prefix) === 0) {
+                    if (($message[2] === $category || $prefix !== $category) && str_starts_with($message[2], $prefix)) {
                         $matched = false;
 
                         break;

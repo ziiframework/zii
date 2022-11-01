@@ -947,7 +947,7 @@ class Request extends \yii\base\Request
                 $this->_scriptUrl = $_SERVER['ORIG_SCRIPT_NAME'];
             } elseif (isset($_SERVER['PHP_SELF']) && ($pos = strpos($_SERVER['PHP_SELF'], '/' . $scriptName)) !== false) {
                 $this->_scriptUrl = substr($_SERVER['SCRIPT_NAME'], 0, $pos) . '/' . $scriptName;
-            } elseif (!empty($_SERVER['DOCUMENT_ROOT']) && strpos($scriptFile, $_SERVER['DOCUMENT_ROOT']) === 0) {
+            } elseif (!empty($_SERVER['DOCUMENT_ROOT']) && str_starts_with($scriptFile, $_SERVER['DOCUMENT_ROOT'])) {
                 $this->_scriptUrl = str_replace([$_SERVER['DOCUMENT_ROOT'], '\\'], ['', '/'], $scriptFile);
             } else {
                 throw new InvalidConfigException('Unable to determine the entry script URL.');
@@ -1076,11 +1076,11 @@ class Request extends \yii\base\Request
         $scriptUrl = $this->getScriptUrl();
         $baseUrl = $this->getBaseUrl();
 
-        if (strpos($pathInfo, $scriptUrl) === 0) {
+        if (str_starts_with($pathInfo, $scriptUrl)) {
             $pathInfo = substr($pathInfo, strlen($scriptUrl));
-        } elseif ($baseUrl === '' || strpos($pathInfo, $baseUrl) === 0) {
+        } elseif ($baseUrl === '' || str_starts_with($pathInfo, $baseUrl)) {
             $pathInfo = substr($pathInfo, strlen($baseUrl));
-        } elseif (isset($_SERVER['PHP_SELF']) && strpos($_SERVER['PHP_SELF'], $scriptUrl) === 0) {
+        } elseif (isset($_SERVER['PHP_SELF']) && str_starts_with($_SERVER['PHP_SELF'], $scriptUrl)) {
             $pathInfo = substr($_SERVER['PHP_SELF'], strlen($scriptUrl));
         } else {
             throw new InvalidConfigException('Unable to determine the path info of the current request.');
@@ -1739,7 +1739,7 @@ class Request extends \yii\base\Request
             ];
 
             foreach ($params as $param) {
-                if (strpos($param, '=') !== false) {
+                if (str_contains($param, '=')) {
                     [$key, $value] = explode('=', $param, 2);
 
                     if ($key === 'q') {
@@ -1823,8 +1823,8 @@ class Request extends \yii\base\Request
 
                 if (
                     $normalizedLanguage === $acceptableLanguage // en-us==en-us
-                    || strpos($acceptableLanguage, $normalizedLanguage . '-') === 0 // en==en-us
-                    || strpos($normalizedLanguage, $acceptableLanguage . '-') === 0 // en-us==en
+                    || str_starts_with($acceptableLanguage, $normalizedLanguage . '-')   // en==en-us
+                    || str_starts_with($normalizedLanguage, $acceptableLanguage . '-')   // en-us==en
                 ) {
                     return $language;
                 }

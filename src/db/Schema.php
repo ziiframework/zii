@@ -559,11 +559,11 @@ abstract class Schema extends BaseObject
             return $name;
         }
 
-        if (strpos($name, '{{') !== false) {
+        if (str_contains($name, '{{')) {
             return $name;
         }
 
-        if (strpos($name, '.') === false) {
+        if (!str_contains($name, '.')) {
             return $this->quoteSimpleTableName($name);
         }
         $parts = $this->getTableNameParts($name);
@@ -603,7 +603,7 @@ abstract class Schema extends BaseObject
      */
     public function quoteColumnName($name)
     {
-        if (strpos($name, '(') !== false || strpos($name, '[[') !== false) {
+        if (str_contains($name, '(') || str_contains($name, '[[')) {
             return $name;
         }
 
@@ -614,7 +614,7 @@ abstract class Schema extends BaseObject
             $prefix = '';
         }
 
-        if (strpos($name, '{{') !== false) {
+        if (str_contains($name, '{{')) {
             return $name;
         }
 
@@ -638,7 +638,7 @@ abstract class Schema extends BaseObject
             [$startingCharacter, $endingCharacter] = $this->tableQuoteCharacter;
         }
 
-        return strpos($name, $startingCharacter) !== false ? $name : $startingCharacter . $name . $endingCharacter;
+        return str_contains($name, $startingCharacter) ? $name : $startingCharacter . $name . $endingCharacter;
     }
 
     /**
@@ -658,7 +658,7 @@ abstract class Schema extends BaseObject
             [$startingCharacter, $endingCharacter] = $this->columnQuoteCharacter;
         }
 
-        return $name === '*' || strpos($name, $startingCharacter) !== false ? $name : $startingCharacter . $name . $endingCharacter;
+        return $name === '*' || str_contains($name, $startingCharacter) ? $name : $startingCharacter . $name . $endingCharacter;
     }
 
     /**
@@ -680,7 +680,7 @@ abstract class Schema extends BaseObject
             $startingCharacter = $this->tableQuoteCharacter[0];
         }
 
-        return strpos($name, $startingCharacter) === false ? $name : substr($name, 1, -1);
+        return !str_contains($name, $startingCharacter) ? $name : substr($name, 1, -1);
     }
 
     /**
@@ -702,7 +702,7 @@ abstract class Schema extends BaseObject
             $startingCharacter = $this->columnQuoteCharacter[0];
         }
 
-        return strpos($name, $startingCharacter) === false ? $name : substr($name, 1, -1);
+        return !str_contains($name, $startingCharacter) ? $name : substr($name, 1, -1);
     }
 
     /**
@@ -716,7 +716,7 @@ abstract class Schema extends BaseObject
      */
     public function getRawTableName($name)
     {
-        if (strpos($name, '{{') !== false) {
+        if (str_contains($name, '{{')) {
             $name = preg_replace('/\\{\\{(.*?)\\}\\}/', '\1', $name);
 
             return str_replace('%', $this->db->tablePrefix, $name);
@@ -776,7 +776,7 @@ abstract class Schema extends BaseObject
         $exceptionClass = '\yii\db\Exception';
 
         foreach ($this->exceptionMap as $error => $class) {
-            if (strpos($e->getMessage(), $error) !== false) {
+            if (str_contains($e->getMessage(), $error)) {
                 $exceptionClass = $class;
             }
         }

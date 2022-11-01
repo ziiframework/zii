@@ -297,7 +297,7 @@ class AccessRule extends Component
                 || ($ip !== null
                     && ($pos = strpos($rule, '*')) !== false
                     && strncmp($ip, $rule, $pos) === 0)
-                || (strpos($rule, '/') !== false
+                || (str_contains($rule, '/')
                     && IpHelper::inRange($ip, $rule) === true)
             ) {
                 return true;

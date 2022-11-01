@@ -101,7 +101,7 @@ class InConditionBuilder implements ExpressionBuilderInterface
             return $nullCondition;
         }
 
-        if (strpos($column, '(') === false) {
+        if (!str_contains($column, '(')) {
             $column = $this->queryBuilder->db->quoteColumnName($column);
         }
 
@@ -181,7 +181,7 @@ class InConditionBuilder implements ExpressionBuilderInterface
                     $col = $col->expression;
                 }
 
-                if (strpos($col, '(') === false) {
+                if (!str_contains($col, '(')) {
                     $columns[$i] = $this->queryBuilder->db->quoteColumnName($col);
                 }
             }
@@ -193,7 +193,7 @@ class InConditionBuilder implements ExpressionBuilderInterface
             $columns = $columns->expression;
         }
 
-        if (strpos($columns, '(') === false) {
+        if (!str_contains($columns, '(')) {
             $columns = $this->queryBuilder->db->quoteColumnName($columns);
         }
 
@@ -241,7 +241,7 @@ class InConditionBuilder implements ExpressionBuilderInterface
             if ($column instanceof Expression) {
                 $column = $column->expression;
             }
-            $sqlColumns[] = strpos($column, '(') === false ? $this->queryBuilder->db->quoteColumnName($column) : $column;
+            $sqlColumns[] = !str_contains($column, '(') ? $this->queryBuilder->db->quoteColumnName($column) : $column;
         }
 
         return '(' . implode(', ', $sqlColumns) . ") $operator (" . implode(', ', $vss) . ')';

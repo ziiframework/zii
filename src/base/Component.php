@@ -567,7 +567,7 @@ class Component extends BaseObject
     {
         $this->ensureBehaviors();
 
-        if (strpos($name, '*') !== false) {
+        if (str_contains($name, '*')) {
             if ($append || empty($this->_eventWildcards[$name])) {
                 $this->_eventWildcards[$name][] = [$handler, $data];
             } else {

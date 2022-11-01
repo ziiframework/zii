@@ -63,7 +63,7 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
             $size = $column->size;
             $dbType = $column->dbType;
 
-            if (strpos($name, 'char_') === 0) {
+            if (str_starts_with($name, 'char_')) {
                 switch ($name) {
                     case 'char_col':
                         $expectedType = 'char';

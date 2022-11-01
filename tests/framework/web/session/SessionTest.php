@@ -107,7 +107,7 @@ class SessionTest extends TestCase
         $sessionSavePath = session_save_path() ?: sys_get_temp_dir();
         // Only perform garbage collection if "N argument" is not used,
         // see https://www.php.net/manual/en/session.configuration.php#ini.session.save-path
-        if (strpos($sessionSavePath, ';') === false) {
+        if (!str_contains($sessionSavePath, ';')) {
             foreach (['non-existing-non-strict', 'non-existing-strict'] as $sessionId) {
                 @unlink($sessionSavePath . '/sess_' . $sessionId);
             }

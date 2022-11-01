@@ -46,7 +46,7 @@ class HashConditionBuilder implements ExpressionBuilderInterface
                 // IN condition
                 $parts[] = $this->queryBuilder->buildCondition(new InCondition($column, 'IN', $value), $params);
             } else {
-                if (strpos($column, '(') === false) {
+                if (!str_contains($column, '(')) {
                     $column = $this->queryBuilder->db->quoteColumnName($column);
                 }
 

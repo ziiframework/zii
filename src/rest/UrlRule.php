@@ -241,14 +241,14 @@ class UrlRule extends CompositeUrlRule
 
         if (
             $this->prefix !== ''
-            && strpos($this->prefix, '<') === false
-            && strpos($pathInfo . '/', $this->prefix . '/') !== 0
+            && !str_contains($this->prefix, '<')
+            && !str_starts_with($pathInfo . '/', $this->prefix . '/')
         ) {
             return false;
         }
 
         foreach ($this->rules as $urlName => $rules) {
-            if (strpos($pathInfo, $urlName) !== false) {
+            if (str_contains($pathInfo, $urlName)) {
                 foreach ($rules as $rule) {
                     /* @var $rule WebUrlRule */
                     $result = $rule->parseRequest($manager, $request);
@@ -279,7 +279,7 @@ class UrlRule extends CompositeUrlRule
         $this->createStatus = WebUrlRule::CREATE_STATUS_SUCCESS;
 
         foreach ($this->controller as $urlName => $controller) {
-            if (strpos($route, $controller) !== false) {
+            if (str_contains($route, $controller)) {
                 /* @var $rules UrlRuleInterface[] */
                 $rules = $this->rules[$urlName];
                 $url = $this->iterateRules($rules, $manager, $route, $params);

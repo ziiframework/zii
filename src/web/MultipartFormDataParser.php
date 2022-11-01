@@ -231,7 +231,7 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
         $headerParts = preg_split('/\\R/su', $headerContent, -1, PREG_SPLIT_NO_EMPTY);
 
         foreach ($headerParts as $headerPart) {
-            if (strpos($headerPart, ':') === false) {
+            if (!str_contains($headerPart, ':')) {
                 continue;
             }
 
@@ -239,7 +239,7 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
             $headerName = strtolower(trim($headerName));
             $headerValue = trim($headerValue);
 
-            if (strpos($headerValue, ';') === false) {
+            if (!str_contains($headerValue, ';')) {
                 $headers[$headerName] = $headerValue;
             } else {
                 $headers[$headerName] = [];
@@ -247,7 +247,7 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
                 foreach (explode(';', $headerValue) as $part) {
                     $part = trim($part);
 
-                    if (strpos($part, '=') === false) {
+                    if (!str_contains($part, '=')) {
                         $headers[$headerName][] = $part;
                     } else {
                         [$name, $value] = explode('=', $part, 2);
@@ -301,7 +301,7 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
      */
     private function addFile(&$files, $name, $info): void
     {
-        if (strpos($name, '[') === false) {
+        if (!str_contains($name, '[')) {
             $files[$name] = $info;
 
             return;

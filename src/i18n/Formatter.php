@@ -660,7 +660,7 @@ class Formatter extends Component
         $scheme = ArrayHelper::remove($options, 'scheme');
 
         if ($scheme === null) {
-            if (strpos($url, '://') === false) {
+            if (!str_contains($url, '://')) {
                 $url = 'http://' . $url;
             }
         } else {

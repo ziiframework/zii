@@ -113,7 +113,7 @@ class Event extends BaseObject
     {
         $class = ltrim($class, '\\');
 
-        if (strpos($class, '*') !== false || strpos($name, '*') !== false) {
+        if (str_contains($class, '*') || str_contains($name, '*')) {
             if ($append || empty(self::$_eventWildcards[$name][$class])) {
                 self::$_eventWildcards[$name][$class][] = [$handler, $data];
             } else {

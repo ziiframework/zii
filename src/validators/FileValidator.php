@@ -602,7 +602,7 @@ class FileValidator extends Validator
                 return true;
             }
 
-            if (strpos($mimeType, '*') !== false && preg_match($this->buildMimeTypeRegexp($mimeType), $fileMimeType)) {
+            if (str_contains($mimeType, '*') && preg_match($this->buildMimeTypeRegexp($mimeType), $fileMimeType)) {
                 return true;
             }
         }

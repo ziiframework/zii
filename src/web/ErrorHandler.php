@@ -430,7 +430,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
      */
     public function isCoreFile($file)
     {
-        return $file === null || strpos(realpath($file), YII2_PATH . DIRECTORY_SEPARATOR) === 0;
+        return $file === null || str_starts_with(realpath($file), YII2_PATH . DIRECTORY_SEPARATOR);
     }
 
     /**

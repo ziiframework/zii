@@ -153,7 +153,7 @@ class Theme extends Component
         foreach ($pathMap as $from => $tos) {
             $from = FileHelper::normalizePath(Yii::getAlias($from)) . DIRECTORY_SEPARATOR;
 
-            if (strpos($path, $from) === 0) {
+            if (str_starts_with($path, $from)) {
                 $n = strlen($from);
 
                 foreach ((array) $tos as $to) {

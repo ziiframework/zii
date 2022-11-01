@@ -162,7 +162,7 @@ class BaseYii
             }
 
             foreach (static::$aliases[$root] as $name => $path) {
-                if (strpos($alias . '/', $name . '/') === 0) {
+                if (str_starts_with($alias . '/', $name . '/')) {
                     return $path . substr($alias, strlen($name));
                 }
             }
@@ -195,7 +195,7 @@ class BaseYii
             }
 
             foreach (static::$aliases[$root] as $name => $path) {
-                if (strpos($alias . '/', $name . '/') === 0) {
+                if (str_starts_with($alias . '/', $name . '/')) {
                     return $name;
                 }
             }
@@ -306,7 +306,7 @@ class BaseYii
             if (strncmp($classFile, '@', 1) === 0) {
                 $classFile = static::getAlias($classFile);
             }
-        } elseif (strpos($className, '\\') !== false) {
+        } elseif (str_contains($className, '\\')) {
             $classFile = static::getAlias('@' . str_replace('\\', '/', $className) . '.php', false);
 
             if ($classFile === false || !is_file($classFile)) {

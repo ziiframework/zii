@@ -341,7 +341,7 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
         $column->isPrimaryKey = $info['pk'] != 0;
 
         $column->dbType = strtolower($info['type']);
-        $column->unsigned = strpos($column->dbType, 'unsigned') !== false;
+        $column->unsigned = str_contains($column->dbType, 'unsigned');
 
         $column->type = self::TYPE_STRING;
 

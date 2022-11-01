@@ -47,7 +47,7 @@ class InConditionBuilder extends \yii\db\conditions\InConditionBuilder
             if ($column instanceof Expression) {
                 $column = $column->expression;
             }
-            $quotedColumns[$i] = strpos($column, '(') === false ? $this->queryBuilder->db->quoteColumnName($column) : $column;
+            $quotedColumns[$i] = !str_contains($column, '(') ? $this->queryBuilder->db->quoteColumnName($column) : $column;
         }
         $vss = [];
 

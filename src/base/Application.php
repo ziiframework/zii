@@ -349,7 +349,7 @@ abstract class Application extends Module
                     $component = $this->get($mixed);
                 } elseif ($this->hasModule($mixed)) {
                     $component = $this->getModule($mixed);
-                } elseif (strpos($mixed, '\\') === false) {
+                } elseif (!str_contains($mixed, '\\')) {
                     throw new InvalidConfigException("Unknown bootstrapping component ID: $mixed");
                 }
             }

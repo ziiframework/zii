@@ -68,17 +68,17 @@ class BaseFileHelper
     {
         $path = rtrim(strtr($path, '/\\', $ds . $ds), $ds);
 
-        if (strpos($ds . $path, "{$ds}.") === false && strpos($path, "{$ds}{$ds}") === false) {
+        if (!str_contains($ds . $path, "{$ds}.") && !str_contains($path, "{$ds}{$ds}")) {
             return $path;
         }
         // fix #17235 stream wrappers
         foreach (stream_get_wrappers() as $protocol) {
-            if (strpos($path, "{$protocol}://") === 0) {
+            if (str_starts_with($path, "{$protocol}://")) {
                 return $path;
             }
         }
         // the path may contain ".", ".." or double slashes, need to clean them up
-        if (strpos($path, "{$ds}{$ds}") === 0 && $ds == '\\') {
+        if (str_starts_with($path, "{$ds}{$ds}") && $ds == '\\') {
             $parts = [$ds];
         } else {
             $parts = [];
@@ -346,7 +346,7 @@ class BaseFileHelper
         $src = static::normalizePath($src);
         $dst = static::normalizePath($dst);
 
-        if ($src === $dst || strpos($dst, $src . DIRECTORY_SEPARATOR) === 0) {
+        if ($src === $dst || str_starts_with($dst, $src . DIRECTORY_SEPARATOR)) {
             throw new InvalidArgumentException('Trying to copy a directory to itself or a subdirectory.');
         }
         $dstExists = is_dir($dst);
@@ -917,7 +917,7 @@ class BaseFileHelper
             $result['flags'] |= self::PATTERN_MUSTBEDIR;
         }
 
-        if (strpos($pattern, '/') === false) {
+        if (!str_contains($pattern, '/')) {
             $result['flags'] |= self::PATTERN_NODIR;
         }
         $result['firstWildcard'] = self::firstWildcardInPattern($pattern);

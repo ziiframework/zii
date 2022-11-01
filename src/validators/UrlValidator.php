@@ -81,7 +81,7 @@ class UrlValidator extends Validator
 
         if (!empty($result)) {
             $this->addError($model, $attribute, $result[0], $result[1]);
-        } elseif ($this->defaultScheme !== null && strpos($value, '://') === false) {
+        } elseif ($this->defaultScheme !== null && !str_contains($value, '://')) {
             $model->$attribute = $this->defaultScheme . '://' . $value;
         }
     }
@@ -93,11 +93,11 @@ class UrlValidator extends Validator
     {
         // make sure the length is limited to avoid DOS attacks
         if (is_string($value) && strlen($value) < 2000) {
-            if ($this->defaultScheme !== null && strpos($value, '://') === false) {
+            if ($this->defaultScheme !== null && !str_contains($value, '://')) {
                 $value = $this->defaultScheme . '://' . $value;
             }
 
-            if (strpos($this->pattern, '{schemes}') !== false) {
+            if (str_contains($this->pattern, '{schemes}')) {
                 $pattern = str_replace('{schemes}', '(' . implode('|', $this->validSchemes) . ')', $this->pattern);
             } else {
                 $pattern = $this->pattern;
@@ -140,7 +140,7 @@ class UrlValidator extends Validator
      */
     public function getClientOptions($model, $attribute)
     {
-        if (strpos($this->pattern, '{schemes}') !== false) {
+        if (str_contains($this->pattern, '{schemes}')) {
             $pattern = str_replace('{schemes}', '(' . implode('|', $this->validSchemes) . ')', $this->pattern);
         } else {
             $pattern = $this->pattern;

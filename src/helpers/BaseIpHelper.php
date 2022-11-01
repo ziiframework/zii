@@ -45,7 +45,7 @@ class BaseIpHelper
      */
     public static function getIpVersion($ip)
     {
-        return strpos($ip, ':') === false ? self::IPV4 : self::IPV6;
+        return !str_contains($ip, ':') ? self::IPV4 : self::IPV6;
     }
 
     /**

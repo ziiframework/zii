@@ -650,7 +650,7 @@ EOD;
             }
 
             foreach ($ignoreCategories as $pattern) {
-                if (strpos($pattern, '*') > 0 && strpos($category, rtrim($pattern, '*')) === 0) {
+                if (strpos($pattern, '*') > 0 && str_starts_with($category, rtrim($pattern, '*'))) {
                     return true;
                 }
             }

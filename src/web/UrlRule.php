@@ -287,7 +287,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
             $this->pattern = '/' . $this->pattern . '/';
         }
 
-        if (strpos($this->route, '<') !== false && preg_match_all('/<([\w._-]+)>/', $this->route, $matches)) {
+        if (str_contains($this->route, '<') && preg_match_all('/<([\w._-]+)>/', $this->route, $matches)) {
             foreach ($matches[1] as $name) {
                 $this->_routeParams[$name] = "<$name>";
             }
@@ -590,7 +590,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
             if ($pos !== false) {
                 $url = substr($url, 0, $pos) . preg_replace('#/+#', '/', substr($url, $pos));
             }
-        } elseif (strpos($url, '//') !== false) {
+        } elseif (str_contains($url, '//')) {
             $url = preg_replace('#/+#', '/', trim($url, '/'));
         }
 

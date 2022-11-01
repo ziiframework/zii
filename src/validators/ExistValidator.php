@@ -356,7 +356,7 @@ class ExistValidator extends Validator
         $prefixedConditions = [];
 
         foreach ($conditions as $columnName => $columnValue) {
-            if (strpos($columnName, '(') === false) {
+            if (!str_contains($columnName, '(')) {
                 $prefixedColumn = "{$alias}.[[" . preg_replace('/^' . preg_quote($alias) . '\.(.*)$/', '$1', $columnName) . ']]';
             } else {
                 // there is an expression, can't prefix it reliably

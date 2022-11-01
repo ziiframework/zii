@@ -693,11 +693,11 @@ class ActiveQuery extends Query implements ActiveQueryInterface
         [$childTable, $childAlias] = $child->getTableNameAndAlias();
 
         if (!empty($child->link)) {
-            if (strpos($parentAlias, '{{') === false) {
+            if (!str_contains($parentAlias, '{{')) {
                 $parentAlias = '{{' . $parentAlias . '}}';
             }
 
-            if (strpos($childAlias, '{{') === false) {
+            if (!str_contains($childAlias, '{{')) {
                 $childAlias = '{{' . $childAlias . '}}';
             }
 

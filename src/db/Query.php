@@ -360,7 +360,7 @@ class Query extends Component implements QueryInterface, ExpressionInterface
         }
 
         if (is_string($this->indexBy) && is_array($this->select) && count($this->select) === 1) {
-            if (strpos($this->indexBy, '.') === false && count($tables = $this->getTablesUsedInFrom()) > 0) {
+            if (!str_contains($this->indexBy, '.') && count($tables = $this->getTablesUsedInFrom()) > 0) {
                 $this->select[] = key($tables) . '.' . $this->indexBy;
             } else {
                 $this->select[] = $this->indexBy;
@@ -775,7 +775,7 @@ PATTERN;
                 if (
                     preg_match('/^(.*?)(?i:\s+as\s+|\s+)([\w\-_\.]+)$/', $columnDefinition, $matches) &&
                     !preg_match('/^\d+$/', $matches[2]) &&
-                    strpos($matches[2], '.') === false
+                    !str_contains($matches[2], '.')
                 ) {
                     // Using "columnName as alias" or "columnName alias" syntax
                     $select[$matches[2]] = $matches[1];
@@ -783,7 +783,7 @@ PATTERN;
                     continue;
                 }
 
-                if (strpos($columnDefinition, '(') === false) {
+                if (!str_contains($columnDefinition, '(')) {
                     // Normal column name, just alias it to itself to ensure it's not selected twice
                     $select[$columnDefinition] = $columnDefinition;
 

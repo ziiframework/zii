@@ -465,7 +465,7 @@ abstract class BaseMigrateController extends Controller
         $migrations = $this->getNewMigrations();
 
         foreach ($migrations as $i => $migration) {
-            if (strpos($migration, $version) === 0) {
+            if (str_starts_with($migration, $version)) {
                 if ($this->confirm("Set migration history at $originalVersion?")) {
                     for ($j = 0; $j <= $i; ++$j) {
                         $this->addMigrationHistory($migrations[$j]);
@@ -482,7 +482,7 @@ abstract class BaseMigrateController extends Controller
         $migrations[] = static::BASE_MIGRATION;
 
         foreach ($migrations as $i => $migration) {
-            if (strpos($migration, $version) === 0) {
+            if (str_starts_with($migration, $version)) {
                 if ($i === 0) {
                     $this->stdout("Already at '$originalVersion'. Nothing needs to be done.\n", Console::FG_YELLOW);
                 } elseif ($this->confirm("Set migration history at $originalVersion?")) {
@@ -751,7 +751,7 @@ abstract class BaseMigrateController extends Controller
         $namespace = null;
         $name = trim($name, '\\');
 
-        if (strpos($name, '\\') !== false) {
+        if (str_contains($name, '\\')) {
             $namespace = substr($name, 0, strrpos($name, '\\'));
             $name = substr($name, strrpos($name, '\\') + 1);
         } elseif ($this->migrationPath === null) {
@@ -904,7 +904,7 @@ abstract class BaseMigrateController extends Controller
     {
         $class = trim($class, '\\');
 
-        if (strpos($class, '\\') === false) {
+        if (!str_contains($class, '\\')) {
             if (is_array($this->migrationPath)) {
                 foreach ($this->migrationPath as $path) {
                     $file = $path . DIRECTORY_SEPARATOR . $class . '.php';
@@ -963,7 +963,7 @@ abstract class BaseMigrateController extends Controller
         $migrations = $this->getNewMigrations();
 
         foreach ($migrations as $i => $migration) {
-            if (strpos($migration, $version) === 0) {
+            if (str_starts_with($migration, $version)) {
                 return $this->actionUp($i + 1);
             }
         }
@@ -972,7 +972,7 @@ abstract class BaseMigrateController extends Controller
         $migrations = array_keys($this->getMigrationHistory(null));
 
         foreach ($migrations as $i => $migration) {
-            if (strpos($migration, $version) === 0) {
+            if (str_starts_with($migration, $version)) {
                 if ($i === 0) {
                     $this->stdout("Already at '$originalVersion'. Nothing needs to be done.\n", Console::FG_YELLOW);
                 } else {

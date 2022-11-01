@@ -485,7 +485,7 @@ class IpValidator extends Validator
      */
     private function parseNegatedRange($string)
     {
-        $isNegated = strpos($string, static::NEGATION_CHAR) === 0;
+        $isNegated = str_starts_with($string, static::NEGATION_CHAR);
 
         return [$isNegated, $isNegated ? substr($string, strlen(static::NEGATION_CHAR)) : $string];
     }

@@ -639,7 +639,7 @@ class FileHelperTest extends TestCase
         // dir
         $foundFiles = FileHelper::findFiles($basePath, ['except' => ['/one']]);
         sort($foundFiles);
-        $expect = array_values(array_filter($flat, static fn ($p) => strpos($p, DIRECTORY_SEPARATOR . 'one') === false));
+        $expect = array_values(array_filter($flat, static fn ($p) => !str_contains($p, DIRECTORY_SEPARATOR . 'one')));
         $this->assertEquals($expect, $foundFiles);
 
         // dir contents

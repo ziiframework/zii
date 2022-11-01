@@ -141,7 +141,7 @@ class ActionFilter extends Behavior
             $mid = $this->owner->getUniqueId();
             $id = $action->getUniqueId();
 
-            if ($mid !== '' && strpos($id, $mid) === 0) {
+            if ($mid !== '' && str_starts_with($id, $mid)) {
                 $id = substr($id, strlen($mid) + 1);
             }
         } else {

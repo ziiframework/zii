@@ -182,7 +182,7 @@ class UploadedFile extends BaseObject
         $results = [];
 
         foreach ($files as $key => $file) {
-            if (strpos($key, "{$name}[") === 0) {
+            if (str_starts_with($key, "{$name}[")) {
                 $results[] = new static($file);
             }
         }

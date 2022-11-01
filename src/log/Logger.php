@@ -180,7 +180,7 @@ class Logger extends Component
             array_pop($ts); // remove the last trace since it would be the entry script, not very useful
 
             foreach ($ts as $trace) {
-                if (isset($trace['file'], $trace['line']) && strpos($trace['file'], YII2_PATH) !== 0) {
+                if (isset($trace['file'], $trace['line']) && !str_starts_with($trace['file'], YII2_PATH)) {
                     unset($trace['object'], $trace['args']);
                     $traces[] = $trace;
 
@@ -296,7 +296,7 @@ class Logger extends Component
 
                 if (
                     ($outerTimingItem['category'] === $category || $prefix !== $category)
-                    && strpos($outerTimingItem['category'], $prefix) === 0
+                    && str_starts_with($outerTimingItem['category'], $prefix)
                 ) {
                     $matched = true;
                     break;
@@ -312,7 +312,7 @@ class Logger extends Component
 
                         if (
                             ($innerTimingItem['category'] === $category || $prefix !== $category)
-                            && strpos($innerTimingItem['category'], $prefix) === 0
+                            && str_starts_with($innerTimingItem['category'], $prefix)
                         ) {
                             $matched = false;
                             break;

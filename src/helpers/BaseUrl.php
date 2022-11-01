@@ -145,7 +145,7 @@ class BaseUrl
             throw new InvalidArgumentException("Unable to resolve the relative route: $route. No active controller is available.");
         }
 
-        if (strpos($route, '/') === false) {
+        if (!str_contains($route, '/')) {
             // empty or an action ID
             return $route === '' ? Yii::$app->controller->getRoute() : Yii::$app->controller->getUniqueId() . '/' . $route;
         }
@@ -397,7 +397,7 @@ class BaseUrl
      */
     public static function isRelative($url)
     {
-        return strncmp($url, '//', 2) && strpos($url, '://') === false;
+        return strncmp($url, '//', 2) && !str_contains($url, '://');
     }
 
     /**

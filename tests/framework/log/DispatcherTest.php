@@ -203,7 +203,7 @@ namespace yiiunit\framework\log {
                                 return false;
                             }
 
-                            if (strpos($arg[0][0], 'Unable to send log via ' . get_class($target1) . ': Exception (Exception) \'yii\base\UserException\' with message \'some error\'') !== 0) {
+                            if (!str_starts_with($arg[0][0], 'Unable to send log via ' . get_class($target1) . ': Exception (Exception) \'yii\base\UserException\' with message \'some error\'')) {
                                 return false;
                             }
 

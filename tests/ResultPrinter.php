@@ -33,7 +33,7 @@ class ResultPrinter extends \PHPUnit\TextUI\DefaultResultPrinter
         }
 
         if (is_string($out)) {
-            $this->is_stdout = strpos($out, 'php://stdout') === 0;
+            $this->is_stdout = str_starts_with($out, 'php://stdout');
         }
     }
 

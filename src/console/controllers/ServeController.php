@@ -59,7 +59,7 @@ class ServeController extends Controller
         $documentRoot = Yii::getAlias($this->docroot);
         $router = $this->router !== null ? Yii::getAlias($this->router) : null;
 
-        if (strpos($address, ':') === false) {
+        if (!str_contains($address, ':')) {
             $address = $address . ':' . $this->port;
         }
 

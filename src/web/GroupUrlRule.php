@@ -133,7 +133,7 @@ class GroupUrlRule extends CompositeUrlRule
     {
         $pathInfo = $request->getPathInfo();
 
-        if ($this->prefix === '' || strpos($pathInfo . '/', $this->prefix . '/') === 0) {
+        if ($this->prefix === '' || str_starts_with($pathInfo . '/', $this->prefix . '/')) {
             return parent::parseRequest($manager, $request);
         }
 
@@ -145,7 +145,7 @@ class GroupUrlRule extends CompositeUrlRule
      */
     public function createUrl($manager, $route, $params)
     {
-        if ($this->routePrefix === '' || strpos($route, $this->routePrefix . '/') === 0) {
+        if ($this->routePrefix === '' || str_starts_with($route, $this->routePrefix . '/')) {
             return parent::createUrl($manager, $route, $params);
         }
 

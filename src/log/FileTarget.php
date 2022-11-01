@@ -121,7 +121,7 @@ class FileTarget extends Target
      */
     public function export(): void
     {
-        if (strpos($this->logFile, '://') === false || strncmp($this->logFile, 'file://', 7) === 0) {
+        if (!str_contains($this->logFile, '://') || strncmp($this->logFile, 'file://', 7) === 0) {
             $logPath = dirname($this->logFile);
             FileHelper::createDirectory($logPath, $this->dirMode, true);
         }

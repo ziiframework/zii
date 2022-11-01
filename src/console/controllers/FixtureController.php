@@ -489,7 +489,7 @@ class FixtureController extends Controller
         $config = [];
 
         foreach ($fixtures as $fixture) {
-            $isNamespaced = (strpos($fixture, '\\') !== false);
+            $isNamespaced = str_contains($fixture, '\\');
             // replace linux' path slashes to namespace backslashes, in case if $fixture is non-namespaced relative path
             $fixture = str_replace('/', '\\', $fixture);
             $fullClassName = $isNamespaced ? $fixture : $this->namespace . '\\' . $fixture;

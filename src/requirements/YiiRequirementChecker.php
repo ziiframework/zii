@@ -373,7 +373,7 @@ class YiiRequirementChecker
         } else {
             $evalPrefix = 'eval:';
 
-            if (is_string($requirement['condition']) && strpos($requirement['condition'], $evalPrefix) === 0) {
+            if (is_string($requirement['condition']) && str_starts_with($requirement['condition'], $evalPrefix)) {
                 $expression = substr($requirement['condition'], strlen($evalPrefix));
                 $requirement['condition'] = $this->evaluateExpression($expression);
             }

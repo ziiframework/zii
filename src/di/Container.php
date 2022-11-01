@@ -378,7 +378,7 @@ class Container extends Component
             }
 
             if (!isset($definition['class'])) {
-                if (strpos($class, '\\') !== false) {
+                if (str_contains($class, '\\')) {
                     $definition['class'] = $class;
                 } else {
                     throw new InvalidConfigException('A class definition requires a "class" member.');

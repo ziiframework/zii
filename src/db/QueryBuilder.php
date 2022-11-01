@@ -1378,11 +1378,11 @@ class QueryBuilder extends \yii\base\BaseObject
                 [$sql, $params] = $this->build($column, $params);
                 $columns[$i] = "($sql) AS " . $this->db->quoteColumnName($i);
             } elseif (is_string($i) && $i !== $column) {
-                if (strpos($column, '(') === false) {
+                if (!str_contains($column, '(')) {
                     $column = $this->db->quoteColumnName($column);
                 }
                 $columns[$i] = "$column AS " . $this->db->quoteColumnName($i);
-            } elseif (strpos($column, '(') === false) {
+            } elseif (!str_contains($column, '(')) {
                 if (preg_match('/^(.*?)(?i:\s+as\s+|\s+)([\w\-_\.]+)$/', $column, $matches)) {
                     $columns[$i] = $this->db->quoteColumnName($matches[1]) . ' AS ' . $this->db->quoteColumnName($matches[2]);
                 } else {
@@ -1462,11 +1462,11 @@ class QueryBuilder extends \yii\base\BaseObject
                 [$sql, $params] = $this->build($table, $params);
                 $tables[$i] = "($sql) " . $this->db->quoteTableName($i);
             } elseif (is_string($i)) {
-                if (strpos($table, '(') === false) {
+                if (!str_contains($table, '(')) {
                     $table = $this->db->quoteTableName($table);
                 }
                 $tables[$i] = "$table " . $this->db->quoteTableName($i);
-            } elseif (strpos(is_string($table) ? $table : (string) $table, '(') === false) {
+            } elseif (!str_contains(is_string($table) ? $table : (string) $table, '(')) {
                 if ($tableWithAlias = $this->extractAlias($table)) { // with alias
                     $tables[$i] = $this->db->quoteTableName($tableWithAlias[1]) . ' ' . $this->db->quoteTableName($tableWithAlias[2]);
                 } else {
@@ -1505,7 +1505,7 @@ class QueryBuilder extends \yii\base\BaseObject
         foreach ($columns as $i => $column) {
             if ($column instanceof ExpressionInterface) {
                 $columns[$i] = $this->buildExpression($column);
-            } elseif (strpos($column, '(') === false) {
+            } elseif (!str_contains($column, '(')) {
                 $columns[$i] = $this->db->quoteColumnName($column);
             }
         }
@@ -1693,7 +1693,7 @@ class QueryBuilder extends \yii\base\BaseObject
     public function buildColumns($columns)
     {
         if (!is_array($columns)) {
-            if (strpos($columns, '(') !== false) {
+            if (str_contains($columns, '(')) {
                 return $columns;
             }
 
@@ -1708,7 +1708,7 @@ class QueryBuilder extends \yii\base\BaseObject
         foreach ($columns as $i => $column) {
             if ($column instanceof ExpressionInterface) {
                 $columns[$i] = $this->buildExpression($column);
-            } elseif (strpos($column, '(') === false) {
+            } elseif (!str_contains($column, '(')) {
                 $columns[$i] = $this->db->quoteColumnName($column);
             }
         }

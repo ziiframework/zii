@@ -356,7 +356,7 @@ class UniqueValidator extends Validator
         $prefixedConditions = [];
 
         foreach ($conditions as $columnName => $columnValue) {
-            if (strpos($columnName, '(') === false) {
+            if (!str_contains($columnName, '(')) {
                 $columnName = preg_replace('/^' . preg_quote($alias) . '\.(.*)$/', '$1', $columnName);
 
                 if (strncmp($columnName, '[[', 2) === 0) {

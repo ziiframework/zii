@@ -738,7 +738,7 @@ EOD;
             }
             $outputUrlParts = array_merge($outputUrlParts, $inputFileRelativePathParts);
 
-            if (strpos($inputUrl, '/') !== false) {
+            if (str_contains($inputUrl, '/')) {
                 $inputUrlParts = explode('/', $inputUrl);
 
                 foreach ($inputUrlParts as $key => $inputUrlPart) {

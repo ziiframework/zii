@@ -360,7 +360,7 @@ class MigrateController extends BaseMigrateController
         ];
 
         foreach ($dropViewErrors as $dropViewError) {
-            if (strpos($errorMessage, $dropViewError) !== false) {
+            if (str_contains($errorMessage, $dropViewError)) {
                 return true;
             }
         }

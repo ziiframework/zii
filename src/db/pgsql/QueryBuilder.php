@@ -159,12 +159,12 @@ class QueryBuilder extends \yii\db\QueryBuilder
      */
     public function dropIndex($name, $table)
     {
-        if (strpos($table, '.') !== false && strpos($name, '.') === false) {
-            if (strpos($table, '{{') !== false) {
+        if (str_contains($table, '.') && !str_contains($name, '.')) {
+            if (str_contains($table, '{{')) {
                 $table = preg_replace('/\\{\\{(.*?)\\}\\}/', '\1', $table);
                 [$schema, $table] = explode('.', $table);
 
-                if (strpos($schema, '%') === false) {
+                if (!str_contains($schema, '%')) {
                     $name = $schema . '.' . $name;
                 } else {
                     $name = '{{' . $schema . '.' . $name . '}}';

@@ -194,7 +194,7 @@ class I18N extends Component
         }
         // try wildcard matching
         foreach ($this->translations as $pattern => $source) {
-            if (strpos($pattern, '*') > 0 && strpos($category, rtrim($pattern, '*')) === 0) {
+            if (strpos($pattern, '*') > 0 && str_starts_with($category, rtrim($pattern, '*'))) {
                 if ($source instanceof MessageSource) {
                     return $source;
                 }

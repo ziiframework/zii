@@ -110,7 +110,7 @@ class Application extends \yii\base\Application
             $option = '--' . self::OPTION_APPCONFIG . '=';
 
             foreach ($_SERVER['argv'] as $param) {
-                if (strpos($param, $option) !== false) {
+                if (str_contains($param, $option)) {
                     $path = substr($param, strlen($option));
 
                     if (!empty($path) && is_file($file = Yii::getAlias($path))) {

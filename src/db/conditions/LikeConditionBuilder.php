@@ -74,7 +74,7 @@ class LikeConditionBuilder implements ExpressionBuilderInterface
 
         if ($column instanceof ExpressionInterface) {
             $column = $this->queryBuilder->buildExpression($column, $params);
-        } elseif (is_string($column) && strpos($column, '(') === false) {
+        } elseif (is_string($column) && !str_contains($column, '(')) {
             $column = $this->queryBuilder->db->quoteColumnName($column);
         }
 
