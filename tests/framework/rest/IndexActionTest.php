@@ -57,7 +57,7 @@ class IndexActionTest extends TestCase
                     'class' => IndexAction::className(),
                     'modelClass' => IndexActionModel::className(),
                     'prepareSearchQuery' => function ($query, $requestParams) use (&$sql) {
-                        $this->assertTrue($query instanceof Query);
+                        $this->assertInstanceOf(Query::class, $query);
                         $sql = $query->createCommand()->getRawSql();
 
                         return $query;

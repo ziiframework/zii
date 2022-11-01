@@ -2078,7 +2078,7 @@ abstract class ActiveRecordTest extends DatabaseTestCase
         $order->populateRelation('orderItems', [$orderItem]);
         $order->save();
 
-        $this->assertEquals(1, count($order->orderItems));
+        $this->assertCount(1, $order->orderItems);
     }
 
     public function testIssetException(): void

@@ -83,7 +83,7 @@ class AssetBundleTest extends \yiiunit\TestCase
         $bundle = TestSourceAsset::register($view);
         $bundle->publish($am);
 
-        $this->assertTrue(is_dir($bundle->basePath));
+        $this->assertDirectoryExists($bundle->basePath);
         $this->sourcesPublish_VerifyFiles('css', $bundle);
         $this->sourcesPublish_VerifyFiles('js', $bundle);
     }
@@ -96,7 +96,7 @@ class AssetBundleTest extends \yiiunit\TestCase
             $this->assertFileExists($publishedFile);
             $this->assertFileEquals($publishedFile, $sourceFile);
         }
-        $this->assertTrue(is_dir($bundle->basePath . DIRECTORY_SEPARATOR . $type));
+        $this->assertDirectoryExists($bundle->basePath . DIRECTORY_SEPARATOR . $type);
     }
 
     public function testSourcesPublishedBySymlink(): void
@@ -112,7 +112,7 @@ class AssetBundleTest extends \yiiunit\TestCase
             'hashCallback' => static fn ($path) => sprintf('%x/%x', crc32($path), crc32(Yii::getVersion())),
         ]);
         $bundle = $this->verifySourcesPublishedBySymlink($view);
-        $this->assertTrue(is_dir(dirname($bundle->basePath)));
+        $this->assertDirectoryExists(dirname($bundle->basePath));
     }
 
     public function testSourcesPublishAssetManagerBeforeCopy(): void
@@ -125,7 +125,7 @@ class AssetBundleTest extends \yiiunit\TestCase
         $bundle = TestSourceAsset::register($view);
         $bundle->publish($am);
 
-        $this->assertFalse(is_dir($bundle->basePath));
+        $this->assertDirectoryNotExists($bundle->basePath);
 
         foreach ($bundle->js as $filename) {
             $publishedFile = $bundle->basePath . DIRECTORY_SEPARATOR . $filename;
@@ -144,7 +144,7 @@ class AssetBundleTest extends \yiiunit\TestCase
         ];
         $bundle->publish($am);
 
-        $this->assertFalse(is_dir($bundle->basePath));
+        $this->assertDirectoryNotExists($bundle->basePath);
 
         foreach ($bundle->js as $filename) {
             $publishedFile = $bundle->basePath . DIRECTORY_SEPARATOR . $filename;
@@ -173,8 +173,8 @@ class AssetBundleTest extends \yiiunit\TestCase
             $publishedFile = $bundle->basePath . DIRECTORY_SEPARATOR . $filename;
             $this->assertFileExists($publishedFile);
         }
-        $this->assertTrue(is_dir(dirname($bundle->basePath . DIRECTORY_SEPARATOR . $bundle->js[0])));
-        $this->assertTrue(is_dir($bundle->basePath));
+        $this->assertDirectoryExists(dirname($bundle->basePath . DIRECTORY_SEPARATOR . $bundle->js[0]));
+        $this->assertDirectoryExists($bundle->basePath);
     }
 
     public function testBasePathIsWritableOnPublish(): void
@@ -213,7 +213,7 @@ class AssetBundleTest extends \yiiunit\TestCase
         $bundle = TestSourceAsset::register($view);
         $bundle->publish($am);
 
-        $this->assertTrue(is_dir($bundle->basePath));
+        $this->assertDirectoryExists($bundle->basePath);
 
         foreach ($bundle->js as $filename) {
             $publishedFile = $bundle->basePath . DIRECTORY_SEPARATOR . $filename;

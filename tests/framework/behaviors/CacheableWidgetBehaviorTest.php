@@ -14,7 +14,7 @@ use Exception;
 use yii\base\Widget;
 use yiiunit\TestCase;
 use yii\behaviors\CacheableWidgetBehavior;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Unit test for [[\yii\behaviors\CacheableWidgetBehavior]].

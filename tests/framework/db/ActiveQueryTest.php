@@ -302,7 +302,7 @@ abstract class ActiveQueryTest extends DatabaseTestCase
         $category = $categories[1];
         $this->assertNotNull($category);
         $orders = $category->orders;
-        $this->assertEquals(2, count($orders));
+        $this->assertCount(2, $orders);
         $this->assertInstanceOf(Order::className(), $orders[0]);
         $this->assertInstanceOf(Order::className(), $orders[1]);
         $ids = [$orders[0]->id, $orders[1]->id];
@@ -312,7 +312,7 @@ abstract class ActiveQueryTest extends DatabaseTestCase
         $category = $categories[2];
         $this->assertNotNull($category);
         $orders = $category->orders;
-        $this->assertEquals(1, count($orders));
+        $this->assertCount(1, $orders);
         $this->assertInstanceOf(Order::className(), $orders[0]);
         $this->assertEquals(2, $orders[0]->id);
     }

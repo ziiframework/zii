@@ -13,7 +13,7 @@ namespace yiiunit\framework\log;
 use yii\log\Logger;
 use yiiunit\TestCase;
 use yii\log\Dispatcher;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 use function microtime;
 

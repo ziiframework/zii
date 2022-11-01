@@ -29,7 +29,7 @@ namespace yiiunit\framework\log {
     use yii\log\Logger;
     use yiiunit\TestCase;
     use yii\helpers\VarDumper;
-    use PHPUnit_Framework_MockObject_MockObject;
+    use PHPUnit\Framework\MockObject\MockObject;
 
     /**
      * Class SyslogTargetTest.

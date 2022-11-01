@@ -303,7 +303,7 @@ namespace yiiunit\framework\log {
             $message = 'test' . time();
             $dispatcher->dispatch([$message], false);
             $this->assertSame(1, $this->targetThrowFirstCount);
-            $this->assertSame(2, count($this->targetThrowSecondOutputs));
+            $this->assertCount(2, $this->targetThrowSecondOutputs);
             $this->assertSame($message, array_shift($this->targetThrowSecondOutputs));
             $this->assertStringStartsWith('Unable to send log via', array_shift($this->targetThrowSecondOutputs)[0]);
         }
