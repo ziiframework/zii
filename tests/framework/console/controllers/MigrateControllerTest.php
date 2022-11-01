@@ -342,6 +342,7 @@ class MigrateControllerTest extends TestCase
      * @param string $migrationName
      * @param string $table
      * @param array $params
+     *
      * @dataProvider generateMigrationDataProvider
      */
     public function testGenerateMigration($expectedFile, $migrationName, $table, $params): void
@@ -382,6 +383,7 @@ class MigrateControllerTest extends TestCase
      * @param string $junctionTable
      * @param string $firstTable
      * @param string $secondTable
+     *
      * @dataProvider generateJunctionMigrationDataProvider
      */
     public function testGenerateJunctionMigration($migrationName, $junctionTable, $firstTable, $secondTable): void
@@ -438,8 +440,6 @@ class MigrateControllerTest extends TestCase
      * Test the migrate:fresh command.
      *
      * @dataProvider refreshMigrationDataProvider
-     *
-     * @param $db
      *
      * @throws \yii\db\Exception
      */

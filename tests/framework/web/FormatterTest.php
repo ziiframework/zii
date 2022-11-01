@@ -50,6 +50,7 @@ abstract class FormatterTest extends \yiiunit\TestCase
     /**
      * @param mixed  $data the data to be formatted
      * @param string $json the expected JSON body
+     *
      * @dataProvider formatScalarDataProvider
      */
     public function testFormatScalar($data, $json): void
@@ -62,6 +63,7 @@ abstract class FormatterTest extends \yiiunit\TestCase
     /**
      * @param mixed  $data the data to be formatted
      * @param string $json the expected JSON body
+     *
      * @dataProvider formatArrayDataProvider
      */
     public function testFormatArrays($data, $json): void
@@ -74,6 +76,7 @@ abstract class FormatterTest extends \yiiunit\TestCase
     /**
      * @param mixed  $data the data to be formatted
      * @param string $json the expected JSON body
+     *
      * @dataProvider formatTraversableObjectDataProvider
      */
     public function testFormatTraversableObjects($data, $json): void
@@ -86,6 +89,7 @@ abstract class FormatterTest extends \yiiunit\TestCase
     /**
      * @param mixed  $data the data to be formatted
      * @param string $json the expected JSON body
+     *
      * @dataProvider formatObjectDataProvider
      */
     public function testFormatObjects($data, $json): void
@@ -98,6 +102,7 @@ abstract class FormatterTest extends \yiiunit\TestCase
     /**
      * @param mixed  $data the data to be formatted
      * @param string $expectedResult the expected body
+     *
      * @dataProvider formatModelDataProvider
      */
     public function testFormatModels($data, $expectedResult): void

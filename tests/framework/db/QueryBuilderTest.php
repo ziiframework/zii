@@ -1187,9 +1187,6 @@ abstract class QueryBuilderTest extends DatabaseTestCase
     /**
      * @dataProvider buildFromDataProvider
      *
-     * @param $table
-     * @param $expected
-     *
      * @throws Exception
      */
     public function testBuildFrom($table, $expected): void
@@ -2100,6 +2097,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
 
     /**
      * @depends      testInitFixtures
+     *
      * @dataProvider upsertProvider
      *
      * @param string          $table

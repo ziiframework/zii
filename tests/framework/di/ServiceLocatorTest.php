@@ -36,6 +36,7 @@ class TestSubclass extends TestClass
  * @author Qiang Xue <qiang.xue@gmail.com>
  *
  * @since 2.0
+ *
  * @group di
  */
 class ServiceLocatorTest extends TestCase

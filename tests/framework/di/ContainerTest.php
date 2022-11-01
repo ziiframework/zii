@@ -44,6 +44,7 @@ use function get_class;
  * @author Qiang Xue <qiang.xue@gmail.com>
  *
  * @since 2.0
+ *
  * @group di
  */
 class ContainerTest extends TestCase

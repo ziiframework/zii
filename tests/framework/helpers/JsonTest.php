@@ -22,6 +22,7 @@ use yiiunit\framework\models\JsonModel;
 
 /**
  * @group helpers
+ *
  * @coversDefaultClass \yii\helpers\Json
  */
 class JsonTest extends TestCase
@@ -251,6 +252,7 @@ class JsonTest extends TestCase
 
     /**
      * @see https://github.com/yiisoft/yii2/issues/17760
+     *
      * @covers ::encode
      */
     public function testEncodeDateTime(): void

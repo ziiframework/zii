@@ -479,8 +479,6 @@ class IpValidator extends Validator
     /**
      * Parses IP address/range for the negation with [[NEGATION_CHAR]].
      *
-     * @param $string
-     *
      * @return array `[0 => bool, 1 => string]`
      *  - boolean: whether the string is negated
      *  - string: the string without negation (when the negation were present)
@@ -497,8 +495,6 @@ class IpValidator extends Validator
      *
      *  - Recursively substitutes aliases, described in [[networks]] with their values,
      *  - Removes duplicates.
-     *
-     * @param $ranges
      *
      * @return array
      *

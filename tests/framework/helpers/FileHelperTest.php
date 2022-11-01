@@ -15,6 +15,7 @@ use yii\helpers\FileHelper;
  * Unit test for [[yii\helpers\FileHelper]].
  *
  * @see FileHelper
+ *
  * @group helpers
  */
 class FileHelperTest extends TestCase

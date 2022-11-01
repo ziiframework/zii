@@ -1188,8 +1188,6 @@ class Response extends \yii\base\Response
     /**
      * Checks if a stream is seekable.
      *
-     * @param $handle
-     *
      * @return bool
      */
     private function isSeekable($handle)

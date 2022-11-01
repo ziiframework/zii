@@ -83,9 +83,6 @@ class ControllerTest extends TestCase
     }
 
     /**
-     * @param $input
-     * @param $expected
-     *
      * @dataProvider actionIdMethodProvider
      */
     public function testActionIdMethod($input, $expected): void

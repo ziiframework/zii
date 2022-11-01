@@ -23,9 +23,6 @@ class IpHelperTest extends TestCase
 {
     /**
      * @dataProvider getIpVersionProvider
-     *
-     * @param $value
-     * @param $expected
      */
     public function testGetIpVersion($value, $expected, $message = ''): void
     {
@@ -71,8 +68,6 @@ class IpHelperTest extends TestCase
     }
 
     /**
-     * @param        $value
-     * @param        $expected
      * @param string $message
      *
      * @dataProvider ip2binProvider
@@ -95,10 +90,6 @@ class IpHelperTest extends TestCase
     }
 
     /**
-     * @param $value
-     * @param $range
-     * @param $expected
-     *
      * @dataProvider inRangeProvider
      */
     public function testInRange($value, $range, $expected): void

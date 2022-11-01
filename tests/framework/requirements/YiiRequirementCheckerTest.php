@@ -16,6 +16,7 @@ use yiiunit\TestCase;
  * Test case for [[YiiRequirementChecker]].
  *
  * @see YiiRequirementChecker
+ *
  * @group requirements
  */
 class YiiRequirementCheckerTest extends TestCase
@@ -198,6 +199,7 @@ class YiiRequirementCheckerTest extends TestCase
 
     /**
      * @depends testGetByteSize
+     *
      * @dataProvider dataProviderCompareByteSize
      *
      * @param string  $a                        first value.

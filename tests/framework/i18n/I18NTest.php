@@ -20,6 +20,7 @@ use yii\i18n\PhpMessageSource;
  * @author Carsten Brandt <mail@cebe.cc>
  *
  * @since 2.0
+ *
  * @group i18n
  */
 class I18NTest extends TestCase
@@ -240,8 +241,6 @@ class I18NTest extends TestCase
 
     /**
      * @dataProvider sourceLanguageDataProvider
-     *
-     * @param $sourceLanguage
      */
     public function testIssue11429($sourceLanguage): void
     {

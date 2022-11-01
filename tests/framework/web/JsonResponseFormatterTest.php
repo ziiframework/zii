@@ -167,6 +167,7 @@ class JsonResponseFormatterTest extends FormatterTest
      * @param mixed  $data the data to be formatted
      * @param string $json the expected JSON body
      * @param string $prettyJson the expected pretty JSON body
+     *
      * @dataProvider formatArrayDataProvider
      */
     public function testFormatArraysPretty($data, $json, $prettyJson): void
@@ -180,6 +181,7 @@ class JsonResponseFormatterTest extends FormatterTest
     /**
      * @param array $configuration JSON formatter configuration array.
      * @param string $contentTypeExpected Expected value of the response `Content-Type` header.
+     *
      * @dataProvider contentTypeGenerationDataProvider
      */
     public function testContentTypeGeneration($configuration, $contentTypeExpected): void

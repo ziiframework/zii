@@ -446,7 +446,6 @@ EXPECTED;
     }
 
     /**
-     * @param $smallString
      * @dataProvider dataMinimumWidth
      */
     public function testMinimumWidth($smallString): void

@@ -348,8 +348,6 @@ class FileValidatorTest extends TestCase
     }
 
     /**
-     * @param $fileName
-     *
      * @return UploadedFile
      */
     protected function getRealTestFile($fileName)
@@ -485,6 +483,7 @@ class FileValidatorTest extends TestCase
     /**
      * @param string $fileName
      * @param string $mask
+     *
      * @dataProvider validMimeTypes
      */
     public function testValidateMimeTypeMaskValid($fileName, $mask): void
@@ -497,6 +496,7 @@ class FileValidatorTest extends TestCase
     /**
      * @param string $fileName
      * @param string $mask
+     *
      * @dataProvider invalidMimeTypes
      */
     public function testValidateMimeTypeMaskInvalid($fileName, $mask): void
@@ -543,6 +543,7 @@ class FileValidatorTest extends TestCase
      * @param string $fileName
      * @param mixed $_
      * @param string|array $allowedExtensions
+     *
      * @dataProvider validMimeTypes
      */
     public function testValidateFileByExtensionUsingMimeType($fileName, $_, $allowedExtensions): void
@@ -557,6 +558,7 @@ class FileValidatorTest extends TestCase
      * @param string $fileName
      * @param mixed $_
      * @param string|array $allowedExtensions
+     *
      * @dataProvider invalidMimeTypes
      */
     public function testValidateFileByExtensionUsingMimeTypeInvalid($fileName, $_, $allowedExtensions): void
@@ -621,6 +623,7 @@ class FileValidatorTest extends TestCase
      * @param string $mask
      * @param string $fileMimeType
      * @param bool   $expected
+     *
      * @dataProvider mimeTypeCaseInsensitive
      */
     public function testValidateMimeTypeCaseInsensitive($mask, $fileMimeType, $expected): void

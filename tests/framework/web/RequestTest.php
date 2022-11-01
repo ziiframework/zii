@@ -17,6 +17,7 @@ use yiiunit\TestCase;
 
 /**
  * @group web
+ *
  * @backupGlobals enabled
  */
 class RequestTest extends TestCase

@@ -17,6 +17,7 @@ use yii\helpers\BaseConsole;
  * Unit test for [[yii\helpers\BaseConsole]].
  *
  * @see BaseConsole
+ *
  * @group helpers
  */
 class BaseConsoleTest extends TestCase
@@ -58,11 +59,6 @@ class BaseConsoleTest extends TestCase
 
     /**
      * @dataProvider ansiColorizedSubstr_withColors_data
-     *
-     * @param $str
-     * @param $start
-     * @param $length
-     * @param $expected
      */
     public function testAnsiColorizedSubstrWithColors($str, $start, $length, $expected): void
     {

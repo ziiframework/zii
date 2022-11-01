@@ -90,9 +90,6 @@ class SchemaTest extends \yiiunit\framework\db\SchemaTest
     /**
      * @dataProvider quoteTableNameDataProvider
      *
-     * @param $name
-     * @param $expectedName
-     *
      * @throws \yii\base\NotSupportedException
      */
     public function testQuoteTableName($name, $expectedName): void

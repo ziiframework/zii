@@ -1072,10 +1072,6 @@ class DateValidatorTest extends TestCase
      * Test dates that don't pass strict intl validation.
      *
      * @dataProvider provideTestStrictDateFormatIntlFail
-     *
-     * @param $format
-     * @param $date
-     * @param $strictDateFormat
      */
     public function testStrictDateFormatIntlFail($format, $date, $strictDateFormat): void
     {
@@ -1110,10 +1106,6 @@ class DateValidatorTest extends TestCase
      * Test dates that pass strict intl validation.
      *
      * @dataProvider provideTestStrictDateFormatIntlPass
-     *
-     * @param $format
-     * @param $date
-     * @param $strictDateFormat
      */
     public function testStrictDateFormatIntlPass($format, $date, $strictDateFormat): void
     {
@@ -1143,10 +1135,6 @@ class DateValidatorTest extends TestCase
      * Test dates that don't pass strict php validation.
      *
      * @dataProvider provideTestStrictDateFormatPhpFail
-     *
-     * @param $format
-     * @param $date
-     * @param $strictDateFormat
      */
     public function testStrictDateFormatPhpFail($format, $date, $strictDateFormat): void
     {
@@ -1180,10 +1168,6 @@ class DateValidatorTest extends TestCase
      * Test dates that pass strict php validation.
      *
      * @dataProvider provideTestStrictDateFormatPhpPass
-     *
-     * @param $format
-     * @param $date
-     * @param $strictDateFormat
      */
     public function testStrictDateFormatPhpPass($format, $date, $strictDateFormat): void
     {

@@ -18,6 +18,7 @@ use yii\console\controllers\HelpController;
  * Unit test for [[\yii\console\controllers\HelpController]].
  *
  * @see HelpController
+ *
  * @group console
  */
 class HelpControllerTest extends TestCase

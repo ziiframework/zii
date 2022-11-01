@@ -17,6 +17,7 @@ use yii\i18n\MessageFormatter;
  * @author Carsten Brandt <mail@cebe.cc>
  *
  * @since 2.0
+ *
  * @group i18n
  */
 class FallbackMessageFormatterTest extends TestCase

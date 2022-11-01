@@ -290,9 +290,6 @@ class StringHelperTest extends TestCase
 
     /**
      * @dataProvider base64UrlEncodedStringsProvider
-     *
-     * @param $input
-     * @param $base64UrlEncoded
      */
     public function testBase64UrlEncode($input, $base64UrlEncoded): void
     {
@@ -302,9 +299,6 @@ class StringHelperTest extends TestCase
 
     /**
      * @dataProvider base64UrlEncodedStringsProvider
-     *
-     * @param $output
-     * @param $base64UrlEncoded
      */
     public function testBase64UrlDecode($output, $base64UrlEncoded): void
     {
@@ -425,6 +419,7 @@ class StringHelperTest extends TestCase
     /**
      * @param string $string
      * @param string $expectedResult
+     *
      * @dataProvider dataProviderMb_ucfirst
      */
     public function testMbUcfirst($string, $expectedResult): void
@@ -454,6 +449,7 @@ class StringHelperTest extends TestCase
     /**
      * @param string $string
      * @param string $expectedResult
+     *
      * @dataProvider dataProviderMb_ucwords
      */
     public function testMbUcwords($string, $expectedResult): void
@@ -464,6 +460,7 @@ class StringHelperTest extends TestCase
     /**
      * @param string $string
      * @param string $expectedResult
+     *
      * @dataProvider dataProviderDirname
      */
     public function testDirname($string, $expectedResult): void

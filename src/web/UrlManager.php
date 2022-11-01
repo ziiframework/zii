@@ -579,8 +579,6 @@ class UrlManager extends Component
     /**
      * Store rule (e.g. [[UrlRule]]) to internal cache.
      *
-     * @param $cacheKey
-     *
      * @since 2.0.8
      */
     protected function setRuleToCache($cacheKey, UrlRuleInterface $rule): void

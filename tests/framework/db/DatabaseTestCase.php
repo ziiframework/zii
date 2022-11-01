@@ -115,8 +115,6 @@ abstract class DatabaseTestCase extends TestCase
     /**
      * Adjust dbms specific escaping.
      *
-     * @param $sql
-     *
      * @return mixed
      */
     protected function replaceQuotes($sql)

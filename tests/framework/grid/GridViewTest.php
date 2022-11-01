@@ -18,6 +18,7 @@ use yii\data\ArrayDataProvider;
 
 /**
  * @author Evgeniy Tkachenko <et.coder@gmail.com>
+ *
  * @group grid
  */
 class GridViewTest extends \yiiunit\TestCase

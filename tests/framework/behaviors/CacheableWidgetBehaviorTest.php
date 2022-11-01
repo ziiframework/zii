@@ -20,6 +20,7 @@ use PHPUnit_Framework_MockObject_MockObject;
  * Unit test for [[\yii\behaviors\CacheableWidgetBehavior]].
  *
  * @see CacheableWidgetBehavior
+ *
  * @group behaviors
  */
 class CacheableWidgetBehaviorTest extends TestCase
@@ -120,8 +121,6 @@ class CacheableWidgetBehaviorTest extends TestCase
 
     /**
      * Returns a widget mock.
-     *
-     * @param $widgetClass
      *
      * @return PHPUnit_Framework_MockObject_MockObject
      */

@@ -43,9 +43,6 @@ final class PdoValue implements ExpressionInterface
 
     /**
      * PdoValue constructor.
-     *
-     * @param $value
-     * @param $type
      */
     public function __construct($value, $type)
     {

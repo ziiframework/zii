@@ -208,6 +208,7 @@ abstract class SchemaTest extends DatabaseTestCase
 
     /**
      * @dataProvider tableSchemaCachePrefixesProvider
+     *
      * @depends      testSchemaCache
      */
     public function testTableSchemaCacheWithTablePrefixes($tablePrefix, $tableName, $testTablePrefix, $testTableName): void
