@@ -13,6 +13,7 @@ return (new PhpCsFixer\Config())
     ->setRules([
         '@PHP80Migration' => true,
         '@PHP80Migration:risky' => true,
+        '@PHPUnit84Migration:risky' => true,
         '@Symfony' => true,
         '@Symfony:risky' => true,
         'yoda_style' => false,
