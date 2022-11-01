@@ -39,7 +39,7 @@ class TimestampBehaviorTest extends TestCase
         }
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->mockApplication([
             'components' => [
@@ -65,7 +65,7 @@ class TimestampBehaviorTest extends TestCase
         Yii::$app->getDb()->createCommand()->createTable('test_auto_timestamp_string', $columns)->execute();
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         Yii::$app->getDb()->close();
         parent::tearDown();

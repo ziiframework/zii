@@ -22,7 +22,7 @@ use yii\helpers\FileHelper;
  */
 class BaseMailerTest extends TestCase
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->mockApplication([
             'components' => [
@@ -36,7 +36,7 @@ class BaseMailerTest extends TestCase
         }
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $filePath = $this->getTestFilePath();
 

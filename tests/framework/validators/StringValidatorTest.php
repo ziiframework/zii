@@ -20,7 +20,7 @@ use yiiunit\data\validators\models\FakedValidationModel;
  */
 class StringValidatorTest extends TestCase
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

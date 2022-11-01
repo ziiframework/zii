@@ -68,7 +68,7 @@ abstract class DbTargetTest extends TestCase
         }
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $databases = static::getParam('databases');
@@ -82,7 +82,7 @@ abstract class DbTargetTest extends TestCase
         static::runConsoleAction('migrate/up', ['migrationPath' => '@yii/log/migrations/', 'interactive' => false]);
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         self::getConnection()->createCommand()->truncateTable(self::$logTable)->execute();
         static::runConsoleAction('migrate/down', ['migrationPath' => '@yii/log/migrations/', 'interactive' => false]);

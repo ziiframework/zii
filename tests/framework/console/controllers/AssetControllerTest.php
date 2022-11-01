@@ -39,7 +39,7 @@ class AssetControllerTest extends TestCase
      */
     protected $testAssetsBasePath = '';
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->mockApplication();
         $this->testFilePath = Yii::getAlias('@yiiunit/runtime') . DIRECTORY_SEPARATOR . str_replace('\\', '_', static::class) . uniqid();
@@ -48,7 +48,7 @@ class AssetControllerTest extends TestCase
         $this->createDir($this->testAssetsBasePath);
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->removeDir($this->testFilePath);
     }

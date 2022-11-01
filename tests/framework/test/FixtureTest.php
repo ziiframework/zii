@@ -95,12 +95,12 @@ class MyTestCase
     public static $load;
     public static $unload;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->loadFixtures();
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->unloadFixtures();
     }

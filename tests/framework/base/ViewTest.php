@@ -28,7 +28,7 @@ class ViewTest extends TestCase
      */
     protected $testViewPath = '';
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -37,7 +37,7 @@ class ViewTest extends TestCase
         FileHelper::createDirectory($this->testViewPath);
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         FileHelper::removeDirectory($this->testViewPath);
         parent::tearDown();

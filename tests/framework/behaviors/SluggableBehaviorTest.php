@@ -37,7 +37,7 @@ class SluggableBehaviorTest extends TestCase
         }
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->mockApplication([
             'components' => [
@@ -64,7 +64,7 @@ class SluggableBehaviorTest extends TestCase
         Yii::$app->getDb()->createCommand()->createTable('test_slug_related', $columns)->execute();
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         Yii::$app->getDb()->close();
         parent::tearDown();

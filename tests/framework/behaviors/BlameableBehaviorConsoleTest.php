@@ -29,7 +29,7 @@ class BlameableBehaviorConsoleTest extends TestCase
         }
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->mockApplication([
             'components' => [
@@ -48,7 +48,7 @@ class BlameableBehaviorConsoleTest extends TestCase
         Yii::$app->getDb()->createCommand()->createTable('test_blame', $columns)->execute();
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         Yii::$app->getDb()->close();
         parent::tearDown();
