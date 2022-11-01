@@ -23,7 +23,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": ">=7.4.5",
+        "php": ">=8.0.5",
         "ext-ctype": "*",
         "ext-dom": "*",
         "ext-json": "*",
