@@ -106,7 +106,7 @@ class Breadcrumbs extends Widget
      * ```php
      * [
      *     'label' => 'demo',
-     *     'url' => 'http://example.com',
+     *     'url' => 'https://example.com',
      *     'class' => 'external',
      * ]
      * ```

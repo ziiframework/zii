@@ -19,7 +19,7 @@ use Exception;
  * was unable to process the contained instructions. For example, to return form
  * validation errors.
  *
- * @link http://www.webdav.org/specs/rfc2518.html#STATUS_422
+ * @link https://www.webdav.org/specs/rfc2518.html#STATUS_422
  *
  * @author Jan Silva <janfrs3@gmail.com>
  *

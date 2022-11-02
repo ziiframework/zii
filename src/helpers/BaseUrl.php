@@ -75,7 +75,7 @@ class BaseUrl
      * // /index.php?r=site%2Findex&src=ref1#name
      * echo Url::toRoute(['site/index', 'src' => 'ref1', '#' => 'name']);
      *
-     * // http://www.example.com/index.php?r=site%2Findex
+     * // https://www.example.com/index.php?r=site%2Findex
      * echo Url::toRoute('site/index', true);
      *
      * // https://www.example.com/index.php?r=site%2Findex
@@ -194,7 +194,7 @@ class BaseUrl
      * // images/logo.gif
      * echo Url::to('images/logo.gif');
      *
-     * // http://www.example.com/images/logo.gif
+     * // https://www.example.com/images/logo.gif
      * echo Url::to('@web/images/logo.gif', true);
      *
      * // https://www.example.com/images/logo.gif

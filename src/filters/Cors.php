@@ -17,7 +17,7 @@ use yii\base\ActionFilter;
 use yii\base\InvalidConfigException;
 
 /**
- * Cors filter implements [Cross Origin Resource Sharing](http://en.wikipedia.org/wiki/Cross-origin_resource_sharing).
+ * Cors filter implements [Cross Origin Resource Sharing](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing).
  *
  * Make sure to read carefully what CORS does and does not. CORS do not secure your API,
  * but allow the developer to grant access to third party code (ajax calls from external domain).
@@ -46,7 +46,7 @@ use yii\base\InvalidConfigException;
  *             'class' => \yii\filters\Cors::class,
  *             'cors' => [
  *                 // restrict access to
- *                 'Origin' => ['http://www.myserver.com', 'https://www.myserver.com'],
+ *                 'Origin' => ['https://www.myserver.com', 'https://www.myserver.com'],
  *                 // Allow only POST and PUT methods
  *                 'Access-Control-Request-Method' => ['POST', 'PUT'],
  *                 // Allow only headers 'X-Wsse'

@@ -387,7 +387,7 @@ class Security extends Component
 
     /**
      * Derives a key from the given password using the standard PBKDF2 algorithm.
-     * Implements HKDF2 specified in [RFC 2898](http://tools.ietf.org/html/rfc2898#section-5.2)
+     * Implements HKDF2 specified in [RFC 2898](https://tools.ietf.org/html/rfc2898#section-5.2)
      * Recommend use one of the SHA-2 hash algorithms: sha224, sha256, sha384 or sha512.
      *
      * @param string $algo a hash algorithm supported by `hash_hmac()`, e.g. 'SHA-256'
@@ -714,7 +714,7 @@ class Security extends Component
     /**
      * Performs string comparison using timing attack resistant approach.
      *
-     * @see http://codereview.stackexchange.com/questions/13512
+     * @see https://codereview.stackexchange.com/questions/13512
      *
      * @param string $expected string to compare.
      * @param string $actual user-supplied string.

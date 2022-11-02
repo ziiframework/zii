@@ -101,7 +101,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
         }
         $sql .= $this->separator . $orderBy;
 
-        // http://technet.microsoft.com/en-us/library/gg699618.aspx
+        // https://technet.microsoft.com/en-us/library/gg699618.aspx
         $offset = $this->hasOffset($offset) ? $offset : '0';
         $sql .= $this->separator . "OFFSET $offset ROWS";
 
@@ -563,7 +563,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      * {@inheritdoc}
      *
      * @see https://docs.microsoft.com/en-us/sql/t-sql/statements/merge-transact-sql
-     * @see http://weblogs.sqlteam.com/dang/archive/2009/01/31/UPSERT-Race-Condition-With-MERGE.aspx
+     * @see https://weblogs.sqlteam.com/dang/archive/2009/01/31/UPSERT-Race-Condition-With-MERGE.aspx
      */
     public function upsert($table, $insertColumns, $updateColumns, &$params)
     {

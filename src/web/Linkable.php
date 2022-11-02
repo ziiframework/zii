@@ -31,10 +31,10 @@ interface Linkable
      *
      * ```php
      * [
-     *     'self' => 'http://example.com/users/1',
+     *     'self' => 'https://example.com/users/1',
      *     'friends' => [
-     *         'http://example.com/users/2',
-     *         'http://example.com/users/3',
+     *         'https://example.com/users/2',
+     *         'https://example.com/users/3',
      *     ],
      *     'manager' => $managerLink, // $managerLink is a Link object
      * ]
