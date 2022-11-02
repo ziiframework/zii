@@ -12,6 +12,7 @@ namespace yiiunit\framework\base;
 
 use yii\base\Model;
 use yiiunit\TestCase;
+use yii\base\DynamicModel;
 use yiiunit\data\base\Singer;
 use yiiunit\data\base\Speaker;
 use yiiunit\data\base\RulesModel;
@@ -517,6 +518,15 @@ class ModelTest extends TestCase
         $this->expectExceptionMessage('The "formName()" method should be explicitly defined for anonymous models');
 
         $model->formName();
+    }
+
+    public function testExcludeEmptyAttributesFromSafe(): void
+    {
+        $model = new DynamicModel(['' => 'emptyFieldValue']);
+        $model->addRule('', 'safe');
+
+        $this->assertEquals([], $model->safeAttributes());
+        $this->assertEquals([''], $model->attributes());
     }
 }
 

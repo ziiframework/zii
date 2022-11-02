@@ -78,7 +78,7 @@ trait GetTablesAliasTestTrait
         $query = $this->createQuery();
         $query->from = new stdClass();
 
-        $this->expectException('yii\base\InvalidConfigException');
+        $this->expectException('\yii\base\InvalidConfigException');
 
         $query->getTablesUsedInFrom();
     }

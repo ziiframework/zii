@@ -395,7 +395,7 @@ class ComponentTest extends TestCase
 
     public function testSetReadOnlyProperty(): void
     {
-        $this->expectException('yii\base\InvalidCallException');
+        $this->expectException('\yii\base\InvalidCallException');
         $this->expectExceptionMessage('Setting read-only property: yiiunit\framework\base\NewComponent::object');
         $this->component->object = 'z';
     }
@@ -424,7 +424,7 @@ class ComponentTest extends TestCase
 
     public function testWriteOnlyProperty(): void
     {
-        $this->expectException('yii\base\InvalidCallException');
+        $this->expectException('\yii\base\InvalidCallException');
         $this->expectExceptionMessage('Getting write-only property: yiiunit\framework\base\NewComponent::writeOnly');
         $this->component->writeOnly;
     }

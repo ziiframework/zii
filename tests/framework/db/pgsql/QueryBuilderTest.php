@@ -73,7 +73,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\QueryBuilderTest
     {
         return array_merge(parent::conditionProvider(), [
             // adding conditions for ILIKE i.e. case insensitive LIKE
-            // http://www.postgresql.org/docs/8.3/static/functions-matching.html#FUNCTIONS-LIKE
+            // https://www.postgresql.org/docs/8.3/functions-matching.html#FUNCTIONS-LIKE
 
             // empty values
             [['ilike', 'name', []], '0=1', []],

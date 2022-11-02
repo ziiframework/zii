@@ -77,6 +77,8 @@ class ArrayAccessObject extends TraversableObject implements ArrayAccess
      * The value to set.
      * </p>
      *
+     * @return void
+     *
      * @since 2.0.14.1
      */
     #[ReturnTypeWillChange]
@@ -93,6 +95,8 @@ class ArrayAccessObject extends TraversableObject implements ArrayAccess
      * @param mixed $offset <p>
      * The offset to unset.
      * </p>
+     *
+     * @return void
      *
      * @since 2.0.14.1
      */
