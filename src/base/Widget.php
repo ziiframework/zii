@@ -12,6 +12,7 @@ namespace yii\base;
 
 use Yii;
 use Exception;
+use Throwable;
 use ReflectionClass;
 
 /**
@@ -155,12 +156,12 @@ class Widget extends Component implements ViewContextInterface
      *
      * @return string the rendering result of the widget.
      *
-     * @throws Exception
+     * @throws Throwable
      */
     public static function widget($config = [])
     {
         ob_start();
-        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
+        ob_implicit_flush(false);
 
         try {
             /* @var $widget Widget */
@@ -173,6 +174,13 @@ class Widget extends Component implements ViewContextInterface
                 $out = $widget->afterRun($result);
             }
         } catch (Exception $e) {
+            // close the output buffer opened above if it has not been closed already
+            if (ob_get_level() > 0) {
+                ob_end_clean();
+            }
+
+            throw $e;
+        } catch (Throwable $e) {
             // close the output buffer opened above if it has not been closed already
             if (ob_get_level() > 0) {
                 ob_end_clean();

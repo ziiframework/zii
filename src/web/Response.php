@@ -770,11 +770,11 @@ class Response extends \yii\base\Response
      *
      * As this header directive is non-standard different directives exists for different web servers applications:
      *
-     * - Apache: [X-Sendfile](http://tn123.org/mod_xsendfile)
-     * - Lighttpd v1.4: [X-LIGHTTPD-send-file](http://redmine.lighttpd.net/projects/lighttpd/wiki/X-LIGHTTPD-send-file)
-     * - Lighttpd v1.5: [X-Sendfile](http://redmine.lighttpd.net/projects/lighttpd/wiki/X-LIGHTTPD-send-file)
-     * - Nginx: [X-Accel-Redirect](http://wiki.nginx.org/XSendfile)
-     * - Cherokee: [X-Sendfile and X-Accel-Redirect](http://www.cherokee-project.com/doc/other_goodies.html#x-sendfile)
+     * - Apache: [X-Sendfile](https://tn123.org/mod_xsendfile)
+     * - Lighttpd v1.4: [X-LIGHTTPD-send-file](https://redmine.lighttpd.net/projects/lighttpd/wiki/X-LIGHTTPD-send-file)
+     * - Lighttpd v1.5: [X-Sendfile](https://redmine.lighttpd.net/projects/lighttpd/wiki/X-LIGHTTPD-send-file)
+     * - Nginx: [X-Accel-Redirect](https://wiki.nginx.org/XSendfile)
+     * - Cherokee: [X-Sendfile and X-Accel-Redirect](https://www.cherokee-project.com/doc/other_goodies.html#x-sendfile)
      *
      * So for this method to work the X-SENDFILE option/module should be enabled by the web server and
      * a proper xHeader should be sent.
@@ -919,7 +919,7 @@ class Response extends \yii\base\Response
      *
      * @param string|array $url the URL to be redirected to. This can be in one of the following formats:
      *
-     * - a string representing a URL (e.g. "http://example.com")
+     * - a string representing a URL (e.g. "https://example.com")
      * - a string representing a URL alias (e.g. "@example.com")
      * - an array in the format of `[$route, ...name-value pairs...]` (e.g. `['site/index', 'ref' => 1]`).
      *   Note that the route is with respect to the whole application, instead of relative to a controller or module.

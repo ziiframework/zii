@@ -66,7 +66,7 @@ class FileCache extends Cache
     public $gcProbability = 10;
 
     /**
-     * @var int the permission to be set for newly created cache files.
+     * @var int|null the permission to be set for newly created cache files.
      * This value will be used by PHP chmod() function. No umask will be applied.
      * If not set, the permission will be determined by the current environment.
      */
@@ -147,7 +147,7 @@ class FileCache extends Cache
      * @param string $key the key identifying the value to be cached
      * @param string $value the value to be cached. Other types (If you have disabled [[serializer]]) unable to get is
      * correct in [[getValue()]].
-     * @param int $duration the number of seconds in which the cached value will expire. 0 means never expire.
+     * @param int $duration the number of seconds in which the cached value will expire. Fewer than or equal to 0 means 1 year expiration time.
      *
      * @return bool true if the value is successfully stored into cache, false otherwise
      */

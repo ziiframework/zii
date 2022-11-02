@@ -148,7 +148,7 @@ class Module extends ServiceLocator
     private $_modules = [];
 
     /**
-     * @var string|callable the version of this module.
+     * @var string|callable|null the version of this module.
      * Version can be specified as a PHP callback, which can accept module instance as an argument and should
      * return the actual version. For example:
      *
@@ -168,7 +168,7 @@ class Module extends ServiceLocator
      * Constructor.
      *
      * @param string $id the ID of this module.
-     * @param Module $parent the parent module (if any).
+     * @param Module|null $parent the parent module (if any).
      * @param array $config name-value pairs that will be used to initialize the object properties.
      */
     public function __construct($id, $parent = null, $config = [])
@@ -382,7 +382,7 @@ class Module extends ServiceLocator
     /**
      * Sets current module version.
      *
-     * @param string|callable $version the version of this module.
+     * @param string|callable|null $version the version of this module.
      * Version can be specified as a PHP callback, which can accept module instance as an argument and should
      * return the actual version. For example:
      *

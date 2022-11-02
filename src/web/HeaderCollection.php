@@ -266,7 +266,7 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      *
      * @param string $name the header name
      *
-     * @return string the header value with the specified name, null if the named header does not exist.
+     * @return string|null the header value with the specified name, null if the named header does not exist.
      */
     #[ReturnTypeWillChange]
     public function offsetGet($name)

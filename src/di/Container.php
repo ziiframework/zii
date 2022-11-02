@@ -25,11 +25,11 @@ use ReflectionIntersectionType;
 use yii\base\InvalidConfigException;
 
 /**
- * Container implements a [dependency injection](http://en.wikipedia.org/wiki/Dependency_injection) container.
+ * Container implements a [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) container.
  *
  * A dependency injection (DI) container is an object that knows how to instantiate and configure objects and
  * all their dependent objects. For more information about DI, please refer to
- * [Martin Fowler's article](http://martinfowler.com/articles/injection.html).
+ * [Martin Fowler's article](https://martinfowler.com/articles/injection.html).
  *
  * Container supports constructor injection as well as property injection.
  *
@@ -631,7 +631,7 @@ class Container extends Component
      * Resolves dependencies by replacing them with the actual object instances.
      *
      * @param array $dependencies the dependencies
-     * @param ReflectionClass $reflection the class reflection associated with the dependencies
+     * @param ReflectionClass|null $reflection the class reflection associated with the dependencies
      *
      * @return array the resolved dependencies
      *

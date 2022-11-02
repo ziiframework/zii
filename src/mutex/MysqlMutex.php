@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace yii\mutex;
 
+use yii\db\Expression;
 use yii\base\InvalidConfigException;
 
 /**
@@ -40,6 +41,13 @@ use yii\base\InvalidConfigException;
 class MysqlMutex extends DbMutex
 {
     /**
+     * @var Expression|string|null prefix value. If null (by default) then connection's current database name is used.
+     *
+     * @since 2.0.47
+     */
+    public $keyPrefix = null;
+
+    /**
      * Initializes MySQL specific mutex component implementation.
      *
      * @throws InvalidConfigException if [[db]] is not MySQL connection.
@@ -51,6 +59,10 @@ class MysqlMutex extends DbMutex
         if ($this->db->driverName !== 'mysql') {
             throw new InvalidConfigException('In order to use MysqlMutex connection must be configured to use MySQL database.');
         }
+
+        if ($this->keyPrefix === null) {
+            $this->keyPrefix = new Expression('DATABASE()');
+        }
     }
 
     /**
@@ -61,13 +73,13 @@ class MysqlMutex extends DbMutex
      *
      * @return bool acquiring result.
      *
-     * @see http://dev.mysql.com/doc/refman/5.0/en/miscellaneous-functions.html#function_get-lock
+     * @see https://dev.mysql.com/doc/refman/8.0/en/miscellaneous-functions.html#function_get-lock
      */
     protected function acquireLock($name, $timeout = 0)
     {
         return $this->db->useMaster(function ($db) use ($name, $timeout) {
             /* @var \yii\db\Connection $db */
-            return (bool) $db->createCommand('SELECT GET_LOCK(:name, :timeout)', [':name' => $this->hashLockName($name), ':timeout' => $timeout])->queryScalar();
+            return (bool) $db->createCommand('SELECT GET_LOCK(SUBSTRING(CONCAT(:prefix, :name), 1, 64), :timeout)', [':name' => $this->hashLockName($name), ':timeout' => $timeout, ':prefix' => $this->keyPrefix])->queryScalar();
         });
     }
 
@@ -78,13 +90,13 @@ class MysqlMutex extends DbMutex
      *
      * @return bool release result.
      *
-     * @see http://dev.mysql.com/doc/refman/5.0/en/miscellaneous-functions.html#function_release-lock
+     * @see https://dev.mysql.com/doc/refman/8.0/en/miscellaneous-functions.html#function_release-lock
      */
     protected function releaseLock($name)
     {
         return $this->db->useMaster(function ($db) use ($name) {
             /* @var \yii\db\Connection $db */
-            return (bool) $db->createCommand('SELECT RELEASE_LOCK(:name)', [':name' => $this->hashLockName($name)])->queryScalar();
+            return (bool) $db->createCommand('SELECT RELEASE_LOCK(SUBSTRING(CONCAT(:prefix, :name), 1, 64))', [':name' => $this->hashLockName($name), ':prefix' => $this->keyPrefix])->queryScalar();
         });
     }
 

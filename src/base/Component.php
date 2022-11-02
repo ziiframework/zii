@@ -593,7 +593,7 @@ class Component extends BaseObject
      * wildcard will be removed, while handlers registered with plain names matching this wildcard will remain.
      *
      * @param string $name event name
-     * @param callable $handler the event handler to be removed.
+     * @param callable|null $handler the event handler to be removed.
      * If it is null, all handlers attached to the named event will be removed.
      *
      * @return bool if a handler is found and detached

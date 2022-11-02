@@ -54,7 +54,7 @@ class BatchQueryResult extends Component implements Iterator
     public const EVENT_FINISH = 'finish';
 
     /**
-     * @var Connection the DB connection to be used when performing batch query.
+     * @var Connection|null the DB connection to be used when performing batch query.
      * If null, the "db" application component will be used.
      */
     public $db;

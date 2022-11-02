@@ -4,7 +4,19 @@ Yii Framework 2 Change Log
 2.0.47 under development
 ------------------------
 
-- no changes in this release.
+- Bug #12636: Fix CompareValidator successful state when compareAttribute has an error (manchenkoff)
+- Bug #14388: Fixed fixture loading order in output message (manchenkoff)
+- Bug #15500: Fix saving empty records to MySQL (manchenkoff)
+- Bug #15557: Fix empty fields exclusion in safe attributes of `yii\base\Model` (manchenkoff)
+- Bug #16658: Fix file readability check on publishing assets by `yii\web\AssetManager` (manchenkoff)
+- Bug #19508: Fix wrong selection for boolean attributes in GridView (alnidok)
+- Bug #19517: Fix regression in `CompositeAuth::authenticate()` introduced in #19418 (WinterSilence)
+- Bug #19530: Fix specifying the field id for `yii\widgets\ActiveField` (kv4nt)
+- Bug #19537: Fix default expression detection for MariaDB `date` and `time` columns (bizley)
+- Bug #19589: Fix Error reporting in to the `BaseArrayHelper::getValue()` (lav45)
+- Bug #19316: Fix MysqlMutex with same connection but difference database (kamarton)
+- Bug #19507: Fix eager loading of nested one-to-many relations (spo0okie)
+- Bug #19546: Reverted #19309 (bizley)
 
 
 2.0.46 August 18, 2022
@@ -2632,14 +2644,14 @@ Yii Framework 2 Change Log
 - Bug: `yii\helpers\Json::encode()`` did not handle objects that implement `JsonSerializable` interface correctly (cebe)
 - Bug: Fixed issue with tabular input on `yii\widgets\ActiveField::radio()` and `yii\widgets\ActiveField::checkbox()` (jom)
 - Bug: Fixed the issue that query cache returns the same data for the same SQL but different query methods (qiangxue)
-- Bug: Fixed URL parsing so it's now properly giving 404 for URLs like `http://example.com//////site/about` (samdark)
+- Bug: Fixed URL parsing so it's now properly giving 404 for URLs like `https://example.com//////site/about` (samdark)
 - Bug: Fixed `yii\console\controllers\HelpController::getModuleCommands()` issue where it attempts to scan a module's controller directory when it doesn't exist (jom)
 - Bug: Fixed an issue with FileHelper and not accessible directories which resulted in endless loop (cebe)
 - Bug: Fixed `yii\base\Model::load()` returned `true` if `$data` and `formName` were empty (samdark)
 - Bug: Fixed issue with `yii\db\ActiveRelationTrait` preventing `yii\db\ActiveQuery` from clearing events and behaviors on clone (jom)
 - Bug: `yii\db\Query::queryScalar()` wasn't making `SELECT DISTINCT` queries subqueries (jom)
 - Bug: Fixed use `$files` instead of `self::$_files[$key]` to allow inheritance (pgaultier)
-- Enh #46: Added Image extension based on [Imagine library](http://imagine.readthedocs.org) (tonydspaniard)
+- Enh #46: Added Image extension based on [Imagine library](https://imagine.readthedocs.io/) (tonydspaniard)
 - Enh #364: Improve `yii\helpers\Inflector::slug()` with `intl` transliteration. Improved transliteration char map. (tonydspaniard)
 - Enh #497: Removed `yii\log\Target::logUser` and added `yii\log\Target::prefix` to support customizing message prefix (qiangxue)
 - Enh #499: Decoupled `Rule` from RBAC `Item` (samdark, qiangxue)
