@@ -574,7 +574,7 @@ abstract class ManagerTestCase extends TestCase
     /**
      * Create Role or Permission RBAC item.
      *
-     * @param int    $RBACItemType
+     * @param int $RBACItemType
      * @param string $name
      *
      * @return Permission|Role
@@ -595,7 +595,7 @@ abstract class ManagerTestCase extends TestCase
     /**
      * Get Role or Permission RBAC item.
      *
-     * @param int    $RBACItemType
+     * @param int $RBACItemType
      * @param string $name
      *
      * @return Permission|Role

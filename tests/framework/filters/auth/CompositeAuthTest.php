@@ -95,9 +95,7 @@ class TestController extends Controller
         return [
             'authenticator' => [
                 'class' => CompositeAuth::className(),
-                'authMethods' => $this->authMethods ?: [
-                    TestAuth::className(),
-                ],
+                'authMethods' => $this->authMethods ?: [TestAuth::className()],
                 'optional' => $this->optional,
             ],
         ];
@@ -261,10 +259,7 @@ class CompositeAuthTest extends \yiiunit\TestCase
     public function testCompositeAuth($authMethods, $actionId, $expectedAuth): void
     {
         Yii::$app->request->headers->set('X-Api-Key', 'user1');
-
-        /** @var TestController $controller */
-        $controller = Yii::$app->createController('test')[0];
-        $controller->authMethods = $authMethods;
+        $controller = new TestController('test', Yii::$app, ['authMethods' => $authMethods]);
 
         if ($expectedAuth) {
             $this->assertEquals('success', $controller->run($actionId));

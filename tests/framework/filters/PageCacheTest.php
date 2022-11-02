@@ -355,7 +355,7 @@ class PageCacheTest extends TestCase
                 'varyByRoute' => $enabled,
             ]);
             Yii::$app->params['dynamic'] = $dynamic = Yii::$app->security->generateRandomString();
-            $this->assertSame($enabled, $filter->beforeAction($action));
+            $this->assertSame($enabled, $filter->beforeAction($action), var_export($enabled, true));
             ob_start();
             Yii::$app->response->send();
             ob_end_clean();
@@ -407,7 +407,7 @@ class PageCacheTest extends TestCase
                 'variations' => $testCase,
             ]);
             Yii::$app->params['dynamic'] = $dynamic = Yii::$app->security->generateRandomString();
-            $this->assertNotSame($expected, $filter->beforeAction($action));
+            $this->assertNotSame($expected, $filter->beforeAction($action), var_export($expected, true));
             ob_start();
             Yii::$app->response->send();
             ob_end_clean();
@@ -465,7 +465,7 @@ class PageCacheTest extends TestCase
             } else {
                 Yii::$app->params['dependency'] = $dependency;
             }
-            $this->assertSame($changed, $filter->beforeAction($action));
+            $this->assertSame($changed, $filter->beforeAction($action), var_export($changed, true));
             ob_start();
             Yii::$app->response->send();
             ob_end_clean();

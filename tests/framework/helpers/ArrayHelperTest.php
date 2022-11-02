@@ -807,11 +807,7 @@ class ArrayHelperTest extends TestCase
 
     public function testGetValueNonexistingProperties1(): void
     {
-        if (PHP_VERSION_ID < 80000) {
-            $this->expectNotice();
-        } else {
-            $this->expectWarning();
-        }
+        $this->expectWarning();
         $object = new Post1();
         ArrayHelper::getValue($object, 'nonExisting');
     }
@@ -1429,6 +1425,8 @@ class ArrayHelperTest extends TestCase
 
     /**
      * @dataProvider dataProviderRecursiveSort
+     *
+     * @return void
      */
     public function testRecursiveSort($expected_result, $input_array): void
     {
