@@ -6,9 +6,6 @@ on:
       - master
       - main
   pull_request:
-    branches:
-      - master
-      - main
 
 env:
   COMPOSER_INSTALL_FLAGS: "--prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi"
