@@ -38,10 +38,10 @@
     },
     "require-dev": {
         "cebe/indent": "^1.0",
-        "nette/php-generator": "^3.6",
+        "nette/php-generator": "^4.0",
         "phpstan/phpstan": "^1.8",
-        "phpunit/phpunit": "^9.5.26",
-        "symfony/var-dumper": "^5.4||^6.0"
+        "phpunit/phpunit": "^9.5",
+        "symfony/var-dumper": "^6.0"
     },
     "autoload": {
         "psr-4": {
