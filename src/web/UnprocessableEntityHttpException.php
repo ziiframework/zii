@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -6,6 +7,8 @@
  */
 
 namespace yii\web;
+
+use Throwable;
 
 /**
  * UnprocessableEntityHttpException represents an "Unprocessable Entity" HTTP
@@ -17,16 +20,19 @@ namespace yii\web;
  * validation errors.
  *
  * @link http://www.webdav.org/specs/rfc2518.html#STATUS_422
+ *
  * @author Jan Silva <janfrs3@gmail.com>
+ *
  * @since 2.0.7
  */
 class UnprocessableEntityHttpException extends HttpException
 {
     /**
      * Constructor.
+     *
      * @param string|null $message error message
      * @param int $code error code
-     * @param \Throwable|null $previous The previous exception used for the exception chaining.
+     * @param Throwable|null $previous The previous exception used for the exception chaining.
      */
     public function __construct($message = null, $code = 0, $previous = null)
     {

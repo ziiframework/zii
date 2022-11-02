@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,7 +8,8 @@
 
 namespace yii\base;
 
-use Yii;
+use Throwable;
+use ReflectionProperty;
 
 /**
  * ErrorException represents a PHP error.
@@ -15,6 +17,7 @@ use Yii;
  * For more details and usage information on ErrorException, see the [guide article on handling errors](guide:runtime-handling-errors).
  *
  * @author Alexander Makarov <sam@rmcreative.ru>
+ *
  * @since 2.0
  */
 class ErrorException extends \ErrorException
@@ -24,21 +27,23 @@ class ErrorException extends \ErrorException
      *
      * PHP Zend runtime won't call the error handler on fatals, HHVM will, with an error code of 16777217
      * We will handle fatal error a bit different on HHVM.
+     *
      * @see https://github.com/facebook/hhvm/blob/master/hphp/runtime/base/runtime-error.h#L62
      * @since 2.0.6
      */
-    const E_HHVM_FATAL_ERROR = 16777217; // E_ERROR | (1 << 24)
-
+    public const E_HHVM_FATAL_ERROR = 16777217; // E_ERROR | (1 << 24)
 
     /**
      * Constructs the exception.
+     *
      * @link https://www.php.net/manual/en/errorexception.construct.php
+     *
      * @param string $message [optional]
      * @param int $code [optional]
      * @param int $severity [optional]
      * @param string $filename [optional]
      * @param int $lineno [optional]
-     * @param \Throwable|null $previous [optional]
+     * @param Throwable|null $previous [optional]
      */
     public function __construct($message = '', $code = 0, $severity = 1, $filename = __FILE__, $lineno = __LINE__, $previous = null)
     {
@@ -49,6 +54,7 @@ class ErrorException extends \ErrorException
             // @see https://github.com/yiisoft/yii2/pull/11723
             $xdebugTrace = array_slice(array_reverse(xdebug_get_function_stack()), 1, -1);
             $trace = [];
+
             foreach ($xdebugTrace as $frame) {
                 if (!isset($frame['function'])) {
                     $frame['function'] = 'unknown';
@@ -68,7 +74,7 @@ class ErrorException extends \ErrorException
                 $trace[] = $frame;
             }
 
-            $ref = new \ReflectionProperty('Exception', 'trace');
+            $ref = new ReflectionProperty('Exception', 'trace');
             $ref->setAccessible(true);
             $ref->setValue($this, $trace);
         }
@@ -76,7 +82,8 @@ class ErrorException extends \ErrorException
 
     /**
      * Ensures that Xdebug stack trace is available based on Xdebug version.
-     * Idea taken from developer bishopb at https://github.com/rollbar/rollbar-php
+     * Idea taken from developer bishopb at https://github.com/rollbar/rollbar-php.
+     *
      * @return bool
      */
     private function isXdebugStackAvailable()
@@ -87,6 +94,7 @@ class ErrorException extends \ErrorException
 
         // check for Xdebug being installed to ensure origin of xdebug_get_function_stack()
         $version = phpversion('xdebug');
+
         if ($version === false) {
             return false;
         }
@@ -97,13 +105,14 @@ class ErrorException extends \ErrorException
         }
 
         // Xdebug 3 and later, proper mode is required
-        return false !== strpos(ini_get('xdebug.mode'), 'develop');
+        return str_contains(ini_get('xdebug.mode'), 'develop');
     }
 
     /**
      * Returns if error is one of fatal type.
      *
      * @param array $error error got from error_get_last()
+     *
      * @return bool if error is one of fatal type
      */
     public static function isFatalError($error)

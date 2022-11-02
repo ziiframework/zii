@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -14,6 +15,7 @@ use yii\base\InvalidConfigException;
  * configuration or usage.
  *
  * @author Sam Mousa <sam@mousa.nl>
+ *
  * @since 2.0.9
  */
 class NotInstantiableException extends InvalidConfigException
