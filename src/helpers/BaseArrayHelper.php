@@ -223,9 +223,9 @@ class BaseArrayHelper
             return $array[$key];
         }
 
-        if ($key && ($pos = strrpos($key, '.')) !== false) {
-            $array = static::getValue($array, substr($key, 0, $pos), $default);
-            $key = substr($key, $pos + 1);
+        if ($key && ($pos = strrpos(pf_string_argument($key), '.')) !== false) {
+            $array = static::getValue($array, substr(pf_string_argument($key), 0, $pos), $default);
+            $key = substr(pf_string_argument($key), $pos + 1);
         }
 
         if (static::keyExists($key, $array)) {
