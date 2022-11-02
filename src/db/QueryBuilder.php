@@ -1465,7 +1465,7 @@ class QueryBuilder extends \yii\base\BaseObject
                     $table = $this->db->quoteTableName($table);
                 }
                 $tables[$i] = "$table " . $this->db->quoteTableName($i);
-            } elseif (!str_contains(pf_string_argument($table), '(')) {
+            } elseif (!str_contains(($table instanceof Expression) ? $table->__toString() : $table, '(')) {
                 if ($tableWithAlias = $this->extractAlias($table)) { // with alias
                     $tables[$i] = $this->db->quoteTableName($tableWithAlias[1]) . ' ' . $this->db->quoteTableName($tableWithAlias[2]);
                 } else {
