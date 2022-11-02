@@ -81,37 +81,30 @@ class BaseVarDumper
         switch (gettype($var)) {
             case 'boolean':
                 self::$_output .= $var ? 'true' : 'false';
-
                 break;
 
             case 'integer':
                 self::$_output .= (string) $var;
-
                 break;
 
             case 'double':
                 self::$_output .= (string) $var;
-
                 break;
 
             case 'string':
                 self::$_output .= "'" . addslashes($var) . "'";
-
                 break;
 
             case 'resource':
                 self::$_output .= '{resource}';
-
                 break;
 
             case 'NULL':
                 self::$_output .= 'null';
-
                 break;
 
             case 'unknown type':
                 self::$_output .= '{unknown}';
-
                 break;
 
             case 'array':
@@ -132,7 +125,6 @@ class BaseVarDumper
                     }
                     self::$_output .= "\n" . $spaces . ']';
                 }
-
                 break;
 
             case 'object':
@@ -157,13 +149,12 @@ class BaseVarDumper
                     }
 
                     foreach ($dumpValues as $key => $value) {
-                        $keyDisplay = strtr(trim(is_int($key) ? (string) $key : $key), "\0", ':');
+                        $keyDisplay = strtr(trim(pf_string_argument($key)), "\0", ':');
                         self::$_output .= "\n" . $spaces . "    [$keyDisplay] => ";
                         self::dumpInternal($value, $level + 1);
                     }
                     self::$_output .= "\n" . $spaces . ')';
                 }
-
                 break;
         }
     }
@@ -202,7 +193,6 @@ class BaseVarDumper
         switch (gettype($var)) {
             case 'NULL':
                 self::$_output .= 'null';
-
                 break;
 
             case 'array':
@@ -226,7 +216,6 @@ class BaseVarDumper
                     }
                     self::$_output .= "\n" . $spaces . ']';
                 }
-
                 break;
 
             case 'object':
@@ -261,7 +250,6 @@ class BaseVarDumper
                     }
                     self::$_output .= $output;
                 }
-
                 break;
 
             default:

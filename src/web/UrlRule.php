@@ -81,7 +81,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
     public const CREATE_STATUS_PARAMS_MISMATCH = 4;
 
     /**
-     * @var string the name of this rule. If not set, it will use [[pattern]] as the name.
+     * @var string|null the name of this rule. If not set, it will use [[pattern]] as the name.
      */
     public $name;
 
@@ -115,14 +115,14 @@ class UrlRule extends BaseObject implements UrlRuleInterface
     public $defaults = [];
 
     /**
-     * @var string the URL suffix used for this rule.
+     * @var string|null the URL suffix used for this rule.
      * For example, ".html" can be used so that the URL looks like pointing to a static HTML page.
      * If not set, the value of [[UrlManager::suffix]] will be used.
      */
     public $suffix;
 
     /**
-     * @var string|array the HTTP verb (e.g. GET, POST, DELETE) that this rule should match.
+     * @var string|array|null the HTTP verb (e.g. GET, POST, DELETE) that this rule should match.
      * Use array to represent multiple verbs that this rule may match.
      * If this property is not set, the rule can match any verb.
      * Note that this property is only used when parsing a request. It is ignored for URL creation.
@@ -130,7 +130,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
     public $verb;
 
     /**
-     * @var int a value indicating if this rule should be used for both request parsing and URL creation,
+     * @var int|null a value indicating if this rule should be used for both request parsing and URL creation,
      * parsing only, or creation only.
      * If not set or 0, it means the rule is both request parsing and URL creation.
      * If it is [[PARSING_ONLY]], the rule is for request parsing only.
@@ -379,7 +379,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
         $this->pattern = '#^' . trim(strtr($this->_template, $tr), '/') . '$#u';
 
         // if host starts with relative scheme, then insert pattern to match any
-        if (is_string($this->host) && strncmp($this->host, '//', 2) === 0) {
+        if ($this->host !== null && strncmp($this->host, '//', 2) === 0) {
             $this->pattern = substr_replace($this->pattern, '[\w]+://', 2, 0);
         }
 
@@ -548,7 +548,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
             if (!isset($params[$name])) {
                 // allow omit empty optional params
                 // @see https://github.com/yiisoft/yii2/issues/10970
-                if (in_array($name, $this->placeholders) && strcmp(is_int($value) ? (string) $value : $value, '') === 0) {
+                if (in_array($name, $this->placeholders) && strcmp(pf_string_argument($value), '') === 0) {
                     $params[$name] = '';
                 } else {
                     $this->createStatus = self::CREATE_STATUS_PARAMS_MISMATCH;
@@ -557,7 +557,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
                 }
             }
 
-            if (strcmp(is_int($params[$name]) ? (string) $params[$name] : $params[$name], is_int($value) ? (string) $value : $value) === 0) { // strcmp will do string conversion automatically
+            if (strcmp(pf_string_argument($params[$name]), pf_string_argument($value)) === 0) { // strcmp will do string conversion automatically
                 unset($params[$name]);
 
                 if (isset($this->_paramRules[$name])) {
@@ -572,8 +572,8 @@ class UrlRule extends BaseObject implements UrlRuleInterface
 
         // match params in the pattern
         foreach ($this->_paramRules as $name => $rule) {
-            if (isset($params[$name]) && !is_array($params[$name]) && ($rule === '' || preg_match($rule, is_int($params[$name]) ? (string) $params[$name] : $params[$name]))) {
-                $tr["<$name>"] = $this->encodeParams ? urlencode(is_int($params[$name]) ? (string) $params[$name] : $params[$name]) : $params[$name];
+            if (isset($params[$name]) && !is_array($params[$name]) && ($rule === '' || preg_match($rule, pf_string_argument($params[$name])))) {
+                $tr["<$name>"] = $this->encodeParams ? urlencode(pf_string_argument($params[$name])) : $params[$name];
                 unset($params[$name]);
             } elseif (!isset($this->defaults[$name]) || isset($params[$name])) {
                 $this->createStatus = self::CREATE_STATUS_PARAMS_MISMATCH;

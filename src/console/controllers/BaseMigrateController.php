@@ -93,7 +93,7 @@ abstract class BaseMigrateController extends Controller
     public $templateFile;
 
     /**
-     * @var int the permission to be set for newly generated migration files.
+     * @var int|null the permission to be set for newly generated migration files.
      * This value will be used by PHP chmod() function. No umask will be applied.
      * If not set, the permission will be determined by the current environment.
      *
@@ -102,7 +102,7 @@ abstract class BaseMigrateController extends Controller
     public $newFileMode;
 
     /**
-     * @var string|int the user and/or group ownership to be set for newly generated migration files.
+     * @var string|int|null the user and/or group ownership to be set for newly generated migration files.
      * If not set, the ownership will be determined by the current environment.
      *
      * @since 2.0.43
@@ -911,7 +911,6 @@ abstract class BaseMigrateController extends Controller
 
                     if (is_file($file)) {
                         require_once $file;
-
                         break;
                     }
                 }
@@ -1029,7 +1028,7 @@ abstract class BaseMigrateController extends Controller
                 }
                 $path = $migrationPath . DIRECTORY_SEPARATOR . $file;
 
-                if (preg_match('/^([mM](\d{6}[_V]?\d{6})\D.*?)\.php$/is', $file, $matches) && is_file($path)) {
+                if (preg_match('/^(m(\d{6}_?\d{6})\D.*?)\.php$/is', $file, $matches) && is_file($path)) {
                     $class = $matches[1];
 
                     if (!empty($namespace)) {
@@ -1097,7 +1096,7 @@ abstract class BaseMigrateController extends Controller
     /**
      * Returns the migration history.
      *
-     * @param int $limit the maximum number of records in the history to be returned. `null` for "no limit".
+     * @param int|null $limit the maximum number of records in the history to be returned. `null` for "no limit".
      *
      * @return array the migration history
      */

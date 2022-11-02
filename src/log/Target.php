@@ -110,7 +110,7 @@ abstract class Target extends Component
     ];
 
     /**
-     * @var callable a PHP callable that returns a string to be prefixed to every exported message.
+     * @var callable|null a PHP callable that returns a string to be prefixed to every exported message.
      *
      * If not set, [[getMessagePrefix()]] will be used, which prefixes the message with context information
      * such as user IP, user ID and session ID.
@@ -287,7 +287,6 @@ abstract class Target extends Component
             foreach ($categories as $category) {
                 if ($message[2] === $category || !empty($category) && substr_compare($category, '*', -1, 1) === 0 && str_starts_with($message[2], rtrim($category, '*'))) {
                     $matched = true;
-
                     break;
                 }
             }
@@ -298,7 +297,6 @@ abstract class Target extends Component
 
                     if (($message[2] === $category || $prefix !== $category) && str_starts_with($message[2], $prefix)) {
                         $matched = false;
-
                         break;
                     }
                 }

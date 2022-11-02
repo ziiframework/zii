@@ -180,11 +180,7 @@ class BaseFileHelper
             throw new InvalidConfigException('The fileinfo PHP extension is not installed.');
         }
 
-        if ($magicFile !== null) {
-            $info = finfo_open(FILEINFO_MIME_TYPE, $magicFile);
-        } else {
-            $info = finfo_open(FILEINFO_MIME_TYPE);
-        }
+        $info = finfo_open(FILEINFO_MIME_TYPE, $magicFile);
 
         if ($info) {
             $result = finfo_file($info, $file);
@@ -1004,7 +1000,11 @@ class BaseFileHelper
      */
     public static function changeOwnership($path, $ownership, $mode = null): void
     {
-        if ($path === null || !file_exists($path)) {
+        if ($path === null) {
+            return;
+        }
+
+        if (!file_exists($path)) {
             throw new InvalidArgumentException('Unable to change ownership, "' . $path . '" is not a file or directory.');
         }
 

@@ -179,7 +179,7 @@ class Migration extends Component implements MigrationInterface
     }
 
     /**
-     * @param Throwable|Exception $e
+     * @param Throwable $e
      */
     private function printException($e): void
     {
@@ -286,11 +286,9 @@ class Migration extends Component implements MigrationInterface
      * If `false` is passed, no update will be performed if the column data already exists.
      * @param array $params the parameters to be bound to the command.
      *
-     * @return $this the command object itself.
-     *
      * @since 2.0.14
      */
-    public function upsert($table, $insertColumns, $updateColumns = true, $params = [])
+    public function upsert($table, $insertColumns, $updateColumns = true, $params = []): void
     {
         $time = $this->beginCommand("upsert into $table");
         $this->db->createCommand()->upsert($table, $insertColumns, $updateColumns, $params)->execute();
@@ -343,7 +341,7 @@ class Migration extends Component implements MigrationInterface
      *
      * @param string $table the name of the table to be created. The name will be properly quoted by the method.
      * @param array $columns the columns (name => definition) in the new table.
-     * @param string $options additional SQL fragment that will be appended to the generated SQL.
+     * @param string|null $options additional SQL fragment that will be appended to the generated SQL.
      */
     public function createTable($table, $columns, $options = null): void
     {
@@ -499,8 +497,8 @@ class Migration extends Component implements MigrationInterface
      * @param string|array $columns the name of the column to that the constraint will be added on. If there are multiple columns, separate them with commas or use an array.
      * @param string $refTable the table that the foreign key references to.
      * @param string|array $refColumns the name of the column that the foreign key references to. If there are multiple columns, separate them with commas or use an array.
-     * @param string $delete the ON DELETE option. Most DBMS support these options: RESTRICT, CASCADE, NO ACTION, SET DEFAULT, SET NULL
-     * @param string $update the ON UPDATE option. Most DBMS support these options: RESTRICT, CASCADE, NO ACTION, SET DEFAULT, SET NULL
+     * @param string|null $delete the ON DELETE option. Most DBMS support these options: RESTRICT, CASCADE, NO ACTION, SET DEFAULT, SET NULL
+     * @param string|null $update the ON UPDATE option. Most DBMS support these options: RESTRICT, CASCADE, NO ACTION, SET DEFAULT, SET NULL
      */
     public function addForeignKey($name, $table, $columns, $refTable, $refColumns, $delete = null, $update = null): void
     {

@@ -173,12 +173,12 @@ class Connection extends Component
     public $dsn;
 
     /**
-     * @var string the username for establishing DB connection. Defaults to `null` meaning no username to use.
+     * @var string|null the username for establishing DB connection. Defaults to `null` meaning no username to use.
      */
     public $username;
 
     /**
-     * @var string the password for establishing DB connection. Defaults to `null` meaning no password to use.
+     * @var string|null the password for establishing DB connection. Defaults to `null` meaning no password to use.
      */
     public $password;
 
@@ -191,7 +191,7 @@ class Connection extends Component
     public $attributes;
 
     /**
-     * @var PDO the PHP PDO instance associated with this DB connection.
+     * @var PDO|null the PHP PDO instance associated with this DB connection.
      * This property is mainly managed by [[open()]] and [[close()]] methods.
      * When a DB connection is active, this property will represent a PDO instance;
      * otherwise, it will be null.
@@ -266,8 +266,8 @@ class Connection extends Component
     public $queryCache = 'cache';
 
     /**
-     * @var string the charset used for database connection. The property is only used
-     * for MySQL, PostgreSQL databases. Defaults to null, meaning using default charset
+     * @var string|null the charset used for database connection. The property is only used
+     * for MySQL, PostgreSQL and CUBRID databases. Defaults to null, meaning using default charset
      * as configured by the database.
      *
      * For Oracle Database, the charset must be specified in the [[dsn]], for example for UTF-8 by appending `;charset=UTF-8`
@@ -279,7 +279,7 @@ class Connection extends Component
     public $charset;
 
     /**
-     * @var bool whether to turn on prepare emulation. Defaults to false, meaning PDO
+     * @var bool|null whether to turn on prepare emulation. Defaults to false, meaning PDO
      * will use the native prepare support if available. For some databases (such as MySQL),
      * this may need to be set true so that PDO can emulate the prepare support to bypass
      * the buggy native prepare support.
@@ -316,7 +316,7 @@ class Connection extends Component
     ];
 
     /**
-     * @var string Custom PDO wrapper class. If not set, it will use [[PDO]] or [[\yii\db\mssql\PDO]] when MSSQL is used.
+     * @var string|null Custom PDO wrapper class. If not set, it will use [[PDO]] or [[\yii\db\mssql\PDO]] when MSSQL is used.
      *
      * @see pdo
      */
@@ -554,14 +554,14 @@ class Connection extends Component
      *
      * @param callable $callable a PHP callable that contains DB queries which will make use of query cache.
      * The signature of the callable is `function (Connection $db)`.
-     * @param int $duration the number of seconds that query results can remain valid in the cache. If this is
+     * @param int|null $duration the number of seconds that query results can remain valid in the cache. If this is
      * not set, the value of [[queryCacheDuration]] will be used instead.
      * Use 0 to indicate that the cached data will never expire.
-     * @param \yii\caching\Dependency $dependency the cache dependency associated with the cached query results.
+     * @param \yii\caching\Dependency|null $dependency the cache dependency associated with the cached query results.
      *
      * @return mixed the return result of the callable
      *
-     * @throws \Exception if there is any exception during query
+     * @throws Throwable if there is any exception during query
      *
      * @see enableQueryCache
      * @see queryCache
@@ -609,7 +609,7 @@ class Connection extends Component
      *
      * @return mixed the return result of the callable
      *
-     * @throws \Exception if there is any exception during query
+     * @throws Throwable if there is any exception during query
      *
      * @see enableQueryCache
      * @see queryCache
@@ -639,10 +639,10 @@ class Connection extends Component
      * Returns the current query cache information.
      * This method is used internally by [[Command]].
      *
-     * @param int $duration the preferred caching duration. If null, it will be ignored.
-     * @param \yii\caching\Dependency $dependency the preferred caching dependency. If null, it will be ignored.
+     * @param int|null $duration the preferred caching duration. If null, it will be ignored.
+     * @param \yii\caching\Dependency|null $dependency the preferred caching dependency. If null, it will be ignored.
      *
-     * @return array the current query cache information, or null if query cache is not enabled.
+     * @return array|null the current query cache information, or null if query cache is not enabled.
      *
      * @internal
      */
@@ -849,7 +849,7 @@ class Connection extends Component
     /**
      * Creates a command for execution.
      *
-     * @param string $sql the SQL statement to be executed
+     * @param string|null $sql the SQL statement to be executed
      * @param array $params the parameters to be bound to the SQL statement
      *
      * @return Command the DB command
@@ -912,7 +912,7 @@ class Connection extends Component
      *
      * @return mixed result of callback function
      *
-     * @throws \Exception if there is any exception during query. In this case the transaction will be rolled back.
+     * @throws Throwable if there is any exception during query. In this case the transaction will be rolled back.
      */
     public function transaction(callable $callback, $isolationLevel = null)
     {
@@ -1121,19 +1121,19 @@ class Connection extends Component
     public function quoteSql($sql)
     {
         return preg_replace_callback('/(\\{\\{(%?[\w\-\. ]+%?)\\}\\}|\\[\\[([\w\-\. ]+)\\]\\])/', function ($matches) {
-            if (isset($matches[3])) {
-                return $this->quoteColumnName($matches[3]);
-            }
+                if (isset($matches[3])) {
+                    return $this->quoteColumnName($matches[3]);
+                }
 
-            return str_replace('%', $this->tablePrefix, $this->quoteTableName($matches[2]));
-        }, $sql);
+                return str_replace('%', $this->tablePrefix, $this->quoteTableName($matches[2]));
+            }, $sql);
     }
 
     /**
      * Returns the name of the DB driver. Based on the the current [[dsn]], in case it was not set explicitly
      * by an end user.
      *
-     * @return string name of the DB driver
+     * @return string|null name of the DB driver
      */
     public function getDriverName()
     {
@@ -1177,7 +1177,7 @@ class Connection extends Component
      *
      * @param bool $fallbackToMaster whether to return a master PDO in case none of the slave connections is available.
      *
-     * @return PDO the PDO instance for the currently active slave connection. `null` is returned if no slave connection
+     * @return PDO|null the PDO instance for the currently active slave connection. `null` is returned if no slave connection
      * is available and `$fallbackToMaster` is false.
      */
     public function getSlavePdo($fallbackToMaster = true)
@@ -1210,7 +1210,7 @@ class Connection extends Component
      *
      * @param bool $fallbackToMaster whether to return a master connection in case there is no slave connection available.
      *
-     * @return Connection the currently active slave connection. `null` is returned if there is no slave available and
+     * @return Connection|null the currently active slave connection. `null` is returned if there is no slave available and
      * `$fallbackToMaster` is false.
      */
     public function getSlave($fallbackToMaster = true)
@@ -1230,7 +1230,7 @@ class Connection extends Component
      * Returns the currently active master connection.
      * If this method is called for the first time, it will try to open a master connection.
      *
-     * @return Connection the currently active master connection. `null` is returned if there is no master available.
+     * @return Connection|null the currently active master connection. `null` is returned if there is no master available.
      *
      * @since 2.0.11
      */
@@ -1262,7 +1262,7 @@ class Connection extends Component
      *
      * @return mixed the return value of the callback
      *
-     * @throws \Exception if there is any exception thrown from the callback
+     * @throws Throwable if there is any exception thrown from the callback
      */
     public function useMaster(callable $callback)
     {
@@ -1299,7 +1299,7 @@ class Connection extends Component
      * @param array $pool the list of connection configurations in the server pool
      * @param array $sharedConfig the configuration common to those given in `$pool`.
      *
-     * @return Connection the opened DB connection, or `null` if no server is available
+     * @return Connection|null the opened DB connection, or `null` if no server is available
      *
      * @throws InvalidConfigException if a configuration does not specify "dsn"
      *
@@ -1330,7 +1330,7 @@ class Connection extends Component
      * @param array $pool the list of connection configurations in the server pool
      * @param array $sharedConfig the configuration common to those given in `$pool`.
      *
-     * @return Connection the opened DB connection, or `null` if no server is available
+     * @return Connection|null the opened DB connection, or `null` if no server is available
      *
      * @throws InvalidConfigException if a configuration does not specify "dsn"
      *
