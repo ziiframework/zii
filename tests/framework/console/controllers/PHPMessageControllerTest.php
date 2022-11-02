@@ -21,14 +21,14 @@ class PHPMessageControllerTest extends BaseMessageControllerTest
 {
     protected $messagePath;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         parent::setUp();
         $this->messagePath = Yii::getAlias('@yiiunit/runtime/test_messages');
         FileHelper::createDirectory($this->messagePath, 0777);
     }
 
-    protected function tearDown(): void
+    public function tearDown(): void
     {
         parent::tearDown();
         FileHelper::removeDirectory($this->messagePath);

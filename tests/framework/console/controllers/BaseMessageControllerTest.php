@@ -27,7 +27,7 @@ abstract class BaseMessageControllerTest extends TestCase
     protected $configFileName = '';
     protected $language = 'en';
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->mockApplication();
         $this->sourcePath = Yii::getAlias('@yiiunit/runtime/test_source');
@@ -52,7 +52,7 @@ abstract class BaseMessageControllerTest extends TestCase
         return $this->configFileName;
     }
 
-    protected function tearDown(): void
+    public function tearDown(): void
     {
         FileHelper::removeDirectory($this->sourcePath);
 

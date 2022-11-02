@@ -37,7 +37,7 @@ class AttributeBehaviorTest extends TestCase
         }
     }
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->mockApplication([
             'components' => [
@@ -56,7 +56,7 @@ class AttributeBehaviorTest extends TestCase
         Yii::$app->getDb()->createCommand()->createTable('test_attribute', $columns)->execute();
     }
 
-    protected function tearDown(): void
+    public function tearDown(): void
     {
         Yii::$app->getDb()->close();
         parent::tearDown();

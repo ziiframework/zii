@@ -31,7 +31,7 @@ class BlameableBehaviorTest extends TestCase
         }
     }
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->mockApplication([
             'components' => [
@@ -55,7 +55,7 @@ class BlameableBehaviorTest extends TestCase
         $this->getUser()->login(10);
     }
 
-    protected function tearDown(): void
+    public function tearDown(): void
     {
         Yii::$app->getDb()->close();
         parent::tearDown();

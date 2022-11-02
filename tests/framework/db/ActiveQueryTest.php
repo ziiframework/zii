@@ -27,7 +27,7 @@ abstract class ActiveQueryTest extends DatabaseTestCase
 {
     use GetTablesAliasTestTrait;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         parent::setUp();
         ActiveRecord::$db = $this->getConnection();

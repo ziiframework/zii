@@ -20,7 +20,7 @@ use yii\mail\BaseMessage;
  */
 class BaseMessageTest extends TestCase
 {
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->mockApplication([
             'components' => [

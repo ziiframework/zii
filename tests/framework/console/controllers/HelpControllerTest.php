@@ -26,7 +26,7 @@ class HelpControllerTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->mockApplication();
     }

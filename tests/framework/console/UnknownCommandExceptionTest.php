@@ -19,7 +19,7 @@ use yii\console\UnknownCommandException;
  */
 class UnknownCommandExceptionTest extends TestCase
 {
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->mockApplication([
             'enableCoreCommands' => false,

@@ -80,7 +80,7 @@ class DbMessageControllerTest extends BaseMessageControllerTest
         parent::tearDownAfterClass();
     }
 
-    protected function tearDown(): void
+    public function tearDown(): void
     {
         parent::tearDown();
         Yii::$app = null;

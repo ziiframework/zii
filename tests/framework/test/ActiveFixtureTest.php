@@ -26,7 +26,7 @@ class ActiveFixtureTest extends DatabaseTestCase
 {
     protected $driverName = 'mysql';
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         parent::setUp();
         $db = $this->getConnection();
@@ -34,7 +34,7 @@ class ActiveFixtureTest extends DatabaseTestCase
         ActiveRecord::$db = $db;
     }
 
-    protected function tearDown(): void
+    public function tearDown(): void
     {
         parent::tearDown();
     }
@@ -207,12 +207,12 @@ class BaseDbTestCase
 {
     use FixtureTrait;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->initFixtures();
     }
 
-    protected function tearDown(): void
+    public function tearDown(): void
     {
     }
 }

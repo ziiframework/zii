@@ -125,7 +125,7 @@ class AssetBundleTest extends \yiiunit\TestCase
         $bundle = TestSourceAsset::register($view);
         $bundle->publish($am);
 
-        $this->assertDirectoryDoesNotExist($bundle->basePath);
+        $this->assertDirectoryNotExists($bundle->basePath);
 
         foreach ($bundle->js as $filename) {
             $publishedFile = $bundle->basePath . DIRECTORY_SEPARATOR . $filename;
@@ -144,7 +144,7 @@ class AssetBundleTest extends \yiiunit\TestCase
         ];
         $bundle->publish($am);
 
-        $this->assertDirectoryDoesNotExist($bundle->basePath);
+        $this->assertDirectoryNotExists($bundle->basePath);
 
         foreach ($bundle->js as $filename) {
             $publishedFile = $bundle->basePath . DIRECTORY_SEPARATOR . $filename;

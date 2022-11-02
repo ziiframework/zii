@@ -38,7 +38,7 @@ class OptimisticLockBehaviorTest extends TestCase
         }
     }
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->mockApplication([
             'components' => [
@@ -62,7 +62,7 @@ class OptimisticLockBehaviorTest extends TestCase
         Yii::$app->getDb()->createCommand()->createTable('test_auto_lock_version_string', $columns)->execute();
     }
 
-    protected function tearDown(): void
+    public function tearDown(): void
     {
         Yii::$app->getDb()->close();
         parent::tearDown();

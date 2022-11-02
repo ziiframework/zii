@@ -22,7 +22,7 @@ class POMessageControllerTest extends BaseMessageControllerTest
     protected $messagePath;
     protected $catalog = 'messages';
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -30,7 +30,7 @@ class POMessageControllerTest extends BaseMessageControllerTest
         FileHelper::createDirectory($this->messagePath, 0777);
     }
 
-    protected function tearDown(): void
+    public function tearDown(): void
     {
         parent::tearDown();
         FileHelper::removeDirectory($this->messagePath);

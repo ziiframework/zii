@@ -17,7 +17,7 @@ use yiiunit\data\ar\ActiveRecord;
 
 abstract class BatchQueryResultTest extends DatabaseTestCase
 {
-    protected function setUp(): void
+    public function setUp(): void
     {
         parent::setUp();
         ActiveRecord::$db = $this->getConnection();
