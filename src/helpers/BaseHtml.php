@@ -40,7 +40,7 @@ class BaseHtml
     /**
      * @var array list of void elements (element name => 1)
      *
-     * @see https://www.w3.org/TR/html-markup/syntax.html#void-element
+     * @see https://html.spec.whatwg.org/multipage/syntax.html#void-element
      */
     public static $voidElements = [
         'area' => 1,
@@ -131,15 +131,7 @@ class BaseHtml
      */
     public static function encode($content, $doubleEncode = true)
     {
-        if ($content === null) {
-            $content = '';
-        }
-
-        if (is_int($content)) {
-            $content = (string) $content;
-        }
-
-        return htmlspecialchars($content, ENT_QUOTES | ENT_SUBSTITUTE, Yii::$app ? Yii::$app->charset : 'UTF-8', $doubleEncode);
+        return htmlspecialchars(pf_string_argument($content), ENT_QUOTES | ENT_SUBSTITUTE, Yii::$app ? Yii::$app->charset : 'UTF-8', $doubleEncode);
     }
 
     /**
@@ -652,7 +644,7 @@ class BaseHtml
     /**
      * Generates an input button.
      *
-     * @param string $label the value attribute. If it is null, the value attribute will not be generated.
+     * @param string|null $label the value attribute. If it is null, the value attribute will not be generated.
      * @param array $options the tag options in terms of name-value pairs. These will be rendered as
      * the attributes of the resulting tag. The values will be HTML-encoded using [[encode()]].
      * If a value is null, the corresponding attribute will not be rendered.
@@ -674,7 +666,7 @@ class BaseHtml
      * Be careful when naming form elements such as submit buttons. According to the [jQuery documentation](https://api.jquery.com/submit/) there
      * are some reserved names that can cause conflicts, e.g. `submit`, `length`, or `method`.
      *
-     * @param string $label the value attribute. If it is null, the value attribute will not be generated.
+     * @param string|null $label the value attribute. If it is null, the value attribute will not be generated.
      * @param array $options the tag options in terms of name-value pairs. These will be rendered as
      * the attributes of the resulting tag. The values will be HTML-encoded using [[encode()]].
      * If a value is null, the corresponding attribute will not be rendered.
@@ -693,7 +685,7 @@ class BaseHtml
     /**
      * Generates a reset input button.
      *
-     * @param string $label the value attribute. If it is null, the value attribute will not be generated.
+     * @param string|null $label the value attribute. If it is null, the value attribute will not be generated.
      * @param array $options the attributes of the button tag. The values will be HTML-encoded using [[encode()]].
      * Attributes whose value is null will be ignored and not put in the tag returned.
      * See [[renderTagAttributes()]] for details on how attributes are being rendered.
@@ -1094,9 +1086,12 @@ class BaseHtml
         $index = 0;
 
         foreach ($items as $value => $label) {
-            $checked = $selection !== null && ((!ArrayHelper::isTraversable($selection) && !strcmp((string) $value, is_int($selection) ? (string) $selection : $selection))
+            $checked = $selection !== null
+                && (
+                    (!ArrayHelper::isTraversable($selection) && !strcmp(pf_string_argument($value), pf_string_argument($selection)))
                     ||
-                    (ArrayHelper::isTraversable($selection) && ArrayHelper::isIn((string) $value, $selection, $strict)));
+                    (ArrayHelper::isTraversable($selection) && ArrayHelper::isIn(pf_string_argument($value), $selection, $strict))
+                );
 
             if ($formatter !== null) {
                 $lines[] = call_user_func($formatter, $index, $label, $name, $checked, $value);
@@ -1200,9 +1195,12 @@ class BaseHtml
         $index = 0;
 
         foreach ($items as $value => $label) {
-            $checked = $selection !== null && ((!ArrayHelper::isTraversable($selection) && !strcmp((string) $value, is_int($selection) ? (string) $selection : $selection))
+            $checked = $selection !== null
+                && (
+                    (!ArrayHelper::isTraversable($selection) && !strcmp(pf_string_argument($value), pf_string_argument($selection)))
                     ||
-                    (ArrayHelper::isTraversable($selection) && ArrayHelper::isIn((string) $value, $selection, $strict)));
+                    (ArrayHelper::isTraversable($selection) && ArrayHelper::isIn(pf_string_argument($value), $selection, $strict))
+                );
 
             if ($formatter !== null) {
                 $lines[] = call_user_func($formatter, $index, $label, $name, $checked, $value);
@@ -1533,7 +1531,6 @@ class BaseHtml
             foreach ($model->getActiveValidators($attrName) as $validator) {
                 if ($validator instanceof StringValidator && ($validator->max !== null || $validator->length !== null)) {
                     $options['maxlength'] = max($validator->max, $validator->length);
-
                     break;
                 }
             }
@@ -2090,7 +2087,7 @@ class BaseHtml
                         && (
                             (!ArrayHelper::isTraversable($selection) && ($strict ? !strcmp(pf_string_argument($key), pf_string_argument($selection, '', '1', '')) : $selection == $key))
                             ||
-                            (ArrayHelper::isTraversable($selection) && ArrayHelper::isIn((string) $key, $selection, $strict))
+                            (ArrayHelper::isTraversable($selection) && ArrayHelper::isIn(pf_string_argument($key), $selection, $strict))
                         );
                 }
                 $text = $encode ? static::encode($value) : $value;
@@ -2109,7 +2106,7 @@ class BaseHtml
      * Renders the HTML tag attributes.
      *
      * Attributes whose values are of boolean type will be treated as
-     * [boolean attributes](https://www.w3.org/TR/html5/infrastructure.html#boolean-attributes).
+     * [boolean attributes](https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#boolean-attributes).
      *
      * Attributes whose values are null will not be rendered.
      *

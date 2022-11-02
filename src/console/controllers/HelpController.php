@@ -50,7 +50,7 @@ class HelpController extends Controller
      * Displays available commands or the detailed information
      * about a particular command.
      *
-     * @param string $command The name of the command to show help about.
+     * @param string|null $command The name of the command to show help about.
      * If not provided, all available commands will be displayed.
      *
      * @return int the exit status

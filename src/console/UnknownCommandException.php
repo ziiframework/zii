@@ -8,6 +8,7 @@
 
 namespace yii\console;
 
+use Throwable;
 use yii\console\controllers\HelpController;
 
 /**
@@ -35,9 +36,9 @@ class UnknownCommandException extends Exception
      * @param string $route the route of the command that could not be found.
      * @param Application $application the console application instance involved.
      * @param int $code the Exception code.
-     * @param \Exception $previous the previous exception used for the exception chaining.
+     * @param Throwable|null $previous the previous exception used for the exception chaining.
      */
-    public function __construct($route, $application, $code = 0, \Exception $previous = null)
+    public function __construct($route, $application, $code = 0, $previous = null)
     {
         $this->command = $route;
         $this->application = $application;
@@ -125,7 +126,7 @@ class UnknownCommandException extends Exception
 
         // suggest alternatives that begin with $command first
         foreach ($actions as $action) {
-            if (strpos($action, $command) === 0) {
+            if (str_starts_with($action, $command)) {
                 $alternatives[] = $action;
             }
         }

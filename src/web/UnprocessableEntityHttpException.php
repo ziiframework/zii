@@ -8,7 +8,7 @@
 
 namespace yii\web;
 
-use Exception;
+use Throwable;
 
 /**
  * UnprocessableEntityHttpException represents an "Unprocessable Entity" HTTP
@@ -19,7 +19,7 @@ use Exception;
  * was unable to process the contained instructions. For example, to return form
  * validation errors.
  *
- * @link https://www.webdav.org/specs/rfc2518.html#STATUS_422
+ * @link http://www.webdav.org/specs/rfc2518.html#STATUS_422
  *
  * @author Jan Silva <janfrs3@gmail.com>
  *
@@ -30,11 +30,11 @@ class UnprocessableEntityHttpException extends HttpException
     /**
      * Constructor.
      *
-     * @param string $message error message
+     * @param string|null $message error message
      * @param int $code error code
-     * @param Exception $previous The previous exception used for the exception chaining.
+     * @param Throwable|null $previous The previous exception used for the exception chaining.
      */
-    public function __construct($message = null, $code = 0, Exception $previous = null)
+    public function __construct($message = null, $code = 0, $previous = null)
     {
         parent::__construct(422, $message, $code, $previous);
     }

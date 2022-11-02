@@ -37,7 +37,7 @@ use yii\base\InvalidConfigException;
  * @property-write string $transactionIsolationLevel The transaction isolation level to use for this
  * transaction. This can be one of [[Transaction::READ_UNCOMMITTED]], [[Transaction::READ_COMMITTED]],
  * [[Transaction::REPEATABLE_READ]] and [[Transaction::SERIALIZABLE]] but also a string containing DBMS specific
- * syntax to be used after `SET TRANSACTION ISOLATION LEVEL`. This property is write-only.
+ * syntax to be used after `SET TRANSACTION ISOLATION LEVEL`.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @author Sergey Makinen <sergey@makinen.ru>
@@ -370,7 +370,7 @@ abstract class Schema extends BaseObject
      * This method may be overridden by child classes to create a DBMS-specific column schema builder.
      *
      * @param string $type type of the column. See [[ColumnSchemaBuilder::$type]].
-     * @param int|string|array $length length or precision of the column. See [[ColumnSchemaBuilder::$length]].
+     * @param int|string|array|null $length length or precision of the column. See [[ColumnSchemaBuilder::$length]].
      *
      * @return ColumnSchemaBuilder column schema builder instance
      *
@@ -503,7 +503,6 @@ abstract class Schema extends BaseObject
         foreach ($tableSchema->primaryKey as $name) {
             if ($tableSchema->columns[$name]->autoIncrement) {
                 $result[$name] = $this->getLastInsertID($tableSchema->sequenceName);
-
                 break;
             }
 
@@ -551,9 +550,7 @@ abstract class Schema extends BaseObject
      */
     public function quoteTableName($name)
     {
-        if (is_int($name)) {
-            $name = (string) $name;
-        }
+        $name = pf_string_argument($name);
 
         if (strncmp($name, '(', 1) === 0 && strpos($name, ')') === strlen($name) - 1) {
             return $name;

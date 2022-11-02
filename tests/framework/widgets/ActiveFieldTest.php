@@ -274,7 +274,7 @@ EOT;
     /**
      * @dataProvider hintDataProvider
      *
-     * @param mixed  $hint
+     * @param mixed $hint
      * @param string $expectedHtml
      */
     public function testHint($hint, $expectedHtml): void
@@ -463,7 +463,7 @@ EOD;
         $this->activeField->textInput();
         $actualValue = $this->activeField->getClientOptions();
 
-        $this->assertEquals('activefieldtestmodel-attributename', $actualValue['id']);
+        $this->assertEquals('custom-input-id', $actualValue['id']);
         $this->assertEquals($this->attributeName, $actualValue['name']);
         $this->assertEquals('.field-custom-input-id', $actualValue['container']);
         $this->assertEquals('#custom-input-id', $actualValue['input']);
@@ -471,7 +471,7 @@ EOD;
         $this->activeField->textInput(['id' => 'custom-textinput-id']);
         $actualValue = $this->activeField->getClientOptions();
 
-        $this->assertEquals('activefieldtestmodel-attributename', $actualValue['id']);
+        $this->assertEquals('custom-textinput-id', $actualValue['id']);
         $this->assertEquals($this->attributeName, $actualValue['name']);
         $this->assertEquals('.field-custom-textinput-id', $actualValue['container']);
         $this->assertEquals('#custom-textinput-id', $actualValue['input']);

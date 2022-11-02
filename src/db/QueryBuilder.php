@@ -27,9 +27,9 @@ use yii\db\conditions\ConditionInterface;
  * For more details and usage information on QueryBuilder, see the [guide article on query builders](guide:db-query-builder).
  *
  * @property-write string[] $conditionClasses Map of condition aliases to condition classes. For example:
- * ```php ['LIKE' => yii\db\condition\LikeCondition::class] ``` . This property is write-only.
+ * ```php ['LIKE' => yii\db\condition\LikeCondition::class] ``` .
  * @property-write string[] $expressionBuilders Array of builders that should be merged with the pre-defined
- * ones in [[expressionBuilders]] property. This property is write-only.
+ * ones in [[expressionBuilders]] property.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  *
@@ -319,7 +319,6 @@ class QueryBuilder extends \yii\base\BaseObject
             foreach (array_reverse($this->expressionBuilders) as $expressionClass => $builderClass) {
                 if (is_subclass_of($expression, $expressionClass)) {
                     $this->expressionBuilders[$className] = $builderClass;
-
                     break;
                 }
             }
@@ -762,7 +761,7 @@ class QueryBuilder extends \yii\base\BaseObject
      *
      * @param string $table the name of the table to be created. The name will be properly quoted by the method.
      * @param array $columns the columns (name => definition) in the new table.
-     * @param string $options additional SQL fragment that will be appended to the generated SQL.
+     * @param string|null $options additional SQL fragment that will be appended to the generated SQL.
      *
      * @return string the SQL statement for creating a new DB table.
      */
@@ -936,8 +935,8 @@ class QueryBuilder extends \yii\base\BaseObject
      * @param string $refTable the table that the foreign key references to.
      * @param string|array $refColumns the name of the column that the foreign key references to.
      * If there are multiple columns, separate them with commas or use an array to represent them.
-     * @param string $delete the ON DELETE option. Most DBMS support these options: RESTRICT, CASCADE, NO ACTION, SET DEFAULT, SET NULL
-     * @param string $update the ON UPDATE option. Most DBMS support these options: RESTRICT, CASCADE, NO ACTION, SET DEFAULT, SET NULL
+     * @param string|null $delete the ON DELETE option. Most DBMS support these options: RESTRICT, CASCADE, NO ACTION, SET DEFAULT, SET NULL
+     * @param string|null $update the ON UPDATE option. Most DBMS support these options: RESTRICT, CASCADE, NO ACTION, SET DEFAULT, SET NULL
      *
      * @return string the SQL statement for adding a foreign key constraint to an existing table.
      */
@@ -1139,7 +1138,7 @@ class QueryBuilder extends \yii\base\BaseObject
      * will have the specified value or the maximum existing value +1.
      *
      * @param string $table the name of the table whose primary key sequence will be reset
-     * @param array|string $value the value for the primary key of the next new row inserted. If this is not set,
+     * @param array|string|null $value the value for the primary key of the next new row inserted. If this is not set,
      * the next new row's primary key will have the maximum existing value +1.
      *
      * @return string the SQL statement for resetting sequence
@@ -1158,7 +1157,7 @@ class QueryBuilder extends \yii\base\BaseObject
      * will have the specified value or the maximum existing value +1.
      *
      * @param string $table the name of the table whose primary key sequence is reset
-     * @param array|string $value the value for the primary key of the next new row inserted. If this is not set,
+     * @param array|string|null $value the value for the primary key of the next new row inserted. If this is not set,
      * the next new row's primary key will have the maximum existing value +1.
      *
      * @throws NotSupportedException if this is not supported by the underlying DBMS
@@ -1351,7 +1350,7 @@ class QueryBuilder extends \yii\base\BaseObject
      * @param array $columns
      * @param array $params the binding parameters to be populated
      * @param bool $distinct
-     * @param string $selectOption
+     * @param string|null $selectOption
      *
      * @return string the SELECT clause built from [[Query::$select]].
      */
@@ -1466,7 +1465,7 @@ class QueryBuilder extends \yii\base\BaseObject
                     $table = $this->db->quoteTableName($table);
                 }
                 $tables[$i] = "$table " . $this->db->quoteTableName($i);
-            } elseif (!str_contains(is_string($table) ? $table : (string) $table, '(')) {
+            } elseif (!str_contains(($table instanceof Expression) ? $table->__toString() : $table, '(')) {
                 if ($tableWithAlias = $this->extractAlias($table)) { // with alias
                     $tables[$i] = $this->db->quoteTableName($tableWithAlias[1]) . ' ' . $this->db->quoteTableName($tableWithAlias[2]);
                 } else {

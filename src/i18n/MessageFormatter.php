@@ -17,7 +17,7 @@ use yii\base\Component;
 use yii\base\NotSupportedException;
 
 /**
- * MessageFormatter allows formatting messages via [ICU message format](https://userguide.icu-project.org/formatparse/messages).
+ * MessageFormatter allows formatting messages via [ICU message format](https://unicode-org.github.io/icu/userguide/format_parse/messages/).
  *
  * This class enhances the message formatter class provided by the PHP intl extension.
  *
@@ -79,7 +79,7 @@ class MessageFormatter extends Component
     }
 
     /**
-     * Formats a message via [ICU message format](https://userguide.icu-project.org/formatparse/messages).
+     * Formats a message via [ICU message format](https://unicode-org.github.io/icu/userguide/format_parse/messages/).
      *
      * It uses the PHP intl extension's [MessageFormatter](https://www.php.net/manual/en/class.messageformatter.php)
      * and works around some issues.
@@ -150,7 +150,7 @@ class MessageFormatter extends Component
     }
 
     /**
-     * Parses an input string according to an [ICU message format](https://userguide.icu-project.org/formatparse/messages) pattern.
+     * Parses an input string according to an [ICU message format](https://unicode-org.github.io/icu/userguide/format_parse/messages/) pattern.
      *
      * It uses the PHP intl extension's [MessageFormatter::parse()](https://www.php.net/manual/en/messageformatter.parsemessage.php)
      * and adds support for named arguments.
@@ -386,7 +386,7 @@ class MessageFormatter extends Component
     private function parseToken($token, $args, $locale)
     {
         // parsing pattern based on ICU grammar:
-        // https://icu-project.org/apiref/icu4c/classMessageFormat.html#details
+        // https://unicode-org.github.io/icu-docs/#/icu4c/classMessageFormat.html
         $charset = Yii::$app ? Yii::$app->charset : 'UTF-8';
         $param = trim($token[0]);
 
@@ -413,9 +413,9 @@ class MessageFormatter extends Component
                 if (is_numeric($arg) && ($format === null || $format === 'integer')) {
                     $number = number_format($arg);
 
-                    if ($format === null && ($pos = strpos((string) $arg, '.')) !== false) {
+                    if ($format === null && ($pos = strpos(pf_string_argument($arg), '.')) !== false) {
                         // add decimals with unknown length
-                        $number .= '.' . substr((string) $arg, $pos + 1);
+                        $number .= '.' . substr(pf_string_argument($arg), $pos + 1);
                     }
 
                     return $number;
@@ -427,7 +427,7 @@ class MessageFormatter extends Component
                 return $arg;
 
             case 'select':
-                /* https://icu-project.org/apiref/icu4c/classicu_1_1SelectFormat.html
+                /* https://unicode-org.github.io/icu-docs/#/icu4c/classicu_1_1SelectFormat.html
                 selectStyle = (selector '{' message '}')+
                 */
                 if (!isset($token[2])) {
@@ -451,11 +451,10 @@ class MessageFormatter extends Component
                 if ($message !== false) {
                     return $this->fallbackFormat($message, $args, $locale);
                 }
-
                 break;
 
             case 'plural':
-                /* https://icu-project.org/apiref/icu4c/classicu_1_1PluralFormat.html
+                /* https://unicode-org.github.io/icu-docs/#/icu4c/classicu_1_1PluralFormat.html
                 pluralStyle = [offsetValue] (selector '{' message '}')+
                 offsetValue = "offset:" number
                 selector = explicitValue | keyword
@@ -486,14 +485,13 @@ class MessageFormatter extends Component
                         strncmp($selector, '=', 1) === 0 && (int) mb_substr($selector, 1, mb_strlen($selector, $charset), $charset) === $arg ||
                         $selector === 'one' && $arg - $offset == 1
                     ) {
-                        $message = implode(',', str_replace('#', (string) ($arg - $offset), $plural[$i]));
+                        $message = implode(',', str_replace('#', pf_string_argument($arg - $offset), $plural[$i]));
                     }
                 }
 
                 if ($message !== false) {
                     return $this->fallbackFormat($message, $args, $locale);
                 }
-
                 break;
         }
 

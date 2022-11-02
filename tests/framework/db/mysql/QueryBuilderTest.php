@@ -13,7 +13,6 @@ namespace yiiunit\framework\db\mysql;
 use PDO;
 use yii\db\Query;
 use yii\db\Schema;
-use yii\helpers\Json;
 use yii\db\Expression;
 use yii\base\DynamicModel;
 use yii\db\JsonExpression;
@@ -402,5 +401,22 @@ MySqlStatement;
         // string value should not be converted
         $sql = $command->insert('{{type}}', ['bigint_col' => '1000000000000'])->getRawSql();
         $this->assertEquals("INSERT INTO `type` (`bigint_col`) VALUES ('1000000000000')", $sql);
+    }
+
+    /**
+     * Test for issue https://github.com/yiisoft/yii2/issues/15500.
+     */
+    public function testDefaultValues(): void
+    {
+        $db = $this->getConnection();
+        $command = $db->createCommand();
+
+        // primary key columns should have NULL as value
+        $sql = $command->insert('null_values', [])->getRawSql();
+        $this->assertEquals('INSERT INTO `null_values` (`id`) VALUES (NULL)', $sql);
+
+        // non-primary key columns should have DEFAULT as value
+        $sql = $command->insert('negative_default_values', [])->getRawSql();
+        $this->assertEquals('INSERT INTO `negative_default_values` (`tinyint_col`) VALUES (DEFAULT)', $sql);
     }
 }

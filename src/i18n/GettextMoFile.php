@@ -273,7 +273,7 @@ class GettextMoFile extends GettextFile
      *
      * @param resource $fileHandle file handle
      * @param int $length of the string
-     * @param int $offset of the string in the file. If null, it reads from the current position.
+     * @param int|null $offset of the string in the file. If null, it reads from the current position.
      *
      * @return string the result
      */

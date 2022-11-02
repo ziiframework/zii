@@ -94,7 +94,7 @@ class Formatter extends Component
     public const UNIT_WEIGHT = 'mass';
 
     /**
-     * @var string the text to be displayed when formatting a `null` value.
+     * @var string|null the text to be displayed when formatting a `null` value.
      * Defaults to `'<span class="not-set">(not set)</span>'`, where `(not set)`
      * will be translated according to [[locale]].
      */
@@ -109,7 +109,7 @@ class Formatter extends Component
     public $booleanFormat;
 
     /**
-     * @var string the locale ID that is used to localize the date and number formatting.
+     * @var string|null the locale ID that is used to localize the date and number formatting.
      * For number and date formatting this is only effective when the
      * [PHP intl extension](https://www.php.net/manual/en/book.intl.php) is installed.
      * If not set, [[\yii\base\Application::language]] will be used.
@@ -117,7 +117,7 @@ class Formatter extends Component
     public $locale;
 
     /**
-     * @var string the language code (e.g. `en-US`, `en`) that is used to translate internal messages.
+     * @var string|null the language code (e.g. `en-US`, `en`) that is used to translate internal messages.
      * If not set, [[locale]] will be used (without the `@calendar` param, if included).
      *
      * @since 2.0.28
@@ -125,7 +125,7 @@ class Formatter extends Component
     public $language;
 
     /**
-     * @var string the time zone to use for formatting time and date values.
+     * @var string|null the time zone to use for formatting time and date values.
      *
      * This can be any value that may be passed to [date_default_timezone_set()](https://www.php.net/manual/en/function.date-default-timezone-set.php)
      * e.g. `UTC`, `Europe/Berlin` or `America/Chicago`.
@@ -222,7 +222,7 @@ class Formatter extends Component
      * ],
      * ```
      *
-     * Available calendar names can be found in the [ICU manual](https://userguide.icu-project.org/datetime/calendar).
+     * Available calendar names can be found in the [ICU manual](https://unicode-org.github.io/icu/userguide/datetime/calendar/).
      *
      * Since PHP 5.5 you may also use an instance of the [[\IntlCalendar]] class.
      * Check the [PHP manual](https://www.php.net/manual/en/intldateformatter.create.php) for more details.
@@ -244,7 +244,7 @@ class Formatter extends Component
     public $decimalSeparator;
 
     /**
-     * @var string the character displayed as the decimal point when formatting a currency.
+     * @var string|null the character displayed as the decimal point when formatting a currency.
      * If not set, the currency decimal separator corresponding to [[locale]] will be used.
      * If [PHP intl extension](https://www.php.net/manual/en/book.intl.php) is not available, setting this property will have no effect.
      *
@@ -646,7 +646,7 @@ class Formatter extends Component
      * @param array $options the tag options in terms of name-value pairs. See [[Html::a()]]. Since 2.0.43 there is
      * a special option available `scheme` - if set it won't be passed to [[Html::a()]] but it will control the URL
      * protocol part of the link by normalizing URL and ensuring that it uses specified scheme. See [[Url::ensureScheme()]].
-     * If `scheme` is not set the original behavior is preserved which is to add "https://" prefix when "://" string is
+     * If `scheme` is not set the original behavior is preserved which is to add "http://" prefix when "://" string is
      * not found in the $value.
      *
      * @return string the formatted result.
@@ -709,7 +709,7 @@ class Formatter extends Component
      * If null, [[dateFormat]] will be used.
      *
      * This can be "short", "medium", "long", or "full", which represents a preset format of different lengths.
-     * It can also be a custom format as specified in the [ICU manual](https://userguide.icu-project.org/formatparse/datetime).
+     * It can also be a custom format as specified in the [ICU manual](https://unicode-org.github.io/icu/userguide/format_parse/datetime/).
      *
      * Alternatively this can be a string prefixed with `php:` representing a format that can be recognized by the
      * PHP [date()](https://www.php.net/manual/en/function.date.php)-function.
@@ -748,7 +748,7 @@ class Formatter extends Component
      * If null, [[timeFormat]] will be used.
      *
      * This can be "short", "medium", "long", or "full", which represents a preset format of different lengths.
-     * It can also be a custom format as specified in the [ICU manual](https://userguide.icu-project.org/formatparse/datetime).
+     * It can also be a custom format as specified in the [ICU manual](https://unicode-org.github.io/icu/userguide/format_parse/datetime/).
      *
      * Alternatively this can be a string prefixed with `php:` representing a format that can be recognized by the
      * PHP [date()](https://www.php.net/manual/en/function.date.php)-function.
@@ -787,7 +787,7 @@ class Formatter extends Component
      * If null, [[datetimeFormat]] will be used.
      *
      * This can be "short", "medium", "long", or "full", which represents a preset format of different lengths.
-     * It can also be a custom format as specified in the [ICU manual](https://userguide.icu-project.org/formatparse/datetime).
+     * It can also be a custom format as specified in the [ICU manual](https://unicode-org.github.io/icu/userguide/format_parse/datetime/).
      *
      * Alternatively this can be a string prefixed with `php:` representing a format that can be recognized by the
      * PHP [date()](https://www.php.net/manual/en/function.date.php)-function.
@@ -1779,7 +1779,7 @@ class Formatter extends Component
     /**
      * @param string $unitType one of [[UNIT_WEIGHT]], [[UNIT_LENGTH]]
      * @param string $unitFormat one of [[FORMAT_WIDTH_SHORT]], [[FORMAT_WIDTH_LONG]]
-     * @param string $system either [[UNIT_SYSTEM_METRIC]] or [[UNIT_SYSTEM_IMPERIAL]]. When `null`, property [[systemOfUnits]] will be used.
+     * @param string|null $system either [[UNIT_SYSTEM_METRIC]] or [[UNIT_SYSTEM_IMPERIAL]]. When `null`, property [[systemOfUnits]] will be used.
      * @param int $position internal position of size unit
      *
      * @return string
@@ -1889,7 +1889,7 @@ class Formatter extends Component
         $params = [
             // this is the unformatted number used for the plural rule
             // abs() to make sure the plural rules work correctly on negative numbers, intl does not cover this
-            // https://english.stackexchange.com/questions/9735/is-1-singular-or-plural
+            // https://english.stackexchange.com/questions/9735/is-1-followed-by-a-singular-or-plural-noun
             'n' => abs($value),
             // this is the formatted number used for display
             'nFormatted' => $this->asDecimal($value, $decimals, $options, $textOptions),

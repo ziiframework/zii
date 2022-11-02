@@ -747,7 +747,7 @@ abstract class SchemaTest extends DatabaseTestCase
      *
      * @param string $tableName
      * @param string $type
-     * @param mixed  $expected
+     * @param mixed $expected
      */
     public function testTableSchemaConstraints($tableName, $type, $expected): void
     {
@@ -764,7 +764,7 @@ abstract class SchemaTest extends DatabaseTestCase
      *
      * @param string $tableName
      * @param string $type
-     * @param mixed  $expected
+     * @param mixed $expected
      */
     public function testTableSchemaConstraintsWithPdoUppercase($tableName, $type, $expected): void
     {
@@ -783,7 +783,7 @@ abstract class SchemaTest extends DatabaseTestCase
      *
      * @param string $tableName
      * @param string $type
-     * @param mixed  $expected
+     * @param mixed $expected
      */
     public function testTableSchemaConstraintsWithPdoLowercase($tableName, $type, $expected): void
     {

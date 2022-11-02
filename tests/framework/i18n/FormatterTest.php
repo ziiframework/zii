@@ -65,7 +65,7 @@ class FormatterTest extends TestCase
     public function testInvalidFormat(): void
     {
         $value = time();
-        $this->expectException('yii\base\InvalidParamException');
+        $this->expectException('\yii\base\InvalidParamException');
         $this->expectExceptionMessage('Unknown format type: data');
         $this->assertSame(date('Y-m-d', $value), $this->formatter->format($value, 'data'));
     }
@@ -73,7 +73,7 @@ class FormatterTest extends TestCase
     public function testInvalidFormatArray(): void
     {
         $value = time();
-        $this->expectException('yii\base\InvalidParamException');
+        $this->expectException('\yii\base\InvalidParamException');
         $this->expectExceptionMessage('Unknown format type: data');
         $this->assertSame(date('Y-m-d', $value), $this->formatter->format($value, ['data']));
     }
@@ -81,7 +81,7 @@ class FormatterTest extends TestCase
     public function testFormatArrayInvalidStructure(): void
     {
         $value = time();
-        $this->expectException('yii\base\InvalidParamException');
+        $this->expectException('\yii\base\InvalidParamException');
         $this->expectExceptionMessage('The $format array must contain at least one element.');
         $this->assertSame(date('Y-m-d', $value), $this->formatter->format($value, []));
     }
@@ -91,9 +91,9 @@ class FormatterTest extends TestCase
         $value = time();
         $this->assertSame(date('Y-m-d', $value), $this->formatter->format($value, static fn ($value) => date('Y-m-d', $value)));
         $this->assertSame('from: ' . date('Y-m-d', $value), $this->formatter->format($value, static function ($value, $formatter) {
-            /* @var $formatter Formatter */
-            return 'from: ' . $formatter->asDate($value, 'php:Y-m-d');
-        }));
+                /* @var $formatter Formatter */
+                return 'from: ' . $formatter->asDate($value, 'php:Y-m-d');
+            }));
     }
 
     public function testLocale(): void
@@ -523,14 +523,14 @@ class FormatterTest extends TestCase
 
     public function testAsWeight(): void
     {
-        $this->expectException('yii\base\InvalidConfigException');
+        $this->expectException('\yii\base\InvalidConfigException');
         $this->expectExceptionMessage('Format of mass is only supported when PHP intl extension is installed.');
         $this->formatter->asWeight(10);
     }
 
     public function testAsLength(): void
     {
-        $this->expectException('yii\base\InvalidConfigException');
+        $this->expectException('\yii\base\InvalidConfigException');
         $this->expectExceptionMessage('Format of length is only supported when PHP intl extension is installed.');
         $this->formatter->asShortLength(10);
     }

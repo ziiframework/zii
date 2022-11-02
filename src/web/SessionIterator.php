@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace yii\web;
 
 use Iterator;
+use ReturnTypeWillChange;
 
 /**
  * SessionIterator implements an [[\Iterator|iterator]] for traversing session variables managed by [[Session]].
@@ -44,7 +45,7 @@ class SessionIterator implements Iterator
      * Rewinds internal array pointer.
      * This method is required by the interface [[\Iterator]].
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function rewind(): void
     {
         $this->_key = reset($this->_keys);
@@ -56,7 +57,7 @@ class SessionIterator implements Iterator
      *
      * @return string|int|null the key of the current array element
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function key()
     {
         return $this->_key === false ? null : $this->_key;
@@ -68,7 +69,7 @@ class SessionIterator implements Iterator
      *
      * @return mixed the current array element
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function current()
     {
         return $this->_key !== false && isset($_SESSION[$this->_key]) ? $_SESSION[$this->_key] : null;
@@ -78,7 +79,7 @@ class SessionIterator implements Iterator
      * Moves the internal pointer to the next array element.
      * This method is required by the interface [[\Iterator]].
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function next(): void
     {
         do {
@@ -92,7 +93,7 @@ class SessionIterator implements Iterator
      *
      * @return bool
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function valid()
     {
         return $this->_key !== false;

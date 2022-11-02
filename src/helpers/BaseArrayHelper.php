@@ -223,9 +223,9 @@ class BaseArrayHelper
             return $array[$key];
         }
 
-        if (!is_int($key) && ($pos = strrpos($key, '.')) !== false) {
-            $array = static::getValue($array, substr($key, 0, $pos), $default);
-            $key = substr($key, $pos + 1);
+        if ($key && ($pos = strrpos(pf_string_argument($key), '.')) !== false) {
+            $array = static::getValue($array, substr(pf_string_argument($key), 0, $pos), $default);
+            $key = substr(pf_string_argument($key), $pos + 1);
         }
 
         if (static::keyExists($key, $array)) {
@@ -375,7 +375,7 @@ class BaseArrayHelper
      * ```
      *
      * @param array $array the array where to look the value from
-     * @param string $value the value to remove from the array
+     * @param mixed $value the value to remove from the array
      *
      * @return array the items that were removed from the array
      *
@@ -617,7 +617,7 @@ class BaseArrayHelper
      * @param array $array
      * @param string|Closure $from
      * @param string|Closure $to
-     * @param string|Closure $group
+     * @param string|Closure|null $group
      *
      * @return array
      */
@@ -741,7 +741,7 @@ class BaseArrayHelper
      * @param array $data data to be encoded
      * @param bool $valuesOnly whether to encode array values only. If false,
      * both the array keys and array values will be encoded.
-     * @param string $charset the charset that the data is using. If not set,
+     * @param string|null $charset the charset that the data is using. If not set,
      * [[\yii\base\Application::charset]] will be used.
      *
      * @return array the encoded data

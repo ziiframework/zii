@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace yii\base;
 
 use Yii;
-use Error;
 use Throwable;
 use yii\helpers\VarDumper;
 use yii\web\HttpException;
@@ -53,7 +52,7 @@ abstract class ErrorHandler extends Component
     public $memoryReserveSize = 262144;
 
     /**
-     * @var \Exception|null the exception that is being handled currently.
+     * @var Throwable|null the exception that is being handled currently.
      */
     public $exception;
 
@@ -132,7 +131,7 @@ abstract class ErrorHandler extends Component
      *
      * This method is implemented as a PHP exception handler.
      *
-     * @param \Exception $exception the exception that is not caught
+     * @param Throwable $exception the exception that is not caught
      */
     public function handleException($exception): void
     {
@@ -290,14 +289,14 @@ abstract class ErrorHandler extends Component
     /**
      * Renders the exception.
      *
-     * @param \Exception|Error|Throwable $exception the exception to be rendered.
+     * @param Throwable $exception the exception to be rendered.
      */
     abstract protected function renderException($exception);
 
     /**
      * Logs the given exception.
      *
-     * @param \Exception $exception the exception to be logged
+     * @param Throwable $exception the exception to be logged
      *
      * @since 2.0.3 this method is now public.
      */
@@ -344,7 +343,7 @@ abstract class ErrorHandler extends Component
     /**
      * Converts an exception into a simple string.
      *
-     * @param \Exception|Error|Throwable $exception the exception being converted
+     * @param Throwable $exception the exception being converted
      *
      * @return string the string representation of the exception.
      */
@@ -364,7 +363,7 @@ abstract class ErrorHandler extends Component
     /**
      * Converts an exception into a string that has verbose information about the exception and its trace.
      *
-     * @param \Exception|Error|Throwable $exception the exception being converted
+     * @param Throwable $exception the exception being converted
      *
      * @return string the string representation of the exception.
      *

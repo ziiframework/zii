@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,6 +8,7 @@
 
 namespace yii\web;
 
+use Throwable;
 use yii\base\UserException;
 
 /**
@@ -25,6 +27,7 @@ use yii\base\UserException;
  * ```
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
+ *
  * @since 2.0
  */
 class HttpException extends UserException
@@ -34,18 +37,18 @@ class HttpException extends UserException
      */
     public $statusCode;
 
-
     /**
      * Constructor.
+     *
      * @param int $status HTTP status code, such as 404, 500, etc.
      * @param string|null $message error message
      * @param int $code error code
-     * @param \Throwable|null $previous The previous exception used for the exception chaining.
+     * @param Throwable|null $previous The previous exception used for the exception chaining.
      */
     public function __construct($status, $message = null, $code = 0, $previous = null)
     {
         $this->statusCode = $status;
-        parent::__construct((string)$message, $code, $previous);
+        parent::__construct((string) $message, $code, $previous);
     }
 
     /**

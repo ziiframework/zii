@@ -16,6 +16,7 @@ use ArrayObject;
 use ArrayIterator;
 use ReflectionClass;
 use IteratorAggregate;
+use ReflectionProperty;
 use ReturnTypeWillChange;
 use yii\helpers\Inflector;
 use yii\validators\Validator;
@@ -282,7 +283,16 @@ class Model extends Component implements StaticInstanceInterface, IteratorAggreg
      */
     public function attributes()
     {
-        return array_keys(Yii::getObjectVars($this));
+        $class = new ReflectionClass($this);
+        $names = [];
+
+        foreach ($class->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {
+            if (!$property->isStatic()) {
+                $names[] = $property->getName();
+            }
+        }
+
+        return $names;
     }
 
     /**
@@ -868,7 +878,11 @@ class Model extends Component implements StaticInstanceInterface, IteratorAggreg
         $attributes = [];
 
         foreach ($scenarios[$scenario] as $attribute) {
-            if (strncmp(is_int($attribute) ? (string) $attribute : $attribute, '!', 1) !== 0 && !in_array('!' . $attribute, $scenarios[$scenario])) {
+            if (
+                $attribute !== ''
+                && strncmp(pf_string_argument($attribute), '!', 1) !== 0
+                && !in_array('!' . $attribute, $scenarios[$scenario])
+            ) {
                 $attributes[] = $attribute;
             }
         }
@@ -892,11 +906,7 @@ class Model extends Component implements StaticInstanceInterface, IteratorAggreg
         $attributes = array_keys(array_flip($scenarios[$scenario]));
 
         foreach ($attributes as $i => $attribute) {
-            if (is_int($attribute)) {
-                $attribute = (string) $attribute;
-            }
-
-            if (strncmp($attribute, '!', 1) === 0) {
+            if (strncmp(pf_string_argument($attribute), '!', 1) === 0) {
                 $attributes[$i] = substr($attribute, 1);
             }
         }

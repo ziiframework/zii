@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace yii\console\controllers;
 
 use Yii;
+use yii\test\Fixture;
 use yii\helpers\Console;
 use yii\console\ExitCode;
 use yii\console\Exception;
@@ -162,7 +163,7 @@ class FixtureController extends Controller
 
         $this->unloadFixtures($fixturesObjects);
         $this->loadFixtures($fixturesObjects);
-        $this->notifyLoaded($fixtures);
+        $this->notifyLoaded($fixturesObjects);
 
         return ExitCode::OK;
     }
@@ -253,13 +254,20 @@ class FixtureController extends Controller
     /**
      * Notifies user that fixtures were successfully loaded.
      *
-     * @param array $fixtures
+     * @param Fixture[] $fixtures array of loaded fixtures
      */
     private function notifyLoaded($fixtures): void
     {
         $this->stdout("Fixtures were successfully loaded from namespace:\n", Console::FG_YELLOW);
         $this->stdout("\t\"" . Yii::getAlias($this->namespace) . "\"\n\n", Console::FG_GREEN);
-        $this->outputList($fixtures);
+
+        $fixtureClassNames = [];
+
+        foreach ($fixtures as $fixture) {
+            $fixtureClassNames[] = $fixture::className();
+        }
+
+        $this->outputList($fixtureClassNames);
     }
 
     /**
