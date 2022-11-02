@@ -54,7 +54,7 @@ use yii\base\InvalidConfigException;
 class ExistValidator extends Validator
 {
     /**
-     * @var string the name of the ActiveRecord class that should be used to validate the existence
+     * @var string|null the name of the ActiveRecord class that should be used to validate the existence
      * of the current attribute value. If not set, it will use the ActiveRecord class of the attribute being validated.
      *
      * @see targetAttribute
@@ -62,7 +62,7 @@ class ExistValidator extends Validator
     public $targetClass;
 
     /**
-     * @var string|array the name of the ActiveRecord attribute that should be used to
+     * @var string|array|null the name of the ActiveRecord attribute that should be used to
      * validate the existence of the current attribute value. If not set, it will use the name
      * of the attribute currently being validated. You may use an array to validate the existence
      * of multiple columns at the same time. The array key is the name of the attribute with the value to validate,
@@ -207,7 +207,7 @@ class ExistValidator extends Validator
      * Processes attributes' relations described in $targetAttribute parameter into conditions, compatible with
      * [[\yii\db\Query::where()|Query::where()]] key-value format.
      *
-     * @param $targetAttribute array|string $attribute the name of the ActiveRecord attribute that should be used to
+     * @param $targetAttribute array|string|null $attribute the name of the ActiveRecord attribute that should be used to
      * validate the existence of the current attribute value. If not set, it will use the name
      * of the attribute currently being validated. You may use an array to validate the existence
      * of multiple columns at the same time. The array key is the name of the attribute with the value to validate,

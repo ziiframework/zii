@@ -5,7 +5,7 @@
 
 ## Links
 
-* [Astigmatic](https://www.astigmatic.com/)
-* [Google WebFonts](https://www.google.com/webfonts/specimen/Spicy+Rice)
+* [Astigmatic](http://www.astigmatic.com/)
+* [Google WebFonts](https://fonts.google.com/specimen/Spicy+Rice)
 * [fontsquirrel.com](https://www.fontsquirrel.com/fonts/spicy-rice)
 * [fontspace.com](https://www.fontspace.com/astigmatic-one-eye-typographic-institute/spicy-rice)

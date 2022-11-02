@@ -52,7 +52,7 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
      * @var array mapping from physical column types (keys) to abstract
      * column types (values)
      *
-     * @see https://www.postgresql.org/docs/current/static/datatype.html#DATATYPE-TABLE
+     * @see https://www.postgresql.org/docs/current/datatype.html#DATATYPE-TABLE
      */
     public $typeMap = [
         'bit' => self::TYPE_INTEGER,

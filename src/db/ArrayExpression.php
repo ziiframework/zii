@@ -154,6 +154,8 @@ class ArrayExpression implements ExpressionInterface, ArrayAccess, Countable, It
      * The value to set.
      * </p>
      *
+     * @return void
+     *
      * @since 2.0.14
      */
     #[ReturnTypeWillChange]
@@ -170,6 +172,8 @@ class ArrayExpression implements ExpressionInterface, ArrayAccess, Countable, It
      * @param mixed $offset <p>
      * The offset to unset.
      * </p>
+     *
+     * @return void
      *
      * @since 2.0.14
      */

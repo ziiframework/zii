@@ -51,7 +51,7 @@ class BaseStringHelper
      *
      * @param string $string the input string. Must be one character or longer.
      * @param int $start the starting position
-     * @param int $length the desired portion length. If not specified or `null`, there will be
+     * @param int|null $length the desired portion length. If not specified or `null`, there will be
      * no limit on length i.e. the output will be until the end of the string.
      *
      * @return string the extracted part of string, or FALSE on failure or an empty string.
@@ -133,7 +133,7 @@ class BaseStringHelper
      * @param string $string The string to truncate.
      * @param int $length How many characters from original string to include into truncated string.
      * @param string $suffix String to append to the end of truncated string.
-     * @param string $encoding The charset to use, defaults to charset currently used by application.
+     * @param string|null $encoding The charset to use, defaults to charset currently used by application.
      * @param bool $asHtml Whether to treat the string being truncated as HTML and preserve proper HTML tags.
      * This parameter is available since version 2.0.1.
      *
@@ -525,7 +525,7 @@ class BaseStringHelper
             return $string;
         }
 
-        $parts = preg_split('/(\s+[^\w]+\s+|^[^\w]+\s+|\s+)/u', $string, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+        $parts = preg_split('/(\s+\W+\s+|^\W+\s+|\s+)/u', $string, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
         $ucfirstEven = trim(mb_substr($parts[0], -1, 1, $encoding)) === '';
 
         foreach ($parts as $key => $value) {

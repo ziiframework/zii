@@ -22,7 +22,7 @@ use yii\base\InvalidArgumentException;
 /**
  * ActiveRecord is the base class for classes representing relational data in terms of objects.
  *
- * Active Record implements the [Active Record design pattern](https://en.wikipedia.org/wiki/Active_record).
+ * Active Record implements the [Active Record design pattern](https://en.wikipedia.org/wiki/Active_record_pattern).
  * The premise behind Active Record is that an individual [[ActiveRecord]] object is associated with a specific
  * row in a database table. The object's attributes are mapped to the columns of the corresponding table.
  * Referencing an Active Record attribute is equivalent to accessing the corresponding table column for that record.
@@ -234,7 +234,7 @@ class ActiveRecord extends BaseActiveRecord
 
         $aliases = array_diff(array_keys($tables), $tables);
 
-        return array_map(static fn ($alias) => preg_replace('/{{([\w]+)}}/', '$1', $alias), array_values($aliases));
+        return array_map(static fn ($alias) => preg_replace('/{{(\w+)}}/', '$1', $alias), array_values($aliases));
     }
 
     /**
@@ -422,7 +422,7 @@ class ActiveRecord extends BaseActiveRecord
      *
      * For a large set of models you might consider using [[ActiveQuery::each()]] to keep memory usage within limits.
      *
-     * @param string|array $condition the conditions that will be put in the WHERE part of the DELETE SQL.
+     * @param string|array|null $condition the conditions that will be put in the WHERE part of the DELETE SQL.
      * Please refer to [[Query::where()]] on how to specify this parameter.
      * @param array $params the parameters (name => value) to be bound to the query.
      *
@@ -591,12 +591,12 @@ class ActiveRecord extends BaseActiveRecord
      * @param bool $runValidation whether to perform validation (calling [[validate()]])
      * before saving the record. Defaults to `true`. If the validation fails, the record
      * will not be saved to the database and this method will return `false`.
-     * @param array $attributes list of attributes that need to be saved. Defaults to `null`,
+     * @param array|null $attributes list of attributes that need to be saved. Defaults to `null`,
      * meaning all attributes that are loaded from DB will be saved.
      *
      * @return bool whether the attributes are valid and the record is inserted successfully.
      *
-     * @throws Exception in case insert failed.
+     * @throws Throwable in case insert failed.
      */
     public function insert($runValidation = true, $attributes = null)
     {
@@ -636,7 +636,7 @@ class ActiveRecord extends BaseActiveRecord
     /**
      * Inserts an ActiveRecord into DB without considering transaction.
      *
-     * @param array $attributes list of attributes that need to be saved. Defaults to `null`,
+     * @param array|null $attributes list of attributes that need to be saved. Defaults to `null`,
      * meaning all attributes that are loaded from DB will be saved.
      *
      * @return bool whether the record is inserted successfully.
@@ -709,7 +709,7 @@ class ActiveRecord extends BaseActiveRecord
      * @param bool $runValidation whether to perform validation (calling [[validate()]])
      * before saving the record. Defaults to `true`. If the validation fails, the record
      * will not be saved to the database and this method will return `false`.
-     * @param array $attributeNames list of attributes that need to be saved. Defaults to `null`,
+     * @param array|null $attributeNames list of attributes that need to be saved. Defaults to `null`,
      * meaning all attributes that are loaded from DB will be saved.
      *
      * @return int|false the number of rows affected, or false if validation fails
@@ -717,7 +717,7 @@ class ActiveRecord extends BaseActiveRecord
      *
      * @throws StaleObjectException if [[optimisticLock|optimistic locking]] is enabled and the data
      * being updated is outdated.
-     * @throws Exception in case update failed.
+     * @throws Throwable in case update failed.
      */
     public function update($runValidation = true, $attributeNames = null)
     {
@@ -772,7 +772,7 @@ class ActiveRecord extends BaseActiveRecord
      *
      * @throws StaleObjectException if [[optimisticLock|optimistic locking]] is enabled and the data
      * being deleted is outdated.
-     * @throws Exception in case delete failed.
+     * @throws Throwable in case delete failed.
      */
     public function delete()
     {

@@ -44,9 +44,9 @@ use yii\base\Widget;
  *
  * Note, never use this method with `pre` or `textarea` tags. It's not that trivial to deal with such tags
  * as it may seem at first sight. For this case you should consider using
- * [HTML Tidy Project](https://tidy.sourceforge.net/) instead.
+ * [HTML Tidy Project](https://www.html-tidy.org/) instead.
  *
- * @see https://tidy.sourceforge.net/
+ * @see https://www.html-tidy.org/
  *
  * @author resurtm <resurtm@gmail.com>
  *
@@ -61,7 +61,7 @@ class Spaceless extends Widget
     {
         parent::init();
         ob_start();
-        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
+        ob_implicit_flush(false);
     }
 
     /**
