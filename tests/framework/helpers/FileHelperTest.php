@@ -437,10 +437,10 @@ class FileHelperTest extends TestCase
         $this->assertFileExists($basePath . 'file');
         $this->assertDirectoryExists($basePath . 'directory');
         $this->assertFileExists($basePath . 'directory' . DIRECTORY_SEPARATOR . 'standard-file-1'); // symlinked directory still have it's file
-        $this->assertDirectoryNotExists($basePath . 'symlinks');
+        $this->assertDirectoryDoesNotExist($basePath . 'symlinks');
         $this->assertFileDoesNotExist($basePath . 'symlinks' . DIRECTORY_SEPARATOR . 'standard-file-2');
         $this->assertFileDoesNotExist($basePath . 'symlinks' . DIRECTORY_SEPARATOR . 'symlinked-file');
-        $this->assertDirectoryNotExists($basePath . 'symlinks' . DIRECTORY_SEPARATOR . 'symlinked-directory');
+        $this->assertDirectoryDoesNotExist($basePath . 'symlinks' . DIRECTORY_SEPARATOR . 'symlinked-directory');
         $this->assertFileDoesNotExist($basePath . 'symlinks' . DIRECTORY_SEPARATOR . 'symlinked-directory' . DIRECTORY_SEPARATOR . 'standard-file-1');
     }
 
@@ -480,10 +480,10 @@ class FileHelperTest extends TestCase
         $this->assertFileExists($basePath . 'file');
         $this->assertDirectoryExists($basePath . 'directory');
         $this->assertFileDoesNotExist($basePath . 'directory' . DIRECTORY_SEPARATOR . 'standard-file-1'); // symlinked directory doesn't have it's file now
-        $this->assertDirectoryNotExists($basePath . 'symlinks');
+        $this->assertDirectoryDoesNotExist($basePath . 'symlinks');
         $this->assertFileDoesNotExist($basePath . 'symlinks' . DIRECTORY_SEPARATOR . 'standard-file-2');
         $this->assertFileDoesNotExist($basePath . 'symlinks' . DIRECTORY_SEPARATOR . 'symlinked-file');
-        $this->assertDirectoryNotExists($basePath . 'symlinks' . DIRECTORY_SEPARATOR . 'symlinked-directory');
+        $this->assertDirectoryDoesNotExist($basePath . 'symlinks' . DIRECTORY_SEPARATOR . 'symlinked-directory');
         $this->assertFileDoesNotExist($basePath . 'symlinks' . DIRECTORY_SEPARATOR . 'symlinked-directory' . DIRECTORY_SEPARATOR . 'standard-file-1');
     }
 
