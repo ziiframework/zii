@@ -495,71 +495,71 @@ class BaseConsole
 
         $tags = 0;
         $result = preg_replace_callback('/\033\[([\d;]+)m/', static function ($ansi) use (&$tags, $styleMap) {
-                $style = [];
-                $reset = false;
-                $negative = false;
+            $style = [];
+            $reset = false;
+            $negative = false;
 
-                foreach (explode(';', $ansi[1]) as $controlCode) {
-                    if ($controlCode == 0) {
-                        $style = [];
-                        $reset = true;
-                    } elseif ($controlCode == self::NEGATIVE) {
-                        $negative = true;
-                    } elseif (isset($styleMap[$controlCode])) {
-                        $style[] = $styleMap[$controlCode];
-                    }
+            foreach (explode(';', $ansi[1]) as $controlCode) {
+                if ($controlCode == 0) {
+                    $style = [];
+                    $reset = true;
+                } elseif ($controlCode == self::NEGATIVE) {
+                    $negative = true;
+                } elseif (isset($styleMap[$controlCode])) {
+                    $style[] = $styleMap[$controlCode];
+                }
+            }
+
+            $return = '';
+
+            while ($reset && $tags > 0) {
+                $return .= '</span>';
+                --$tags;
+            }
+
+            if (empty($style)) {
+                return $return;
+            }
+
+            $currentStyle = [];
+
+            foreach ($style as $content) {
+                $currentStyle = ArrayHelper::merge($currentStyle, $content);
+            }
+
+            // if negative is set, invert background and foreground
+            if ($negative) {
+                if (isset($currentStyle['color'])) {
+                    $fgColor = $currentStyle['color'];
+                    unset($currentStyle['color']);
                 }
 
-                $return = '';
-
-                while ($reset && $tags > 0) {
-                    $return .= '</span>';
-                    --$tags;
+                if (isset($currentStyle['background-color'])) {
+                    $bgColor = $currentStyle['background-color'];
+                    unset($currentStyle['background-color']);
                 }
 
-                if (empty($style)) {
-                    return $return;
+                if (isset($fgColor)) {
+                    $currentStyle['background-color'] = $fgColor;
                 }
 
-                $currentStyle = [];
-
-                foreach ($style as $content) {
-                    $currentStyle = ArrayHelper::merge($currentStyle, $content);
+                if (isset($bgColor)) {
+                    $currentStyle['color'] = $bgColor;
                 }
+            }
 
-                // if negative is set, invert background and foreground
-                if ($negative) {
-                    if (isset($currentStyle['color'])) {
-                        $fgColor = $currentStyle['color'];
-                        unset($currentStyle['color']);
-                    }
+            $styleString = '';
 
-                    if (isset($currentStyle['background-color'])) {
-                        $bgColor = $currentStyle['background-color'];
-                        unset($currentStyle['background-color']);
-                    }
-
-                    if (isset($fgColor)) {
-                        $currentStyle['background-color'] = $fgColor;
-                    }
-
-                    if (isset($bgColor)) {
-                        $currentStyle['color'] = $bgColor;
-                    }
+            foreach ($currentStyle as $name => $value) {
+                if (is_array($value)) {
+                    $value = implode(' ', $value);
                 }
+                $styleString .= "$name: $value;";
+            }
+            ++$tags;
 
-                $styleString = '';
-
-                foreach ($currentStyle as $name => $value) {
-                    if (is_array($value)) {
-                        $value = implode(' ', $value);
-                    }
-                    $styleString .= "$name: $value;";
-                }
-                ++$tags;
-
-                return "$return<span style=\"$styleString\">";
-            }, $string);
+            return "$return<span style=\"$styleString\">";
+        }, $string);
 
         while ($tags > 0) {
             $result .= '</span>';
