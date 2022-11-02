@@ -1058,7 +1058,7 @@ class Request extends \yii\base\Request
         $pathInfo = urldecode($pathInfo);
 
         // try to encode in UTF8 if not so
-        // https://w3.org/International/questions/qa-forms-utf-8.html
+        // https://www.w3.org/International/questions/qa-forms-utf-8.en.html
         if (!preg_match('%^(?:
             [\x09\x0A\x0D\x20-\x7E]              # ASCII
             | [\xC2-\xDF][\x80-\xBF]             # non-overlong 2-byte
@@ -1110,15 +1110,15 @@ class Request extends \yii\base\Request
         for ($i = $len >> 1, $j = 0; $i < $len; ++$i, ++$j) {
             switch (true) {
                 case $s[$i] < "\x80": $s[$j] = $s[$i];
-                    break;
+                break;
 
                 case $s[$i] < "\xC0": $s[$j] = "\xC2";
-                    $s[++$j] = $s[$i];
-                    break;
+                $s[++$j] = $s[$i];
+                break;
 
                 default: $s[$j] = "\xC3";
-                    $s[++$j] = chr(ord($s[$i]) - 64);
-                    break;
+                $s[++$j] = chr(ord($s[$i]) - 64);
+                break;
             }
         }
 
@@ -1246,7 +1246,7 @@ class Request extends \yii\base\Request
     /**
      * Returns the server name.
      *
-     * @return string server name, null if not available
+     * @return string|null server name, null if not available
      */
     public function getServerName()
     {
@@ -1330,7 +1330,7 @@ class Request extends \yii\base\Request
     {
         $ip = $this->getSecureForwardedHeaderTrustedPart('for');
 
-        if ($ip !== null && preg_match('/^\[?(?P<ip>(?:(?:(?:[0-9a-f]{1,4}:){1,6}(?:[0-9a-f]{1,4})?(?:(?::[0-9a-f]{1,4}){1,6}))|(?:[\d]{1,3}\.){3}[\d]{1,3}))\]?(?::(?P<port>[\d]+))?$/', $ip, $matches)) {
+        if ($ip !== null && preg_match('/^\[?(?P<ip>(?:(?:(?:[0-9a-f]{1,4}:){1,6}(?:[0-9a-f]{1,4})?(?:(?::[0-9a-f]{1,4}){1,6}))|(?:\d{1,3}\.){3}\d{1,3}))\]?(?::(?P<port>\d+))?$/', $ip, $matches)) {
             $ip = $this->getUserIpFromIpHeader($matches['ip']);
 
             if ($ip !== null) {
@@ -1932,7 +1932,7 @@ class Request extends \yii\base\Request
     /**
      * Returns the token used to perform CSRF validation.
      *
-     * This token is generated in a way to prevent [BREACH attacks](https://breachattack.com/). It may be passed
+     * This token is generated in a way to prevent [BREACH attacks](https://en.wikipedia.org/wiki/BREACH). It may be passed
      * along via a hidden field of an HTML form or an HTTP header value to support CSRF validation.
      *
      * @param bool $regenerate whether to regenerate CSRF token. When this parameter is true, each time
@@ -1957,7 +1957,7 @@ class Request extends \yii\base\Request
     /**
      * Loads the CSRF token from cookie or session.
      *
-     * @return string the CSRF token loaded from cookie or session. Null is returned if the cookie or session
+     * @return string|null the CSRF token loaded from cookie or session. Null is returned if the cookie or session
      * does not have CSRF token.
      */
     protected function loadCsrfToken()
@@ -1989,7 +1989,7 @@ class Request extends \yii\base\Request
     }
 
     /**
-     * @return string the CSRF token sent via [[CSRF_HEADER]] by browser. Null is returned if no such header is sent.
+     * @return string|null the CSRF token sent via [[CSRF_HEADER]] by browser. Null is returned if no such header is sent.
      */
     public function getCsrfTokenFromHeader()
     {
@@ -2026,7 +2026,7 @@ class Request extends \yii\base\Request
      * Note that the method will NOT perform CSRF validation if [[enableCsrfValidation]] is false or the HTTP method
      * is among GET, HEAD or OPTIONS.
      *
-     * @param string $clientSuppliedToken the user-provided CSRF token to be validated. If null, the token will be retrieved from
+     * @param string|null $clientSuppliedToken the user-provided CSRF token to be validated. If null, the token will be retrieved from
      * the [[csrfParam]] POST field or HTTP header.
      * This parameter is available since version 2.0.4.
      *

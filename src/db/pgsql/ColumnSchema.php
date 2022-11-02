@@ -122,7 +122,7 @@ class ColumnSchema extends \yii\db\ColumnSchema
     /**
      * Casts $value after retrieving from the DBMS to PHP representation.
      *
-     * @param string|bool|null $value
+     * @param string|null $value
      *
      * @return bool|mixed|null
      */

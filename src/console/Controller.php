@@ -14,15 +14,16 @@ use const STDERR;
 use const STDOUT;
 
 use Yii;
-use Reflector;
 use ReflectionClass;
 use yii\base\Action;
 use ReflectionMethod;
+use ReflectionProperty;
 use ReflectionNamedType;
 use ReflectionParameter;
 use yii\helpers\Console;
 use yii\base\InlineAction;
 use yii\helpers\Inflector;
+use ReflectionFunctionAbstract;
 use yii\base\InvalidRouteException;
 
 /**
@@ -39,12 +40,10 @@ use yii\base\InvalidRouteException;
  * where `<route>` is a route to a controller action and the params will be populated as properties of a command.
  * See [[options()]] for details.
  *
- * @property-read string $help
- * @property-read string $helpSummary
+ * @property-read string $help The help information for this controller.
+ * @property-read string $helpSummary The one-line short summary describing this controller.
  * @property-read array $passedOptionValues The properties corresponding to the passed options.
  * @property-read array $passedOptions The names of the options passed during execution.
- * @property Request $request
- * @property Response $response
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  *
@@ -169,7 +168,7 @@ class Controller extends \yii\base\Controller
 
             foreach ($params as $name => $value) {
                 // Allow camelCase options to be entered in kebab-case
-                if (!in_array($name, $options, true) && str_contains((string) $name, '-')) {
+                if (!in_array($name, $options, true) && str_contains(pf_string_argument($name), '-')) {
                     $kebabName = $name;
                     $altName = lcfirst(Inflector::id2camel($kebabName));
 
@@ -747,7 +746,7 @@ class Controller extends \yii\base\Controller
     /**
      * @param Action $action
      *
-     * @return ReflectionMethod
+     * @return ReflectionFunctionAbstract
      */
     protected function getActionMethodReflection($action)
     {
@@ -765,7 +764,7 @@ class Controller extends \yii\base\Controller
     /**
      * Parses the comment block into tags.
      *
-     * @param Reflector $reflection the comment block
+     * @param ReflectionClass|ReflectionProperty|ReflectionFunctionAbstract $reflection the comment block
      *
      * @return array the parsed tags
      */
@@ -777,8 +776,7 @@ class Controller extends \yii\base\Controller
             $comment = '';
         }
 
-        $comment = "@description \n" . str_replace("\r", '', trim(preg_replace('/^\s*\**( |\t)?/m', '', trim($comment, '/'))));
-
+        $comment = "@description \n" . strtr(trim(preg_replace('/^\s*\**([ \t])?/m', '', trim($comment, '/'))), "\r", '');
         $parts = preg_split('/^\s*@/m', $comment, -1, PREG_SPLIT_NO_EMPTY);
         $tags = [];
 
@@ -802,7 +800,7 @@ class Controller extends \yii\base\Controller
     /**
      * Returns the first line of docblock.
      *
-     * @param Reflector $reflection
+     * @param ReflectionClass|ReflectionProperty|ReflectionFunctionAbstract $reflection
      *
      * @return string
      */
@@ -826,7 +824,7 @@ class Controller extends \yii\base\Controller
     /**
      * Returns full description from the docblock.
      *
-     * @param Reflector $reflection
+     * @param ReflectionClass|ReflectionProperty|ReflectionFunctionAbstract $reflection
      *
      * @return string
      */
@@ -838,7 +836,7 @@ class Controller extends \yii\base\Controller
             return '';
         }
 
-        $comment = str_replace("\r", '', trim(preg_replace('/^\s*\**( |\t)?/m', '', trim($docComment, '/'))));
+        $comment = strtr(trim(preg_replace('/^\s*\**([ \t])?/m', '', trim($docComment, '/'))), "\r", '');
 
         if (preg_match('/^\s*@\w+/m', $comment, $matches, PREG_OFFSET_CAPTURE)) {
             $comment = trim(substr($comment, 0, $matches[0][1]));
