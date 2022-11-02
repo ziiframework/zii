@@ -65,7 +65,7 @@ class View extends Component implements DynamicContentAwareInterface
     public $params = [];
 
     /**
-     * @var array a list of available renderers indexed by their corresponding supported file extensions.
+     * @var array|null a list of available renderers indexed by their corresponding supported file extensions.
      * Each renderer may be a view renderer object or the configuration for creating the renderer object.
      * For example, the following configuration enables both Smarty and Twig view renderers:
      *
@@ -87,7 +87,7 @@ class View extends Component implements DynamicContentAwareInterface
     public $defaultExtension = 'php';
 
     /**
-     * @var Theme|array|string the theme object or the configuration for creating the theme object.
+     * @var Theme|array|string|null the theme object or the configuration for creating the theme object.
      * If not set, it means theming is not enabled.
      */
     public $theme;
@@ -162,7 +162,7 @@ class View extends Component implements DynamicContentAwareInterface
      *
      * @param string $view the view name.
      * @param array $params the parameters (name-value pairs) that will be extracted and made available in the view file.
-     * @param object $context the context to be assigned to the view and can later be accessed via [[context]]
+     * @param object|null $context the context to be assigned to the view and can later be accessed via [[context]]
      * in the view. If the context implements [[ViewContextInterface]], it may also be used to locate
      * the view file corresponding to a relative view name.
      *
@@ -185,7 +185,7 @@ class View extends Component implements DynamicContentAwareInterface
      *
      * @param string $view the view name or the [path alias](guide:concept-aliases) of the view file. Please refer to [[render()]]
      * on how to specify this parameter.
-     * @param object $context the context to be assigned to the view and can later be accessed via [[context]]
+     * @param object|null $context the context to be assigned to the view and can later be accessed via [[context]]
      * in the view. If the context implements [[ViewContextInterface]], it may also be used to locate
      * the view file corresponding to a relative view name.
      *
@@ -243,7 +243,7 @@ class View extends Component implements DynamicContentAwareInterface
      *
      * @param string $viewFile the view file. This can be either an absolute file path or an alias of it.
      * @param array $params the parameters (name-value pairs) that will be extracted and made available in the view file.
-     * @param object $context the context that the view should use for rendering the view. If null,
+     * @param object|null $context the context that the view should use for rendering the view. If null,
      * existing [[context]] will be used.
      *
      * @return string the rendering result
@@ -374,13 +374,13 @@ class View extends Component implements DynamicContentAwareInterface
      *
      * @return string the rendering result
      *
-     * @throws Exception
+     * @throws Throwable
      */
     public function renderPhpFile($_file_, $_params_ = [])
     {
         $_obInitialLevel_ = ob_get_level();
         ob_start();
-        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
+        ob_implicit_flush(false);
         extract($_params_, EXTR_OVERWRITE);
 
         try {
@@ -632,7 +632,7 @@ class View extends Component implements DynamicContentAwareInterface
     public function beginPage(): void
     {
         ob_start();
-        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
+        ob_implicit_flush(false);
 
         $this->trigger(self::EVENT_BEGIN_PAGE);
     }

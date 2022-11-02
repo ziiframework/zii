@@ -246,7 +246,7 @@ class CookieCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      *
      * @param string $name the cookie name
      *
-     * @return Cookie the cookie with the specified name, null if the named cookie does not exist.
+     * @return Cookie|null the cookie with the specified name, null if the named cookie does not exist.
      */
     #[ReturnTypeWillChange]
     public function offsetGet($name)

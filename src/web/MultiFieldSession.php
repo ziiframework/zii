@@ -95,8 +95,8 @@ abstract class MultiFieldSession extends Session
     /**
      * Composes storage field set for session writing.
      *
-     * @param string $id Optional session id
-     * @param string $data Optional session data
+     * @param string|null $id Optional session id
+     * @param string|null $data Optional session data
      *
      * @return array storage fields
      */

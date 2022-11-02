@@ -23,7 +23,7 @@ use yii\base\InvalidConfigException;
  * CaptchaAction renders a CAPTCHA image.
  *
  * CaptchaAction is used together with [[Captcha]] and [[\yii\captcha\CaptchaValidator]]
- * to provide the [CAPTCHA](https://en.wikipedia.org/wiki/Captcha) feature.
+ * to provide the [CAPTCHA](https://en.wikipedia.org/wiki/CAPTCHA) feature.
  *
  * By configuring the properties of CaptchaAction, you may customize the appearance of
  * the generated CAPTCHA images, such as the font color, the background color, etc.
@@ -109,7 +109,7 @@ class CaptchaAction extends Action
     public $fontFile = '@yii/captcha/SpicyRice.ttf';
 
     /**
-     * @var string the fixed verification code. When this property is set,
+     * @var string|null the fixed verification code. When this property is set,
      * [[getVerifyCode()]] will always return the value of this property.
      * This is mainly used in automated tests where we want to be able to reproduce
      * the same verification code each time we run the tests.
@@ -118,7 +118,7 @@ class CaptchaAction extends Action
     public $fixedVerifyCode;
 
     /**
-     * @var string the rendering library to use. Currently supported only 'gd' and 'imagick'.
+     * @var string|null the rendering library to use. Currently supported only 'gd' and 'imagick'.
      * If not set, library will be determined automatically.
      *
      * @since 2.0.7

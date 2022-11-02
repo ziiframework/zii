@@ -631,7 +631,7 @@ class Container extends Component
      * Resolves dependencies by replacing them with the actual object instances.
      *
      * @param array $dependencies the dependencies
-     * @param ReflectionClass $reflection the class reflection associated with the dependencies
+     * @param ReflectionClass|null $reflection the class reflection associated with the dependencies
      *
      * @return array the resolved dependencies
      *

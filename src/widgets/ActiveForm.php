@@ -162,7 +162,7 @@ class ActiveForm extends Widget
     public $enableClientScript = true;
 
     /**
-     * @var array|string the URL for performing AJAX-based validation. This property will be processed by
+     * @var array|string|null the URL for performing AJAX-based validation. This property will be processed by
      * [[Url::to()]]. Please refer to [[Url::to()]] for more details on how to configure this property.
      * If this property is not set, it will take the value of the form's action attribute.
      */
@@ -249,7 +249,7 @@ class ActiveForm extends Widget
             $this->options['id'] = $this->getId();
         }
         ob_start();
-        ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
+        ob_implicit_flush(false);
     }
 
     /**

@@ -46,7 +46,7 @@ use yii\base\InvalidConfigException;
  *             'class' => \yii\filters\Cors::class,
  *             'cors' => [
  *                 // restrict access to
- *                 'Origin' => ['https://www.myserver.com', 'https://www.myserver.com'],
+ *                 'Origin' => ['http://www.myserver.com', 'https://www.myserver.com'],
  *                 // Allow only POST and PUT methods
  *                 'Access-Control-Request-Method' => ['POST', 'PUT'],
  *                 // Allow only headers 'X-Wsse'
@@ -74,12 +74,12 @@ use yii\base\InvalidConfigException;
 class Cors extends ActionFilter
 {
     /**
-     * @var Request the current request. If not set, the `request` application component will be used.
+     * @var Request|null the current request. If not set, the `request` application component will be used.
      */
     public $request;
 
     /**
-     * @var Response the response to be sent. If not set, the `response` application component will be used.
+     * @var Response|null the response to be sent. If not set, the `response` application component will be used.
      */
     public $response;
 

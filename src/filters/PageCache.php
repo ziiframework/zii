@@ -126,7 +126,7 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
     public $enabled = true;
 
     /**
-     * @var \yii\base\View the view component to use for caching. If not set, the default application view component
+     * @var \yii\base\View|null the view component to use for caching. If not set, the default application view component
      * [[\yii\web\Application::view]] will be used.
      */
     public $view;
@@ -187,7 +187,7 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
         if (!is_array($data) || !isset($data['cacheVersion']) || $data['cacheVersion'] !== static::PAGE_CACHE_VERSION) {
             $this->view->pushDynamicContent($this);
             ob_start();
-            ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
+            ob_implicit_flush(false);
             $response->on(Response::EVENT_AFTER_SEND, [$this, 'cacheResponse']);
             Yii::debug('Valid page content is not found in the cache.', __METHOD__);
 

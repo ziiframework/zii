@@ -60,7 +60,7 @@ class Pjax extends Widget
     public $options = [];
 
     /**
-     * @var string|false the jQuery selector of the links that should trigger pjax requests.
+     * @var string|false|null the jQuery selector of the links that should trigger pjax requests.
      * If not set, all links within the enclosed content of Pjax will trigger pjax requests.
      * If set to false, no code will be registered to handle links.
      * Note that if the response to the pjax request is a full page, a normal request will be sent again.
@@ -68,7 +68,7 @@ class Pjax extends Widget
     public $linkSelector;
 
     /**
-     * @var string|false the jQuery selector of the forms whose submissions should trigger pjax requests.
+     * @var string|false|null the jQuery selector of the forms whose submissions should trigger pjax requests.
      * If not set, all forms with `data-pjax` attribute within the enclosed content of Pjax will trigger pjax requests.
      * If set to false, no code will be registered to handle forms.
      * Note that if the response to the pjax request is a full page, a normal request will be sent again.
@@ -136,7 +136,7 @@ class Pjax extends Widget
 
         if ($this->requiresPjax()) {
             ob_start();
-            ob_implicit_flush(PHP_VERSION_ID >= 80000 ? false : 0);
+            ob_implicit_flush(false);
             $view = $this->getView();
             $view->clear();
             $view->beginPage();

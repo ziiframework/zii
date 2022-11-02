@@ -133,7 +133,7 @@ class AssetManager extends Component
     public $linkAssets = false;
 
     /**
-     * @var int the permission to be set for newly published asset files.
+     * @var int|null the permission to be set for newly published asset files.
      * This value will be used by PHP chmod() function. No umask will be applied.
      * If not set, the permission will be determined by the current environment.
      */
@@ -188,7 +188,7 @@ class AssetManager extends Component
     public $appendTimestamp = false;
 
     /**
-     * @var callable a callback that will be called to produce hash for asset directory generation.
+     * @var callable|null a callback that will be called to produce hash for asset directory generation.
      * The signature of the callback should be as follows:
      *
      * ```
@@ -477,7 +477,7 @@ class AssetManager extends Component
      * that holds the published assets. This problem can be avoided altogether by 'requesting'
      * in advance all the resources that are supposed to trigger a 'publish()' call, and doing
      * that in the application deployment phase, before system goes live. See more in the following
-     * discussion: https://code.google.com/p/yii/issues/detail?id=2579
+     * discussion: https://code.google.com/archive/p/yii/issues/2579
      *
      * @param string $path the asset (file or directory) to be published
      * @param array $options the options to be applied when publishing a directory.
@@ -509,6 +509,10 @@ class AssetManager extends Component
 
         if (!is_string($path) || ($src = realpath($path)) === false) {
             throw new InvalidArgumentException("The file or directory to be published does not exist: $path");
+        }
+
+        if (!is_readable($path)) {
+            throw new InvalidArgumentException("The file or directory to be published is not readable: $path");
         }
 
         if (is_file($src)) {

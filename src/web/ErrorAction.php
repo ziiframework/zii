@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace yii\web;
 
 use Yii;
+use Throwable;
 use yii\base\Action;
 use yii\base\Exception;
 use yii\base\UserException;
@@ -55,7 +56,7 @@ use yii\base\UserException;
 class ErrorAction extends Action
 {
     /**
-     * @var string the view file to be rendered. If not set, it will take the value of [[id]].
+     * @var string|null the view file to be rendered. If not set, it will take the value of [[id]].
      * That means, if you name the action as "error" in "SiteController", then the view name
      * would be "error", and the corresponding view file would be "views/site/error.php".
      */
@@ -83,7 +84,7 @@ class ErrorAction extends Action
     public $layout;
 
     /**
-     * @var \Exception the exception object, normally is filled on [[init()]] method call.
+     * @var Throwable the exception object, normally is filled on [[init()]] method call.
      *
      * @see findException() to know default way of obtaining exception.
      * @since 2.0.11
@@ -172,7 +173,7 @@ class ErrorAction extends Action
      * In case there is no exception in the component, treat as the action has been invoked
      * not from error handler, but by direct route, so '404 Not Found' error will be displayed.
      *
-     * @return \Exception
+     * @return Throwable
      *
      * @since 2.0.11
      */
