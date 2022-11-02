@@ -41,7 +41,7 @@
         "nette/php-generator": "^3.6",
         "phpstan/phpstan": "^1.8",
         "phpunit/phpunit": "^9.5.26",
-        "symfony/var-dumper": "^5.4||^6.0"
+        "symfony/var-dumper": "^6.0.14"
     },
     "autoload": {
         "psr-4": {
