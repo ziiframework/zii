@@ -28,7 +28,7 @@ abstract class QueryTest extends DatabaseTestCase
         $query = new Query();
         $query->select('*');
         $this->assertEquals(['*' => '*'], $query->select);
-        $this->assertNull($query->distinct);
+        $this->assertFalse($query->distinct);
         $this->assertNull($query->selectOption);
 
         $query = new Query();
@@ -436,13 +436,11 @@ abstract class QueryTest extends DatabaseTestCase
             case 'pgsql':
             case 'sqlite':
                 $selectExpression = "(customer.name || ' in ' || p.description) AS name";
-
                 break;
 
             case 'cubird':
             case 'mysql':
                 $selectExpression = "concat(customer.name,' in ', p.description) name";
-
                 break;
 
             default:
