@@ -466,14 +466,58 @@ class ModelController extends Controller
                 $fileContent = file_get_contents($file);
                 $fileContent = str_replace(': \\?', ': ?', $fileContent);
                 file_put_contents($file, $fileContent);
-                echo '✔ Successfully created model Base' . Inflector::camelize($tableName);
+                echo '✔ Successfully created abstract model Base' . Inflector::camelize($tableName);
+                $this->createAbstractModelInstance($tableName);
+                $this->fixCodeStyle($file);
             } else {
-                echo '✘ Failed to create model Base' . Inflector::camelize($tableName);
+                echo '✘ Failed to create abstract model Base' . Inflector::camelize($tableName);
             }
             echo "\n";
         } else {
             echo '✘ Create model Base' . Inflector::camelize($tableName) . " aborted, file $file already exists\n";
         }
+    }
+
+    private function createAbstractModelInstance(string $tableName): void
+    {
+        $file = Yii::getAlias($this->modelDir) . Inflector::camelize($tableName) . '.php';
+
+        if (file_exists($file)) {
+            echo "Skipped createAbstractModelInstance()";
+            return;
+        }
+
+        $namespace = new PhpNamespace($this->modelNamespace);
+
+        $class = $namespace->addClass(Inflector::camelize($tableName));
+        $class->setExtends('\\Zpp\\Models\\Base' . Inflector::camelize($tableName));
+        $class->setFinal();
+
+        if (file_put_contents($file, "<?php\n\ndeclare(strict_types=1);\n\n" . $namespace->__toString()) !== false) {
+            echo '✔ Successfully created model ' . Inflector::camelize($tableName);
+        } else {
+            echo '✘ Failed to create model ' . Inflector::camelize($tableName);
+        }
+    }
+
+    private function fixCodeStyle(string $file): void
+    {
+        $rootDir = dirname(Yii::getAlias('@webroot'));
+
+        $cmd = "/d/phpcsfixer.phar --version  2>&1";
+        exec($cmd, $output, $outCode);
+        echo "exec: $cmd" . "\n\n",
+            implode("\n", $output)
+            . "\n\nresult code: $outCode\n\n";
+        unset($cmd, $output, $outCode);
+
+        $cmd = "/d/phpcsfixer.phar --config=$rootDir/.php-cs-fixer.dist.php fix $file  2>&1";
+        exec($cmd, $output, $outCode);
+        echo implode("\n", $output) . "\n\nresult code: $outCode\n\n";
+        echo "exec: $cmd" . "\n\n",
+            implode("\n", $output)
+            . "\n\nresult code: $outCode\n\n";
+        unset($cmd, $output, $outCode);
     }
 
     private function castColumn(ColumnSchema $column): void
