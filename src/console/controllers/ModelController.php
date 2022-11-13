@@ -466,7 +466,7 @@ class ModelController extends Controller
                 $fileContent = file_get_contents($file);
                 $fileContent = str_replace(': \\?', ': ?', $fileContent);
                 file_put_contents($file, $fileContent);
-                echo '✔ Successfully created abstract model Base' . Inflector::camelize($tableName);
+                echo '✔ Successfully created abstract model Base' . Inflector::camelize($tableName) . "\n\n";
                 $this->createAbstractModelInstance($tableName);
                 $this->fixCodeStyle($file);
             } else {
@@ -504,14 +504,14 @@ class ModelController extends Controller
     {
         $rootDir = dirname(Yii::getAlias('@webroot'));
 
-        $cmd = "/d/phpcsfixer.phar --version  2>&1";
+        $cmd = "D:/phpcsfixer.phar --version  2>&1";
         exec($cmd, $output, $outCode);
         echo "exec: $cmd" . "\n\n",
             implode("\n", $output)
             . "\n\nresult code: $outCode\n\n";
         unset($cmd, $output, $outCode);
 
-        $cmd = "/d/phpcsfixer.phar --config=$rootDir/.php-cs-fixer.dist.php fix $file  2>&1";
+        $cmd = "D:/phpcsfixer.phar --config=$rootDir/.php-cs-fixer.dist.php fix $file  2>&1";
         exec($cmd, $output, $outCode);
         echo implode("\n", $output) . "\n\nresult code: $outCode\n\n";
         echo "exec: $cmd" . "\n\n",
