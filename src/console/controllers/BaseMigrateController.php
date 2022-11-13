@@ -556,7 +556,7 @@ abstract class BaseMigrateController extends Controller
      */
     private function extractMigrationVersion($rawVersion)
     {
-        if (preg_match('/^m?(\d{6}_?\d{6})(\D.*)?$/is', $rawVersion, $matches)) {
+        if (preg_match('/^[mM]?(\d{6}[_V]?\d{6})(\D.*)?$/is', $rawVersion, $matches)) {
             return 'm' . $matches[1];
         }
 
