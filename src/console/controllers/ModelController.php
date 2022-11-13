@@ -480,10 +480,10 @@ class ModelController extends Controller
 
     private function createAbstractModelInstance(string $tableName): void
     {
-        $file = Yii::getAlias($this->modelDir) . Inflector::camelize($tableName) . '.php';
+        $file = Yii::getAlias($this->modelDir) . "/" . Inflector::camelize($tableName) . '.php';
 
         if (file_exists($file)) {
-            echo "Skipped createAbstractModelInstance()";
+            echo "Skipped createAbstractModelInstance()\n";
             return;
         }
 
