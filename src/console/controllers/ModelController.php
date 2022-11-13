@@ -235,7 +235,7 @@ class ModelController extends Controller
 
     public function actionIndex(): void
     {
-        $this->stdout("Use php yii model/generate to generate a model.\n", Console::FG_RED);
+        $this->stdout("Use php yii model/gii to generate a model.\n", Console::FG_RED);
     }
 
     public function actionGiiAll(): void
@@ -308,7 +308,7 @@ class ModelController extends Controller
                 $varType = 'float';
             }
 
-            if (str_contains($column->dbType, 'tinyint') && preg_match('/^(is|has|can|enable|use)_/', $column->name)) {
+            if (str_contains($column->dbType, 'tinyint') && preg_match('/^(is|has|can|enable|use|require)_/', $column->name)) {
                 $varType = 'bool';
             }
 
@@ -873,7 +873,7 @@ EOT;
 
     private function fieldTypeCast(string $dbType): string
     {
-        if (strpos($dbType, '(') === false) {
+        if (!str_contains($dbType, '(')) {
             return $dbType;
         }
 
