@@ -956,6 +956,7 @@ EOT;
 
                 break;
             case Schema::TYPE_DECIMAL:
+            case Schema::TYPE_DOUBLE:
                 $precision = $column->precision === null || $column->precision >= 9 ? 9 : $column->precision;
                 $scale = $column->scale === null ? 0 : $column->scale;
 
@@ -965,6 +966,7 @@ EOT;
                 if ($edge === self::EDGE_MIN) {
                     return '0.' . str_repeat('0', $scale);
                 }
+
                 return null;
             default:
                 $max = null;
