@@ -504,7 +504,12 @@ class DateValidator extends Validator
         $date = DateTime::createFromFormat($format, pf_string_argument($value), new DateTimeZone($timezone));
         $errors = DateTime::getLastErrors();
 
-        if ($date === false || $errors['error_count'] || $errors['warning_count'] || ($this->strictDateFormat && $date->format($format) !== $value)) {
+        if (
+            $date === false
+            || (is_array($errors) && $errors['error_count'])
+            || (is_array($errors) && $errors['warning_count'])
+            || ($this->strictDateFormat && $date->format($format) !== $value)
+        ) {
             return false;
         }
 
