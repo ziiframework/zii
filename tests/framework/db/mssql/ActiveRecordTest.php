@@ -92,7 +92,7 @@ END';
     /**
      * @throws Exception
      */
-    public function testSaveWithRowVersionColumn()
+    public function testSaveWithRowVersionColumn(): void
     {
         $db = $this->getConnection();
 
@@ -109,7 +109,7 @@ END';
     /**
      * @throws Exception
      */
-    public function testSaveWithRowVersionNullColumn()
+    public function testSaveWithRowVersionNullColumn(): void
     {
         $db = $this->getConnection();
 

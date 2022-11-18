@@ -1087,11 +1087,9 @@ class BaseHtml
 
         foreach ($items as $value => $label) {
             $checked = $selection !== null
-                && (
-                    (!ArrayHelper::isTraversable($selection) && !strcmp(pf_string_argument($value), pf_string_argument($selection)))
+                && ((!ArrayHelper::isTraversable($selection) && !strcmp(pf_string_argument($value), pf_string_argument($selection)))
                     ||
-                    (ArrayHelper::isTraversable($selection) && ArrayHelper::isIn(pf_string_argument($value), $selection, $strict))
-                );
+                    (ArrayHelper::isTraversable($selection) && ArrayHelper::isIn(pf_string_argument($value), $selection, $strict)));
 
             if ($formatter !== null) {
                 $lines[] = call_user_func($formatter, $index, $label, $name, $checked, $value);
@@ -1196,11 +1194,9 @@ class BaseHtml
 
         foreach ($items as $value => $label) {
             $checked = $selection !== null
-                && (
-                    (!ArrayHelper::isTraversable($selection) && !strcmp(pf_string_argument($value), pf_string_argument($selection)))
+                && ((!ArrayHelper::isTraversable($selection) && !strcmp(pf_string_argument($value), pf_string_argument($selection)))
                     ||
-                    (ArrayHelper::isTraversable($selection) && ArrayHelper::isIn(pf_string_argument($value), $selection, $strict))
-                );
+                    (ArrayHelper::isTraversable($selection) && ArrayHelper::isIn(pf_string_argument($value), $selection, $strict)));
 
             if ($formatter !== null) {
                 $lines[] = call_user_func($formatter, $index, $label, $name, $checked, $value);
@@ -2038,11 +2034,12 @@ class BaseHtml
     {
         if (ArrayHelper::isTraversable($selection)) {
             $normalizedSelection = [];
+
             foreach (ArrayHelper::toArray($selection) as $selectionItem) {
                 if (is_bool($selectionItem)) {
                     $normalizedSelection[] = $selectionItem ? '1' : '0';
                 } else {
-                    $normalizedSelection[] = (string)$selectionItem;
+                    $normalizedSelection[] = (string) $selectionItem;
                 }
             }
             $selection = $normalizedSelection;
@@ -2094,13 +2091,14 @@ class BaseHtml
 
                 if (!array_key_exists('selected', $attrs)) {
                     $selected = false;
+
                     if ($selection !== null) {
                         if (ArrayHelper::isTraversable($selection)) {
-                            $selected = ArrayHelper::isIn((string)$key, $selection, $strict);
+                            $selected = ArrayHelper::isIn((string) $key, $selection, $strict);
                         } elseif ($key === '' || $selection === '') {
                             $selected = $selection === $key;
                         } elseif ($strict) {
-                            $selected = !strcmp((string)$key, (string)$selection);
+                            $selected = !strcmp((string) $key, (string) $selection);
                         } else {
                             $selected = $selection == $key;
                         }
