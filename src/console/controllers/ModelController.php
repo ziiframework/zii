@@ -551,49 +551,15 @@ class ModelController extends Controller
             ];
         }
 
-        // double、float、decimal TODO
+        // double
         if ($this->fieldTypeCast($column->dbType) === 'double') {
-            // yii\db\mysql\ColumnSchema {#90
-            //  +disableJsonSupport: false
-            //  +name: "integral"
-            //  +allowNull: true
-            //  +type: "double"
-            //  +phpType: "double"
-            //  +dbType: "double(11,2)"
-            //  +defaultValue: 0.0
-            //  +enumValues: null
-            //  +size: 11
-            //  +precision: 11
-            //  +scale: 2
-            //  +isPrimaryKey: false
-            //  +autoIncrement: false
-            //  +unsigned: false
-            //  +comment: "积分"
-            // }
-
-            // yii\db\mysql\ColumnSchema {#68
-            //  +disableJsonSupport: false
-            //  +name: "integralsum"
-            //  +allowNull: false
-            //  +type: "double"
-            //  +phpType: "double"
-            //  +dbType: "double(11,2) unsigned"
-            //  +defaultValue: 0.0
-            //  +enumValues: null
-            //  +size: 11
-            //  +precision: 11
-            //  +scale: 2
-            //  +isPrimaryKey: false
-            //  +autoIncrement: false
-            //  +unsigned: true
-            //  +comment: "总积分"
-            // }
             $this->_ruleInteger[] = [
                 'name' => $column->name,
                 'max' => $this->getColumnEdge($column),
             ];
         }
 
+        // float TODO
         if ($this->fieldTypeCast($column->dbType) === 'float') {
             dump($column);
             $this->_ruleInteger[] = [
