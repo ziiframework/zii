@@ -316,9 +316,7 @@ class AttributeTypecastBehavior extends Behavior
             }
 
             if ($type !== null) {
-                foreach ((array) $validator->attributes as $attribute) {
-                    $attributeTypes[ltrim($attribute, '!')] = $type;
-                }
+                $attributeTypes += array_fill_keys($validator->getAttributeNames(), $type);
             }
         }
 

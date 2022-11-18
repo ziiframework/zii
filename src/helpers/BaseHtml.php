@@ -2037,7 +2037,17 @@ class BaseHtml
     public static function renderSelectOptions($selection, $items, &$tagOptions = [])
     {
         if (ArrayHelper::isTraversable($selection)) {
-            $selection = array_map('strval', ArrayHelper::toArray($selection));
+            $normalizedSelection = [];
+            foreach (ArrayHelper::toArray($selection) as $selectionItem) {
+                if (is_bool($selectionItem)) {
+                    $normalizedSelection[] = $selectionItem ? '1' : '0';
+                } else {
+                    $normalizedSelection[] = (string)$selectionItem;
+                }
+            }
+            $selection = $normalizedSelection;
+        } elseif (is_bool($selection)) {
+            $selection = $selection ? '1' : '0';
         }
 
         $lines = [];
@@ -2083,12 +2093,20 @@ class BaseHtml
                 $attrs['value'] = (string) $key;
 
                 if (!array_key_exists('selected', $attrs)) {
-                    $attrs['selected'] = $selection !== null
-                        && (
-                            (!ArrayHelper::isTraversable($selection) && ($strict ? !strcmp(pf_string_argument($key), pf_string_argument($selection, '', '1', '')) : $selection == $key))
-                            ||
-                            (ArrayHelper::isTraversable($selection) && ArrayHelper::isIn(pf_string_argument($key), $selection, $strict))
-                        );
+                    $selected = false;
+                    if ($selection !== null) {
+                        if (ArrayHelper::isTraversable($selection)) {
+                            $selected = ArrayHelper::isIn((string)$key, $selection, $strict);
+                        } elseif ($key === '' || $selection === '') {
+                            $selected = $selection === $key;
+                        } elseif ($strict) {
+                            $selected = !strcmp((string)$key, (string)$selection);
+                        } else {
+                            $selected = $selection == $key;
+                        }
+                    }
+
+                    $attrs['selected'] = $selected;
                 }
                 $text = $encode ? static::encode($value) : $value;
 

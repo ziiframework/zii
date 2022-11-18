@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace yii\filters\auth;
 
 use Yii;
+use yii\base\ActionFilter;
 use yii\base\Controller;
 use yii\base\InvalidConfigException;
 
@@ -77,10 +78,17 @@ class CompositeAuth extends AuthMethod
 
             if (
                 $this->owner instanceof Controller
-                && (!isset($this->owner->action) || !$auth->isActive($this->owner->action))
+                && (
+                    !isset($this->owner->action)
+                    || (
+                        $auth instanceof ActionFilter
+                        && !$auth->isActive($this->owner->action)
+                    )
+                )
             ) {
                 continue;
             }
+
             $identity = $auth->authenticate($user, $request, $response);
 
             if ($identity !== null) {

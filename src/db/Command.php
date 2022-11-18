@@ -1493,6 +1493,5 @@ class Command extends Component
         $this->params = [];
         $this->_refreshTableName = null;
         $this->_isolationLevel = false;
-        $this->_retryHandler = null;
     }
 }

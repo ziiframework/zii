@@ -694,10 +694,15 @@ class DbManager extends BaseManager
         if ($row === false) {
             return null;
         }
+
         $data = $row['data'];
 
         if (is_resource($data)) {
             $data = stream_get_contents($data);
+        }
+
+        if (!$data) {
+            return null;
         }
 
         return unserialize($data);
@@ -722,7 +727,10 @@ class DbManager extends BaseManager
             if (is_resource($data)) {
                 $data = stream_get_contents($data);
             }
-            $rules[$row['name']] = unserialize($data);
+
+            if ($data) {
+                $rules[$row['name']] = unserialize($data);
+            }
         }
 
         return $rules;
@@ -1076,7 +1084,10 @@ class DbManager extends BaseManager
             if (is_resource($data)) {
                 $data = stream_get_contents($data);
             }
-            $this->rules[$row['name']] = unserialize($data);
+
+            if ($data) {
+                $this->rules[$row['name']] = unserialize($data);
+            }
         }
 
         $query = (new Query())->from($this->itemChildTable);

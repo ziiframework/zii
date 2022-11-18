@@ -526,7 +526,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
 
         [$names, $placeholders, $values, $params] = $this->prepareInsertValues($table, $columns, $params);
         $cols = [];
-        $columns = [];
+        $outputColumns = [];
 
         if ($version2005orLater) {
             /* @var $schema TableSchema */
@@ -536,19 +536,26 @@ class QueryBuilder extends \yii\db\QueryBuilder
                 if ($column->isComputed) {
                     continue;
                 }
+
+                $dbType = $column->dbType;
+                if (in_array($dbType, ['char', 'varchar', 'nchar', 'nvarchar', 'binary', 'varbinary'])) {
+                    $dbType .= '(MAX)';
+                }
+                if ($column->dbType === Schema::TYPE_TIMESTAMP) {
+                    $dbType = $column->allowNull ? 'varbinary(8)' : 'binary(8)';
+                }
+
                 $quoteColumnName = $this->db->quoteColumnName($column->name);
-                $cols[] = $quoteColumnName . ' '
-                    . $column->dbType
-                    . (in_array($column->dbType, ['char', 'varchar', 'nchar', 'nvarchar', 'binary', 'varbinary']) ? '(MAX)' : '')
-                    . ' ' . ($column->allowNull ? 'NULL' : '');
-                $columns[] = 'INSERTED.' . $quoteColumnName;
+                $cols[] = $quoteColumnName . ' ' . $dbType . ' ' . ($column->allowNull ? "NULL" : "");
+                $outputColumns[] = 'INSERTED.' . $quoteColumnName;
             }
         }
-        $countColumns = count($columns);
+
+        $countColumns = count($outputColumns);
 
         $sql = 'INSERT INTO ' . $this->db->quoteTableName($table)
             . (!empty($names) ? ' (' . implode(', ', $names) . ')' : '')
-            . (($version2005orLater && $countColumns) ? ' OUTPUT ' . implode(',', $columns) . ' INTO @temporary_inserted' : '')
+            . (($version2005orLater && $countColumns) ? ' OUTPUT ' . implode(',', $outputColumns) . ' INTO @temporary_inserted' : '')
             . (!empty($placeholders) ? ' VALUES (' . implode(', ', $placeholders) . ')' : $values);
 
         if ($version2005orLater && $countColumns) {

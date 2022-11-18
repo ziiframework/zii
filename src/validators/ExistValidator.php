@@ -180,7 +180,7 @@ class ExistValidator extends Validator
         }
 
         $params = $this->prepareConditions($targetAttribute, $model, $attribute);
-        $conditions = [$this->targetAttributeJunction == 'or' ? 'or' : 'and'];
+        $conditions = [$this->targetAttributeJunction === 'or' ? 'or' : 'and'];
 
         if (!$this->allowArray) {
             foreach ($params as $key => $value) {
@@ -289,15 +289,12 @@ class ExistValidator extends Validator
     private function valueExists($targetClass, $query, $value)
     {
         $db = $targetClass::getDb();
-        $exists = false;
 
         if ($this->forceMasterDb && method_exists($db, 'useMaster')) {
-            $exists = $db->useMaster(fn () => $this->queryValueExists($query, $value));
-        } else {
-            $exists = $this->queryValueExists($query, $value);
+            return $db->useMaster(fn () => $this->queryValueExists($query, $value));
         }
 
-        return $exists;
+        return $this->queryValueExists($query, $value);
     }
 
     /**
@@ -357,7 +354,7 @@ class ExistValidator extends Validator
 
         foreach ($conditions as $columnName => $columnValue) {
             if (!str_contains($columnName, '(')) {
-                $prefixedColumn = "{$alias}.[[" . preg_replace('/^' . preg_quote($alias) . '\.(.*)$/', '$1', $columnName) . ']]';
+                $prefixedColumn = "{$alias}.[[" . preg_replace('/^' . preg_quote($alias, '/') . '\.(.*)$/', '$1', $columnName) . ']]';
             } else {
                 // there is an expression, can't prefix it reliably
                 $prefixedColumn = $columnName;
