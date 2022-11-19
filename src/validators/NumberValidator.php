@@ -103,12 +103,12 @@ class NumberValidator extends Validator
     {
         $value = $model->$attribute;
 
-        if (is_array($value) && !$this->allowArray) {
+        if (\is_array($value) && !$this->allowArray) {
             $this->addError($model, $attribute, $this->message);
 
             return;
         }
-        $values = !is_array($value) ? [$value] : $value;
+        $values = !\is_array($value) ? [$value] : $value;
 
         foreach ($values as $value) {
             if ($this->isNotNumber($value)) {
@@ -118,7 +118,7 @@ class NumberValidator extends Validator
             }
             $pattern = $this->integerOnly ? $this->integerPattern : $this->numberPattern;
 
-            if (!preg_match($pattern, StringHelper::normalizeNumber($value))) {
+            if (!\preg_match($pattern, StringHelper::normalizeNumber($value))) {
                 $this->addError($model, $attribute, $this->message);
             }
 
@@ -137,10 +137,10 @@ class NumberValidator extends Validator
      */
     protected function validateValue($value)
     {
-        if (is_array($value) && !$this->allowArray) {
+        if (\is_array($value) && !$this->allowArray) {
             return [Yii::t('yii', '{attribute} is invalid.'), []];
         }
-        $values = !is_array($value) ? [$value] : $value;
+        $values = !\is_array($value) ? [$value] : $value;
 
         foreach ($values as $value) {
             if ($this->isNotNumber($value)) {
@@ -148,7 +148,7 @@ class NumberValidator extends Validator
             }
             $pattern = $this->integerOnly ? $this->integerPattern : $this->numberPattern;
 
-            if (!preg_match($pattern, StringHelper::normalizeNumber($value))) {
+            if (!\preg_match($pattern, StringHelper::normalizeNumber($value))) {
                 return [$this->message, []];
             } elseif ($this->min !== null && $value < $this->min) {
                 return [$this->tooSmall, ['min' => $this->min]];
@@ -165,10 +165,10 @@ class NumberValidator extends Validator
      */
     private function isNotNumber($value)
     {
-        return is_array($value)
-            || is_bool($value)
-            || (is_object($value) && !method_exists($value, '__toString'))
-            || (!is_object($value) && !is_scalar($value) && $value !== null);
+        return \is_array($value)
+            || \is_bool($value)
+            || (\is_object($value) && !\method_exists($value, '__toString'))
+            || (!\is_object($value) && !\is_scalar($value) && $value !== null);
     }
 
     /**
@@ -199,7 +199,7 @@ class NumberValidator extends Validator
         if ($this->min !== null) {
             // ensure numeric value to make javascript comparison equal to PHP comparison
             // https://github.com/yiisoft/yii2/issues/3118
-            $options['min'] = is_string($this->min) ? (float) $this->min : $this->min;
+            $options['min'] = \is_string($this->min) ? (float) $this->min : $this->min;
             $options['tooSmall'] = $this->formatMessage($this->tooSmall, [
                 'attribute' => $label,
                 'min' => $this->min,
@@ -209,7 +209,7 @@ class NumberValidator extends Validator
         if ($this->max !== null) {
             // ensure numeric value to make javascript comparison equal to PHP comparison
             // https://github.com/yiisoft/yii2/issues/3118
-            $options['max'] = is_string($this->max) ? (float) $this->max : $this->max;
+            $options['max'] = \is_string($this->max) ? (float) $this->max : $this->max;
             $options['tooBig'] = $this->formatMessage($this->tooBig, [
                 'attribute' => $label,
                 'max' => $this->max,

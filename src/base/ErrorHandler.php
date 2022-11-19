@@ -93,19 +93,19 @@ abstract class ErrorHandler extends Component
     public function register(): void
     {
         if (!$this->_registered) {
-            ini_set('display_errors', '0');
-            set_exception_handler([$this, 'handleException']);
+            \ini_set('display_errors', '0');
+            \set_exception_handler([$this, 'handleException']);
 
-            set_error_handler([$this, 'handleError']);
+            \set_error_handler([$this, 'handleError']);
 
             if ($this->memoryReserveSize > 0) {
-                $this->_memoryReserve = str_pad('', $this->memoryReserveSize, 'x');
+                $this->_memoryReserve = \str_pad('', $this->memoryReserveSize, 'x');
             }
             // to restore working directory in shutdown handler
-            if (PHP_SAPI !== 'cli') {
-                $this->_workingDirectory = getcwd();
+            if (\PHP_SAPI !== 'cli') {
+                $this->_workingDirectory = \getcwd();
             }
-            register_shutdown_function([$this, 'handleFatalError']);
+            \register_shutdown_function([$this, 'handleFatalError']);
             $this->_registered = true;
         }
     }
@@ -120,8 +120,8 @@ abstract class ErrorHandler extends Component
         if ($this->_registered) {
             $this->_memoryReserve = null;
             $this->_workingDirectory = null;
-            restore_error_handler();
-            restore_exception_handler();
+            \restore_error_handler();
+            \restore_exception_handler();
             $this->_registered = false;
         }
     }
@@ -146,8 +146,8 @@ abstract class ErrorHandler extends Component
 
         // set preventive HTTP status code to 500 in case error handling somehow fails and headers are sent
         // HTTP exceptions will override this value in renderException()
-        if (PHP_SAPI !== 'cli') {
-            http_response_code(500);
+        if (\PHP_SAPI !== 'cli') {
+            \http_response_code(500);
         }
 
         try {
@@ -190,16 +190,16 @@ abstract class ErrorHandler extends Component
         $msg .= (string) $previousException;
 
         if (YII_DEBUG) {
-            if (PHP_SAPI === 'cli') {
+            if (\PHP_SAPI === 'cli') {
                 echo $msg . "\n";
             } else {
-                echo '<pre>' . htmlspecialchars($msg, ENT_QUOTES, Yii::$app->charset) . '</pre>';
+                echo '<pre>' . \htmlspecialchars($msg, \ENT_QUOTES, Yii::$app->charset) . '</pre>';
             }
             $msg .= "\n\$_SERVER = " . VarDumper::export($_SERVER);
         } else {
             echo 'An internal server error occurred.';
         }
-        error_log($msg);
+        \error_log($msg);
 
         exit(1);
     }
@@ -220,10 +220,10 @@ abstract class ErrorHandler extends Component
      */
     public function handleError($code, $message, $file, $line)
     {
-        if (error_reporting() & $code) {
+        if (\error_reporting() & $code) {
             // load ErrorException manually here because autoloading them will not work
             // when error occurs while autoloading a class
-            if (!class_exists('yii\\base\\ErrorException', false)) {
+            if (!\class_exists('yii\\base\\ErrorException', false)) {
                 require_once __DIR__ . '/ErrorException.php';
             }
             $exception = new ErrorException($message, $code, $code, $file, $line);
@@ -243,12 +243,12 @@ abstract class ErrorHandler extends Component
 
         if (isset($this->_workingDirectory)) {
             // fix working directory for some Web servers e.g. Apache
-            chdir($this->_workingDirectory);
+            \chdir($this->_workingDirectory);
             // flush memory
             unset($this->_workingDirectory);
         }
 
-        $error = error_get_last();
+        $error = \error_get_last();
 
         if ($error === null) {
             return;
@@ -256,7 +256,7 @@ abstract class ErrorHandler extends Component
 
         // load ErrorException manually here because autoloading them will not work
         // when error occurs while autoloading a class
-        if (!class_exists('yii\\base\\ErrorException', false)) {
+        if (!\class_exists('yii\\base\\ErrorException', false)) {
             require_once __DIR__ . '/ErrorException.php';
         }
 
@@ -281,7 +281,7 @@ abstract class ErrorHandler extends Component
         $this->trigger(static::EVENT_SHUTDOWN);
 
         // ensure it is called after user-defined shutdown functions
-        register_shutdown_function(static function (): void {
+        \register_shutdown_function(static function (): void {
             exit(1);
         });
     }
@@ -302,7 +302,7 @@ abstract class ErrorHandler extends Component
      */
     public function logException($exception): void
     {
-        $category = get_class($exception);
+        $category = \get_class($exception);
 
         if ($exception instanceof HttpException) {
             $category = 'yii\\web\\HttpException:' . $exception->statusCode;
@@ -318,9 +318,9 @@ abstract class ErrorHandler extends Component
     public function clearOutput(): void
     {
         // the following manual level counting is to deal with zlib.output_compression set to On
-        for ($level = ob_get_level(); $level > 0; --$level) {
-            if (!@ob_end_clean()) {
-                ob_clean();
+        for ($level = \ob_get_level(); $level > 0; --$level) {
+            if (!@\ob_end_clean()) {
+                \ob_clean();
             }
         }
     }
@@ -337,7 +337,7 @@ abstract class ErrorHandler extends Component
      */
     public static function convertExceptionToError($exception)
     {
-        trigger_error(static::convertExceptionToString($exception), E_USER_ERROR);
+        \trigger_error(static::convertExceptionToString($exception), \E_USER_ERROR);
     }
 
     /**
@@ -378,7 +378,7 @@ abstract class ErrorHandler extends Component
         } else {
             $message = 'Exception';
         }
-        $message .= " '" . get_class($exception) . "' with message '{$exception->getMessage()}' \n\nin "
+        $message .= " '" . \get_class($exception) . "' with message '{$exception->getMessage()}' \n\nin "
             . $exception->getFile() . ':' . $exception->getLine() . "\n\n"
             . "Stack trace:\n" . $exception->getTraceAsString();
 

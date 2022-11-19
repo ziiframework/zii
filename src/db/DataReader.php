@@ -111,8 +111,8 @@ class DataReader extends \yii\base\BaseObject implements Iterator, Countable
      */
     public function setFetchMode($mode): void
     {
-        $params = func_get_args();
-        call_user_func_array([$this->_statement, 'setFetchMode'], $params);
+        $params = \func_get_args();
+        \call_user_func_array([$this->_statement, 'setFetchMode'], $params);
     }
 
     /**

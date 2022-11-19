@@ -94,7 +94,7 @@ class EmailValidator extends Validator
     {
         parent::init();
 
-        if ($this->enableIDN && !function_exists('idn_to_ascii')) {
+        if ($this->enableIDN && !\function_exists('idn_to_ascii')) {
             throw new InvalidConfigException('In order to use IDN validation intl extension must be installed and enabled.');
         }
 
@@ -108,9 +108,9 @@ class EmailValidator extends Validator
      */
     protected function validateValue($value)
     {
-        if (!is_string($value)) {
+        if (!\is_string($value)) {
             $valid = false;
-        } elseif (!preg_match('/^(?P<name>(?:"?([^"]*)"?\s)?)(?:\s+)?(?:(?P<open><?)((?P<local>.+)@(?P<domain>[^>]+))(?P<close>>?))$/i', $value, $matches)) {
+        } elseif (!\preg_match('/^(?P<name>(?:"?([^"]*)"?\s)?)(?:\s+)?(?:(?P<open><?)((?P<local>.+)@(?P<domain>[^>]+))(?P<close>>?))$/i', $value, $matches)) {
             $valid = false;
         } else {
             if ($this->enableIDN) {
@@ -121,11 +121,11 @@ class EmailValidator extends Validator
                 $value = $matches['name'] . $matches['open'] . $matches['local'] . '@' . $matches['domain'] . $matches['close'];
             }
 
-            if (is_string($matches['local']) && strlen($matches['local']) > 64) {
+            if (\is_string($matches['local']) && \strlen($matches['local']) > 64) {
                 // The maximum total length of a user name or other local-part is 64 octets. RFC 5322 section 4.5.3.1.1
                 // https://datatracker.ietf.org/doc/html/rfc5321#section-4.5.3.1.1
                 $valid = false;
-            } elseif (strlen($matches['local'] . '@' . $matches['domain']) > 254) {
+            } elseif (\strlen($matches['local'] . '@' . $matches['domain']) > 254) {
                 // There is a restriction in RFC 2821 on the length of an address in MAIL and RCPT commands
                 // of 254 characters. Since addresses that do not fit in those fields are not normally useful, the
                 // upper limit on address lengths should normally be considered to be 254.
@@ -134,7 +134,7 @@ class EmailValidator extends Validator
                 // https://www.rfc-editor.org/errata_search.php?eid=1690
                 $valid = false;
             } else {
-                $valid = preg_match($this->pattern, $value) || ($this->allowName && preg_match($this->fullPattern, $value));
+                $valid = \preg_match($this->pattern, $value) || ($this->allowName && \preg_match($this->fullPattern, $value));
 
                 if ($valid && $this->checkDNS) {
                     $valid = $this->isDNSValid($matches['domain']);
@@ -161,13 +161,13 @@ class EmailValidator extends Validator
     {
         $normalizedDomain = $domain . '.';
 
-        if (!checkdnsrr($normalizedDomain, $isMX ? 'MX' : 'A')) {
+        if (!\checkdnsrr($normalizedDomain, $isMX ? 'MX' : 'A')) {
             return false;
         }
 
         try {
             // dns_get_record can return false and emit Warning that may or may not be converted to ErrorException
-            $records = dns_get_record($normalizedDomain, $isMX ? DNS_MX : DNS_A);
+            $records = \dns_get_record($normalizedDomain, $isMX ? \DNS_MX : \DNS_A);
         } catch (ErrorException $exception) {
             return false;
         }
@@ -177,7 +177,7 @@ class EmailValidator extends Validator
 
     private function idnToAscii($idn)
     {
-        return idn_to_ascii($idn, IDNA_NONTRANSITIONAL_TO_ASCII, INTL_IDNA_VARIANT_UTS46);
+        return \idn_to_ascii($idn, \IDNA_NONTRANSITIONAL_TO_ASCII, \INTL_IDNA_VARIANT_UTS46);
     }
 
     /**
@@ -229,7 +229,7 @@ class EmailValidator extends Validator
         $ascii = $this->idnToAscii($value);
 
         if ($ascii === false) {
-            if (preg_match($this->patternASCII, $value) || ($this->allowName && preg_match($this->fullPatternASCII, $value))) {
+            if (\preg_match($this->patternASCII, $value) || ($this->allowName && \preg_match($this->fullPatternASCII, $value))) {
                 return $value;
             }
         }

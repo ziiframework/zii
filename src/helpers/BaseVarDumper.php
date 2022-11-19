@@ -65,8 +65,8 @@ class BaseVarDumper
         self::dumpInternal($var, 0);
 
         if ($highlight) {
-            $result = highlight_string("<?php\n" . self::$_output, true);
-            self::$_output = preg_replace('/&lt;\\?php<br \\/>/', '', $result, 1);
+            $result = \highlight_string("<?php\n" . self::$_output, true);
+            self::$_output = \preg_replace('/&lt;\\?php<br \\/>/', '', $result, 1);
         }
 
         return self::$_output;
@@ -78,7 +78,7 @@ class BaseVarDumper
      */
     private static function dumpInternal($var, $level): void
     {
-        switch (gettype($var)) {
+        switch (\gettype($var)) {
             case 'boolean':
                 self::$_output .= $var ? 'true' : 'false';
                 break;
@@ -92,7 +92,7 @@ class BaseVarDumper
                 break;
 
             case 'string':
-                self::$_output .= "'" . addslashes($var) . "'";
+                self::$_output .= "'" . \addslashes($var) . "'";
                 break;
 
             case 'resource':
@@ -113,8 +113,8 @@ class BaseVarDumper
                 } elseif (empty($var)) {
                     self::$_output .= '[]';
                 } else {
-                    $keys = array_keys($var);
-                    $spaces = str_repeat(' ', $level * 4);
+                    $keys = \array_keys($var);
+                    $spaces = \str_repeat(' ', $level * 4);
                     self::$_output .= '[';
 
                     foreach ($keys as $key) {
@@ -128,20 +128,20 @@ class BaseVarDumper
                 break;
 
             case 'object':
-                if (($id = array_search($var, self::$_objects, true)) !== false) {
-                    self::$_output .= get_class($var) . '#' . ($id + 1) . '(...)';
+                if (($id = \array_search($var, self::$_objects, true)) !== false) {
+                    self::$_output .= \get_class($var) . '#' . ($id + 1) . '(...)';
                 } elseif (self::$_depth <= $level) {
-                    self::$_output .= get_class($var) . '(...)';
+                    self::$_output .= \get_class($var) . '(...)';
                 } else {
-                    $id = array_push(self::$_objects, $var);
-                    $className = get_class($var);
-                    $spaces = str_repeat(' ', $level * 4);
+                    $id = \array_push(self::$_objects, $var);
+                    $className = \get_class($var);
+                    $spaces = \str_repeat(' ', $level * 4);
                     self::$_output .= "$className#$id\n" . $spaces . '(';
 
-                    if ('__PHP_Incomplete_Class' !== get_class($var) && method_exists($var, '__debugInfo')) {
+                    if ('__PHP_Incomplete_Class' !== \get_class($var) && \method_exists($var, '__debugInfo')) {
                         $dumpValues = $var->__debugInfo();
 
-                        if (!is_array($dumpValues)) {
+                        if (!\is_array($dumpValues)) {
                             throw new InvalidValueException('__debuginfo() must return an array');
                         }
                     } else {
@@ -149,7 +149,7 @@ class BaseVarDumper
                     }
 
                     foreach ($dumpValues as $key => $value) {
-                        $keyDisplay = strtr(trim(pf_string_argument($key)), "\0", ':');
+                        $keyDisplay = \strtr(\trim(pf_string_argument($key)), "\0", ':');
                         self::$_output .= "\n" . $spaces . "    [$keyDisplay] => ";
                         self::dumpInternal($value, $level + 1);
                     }
@@ -190,7 +190,7 @@ class BaseVarDumper
      */
     private static function exportInternal($var, $level): void
     {
-        switch (gettype($var)) {
+        switch (\gettype($var)) {
             case 'NULL':
                 self::$_output .= 'null';
                 break;
@@ -199,9 +199,9 @@ class BaseVarDumper
                 if (empty($var)) {
                     self::$_output .= '[]';
                 } else {
-                    $keys = array_keys($var);
-                    $outputKeys = ($keys !== range(0, count($var) - 1));
-                    $spaces = str_repeat(' ', $level * 4);
+                    $keys = \array_keys($var);
+                    $outputKeys = ($keys !== \range(0, \count($var) - 1));
+                    $spaces = \str_repeat(' ', $level * 4);
                     self::$_output .= '[';
 
                     foreach ($keys as $key) {
@@ -223,7 +223,7 @@ class BaseVarDumper
                     self::$_output .= self::exportClosure($var);
                 } else {
                     try {
-                        $output = 'unserialize(' . var_export(serialize($var), true) . ')';
+                        $output = 'unserialize(' . \var_export(\serialize($var), true) . ')';
                     } catch (Exception $e) {
                         // serialize may fail, for example: if object contains a `\Closure` instance
                         // so we use a fallback
@@ -240,11 +240,11 @@ class BaseVarDumper
                             self::exportInternal($varAsArray, $level);
 
                             return;
-                        } elseif ('__PHP_Incomplete_Class' !== get_class($var) && method_exists($var, '__toString')) {
-                            $output = var_export($var->__toString(), true);
+                        } elseif ('__PHP_Incomplete_Class' !== \get_class($var) && \method_exists($var, '__toString')) {
+                            $output = \var_export($var->__toString(), true);
                         } else {
                             $outputBackup = self::$_output;
-                            $output = var_export(self::dumpAsString($var), true);
+                            $output = \var_export(self::dumpAsString($var), true);
                             self::$_output = $outputBackup;
                         }
                     }
@@ -253,7 +253,7 @@ class BaseVarDumper
                 break;
 
             default:
-                self::$_output .= var_export($var, true);
+                self::$_output .= \var_export($var, true);
         }
     }
 
@@ -278,15 +278,15 @@ class BaseVarDumper
 
         --$start;
 
-        $source = implode("\n", array_slice(file($fileName), $start, $end - $start));
-        $tokens = token_get_all('<?php ' . $source);
-        array_shift($tokens);
+        $source = \implode("\n", \array_slice(\file($fileName), $start, $end - $start));
+        $tokens = \token_get_all('<?php ' . $source);
+        \array_shift($tokens);
 
         $closureTokens = [];
         $pendingParenthesisCount = 0;
 
         foreach ($tokens as $token) {
-            if (isset($token[0]) && $token[0] === T_FUNCTION) {
+            if (isset($token[0]) && $token[0] === \T_FUNCTION) {
                 $closureTokens[] = $token[1];
 
                 continue;
@@ -307,6 +307,6 @@ class BaseVarDumper
             }
         }
 
-        return implode('', $closureTokens);
+        return \implode('', $closureTokens);
     }
 }

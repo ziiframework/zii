@@ -129,7 +129,7 @@ class ListView extends BaseListView
         $keys = $this->dataProvider->getKeys();
         $rows = [];
 
-        foreach (array_values($models) as $index => $model) {
+        foreach (\array_values($models) as $index => $model) {
             $key = $keys[$index];
 
             if (($before = $this->renderBeforeItem($model, $key, $index)) !== null) {
@@ -143,7 +143,7 @@ class ListView extends BaseListView
             }
         }
 
-        return implode($this->separator, $rows);
+        return \implode($this->separator, $rows);
     }
 
     /**
@@ -162,7 +162,7 @@ class ListView extends BaseListView
     protected function renderBeforeItem($model, $key, $index)
     {
         if ($this->beforeItem instanceof Closure) {
-            return call_user_func($this->beforeItem, $model, $key, $index, $this);
+            return \call_user_func($this->beforeItem, $model, $key, $index, $this);
         }
 
         return null;
@@ -184,7 +184,7 @@ class ListView extends BaseListView
     protected function renderAfterItem($model, $key, $index)
     {
         if ($this->afterItem instanceof Closure) {
-            return call_user_func($this->afterItem, $model, $key, $index, $this);
+            return \call_user_func($this->afterItem, $model, $key, $index, $this);
         }
 
         return null;
@@ -203,24 +203,24 @@ class ListView extends BaseListView
     {
         if ($this->itemView === null) {
             $content = $key;
-        } elseif (is_string($this->itemView)) {
-            $content = $this->getView()->render($this->itemView, array_merge([
+        } elseif (\is_string($this->itemView)) {
+            $content = $this->getView()->render($this->itemView, \array_merge([
                 'model' => $model,
                 'key' => $key,
                 'index' => $index,
                 'widget' => $this,
             ], $this->viewParams));
         } else {
-            $content = call_user_func($this->itemView, $model, $key, $index, $this);
+            $content = \call_user_func($this->itemView, $model, $key, $index, $this);
         }
 
         if ($this->itemOptions instanceof Closure) {
-            $options = call_user_func($this->itemOptions, $model, $key, $index, $this);
+            $options = \call_user_func($this->itemOptions, $model, $key, $index, $this);
         } else {
             $options = $this->itemOptions;
         }
         $tag = ArrayHelper::remove($options, 'tag', 'div');
-        $options['data-key'] = is_array($key) ? json_encode($key, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) : (string) $key;
+        $options['data-key'] = \is_array($key) ? \json_encode($key, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE) : (string) $key;
 
         return Html::tag($tag, $content, $options);
     }

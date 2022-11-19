@@ -29,7 +29,7 @@ class InConditionBuilder extends \yii\db\conditions\InConditionBuilder
      */
     protected function buildSubqueryInCondition($operator, $columns, $values, &$params)
     {
-        if (is_array($columns)) {
+        if (\is_array($columns)) {
             throw new NotSupportedException(__METHOD__ . ' is not supported by MSSQL.');
         }
 
@@ -47,7 +47,7 @@ class InConditionBuilder extends \yii\db\conditions\InConditionBuilder
             if ($column instanceof Expression) {
                 $column = $column->expression;
             }
-            $quotedColumns[$i] = !str_contains($column, '(') ? $this->queryBuilder->db->quoteColumnName($column) : $column;
+            $quotedColumns[$i] = !\str_contains($column, '(') ? $this->queryBuilder->db->quoteColumnName($column) : $column;
         }
         $vss = [];
 
@@ -66,9 +66,9 @@ class InConditionBuilder extends \yii\db\conditions\InConditionBuilder
                     $vs[] = $quotedColumns[$i] . ($operator === 'IN' ? ' IS' : ' IS NOT') . ' NULL';
                 }
             }
-            $vss[] = '(' . implode($operator === 'IN' ? ' AND ' : ' OR ', $vs) . ')';
+            $vss[] = '(' . \implode($operator === 'IN' ? ' AND ' : ' OR ', $vs) . ')';
         }
 
-        return '(' . implode($operator === 'IN' ? ' OR ' : ' AND ', $vss) . ')';
+        return '(' . \implode($operator === 'IN' ? ' OR ' : ' AND ', $vss) . ')';
     }
 }

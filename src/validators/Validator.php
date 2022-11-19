@@ -238,8 +238,8 @@ class Validator extends Component
                 $type = static::$builtInValidators[$type];
             }
 
-            if (is_array($type)) {
-                $params = array_merge($type, $params);
+            if (\is_array($type)) {
+                $params = \array_merge($type, $params);
             } else {
                 $params['class'] = $type;
             }
@@ -276,7 +276,7 @@ class Validator extends Component
                 || $this->skipOnEmpty && $this->isEmpty($model->$attribute);
 
             if (!$skip) {
-                if ($this->when === null || call_user_func($this->when, $model, $attribute)) {
+                if ($this->when === null || \call_user_func($this->when, $model, $attribute)) {
                     $this->validateAttribute($model, $attribute);
                 }
             }
@@ -302,7 +302,7 @@ class Validator extends Component
             return $this->getAttributeNames();
         }
 
-        if (is_scalar($attributes)) {
+        if (\is_scalar($attributes)) {
             $attributes = [$attributes];
         }
 
@@ -311,7 +311,7 @@ class Validator extends Component
 
         foreach ($attributes as $attribute) {
             // do not strict compare, otherwise int attributes would fail due to to string conversion in getAttributeNames() using ltrim().
-            if (in_array($attribute, $attributeNames, false)) {
+            if (\in_array($attribute, $attributeNames, false)) {
                 $newAttributes[] = $attribute;
             }
         }
@@ -355,9 +355,9 @@ class Validator extends Component
         [$message, $params] = $result;
         $params['attribute'] = Yii::t('yii', 'the input value');
 
-        if (is_array($value)) {
+        if (\is_array($value)) {
             $params['value'] = 'array()';
-        } elseif (is_object($value)) {
+        } elseif (\is_object($value)) {
             $params['value'] = 'object';
         } else {
             $params['value'] = $value;
@@ -468,7 +468,7 @@ class Validator extends Component
      */
     public function isActive($scenario)
     {
-        return !in_array($scenario, $this->except, true) && (empty($this->on) || in_array($scenario, $this->on, true));
+        return !\in_array($scenario, $this->except, true) && (empty($this->on) || \in_array($scenario, $this->on, true));
     }
 
     /**
@@ -487,9 +487,9 @@ class Validator extends Component
         if (!isset($params['value'])) {
             $value = $model->$attribute;
 
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $params['value'] = 'array()';
-            } elseif (is_object($value) && !method_exists($value, '__toString')) {
+            } elseif (\is_object($value) && !\method_exists($value, '__toString')) {
                 $params['value'] = '(object)';
             } else {
                 $params['value'] = $value;
@@ -510,7 +510,7 @@ class Validator extends Component
     public function isEmpty($value)
     {
         if ($this->isEmpty !== null) {
-            return call_user_func($this->isEmpty, $value);
+            return \call_user_func($this->isEmpty, $value);
         }
 
         return $value === null || $value === [] || $value === '';
@@ -538,7 +538,7 @@ class Validator extends Component
             $placeholders['{' . $name . '}'] = $value;
         }
 
-        return ($placeholders === []) ? $message : strtr($message, $placeholders);
+        return ($placeholders === []) ? $message : \strtr($message, $placeholders);
     }
 
     /**
@@ -550,6 +550,6 @@ class Validator extends Component
      */
     public function getAttributeNames()
     {
-        return array_map(static fn ($attribute) => ltrim(pf_string_argument($attribute), '!'), $this->attributes);
+        return \array_map(static fn ($attribute) => \ltrim(pf_string_argument($attribute), '!'), $this->attributes);
     }
 }

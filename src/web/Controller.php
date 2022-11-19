@@ -149,10 +149,10 @@ class Controller extends \yii\base\Controller
         foreach ($method->getParameters() as $param) {
             $name = $param->getName();
 
-            if (array_key_exists($name, $params)) {
+            if (\array_key_exists($name, $params)) {
                 $isValid = true;
 
-                if (PHP_VERSION_ID >= 80000) {
+                if (\PHP_VERSION_ID >= 80000) {
                     $isArray = ($type = $param->getType()) instanceof ReflectionNamedType && $type->getName() === 'array';
                 } else {
                     $isArray = $param->isArray();
@@ -160,15 +160,15 @@ class Controller extends \yii\base\Controller
 
                 if ($isArray) {
                     $params[$name] = (array) $params[$name];
-                } elseif (is_array($params[$name])) {
+                } elseif (\is_array($params[$name])) {
                     $isValid = false;
                 } elseif (
-                    PHP_VERSION_ID >= 70000
+                    \PHP_VERSION_ID >= 70000
                     && ($type = $param->getType()) !== null
                     && $type->isBuiltin()
                     && ($params[$name] !== null || !$type->allowsNull())
                 ) {
-                    $typeName = PHP_VERSION_ID >= 70100 ? $type->getName() : (string) $type;
+                    $typeName = \PHP_VERSION_ID >= 70100 ? $type->getName() : (string) $type;
 
                     if ($params[$name] === '' && $type->allowsNull()) {
                         if ($typeName !== 'string') { // for old string behavior compatibility
@@ -177,15 +177,15 @@ class Controller extends \yii\base\Controller
                     } else {
                         switch ($typeName) {
                             case 'int':
-                                $params[$name] = filter_var($params[$name], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
+                                $params[$name] = \filter_var($params[$name], \FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
                                 break;
 
                             case 'float':
-                                $params[$name] = filter_var($params[$name], FILTER_VALIDATE_FLOAT, FILTER_NULL_ON_FAILURE);
+                                $params[$name] = \filter_var($params[$name], \FILTER_VALIDATE_FLOAT, FILTER_NULL_ON_FAILURE);
                                 break;
 
                             case 'bool':
-                                $params[$name] = filter_var($params[$name], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+                                $params[$name] = \filter_var($params[$name], \FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
                                 break;
                         }
 
@@ -201,7 +201,7 @@ class Controller extends \yii\base\Controller
                 $args[] = $actionParams[$name] = $params[$name];
                 unset($params[$name]);
             } elseif (
-                PHP_VERSION_ID >= 70100
+                \PHP_VERSION_ID >= 70100
                 && ($type = $param->getType()) !== null
                 && $type instanceof ReflectionNamedType
                 && !$type->isBuiltin()
@@ -221,14 +221,14 @@ class Controller extends \yii\base\Controller
         }
 
         if (!empty($missing)) {
-            throw new BadRequestHttpException(Yii::t('yii', 'Missing required parameters: {params}', ['params' => implode(', ', $missing)]));
+            throw new BadRequestHttpException(Yii::t('yii', 'Missing required parameters: {params}', ['params' => \implode(', ', $missing)]));
         }
 
         $this->actionParams = $actionParams;
 
         // We use a different array here, specifically one that doesn't contain service instances but descriptions instead.
         if (Yii::$app->requestedParams === null) {
-            Yii::$app->requestedParams = array_merge($actionParams, $requestedParams);
+            Yii::$app->requestedParams = \array_merge($actionParams, $requestedParams);
         }
 
         return $args;

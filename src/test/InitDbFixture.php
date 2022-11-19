@@ -70,7 +70,7 @@ class InitDbFixture extends DbFixture
     {
         $file = Yii::getAlias($this->initScript);
 
-        if (is_file($file)) {
+        if (\is_file($file)) {
             require $file;
         }
     }

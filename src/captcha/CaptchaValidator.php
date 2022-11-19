@@ -64,7 +64,7 @@ class CaptchaValidator extends Validator
     protected function validateValue($value)
     {
         $captcha = $this->createCaptchaAction();
-        $valid = !is_array($value) && $captcha->validate($value, $this->caseSensitive);
+        $valid = !\is_array($value) && $captcha->validate($value, $this->caseSensitive);
 
         return $valid ? null : [$this->message, []];
     }
@@ -111,7 +111,7 @@ class CaptchaValidator extends Validator
     {
         $captcha = $this->createCaptchaAction();
         $code = $captcha->getVerifyCode(false);
-        $hash = $captcha->generateValidationHash($this->caseSensitive ? $code : strtolower($code));
+        $hash = $captcha->generateValidationHash($this->caseSensitive ? $code : \strtolower($code));
         $options = [
             'hash' => $hash,
             'hashKey' => 'yiiCaptcha/' . $captcha->getUniqueId(),

@@ -144,7 +144,7 @@ class DetailView extends Widget
 
         if ($this->formatter === null) {
             $this->formatter = Yii::$app->getFormatter();
-        } elseif (is_array($this->formatter)) {
+        } elseif (\is_array($this->formatter)) {
             $this->formatter = Yii::createObject($this->formatter);
         }
 
@@ -173,7 +173,7 @@ class DetailView extends Widget
 
         $options = $this->options;
         $tag = ArrayHelper::remove($options, 'tag', 'table');
-        echo Html::tag($tag, implode("\n", $rows), $options);
+        echo Html::tag($tag, \implode("\n", $rows), $options);
     }
 
     /**
@@ -186,11 +186,11 @@ class DetailView extends Widget
      */
     protected function renderAttribute($attribute, $index)
     {
-        if (is_string($this->template)) {
+        if (\is_string($this->template)) {
             $captionOptions = Html::renderTagAttributes(ArrayHelper::getValue($attribute, 'captionOptions', []));
             $contentOptions = Html::renderTagAttributes(ArrayHelper::getValue($attribute, 'contentOptions', []));
 
-            return strtr($this->template, [
+            return \strtr($this->template, [
                 '{label}' => $attribute['label'],
                 '{value}' => $this->formatter->format($attribute['value'], $attribute['format']),
                 '{captionOptions}' => $captionOptions,
@@ -198,7 +198,7 @@ class DetailView extends Widget
             ]);
         }
 
-        return call_user_func($this->template, $attribute, $index, $this);
+        return \call_user_func($this->template, $attribute, $index, $this);
     }
 
     /**
@@ -211,19 +211,19 @@ class DetailView extends Widget
         if ($this->attributes === null) {
             if ($this->model instanceof Model) {
                 $this->attributes = $this->model->attributes();
-            } elseif (is_object($this->model)) {
-                $this->attributes = $this->model instanceof Arrayable ? array_keys($this->model->toArray()) : array_keys(get_object_vars($this->model));
-            } elseif (is_array($this->model)) {
-                $this->attributes = array_keys($this->model);
+            } elseif (\is_object($this->model)) {
+                $this->attributes = $this->model instanceof Arrayable ? \array_keys($this->model->toArray()) : \array_keys(\get_object_vars($this->model));
+            } elseif (\is_array($this->model)) {
+                $this->attributes = \array_keys($this->model);
             } else {
                 throw new InvalidConfigException('The "model" property must be either an array or an object.');
             }
-            sort($this->attributes);
+            \sort($this->attributes);
         }
 
         foreach ($this->attributes as $i => $attribute) {
-            if (is_string($attribute)) {
-                if (!preg_match('/^([^:]+)(:(\w*))?(:(.*))?$/', $attribute, $matches)) {
+            if (\is_string($attribute)) {
+                if (!\preg_match('/^([^:]+)(:(\w*))?(:(.*))?$/', $attribute, $matches)) {
                     throw new InvalidConfigException('The attribute must be specified in the format of "attribute", "attribute:format" or "attribute:format:label"');
                 }
                 $attribute = [
@@ -233,7 +233,7 @@ class DetailView extends Widget
                 ];
             }
 
-            if (!is_array($attribute)) {
+            if (!\is_array($attribute)) {
                 throw new InvalidConfigException('The attribute configuration must be an array.');
             }
 
@@ -254,15 +254,15 @@ class DetailView extends Widget
                     $attribute['label'] = $this->model instanceof Model ? $this->model->getAttributeLabel($attributeName) : Inflector::camel2words($attributeName, true);
                 }
 
-                if (!array_key_exists('value', $attribute)) {
+                if (!\array_key_exists('value', $attribute)) {
                     $attribute['value'] = ArrayHelper::getValue($this->model, $attributeName);
                 }
-            } elseif (!isset($attribute['label']) || !array_key_exists('value', $attribute)) {
+            } elseif (!isset($attribute['label']) || !\array_key_exists('value', $attribute)) {
                 throw new InvalidConfigException('The attribute configuration requires the "attribute" element to determine the value and display label.');
             }
 
             if ($attribute['value'] instanceof Closure) {
-                $attribute['value'] = call_user_func($attribute['value'], $this->model, $this);
+                $attribute['value'] = \call_user_func($attribute['value'], $this->model, $this);
             }
 
             $this->attributes[$i] = $attribute;

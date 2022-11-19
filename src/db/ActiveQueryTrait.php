@@ -89,9 +89,9 @@ trait ActiveQueryTrait
      */
     public function with()
     {
-        $with = func_get_args();
+        $with = \func_get_args();
 
-        if (isset($with[0]) && is_array($with[0])) {
+        if (isset($with[0]) && \is_array($with[0])) {
             // the parameter is given as an array
             $with = $with[0];
         }
@@ -100,7 +100,7 @@ trait ActiveQueryTrait
             $this->with = $with;
         } elseif (!empty($with)) {
             foreach ($with as $name => $value) {
-                if (is_int($name)) {
+                if (\is_int($name)) {
                     // repeating relation is fine as normalizeRelations() handle it well
                     $this->with[] = $value;
                 } else {
@@ -132,7 +132,7 @@ trait ActiveQueryTrait
 
             foreach ($rows as $row) {
                 $model = $class::instantiate($row);
-                $modelClass = get_class($model);
+                $modelClass = \get_class($model);
                 $modelClass::populateRecord($model, $row);
                 $models[] = $model;
             }
@@ -150,7 +150,7 @@ trait ActiveQueryTrait
      */
     public function findWith($with, &$models): void
     {
-        $primaryModel = reset($models);
+        $primaryModel = \reset($models);
 
         if (!$primaryModel instanceof ActiveRecordInterface) {
             /* @var $modelClass ActiveRecordInterface */
@@ -179,15 +179,15 @@ trait ActiveQueryTrait
         $relations = [];
 
         foreach ($with as $name => $callback) {
-            if (is_int($name)) {
+            if (\is_int($name)) {
                 $name = $callback;
                 $callback = null;
             }
 
-            if (($pos = strpos($name, '.')) !== false) {
+            if (($pos = \strpos($name, '.')) !== false) {
                 // with sub-relations
-                $childName = substr($name, $pos + 1);
-                $name = substr($name, 0, $pos);
+                $childName = \substr($name, $pos + 1);
+                $name = \substr($name, 0, $pos);
             } else {
                 $childName = null;
             }
@@ -203,7 +203,7 @@ trait ActiveQueryTrait
             if (isset($childName)) {
                 $relation->with[$childName] = $callback;
             } elseif ($callback !== null) {
-                call_user_func($callback, $relation);
+                \call_user_func($callback, $relation);
             }
         }
 

@@ -95,7 +95,7 @@ class XmlResponseFormatter extends Component implements ResponseFormatterInterfa
     {
         $charset = $this->encoding === null ? $response->charset : $this->encoding;
 
-        if (stripos($this->contentType, 'charset') === false) {
+        if (\stripos($this->contentType, 'charset') === false) {
             $this->contentType .= '; charset=' . $charset;
         }
         $response->getHeaders()->set('Content-Type', $this->contentType);
@@ -104,7 +104,7 @@ class XmlResponseFormatter extends Component implements ResponseFormatterInterfa
             $this->dom = new DOMDocument($this->version, $charset);
 
             if (!empty($this->rootTag)) {
-                if (is_array($this->rootTag)) {
+                if (\is_array($this->rootTag)) {
                     $root = $this->dom->createElementNS($this->rootTag[0], $this->rootTag[1]);
                 } else {
                     $root = $this->dom->createElement($this->rootTag);
@@ -126,13 +126,13 @@ class XmlResponseFormatter extends Component implements ResponseFormatterInterfa
      */
     protected function buildXml($element, $data): void
     {
-        if (is_array($data) ||
+        if (\is_array($data) ||
             ($data instanceof Traversable && $this->useTraversableAsArray && !$data instanceof Arrayable)
         ) {
             foreach ($data as $name => $value) {
-                if (is_int($name) && is_object($value)) {
+                if (\is_int($name) && \is_object($value)) {
                     $this->buildXml($element, $value);
-                } elseif (is_array($value) || is_object($value)) {
+                } elseif (\is_array($value) || \is_object($value)) {
                     $child = $this->dom->createElement($this->getValidXmlElementName($name));
                     $element->appendChild($child);
                     $this->buildXml($child, $value);
@@ -142,12 +142,12 @@ class XmlResponseFormatter extends Component implements ResponseFormatterInterfa
                     $element->appendChild($child);
                 }
             }
-        } elseif (is_object($data)) {
+        } elseif (\is_object($data)) {
             if ($this->useObjectTags) {
-                $name = StringHelper::basename(get_class($data));
+                $name = StringHelper::basename(\get_class($data));
 
                 if ($this->objectTagToLowercase) {
-                    $name = strtolower($name);
+                    $name = \strtolower($name);
                 }
                 $child = $this->dom->createElement($name);
                 $element->appendChild($child);
@@ -189,7 +189,7 @@ class XmlResponseFormatter extends Component implements ResponseFormatterInterfa
             return 'false';
         }
 
-        if (is_float($value)) {
+        if (\is_float($value)) {
             return StringHelper::floatToString($value);
         }
 
@@ -210,7 +210,7 @@ class XmlResponseFormatter extends Component implements ResponseFormatterInterfa
      */
     protected function getValidXmlElementName($name)
     {
-        if (empty($name) || is_int($name) || !$this->isValidXmlName($name)) {
+        if (empty($name) || \is_int($name) || !$this->isValidXmlName($name)) {
             return $this->itemTag;
         }
 

@@ -37,7 +37,7 @@ class Locale extends Component
      */
     public function init(): void
     {
-        if (!extension_loaded('intl')) {
+        if (!\extension_loaded('intl')) {
             throw new InvalidConfigException('Locale component requires PHP intl extension to be installed.');
         }
 

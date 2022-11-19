@@ -45,7 +45,7 @@ class BaseIpHelper
      */
     public static function getIpVersion($ip)
     {
-        return !str_contains($ip, ':') ? self::IPV4 : self::IPV6;
+        return !\str_contains($ip, ':') ? self::IPV4 : self::IPV6;
     }
 
     /**
@@ -76,8 +76,8 @@ class BaseIpHelper
      */
     public static function inRange($subnet, $range)
     {
-        [$ip, $mask] = array_pad(explode('/', $subnet), 2, null);
-        [$net, $netMask] = array_pad(explode('/', $range), 2, null);
+        [$ip, $mask] = \array_pad(\explode('/', $subnet), 2, null);
+        [$net, $netMask] = \array_pad(\explode('/', $range), 2, null);
 
         $ipVersion = static::getIpVersion($ip);
         $netVersion = static::getIpVersion($net);
@@ -93,11 +93,11 @@ class BaseIpHelper
         $binIp = static::ip2bin($ip);
         $binNet = static::ip2bin($net);
 
-        if (is_string($netMask) && is_numeric($netMask)) {
+        if (\is_string($netMask) && \is_numeric($netMask)) {
             $netMask = (int) $netMask;
         }
 
-        return substr($binIp, 0, $netMask) === substr($binNet, 0, $netMask) && $mask >= $netMask;
+        return \substr($binIp, 0, $netMask) === \substr($binNet, 0, $netMask) && $mask >= $netMask;
     }
 
     /**
@@ -111,15 +111,15 @@ class BaseIpHelper
      */
     public static function expandIPv6($ip)
     {
-        $addr = inet_pton($ip);
+        $addr = \inet_pton($ip);
 
         if ($addr === false) {
             $addr = '';
         }
 
-        $hex = unpack('H*hex', $addr);
+        $hex = \unpack('H*hex', $addr);
 
-        return substr(preg_replace('/([a-f0-9]{4})/i', '$1:', $hex['hex']), 0, -1);
+        return \substr(\preg_replace('/([a-f0-9]{4})/i', '$1:', $hex['hex']), 0, -1);
     }
 
     /**
@@ -136,17 +136,17 @@ class BaseIpHelper
         $ipBinary = null;
 
         if (static::getIpVersion($ip) === self::IPV4) {
-            $ipBinary = pack('N', ip2long($ip));
-        } elseif (@inet_pton('::1') === false) {
+            $ipBinary = \pack('N', \ip2long($ip));
+        } elseif (@\inet_pton('::1') === false) {
             throw new NotSupportedException('IPv6 is not supported by inet_pton()!');
         } else {
-            $ipBinary = inet_pton($ip);
+            $ipBinary = \inet_pton($ip);
         }
 
         $result = '';
 
-        for ($i = 0, $iMax = strlen($ipBinary); $i < $iMax; $i += 4) {
-            $result .= str_pad(decbin(unpack('N', substr($ipBinary, $i, 4))[1]), 32, '0', STR_PAD_LEFT);
+        for ($i = 0, $iMax = \strlen($ipBinary); $i < $iMax; $i += 4) {
+            $result .= \str_pad(\decbin(\unpack('N', \substr($ipBinary, $i, 4))[1]), 32, '0', \STR_PAD_LEFT);
         }
 
         return $result;

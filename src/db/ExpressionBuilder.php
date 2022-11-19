@@ -28,7 +28,7 @@ class ExpressionBuilder implements ExpressionBuilderInterface
      */
     public function build(ExpressionInterface $expression, array &$params = [])
     {
-        $params = array_merge($params, $expression->params);
+        $params = \array_merge($params, $expression->params);
 
         return $expression->__toString();
     }

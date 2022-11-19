@@ -78,8 +78,8 @@ class PhpMessageSource extends MessageSource
         $messageFile = $this->getMessageFilePath($category, $language);
         $messages = $this->loadMessagesFromFile($messageFile);
 
-        $fallbackLanguage = substr($language ?? '', 0, 2);
-        $fallbackSourceLanguage = substr($this->sourceLanguage, 0, 2);
+        $fallbackLanguage = \substr($language ?? '', 0, 2);
+        $fallbackSourceLanguage = \substr($this->sourceLanguage, 0, 2);
 
         if ($fallbackLanguage !== '' && $language !== $fallbackLanguage) {
             $messages = $this->loadFallbackMessages($category, $fallbackLanguage, $messages, $messageFile);
@@ -115,7 +115,7 @@ class PhpMessageSource extends MessageSource
         if (
             $messages === null && $fallbackMessages === null
             && $fallbackLanguage !== $this->sourceLanguage
-            && !str_starts_with($this->sourceLanguage, $fallbackLanguage)
+            && !\str_starts_with($this->sourceLanguage, $fallbackLanguage)
         ) {
             Yii::error("The message file for category '$category' does not exist: $originalMessageFile "
                 . "Fallback file does not exist as well: $fallbackMessageFile", __METHOD__);
@@ -144,15 +144,15 @@ class PhpMessageSource extends MessageSource
     {
         $language = (string) $language;
 
-        if ($language !== '' && !preg_match('/^[a-z0-9_-]+$/i', $language)) {
-            throw new InvalidArgumentException(sprintf('Invalid language code: "%s".', $language));
+        if ($language !== '' && !\preg_match('/^[a-z0-9_-]+$/i', $language)) {
+            throw new InvalidArgumentException(\sprintf('Invalid language code: "%s".', $language));
         }
         $messageFile = Yii::getAlias($this->basePath) . "/$language/";
 
         if (isset($this->fileMap[$category])) {
             $messageFile .= $this->fileMap[$category];
         } else {
-            $messageFile .= str_replace('\\', '/', $category) . '.php';
+            $messageFile .= \str_replace('\\', '/', $category) . '.php';
         }
 
         return $messageFile;
@@ -167,10 +167,10 @@ class PhpMessageSource extends MessageSource
      */
     protected function loadMessagesFromFile($messageFile)
     {
-        if (is_file($messageFile)) {
+        if (\is_file($messageFile)) {
             $messages = include $messageFile;
 
-            if (!is_array($messages)) {
+            if (!\is_array($messages)) {
                 $messages = [];
             }
 

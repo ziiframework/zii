@@ -134,10 +134,10 @@ class ActiveDataProvider extends BaseDataProvider
 
         if ($this->key !== null) {
             foreach ($models as $model) {
-                if (is_string($this->key)) {
+                if (\is_string($this->key)) {
                     $keys[] = $model[$this->key];
                 } else {
-                    $keys[] = call_user_func($this->key, $model);
+                    $keys[] = \call_user_func($this->key, $model);
                 }
             }
 
@@ -147,7 +147,7 @@ class ActiveDataProvider extends BaseDataProvider
             $class = $this->query->modelClass;
             $pks = $class::primaryKey();
 
-            if (count($pks) === 1) {
+            if (\count($pks) === 1) {
                 $pk = $pks[0];
 
                 foreach ($models as $model) {
@@ -167,7 +167,7 @@ class ActiveDataProvider extends BaseDataProvider
             return $keys;
         }
 
-        return array_keys($models);
+        return \array_keys($models);
     }
 
     /**
@@ -198,8 +198,8 @@ class ActiveDataProvider extends BaseDataProvider
             if (empty($sort->attributes)) {
                 foreach ($model->attributes() as $attribute) {
                     $sort->attributes[$attribute] = [
-                        'asc' => [$attribute => SORT_ASC],
-                        'desc' => [$attribute => SORT_DESC],
+                        'asc' => [$attribute => \SORT_ASC],
+                        'desc' => [$attribute => \SORT_DESC],
                         'label' => $model->getAttributeLabel($attribute),
                     ];
                 }
@@ -215,7 +215,7 @@ class ActiveDataProvider extends BaseDataProvider
 
     public function __clone()
     {
-        if (is_object($this->query)) {
+        if (\is_object($this->query)) {
             $this->query = clone $this->query;
         }
 

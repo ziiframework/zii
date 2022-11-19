@@ -143,7 +143,7 @@ class Controller extends \yii\base\Controller
                 $optionAliases = $this->optionAliases();
 
                 foreach ($params['_aliases'] as $name => $value) {
-                    if (array_key_exists($name, $optionAliases)) {
+                    if (\array_key_exists($name, $optionAliases)) {
                         $params[$optionAliases[$name]] = $value;
                     } else {
                         $message = Yii::t('yii', 'Unknown alias: -{name}', ['name' => $name]);
@@ -156,7 +156,7 @@ class Controller extends \yii\base\Controller
                             }
 
                             $message .= '. ' . Yii::t('yii', 'Aliases available: {aliases}', [
-                                'aliases' => implode(', ', $aliasesAvailable),
+                                'aliases' => \implode(', ', $aliasesAvailable),
                             ]);
                         }
 
@@ -168,22 +168,22 @@ class Controller extends \yii\base\Controller
 
             foreach ($params as $name => $value) {
                 // Allow camelCase options to be entered in kebab-case
-                if (!in_array($name, $options, true) && str_contains(pf_string_argument($name), '-')) {
+                if (!\in_array($name, $options, true) && \str_contains(pf_string_argument($name), '-')) {
                     $kebabName = $name;
-                    $altName = lcfirst(Inflector::id2camel($kebabName));
+                    $altName = \lcfirst(Inflector::id2camel($kebabName));
 
-                    if (in_array($altName, $options, true)) {
+                    if (\in_array($altName, $options, true)) {
                         $name = $altName;
                     }
                 }
 
-                if (in_array($name, $options, true)) {
+                if (\in_array($name, $options, true)) {
                     $default = $this->$name;
 
-                    if (is_array($default) && is_string($value)) {
-                        $this->$name = preg_split('/\s*,\s*(?![^()]*\))/', $value);
+                    if (\is_array($default) && \is_string($value)) {
+                        $this->$name = \preg_split('/\s*,\s*(?![^()]*\))/', $value);
                     } elseif ($default !== null) {
-                        settype($value, gettype($default));
+                        \settype($value, \gettype($default));
                         $this->$name = $value;
                     } else {
                         $this->$name = $value;
@@ -194,11 +194,11 @@ class Controller extends \yii\base\Controller
                     if (isset($kebabName)) {
                         unset($params[$kebabName]);
                     }
-                } elseif (!is_int($name)) {
+                } elseif (!\is_int($name)) {
                     $message = Yii::t('yii', 'Unknown option: --{name}', ['name' => $name]);
 
                     if (!empty($options)) {
-                        $message .= '. ' . Yii::t('yii', 'Options available: {options}', ['options' => '--' . implode(', --', $options)]);
+                        $message .= '. ' . Yii::t('yii', 'Options available: {options}', ['options' => '--' . \implode(', --', $options)]);
                     }
 
                     throw new Exception($message);
@@ -245,26 +245,26 @@ class Controller extends \yii\base\Controller
             $name = $param->getName();
             $key = null;
 
-            if (array_key_exists($i, $params)) {
+            if (\array_key_exists($i, $params)) {
                 $key = $i;
-            } elseif (array_key_exists($name, $params)) {
+            } elseif (\array_key_exists($name, $params)) {
                 $key = $name;
             }
 
             if ($key !== null) {
-                if (PHP_VERSION_ID >= 80000) {
+                if (\PHP_VERSION_ID >= 80000) {
                     $isArray = ($type = $param->getType()) instanceof ReflectionNamedType && $type->getName() === 'array';
                 } else {
                     $isArray = $param->isArray();
                 }
 
                 if ($isArray) {
-                    $params[$key] = $params[$key] === '' ? [] : preg_split('/\s*,\s*/', $params[$key]);
+                    $params[$key] = $params[$key] === '' ? [] : \preg_split('/\s*,\s*/', $params[$key]);
                 }
                 $args[] = $actionParams[$key] = $params[$key];
                 unset($params[$key]);
             } elseif (
-                PHP_VERSION_ID >= 70100
+                \PHP_VERSION_ID >= 70100
                 && ($type = $param->getType()) !== null
                 && $type instanceof ReflectionNamedType
                 && !$type->isBuiltin()
@@ -282,15 +282,15 @@ class Controller extends \yii\base\Controller
         }
 
         if (!empty($missing)) {
-            throw new Exception(Yii::t('yii', 'Missing required arguments: {params}', ['params' => implode(', ', $missing)]));
+            throw new Exception(Yii::t('yii', 'Missing required arguments: {params}', ['params' => \implode(', ', $missing)]));
         }
 
         // We use a different array here, specifically one that doesn't contain service instances but descriptions instead.
         if (Yii::$app->requestedParams === null) {
-            Yii::$app->requestedParams = array_merge($actionParams, $requestedParams);
+            Yii::$app->requestedParams = \array_merge($actionParams, $requestedParams);
         }
 
-        return array_merge($args, $params);
+        return \array_merge($args, $params);
     }
 
     /**
@@ -311,8 +311,8 @@ class Controller extends \yii\base\Controller
     public function ansiFormat($string)
     {
         if ($this->isColorEnabled()) {
-            $args = func_get_args();
-            array_shift($args);
+            $args = \func_get_args();
+            \array_shift($args);
             $string = Console::ansiFormat($string, $args);
         }
 
@@ -339,8 +339,8 @@ class Controller extends \yii\base\Controller
     public function stdout($string)
     {
         if ($this->isColorEnabled()) {
-            $args = func_get_args();
-            array_shift($args);
+            $args = \func_get_args();
+            \array_shift($args);
             $string = Console::ansiFormat($string, $args);
         }
 
@@ -367,12 +367,12 @@ class Controller extends \yii\base\Controller
     public function stderr($string)
     {
         if ($this->isColorEnabled(STDERR)) {
-            $args = func_get_args();
-            array_shift($args);
+            $args = \func_get_args();
+            \array_shift($args);
             $string = Console::ansiFormat($string, $args);
         }
 
-        return fwrite(STDERR, $string);
+        return \fwrite(STDERR, $string);
     }
 
     /**
@@ -616,7 +616,7 @@ class Controller extends \yii\base\Controller
         $phpDocParams = [];
 
         foreach ($tags['param'] as $i => $tag) {
-            if (preg_match('/^(?<type>\S+)(\s+\$(?<name>\w+))?(?<comment>.*)/us', $tag, $matches) === 1) {
+            if (\preg_match('/^(?<type>\S+)(\s+\$(?<name>\w+))?(?<comment>.*)/us', $tag, $matches) === 1) {
                 $key = empty($matches['name']) ? $i : $matches['name'];
                 $phpDocParams[$key] = ['type' => $matches['type'], 'comment' => $matches['comment']];
             }
@@ -630,16 +630,16 @@ class Controller extends \yii\base\Controller
             $type = null;
             $comment = '';
 
-            if (PHP_MAJOR_VERSION > 5 && $parameter->hasType()) {
+            if (\PHP_MAJOR_VERSION > 5 && $parameter->hasType()) {
                 $reflectionType = $parameter->getType();
 
-                if (PHP_VERSION_ID >= 70100) {
-                    $types = method_exists($reflectionType, 'getTypes') ? $reflectionType->getTypes() : [$reflectionType];
+                if (\PHP_VERSION_ID >= 70100) {
+                    $types = \method_exists($reflectionType, 'getTypes') ? $reflectionType->getTypes() : [$reflectionType];
 
                     foreach ($types as $key => $reflectionType) {
                         $types[$key] = $reflectionType->getName();
                     }
-                    $type = implode('|', $types);
+                    $type = \implode('|', $types);
                 } else {
                     $type = (string) $reflectionType;
                 }
@@ -656,7 +656,7 @@ class Controller extends \yii\base\Controller
             }
             // if type still not detected, then using type of default value
             if ($type === null && $parameter->isDefaultValueAvailable() && $parameter->getDefaultValue() !== null) {
-                $type = gettype($parameter->getDefaultValue());
+                $type = \gettype($parameter->getDefaultValue());
             }
 
             $args[$parameter->name] = [
@@ -701,7 +701,7 @@ class Controller extends \yii\base\Controller
         foreach ($class->getProperties() as $property) {
             $name = $property->getName();
 
-            if (!in_array($name, $optionNames, true)) {
+            if (!\in_array($name, $optionNames, true)) {
                 continue;
             }
             $defaultValue = $property->getValue($this);
@@ -713,11 +713,11 @@ class Controller extends \yii\base\Controller
             if (isset($tags['var']) || isset($tags['property'])) {
                 $doc = $tags['var'] ?? $tags['property'];
 
-                if (is_array($doc)) {
-                    $doc = reset($doc);
+                if (\is_array($doc)) {
+                    $doc = \reset($doc);
                 }
 
-                if (preg_match('/^(\S+)(.*)/s', $doc, $matches)) {
+                if (\preg_match('/^(\S+)(.*)/s', $doc, $matches)) {
                     $type = $matches[1];
                     $comment = $matches[2];
                 } else {
@@ -776,20 +776,20 @@ class Controller extends \yii\base\Controller
             $comment = '';
         }
 
-        $comment = "@description \n" . strtr(trim(preg_replace('/^\s*\**([ \t])?/m', '', trim($comment, '/'))), "\r", '');
-        $parts = preg_split('/^\s*@/m', $comment, -1, PREG_SPLIT_NO_EMPTY);
+        $comment = "@description \n" . \strtr(\trim(\preg_replace('/^\s*\**([ \t])?/m', '', \trim($comment, '/'))), "\r", '');
+        $parts = \preg_split('/^\s*@/m', $comment, -1, \PREG_SPLIT_NO_EMPTY);
         $tags = [];
 
         foreach ($parts as $part) {
-            if (preg_match('/^(\w+)(.*)/ms', trim($part), $matches)) {
+            if (\preg_match('/^(\w+)(.*)/ms', \trim($part), $matches)) {
                 $name = $matches[1];
 
                 if (!isset($tags[$name])) {
-                    $tags[$name] = trim($matches[2]);
-                } elseif (is_array($tags[$name])) {
-                    $tags[$name][] = trim($matches[2]);
+                    $tags[$name] = \trim($matches[2]);
+                } elseif (\is_array($tags[$name])) {
+                    $tags[$name][] = \trim($matches[2]);
                 } else {
-                    $tags[$name] = [$tags[$name], trim($matches[2])];
+                    $tags[$name] = [$tags[$name], \trim($matches[2])];
                 }
             }
         }
@@ -812,10 +812,10 @@ class Controller extends \yii\base\Controller
             $docComment = '';
         }
 
-        $docLines = preg_split('~\R~u', $docComment);
+        $docLines = \preg_split('~\R~u', $docComment);
 
         if (isset($docLines[1])) {
-            return trim($docLines[1], "\t *");
+            return \trim($docLines[1], "\t *");
         }
 
         return '';
@@ -836,14 +836,14 @@ class Controller extends \yii\base\Controller
             return '';
         }
 
-        $comment = strtr(trim(preg_replace('/^\s*\**([ \t])?/m', '', trim($docComment, '/'))), "\r", '');
+        $comment = \strtr(\trim(\preg_replace('/^\s*\**([ \t])?/m', '', \trim($docComment, '/'))), "\r", '');
 
-        if (preg_match('/^\s*@\w+/m', $comment, $matches, PREG_OFFSET_CAPTURE)) {
-            $comment = trim(substr($comment, 0, $matches[0][1]));
+        if (\preg_match('/^\s*@\w+/m', $comment, $matches, \PREG_OFFSET_CAPTURE)) {
+            $comment = \trim(\substr($comment, 0, $matches[0][1]));
         }
 
         if ($comment !== '') {
-            return rtrim(Console::renderColoredString(Console::markdownToAnsi($comment)));
+            return \rtrim(Console::renderColoredString(Console::markdownToAnsi($comment)));
         }
 
         return '';

@@ -186,7 +186,7 @@ class Controller extends Component implements ViewContextInterface
         // call beforeAction on modules
         foreach ($this->getModules() as $module) {
             if ($module->beforeAction($action)) {
-                array_unshift($modules, $module);
+                \array_unshift($modules, $module);
             } else {
                 $runAction = false;
                 break;
@@ -230,7 +230,7 @@ class Controller extends Component implements ViewContextInterface
      */
     public function run($route, $params = [])
     {
-        $pos = strpos($route, '/');
+        $pos = \strpos($route, '/');
 
         if ($pos === false) {
             return $this->runAction($route, $params);
@@ -238,7 +238,7 @@ class Controller extends Component implements ViewContextInterface
             return $this->module->runAction($route, $params);
         }
 
-        return Yii::$app->runAction(ltrim($route, '/'), $params);
+        return Yii::$app->runAction(\ltrim($route, '/'), $params);
     }
 
     /**
@@ -279,10 +279,10 @@ class Controller extends Component implements ViewContextInterface
             return Yii::createObject($actionMap[$id], [$id, $this]);
         }
 
-        if (preg_match('/^(?:[a-z0-9_]+-)*[a-z0-9_]+$/', $id)) {
-            $methodName = 'action' . str_replace(' ', '', ucwords(str_replace('-', ' ', $id)));
+        if (\preg_match('/^(?:[a-z0-9_]+-)*[a-z0-9_]+$/', $id)) {
+            $methodName = 'action' . \str_replace(' ', '', \ucwords(\str_replace('-', ' ', $id)));
 
-            if (method_exists($this, $methodName)) {
+            if (\method_exists($this, $methodName)) {
                 $method = new ReflectionMethod($this, $methodName);
 
                 if ($method->isPublic() && $method->getName() === $methodName) {
@@ -377,7 +377,7 @@ class Controller extends Component implements ViewContextInterface
         $module = $this->module;
 
         while ($module->module !== null) {
-            array_unshift($modules, $module->module);
+            \array_unshift($modules, $module->module);
             $module = $module->module;
         }
 
@@ -541,7 +541,7 @@ class Controller extends Component implements ViewContextInterface
     public function getViewPath()
     {
         if ($this->_viewPath === null) {
-            $this->_viewPath = $this->module->getViewPath() . DIRECTORY_SEPARATOR . $this->id;
+            $this->_viewPath = $this->module->getViewPath() . \DIRECTORY_SEPARATOR . $this->id;
         }
 
         return $this->_viewPath;
@@ -576,14 +576,14 @@ class Controller extends Component implements ViewContextInterface
         $module = $this->module;
         $layout = null;
 
-        if (is_string($this->layout)) {
+        if (\is_string($this->layout)) {
             $layout = $this->layout;
         } elseif ($this->layout === null) {
             while ($module !== null && $module->layout === null) {
                 $module = $module->module;
             }
 
-            if ($module !== null && is_string($module->layout)) {
+            if ($module !== null && \is_string($module->layout)) {
                 $layout = $module->layout;
             }
         }
@@ -592,20 +592,20 @@ class Controller extends Component implements ViewContextInterface
             return false;
         }
 
-        if (strncmp($layout, '@', 1) === 0) {
+        if (\strncmp($layout, '@', 1) === 0) {
             $file = Yii::getAlias($layout);
-        } elseif (strncmp($layout, '/', 1) === 0) {
-            $file = Yii::$app->getLayoutPath() . DIRECTORY_SEPARATOR . substr($layout, 1);
+        } elseif (\strncmp($layout, '/', 1) === 0) {
+            $file = Yii::$app->getLayoutPath() . \DIRECTORY_SEPARATOR . \substr($layout, 1);
         } else {
-            $file = $module->getLayoutPath() . DIRECTORY_SEPARATOR . $layout;
+            $file = $module->getLayoutPath() . \DIRECTORY_SEPARATOR . $layout;
         }
 
-        if (pathinfo($file, PATHINFO_EXTENSION) !== '') {
+        if (\pathinfo($file, \PATHINFO_EXTENSION) !== '') {
             return $file;
         }
         $path = $file . '.' . $view->defaultExtension;
 
-        if ($view->defaultExtension !== 'php' && !is_file($path)) {
+        if ($view->defaultExtension !== 'php' && !\is_file($path)) {
             $path = $file . '.php';
         }
 
@@ -634,10 +634,10 @@ class Controller extends Component implements ViewContextInterface
 
         if (($component = $this->module->get($name, false)) instanceof $typeName) {
             $args[] = $component;
-            $requestedParams[$name] = 'Component: ' . get_class($component) . " \$$name";
+            $requestedParams[$name] = 'Component: ' . \get_class($component) . " \$$name";
         } elseif ($this->module->has($typeName) && ($service = $this->module->get($typeName)) instanceof $typeName) {
             $args[] = $service;
-            $requestedParams[$name] = 'Module ' . get_class($this->module) . " DI: $typeName \$$name";
+            $requestedParams[$name] = 'Module ' . \get_class($this->module) . " DI: $typeName \$$name";
         } elseif (Yii::$container->has($typeName) && ($service = Yii::$container->get($typeName)) instanceof $typeName) {
             $args[] = $service;
             $requestedParams[$name] = "Container DI: $typeName \$$name";

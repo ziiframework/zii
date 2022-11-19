@@ -55,7 +55,7 @@ abstract class Mutex extends Component
     {
         if ($this->autoRelease) {
             $locks = &$this->_locks;
-            register_shutdown_function(function () use (&$locks): void {
+            \register_shutdown_function(function () use (&$locks): void {
                 foreach ($locks as $lock) {
                     $this->release($lock);
                 }
@@ -74,7 +74,7 @@ abstract class Mutex extends Component
      */
     public function acquire($name, $timeout = 0)
     {
-        if (!in_array($name, $this->_locks, true) && $this->acquireLock($name, $timeout)) {
+        if (!\in_array($name, $this->_locks, true) && $this->acquireLock($name, $timeout)) {
             $this->_locks[] = $name;
 
             return true;
@@ -93,7 +93,7 @@ abstract class Mutex extends Component
     public function release($name)
     {
         if ($this->releaseLock($name)) {
-            $index = array_search($name, $this->_locks);
+            $index = \array_search($name, $this->_locks);
 
             if ($index !== false) {
                 unset($this->_locks[$index]);
@@ -117,7 +117,7 @@ abstract class Mutex extends Component
      */
     public function isAcquired($name)
     {
-        return in_array($name, $this->_locks, true);
+        return \in_array($name, $this->_locks, true);
     }
 
     /**

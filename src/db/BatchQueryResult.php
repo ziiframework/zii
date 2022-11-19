@@ -146,17 +146,17 @@ class BatchQueryResult extends Component implements Iterator
     #[ReturnTypeWillChange]
     public function next(): void
     {
-        if ($this->_batch === null || !$this->each || $this->each && next($this->_batch) === false) {
+        if ($this->_batch === null || !$this->each || $this->each && \next($this->_batch) === false) {
             $this->_batch = $this->fetchData();
-            reset($this->_batch);
+            \reset($this->_batch);
         }
 
         if ($this->each) {
-            $this->_value = current($this->_batch);
+            $this->_value = \current($this->_batch);
 
             if ($this->query->indexBy !== null) {
-                $this->_key = key($this->_batch);
-            } elseif (key($this->_batch) !== null) {
+                $this->_key = \key($this->_batch);
+            } elseif (\key($this->_batch) !== null) {
                 $this->_key = $this->_key === null ? 0 : $this->_key + 1;
             } else {
                 $this->_key = null;
@@ -267,7 +267,7 @@ class BatchQueryResult extends Component implements Iterator
         }
 
         if (!empty($this->_batch)) {
-            $key = array_keys($this->_batch)[0];
+            $key = \array_keys($this->_batch)[0];
 
             if (isset($this->_batch[$key]->db->driverName)) {
                 return $this->_batch[$key]->db->driverName;

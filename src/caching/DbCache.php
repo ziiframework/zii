@@ -125,7 +125,7 @@ class DbCache extends Cache
         $query = new Query();
         $query->select(['COUNT(*)'])
             ->from($this->cacheTable)
-            ->where('[[id]] = :id AND ([[expire]] = 0 OR [[expire]] >' . time() . ')', [':id' => $key]);
+            ->where('[[id]] = :id AND ([[expire]] = 0 OR [[expire]] >' . \time() . ')', [':id' => $key]);
 
         if ($this->db->enableQueryCache) {
             // temporarily disable and re-enable query caching
@@ -152,7 +152,7 @@ class DbCache extends Cache
         $query = new Query();
         $query->select([$this->getDataFieldName()])
             ->from($this->cacheTable)
-            ->where('[[id]] = :id AND ([[expire]] = 0 OR [[expire]] >' . time() . ')', [':id' => $key]);
+            ->where('[[id]] = :id AND ([[expire]] = 0 OR [[expire]] >' . \time() . ')', [':id' => $key]);
 
         if ($this->db->enableQueryCache) {
             // temporarily disable and re-enable query caching
@@ -182,7 +182,7 @@ class DbCache extends Cache
         $query->select(['id', $this->getDataFieldName()])
             ->from($this->cacheTable)
             ->where(['id' => $keys])
-            ->andWhere('([[expire]] = 0 OR [[expire]] > ' . time() . ')');
+            ->andWhere('([[expire]] = 0 OR [[expire]] > ' . \time() . ')');
 
         if ($this->db->enableQueryCache) {
             $this->db->enableQueryCache = false;
@@ -199,8 +199,8 @@ class DbCache extends Cache
         }
 
         foreach ($rows as $row) {
-            if (is_resource($row['data']) && get_resource_type($row['data']) === 'stream') {
-                $results[$row['id']] = stream_get_contents($row['data']);
+            if (\is_resource($row['data']) && \get_resource_type($row['data']) === 'stream') {
+                $results[$row['id']] = \stream_get_contents($row['data']);
             } else {
                 $results[$row['id']] = $row['data'];
             }
@@ -225,7 +225,7 @@ class DbCache extends Cache
             $this->db->noCache(function (Connection $db) use ($key, $value, $duration): void {
                 $db->createCommand()->upsert($this->cacheTable, [
                     'id' => $key,
-                    'expire' => $duration > 0 ? $duration + time() : 0,
+                    'expire' => $duration > 0 ? $duration + \time() : 0,
                     'data' => $this->getDataFieldValue($value),
                 ])->execute();
             });
@@ -259,7 +259,7 @@ class DbCache extends Cache
                 $db->createCommand()
                     ->insert($this->cacheTable, [
                         'id' => $key,
-                        'expire' => $duration > 0 ? $duration + time() : 0,
+                        'expire' => $duration > 0 ? $duration + \time() : 0,
                         'data' => $this->getDataFieldValue($value),
                     ])->execute();
             });
@@ -299,9 +299,9 @@ class DbCache extends Cache
      */
     public function gc($force = false): void
     {
-        if ($force || random_int(0, 1000000) < $this->gcProbability) {
+        if ($force || \random_int(0, 1000000) < $this->gcProbability) {
             $this->db->createCommand()
-                ->delete($this->cacheTable, '[[expire]] > 0 AND [[expire]] < ' . time())
+                ->delete($this->cacheTable, '[[expire]] > 0 AND [[expire]] < ' . \time())
                 ->execute();
         }
     }
@@ -329,7 +329,7 @@ class DbCache extends Cache
     protected function isVarbinaryDataField()
     {
         if ($this->isVarbinaryDataField === null) {
-            $this->isVarbinaryDataField = in_array($this->db->getDriverName(), ['sqlsrv', 'dblib']) &&
+            $this->isVarbinaryDataField = \in_array($this->db->getDriverName(), ['sqlsrv', 'dblib']) &&
                 $this->db->getTableSchema($this->cacheTable)->columns['data']->dbType === 'varbinary';
         }
 

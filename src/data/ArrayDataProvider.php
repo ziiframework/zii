@@ -97,7 +97,7 @@ class ArrayDataProvider extends BaseDataProvider
             $pagination->totalCount = $this->getTotalCount();
 
             if ($pagination->getPageSize() > 0) {
-                $models = array_slice($models, $pagination->getOffset(), $pagination->getLimit(), true);
+                $models = \array_slice($models, $pagination->getOffset(), $pagination->getLimit(), true);
             }
         }
 
@@ -113,17 +113,17 @@ class ArrayDataProvider extends BaseDataProvider
             $keys = [];
 
             foreach ($models as $model) {
-                if (is_string($this->key)) {
+                if (\is_string($this->key)) {
                     $keys[] = $model[$this->key];
                 } else {
-                    $keys[] = call_user_func($this->key, $model);
+                    $keys[] = \call_user_func($this->key, $model);
                 }
             }
 
             return $keys;
         }
 
-        return array_keys($models);
+        return \array_keys($models);
     }
 
     /**
@@ -131,7 +131,7 @@ class ArrayDataProvider extends BaseDataProvider
      */
     protected function prepareTotalCount()
     {
-        return is_array($this->allModels) ? count($this->allModels) : 0;
+        return \is_array($this->allModels) ? \count($this->allModels) : 0;
     }
 
     /**
@@ -147,7 +147,7 @@ class ArrayDataProvider extends BaseDataProvider
         $orders = $sort->getOrders();
 
         if (!empty($orders)) {
-            ArrayHelper::multisort($models, array_keys($orders), array_values($orders), $sort->sortFlags);
+            ArrayHelper::multisort($models, \array_keys($orders), \array_values($orders), $sort->sortFlags);
         }
 
         return $models;

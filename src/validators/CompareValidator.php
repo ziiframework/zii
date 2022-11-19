@@ -158,7 +158,7 @@ class CompareValidator extends Validator
     {
         $value = $model->$attribute;
 
-        if (is_array($value)) {
+        if (\is_array($value)) {
             $this->addError($model, $attribute, Yii::t('yii', '{attribute} is invalid.'));
 
             return;
@@ -166,7 +166,7 @@ class CompareValidator extends Validator
 
         if ($this->compareValue !== null) {
             if ($this->compareValue instanceof Closure) {
-                $this->compareValue = call_user_func($this->compareValue);
+                $this->compareValue = \call_user_func($this->compareValue);
             }
             $compareLabel = $compareValue = $compareValueOrAttribute = $this->compareValue;
         } else {
@@ -200,7 +200,7 @@ class CompareValidator extends Validator
         }
 
         if ($this->compareValue instanceof Closure) {
-            $this->compareValue = call_user_func($this->compareValue);
+            $this->compareValue = \call_user_func($this->compareValue);
         }
 
         if (!$this->compareValues($this->operator, $this->type, $value, $this->compareValue)) {
@@ -270,7 +270,7 @@ class CompareValidator extends Validator
     public function clientValidateAttribute($model, $attribute, $view)
     {
         if ($this->compareValue != null && $this->compareValue instanceof Closure) {
-            $this->compareValue = call_user_func($this->compareValue);
+            $this->compareValue = \call_user_func($this->compareValue);
         }
 
         ValidationAsset::register($view);

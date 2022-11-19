@@ -89,7 +89,7 @@ class CookieCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      */
     public function getCount()
     {
-        return count($this->_cookies);
+        return \count($this->_cookies);
     }
 
     /**
@@ -134,7 +134,7 @@ class CookieCollection extends BaseObject implements IteratorAggregate, ArrayAcc
     public function has($name)
     {
         return isset($this->_cookies[$name]) && $this->_cookies[$name]->value !== ''
-            && ($this->_cookies[$name]->expire === null || $this->_cookies[$name]->expire === 0 || $this->_cookies[$name]->expire >= time());
+            && ($this->_cookies[$name]->expire === null || $this->_cookies[$name]->expire === 0 || $this->_cookies[$name]->expire >= \time());
     }
 
     /**

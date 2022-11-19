@@ -77,7 +77,7 @@ class CacheController extends Controller
      */
     public function actionFlush()
     {
-        $cachesInput = func_get_args();
+        $cachesInput = \func_get_args();
 
         if (empty($cachesInput)) {
             throw new Exception('You should specify cache components names');
@@ -86,8 +86,8 @@ class CacheController extends Controller
         $caches = $this->findCaches($cachesInput);
         $cachesInfo = [];
 
-        $foundCaches = array_keys($caches);
-        $notFoundCaches = array_diff($cachesInput, array_keys($caches));
+        $foundCaches = \array_keys($caches);
+        $notFoundCaches = \array_diff($cachesInput, \array_keys($caches));
 
         if ($notFoundCaches !== []) {
             $this->notifyNotFoundCaches($notFoundCaches);
@@ -279,21 +279,21 @@ class CacheController extends Controller
         $findAll = ($cachesNames === []);
 
         foreach ($components as $name => $component) {
-            if (!$findAll && !in_array($name, $cachesNames, true)) {
+            if (!$findAll && !\in_array($name, $cachesNames, true)) {
                 continue;
             }
 
             if ($component instanceof CacheInterface) {
-                $caches[$name] = get_class($component);
-            } elseif (is_array($component) && isset($component['class']) && $this->isCacheClass($component['class'])) {
+                $caches[$name] = \get_class($component);
+            } elseif (\is_array($component) && isset($component['class']) && $this->isCacheClass($component['class'])) {
                 $caches[$name] = $component['class'];
-            } elseif (is_string($component) && $this->isCacheClass($component)) {
+            } elseif (\is_string($component) && $this->isCacheClass($component)) {
                 $caches[$name] = $component;
             } elseif ($component instanceof Closure) {
                 $cache = Yii::$app->get($name);
 
                 if ($this->isCacheClass($cache)) {
-                    $cacheClass = get_class($cache);
+                    $cacheClass = \get_class($cache);
                     $caches[$name] = $cacheClass;
                 }
             }
@@ -311,7 +311,7 @@ class CacheController extends Controller
      */
     private function isCacheClass($className)
     {
-        return is_subclass_of($className, 'yii\caching\CacheInterface') || $className === 'yii\caching\CacheInterface';
+        return \is_subclass_of($className, 'yii\caching\CacheInterface') || $className === 'yii\caching\CacheInterface';
     }
 
     /**
@@ -323,6 +323,6 @@ class CacheController extends Controller
      */
     private function canBeFlushed($className)
     {
-        return !is_a($className, ApcCache::className(), true) || PHP_SAPI !== 'cli';
+        return !\is_a($className, ApcCache::className(), true) || \PHP_SAPI !== 'cli';
     }
 }

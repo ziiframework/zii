@@ -57,7 +57,7 @@ abstract class Dependency extends \yii\base\BaseObject
         if ($this->reusable) {
             $hash = $this->generateReusableHash();
 
-            if (!array_key_exists($hash, self::$_reusableData)) {
+            if (!\array_key_exists($hash, self::$_reusableData)) {
                 self::$_reusableData[$hash] = $this->generateDependencyData($cache);
             }
             $this->data = self::$_reusableData[$hash];
@@ -94,7 +94,7 @@ abstract class Dependency extends \yii\base\BaseObject
         if ($this->reusable) {
             $hash = $this->generateReusableHash();
 
-            if (!array_key_exists($hash, self::$_reusableData)) {
+            if (!\array_key_exists($hash, self::$_reusableData)) {
                 self::$_reusableData[$hash] = $this->generateDependencyData($cache);
             }
             $data = self::$_reusableData[$hash];
@@ -126,18 +126,18 @@ abstract class Dependency extends \yii\base\BaseObject
         $clone->data = null; // https://github.com/yiisoft/yii2/issues/3052
 
         try {
-            $serialized = serialize($clone);
+            $serialized = \serialize($clone);
         } catch (Exception $e) {
             // unserializable properties are nulled
             foreach ($clone as $name => $value) {
-                if (is_object($value) && $value instanceof Closure) {
+                if (\is_object($value) && $value instanceof Closure) {
                     $clone->{$name} = null;
                 }
             }
-            $serialized = serialize($clone);
+            $serialized = \serialize($clone);
         }
 
-        return sha1($serialized);
+        return \sha1($serialized);
     }
 
     /**

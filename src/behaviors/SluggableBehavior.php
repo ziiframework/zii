@@ -227,7 +227,7 @@ class SluggableBehavior extends AttributeBehavior
      */
     protected function generateSlug($slugParts)
     {
-        return Inflector::slug(implode('-', $slugParts));
+        return Inflector::slug(\implode('-', $slugParts));
     }
 
     /**
@@ -266,7 +266,7 @@ class SluggableBehavior extends AttributeBehavior
     {
         /* @var $validator UniqueValidator */
         /* @var $model BaseActiveRecord */
-        $validator = Yii::createObject(array_merge([
+        $validator = Yii::createObject(\array_merge([
                 'class' => UniqueValidator::className(),
             ], $this->uniqueValidator));
 
@@ -291,8 +291,8 @@ class SluggableBehavior extends AttributeBehavior
      */
     protected function generateUniqueSlug($baseSlug, $iteration)
     {
-        if (is_callable($this->uniqueSlugGenerator)) {
-            return call_user_func($this->uniqueSlugGenerator, $baseSlug, $iteration, $this->owner);
+        if (\is_callable($this->uniqueSlugGenerator)) {
+            return \call_user_func($this->uniqueSlugGenerator, $baseSlug, $iteration, $this->owner);
         }
 
         return $baseSlug . '-' . ($iteration + 1);

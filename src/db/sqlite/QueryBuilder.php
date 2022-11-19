@@ -61,7 +61,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      */
     protected function defaultExpressionBuilders()
     {
-        return array_merge(parent::defaultExpressionBuilders(), [
+        return \array_merge(parent::defaultExpressionBuilders(), [
             'yii\db\conditions\LikeCondition' => 'yii\db\sqlite\conditions\LikeConditionBuilder',
             'yii\db\conditions\InCondition' => 'yii\db\sqlite\conditions\InConditionBuilder',
         ]);
@@ -88,8 +88,8 @@ class QueryBuilder extends \yii\db\QueryBuilder
 
         [, $placeholders, $values, $params] = $this->prepareInsertValues($table, $insertColumns, $params);
         $insertSql = 'INSERT OR IGNORE INTO ' . $this->db->quoteTableName($table)
-            . (!empty($insertNames) ? ' (' . implode(', ', $insertNames) . ')' : '')
-            . (!empty($placeholders) ? ' VALUES (' . implode(', ', $placeholders) . ')' : $values);
+            . (!empty($insertNames) ? ' (' . \implode(', ', $insertNames) . ')' : '')
+            . (!empty($placeholders) ? ' VALUES (' . \implode(', ', $placeholders) . ')' : $values);
 
         if ($updateColumns === false) {
             return $insertSql;
@@ -114,14 +114,14 @@ class QueryBuilder extends \yii\db\QueryBuilder
             foreach ($updateNames as $name) {
                 $quotedName = $this->db->quoteColumnName($name);
 
-                if (strrpos($quotedName, '.') === false) {
+                if (\strrpos($quotedName, '.') === false) {
                     $quotedName = "(SELECT $quotedName FROM `EXCLUDED`)";
                 }
                 $updateColumns[$name] = new Expression($quotedName);
             }
         }
-        $updateSql = 'WITH "EXCLUDED" (' . implode(', ', $insertNames)
-            . ') AS (' . (!empty($placeholders) ? 'VALUES (' . implode(', ', $placeholders) . ')' : ltrim($values, ' ')) . ') '
+        $updateSql = 'WITH "EXCLUDED" (' . \implode(', ', $insertNames)
+            . ') AS (' . (!empty($placeholders) ? 'VALUES (' . \implode(', ', $placeholders) . ')' : \ltrim($values, ' ')) . ') '
             . $this->update($table, $updateColumns, $updateCondition, $params);
 
         return "$updateSql; $insertSql;";
@@ -158,7 +158,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
         // https://www.sqlite.org/releaselog/3_7_11.html
         $this->db->open(); // ensure pdo is not null
 
-        if (version_compare($this->db->getServerVersion(), '3.7.11', '>=')) {
+        if (\version_compare($this->db->getServerVersion(), '3.7.11', '>=')) {
             return parent::batchInsert($table, $columns, $rows, $params);
         }
 
@@ -180,9 +180,9 @@ class QueryBuilder extends \yii\db\QueryBuilder
                     $value = $columnSchemas[$columns[$i]]->dbTypecast($value);
                 }
 
-                if (is_string($value)) {
+                if (\is_string($value)) {
                     $value = $schema->quoteValue($value);
-                } elseif (is_float($value)) {
+                } elseif (\is_float($value)) {
                     // ensure type cast always has . as decimal separator in all locales
                     $value = StringHelper::floatToString($value);
                 } elseif ($value === false) {
@@ -194,7 +194,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
                 }
                 $vs[] = $value;
             }
-            $values[] = implode(', ', $vs);
+            $values[] = \implode(', ', $vs);
         }
 
         if (empty($values)) {
@@ -206,7 +206,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
         }
 
         return 'INSERT INTO ' . $schema->quoteTableName($table)
-        . ' (' . implode(', ', $columns) . ') SELECT ' . implode(' UNION SELECT ', $values);
+        . ' (' . \implode(', ', $columns) . ') SELECT ' . \implode(' UNION SELECT ', $values);
     }
 
     /**
@@ -231,7 +231,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
             $tableName = $db->quoteTableName($tableName);
 
             if ($value === null) {
-                $key = $this->db->quoteColumnName(reset($table->primaryKey));
+                $key = $this->db->quoteColumnName(\reset($table->primaryKey));
                 $value = $this->db->useMaster(static fn (Connection $db) => $db->createCommand("SELECT MAX($key) FROM $tableName")->queryScalar());
             } else {
                 $value = (int) $value - 1;
@@ -555,7 +555,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         $query = $query->prepare($this);
 
-        $params = empty($params) ? $query->params : array_merge($params, $query->params);
+        $params = empty($params) ? $query->params : \array_merge($params, $query->params);
 
         $clauses = [
             $this->buildSelect($query->select, $params, $query->distinct, $query->selectOption),
@@ -566,7 +566,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
             $this->buildHaving($query->having, $params),
         ];
 
-        $sql = implode($this->separator, array_filter($clauses));
+        $sql = \implode($this->separator, \array_filter($clauses));
         $sql = $this->buildOrderByAndLimit($sql, $query->orderBy, $query->limit, $query->offset);
 
         if (!empty($query->orderBy)) {
@@ -621,7 +621,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
             $result .= ' UNION ' . ($union['all'] ? 'ALL ' : '') . ' ' . $unions[$i]['query'];
         }
 
-        return trim($result);
+        return \trim($result);
     }
 
     /**
@@ -629,11 +629,11 @@ class QueryBuilder extends \yii\db\QueryBuilder
      */
     public function createIndex($name, $table, $columns, $unique = false)
     {
-        $tableParts = explode('.', $table);
+        $tableParts = \explode('.', $table);
 
         $schema = null;
 
-        if (count($tableParts) === 2) {
+        if (\count($tableParts) === 2) {
             [$schema, $table] = $tableParts;
         }
 

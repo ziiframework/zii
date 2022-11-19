@@ -66,7 +66,7 @@ class Markdown extends \cebe\markdown\Parser
      */
     protected function renderParagraph($block)
     {
-        return rtrim($this->renderAbsy($block['content'])) . "\n\n";
+        return \rtrim($this->renderAbsy($block['content'])) . "\n\n";
     }
 
     /**

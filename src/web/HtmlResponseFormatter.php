@@ -35,7 +35,7 @@ class HtmlResponseFormatter extends Component implements ResponseFormatterInterf
      */
     public function format($response): void
     {
-        if (stripos($this->contentType, 'charset') === false) {
+        if (\stripos($this->contentType, 'charset') === false) {
             $this->contentType .= '; charset=' . $response->charset;
         }
         $response->getHeaders()->set('Content-Type', $this->contentType);

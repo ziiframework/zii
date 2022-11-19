@@ -62,7 +62,7 @@ class Command extends \yii\db\Command
             return parent::queryInternal($method, $fetchMode);
         }
 
-        [$lastStatementSql, $lastStatementParams] = array_pop($statements);
+        [$lastStatementSql, $lastStatementParams] = \array_pop($statements);
 
         foreach ($statements as $statement) {
             [$statementSql, $statementParams] = $statement;
@@ -87,7 +87,7 @@ class Command extends \yii\db\Command
      */
     private function splitStatements($sql, $params)
     {
-        $semicolonIndex = strpos($sql, ';');
+        $semicolonIndex = \strpos($sql, ';');
 
         if ($semicolonIndex === false || $semicolonIndex === StringHelper::byteLength($sql) - 1) {
             return false;
@@ -96,7 +96,7 @@ class Command extends \yii\db\Command
         $tokenizer = new SqlTokenizer($sql);
         $codeToken = $tokenizer->tokenize();
 
-        if (count($codeToken->getChildren()) === 1) {
+        if (\count($codeToken->getChildren()) === 1) {
             return false;
         }
 
@@ -118,11 +118,11 @@ class Command extends \yii\db\Command
      */
     private function extractUsedParams(SqlToken $statement, $params)
     {
-        preg_match_all('/(?P<placeholder>:\w+)/', $statement->getSql(), $matches, PREG_SET_ORDER);
+        \preg_match_all('/(?P<placeholder>:\w+)/', $statement->getSql(), $matches, \PREG_SET_ORDER);
         $result = [];
 
         foreach ($matches as $match) {
-            $phName = ltrim($match['placeholder'], ':');
+            $phName = \ltrim($match['placeholder'], ':');
 
             if (isset($params[$phName])) {
                 $result[$phName] = $params[$phName];

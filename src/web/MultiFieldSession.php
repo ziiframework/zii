@@ -102,7 +102,7 @@ abstract class MultiFieldSession extends Session
      */
     protected function composeFields($id = null, $data = null)
     {
-        $fields = $this->writeCallback ? call_user_func($this->writeCallback, $this) : [];
+        $fields = $this->writeCallback ? \call_user_func($this->writeCallback, $this) : [];
 
         if ($id !== null) {
             $fields['id'] = $id;
@@ -128,13 +128,13 @@ abstract class MultiFieldSession extends Session
             if (!isset($fields['data'])) {
                 $fields['data'] = '';
             }
-            $extraData = call_user_func($this->readCallback, $fields);
+            $extraData = \call_user_func($this->readCallback, $fields);
 
             if (!empty($extraData)) {
-                session_decode($fields['data']);
-                $_SESSION = array_merge((array) $_SESSION, (array) $extraData);
+                \session_decode($fields['data']);
+                $_SESSION = \array_merge((array) $_SESSION, (array) $extraData);
 
-                return session_encode();
+                return \session_encode();
             }
 
             return $fields['data'];

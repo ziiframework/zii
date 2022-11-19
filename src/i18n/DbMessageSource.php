@@ -166,8 +166,8 @@ class DbMessageSource extends MessageSource
                 't2.language' => $language,
             ]);
 
-        $fallbackLanguage = substr($language ?? '', 0, 2);
-        $fallbackSourceLanguage = substr($this->sourceLanguage, 0, 2);
+        $fallbackLanguage = \substr($language ?? '', 0, 2);
+        $fallbackSourceLanguage = \substr($this->sourceLanguage, 0, 2);
 
         if ($fallbackLanguage !== $language) {
             $mainQuery->union($this->createFallbackQuery($category, $language, $fallbackLanguage), true);

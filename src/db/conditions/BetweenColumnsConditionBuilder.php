@@ -62,7 +62,7 @@ class BetweenColumnsConditionBuilder implements ExpressionBuilderInterface
             return "($sql)";
         } elseif ($columnName instanceof ExpressionInterface) {
             return $this->queryBuilder->buildExpression($columnName, $params);
-        } elseif (!str_contains($columnName, '(')) {
+        } elseif (!\str_contains($columnName, '(')) {
             return $this->queryBuilder->db->quoteColumnName($columnName);
         }
 

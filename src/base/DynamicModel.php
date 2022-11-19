@@ -80,7 +80,7 @@ class DynamicModel extends Model
     public function __construct(array $attributes = [], $config = [])
     {
         foreach ($attributes as $name => $value) {
-            if (is_int($name)) {
+            if (\is_int($name)) {
                 $this->_attributes[$value] = null;
             } else {
                 $this->_attributes[$name] = $value;
@@ -164,7 +164,7 @@ class DynamicModel extends Model
      */
     public function hasAttribute($name)
     {
-        return array_key_exists($name, $this->_attributes);
+        return \array_key_exists($name, $this->_attributes);
     }
 
     /**
@@ -242,8 +242,8 @@ class DynamicModel extends Model
             foreach ($rules as $rule) {
                 if ($rule instanceof Validator) {
                     $validators->append($rule);
-                } elseif (is_array($rule) && isset($rule[0], $rule[1])) { // attributes, validator type
-                    $validator = Validator::createValidator($rule[1], $model, (array) $rule[0], array_slice($rule, 2));
+                } elseif (\is_array($rule) && isset($rule[0], $rule[1])) { // attributes, validator type
+                    $validator = Validator::createValidator($rule[1], $model, (array) $rule[0], \array_slice($rule, 2));
                     $validators->append($validator);
                 } else {
                     throw new InvalidConfigException('Invalid validation rule: a rule must specify both attribute names and validator type.');
@@ -261,7 +261,7 @@ class DynamicModel extends Model
      */
     public function attributes()
     {
-        return array_keys($this->_attributes);
+        return \array_keys($this->_attributes);
     }
 
     /**

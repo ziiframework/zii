@@ -42,11 +42,11 @@ class ConjunctionConditionBuilder implements ExpressionBuilderInterface
             return '';
         }
 
-        if (count($parts) === 1) {
-            return reset($parts);
+        if (\count($parts) === 1) {
+            return \reset($parts);
         }
 
-        return '(' . implode(") {$condition->getOperator()} (", $parts) . ')';
+        return '(' . \implode(") {$condition->getOperator()} (", $parts) . ')';
     }
 
     /**
@@ -62,7 +62,7 @@ class ConjunctionConditionBuilder implements ExpressionBuilderInterface
         $parts = [];
 
         foreach ($condition->getExpressions() as $condition) {
-            if (is_array($condition)) {
+            if (\is_array($condition)) {
                 $condition = $this->queryBuilder->buildCondition($condition, $params);
             }
 

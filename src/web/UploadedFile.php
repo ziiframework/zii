@@ -182,7 +182,7 @@ class UploadedFile extends BaseObject
         $results = [];
 
         foreach ($files as $key => $file) {
-            if (str_starts_with($key, "{$name}[")) {
+            if (\str_starts_with($key, "{$name}[")) {
                 $results[] = new static($file);
             }
         }
@@ -219,13 +219,13 @@ class UploadedFile extends BaseObject
 
         $targetFile = Yii::getAlias($file);
 
-        if (is_resource($this->_tempResource)) {
+        if (\is_resource($this->_tempResource)) {
             $result = $this->copyTempFile($targetFile);
 
-            return $deleteTempFile ? @fclose($this->_tempResource) : (bool) $result;
+            return $deleteTempFile ? @\fclose($this->_tempResource) : (bool) $result;
         }
 
-        return $deleteTempFile ? move_uploaded_file($this->tempName, $targetFile) : copy($this->tempName, $targetFile);
+        return $deleteTempFile ? \move_uploaded_file($this->tempName, $targetFile) : \copy($this->tempName, $targetFile);
     }
 
     /**
@@ -239,14 +239,14 @@ class UploadedFile extends BaseObject
      */
     protected function copyTempFile($targetFile)
     {
-        $target = fopen($targetFile, 'wb');
+        $target = \fopen($targetFile, 'wb');
 
         if ($target === false) {
             return false;
         }
 
-        $result = stream_copy_to_stream($this->_tempResource, $target);
-        @fclose($target);
+        $result = \stream_copy_to_stream($this->_tempResource, $target);
+        @\fclose($target);
 
         return $result;
     }
@@ -257,9 +257,9 @@ class UploadedFile extends BaseObject
     public function getBaseName()
     {
         // https://github.com/yiisoft/yii2/issues/11012
-        $pathInfo = pathinfo('_' . $this->name, PATHINFO_FILENAME);
+        $pathInfo = \pathinfo('_' . $this->name, \PATHINFO_FILENAME);
 
-        return mb_substr($pathInfo, 1, mb_strlen($pathInfo, '8bit'), '8bit');
+        return \mb_substr($pathInfo, 1, \mb_strlen($pathInfo, '8bit'), '8bit');
     }
 
     /**
@@ -267,7 +267,7 @@ class UploadedFile extends BaseObject
      */
     public function getExtension()
     {
-        return strtolower(pathinfo($this->name, PATHINFO_EXTENSION));
+        return \strtolower(\pathinfo($this->name, \PATHINFO_EXTENSION));
     }
 
     /**
@@ -276,7 +276,7 @@ class UploadedFile extends BaseObject
      */
     public function getHasError()
     {
-        return $this->error != UPLOAD_ERR_OK;
+        return $this->error != \UPLOAD_ERR_OK;
     }
 
     /**
@@ -289,7 +289,7 @@ class UploadedFile extends BaseObject
         if (self::$_files === null) {
             self::$_files = [];
 
-            if (isset($_FILES) && is_array($_FILES)) {
+            if (isset($_FILES) && \is_array($_FILES)) {
                 foreach ($_FILES as $key => $info) {
                     self::loadFilesRecursive($key, $info['name'], $info['tmp_name'], $info['type'], $info['size'], $info['error'], $info['full_path'] ?? [], $info['tmp_resource'] ?? []);
                 }
@@ -313,19 +313,19 @@ class UploadedFile extends BaseObject
      */
     private static function loadFilesRecursive($key, $names, $tempNames, $types, $sizes, $errors, $fullPaths, $tempResources): void
     {
-        if (is_array($names)) {
+        if (\is_array($names)) {
             foreach ($names as $i => $name) {
                 self::loadFilesRecursive($key . '[' . $i . ']', $name, $tempNames[$i], $types[$i], $sizes[$i], $errors[$i], $fullPaths[$i] ?? null, $tempResources[$i] ?? null);
             }
-        } elseif ($errors != UPLOAD_ERR_NO_FILE) {
+        } elseif ($errors != \UPLOAD_ERR_NO_FILE) {
             self::$_files[$key] = [
                 'name' => $names,
                 'tempName' => $tempNames,
-                'tempResource' => is_resource($tempResources) ? $tempResources : null,
+                'tempResource' => \is_resource($tempResources) ? $tempResources : null,
                 'type' => $types,
                 'size' => $sizes,
                 'error' => $errors,
-                'fullPath' => is_string($fullPaths) ? $fullPaths : null,
+                'fullPath' => \is_string($fullPaths) ? $fullPaths : null,
             ];
         }
     }

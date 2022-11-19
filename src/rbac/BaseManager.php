@@ -241,12 +241,12 @@ abstract class BaseManager extends Component implements ManagerInterface
      */
     public function setDefaultRoles($roles): void
     {
-        if (is_array($roles)) {
+        if (\is_array($roles)) {
             $this->defaultRoles = $roles;
         } elseif ($roles instanceof Closure) {
-            $roles = call_user_func($roles);
+            $roles = \call_user_func($roles);
 
-            if (!is_array($roles)) {
+            if (!\is_array($roles)) {
                 throw new InvalidValueException('Default roles closure must return an array');
             }
             $this->defaultRoles = $roles;

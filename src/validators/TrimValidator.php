@@ -43,9 +43,9 @@ class TrimValidator extends Validator
     {
         $value = $model->$attribute;
 
-        if (!$this->skipOnArray || !is_array($value)) {
-            $model->$attribute = is_array($value)
-                ? array_map([$this, 'trimValue'], $value)
+        if (!$this->skipOnArray || !\is_array($value)) {
+            $model->$attribute = \is_array($value)
+                ? \array_map([$this, 'trimValue'], $value)
                 : $this->trimValue($value);
         }
     }
@@ -59,7 +59,7 @@ class TrimValidator extends Validator
      */
     protected function trimValue($value)
     {
-        return $this->isEmpty($value) ? '' : trim((string) $value, $this->chars ?: " \n\r\t\v\x00");
+        return $this->isEmpty($value) ? '' : \trim((string) $value, $this->chars ?: " \n\r\t\v\x00");
     }
 
     /**
@@ -67,7 +67,7 @@ class TrimValidator extends Validator
      */
     public function clientValidateAttribute($model, $attribute, $view)
     {
-        if ($this->skipOnArray && is_array($model->$attribute)) {
+        if ($this->skipOnArray && \is_array($model->$attribute)) {
             return null;
         }
 

@@ -124,7 +124,7 @@ abstract class BaseMigrateController extends Controller
      */
     public function options($actionID)
     {
-        return array_merge(parent::options($actionID), ['migrationPath', 'migrationNamespaces', 'compact'], // global for all actions
+        return \array_merge(parent::options($actionID), ['migrationPath', 'migrationNamespaces', 'compact'], // global for all actions
             $actionID === 'create' ? ['templateFile'] : [] // action create
         );
     }
@@ -149,17 +149,17 @@ abstract class BaseMigrateController extends Controller
             $this->migrationNamespaces = (array) $this->migrationNamespaces;
 
             foreach ($this->migrationNamespaces as $key => $value) {
-                $this->migrationNamespaces[$key] = trim($value, '\\');
+                $this->migrationNamespaces[$key] = \trim($value, '\\');
             }
 
-            if (is_array($this->migrationPath)) {
+            if (\is_array($this->migrationPath)) {
                 foreach ($this->migrationPath as $i => $path) {
                     $this->migrationPath[$i] = Yii::getAlias($path);
                 }
             } elseif ($this->migrationPath !== null) {
                 $path = Yii::getAlias($this->migrationPath);
 
-                if (!is_dir($path)) {
+                if (!\is_dir($path)) {
                     if ($action->id !== 'create') {
                         throw new InvalidConfigException("Migration failed. Directory specified in migrationPath doesn't exist: {$this->migrationPath}");
                     }
@@ -202,14 +202,14 @@ abstract class BaseMigrateController extends Controller
             return ExitCode::OK;
         }
 
-        $total = count($migrations);
+        $total = \count($migrations);
         $limit = (int) $limit;
 
         if ($limit > 0) {
-            $migrations = array_slice($migrations, 0, $limit);
+            $migrations = \array_slice($migrations, 0, $limit);
         }
 
-        $n = count($migrations);
+        $n = \count($migrations);
 
         if ($n === $total) {
             $this->stdout("Total $n new " . ($n === 1 ? 'migration' : 'migrations') . " to be applied:\n", Console::FG_YELLOW);
@@ -220,7 +220,7 @@ abstract class BaseMigrateController extends Controller
         foreach ($migrations as $migration) {
             $nameLimit = $this->getMigrationNameLimit();
 
-            if ($nameLimit !== null && strlen($migration) > $nameLimit) {
+            if ($nameLimit !== null && \strlen($migration) > $nameLimit) {
                 $this->stdout("\nThe migration name '$migration' is too long. Its not possible to apply this migration.\n", Console::FG_RED);
 
                 return ExitCode::UNSPECIFIED_ERROR;
@@ -287,9 +287,9 @@ abstract class BaseMigrateController extends Controller
             return ExitCode::OK;
         }
 
-        $migrations = array_keys($migrations);
+        $migrations = \array_keys($migrations);
 
-        $n = count($migrations);
+        $n = \count($migrations);
         $this->stdout("Total $n " . ($n === 1 ? 'migration' : 'migrations') . " to be reverted:\n", Console::FG_YELLOW);
 
         foreach ($migrations as $migration) {
@@ -355,9 +355,9 @@ abstract class BaseMigrateController extends Controller
             return ExitCode::OK;
         }
 
-        $migrations = array_keys($migrations);
+        $migrations = \array_keys($migrations);
 
-        $n = count($migrations);
+        $n = \count($migrations);
         $this->stdout("Total $n " . ($n === 1 ? 'migration' : 'migrations') . " to be redone:\n", Console::FG_YELLOW);
 
         foreach ($migrations as $migration) {
@@ -374,7 +374,7 @@ abstract class BaseMigrateController extends Controller
                 }
             }
 
-            foreach (array_reverse($migrations) as $migration) {
+            foreach (\array_reverse($migrations) as $migration) {
                 if (!$this->migrateUp($migration)) {
                     $this->stdout("\nMigration failed. The rest of the migrations are canceled.\n", Console::FG_RED);
 
@@ -421,7 +421,7 @@ abstract class BaseMigrateController extends Controller
             return $this->migrateToVersion($migrationName);
         } elseif ((string) (int) $version == $version) {
             return $this->migrateToTime($version);
-        } elseif (($time = strtotime($version)) !== false) {
+        } elseif (($time = \strtotime($version)) !== false) {
             return $this->migrateToTime($time);
         } else {
             throw new Exception("The version argument must be either a timestamp (e.g. 101129_185401),\n the full name of a migration (e.g. m101129_185401_create_user_table),\n the full namespaced name of a migration (e.g. app\\migrations\\M101129185401CreateUserTable),\n a UNIX timestamp (e.g. 1392853000), or a datetime string parseable\nby the strtotime() function (e.g. 2014-02-15 13:00:50).");
@@ -465,7 +465,7 @@ abstract class BaseMigrateController extends Controller
         $migrations = $this->getNewMigrations();
 
         foreach ($migrations as $i => $migration) {
-            if (str_starts_with($migration, $version)) {
+            if (\str_starts_with($migration, $version)) {
                 if ($this->confirm("Set migration history at $originalVersion?")) {
                     for ($j = 0; $j <= $i; ++$j) {
                         $this->addMigrationHistory($migrations[$j]);
@@ -478,11 +478,11 @@ abstract class BaseMigrateController extends Controller
         }
 
         // try mark down
-        $migrations = array_keys($this->getMigrationHistory(null));
+        $migrations = \array_keys($this->getMigrationHistory(null));
         $migrations[] = static::BASE_MIGRATION;
 
         foreach ($migrations as $i => $migration) {
-            if (str_starts_with($migration, $version)) {
+            if (\str_starts_with($migration, $version)) {
                 if ($i === 0) {
                     $this->stdout("Already at '$originalVersion'. Nothing needs to be done.\n", Console::FG_YELLOW);
                 } elseif ($this->confirm("Set migration history at $originalVersion?")) {
@@ -538,8 +538,8 @@ abstract class BaseMigrateController extends Controller
      */
     private function extractNamespaceMigrationVersion($rawVersion)
     {
-        if (preg_match('/^\\\\?([\w_]+\\\\)+m(\d{6}_?\d{6})(\D.*)?$/is', $rawVersion, $matches)) {
-            return trim($rawVersion, '\\');
+        if (\preg_match('/^\\\\?([\w_]+\\\\)+m(\d{6}_?\d{6})(\D.*)?$/is', $rawVersion, $matches)) {
+            return \trim($rawVersion, '\\');
         }
 
         return false;
@@ -556,7 +556,7 @@ abstract class BaseMigrateController extends Controller
      */
     private function extractMigrationVersion($rawVersion)
     {
-        if (preg_match('/^[mM]?(\d{6}[_V]?\d{6})(\D.*)?$/is', $rawVersion, $matches)) {
+        if (\preg_match('/^[mM]?(\d{6}[_V]?\d{6})(\D.*)?$/is', $rawVersion, $matches)) {
             return 'm' . $matches[1];
         }
 
@@ -597,7 +597,7 @@ abstract class BaseMigrateController extends Controller
         if (empty($migrations)) {
             $this->stdout("No migration has been done before.\n", Console::FG_YELLOW);
         } else {
-            $n = count($migrations);
+            $n = \count($migrations);
 
             if ($limit > 0) {
                 $this->stdout("Showing the last $n applied " . ($n === 1 ? 'migration' : 'migrations') . ":\n", Console::FG_YELLOW);
@@ -606,11 +606,11 @@ abstract class BaseMigrateController extends Controller
             }
 
             foreach ($migrations as $version => $time) {
-                if (is_string($time) && is_numeric($time)) {
+                if (\is_string($time) && \is_numeric($time)) {
                     $time = (int) $time;
                 }
 
-                $this->stdout("\t(" . date('Y-m-d H:i:s', $time) . ') ' . $version . "\n");
+                $this->stdout("\t(" . \date('Y-m-d H:i:s', $time) . ') ' . $version . "\n");
             }
         }
 
@@ -649,10 +649,10 @@ abstract class BaseMigrateController extends Controller
         if (empty($migrations)) {
             $this->stdout("No new migrations found. Your system is up-to-date.\n", Console::FG_GREEN);
         } else {
-            $n = count($migrations);
+            $n = \count($migrations);
 
             if ($limit !== 'all' && $n > $limit) {
-                $migrations = array_slice($migrations, 0, $limit);
+                $migrations = \array_slice($migrations, 0, $limit);
                 $this->stdout("Showing $limit out of $n new " . ($n === 1 ? 'migration' : 'migrations') . ":\n", Console::FG_YELLOW);
             } else {
                 $this->stdout("Found $n new " . ($n === 1 ? 'migration' : 'migrations') . ":\n", Console::FG_YELLOW);
@@ -699,7 +699,7 @@ abstract class BaseMigrateController extends Controller
      */
     public function actionCreate($name)
     {
-        if (!preg_match('/^[\w\\\\]+$/', $name)) {
+        if (!\preg_match('/^[\w\\\\]+$/', $name)) {
             throw new Exception('The migration name should contain letters, digits, underscore and/or backslash characters only.');
         }
 
@@ -707,13 +707,13 @@ abstract class BaseMigrateController extends Controller
         // Abort if name is too long
         $nameLimit = $this->getMigrationNameLimit();
 
-        if ($nameLimit !== null && strlen($className) > $nameLimit) {
+        if ($nameLimit !== null && \strlen($className) > $nameLimit) {
             throw new Exception('The migration name is too long.');
         }
 
         $migrationPath = $this->findMigrationPath($namespace);
 
-        $file = $migrationPath . DIRECTORY_SEPARATOR . $className . '.php';
+        $file = $migrationPath . \DIRECTORY_SEPARATOR . $className . '.php';
 
         if ($this->confirm("Create new migration '$file'?")) {
             $content = $this->generateMigrationSourceCode([
@@ -723,7 +723,7 @@ abstract class BaseMigrateController extends Controller
             ]);
             FileHelper::createDirectory($migrationPath);
 
-            if (file_put_contents($file, $content, LOCK_EX) === false) {
+            if (\file_put_contents($file, $content, \LOCK_EX) === false) {
                 $this->stdout("Failed to create new migration.\n", Console::FG_RED);
 
                 return ExitCode::IOERR;
@@ -749,20 +749,20 @@ abstract class BaseMigrateController extends Controller
     private function generateClassName($name)
     {
         $namespace = null;
-        $name = trim($name, '\\');
+        $name = \trim($name, '\\');
 
-        if (str_contains($name, '\\')) {
-            $namespace = substr($name, 0, strrpos($name, '\\'));
-            $name = substr($name, strrpos($name, '\\') + 1);
+        if (\str_contains($name, '\\')) {
+            $namespace = \substr($name, 0, \strrpos($name, '\\'));
+            $name = \substr($name, \strrpos($name, '\\') + 1);
         } elseif ($this->migrationPath === null) {
             $migrationNamespaces = $this->migrationNamespaces;
-            $namespace = array_shift($migrationNamespaces);
+            $namespace = \array_shift($migrationNamespaces);
         }
 
         if ($namespace === null) {
-            $class = 'm' . gmdate('ymd_His') . '_' . $name;
+            $class = 'm' . \gmdate('ymd_His') . '_' . $name;
         } else {
-            $class = 'M' . gmdate('ymdHis') . Inflector::camelize($name);
+            $class = 'M' . \gmdate('ymdHis') . Inflector::camelize($name);
         }
 
         return [$namespace, $class];
@@ -782,10 +782,10 @@ abstract class BaseMigrateController extends Controller
     private function findMigrationPath($namespace)
     {
         if (empty($namespace)) {
-            return is_array($this->migrationPath) ? reset($this->migrationPath) : $this->migrationPath;
+            return \is_array($this->migrationPath) ? \reset($this->migrationPath) : $this->migrationPath;
         }
 
-        if (!in_array($namespace, $this->migrationNamespaces, true)) {
+        if (!\in_array($namespace, $this->migrationNamespaces, true)) {
             throw new Exception("Namespace '{$namespace}' not found in `migrationNamespaces`");
         }
 
@@ -803,7 +803,7 @@ abstract class BaseMigrateController extends Controller
      */
     private function getNamespacePath($namespace)
     {
-        return str_replace('/', DIRECTORY_SEPARATOR, Yii::getAlias('@' . str_replace('\\', '/', $namespace)));
+        return \str_replace('/', \DIRECTORY_SEPARATOR, Yii::getAlias('@' . \str_replace('\\', '/', $namespace)));
     }
 
     /**
@@ -820,19 +820,19 @@ abstract class BaseMigrateController extends Controller
         }
 
         $this->stdout("*** applying $class\n", Console::FG_YELLOW);
-        $start = microtime(true);
+        $start = \microtime(true);
         $migration = $this->createMigration($class);
 
         if ($migration->up() !== false) {
             $this->addMigrationHistory($class);
-            $time = microtime(true) - $start;
-            $this->stdout("*** applied $class (time: " . sprintf('%.3f', $time) . "s)\n\n", Console::FG_GREEN);
+            $time = \microtime(true) - $start;
+            $this->stdout("*** applied $class (time: " . \sprintf('%.3f', $time) . "s)\n\n", Console::FG_GREEN);
 
             return true;
         }
 
-        $time = microtime(true) - $start;
-        $this->stdout("*** failed to apply $class (time: " . sprintf('%.3f', $time) . "s)\n\n", Console::FG_RED);
+        $time = \microtime(true) - $start;
+        $this->stdout("*** failed to apply $class (time: " . \sprintf('%.3f', $time) . "s)\n\n", Console::FG_RED);
 
         return false;
     }
@@ -851,19 +851,19 @@ abstract class BaseMigrateController extends Controller
         }
 
         $this->stdout("*** reverting $class\n", Console::FG_YELLOW);
-        $start = microtime(true);
+        $start = \microtime(true);
         $migration = $this->createMigration($class);
 
         if ($migration->down() !== false) {
             $this->removeMigrationHistory($class);
-            $time = microtime(true) - $start;
-            $this->stdout("*** reverted $class (time: " . sprintf('%.3f', $time) . "s)\n\n", Console::FG_GREEN);
+            $time = \microtime(true) - $start;
+            $this->stdout("*** reverted $class (time: " . \sprintf('%.3f', $time) . "s)\n\n", Console::FG_GREEN);
 
             return true;
         }
 
-        $time = microtime(true) - $start;
-        $this->stdout("*** failed to revert $class (time: " . sprintf('%.3f', $time) . "s)\n\n", Console::FG_RED);
+        $time = \microtime(true) - $start;
+        $this->stdout("*** failed to revert $class (time: " . \sprintf('%.3f', $time) . "s)\n\n", Console::FG_RED);
 
         return false;
     }
@@ -902,20 +902,20 @@ abstract class BaseMigrateController extends Controller
      */
     protected function includeMigrationFile($class): void
     {
-        $class = trim($class, '\\');
+        $class = \trim($class, '\\');
 
-        if (!str_contains($class, '\\')) {
-            if (is_array($this->migrationPath)) {
+        if (!\str_contains($class, '\\')) {
+            if (\is_array($this->migrationPath)) {
                 foreach ($this->migrationPath as $path) {
-                    $file = $path . DIRECTORY_SEPARATOR . $class . '.php';
+                    $file = $path . \DIRECTORY_SEPARATOR . $class . '.php';
 
-                    if (is_file($file)) {
+                    if (\is_file($file)) {
                         require_once $file;
                         break;
                     }
                 }
             } else {
-                $file = $this->migrationPath . DIRECTORY_SEPARATOR . $class . '.php';
+                $file = $this->migrationPath . \DIRECTORY_SEPARATOR . $class . '.php';
 
                 require_once $file;
             }
@@ -930,9 +930,9 @@ abstract class BaseMigrateController extends Controller
     protected function migrateToTime($time)
     {
         $count = 0;
-        $migrations = array_values($this->getMigrationHistory(null));
+        $migrations = \array_values($this->getMigrationHistory(null));
 
-        while ($count < count($migrations) && $migrations[$count] > $time) {
+        while ($count < \count($migrations) && $migrations[$count] > $time) {
             ++$count;
         }
 
@@ -962,16 +962,16 @@ abstract class BaseMigrateController extends Controller
         $migrations = $this->getNewMigrations();
 
         foreach ($migrations as $i => $migration) {
-            if (str_starts_with($migration, $version)) {
+            if (\str_starts_with($migration, $version)) {
                 return $this->actionUp($i + 1);
             }
         }
 
         // try migrate down
-        $migrations = array_keys($this->getMigrationHistory(null));
+        $migrations = \array_keys($this->getMigrationHistory(null));
 
         foreach ($migrations as $i => $migration) {
-            if (str_starts_with($migration, $version)) {
+            if (\str_starts_with($migration, $version)) {
                 if ($i === 0) {
                     $this->stdout("Already at '$originalVersion'. Nothing needs to be done.\n", Console::FG_YELLOW);
                 } else {
@@ -995,12 +995,12 @@ abstract class BaseMigrateController extends Controller
         $applied = [];
 
         foreach ($this->getMigrationHistory(null) as $class => $time) {
-            $applied[trim($class, '\\')] = true;
+            $applied[\trim($class, '\\')] = true;
         }
 
         $migrationPaths = [];
 
-        if (is_array($this->migrationPath)) {
+        if (\is_array($this->migrationPath)) {
             foreach ($this->migrationPath as $path) {
                 $migrationPaths[] = [$path, ''];
             }
@@ -1017,35 +1017,35 @@ abstract class BaseMigrateController extends Controller
         foreach ($migrationPaths as $item) {
             [$migrationPath, $namespace] = $item;
 
-            if (!file_exists($migrationPath)) {
+            if (!\file_exists($migrationPath)) {
                 continue;
             }
-            $handle = opendir($migrationPath);
+            $handle = \opendir($migrationPath);
 
-            while (($file = readdir($handle)) !== false) {
+            while (($file = \readdir($handle)) !== false) {
                 if ($file === '.' || $file === '..') {
                     continue;
                 }
-                $path = $migrationPath . DIRECTORY_SEPARATOR . $file;
+                $path = $migrationPath . \DIRECTORY_SEPARATOR . $file;
 
-                if (preg_match('/^(m(\d{6}_?\d{6})\D.*?)\.php$/is', $file, $matches) && is_file($path)) {
+                if (\preg_match('/^(m(\d{6}_?\d{6})\D.*?)\.php$/is', $file, $matches) && \is_file($path)) {
                     $class = $matches[1];
 
                     if (!empty($namespace)) {
                         $class = $namespace . '\\' . $class;
                     }
-                    $time = str_replace('_', '', $matches[2]);
+                    $time = \str_replace('_', '', $matches[2]);
 
                     if (!isset($applied[$class])) {
                         $migrations[$time . '\\' . $class] = $class;
                     }
                 }
             }
-            closedir($handle);
+            \closedir($handle);
         }
-        ksort($migrations);
+        \ksort($migrations);
 
-        return array_values($migrations);
+        return \array_values($migrations);
     }
 
     /**

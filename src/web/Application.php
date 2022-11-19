@@ -69,7 +69,7 @@ class Application extends \yii\base\Application
     protected function bootstrap(): void
     {
         $request = $this->getRequest();
-        Yii::setAlias('@webroot', dirname($request->getScriptFile()));
+        Yii::setAlias('@webroot', \dirname($request->getScriptFile()));
         Yii::setAlias('@web', $request->getBaseUrl());
 
         parent::bootstrap();
@@ -92,10 +92,10 @@ class Application extends \yii\base\Application
             } catch (UrlNormalizerRedirectException $e) {
                 $url = $e->url;
 
-                if (is_array($url)) {
+                if (\is_array($url)) {
                     if (isset($url[0])) {
                         // ensure the route is absolute
-                        $url[0] = '/' . ltrim($url[0], '/');
+                        $url[0] = '/' . \ltrim($url[0], '/');
                     }
                     $url += $request->getQueryParams();
                 }
@@ -222,7 +222,7 @@ class Application extends \yii\base\Application
      */
     public function coreComponents()
     {
-        return array_merge(parent::coreComponents(), [
+        return \array_merge(parent::coreComponents(), [
             'request' => ['class' => 'yii\web\Request'],
             'response' => ['class' => 'yii\web\Response'],
             'session' => ['class' => 'yii\web\Session'],

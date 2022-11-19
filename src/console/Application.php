@@ -15,9 +15,9 @@ use yii\base\InvalidRouteException;
 
 // define STDIN, STDOUT and STDERR if the PHP SAPI did not define them (e.g. creating console application in web env)
 // https://www.php.net/manual/en/features.commandline.io-streams.php
-defined('STDIN') || define('STDIN', fopen('php://stdin', 'rb'));
-defined('STDOUT') || define('STDOUT', fopen('php://stdout', 'wb'));
-defined('STDERR') || define('STDERR', fopen('php://stderr', 'wb'));
+\defined('STDIN') || \define('STDIN', \fopen('php://stdin', 'rb'));
+\defined('STDOUT') || \define('STDOUT', \fopen('php://stdout', 'wb'));
+\defined('STDERR') || \define('STDERR', \fopen('php://stderr', 'wb'));
 
 /**
  * Application represents a console application.
@@ -110,10 +110,10 @@ class Application extends \yii\base\Application
             $option = '--' . self::OPTION_APPCONFIG . '=';
 
             foreach ($_SERVER['argv'] as $param) {
-                if (str_contains($param, $option)) {
-                    $path = substr($param, strlen($option));
+                if (\str_contains($param, $option)) {
+                    $path = \substr($param, \strlen($option));
 
-                    if (!empty($path) && is_file($file = Yii::getAlias($path))) {
+                    if (!empty($path) && \is_file($file = Yii::getAlias($path))) {
                         return require $file;
                     }
 
@@ -194,7 +194,7 @@ class Application extends \yii\base\Application
         try {
             $res = parent::runAction($route, $params);
 
-            return is_object($res) ? $res : (int) $res;
+            return \is_object($res) ? $res : (int) $res;
         } catch (InvalidRouteException $e) {
             throw new UnknownCommandException($route, $this, 0, $e);
         }
@@ -254,7 +254,7 @@ class Application extends \yii\base\Application
      */
     public function coreComponents()
     {
-        return array_merge(parent::coreComponents(), [
+        return \array_merge(parent::coreComponents(), [
             'request' => ['class' => 'yii\console\Request'],
             'response' => ['class' => 'yii\console\Response'],
             'errorHandler' => ['class' => 'yii\console\ErrorHandler'],

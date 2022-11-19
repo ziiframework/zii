@@ -96,7 +96,7 @@ class CheckboxColumn extends Column
             throw new InvalidConfigException('The "name" property must be set.');
         }
 
-        if (substr_compare($this->name, '[]', -2, 2)) {
+        if (\substr_compare($this->name, '[]', -2, 2)) {
             $this->name .= '[]';
         }
 
@@ -129,13 +129,13 @@ class CheckboxColumn extends Column
         }
 
         if ($this->checkboxOptions instanceof Closure) {
-            $options = call_user_func($this->checkboxOptions, $model, $key, $index, $this);
+            $options = \call_user_func($this->checkboxOptions, $model, $key, $index, $this);
         } else {
             $options = $this->checkboxOptions;
         }
 
         if (!isset($options['value'])) {
-            $options['value'] = is_array($key) ? Json::encode($key) : $key;
+            $options['value'] = \is_array($key) ? Json::encode($key) : $key;
         }
 
         if ($this->cssClass !== null) {
@@ -156,12 +156,12 @@ class CheckboxColumn extends Column
     {
         $name = $this->name;
 
-        if (substr_compare($name, '[]', -2, 2) === 0) {
-            $name = substr($name, 0, -2);
+        if (\substr_compare($name, '[]', -2, 2) === 0) {
+            $name = \substr($name, 0, -2);
         }
 
-        if (substr_compare($name, ']', -1, 1) === 0) {
-            $name = substr($name, 0, -1) . '_all]';
+        if (\substr_compare($name, ']', -1, 1) === 0) {
+            $name = \substr($name, 0, -1) . '_all]';
         } else {
             $name .= '_all';
         }

@@ -87,18 +87,18 @@ class Action extends Component
      */
     public function runWithParams($params)
     {
-        if (!method_exists($this, 'run')) {
+        if (!\method_exists($this, 'run')) {
             throw new InvalidConfigException(static::class . ' must define a "run()" method.');
         }
         $args = $this->controller->bindActionParams($this, $params);
-        Yii::debug('Running action: ' . static::class . '::run(), invoked by ' . get_class($this->controller), __METHOD__);
+        Yii::debug('Running action: ' . static::class . '::run(), invoked by ' . \get_class($this->controller), __METHOD__);
 
         if (Yii::$app->requestedParams === null) {
             Yii::$app->requestedParams = $args;
         }
 
         if ($this->beforeRun()) {
-            $result = call_user_func_array([$this, 'run'], $args);
+            $result = \call_user_func_array([$this, 'run'], $args);
             $this->afterRun();
 
             return $result;

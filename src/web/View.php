@@ -192,7 +192,7 @@ class View extends \yii\base\View
         $this->trigger(self::EVENT_END_BODY);
         echo self::PH_BODY_END;
 
-        foreach (array_keys($this->assetBundles) as $bundle) {
+        foreach (\array_keys($this->assetBundles) as $bundle) {
             $this->registerAssetFiles($bundle);
         }
     }
@@ -210,9 +210,9 @@ class View extends \yii\base\View
 
         $this->_isPageEnded = true;
 
-        $content = ob_get_clean();
+        $content = \ob_get_clean();
 
-        echo strtr($content, [
+        echo \strtr($content, [
             self::PH_HEAD => $this->renderHeadHtml(),
             self::PH_BODY_BEGIN => $this->renderBodyBeginHtml(),
             self::PH_BODY_END => $this->renderBodyEndHtml($ajaxMode),
@@ -242,8 +242,8 @@ class View extends \yii\base\View
     {
         $viewFile = $this->findViewFile($view, $context);
 
-        ob_start();
-        ob_implicit_flush(false);
+        \ob_start();
+        \ob_implicit_flush(false);
 
         $this->beginPage();
         $this->head();
@@ -252,7 +252,7 @@ class View extends \yii\base\View
         $this->endBody();
         $this->endPage(true);
 
-        return ob_get_clean();
+        return \ob_get_clean();
     }
 
     /**
@@ -450,7 +450,7 @@ class View extends \yii\base\View
      */
     public function registerCss($css, $options = [], $key = null): void
     {
-        $key = $key ?: md5($css);
+        $key = $key ?: \md5($css);
         $this->css[$key] = Html::style($css, $options);
     }
 
@@ -498,7 +498,7 @@ class View extends \yii\base\View
      */
     public function registerJs($js, $position = self::POS_READY, $key = null): void
     {
-        $key = $key ?: md5($js);
+        $key = $key ?: \md5($js);
         $this->js[$position][$key] = $js;
 
         if ($position === self::POS_READY || $position === self::POS_LOAD) {
@@ -547,9 +547,9 @@ class View extends \yii\base\View
             // register directly without AssetManager
             if ($appendTimestamp && Url::isRelative($url)) {
                 $prefix = Yii::getAlias('@web');
-                $prefixLength = strlen($prefix);
-                $trimmedUrl = ltrim((substr($url, 0, $prefixLength) === $prefix) ? substr($url, $prefixLength) : $url, '/');
-                $timestamp = @filemtime(Yii::getAlias('@webroot/' . $trimmedUrl, false));
+                $prefixLength = \strlen($prefix);
+                $trimmedUrl = \ltrim((\substr($url, 0, $prefixLength) === $prefix) ? \substr($url, $prefixLength) : $url, '/');
+                $timestamp = @\filemtime(Yii::getAlias('@webroot/' . $trimmedUrl, false));
 
                 if ($timestamp > 0) {
                     $url = $timestamp ? "$url?v=$timestamp" : $url;
@@ -566,7 +566,7 @@ class View extends \yii\base\View
                 'class' => AssetBundle::className(),
                 'baseUrl' => '',
                 'basePath' => '@webroot',
-                (string) $type => [ArrayHelper::merge([!Url::isRelative($url) ? $url : ltrim($url, '/')], $originalOptions)],
+                (string) $type => [ArrayHelper::merge([!Url::isRelative($url) ? $url : \ltrim($url, '/')], $originalOptions)],
                 "{$type}Options" => $options,
                 'depends' => (array) $depends,
             ]);
@@ -626,7 +626,7 @@ class View extends \yii\base\View
      */
     public function registerJsVar($name, $value, $position = self::POS_HEAD): void
     {
-        $js = sprintf('var %s = %s;', $name, \yii\helpers\Json::htmlEncode($value));
+        $js = \sprintf('var %s = %s;', $name, \yii\helpers\Json::htmlEncode($value));
         $this->registerJs($js, $position, $name);
     }
 
@@ -641,30 +641,30 @@ class View extends \yii\base\View
         $lines = [];
 
         if (!empty($this->metaTags)) {
-            $lines[] = implode("\n", $this->metaTags);
+            $lines[] = \implode("\n", $this->metaTags);
         }
 
         if (!empty($this->linkTags)) {
-            $lines[] = implode("\n", $this->linkTags);
+            $lines[] = \implode("\n", $this->linkTags);
         }
 
         if (!empty($this->cssFiles)) {
-            $lines[] = implode("\n", $this->cssFiles);
+            $lines[] = \implode("\n", $this->cssFiles);
         }
 
         if (!empty($this->css)) {
-            $lines[] = implode("\n", $this->css);
+            $lines[] = \implode("\n", $this->css);
         }
 
         if (!empty($this->jsFiles[self::POS_HEAD])) {
-            $lines[] = implode("\n", $this->jsFiles[self::POS_HEAD]);
+            $lines[] = \implode("\n", $this->jsFiles[self::POS_HEAD]);
         }
 
         if (!empty($this->js[self::POS_HEAD])) {
-            $lines[] = Html::script(implode("\n", $this->js[self::POS_HEAD]));
+            $lines[] = Html::script(\implode("\n", $this->js[self::POS_HEAD]));
         }
 
-        return empty($lines) ? '' : implode("\n", $lines);
+        return empty($lines) ? '' : \implode("\n", $lines);
     }
 
     /**
@@ -678,14 +678,14 @@ class View extends \yii\base\View
         $lines = [];
 
         if (!empty($this->jsFiles[self::POS_BEGIN])) {
-            $lines[] = implode("\n", $this->jsFiles[self::POS_BEGIN]);
+            $lines[] = \implode("\n", $this->jsFiles[self::POS_BEGIN]);
         }
 
         if (!empty($this->js[self::POS_BEGIN])) {
-            $lines[] = Html::script(implode("\n", $this->js[self::POS_BEGIN]));
+            $lines[] = Html::script(\implode("\n", $this->js[self::POS_BEGIN]));
         }
 
-        return empty($lines) ? '' : implode("\n", $lines);
+        return empty($lines) ? '' : \implode("\n", $lines);
     }
 
     /**
@@ -703,43 +703,43 @@ class View extends \yii\base\View
         $lines = [];
 
         if (!empty($this->jsFiles[self::POS_END])) {
-            $lines[] = implode("\n", $this->jsFiles[self::POS_END]);
+            $lines[] = \implode("\n", $this->jsFiles[self::POS_END]);
         }
 
         if ($ajaxMode) {
             $scripts = [];
 
             if (!empty($this->js[self::POS_END])) {
-                $scripts[] = implode("\n", $this->js[self::POS_END]);
+                $scripts[] = \implode("\n", $this->js[self::POS_END]);
             }
 
             if (!empty($this->js[self::POS_READY])) {
-                $scripts[] = implode("\n", $this->js[self::POS_READY]);
+                $scripts[] = \implode("\n", $this->js[self::POS_READY]);
             }
 
             if (!empty($this->js[self::POS_LOAD])) {
-                $scripts[] = implode("\n", $this->js[self::POS_LOAD]);
+                $scripts[] = \implode("\n", $this->js[self::POS_LOAD]);
             }
 
             if (!empty($scripts)) {
-                $lines[] = Html::script(implode("\n", $scripts));
+                $lines[] = Html::script(\implode("\n", $scripts));
             }
         } else {
             if (!empty($this->js[self::POS_END])) {
-                $lines[] = Html::script(implode("\n", $this->js[self::POS_END]));
+                $lines[] = Html::script(\implode("\n", $this->js[self::POS_END]));
             }
 
             if (!empty($this->js[self::POS_READY])) {
-                $js = "jQuery(function ($) {\n" . implode("\n", $this->js[self::POS_READY]) . "\n});";
+                $js = "jQuery(function ($) {\n" . \implode("\n", $this->js[self::POS_READY]) . "\n});";
                 $lines[] = Html::script($js);
             }
 
             if (!empty($this->js[self::POS_LOAD])) {
-                $js = "jQuery(window).on('load', function () {\n" . implode("\n", $this->js[self::POS_LOAD]) . "\n});";
+                $js = "jQuery(window).on('load', function () {\n" . \implode("\n", $this->js[self::POS_LOAD]) . "\n});";
                 $lines[] = Html::script($js);
             }
         }
 
-        return empty($lines) ? '' : implode("\n", $lines);
+        return empty($lines) ? '' : \implode("\n", $lines);
     }
 }

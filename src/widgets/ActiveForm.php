@@ -248,8 +248,8 @@ class ActiveForm extends Widget
         if (!isset($this->options['id'])) {
             $this->options['id'] = $this->getId();
         }
-        ob_start();
-        ob_implicit_flush(false);
+        \ob_start();
+        \ob_implicit_flush(false);
     }
 
     /**
@@ -264,7 +264,7 @@ class ActiveForm extends Widget
             throw new InvalidCallException('Each beginField() should have a matching endField() call.');
         }
 
-        $content = ob_get_clean();
+        $content = \ob_get_clean();
         $html = Html::beginForm($this->action, $this->method, $this->options);
         $html .= $content;
 
@@ -301,7 +301,7 @@ class ActiveForm extends Widget
     {
         $options = [
             'encodeErrorSummary' => $this->encodeErrorSummary,
-            'errorSummary' => '.' . implode('.', preg_split('/\s+/', $this->errorSummaryCssClass, -1, PREG_SPLIT_NO_EMPTY)),
+            'errorSummary' => '.' . \implode('.', \preg_split('/\s+/', $this->errorSummaryCssClass, -1, \PREG_SPLIT_NO_EMPTY)),
             'validateOnSubmit' => $this->validateOnSubmit,
             'errorCssClass' => $this->errorCssClass,
             'successCssClass' => $this->successCssClass,
@@ -318,7 +318,7 @@ class ActiveForm extends Widget
         }
 
         // only get the options that are different from the default ones (set in yii.activeForm.js)
-        return array_diff_assoc($options, [
+        return \array_diff_assoc($options, [
             'encodeErrorSummary' => true,
             'errorSummary' => '.error-summary',
             'validateOnSubmit' => true,
@@ -378,7 +378,7 @@ class ActiveForm extends Widget
         $config = $this->fieldConfig;
 
         if ($config instanceof Closure) {
-            $config = call_user_func($config, $model, $attribute);
+            $config = \call_user_func($config, $model, $attribute);
         }
 
         if (!isset($config['class'])) {
@@ -425,7 +425,7 @@ class ActiveForm extends Widget
      */
     public function endField()
     {
-        $field = array_pop($this->_fields);
+        $field = \array_pop($this->_fields);
 
         if ($field instanceof ActiveField) {
             return $field->end();
@@ -474,7 +474,7 @@ class ActiveForm extends Widget
 
         if ($attributes instanceof Model) {
             // validating multiple models
-            $models = func_get_args();
+            $models = \func_get_args();
             $attributes = null;
         } else {
             $models = [$model];

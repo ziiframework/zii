@@ -133,10 +133,10 @@ class Cors extends ActionFilter
     {
         if (isset($this->actions[$action->id])) {
             $actionParams = $this->actions[$action->id];
-            $actionParamsKeys = array_keys($actionParams);
+            $actionParamsKeys = \array_keys($actionParams);
 
             foreach ($this->cors as $headerField => $headerValue) {
-                if (in_array($headerField, $actionParamsKeys)) {
+                if (\in_array($headerField, $actionParamsKeys)) {
                     $this->cors[$headerField] = $actionParams[$headerField];
                 }
             }
@@ -152,7 +152,7 @@ class Cors extends ActionFilter
     {
         $headers = [];
 
-        foreach (array_keys($this->cors) as $headerField) {
+        foreach (\array_keys($this->cors) as $headerField) {
             $serverField = $this->headerizeToPhp($headerField);
             $headerData = $_SERVER[$serverField] ?? null;
 
@@ -176,11 +176,11 @@ class Cors extends ActionFilter
         $responseHeaders = [];
         // handle Origin
         if (isset($requestHeaders['Origin'], $this->cors['Origin'])) {
-            if (in_array($requestHeaders['Origin'], $this->cors['Origin'], true)) {
+            if (\in_array($requestHeaders['Origin'], $this->cors['Origin'], true)) {
                 $responseHeaders['Access-Control-Allow-Origin'] = $requestHeaders['Origin'];
             }
 
-            if (in_array('*', $this->cors['Origin'], true)) {
+            if (\in_array('*', $this->cors['Origin'], true)) {
                 // Per CORS standard (https://fetch.spec.whatwg.org), wildcard origins shouldn't be used together with credentials
                 if (isset($this->cors['Access-Control-Allow-Credentials']) && $this->cors['Access-Control-Allow-Credentials']) {
                     if (YII_DEBUG) {
@@ -197,7 +197,7 @@ class Cors extends ActionFilter
         $this->prepareAllowHeaders('Headers', $requestHeaders, $responseHeaders);
 
         if (isset($requestHeaders['Access-Control-Request-Method'])) {
-            $responseHeaders['Access-Control-Allow-Methods'] = implode(', ', $this->cors['Access-Control-Request-Method']);
+            $responseHeaders['Access-Control-Allow-Methods'] = \implode(', ', $this->cors['Access-Control-Request-Method']);
         }
 
         if (isset($this->cors['Access-Control-Allow-Credentials'])) {
@@ -209,11 +209,11 @@ class Cors extends ActionFilter
         }
 
         if (isset($this->cors['Access-Control-Expose-Headers'])) {
-            $responseHeaders['Access-Control-Expose-Headers'] = implode(', ', $this->cors['Access-Control-Expose-Headers']);
+            $responseHeaders['Access-Control-Expose-Headers'] = \implode(', ', $this->cors['Access-Control-Expose-Headers']);
         }
 
         if (isset($this->cors['Access-Control-Allow-Headers'])) {
-            $responseHeaders['Access-Control-Allow-Headers'] = implode(', ', $this->cors['Access-Control-Allow-Headers']);
+            $responseHeaders['Access-Control-Allow-Headers'] = \implode(', ', $this->cors['Access-Control-Allow-Headers']);
         }
 
         return $responseHeaders;
@@ -235,14 +235,14 @@ class Cors extends ActionFilter
             return;
         }
 
-        if (in_array('*', $this->cors[$requestHeaderField])) {
+        if (\in_array('*', $this->cors[$requestHeaderField])) {
             $responseHeaders[$responseHeaderField] = $this->headerize($requestHeaders[$requestHeaderField]);
         } else {
-            $requestedData = preg_split('/[\\s,]+/', $requestHeaders[$requestHeaderField], -1, PREG_SPLIT_NO_EMPTY);
-            $acceptedData = array_uintersect($requestedData, $this->cors[$requestHeaderField], 'strcasecmp');
+            $requestedData = \preg_split('/[\\s,]+/', $requestHeaders[$requestHeaderField], -1, \PREG_SPLIT_NO_EMPTY);
+            $acceptedData = \array_uintersect($requestedData, $this->cors[$requestHeaderField], 'strcasecmp');
 
             if (!empty($acceptedData)) {
-                $responseHeaders[$responseHeaderField] = implode(', ', $acceptedData);
+                $responseHeaders[$responseHeaderField] = \implode(', ', $acceptedData);
             }
         }
     }
@@ -277,10 +277,10 @@ class Cors extends ActionFilter
      */
     protected function headerize($string)
     {
-        $headers = preg_split('/[\\s,]+/', $string, -1, PREG_SPLIT_NO_EMPTY);
-        $headers = array_map(static fn ($element) => str_replace(' ', '-', ucwords(strtolower(str_replace(['_', '-'], [' ', ' '], $element)))), $headers);
+        $headers = \preg_split('/[\\s,]+/', $string, -1, \PREG_SPLIT_NO_EMPTY);
+        $headers = \array_map(static fn ($element) => \str_replace(' ', '-', \ucwords(\strtolower(\str_replace(['_', '-'], [' ', ' '], $element)))), $headers);
 
-        return implode(', ', $headers);
+        return \implode(', ', $headers);
     }
 
     /**
@@ -296,6 +296,6 @@ class Cors extends ActionFilter
      */
     protected function headerizeToPhp($string)
     {
-        return 'HTTP_' . strtoupper(str_replace([' ', '-'], ['_', '_'], $string));
+        return 'HTTP_' . \strtoupper(\str_replace([' ', '-'], ['_', '_'], $string));
     }
 }

@@ -118,7 +118,7 @@ class I18N extends Component
             return $message;
         }
 
-        if (preg_match('~{\s*[\w.]+\s*,~u', $message)) {
+        if (\preg_match('~{\s*[\w.]+\s*,~u', $message)) {
             $formatter = $this->getMessageFormatter();
             $result = $formatter->format($message, $params, $language);
 
@@ -138,7 +138,7 @@ class I18N extends Component
             $p['{' . $name . '}'] = $value;
         }
 
-        return strtr($message, $p);
+        return \strtr($message, $p);
     }
 
     /**
@@ -155,7 +155,7 @@ class I18N extends Component
     {
         if ($this->_messageFormatter === null) {
             $this->_messageFormatter = new MessageFormatter();
-        } elseif (is_array($this->_messageFormatter) || is_string($this->_messageFormatter)) {
+        } elseif (\is_array($this->_messageFormatter) || \is_string($this->_messageFormatter)) {
             $this->_messageFormatter = Yii::createObject($this->_messageFormatter);
         }
 
@@ -194,7 +194,7 @@ class I18N extends Component
         }
         // try wildcard matching
         foreach ($this->translations as $pattern => $source) {
-            if (strpos($pattern, '*') > 0 && str_starts_with($category, rtrim($pattern, '*'))) {
+            if (\strpos($pattern, '*') > 0 && \str_starts_with($category, \rtrim($pattern, '*'))) {
                 if ($source instanceof MessageSource) {
                     return $source;
                 }

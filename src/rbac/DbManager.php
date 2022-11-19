@@ -190,7 +190,7 @@ class DbManager extends BaseManager
             return false;
         }
 
-        if (isset($assignments[$itemName]) || in_array($itemName, $this->defaultRoles)) {
+        if (isset($assignments[$itemName]) || \in_array($itemName, $this->defaultRoles)) {
             return true;
         }
 
@@ -231,7 +231,7 @@ class DbManager extends BaseManager
             return false;
         }
 
-        if (isset($assignments[$itemName]) || in_array($itemName, $this->defaultRoles)) {
+        if (isset($assignments[$itemName]) || \in_array($itemName, $this->defaultRoles)) {
             return true;
         }
 
@@ -282,7 +282,7 @@ class DbManager extends BaseManager
      */
     protected function supportsCascadeUpdate()
     {
-        return strncmp($this->db->getDriverName(), 'sqlite', 6) !== 0;
+        return \strncmp($this->db->getDriverName(), 'sqlite', 6) !== 0;
     }
 
     /**
@@ -290,7 +290,7 @@ class DbManager extends BaseManager
      */
     protected function addItem($item)
     {
-        $time = time();
+        $time = \time();
 
         if ($item->createdAt === null) {
             $item->createdAt = $time;
@@ -305,7 +305,7 @@ class DbManager extends BaseManager
                 'type' => $item->type,
                 'description' => $item->description,
                 'rule_name' => $item->ruleName,
-                'data' => $item->data === null ? null : serialize($item->data),
+                'data' => $item->data === null ? null : \serialize($item->data),
                 'created_at' => $item->createdAt,
                 'updated_at' => $item->updatedAt,
             ])->execute();
@@ -355,14 +355,14 @@ class DbManager extends BaseManager
                 ->execute();
         }
 
-        $item->updatedAt = time();
+        $item->updatedAt = \time();
 
         $this->db->createCommand()
             ->update($this->itemTable, [
                 'name' => $item->name,
                 'description' => $item->description,
                 'rule_name' => $item->ruleName,
-                'data' => $item->data === null ? null : serialize($item->data),
+                'data' => $item->data === null ? null : \serialize($item->data),
                 'updated_at' => $item->updatedAt,
             ], [
                 'name' => $name,
@@ -378,7 +378,7 @@ class DbManager extends BaseManager
      */
     protected function addRule($rule)
     {
-        $time = time();
+        $time = \time();
 
         if ($rule->createdAt === null) {
             $rule->createdAt = $time;
@@ -390,7 +390,7 @@ class DbManager extends BaseManager
         $this->db->createCommand()
             ->insert($this->ruleTable, [
                 'name' => $rule->name,
-                'data' => serialize($rule),
+                'data' => \serialize($rule),
                 'created_at' => $rule->createdAt,
                 'updated_at' => $rule->updatedAt,
             ])->execute();
@@ -411,12 +411,12 @@ class DbManager extends BaseManager
                 ->execute();
         }
 
-        $rule->updatedAt = time();
+        $rule->updatedAt = \time();
 
         $this->db->createCommand()
             ->update($this->ruleTable, [
                 'name' => $rule->name,
-                'data' => serialize($rule),
+                'data' => \serialize($rule),
                 'updated_at' => $rule->updatedAt,
             ], [
                 'name' => $name,
@@ -476,7 +476,7 @@ class DbManager extends BaseManager
     {
         $class = $row['type'] == Item::TYPE_PERMISSION ? Permission::className() : Role::className();
 
-        if (!isset($row['data']) || ($data = @unserialize(is_resource($row['data']) ? stream_get_contents($row['data']) : $row['data'])) === false) {
+        if (!isset($row['data']) || ($data = @\unserialize(\is_resource($row['data']) ? \stream_get_contents($row['data']) : $row['data'])) === false) {
             $data = null;
         }
 
@@ -532,7 +532,7 @@ class DbManager extends BaseManager
 
         $roles = [$roleName => $role];
 
-        $roles += array_filter($this->getRoles(), static fn (Role $roleItem) => array_key_exists($roleItem->name, $result));
+        $roles += \array_filter($this->getRoles(), static fn (Role $roleItem) => \array_key_exists($roleItem->name, $result));
 
         return $roles;
     }
@@ -551,7 +551,7 @@ class DbManager extends BaseManager
         }
         $query = (new Query())->from($this->itemTable)->where([
             'type' => Item::TYPE_PERMISSION,
-            'name' => array_keys($result),
+            'name' => \array_keys($result),
         ]);
         $permissions = [];
 
@@ -574,7 +574,7 @@ class DbManager extends BaseManager
         $directPermission = $this->getDirectPermissionsByUser($userId);
         $inheritedPermission = $this->getInheritedPermissionsByUser($userId);
 
-        return array_merge($directPermission, $inheritedPermission);
+        return \array_merge($directPermission, $inheritedPermission);
     }
 
     /**
@@ -631,7 +631,7 @@ class DbManager extends BaseManager
 
         $query = (new Query())->from($this->itemTable)->where([
             'type' => Item::TYPE_PERMISSION,
-            'name' => array_keys($result),
+            'name' => \array_keys($result),
         ]);
         $permissions = [];
 
@@ -697,15 +697,15 @@ class DbManager extends BaseManager
 
         $data = $row['data'];
 
-        if (is_resource($data)) {
-            $data = stream_get_contents($data);
+        if (\is_resource($data)) {
+            $data = \stream_get_contents($data);
         }
 
         if (!$data) {
             return null;
         }
 
-        return unserialize($data);
+        return \unserialize($data);
     }
 
     /**
@@ -724,12 +724,12 @@ class DbManager extends BaseManager
         foreach ($query->all($this->db) as $row) {
             $data = $row['data'];
 
-            if (is_resource($data)) {
-                $data = stream_get_contents($data);
+            if (\is_resource($data)) {
+                $data = \stream_get_contents($data);
             }
 
             if ($data) {
-                $rules[$row['name']] = unserialize($data);
+                $rules[$row['name']] = \unserialize($data);
             }
         }
 
@@ -911,7 +911,7 @@ class DbManager extends BaseManager
         $assignment = new Assignment([
             'userId' => $userId,
             'roleName' => $role->name,
-            'createdAt' => time(),
+            'createdAt' => \time(),
         ]);
 
         $this->db->createCommand()
@@ -1062,7 +1062,7 @@ class DbManager extends BaseManager
 
         $data = $this->cache->get($this->cacheKey);
 
-        if (is_array($data) && isset($data[0], $data[1], $data[2])) {
+        if (\is_array($data) && isset($data[0], $data[1], $data[2])) {
             [$this->items, $this->rules, $this->parents] = $data;
 
             return;
@@ -1081,12 +1081,12 @@ class DbManager extends BaseManager
         foreach ($query->all($this->db) as $row) {
             $data = $row['data'];
 
-            if (is_resource($data)) {
-                $data = stream_get_contents($data);
+            if (\is_resource($data)) {
+                $data = \stream_get_contents($data);
             }
 
             if ($data) {
-                $this->rules[$row['name']] = unserialize($data);
+                $this->rules[$row['name']] = \unserialize($data);
             }
         }
 

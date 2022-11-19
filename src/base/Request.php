@@ -43,7 +43,7 @@ abstract class Request extends Component
      */
     public function getIsConsoleRequest()
     {
-        return $this->_isConsoleRequest !== null ? $this->_isConsoleRequest : PHP_SAPI === 'cli';
+        return $this->_isConsoleRequest !== null ? $this->_isConsoleRequest : \PHP_SAPI === 'cli';
     }
 
     /**
@@ -88,9 +88,9 @@ abstract class Request extends Component
      */
     public function setScriptFile($value): void
     {
-        $scriptFile = realpath(Yii::getAlias($value));
+        $scriptFile = \realpath(Yii::getAlias($value));
 
-        if ($scriptFile !== false && is_file($scriptFile)) {
+        if ($scriptFile !== false && \is_file($scriptFile)) {
             $this->_scriptFile = $scriptFile;
         } else {
             throw new InvalidConfigException('Unable to determine the entry script file path.');

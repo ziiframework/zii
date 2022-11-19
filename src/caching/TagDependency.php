@@ -58,7 +58,7 @@ class TagDependency extends Dependency
         }
 
         if (!empty($newKeys)) {
-            $timestamps = array_merge($timestamps, static::touchKeys($cache, $newKeys));
+            $timestamps = \array_merge($timestamps, static::touchKeys($cache, $newKeys));
         }
 
         return $timestamps;
@@ -101,7 +101,7 @@ class TagDependency extends Dependency
     protected static function touchKeys($cache, $keys)
     {
         $items = [];
-        $time = microtime();
+        $time = \microtime();
 
         foreach ($keys as $key) {
             $items[$key] = $time;

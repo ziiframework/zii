@@ -51,10 +51,10 @@ class NotCondition implements ConditionInterface
      */
     public static function fromArrayDefinition($operator, $operands)
     {
-        if (count($operands) !== 1) {
+        if (\count($operands) !== 1) {
             throw new InvalidArgumentException("Operator '$operator' requires exactly one operand.");
         }
 
-        return new static(array_shift($operands));
+        return new static(\array_shift($operands));
     }
 }

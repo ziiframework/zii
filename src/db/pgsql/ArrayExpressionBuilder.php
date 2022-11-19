@@ -50,7 +50,7 @@ class ArrayExpressionBuilder implements ExpressionBuilderInterface
 
         $placeholders = $this->buildPlaceholders($expression, $params);
 
-        return 'ARRAY[' . implode(', ', $placeholders) . ']' . $this->getTypehint($expression);
+        return 'ARRAY[' . \implode(', ', $placeholders) . ']' . $this->getTypehint($expression);
     }
 
     /**
@@ -67,7 +67,7 @@ class ArrayExpressionBuilder implements ExpressionBuilderInterface
 
         $placeholders = [];
 
-        if ($value === null || !is_array($value) && !$value instanceof Traversable) {
+        if ($value === null || !\is_array($value) && !$value instanceof Traversable) {
             return $placeholders;
         }
 
@@ -108,7 +108,7 @@ class ArrayExpressionBuilder implements ExpressionBuilderInterface
      */
     private function unnestArrayExpression(ArrayExpression $expression, $value)
     {
-        $expressionClass = get_class($expression);
+        $expressionClass = \get_class($expression);
 
         return new $expressionClass($value, $expression->getType(), $expression->getDimension() - 1);
     }
@@ -123,7 +123,7 @@ class ArrayExpressionBuilder implements ExpressionBuilderInterface
         }
 
         $result = '::' . $expression->getType();
-        $result .= str_repeat('[]', $expression->getDimension());
+        $result .= \str_repeat('[]', $expression->getDimension());
 
         return $result;
     }
@@ -153,7 +153,7 @@ class ArrayExpressionBuilder implements ExpressionBuilderInterface
             return $value;
         }
 
-        if (in_array($expression->getType(), [Schema::TYPE_JSON, Schema::TYPE_JSONB], true)) {
+        if (\in_array($expression->getType(), [Schema::TYPE_JSON, Schema::TYPE_JSONB], true)) {
             return new JsonExpression($value);
         }
 

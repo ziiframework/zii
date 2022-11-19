@@ -168,14 +168,14 @@ class UrlRule extends CompositeUrlRule
         $controllers = [];
 
         foreach ((array) $this->controller as $urlName => $controller) {
-            if (is_int($urlName)) {
+            if (\is_int($urlName)) {
                 $urlName = $this->pluralize ? Inflector::pluralize($controller) : $controller;
             }
             $controllers[$urlName] = $controller;
         }
         $this->controller = $controllers;
 
-        $this->prefix = trim($this->prefix ?? '', '/');
+        $this->prefix = \trim($this->prefix ?? '', '/');
 
         parent::init();
     }
@@ -185,13 +185,13 @@ class UrlRule extends CompositeUrlRule
      */
     protected function createRules()
     {
-        $only = array_flip($this->only);
-        $except = array_flip($this->except);
+        $only = \array_flip($this->only);
+        $except = \array_flip($this->except);
         $patterns = $this->extraPatterns + $this->patterns;
         $rules = [];
 
         foreach ($this->controller as $urlName => $controller) {
-            $prefix = trim($this->prefix . '/' . $urlName, '/');
+            $prefix = \trim($this->prefix . '/' . $urlName, '/');
 
             foreach ($patterns as $pattern => $action) {
                 if (!isset($except[$action]) && (empty($only) || isset($only[$action]))) {
@@ -216,8 +216,8 @@ class UrlRule extends CompositeUrlRule
     {
         $verbs = 'GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS';
 
-        if (preg_match("/^((?:($verbs),)*($verbs))(?:\\s+(.*))?$/", $pattern, $matches)) {
-            $verbs = explode(',', $matches[1]);
+        if (\preg_match("/^((?:($verbs),)*($verbs))(?:\\s+(.*))?$/", $pattern, $matches)) {
+            $verbs = \explode(',', $matches[1]);
             $pattern = $matches[4] ?? '';
         } else {
             $verbs = [];
@@ -225,7 +225,7 @@ class UrlRule extends CompositeUrlRule
 
         $config = $this->ruleConfig;
         $config['verb'] = $verbs;
-        $config['pattern'] = rtrim($prefix . '/' . strtr($pattern, $this->tokens), '/');
+        $config['pattern'] = \rtrim($prefix . '/' . \strtr($pattern, $this->tokens), '/');
         $config['route'] = $action;
         $config['suffix'] = $this->suffix;
 
@@ -241,21 +241,21 @@ class UrlRule extends CompositeUrlRule
 
         if (
             $this->prefix !== ''
-            && !str_contains($this->prefix, '<')
-            && !str_starts_with($pathInfo . '/', $this->prefix . '/')
+            && !\str_contains($this->prefix, '<')
+            && !\str_starts_with($pathInfo . '/', $this->prefix . '/')
         ) {
             return false;
         }
 
         foreach ($this->rules as $urlName => $rules) {
-            if (str_contains($pathInfo, $urlName)) {
+            if (\str_contains($pathInfo, $urlName)) {
                 foreach ($rules as $rule) {
                     /* @var $rule WebUrlRule */
                     $result = $rule->parseRequest($manager, $request);
 
                     if (YII_DEBUG) {
                         Yii::debug([
-                            'rule' => method_exists($rule, '__toString') ? $rule->__toString() : get_class($rule),
+                            'rule' => \method_exists($rule, '__toString') ? $rule->__toString() : \get_class($rule),
                             'match' => $result !== false,
                             'parent' => self::className(),
                         ], __METHOD__);
@@ -279,7 +279,7 @@ class UrlRule extends CompositeUrlRule
         $this->createStatus = WebUrlRule::CREATE_STATUS_SUCCESS;
 
         foreach ($this->controller as $urlName => $controller) {
-            if (str_contains($route, $controller)) {
+            if (\str_contains($route, $controller)) {
                 /* @var $rules UrlRuleInterface[] */
                 $rules = $this->rules[$urlName];
                 $url = $this->iterateRules($rules, $manager, $route, $params);

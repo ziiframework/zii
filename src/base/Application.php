@@ -275,7 +275,7 @@ abstract class Application extends Module
         if (isset($config['timeZone'])) {
             $this->setTimeZone($config['timeZone']);
             unset($config['timeZone']);
-        } elseif (!ini_get('date.timezone')) {
+        } elseif (!\ini_get('date.timezone')) {
             $this->setTimeZone('UTC');
         }
 
@@ -289,7 +289,7 @@ abstract class Application extends Module
         foreach ($this->coreComponents() as $id => $component) {
             if (!isset($config['components'][$id])) {
                 $config['components'][$id] = $component;
-            } elseif (is_array($config['components'][$id]) && !isset($config['components'][$id]['class'])) {
+            } elseif (\is_array($config['components'][$id]) && !isset($config['components'][$id]['class'])) {
                 $config['components'][$id]['class'] = $component['class'];
             }
         }
@@ -313,7 +313,7 @@ abstract class Application extends Module
     {
         if ($this->extensions === null) {
             $file = Yii::getAlias('@vendor/ziiframework/extensions.php');
-            $this->extensions = is_file($file) ? include $file : [];
+            $this->extensions = \is_file($file) ? include $file : [];
         }
 
         foreach ($this->extensions as $extension) {
@@ -327,10 +327,10 @@ abstract class Application extends Module
                 $component = Yii::createObject($extension['bootstrap']);
 
                 if ($component instanceof BootstrapInterface) {
-                    Yii::debug('Bootstrap with ' . get_class($component) . '::bootstrap()', __METHOD__);
+                    Yii::debug('Bootstrap with ' . \get_class($component) . '::bootstrap()', __METHOD__);
                     $component->bootstrap($this);
                 } else {
-                    Yii::debug('Bootstrap with ' . get_class($component), __METHOD__);
+                    Yii::debug('Bootstrap with ' . \get_class($component), __METHOD__);
                 }
             }
         }
@@ -341,15 +341,15 @@ abstract class Application extends Module
             if ($mixed instanceof Closure) {
                 Yii::debug('Bootstrap with Closure', __METHOD__);
 
-                if (!$component = call_user_func($mixed, $this)) {
+                if (!$component = \call_user_func($mixed, $this)) {
                     continue;
                 }
-            } elseif (is_string($mixed)) {
+            } elseif (\is_string($mixed)) {
                 if ($this->has($mixed)) {
                     $component = $this->get($mixed);
                 } elseif ($this->hasModule($mixed)) {
                     $component = $this->getModule($mixed);
-                } elseif (!str_contains($mixed, '\\')) {
+                } elseif (!\str_contains($mixed, '\\')) {
                     throw new InvalidConfigException("Unknown bootstrapping component ID: $mixed");
                 }
             }
@@ -359,10 +359,10 @@ abstract class Application extends Module
             }
 
             if ($component instanceof BootstrapInterface) {
-                Yii::debug('Bootstrap with ' . get_class($component) . '::bootstrap()', __METHOD__);
+                Yii::debug('Bootstrap with ' . \get_class($component) . '::bootstrap()', __METHOD__);
                 $component->bootstrap($this);
             } else {
-                Yii::debug('Bootstrap with ' . get_class($component), __METHOD__);
+                Yii::debug('Bootstrap with ' . \get_class($component), __METHOD__);
             }
         }
     }
@@ -467,7 +467,7 @@ abstract class Application extends Module
     public function getRuntimePath()
     {
         if ($this->_runtimePath === null) {
-            $this->setRuntimePath($this->getBasePath() . DIRECTORY_SEPARATOR . 'runtime');
+            $this->setRuntimePath($this->getBasePath() . \DIRECTORY_SEPARATOR . 'runtime');
         }
 
         return $this->_runtimePath;
@@ -495,7 +495,7 @@ abstract class Application extends Module
     public function getVendorPath()
     {
         if ($this->_vendorPath === null) {
-            $this->setVendorPath($this->getBasePath() . DIRECTORY_SEPARATOR . 'vendor');
+            $this->setVendorPath($this->getBasePath() . \DIRECTORY_SEPARATOR . 'vendor');
         }
 
         return $this->_vendorPath;
@@ -510,8 +510,8 @@ abstract class Application extends Module
     {
         $this->_vendorPath = Yii::getAlias($path);
         Yii::setAlias('@vendor', $this->_vendorPath);
-        Yii::setAlias('@bower', $this->_vendorPath . DIRECTORY_SEPARATOR . 'bower');
-        Yii::setAlias('@npm', $this->_vendorPath . DIRECTORY_SEPARATOR . 'npm');
+        Yii::setAlias('@bower', $this->_vendorPath . \DIRECTORY_SEPARATOR . 'bower');
+        Yii::setAlias('@npm', $this->_vendorPath . \DIRECTORY_SEPARATOR . 'npm');
     }
 
     /**
@@ -526,7 +526,7 @@ abstract class Application extends Module
      */
     public function getTimeZone()
     {
-        return date_default_timezone_get();
+        return \date_default_timezone_get();
     }
 
     /**
@@ -540,7 +540,7 @@ abstract class Application extends Module
      */
     public function setTimeZone($value): void
     {
-        date_default_timezone_set($value);
+        \date_default_timezone_set($value);
     }
 
     /**
@@ -704,7 +704,7 @@ abstract class Application extends Module
             'security' => ['class' => 'yii\base\Security'],
         ];
 
-        if (class_exists('yii\swiftmailer\Mailer')) {
+        if (\class_exists('yii\swiftmailer\Mailer')) {
             $components['mailer'] = ['class' => 'yii\swiftmailer\Mailer'];
         }
 

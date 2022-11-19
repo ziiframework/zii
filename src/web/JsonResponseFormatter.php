@@ -118,7 +118,7 @@ class JsonResponseFormatter extends Component implements ResponseFormatterInterf
             $this->contentType = $this->useJsonp
                 ? self::CONTENT_TYPE_JSONP
                 : self::CONTENT_TYPE_JSON;
-        } elseif (!str_contains($this->contentType, 'charset')) {
+        } elseif (!\str_contains($this->contentType, 'charset')) {
             $this->contentType .= '; charset=UTF-8';
         }
         $response->getHeaders()->set('Content-Type', $this->contentType);
@@ -141,7 +141,7 @@ class JsonResponseFormatter extends Component implements ResponseFormatterInterf
             $options = $this->encodeOptions;
 
             if ($this->prettyPrint) {
-                $options |= JSON_PRETTY_PRINT;
+                $options |= \JSON_PRETTY_PRINT;
             }
 
             $default = Json::$keepObjectType;
@@ -166,10 +166,10 @@ class JsonResponseFormatter extends Component implements ResponseFormatterInterf
      */
     protected function formatJsonp($response): void
     {
-        if (is_array($response->data)
+        if (\is_array($response->data)
             && isset($response->data['data'], $response->data['callback'])
         ) {
-            $response->content = sprintf('%s(%s);', $response->data['callback'], Json::htmlEncode($response->data['data']));
+            $response->content = \sprintf('%s(%s);', $response->data['callback'], Json::htmlEncode($response->data['data']));
         } elseif ($response->data !== null) {
             $response->content = '';
             Yii::warning("The 'jsonp' response requires that the data be an array consisting of both 'data' and 'callback' elements.", __METHOD__);

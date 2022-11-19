@@ -42,7 +42,7 @@ class BaseStringHelper
      */
     public static function byteLength($string)
     {
-        return mb_strlen((string) $string, '8bit');
+        return \mb_strlen((string) $string, '8bit');
     }
 
     /**
@@ -64,7 +64,7 @@ class BaseStringHelper
             $length = static::byteLength($string);
         }
 
-        return mb_substr($string, $start, $length, '8bit');
+        return \mb_substr($string, $start, $length, '8bit');
     }
 
     /**
@@ -84,17 +84,17 @@ class BaseStringHelper
      */
     public static function basename($path, $suffix = '')
     {
-        $len = mb_strlen($suffix);
+        $len = \mb_strlen($suffix);
 
-        if ($len > 0 && mb_substr($path, -$len) === $suffix) {
-            $path = mb_substr($path, 0, -$len);
+        if ($len > 0 && \mb_substr($path, -$len) === $suffix) {
+            $path = \mb_substr($path, 0, -$len);
         }
 
-        $path = rtrim(str_replace('\\', '/', $path), '/');
-        $pos = mb_strrpos($path, '/');
+        $path = \rtrim(\str_replace('\\', '/', $path), '/');
+        $pos = \mb_strrpos($path, '/');
 
         if ($pos !== false) {
-            return mb_substr($path, $pos + 1);
+            return \mb_substr($path, $pos + 1);
         }
 
         return $path;
@@ -113,11 +113,11 @@ class BaseStringHelper
      */
     public static function dirname($path)
     {
-        $normalizedPath = rtrim(str_replace('\\', '/', $path), '/');
-        $separatorPosition = mb_strrpos($normalizedPath, '/');
+        $normalizedPath = \rtrim(\str_replace('\\', '/', $path), '/');
+        $separatorPosition = \mb_strrpos($normalizedPath, '/');
 
         if ($separatorPosition !== false) {
-            return mb_substr($path, 0, $separatorPosition);
+            return \mb_substr($path, 0, $separatorPosition);
         }
 
         return '';
@@ -149,8 +149,8 @@ class BaseStringHelper
             return static::truncateHtml($string, $length, $suffix, $encoding);
         }
 
-        if (mb_strlen($string, $encoding) > $length) {
-            return rtrim(mb_substr($string, 0, $length, $encoding)) . $suffix;
+        if (\mb_strlen($string, $encoding) > $length) {
+            return \rtrim(\mb_substr($string, 0, $length, $encoding)) . $suffix;
         }
 
         return $string;
@@ -173,10 +173,10 @@ class BaseStringHelper
             return static::truncateHtml($string, $count, $suffix);
         }
 
-        $words = preg_split('/(\s+)/u', trim($string), 0, PREG_SPLIT_DELIM_CAPTURE);
+        $words = \preg_split('/(\s+)/u', \trim($string), 0, \PREG_SPLIT_DELIM_CAPTURE);
 
-        if (count($words) / 2 > $count) {
-            return implode('', array_slice($words, 0, ($count * 2) - 1)) . $suffix;
+        if (\count($words) / 2 > $count) {
+            return \implode('', \array_slice($words, 0, ($count * 2) - 1)) . $suffix;
         }
 
         return $string;
@@ -215,12 +215,12 @@ class BaseStringHelper
                 ++$depth;
             } elseif ($token instanceof HTMLPurifier_Token_Text && $totalCount <= $count) { // Text
                 if (false === $encoding) {
-                    preg_match('/^(\s*)/um', $token->data, $prefixSpace) ?: $prefixSpace = ['', ''];
-                    $token->data = $prefixSpace[1] . self::truncateWords(ltrim($token->data), $count - $totalCount, '');
+                    \preg_match('/^(\s*)/um', $token->data, $prefixSpace) ?: $prefixSpace = ['', ''];
+                    $token->data = $prefixSpace[1] . self::truncateWords(\ltrim($token->data), $count - $totalCount, '');
                     $currentCount = self::countWords($token->data);
                 } else {
                     $token->data = self::truncate($token->data, $count - $totalCount, '', $encoding);
-                    $currentCount = mb_strlen($token->data, $encoding);
+                    $currentCount = \mb_strlen($token->data, $encoding);
                 }
                 $totalCount += $currentCount;
                 $truncated[] = $token;
@@ -235,8 +235,8 @@ class BaseStringHelper
             }
 
             if ($totalCount >= $count) {
-                if (0 < count($openTokens)) {
-                    krsort($openTokens);
+                if (0 < \count($openTokens)) {
+                    \krsort($openTokens);
 
                     foreach ($openTokens as $name) {
                         $truncated[] = new HTMLPurifier_Token_End($name);
@@ -268,13 +268,13 @@ class BaseStringHelper
         }
 
         if ($caseSensitive) {
-            return strncmp($string, $with, $bytes) === 0;
+            return \strncmp($string, $with, $bytes) === 0;
         }
 
         $encoding = Yii::$app ? Yii::$app->charset : 'UTF-8';
         $string = static::byteSubstr($string, 0, $bytes);
 
-        return mb_strtolower($string, $encoding) === mb_strtolower($with, $encoding);
+        return \mb_strtolower($string, $encoding) === \mb_strtolower($with, $encoding);
     }
 
     /**
@@ -299,13 +299,13 @@ class BaseStringHelper
                 return false;
             }
 
-            return substr_compare($string, $with, -$bytes, $bytes) === 0;
+            return \substr_compare($string, $with, -$bytes, $bytes) === 0;
         }
 
         $encoding = Yii::$app ? Yii::$app->charset : 'UTF-8';
         $string = static::byteSubstr($string, -$bytes);
 
-        return mb_strtolower($string, $encoding) === mb_strtolower($with, $encoding);
+        return \mb_strtolower($string, $encoding) === \mb_strtolower($with, $encoding);
     }
 
     /**
@@ -325,20 +325,20 @@ class BaseStringHelper
      */
     public static function explode($string, $delimiter = ',', $trim = true, $skipEmpty = false)
     {
-        $result = explode($delimiter, $string);
+        $result = \explode($delimiter, $string);
 
         if ($trim !== false) {
             if ($trim === true) {
                 $trim = 'trim';
-            } elseif (!is_callable($trim)) {
-                $trim = static fn ($v) => trim($v, $trim);
+            } elseif (!\is_callable($trim)) {
+                $trim = static fn ($v) => \trim($v, $trim);
             }
-            $result = array_map($trim, $result);
+            $result = \array_map($trim, $result);
         }
 
         if ($skipEmpty) {
             // Wrapped with array_values to make array keys sequential after empty values removing
-            $result = array_values(array_filter($result, static fn ($value) => $value !== ''));
+            $result = \array_values(\array_filter($result, static fn ($value) => $value !== ''));
         }
 
         return $result;
@@ -355,7 +355,7 @@ class BaseStringHelper
      */
     public static function countWords($string)
     {
-        return count(preg_split('/\s+/u', $string, 0, PREG_SPLIT_NO_EMPTY));
+        return \count(\preg_split('/\s+/u', $string, 0, \PREG_SPLIT_NO_EMPTY));
     }
 
     /**
@@ -372,11 +372,11 @@ class BaseStringHelper
     {
         $value = (string) $value;
 
-        $localeInfo = localeconv();
+        $localeInfo = \localeconv();
         $decimalSeparator = $localeInfo['decimal_point'] ?? null;
 
         if ($decimalSeparator !== null && $decimalSeparator !== '.') {
-            $value = str_replace($decimalSeparator, '.', $value);
+            $value = \str_replace($decimalSeparator, '.', $value);
         }
 
         return $value;
@@ -397,7 +397,7 @@ class BaseStringHelper
      */
     public static function base64UrlEncode($input)
     {
-        return strtr(base64_encode($input), '+/', '-_');
+        return \strtr(\base64_encode($input), '+/', '-_');
     }
 
     /**
@@ -412,7 +412,7 @@ class BaseStringHelper
      */
     public static function base64UrlDecode($input)
     {
-        return base64_decode(strtr($input, '-_', '+/'));
+        return \base64_decode(\strtr($input, '-_', '+/'));
     }
 
     /**
@@ -429,7 +429,7 @@ class BaseStringHelper
     {
         // . and , are the only decimal separators known in ICU data,
         // so its safe to call str_replace here
-        return str_replace(',', '.', (string) $number);
+        return \str_replace(',', '.', (string) $number);
     }
 
     /**
@@ -477,14 +477,14 @@ class BaseStringHelper
             $replacements['\?'] = '[^/\\\\]';
         }
 
-        $pattern = strtr(preg_quote($pattern, '#'), $replacements);
+        $pattern = \strtr(\preg_quote($pattern, '#'), $replacements);
         $pattern = '#^' . $pattern . '$#us';
 
         if (isset($options['caseSensitive']) && !$options['caseSensitive']) {
             $pattern .= 'i';
         }
 
-        return preg_match($pattern, (string) $string) === 1;
+        return \preg_match($pattern, (string) $string) === 1;
     }
 
     /**
@@ -500,10 +500,10 @@ class BaseStringHelper
      */
     public static function mb_ucfirst($string, $encoding = 'UTF-8')
     {
-        $firstChar = mb_substr((string) $string, 0, 1, $encoding);
-        $rest = mb_substr((string) $string, 1, null, $encoding);
+        $firstChar = \mb_substr((string) $string, 0, 1, $encoding);
+        $rest = \mb_substr((string) $string, 1, null, $encoding);
 
-        return mb_strtoupper($firstChar, $encoding) . $rest;
+        return \mb_strtoupper($firstChar, $encoding) . $rest;
     }
 
     /**
@@ -525,8 +525,8 @@ class BaseStringHelper
             return $string;
         }
 
-        $parts = preg_split('/(\s+\W+\s+|^\W+\s+|\s+)/u', $string, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
-        $ucfirstEven = trim(mb_substr($parts[0], -1, 1, $encoding)) === '';
+        $parts = \preg_split('/(\s+\W+\s+|^\W+\s+|\s+)/u', $string, -1, \PREG_SPLIT_NO_EMPTY | \PREG_SPLIT_DELIM_CAPTURE);
+        $ucfirstEven = \trim(\mb_substr($parts[0], -1, 1, $encoding)) === '';
 
         foreach ($parts as $key => $value) {
             $isEven = (bool) ($key % 2);
@@ -536,6 +536,6 @@ class BaseStringHelper
             }
         }
 
-        return implode('', $parts);
+        return \implode('', $parts);
     }
 }

@@ -194,11 +194,11 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
     protected function negotiateContentType($request, $response): void
     {
         if (!empty($this->formatParam) && ($format = $request->get($this->formatParam)) !== null) {
-            if (is_array($format)) {
+            if (\is_array($format)) {
                 throw new BadRequestHttpException("Invalid data received for GET parameter '{$this->formatParam}'.");
             }
 
-            if (in_array($format, $this->formats)) {
+            if (\in_array($format, $this->formats)) {
                 $response->format = $format;
                 $response->acceptMimeType = null;
                 $response->acceptParams = [];
@@ -249,9 +249,9 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
     protected function negotiateLanguage($request)
     {
         if (!empty($this->languageParam) && ($language = $request->get($this->languageParam)) !== null) {
-            if (is_array($language)) {
+            if (\is_array($language)) {
                 // If an array received, then skip it and use the first of supported languages
-                return reset($this->languages);
+                return \reset($this->languages);
             }
 
             if (isset($this->languages[$language])) {
@@ -259,12 +259,12 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
             }
 
             foreach ($this->languages as $key => $supported) {
-                if (is_int($key) && $this->isLanguageSupported($language, $supported)) {
+                if (\is_int($key) && $this->isLanguageSupported($language, $supported)) {
                     return $supported;
                 }
             }
 
-            return reset($this->languages);
+            return \reset($this->languages);
         }
 
         foreach ($request->getAcceptableLanguages() as $language) {
@@ -273,13 +273,13 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
             }
 
             foreach ($this->languages as $key => $supported) {
-                if (is_int($key) && $this->isLanguageSupported($language, $supported)) {
+                if (\is_int($key) && $this->isLanguageSupported($language, $supported)) {
                     return $supported;
                 }
             }
         }
 
-        return reset($this->languages);
+        return \reset($this->languages);
     }
 
     /**
@@ -292,9 +292,9 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
      */
     protected function isLanguageSupported($requested, $supported)
     {
-        $supported = str_replace('_', '-', strtolower($supported));
-        $requested = str_replace('_', '-', strtolower($requested));
+        $supported = \str_replace('_', '-', \strtolower($supported));
+        $requested = \str_replace('_', '-', \strtolower($requested));
 
-        return str_starts_with($requested . '-', $supported . '-');
+        return \str_starts_with($requested . '-', $supported . '-');
     }
 }

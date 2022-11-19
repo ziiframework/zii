@@ -56,7 +56,7 @@ class HttpHeaderAuth extends AuthMethod
 
         if ($authHeader !== null) {
             if ($this->pattern !== null) {
-                if (preg_match($this->pattern, $authHeader, $matches)) {
+                if (\preg_match($this->pattern, $authHeader, $matches)) {
                     $authHeader = $matches[1];
                 } else {
                     return null;

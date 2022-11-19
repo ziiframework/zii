@@ -314,7 +314,7 @@ class GridView extends BaseListView
 
         if ($this->formatter === null) {
             $this->formatter = Yii::$app->getFormatter();
-        } elseif (is_array($this->formatter)) {
+        } elseif (\is_array($this->formatter)) {
             $this->formatter = Yii::createObject($this->formatter);
         }
 
@@ -337,7 +337,7 @@ class GridView extends BaseListView
         $view = $this->getView();
         GridViewAsset::register($view);
         $id = $this->options['id'];
-        $options = Json::htmlEncode(array_merge($this->getClientOptions(), ['filterOnFocusOut' => $this->filterOnFocusOut]));
+        $options = Json::htmlEncode(\array_merge($this->getClientOptions(), ['filterOnFocusOut' => $this->filterOnFocusOut]));
         $view->registerJs("jQuery('#$id').yiiGridView($options);");
         parent::run();
     }
@@ -414,7 +414,7 @@ class GridView extends BaseListView
             }
         }
 
-        $content = array_filter([
+        $content = \array_filter([
             $caption,
             $columnGroup,
             $tableHeader,
@@ -423,7 +423,7 @@ class GridView extends BaseListView
             $tableFooterAfterBody,
         ]);
 
-        return Html::tag('table', implode("\n", $content), $this->tableOptions);
+        return Html::tag('table', \implode("\n", $content), $this->tableOptions);
     }
 
     /**
@@ -456,7 +456,7 @@ class GridView extends BaseListView
                     $cols[] = Html::tag('col', '', $col->options);
                 }
 
-                return Html::tag('colgroup', implode("\n", $cols));
+                return Html::tag('colgroup', \implode("\n", $cols));
             }
         }
 
@@ -476,7 +476,7 @@ class GridView extends BaseListView
             /* @var $column Column */
             $cells[] = $column->renderHeaderCell();
         }
-        $content = Html::tag('tr', implode('', $cells), $this->headerRowOptions);
+        $content = Html::tag('tr', \implode('', $cells), $this->headerRowOptions);
 
         if ($this->filterPosition === self::FILTER_POS_HEADER) {
             $content = $this->renderFilters() . $content;
@@ -500,7 +500,7 @@ class GridView extends BaseListView
             /* @var $column Column */
             $cells[] = $column->renderFooterCell();
         }
-        $content = Html::tag('tr', implode('', $cells), $this->footerRowOptions);
+        $content = Html::tag('tr', \implode('', $cells), $this->footerRowOptions);
 
         if ($this->filterPosition === self::FILTER_POS_FOOTER) {
             $content .= $this->renderFilters();
@@ -524,7 +524,7 @@ class GridView extends BaseListView
                 $cells[] = $column->renderFilterCell();
             }
 
-            return Html::tag('tr', implode('', $cells), $this->filterRowOptions);
+            return Html::tag('tr', \implode('', $cells), $this->filterRowOptions);
         }
 
         return '';
@@ -537,7 +537,7 @@ class GridView extends BaseListView
      */
     public function renderTableBody()
     {
-        $models = array_values($this->dataProvider->getModels());
+        $models = \array_values($this->dataProvider->getModels());
         $keys = $this->dataProvider->getKeys();
         $rows = [];
 
@@ -545,7 +545,7 @@ class GridView extends BaseListView
             $key = $keys[$index];
 
             if ($this->beforeRow !== null) {
-                $row = call_user_func($this->beforeRow, $model, $key, $index, $this);
+                $row = \call_user_func($this->beforeRow, $model, $key, $index, $this);
 
                 if (!empty($row)) {
                     $rows[] = $row;
@@ -555,7 +555,7 @@ class GridView extends BaseListView
             $rows[] = $this->renderTableRow($model, $key, $index);
 
             if ($this->afterRow !== null) {
-                $row = call_user_func($this->afterRow, $model, $key, $index, $this);
+                $row = \call_user_func($this->afterRow, $model, $key, $index, $this);
 
                 if (!empty($row)) {
                     $rows[] = $row;
@@ -564,12 +564,12 @@ class GridView extends BaseListView
         }
 
         if (empty($rows) && $this->emptyText !== false) {
-            $colspan = count($this->columns);
+            $colspan = \count($this->columns);
 
             return "<tbody>\n<tr><td colspan=\"$colspan\">" . $this->renderEmpty() . "</td></tr>\n</tbody>";
         }
 
-        return "<tbody>\n" . implode("\n", $rows) . "\n</tbody>";
+        return "<tbody>\n" . \implode("\n", $rows) . "\n</tbody>";
     }
 
     /**
@@ -590,13 +590,13 @@ class GridView extends BaseListView
         }
 
         if ($this->rowOptions instanceof Closure) {
-            $options = call_user_func($this->rowOptions, $model, $key, $index, $this);
+            $options = \call_user_func($this->rowOptions, $model, $key, $index, $this);
         } else {
             $options = $this->rowOptions;
         }
-        $options['data-key'] = is_array($key) ? json_encode($key) : (string) $key;
+        $options['data-key'] = \is_array($key) ? \json_encode($key) : (string) $key;
 
-        return Html::tag('tr', implode('', $cells), $options);
+        return Html::tag('tr', \implode('', $cells), $options);
     }
 
     /**
@@ -609,10 +609,10 @@ class GridView extends BaseListView
         }
 
         foreach ($this->columns as $i => $column) {
-            if (is_string($column)) {
+            if (\is_string($column)) {
                 $column = $this->createDataColumn($column);
             } else {
-                $column = Yii::createObject(array_merge([
+                $column = Yii::createObject(\array_merge([
                     'class' => $this->dataColumnClass ?: DataColumn::className(),
                     'grid' => $this,
                 ], $column));
@@ -638,7 +638,7 @@ class GridView extends BaseListView
      */
     protected function createDataColumn($text)
     {
-        if (!preg_match('/^([^:]+)(:(\w*))?(:(.*))?$/', $text, $matches)) {
+        if (!\preg_match('/^([^:]+)(:(\w*))?(:(.*))?$/', $text, $matches)) {
             throw new InvalidConfigException('The column must be specified in the format of "attribute", "attribute:format" or "attribute:format:label"');
         }
 
@@ -658,11 +658,11 @@ class GridView extends BaseListView
     protected function guessColumns(): void
     {
         $models = $this->dataProvider->getModels();
-        $model = reset($models);
+        $model = \reset($models);
 
-        if (is_array($model) || is_object($model)) {
+        if (\is_array($model) || \is_object($model)) {
             foreach ($model as $name => $value) {
-                if ($value === null || is_scalar($value) || is_callable([$value, '__toString'])) {
+                if ($value === null || \is_scalar($value) || \is_callable([$value, '__toString'])) {
                     $this->columns[] = (string) $name;
                 }
             }

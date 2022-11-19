@@ -470,7 +470,7 @@ class Migration extends Component implements MigrationInterface
      */
     public function addPrimaryKey($name, $table, $columns): void
     {
-        $time = $this->beginCommand("add primary key $name on $table (" . (is_array($columns) ? implode(',', $columns) : $columns) . ')');
+        $time = $this->beginCommand("add primary key $name on $table (" . (\is_array($columns) ? \implode(',', $columns) : $columns) . ')');
         $this->db->createCommand()->addPrimaryKey($name, $table, $columns)->execute();
         $this->endCommand($time);
     }
@@ -502,7 +502,7 @@ class Migration extends Component implements MigrationInterface
      */
     public function addForeignKey($name, $table, $columns, $refTable, $refColumns, $delete = null, $update = null): void
     {
-        $time = $this->beginCommand("add foreign key $name: $table (" . implode(',', (array) $columns) . ") references $refTable (" . implode(',', (array) $refColumns) . ')');
+        $time = $this->beginCommand("add foreign key $name: $table (" . \implode(',', (array) $columns) . ") references $refTable (" . \implode(',', (array) $refColumns) . ')');
         $this->db->createCommand()->addForeignKey($name, $table, $columns, $refTable, $refColumns, $delete, $update)->execute();
         $this->endCommand($time);
     }
@@ -532,7 +532,7 @@ class Migration extends Component implements MigrationInterface
      */
     public function createIndex($name, $table, $columns, $unique = false): void
     {
-        $time = $this->beginCommand('create' . ($unique ? ' unique' : '') . " index $name on $table (" . implode(',', (array) $columns) . ')');
+        $time = $this->beginCommand('create' . ($unique ? ' unique' : '') . " index $name on $table (" . \implode(',', (array) $columns) . ')');
         $this->db->createCommand()->createIndex($name, $table, $columns, $unique)->execute();
         $this->endCommand($time);
     }
@@ -625,7 +625,7 @@ class Migration extends Component implements MigrationInterface
             echo "    > $description ...";
         }
 
-        return microtime(true);
+        return \microtime(true);
     }
 
     /**
@@ -638,7 +638,7 @@ class Migration extends Component implements MigrationInterface
     protected function endCommand($time): void
     {
         if (!$this->compact) {
-            echo ' done (time: ' . sprintf('%.3f', microtime(true) - $time) . "s)\n";
+            echo ' done (time: ' . \sprintf('%.3f', \microtime(true) - $time) . "s)\n";
         }
     }
 }

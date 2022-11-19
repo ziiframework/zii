@@ -95,7 +95,7 @@ class StringValidator extends Validator
     {
         parent::init();
 
-        if (is_array($this->length)) {
+        if (\is_array($this->length)) {
             if (isset($this->length[0])) {
                 $this->min = $this->length[0];
             }
@@ -134,17 +134,17 @@ class StringValidator extends Validator
     {
         $value = $model->$attribute;
 
-        if (!$this->strict && is_scalar($value) && !is_string($value)) {
+        if (!$this->strict && \is_scalar($value) && !\is_string($value)) {
             $value = (string) $value;
         }
 
-        if (!is_string($value)) {
+        if (!\is_string($value)) {
             $this->addError($model, $attribute, $this->message);
 
             return;
         }
 
-        $length = mb_strlen($value, $this->encoding);
+        $length = \mb_strlen($value, $this->encoding);
 
         if ($this->min !== null && $length < $this->min) {
             $this->addError($model, $attribute, $this->tooShort, ['min' => $this->min]);
@@ -164,15 +164,15 @@ class StringValidator extends Validator
      */
     protected function validateValue($value)
     {
-        if (!$this->strict && is_scalar($value) && !is_string($value)) {
+        if (!$this->strict && \is_scalar($value) && !\is_string($value)) {
             $value = (string) $value;
         }
 
-        if (!is_string($value)) {
+        if (!\is_string($value)) {
             return [$this->message, []];
         }
 
-        $length = mb_strlen($value, $this->encoding);
+        $length = \mb_strlen($value, $this->encoding);
 
         if ($this->min !== null && $length < $this->min) {
             return [$this->tooShort, ['min' => $this->min]];

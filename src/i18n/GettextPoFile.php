@@ -35,9 +35,9 @@ class GettextPoFile extends GettextFile
         $pattern = '/(msgctxt\s+"(.*?(?<!\\\\))")?\s+' // context
             . 'msgid\s+((?:".*(?<!\\\\)"\s*)+)\s+' // message ID, i.e. original string
             . 'msgstr\s+((?:".*(?<!\\\\)"\s*)+)/'; // translated string
-        $content = file_get_contents($filePath);
+        $content = \file_get_contents($filePath);
         $matches = [];
-        $matchCount = preg_match_all($pattern, $content, $matches);
+        $matchCount = \preg_match_all($pattern, $content, $matches);
 
         $messages = [];
 
@@ -62,7 +62,7 @@ class GettextPoFile extends GettextFile
      */
     public function save($filePath, $messages): void
     {
-        $language = str_replace('-', '_', basename(dirname($filePath)));
+        $language = \str_replace('-', '_', \basename(\dirname($filePath)));
         $headers = [
             'msgid ""',
             'msgstr ""',
@@ -76,19 +76,19 @@ class GettextPoFile extends GettextFile
             '"Content-Type: text/plain; charset=' . Yii::$app->charset . '\n"',
             '"Content-Transfer-Encoding: 8bit\n"',
         ];
-        $content = implode("\n", $headers) . "\n\n";
+        $content = \implode("\n", $headers) . "\n\n";
 
         foreach ($messages as $id => $message) {
-            $separatorPosition = strpos($id, chr(4));
+            $separatorPosition = \strpos($id, \chr(4));
 
             if ($separatorPosition !== false) {
-                $content .= 'msgctxt "' . substr($id, 0, $separatorPosition) . "\"\n";
-                $id = substr($id, $separatorPosition + 1);
+                $content .= 'msgctxt "' . \substr($id, 0, $separatorPosition) . "\"\n";
+                $id = \substr($id, $separatorPosition + 1);
             }
             $content .= 'msgid "' . $this->encode($id) . "\"\n";
             $content .= 'msgstr "' . $this->encode($message) . "\"\n\n";
         }
-        file_put_contents($filePath, $content);
+        \file_put_contents($filePath, $content);
     }
 
     /**
@@ -100,7 +100,7 @@ class GettextPoFile extends GettextFile
      */
     protected function encode($string)
     {
-        return str_replace(['"', "\n", "\t", "\r"], ['\\"', '\\n', '\\t', '\\r'], $string);
+        return \str_replace(['"', "\n", "\t", "\r"], ['\\"', '\\n', '\\t', '\\r'], $string);
     }
 
     /**
@@ -112,8 +112,8 @@ class GettextPoFile extends GettextFile
      */
     protected function decode($string)
     {
-        $string = preg_replace(['/"\s+"/', '/\\\\n/', '/\\\\r/', '/\\\\t/', '/\\\\"/'], ['', "\n", "\r", "\t", '"'], $string);
+        $string = \preg_replace(['/"\s+"/', '/\\\\n/', '/\\\\r/', '/\\\\t/', '/\\\\"/'], ['', "\n", "\r", "\t", '"'], $string);
 
-        return substr(rtrim($string), 1, -1);
+        return \substr(\rtrim($string), 1, -1);
     }
 }

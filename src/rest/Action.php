@@ -89,18 +89,18 @@ class Action extends \yii\base\Action
     public function findModel($id)
     {
         if ($this->findModel !== null) {
-            return call_user_func($this->findModel, $id, $this);
+            return \call_user_func($this->findModel, $id, $this);
         }
 
         /* @var $modelClass ActiveRecordInterface */
         $modelClass = $this->modelClass;
         $keys = $modelClass::primaryKey();
 
-        if (count($keys) > 1) {
-            $values = explode(',', $id);
+        if (\count($keys) > 1) {
+            $values = \explode(',', $id);
 
-            if (count($keys) === count($values)) {
-                $model = $modelClass::findOne(array_combine($keys, $values));
+            if (\count($keys) === \count($values)) {
+                $model = $modelClass::findOne(\array_combine($keys, $values));
             }
         } elseif ($id !== null) {
             $model = $modelClass::findOne($id);

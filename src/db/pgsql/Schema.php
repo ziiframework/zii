@@ -144,7 +144,7 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
     protected function resolveTableName($name)
     {
         $resolvedName = new TableSchema();
-        $parts = explode('.', str_replace('"', '', $name));
+        $parts = \explode('.', \str_replace('"', '', $name));
 
         if (isset($parts[1])) {
             $resolvedName->schemaName = $parts[0];
@@ -314,7 +314,7 @@ SQL;
      */
     protected function resolveTableNames($table, $name): void
     {
-        $parts = explode('.', str_replace('"', '', $name));
+        $parts = \explode('.', \str_replace('"', '', $name));
 
         if (isset($parts[1])) {
             $table->schemaName = $parts[0];
@@ -388,7 +388,7 @@ SQL;
 
         foreach ($this->db->createCommand($sql)->queryAll() as $constraint) {
             if ($this->db->slavePdo->getAttribute(PDO::ATTR_CASE) === PDO::CASE_UPPER) {
-                $constraint = array_change_key_case($constraint, CASE_LOWER);
+                $constraint = \array_change_key_case($constraint, \CASE_LOWER);
             }
 
             if ($constraint['foreign_table_schema'] !== $this->defaultSchema) {
@@ -408,7 +408,7 @@ SQL;
         }
 
         foreach ($constraints as $name => $constraint) {
-            $table->foreignKeys[$name] = array_merge([$constraint['tableName']], $constraint['columns']);
+            $table->foreignKeys[$name] = \array_merge([$constraint['tableName']], $constraint['columns']);
         }
     }
 
@@ -465,14 +465,14 @@ SQL;
 
         foreach ($this->getUniqueIndexInformation($table) as $row) {
             if ($this->db->slavePdo->getAttribute(PDO::ATTR_CASE) === PDO::CASE_UPPER) {
-                $row = array_change_key_case($row, CASE_LOWER);
+                $row = \array_change_key_case($row, \CASE_LOWER);
             }
             $column = $row['columnname'];
 
-            if (strncmp($column, '"', 1) === 0) {
+            if (\strncmp($column, '"', 1) === 0) {
                 // postgres will quote names that are not lowercase-only
                 // https://github.com/yiisoft/yii2/issues/10613
-                $column = substr($column, 1, -1);
+                $column = \substr($column, 1, -1);
             }
             $uniqueIndexes[$row['indexname']][] = $column;
         }
@@ -494,7 +494,7 @@ SQL;
 
         $orIdentity = '';
 
-        if (version_compare($this->db->serverVersion, '12.0', '>=')) {
+        if (\version_compare($this->db->serverVersion, '12.0', '>=')) {
             $orIdentity = 'OR attidentity != \'\'';
         }
 
@@ -569,7 +569,7 @@ SQL;
 
         foreach ($columns as $column) {
             if ($this->db->slavePdo->getAttribute(PDO::ATTR_CASE) === PDO::CASE_UPPER) {
-                $column = array_change_key_case($column, CASE_LOWER);
+                $column = \array_change_key_case($column, \CASE_LOWER);
             }
             $column = $this->loadColumnSchema($column);
             $table->columns[$column->name] = $column;
@@ -583,19 +583,19 @@ SQL;
                 $column->defaultValue = null;
             } elseif ($column->defaultValue) {
                 if (
-                    in_array($column->type, [self::TYPE_TIMESTAMP, self::TYPE_DATE, self::TYPE_TIME], true) &&
-                    in_array(strtoupper($column->defaultValue), ['NOW()', 'CURRENT_TIMESTAMP', 'CURRENT_DATE', 'CURRENT_TIME'], true)
+                    \in_array($column->type, [self::TYPE_TIMESTAMP, self::TYPE_DATE, self::TYPE_TIME], true) &&
+                    \in_array(\strtoupper($column->defaultValue), ['NOW()', 'CURRENT_TIMESTAMP', 'CURRENT_DATE', 'CURRENT_TIME'], true)
                 ) {
                     $column->defaultValue = new Expression($column->defaultValue);
                 } elseif ($column->type === 'boolean') {
                     $column->defaultValue = ($column->defaultValue === 'true');
-                } elseif (preg_match("/^B'(.*?)'::/", $column->defaultValue, $matches)) {
-                    $column->defaultValue = bindec($matches[1]);
-                } elseif (preg_match("/^'(\d+)'::\"bit\"$/", $column->defaultValue, $matches)) {
-                    $column->defaultValue = bindec($matches[1]);
-                } elseif (preg_match("/^'(.*?)'::/", $column->defaultValue, $matches)) {
+                } elseif (\preg_match("/^B'(.*?)'::/", $column->defaultValue, $matches)) {
+                    $column->defaultValue = \bindec($matches[1]);
+                } elseif (\preg_match("/^'(\d+)'::\"bit\"$/", $column->defaultValue, $matches)) {
+                    $column->defaultValue = \bindec($matches[1]);
+                } elseif (\preg_match("/^'(.*?)'::/", $column->defaultValue, $matches)) {
                     $column->defaultValue = $column->phpTypecast($matches[1]);
-                } elseif (preg_match('/^(\()?(.*?)(?(1)\))(?:::.+)?$/', $column->defaultValue, $matches)) {
+                } elseif (\preg_match('/^(\()?(.*?)(?(1)\))(?:::.+)?$/', $column->defaultValue, $matches)) {
                     if ($matches[2] === 'NULL') {
                         $column->defaultValue = null;
                     } else {
@@ -625,14 +625,14 @@ SQL;
         $column->autoIncrement = $info['is_autoinc'];
         $column->comment = $info['column_comment'];
 
-        if ($info['type_scheme'] !== null && !in_array($info['type_scheme'], [$this->defaultSchema, 'pg_catalog'], true)
+        if ($info['type_scheme'] !== null && !\in_array($info['type_scheme'], [$this->defaultSchema, 'pg_catalog'], true)
         ) {
             $column->dbType = $info['type_scheme'] . '.' . $info['data_type'];
         } else {
             $column->dbType = $info['data_type'];
         }
         $column->defaultValue = $info['column_default'];
-        $column->enumValues = ($info['enum_values'] !== null) ? explode(',', str_replace(["''"], ["'"], $info['enum_values'])) : null;
+        $column->enumValues = ($info['enum_values'] !== null) ? \explode(',', \str_replace(["''"], ["'"], $info['enum_values'])) : null;
         $column->unsigned = false; // has no meaning in PG
         $column->isPrimaryKey = $info['is_pkey'];
         $column->name = $info['column_name'];
@@ -641,8 +641,8 @@ SQL;
         $column->size = $info['size'] === null ? null : (int) $info['size'];
         $column->dimension = (int) $info['dimension'];
         // pg_get_serial_sequence() doesn't track DEFAULT value change. GENERATED BY IDENTITY columns always have null default value
-        if (isset($column->defaultValue) && preg_match("/nextval\\('\"?\\w+\"?\.?\"?\\w+\"?'(::regclass)?\\)/", $column->defaultValue) === 1) {
-            $column->sequenceName = preg_replace(['/nextval/', '/::/', '/regclass/', '/\'\)/', '/\(\'/'], '', $column->defaultValue);
+        if (isset($column->defaultValue) && \preg_match("/nextval\\('\"?\\w+\"?\.?\"?\\w+\"?'(::regclass)?\\)/", $column->defaultValue) === 1) {
+            $column->sequenceName = \preg_replace(['/nextval/', '/::/', '/regclass/', '/\'\)/', '/\(\'/'], '', $column->defaultValue);
         } elseif (isset($info['sequence_name'])) {
             $column->sequenceName = $this->resolveTableName($info['sequence_name'])->fullName;
         }
@@ -672,7 +672,7 @@ SQL;
             foreach ((array) $returnColumns as $name) {
                 $returning[] = $this->quoteColumnName($name);
             }
-            $sql .= ' RETURNING ' . implode(', ', $returning);
+            $sql .= ' RETURNING ' . \implode(', ', $returning);
         }
 
         $command = $this->db->createCommand($sql, $params);
@@ -758,10 +758,10 @@ SQL;
                     case 'f':
                         $result['foreignKeys'][] = new ForeignKeyConstraint([
                             'name' => $name,
-                            'columnNames' => array_keys(array_count_values(ArrayHelper::getColumn($constraint, 'column_name'))),
+                            'columnNames' => \array_keys(\array_count_values(ArrayHelper::getColumn($constraint, 'column_name'))),
                             'foreignSchemaName' => $constraint[0]['foreign_table_schema'],
                             'foreignTableName' => $constraint[0]['foreign_table_name'],
-                            'foreignColumnNames' => array_keys(array_count_values(ArrayHelper::getColumn($constraint, 'foreign_column_name'))),
+                            'foreignColumnNames' => \array_keys(\array_count_values(ArrayHelper::getColumn($constraint, 'foreign_column_name'))),
                             'onDelete' => $actionTypes[$constraint[0]['on_delete']] ?? null,
                             'onUpdate' => $actionTypes[$constraint[0]['on_update']] ?? null,
                         ]);

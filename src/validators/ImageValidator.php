@@ -152,7 +152,7 @@ class ImageValidator extends FileValidator
      */
     protected function validateImage($image)
     {
-        if (false === ($imageInfo = getimagesize($image->tempName))) {
+        if (false === ($imageInfo = \getimagesize($image->tempName))) {
             return [$this->notImage, ['file' => $image->name]];
         }
 

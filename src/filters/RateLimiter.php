@@ -100,7 +100,7 @@ class RateLimiter extends ActionFilter
         }
 
         if ($this->user instanceof Closure) {
-            $this->user = call_user_func($this->user, $action);
+            $this->user = \call_user_func($this->user, $action);
         }
 
         if ($this->user instanceof RateLimitInterface) {
@@ -130,7 +130,7 @@ class RateLimiter extends ActionFilter
         [$limit, $window] = $user->getRateLimit($request, $action);
         [$allowance, $timestamp] = $user->loadAllowance($request, $action);
 
-        $current = time();
+        $current = \time();
 
         $allowance += (int) (($current - $timestamp) * $limit / $window);
 

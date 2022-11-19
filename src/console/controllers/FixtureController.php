@@ -74,7 +74,7 @@ class FixtureController extends Controller
      */
     public function options($actionID)
     {
-        return array_merge(parent::options($actionID), [
+        return \array_merge(parent::options($actionID), [
             'namespace', 'globalFixtures',
         ]);
     }
@@ -86,7 +86,7 @@ class FixtureController extends Controller
      */
     public function optionAliases()
     {
-        return array_merge(parent::optionAliases(), [
+        return \array_merge(parent::optionAliases(), [
             'g' => 'globalFixtures',
             'n' => 'namespace',
         ]);
@@ -128,7 +128,7 @@ class FixtureController extends Controller
             $fixtures = $filtered['apply'];
 
             $foundFixtures = $this->findFixtures($fixtures);
-            $notFoundFixtures = array_diff($fixtures, $foundFixtures);
+            $notFoundFixtures = \array_diff($fixtures, $foundFixtures);
 
             if ($notFoundFixtures !== []) {
                 $this->notifyNotFound($notFoundFixtures);
@@ -137,10 +137,10 @@ class FixtureController extends Controller
             $foundFixtures = $this->findFixtures();
         }
 
-        $fixturesToLoad = array_diff($foundFixtures, $except);
+        $fixturesToLoad = \array_diff($foundFixtures, $except);
 
         if (!$foundFixtures) {
-            throw new Exception('No files were found for: "' . implode(', ', $fixturesInput) . "\".\n" . "Check that files exist under fixtures path: \n\"" . $this->getFixturePath() . '".');
+            throw new Exception('No files were found for: "' . \implode(', ', $fixturesInput) . "\".\n" . "Check that files exist under fixtures path: \n\"" . $this->getFixturePath() . '".');
         }
 
         if ($fixturesToLoad === []) {
@@ -153,7 +153,7 @@ class FixtureController extends Controller
             return ExitCode::OK;
         }
 
-        $fixtures = $this->getFixturesConfig(array_merge($this->globalFixtures, $fixturesToLoad));
+        $fixtures = $this->getFixturesConfig(\array_merge($this->globalFixtures, $fixturesToLoad));
 
         if (!$fixtures) {
             throw new Exception('No fixtures were found in namespace: "' . $this->namespace . '"' . '');
@@ -203,7 +203,7 @@ class FixtureController extends Controller
             $fixtures = $filtered['apply'];
 
             $foundFixtures = $this->findFixtures($fixtures);
-            $notFoundFixtures = array_diff($fixtures, $foundFixtures);
+            $notFoundFixtures = \array_diff($fixtures, $foundFixtures);
 
             if ($notFoundFixtures !== []) {
                 $this->notifyNotFound($notFoundFixtures);
@@ -213,10 +213,10 @@ class FixtureController extends Controller
         }
 
         if ($foundFixtures === []) {
-            throw new Exception('No files were found for: "' . implode(', ', $fixturesInput) . "\".\n" . "Check that files exist under fixtures path: \n\"" . $this->getFixturePath() . '".');
+            throw new Exception('No files were found for: "' . \implode(', ', $fixturesInput) . "\".\n" . "Check that files exist under fixtures path: \n\"" . $this->getFixturePath() . '".');
         }
 
-        $fixturesToUnload = array_diff($foundFixtures, $except);
+        $fixturesToUnload = \array_diff($foundFixtures, $except);
 
         if ($fixturesToUnload === []) {
             $this->notifyNothingToUnload($foundFixtures, $except);
@@ -228,7 +228,7 @@ class FixtureController extends Controller
             return ExitCode::OK;
         }
 
-        $fixtures = $this->getFixturesConfig(array_merge($this->globalFixtures, $fixturesToUnload));
+        $fixtures = $this->getFixturesConfig(\array_merge($this->globalFixtures, $fixturesToUnload));
 
         if ($fixtures === []) {
             throw new Exception('No fixtures were found in namespace: ' . $this->namespace . '".');
@@ -282,12 +282,12 @@ class FixtureController extends Controller
         $this->stdout("Fixtures namespace is: \n", Console::FG_YELLOW);
         $this->stdout("\t" . $this->namespace . "\n", Console::FG_GREEN);
 
-        if (count($foundFixtures)) {
+        if (\count($foundFixtures)) {
             $this->stdout("\nFixtures founded under the namespace:\n\n", Console::FG_YELLOW);
             $this->outputList($foundFixtures);
         }
 
-        if (count($except)) {
+        if (\count($except)) {
             $this->stdout("\nFixtures that will NOT be loaded: \n\n", Console::FG_YELLOW);
             $this->outputList($except);
         }
@@ -305,12 +305,12 @@ class FixtureController extends Controller
         $this->stdout("Fixtures namespace is: \n", Console::FG_YELLOW);
         $this->stdout("\t" . $this->namespace . "\n", Console::FG_GREEN);
 
-        if (count($foundFixtures)) {
+        if (\count($foundFixtures)) {
             $this->stdout("\nFixtures found under the namespace:\n\n", Console::FG_YELLOW);
             $this->outputList($foundFixtures);
         }
 
-        if (count($except)) {
+        if (\count($except)) {
             $this->stdout("\nFixtures that will NOT be unloaded: \n\n", Console::FG_YELLOW);
             $this->outputList($except);
         }
@@ -355,17 +355,17 @@ class FixtureController extends Controller
         $this->stdout("Fixtures namespace is: \n", Console::FG_YELLOW);
         $this->stdout("\t" . $this->namespace . "\n\n", Console::FG_GREEN);
 
-        if (count($this->globalFixtures)) {
+        if (\count($this->globalFixtures)) {
             $this->stdout("Global fixtures will be used:\n\n", Console::FG_YELLOW);
             $this->outputList($this->globalFixtures);
         }
 
-        if (count($fixtures)) {
+        if (\count($fixtures)) {
             $this->stdout("\nFixtures below will be loaded:\n\n", Console::FG_YELLOW);
             $this->outputList($fixtures);
         }
 
-        if (count($except)) {
+        if (\count($except)) {
             $this->stdout("\nFixtures that will NOT be loaded: \n\n", Console::FG_YELLOW);
             $this->outputList($except);
         }
@@ -389,17 +389,17 @@ class FixtureController extends Controller
         $this->stdout("Fixtures namespace is: \n", Console::FG_YELLOW);
         $this->stdout("\t" . $this->namespace . "\n\n", Console::FG_GREEN);
 
-        if (count($this->globalFixtures)) {
+        if (\count($this->globalFixtures)) {
             $this->stdout("Global fixtures will be used:\n\n", Console::FG_YELLOW);
             $this->outputList($this->globalFixtures);
         }
 
-        if (count($fixtures)) {
+        if (\count($fixtures)) {
             $this->stdout("\nFixtures below will be unloaded:\n\n", Console::FG_YELLOW);
             $this->outputList($fixtures);
         }
 
-        if (count($except)) {
+        if (\count($except)) {
             $this->stdout("\nFixtures that will NOT be unloaded:\n\n", Console::FG_YELLOW);
             $this->outputList($except);
         }
@@ -479,10 +479,10 @@ class FixtureController extends Controller
         $fixturesPath = FileHelper::normalizePath($this->getFixturePath());
         $fullFixturePath = FileHelper::normalizePath($fullFixturePath);
 
-        $relativeName = substr($fullFixturePath, strlen($fixturesPath) + 1);
-        $relativeDir = dirname($relativeName) === '.' ? '' : dirname($relativeName) . '/';
+        $relativeName = \substr($fullFixturePath, \strlen($fixturesPath) + 1);
+        $relativeDir = \dirname($relativeName) === '.' ? '' : \dirname($relativeName) . '/';
 
-        return $relativeDir . basename($fullFixturePath, 'Fixture.php');
+        return $relativeDir . \basename($fullFixturePath, 'Fixture.php');
     }
 
     /**
@@ -497,14 +497,14 @@ class FixtureController extends Controller
         $config = [];
 
         foreach ($fixtures as $fixture) {
-            $isNamespaced = str_contains($fixture, '\\');
+            $isNamespaced = \str_contains($fixture, '\\');
             // replace linux' path slashes to namespace backslashes, in case if $fixture is non-namespaced relative path
-            $fixture = str_replace('/', '\\', $fixture);
+            $fixture = \str_replace('/', '\\', $fixture);
             $fullClassName = $isNamespaced ? $fixture : $this->namespace . '\\' . $fixture;
 
-            if (class_exists($fullClassName)) {
+            if (\class_exists($fullClassName)) {
                 $config[] = $fullClassName;
-            } elseif (class_exists($fullClassName . 'Fixture')) {
+            } elseif (\class_exists($fullClassName . 'Fixture')) {
                 $config[] = $fullClassName . 'Fixture';
             }
         }
@@ -543,8 +543,8 @@ class FixtureController extends Controller
         ];
 
         foreach ($fixtures as $fixture) {
-            if (mb_strpos($fixture, '-') !== false) {
-                $filtered['except'][] = str_replace('-', '', $fixture);
+            if (\mb_strpos($fixture, '-') !== false) {
+                $filtered['except'][] = \str_replace('-', '', $fixture);
             } else {
                 $filtered['apply'][] = $fixture;
             }
@@ -563,7 +563,7 @@ class FixtureController extends Controller
     private function getFixturePath()
     {
         try {
-            return Yii::getAlias('@' . str_replace('\\', '/', $this->namespace));
+            return Yii::getAlias('@' . \str_replace('\\', '/', $this->namespace));
         } catch (InvalidParamException $e) {
             throw new InvalidConfigException('Invalid fixture namespace: "' . $this->namespace . '". Please, check your FixtureController::namespace parameter');
         }

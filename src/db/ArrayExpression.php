@@ -194,7 +194,7 @@ class ArrayExpression implements ExpressionInterface, ArrayAccess, Countable, It
     #[ReturnTypeWillChange]
     public function count()
     {
-        return count($this->value);
+        return \count($this->value);
     }
 
     /**

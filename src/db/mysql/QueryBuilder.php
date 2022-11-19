@@ -61,7 +61,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         parent::init();
 
-        $this->typeMap = array_merge($this->typeMap, $this->defaultTimeTypeMap());
+        $this->typeMap = \array_merge($this->typeMap, $this->defaultTimeTypeMap());
     }
 
     /**
@@ -69,7 +69,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      */
     protected function defaultExpressionBuilders()
     {
-        return array_merge(parent::defaultExpressionBuilders(), [
+        return \array_merge(parent::defaultExpressionBuilders(), [
             'yii\db\JsonExpression' => 'yii\db\mysql\JsonExpressionBuilder',
         ]);
     }
@@ -97,11 +97,11 @@ class QueryBuilder extends \yii\db\QueryBuilder
         if (isset($row['Create Table'])) {
             $sql = $row['Create Table'];
         } else {
-            $row = array_values($row);
+            $row = \array_values($row);
             $sql = $row[1];
         }
 
-        if (preg_match_all('/^\s*[`"](.*?)[`"]\s+(.*?),?$/m', $sql, $matches)) {
+        if (\preg_match_all('/^\s*[`"](.*?)[`"]\s+(.*?),?$/m', $sql, $matches)) {
             foreach ($matches[1] as $i => $c) {
                 if ($c === $oldName) {
                     return "ALTER TABLE $quotedTable CHANGE "
@@ -207,7 +207,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
             $tableName = $this->db->quoteTableName($tableName);
 
             if ($value === null) {
-                $key = reset($table->primaryKey);
+                $key = \reset($table->primaryKey);
                 $value = $this->db->createCommand("SELECT MAX(`$key`) FROM $tableName")->queryScalar() + 1;
             } else {
                 $value = (int) $value;
@@ -264,7 +264,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
     protected function hasLimit($limit)
     {
         // In MySQL limit argument must be nonnegative integer constant
-        return ctype_digit((string) $limit);
+        return \ctype_digit((string) $limit);
     }
 
     /**
@@ -275,7 +275,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
         // In MySQL offset argument must be nonnegative integer constant
         $offset = (string) $offset;
 
-        return ctype_digit($offset) && $offset !== '0';
+        return \ctype_digit($offset) && $offset !== '0';
     }
 
     /**
@@ -293,7 +293,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
                     $columns = $tableSchema->primaryKey;
                     $defaultValue = 'NULL';
                 } else {
-                    $columns = [reset($tableSchema->columns)->name];
+                    $columns = [\reset($tableSchema->columns)->name];
                     $defaultValue = 'DEFAULT';
                 }
 
@@ -333,12 +333,12 @@ class QueryBuilder extends \yii\db\QueryBuilder
                 $updateColumns[$name] = new Expression('VALUES(' . $this->db->quoteColumnName($name) . ')');
             }
         } elseif ($updateColumns === false) {
-            $name = $this->db->quoteColumnName(reset($uniqueNames));
+            $name = $this->db->quoteColumnName(\reset($uniqueNames));
             $updateColumns = [$name => new Expression($this->db->quoteTableName($table) . '.' . $name)];
         }
         [$updates, $params] = $this->prepareUpdateSets($table, $updateColumns, $params);
 
-        return $insertSql . ' ON DUPLICATE KEY UPDATE ' . implode(', ', $updates);
+        return $insertSql . ' ON DUPLICATE KEY UPDATE ' . \implode(', ', $updates);
     }
 
     /**
@@ -349,13 +349,13 @@ class QueryBuilder extends \yii\db\QueryBuilder
     public function addCommentOnColumn($table, $column, $comment)
     {
         // Strip existing comment which may include escaped quotes
-        $definition = trim(preg_replace("/COMMENT '(?:''|[^'])*'/i", '', $this->getColumnDefinition($table, $column)));
+        $definition = \trim(\preg_replace("/COMMENT '(?:''|[^'])*'/i", '', $this->getColumnDefinition($table, $column)));
 
         $checkRegex = '/CHECK *(\(([^()]|(?-2))*\))/';
-        $check = preg_match($checkRegex, $definition, $checkMatches);
+        $check = \preg_match($checkRegex, $definition, $checkMatches);
 
         if ($check === 1) {
-            $definition = preg_replace($checkRegex, '', $definition);
+            $definition = \preg_replace($checkRegex, '', $definition);
         }
         $alterSql = 'ALTER TABLE ' . $this->db->quoteTableName($table)
             . ' CHANGE ' . $this->db->quoteColumnName($column)
@@ -422,11 +422,11 @@ class QueryBuilder extends \yii\db\QueryBuilder
         if (isset($row['Create Table'])) {
             $sql = $row['Create Table'];
         } else {
-            $row = array_values($row);
+            $row = \array_values($row);
             $sql = $row[1];
         }
 
-        if (preg_match_all('/^\s*[`"](.*?)[`"]\s+(.*?),?$/m', $sql, $matches)) {
+        if (\preg_match_all('/^\s*[`"](.*?)[`"]\s+(.*?),?$/m', $sql, $matches)) {
             foreach ($matches[1] as $i => $c) {
                 if ($c === $column) {
                     return $matches[2][$i];
@@ -450,7 +450,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
         // https://github.com/yiisoft/yii2/issues/13749#issuecomment-481657224
         $key = [__METHOD__, $this->db->dsn];
         $cache = null;
-        $schemaCache = (Yii::$app && is_string($this->db->schemaCache)) ? Yii::$app->get($this->db->schemaCache, false) : $this->db->schemaCache;
+        $schemaCache = (Yii::$app && \is_string($this->db->schemaCache)) ? Yii::$app->get($this->db->schemaCache, false) : $this->db->schemaCache;
         // If the `$schemaCache` is an instance of `DbCache` we don't use it to avoid a loop
         if ($this->db->enableSchemaCache && $schemaCache instanceof CacheInterface && !($schemaCache instanceof DbCache)) {
             $cache = $schemaCache;
@@ -465,7 +465,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
             }
         }
 
-        return version_compare($version, '5.6.4', '>=');
+        return \version_compare($version, '5.6.4', '>=');
     }
 
     /**

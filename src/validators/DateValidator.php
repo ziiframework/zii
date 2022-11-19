@@ -301,7 +301,7 @@ class DateValidator extends Validator
             $this->minString = (string) $this->min;
         }
 
-        if ($this->max !== null && is_string($this->max)) {
+        if ($this->max !== null && \is_string($this->max)) {
             $timestamp = $this->parseDateValue($this->max);
 
             if ($timestamp === false) {
@@ -310,7 +310,7 @@ class DateValidator extends Validator
             $this->max = $timestamp;
         }
 
-        if ($this->min !== null && is_string($this->min)) {
+        if ($this->min !== null && \is_string($this->min)) {
             $timestamp = $this->parseDateValue($this->min);
 
             if ($timestamp === false) {
@@ -340,7 +340,7 @@ class DateValidator extends Validator
         if ($timestamp === false) {
             if ($this->timestampAttribute === $attribute) {
                 if ($this->timestampAttributeFormat === null) {
-                    if (is_int($value)) {
+                    if (\is_int($value)) {
                         return;
                     }
                 } elseif ($this->parseDateValueFormat($value, $this->timestampAttributeFormat) !== false) {
@@ -404,14 +404,14 @@ class DateValidator extends Validator
      */
     private function parseDateValueFormat($value, $format)
     {
-        if (is_array($value)) {
+        if (\is_array($value)) {
             return false;
         }
 
-        if (strncmp($format, 'php:', 4) === 0) {
-            $format = substr($format, 4);
+        if (\strncmp($format, 'php:', 4) === 0) {
+            $format = \substr($format, 4);
         } else {
-            if (extension_loaded('intl')) {
+            if (\extension_loaded('intl')) {
                 return $this->parseDateValueIntl($value, $format);
             }
 
@@ -442,7 +442,7 @@ class DateValidator extends Validator
         // See https://github.com/yiisoft/yii2/issues/5962 and https://bugs.php.net/bug.php?id=68528
         $parsePos = 0;
         $parsedDate = @$formatter->parse(pf_string_argument($value), $parsePos);
-        $valueLength = mb_strlen(pf_string_argument($value), Yii::$app ? Yii::$app->charset : 'UTF-8');
+        $valueLength = \mb_strlen(pf_string_argument($value), Yii::$app ? Yii::$app->charset : 'UTF-8');
 
         if ($parsedDate === false || $parsePos !== $valueLength || ($this->strictDateFormat && $formatter->format($parsedDate) !== $value)) {
             return false;
@@ -464,7 +464,7 @@ class DateValidator extends Validator
     {
         if (!isset($this->_dateFormats[$format])) {
             // if no time was provided in the format string set timezone to default one to match yii\i18n\Formatter::formatDateTimeValue()
-            $timezone = strpbrk($format, 'ahHkKmsSA') !== false ? $this->timeZone : $this->defaultTimeZone;
+            $timezone = \strpbrk($format, 'ahHkKmsSA') !== false ? $this->timeZone : $this->defaultTimeZone;
 
             return new IntlDateFormatter($this->locale, IntlDateFormatter::NONE, IntlDateFormatter::NONE, $timezone, null, $format);
         }
@@ -498,7 +498,7 @@ class DateValidator extends Validator
      */
     private function parseDateValuePHP($value, $format)
     {
-        $hasTimeInfo = strpbrk($format, 'HhGgisU') !== false;
+        $hasTimeInfo = \strpbrk($format, 'HhGgisU') !== false;
         // if no time was provided in the format string set timezone to default one to match yii\i18n\Formatter::formatDateTimeValue()
         $timezone = $hasTimeInfo ? $this->timeZone : $this->defaultTimeZone;
         $date = DateTime::createFromFormat($format, pf_string_argument($value), new DateTimeZone($timezone));
@@ -506,8 +506,8 @@ class DateValidator extends Validator
 
         if (
             $date === false
-            || (is_array($errors) && $errors['error_count'])
-            || (is_array($errors) && $errors['warning_count'])
+            || (\is_array($errors) && $errors['error_count'])
+            || (\is_array($errors) && $errors['warning_count'])
             || ($this->strictDateFormat && $date->format($format) !== $value)
         ) {
             return false;
@@ -533,8 +533,8 @@ class DateValidator extends Validator
      */
     private function formatTimestamp($timestamp, $format)
     {
-        if (strncmp($format, 'php:', 4) === 0) {
-            $format = substr($format, 4);
+        if (\strncmp($format, 'php:', 4) === 0) {
+            $format = \substr($format, 4);
         } else {
             $format = FormatConverter::convertDateIcuToPhp($format, 'date');
         }

@@ -208,7 +208,7 @@ class AccessRule extends Component
      */
     protected function matchAction($action)
     {
-        return empty($this->actions) || in_array($action->id, $this->actions, true);
+        return empty($this->actions) || \in_array($action->id, $this->actions, true);
     }
 
     /**
@@ -245,7 +245,7 @@ class AccessRule extends Component
         $items = empty($this->roles) ? [] : $this->roles;
 
         if (!empty($this->permissions)) {
-            $items = array_merge($items, $this->permissions);
+            $items = \array_merge($items, $this->permissions);
         }
 
         if (empty($items)) {
@@ -267,7 +267,7 @@ class AccessRule extends Component
                 }
             } else {
                 if (!isset($roleParams)) {
-                    $roleParams = !is_array($this->roleParams) && is_callable($this->roleParams) ? call_user_func($this->roleParams, $this) : $this->roleParams;
+                    $roleParams = !\is_array($this->roleParams) && \is_callable($this->roleParams) ? \call_user_func($this->roleParams, $this) : $this->roleParams;
                 }
 
                 if ($user->can($item, $roleParams)) {
@@ -295,9 +295,9 @@ class AccessRule extends Component
                 $rule === '*'
                 || $rule === $ip
                 || ($ip !== null
-                    && ($pos = strpos($rule, '*')) !== false
-                    && strncmp($ip, $rule, $pos) === 0)
-                || (str_contains($rule, '/')
+                    && ($pos = \strpos($rule, '*')) !== false
+                    && \strncmp($ip, $rule, $pos) === 0)
+                || (\str_contains($rule, '/')
                     && IpHelper::inRange($ip, $rule) === true)
             ) {
                 return true;
@@ -314,7 +314,7 @@ class AccessRule extends Component
      */
     protected function matchVerb($verb)
     {
-        return empty($this->verbs) || in_array(strtoupper($verb), array_map('strtoupper', $this->verbs), true);
+        return empty($this->verbs) || \in_array(\strtoupper($verb), \array_map('strtoupper', $this->verbs), true);
     }
 
     /**
@@ -324,6 +324,6 @@ class AccessRule extends Component
      */
     protected function matchCustom($action)
     {
-        return empty($this->matchCallback) || call_user_func($this->matchCallback, $this, $action);
+        return empty($this->matchCallback) || \call_user_func($this->matchCallback, $this, $action);
     }
 }

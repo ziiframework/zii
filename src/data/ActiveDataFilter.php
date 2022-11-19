@@ -96,7 +96,7 @@ class ActiveDataFilter extends DataFilter
             if (isset($this->conditionBuilders[$key])) {
                 $method = $this->conditionBuilders[$key];
 
-                if (is_string($method)) {
+                if (\is_string($method)) {
                     $callback = [$this, $method];
                 } else {
                     $callback = $method;
@@ -108,10 +108,10 @@ class ActiveDataFilter extends DataFilter
         }
 
         if (!empty($parts)) {
-            if (count($parts) > 1) {
-                array_unshift($parts, 'AND');
+            if (\count($parts) > 1) {
+                \array_unshift($parts, 'AND');
             } else {
-                $parts = array_shift($parts);
+                $parts = \array_shift($parts);
             }
         }
 
@@ -172,7 +172,7 @@ class ActiveDataFilter extends DataFilter
      */
     protected function buildAttributeCondition($attribute, $condition)
     {
-        if (is_array($condition)) {
+        if (\is_array($condition)) {
             $parts = [];
 
             foreach ($condition as $operator => $value) {
@@ -180,7 +180,7 @@ class ActiveDataFilter extends DataFilter
                     if (isset($this->conditionBuilders[$operator])) {
                         $method = $this->conditionBuilders[$operator];
 
-                        if (is_string($method)) {
+                        if (\is_string($method)) {
                             $callback = [$this, $method];
                         } else {
                             $callback = $method;
@@ -193,11 +193,11 @@ class ActiveDataFilter extends DataFilter
             }
 
             if (!empty($parts)) {
-                if (count($parts) > 1) {
-                    return array_merge(['AND'], $parts);
+                if (\count($parts) > 1) {
+                    return \array_merge(['AND'], $parts);
                 }
 
-                return array_shift($parts);
+                return \array_shift($parts);
             }
         }
 

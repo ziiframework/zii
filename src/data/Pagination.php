@@ -388,6 +388,6 @@ class Pagination extends BaseObject implements Linkable
             $params = $request instanceof Request ? $request->getQueryParams() : [];
         }
 
-        return isset($params[$name]) && is_scalar($params[$name]) ? $params[$name] : $defaultValue;
+        return isset($params[$name]) && \is_scalar($params[$name]) ? $params[$name] : $defaultValue;
     }
 }

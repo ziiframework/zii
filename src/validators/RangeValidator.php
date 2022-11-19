@@ -66,7 +66,7 @@ class RangeValidator extends Validator
     {
         parent::init();
 
-        if (!is_array($this->range)
+        if (!\is_array($this->range)
             && !($this->range instanceof Closure)
             && !($this->range instanceof Traversable)
         ) {
@@ -86,7 +86,7 @@ class RangeValidator extends Validator
         $in = false;
 
         if ($this->allowArray
-            && ($value instanceof Traversable || is_array($value))
+            && ($value instanceof Traversable || \is_array($value))
             && ArrayHelper::isSubset($value, $this->range, $this->strict)
         ) {
             $in = true;
@@ -105,7 +105,7 @@ class RangeValidator extends Validator
     public function validateAttribute($model, $attribute): void
     {
         if ($this->range instanceof Closure) {
-            $this->range = call_user_func($this->range, $model, $attribute);
+            $this->range = \call_user_func($this->range, $model, $attribute);
         }
         parent::validateAttribute($model, $attribute);
     }
@@ -116,7 +116,7 @@ class RangeValidator extends Validator
     public function clientValidateAttribute($model, $attribute, $view)
     {
         if ($this->range instanceof Closure) {
-            $this->range = call_user_func($this->range, $model, $attribute);
+            $this->range = \call_user_func($this->range, $model, $attribute);
         }
 
         ValidationAsset::register($view);

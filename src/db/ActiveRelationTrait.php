@@ -85,9 +85,9 @@ trait ActiveRelationTrait
     {
         parent::__clone();
         // make a clone of "via" object so that the same query object can be reused multiple times
-        if (is_object($this->via)) {
+        if (\is_object($this->via)) {
             $this->via = clone $this->via;
-        } elseif (is_array($this->via)) {
+        } elseif (\is_array($this->via)) {
             $this->via = [$this->via[0], clone $this->via[1], $this->via[2]];
         }
     }
@@ -124,7 +124,7 @@ trait ActiveRelationTrait
         $this->via = [$relationName, $relation, $callableUsed];
 
         if ($callable !== null) {
-            call_user_func($callable, $relation);
+            \call_user_func($callable, $relation);
         }
 
         return $this;
@@ -196,12 +196,12 @@ trait ActiveRelationTrait
      */
     public function findFor($name, $model)
     {
-        if (method_exists($model, 'get' . $name)) {
+        if (\method_exists($model, 'get' . $name)) {
             $method = new ReflectionMethod($model, 'get' . $name);
-            $realName = lcfirst(substr($method->getName(), 3));
+            $realName = \lcfirst(\substr($method->getName(), 3));
 
             if ($realName !== $name) {
-                throw new InvalidArgumentException('Relation names are case sensitive. ' . get_class($model) . " has a relation named \"$realName\" instead of \"$name\".");
+                throw new InvalidArgumentException('Relation names are case sensitive. ' . \get_class($model) . " has a relation named \"$realName\" instead of \"$name\".");
             }
         }
 
@@ -250,7 +250,7 @@ trait ActiveRelationTrait
      */
     public function populateRelation($name, &$primaryModels)
     {
-        if (!is_array($this->link)) {
+        if (!\is_array($this->link)) {
             throw new InvalidConfigException('Invalid link: it must be an array of key-value pairs.');
         }
 
@@ -260,7 +260,7 @@ trait ActiveRelationTrait
             $viaQuery = $this->via;
             $viaModels = $viaQuery->findJunctionRows($primaryModels);
             $this->filterByModels($viaModels);
-        } elseif (is_array($this->via)) {
+        } elseif (\is_array($this->via)) {
             // via relation
             /* @var $viaQuery ActiveRelationTrait|ActiveQueryTrait */
             [$viaName, $viaQuery] = $this->via;
@@ -270,20 +270,20 @@ trait ActiveRelationTrait
                 $viaQuery->asArray($this->asArray);
             }
             $viaQuery->primaryModel = null;
-            $viaModels = array_filter($viaQuery->populateRelation($viaName, $primaryModels));
+            $viaModels = \array_filter($viaQuery->populateRelation($viaName, $primaryModels));
             $this->filterByModels($viaModels);
         } else {
             $this->filterByModels($primaryModels);
         }
 
-        if (!$this->multiple && count($primaryModels) === 1) {
+        if (!$this->multiple && \count($primaryModels) === 1) {
             $model = $this->one();
-            $primaryModel = reset($primaryModels);
+            $primaryModel = \reset($primaryModels);
 
             if ($primaryModel instanceof ActiveRecordInterface) {
                 $primaryModel->populateRelation($name, $model);
             } else {
-                $primaryModels[key($primaryModels)][$name] = $model;
+                $primaryModels[\key($primaryModels)][$name] = $model;
             }
 
             if ($this->inverseOf !== null) {
@@ -311,26 +311,26 @@ trait ActiveRelationTrait
             $buckets = $this->indexBuckets($buckets, $this->indexBy);
         }
 
-        $link = array_values($this->link);
+        $link = \array_values($this->link);
 
         if (isset($viaQuery)) {
             $deepViaQuery = $viaQuery;
 
             while ($deepViaQuery->via) {
-                $deepViaQuery = is_array($deepViaQuery->via) ? $deepViaQuery->via[1] : $deepViaQuery->via;
+                $deepViaQuery = \is_array($deepViaQuery->via) ? $deepViaQuery->via[1] : $deepViaQuery->via;
             }
-            $link = array_values($deepViaQuery->link);
+            $link = \array_values($deepViaQuery->link);
         }
 
         foreach ($primaryModels as $i => $primaryModel) {
             $keys = null;
 
-            if ($this->multiple && count($link) === 1) {
-                $primaryModelKey = reset($link);
+            if ($this->multiple && \count($link) === 1) {
+                $primaryModelKey = \reset($link);
                 $keys = $primaryModel[$primaryModelKey] ?? null;
             }
 
-            if (is_array($keys)) {
+            if (\is_array($keys)) {
                 $value = [];
 
                 foreach ($keys as $key) {
@@ -343,7 +343,7 @@ trait ActiveRelationTrait
                                 $value[$bucketKey] = $bucketValue;
                             }
                         } else {
-                            $value = array_merge($value, $buckets[$key]);
+                            $value = \array_merge($value, $buckets[$key]);
                         }
                     }
                 }
@@ -377,7 +377,7 @@ trait ActiveRelationTrait
         if (empty($models) || empty($primaryModels)) {
             return;
         }
-        $model = reset($models);
+        $model = \reset($models);
         /* @var $relation ActiveQueryInterface|ActiveQuery */
         if ($model instanceof ActiveRecordInterface) {
             $relation = $model->getRelation($name);
@@ -443,8 +443,8 @@ trait ActiveRelationTrait
         if ($viaModels !== null) {
             $map = [];
             $viaLink = $viaQuery->link;
-            $viaLinkKeys = array_keys($viaLink);
-            $linkValues = array_values($link);
+            $viaLinkKeys = \array_keys($viaLink);
+            $linkValues = \array_values($link);
 
             foreach ($viaModels as $viaModel) {
                 $key1 = $this->getModelKey($viaModel, $viaLinkKeys);
@@ -457,7 +457,7 @@ trait ActiveRelationTrait
             $viaVia = $viaQuery->via;
 
             while ($viaVia) {
-                $viaViaQuery = is_array($viaVia) ? $viaVia[1] : $viaVia;
+                $viaViaQuery = \is_array($viaVia) ? $viaVia[1] : $viaVia;
                 $map = $this->mapVia($map, $viaViaQuery->viaMap);
 
                 $viaVia = $viaViaQuery->via;
@@ -465,14 +465,14 @@ trait ActiveRelationTrait
         }
 
         $buckets = [];
-        $linkKeys = array_keys($link);
+        $linkKeys = \array_keys($link);
 
         if (isset($map)) {
             foreach ($models as $model) {
                 $key = $this->getModelKey($model, $linkKeys);
 
                 if (isset($map[$key])) {
-                    foreach (array_keys($map[$key]) as $key2) {
+                    foreach (\array_keys($map[$key]) as $key2) {
                         $buckets[$key2][] = $model;
                     }
                 }
@@ -486,7 +486,7 @@ trait ActiveRelationTrait
 
         if ($checkMultiple && !$this->multiple) {
             foreach ($buckets as $i => $bucket) {
-                $buckets[$i] = reset($bucket);
+                $buckets[$i] = \reset($bucket);
             }
         }
 
@@ -506,7 +506,7 @@ trait ActiveRelationTrait
         foreach ($map as $key => $linkKeys) {
             $resultMap[$key] = [];
 
-            foreach (array_keys($linkKeys) as $linkKey) {
+            foreach (\array_keys($linkKeys) as $linkKey) {
                 $resultMap[$key] += $viaMap[$linkKey];
             }
         }
@@ -531,7 +531,7 @@ trait ActiveRelationTrait
             $result[$key] = [];
 
             foreach ($models as $model) {
-                $index = is_string($indexBy) ? $model[$indexBy] : call_user_func($indexBy, $model);
+                $index = \is_string($indexBy) ? $model[$indexBy] : \call_user_func($indexBy, $model);
                 $result[$key][$index] = $model;
             }
         }
@@ -553,7 +553,7 @@ trait ActiveRelationTrait
                 $alias = $modelClass::tableName();
             } else {
                 foreach ($this->from as $alias => $table) {
-                    if (!is_string($alias)) {
+                    if (!\is_string($alias)) {
                         $alias = $table;
                     }
                     break;
@@ -575,24 +575,24 @@ trait ActiveRelationTrait
      */
     private function filterByModels($models): void
     {
-        $attributes = array_keys($this->link);
+        $attributes = \array_keys($this->link);
 
         $attributes = $this->prefixKeyColumns($attributes);
 
         $values = [];
 
-        if (count($attributes) === 1) {
+        if (\count($attributes) === 1) {
             // single key
-            $attribute = reset($this->link);
+            $attribute = \reset($this->link);
 
             foreach ($models as $model) {
-                $value = isset($model[$attribute]) || (is_object($model) && property_exists($model, $attribute)) ? $model[$attribute] : null;
+                $value = isset($model[$attribute]) || (\is_object($model) && \property_exists($model, $attribute)) ? $model[$attribute] : null;
 
                 if ($value !== null) {
-                    if (is_array($value)) {
-                        $values = array_merge($values, $value);
+                    if (\is_array($value)) {
+                        $values = \array_merge($values, $value);
                     } elseif ($value instanceof ArrayExpression && $value->getDimension() === 1) {
-                        $values = array_merge($values, $value->getValue());
+                        $values = \array_merge($values, $value->getValue());
                     } else {
                         $values[] = $value;
                     }
@@ -606,7 +606,7 @@ trait ActiveRelationTrait
             // composite keys
 
             // ensure keys of $this->link are prefixed the same way as $attributes
-            $prefixedLink = array_combine($attributes, $this->link);
+            $prefixedLink = \array_combine($attributes, $this->link);
 
             foreach ($models as $model) {
                 $v = [];
@@ -627,15 +627,15 @@ trait ActiveRelationTrait
             $nonScalarValues = [];
 
             foreach ($values as $value) {
-                if (is_scalar($value)) {
+                if (\is_scalar($value)) {
                     $scalarValues[] = $value;
                 } else {
                     $nonScalarValues[] = $value;
                 }
             }
 
-            $scalarValues = array_unique($scalarValues);
-            $values = array_merge($scalarValues, $nonScalarValues);
+            $scalarValues = \array_unique($scalarValues);
+            $values = \array_merge($scalarValues, $nonScalarValues);
         }
 
         $this->andWhere(['in', $attributes, $values]);
@@ -652,16 +652,16 @@ trait ActiveRelationTrait
         $key = [];
 
         foreach ($attributes as $attribute) {
-            if (isset($model[$attribute]) || (is_object($model) && property_exists($model, $attribute))) {
+            if (isset($model[$attribute]) || (\is_object($model) && \property_exists($model, $attribute))) {
                 $key[] = $this->normalizeModelKey($model[$attribute]);
             }
         }
 
-        if (count($key) > 1) {
-            return serialize($key);
+        if (\count($key) > 1) {
+            return \serialize($key);
         }
 
-        return reset($key);
+        return \reset($key);
     }
 
     /**
@@ -693,7 +693,7 @@ trait ActiveRelationTrait
         }
         $this->filterByModels($primaryModels);
         /* @var $primaryModel ActiveRecord */
-        $primaryModel = reset($primaryModels);
+        $primaryModel = \reset($primaryModels);
 
         if (!$primaryModel instanceof ActiveRecordInterface) {
             // when primaryModels are array of arrays (asArray case)

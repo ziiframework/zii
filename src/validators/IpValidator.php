@@ -315,8 +315,8 @@ class IpValidator extends Validator
     {
         $result = $this->validateSubnet($value);
 
-        if (is_array($result)) {
-            $result[1] = array_merge(['ip' => is_array($value) ? 'array()' : $value], $result[1]);
+        if (\is_array($result)) {
+            $result[1] = \array_merge(['ip' => \is_array($value) ? 'array()' : $value], $result[1]);
 
             return $result;
         }
@@ -333,8 +333,8 @@ class IpValidator extends Validator
 
         $result = $this->validateSubnet($value);
 
-        if (is_array($result)) {
-            $result[1] = array_merge(['ip' => is_array($value) ? 'array()' : $value], $result[1]);
+        if (\is_array($result)) {
+            $result[1] = \array_merge(['ip' => \is_array($value) ? 'array()' : $value], $result[1]);
             $this->addError($model, $attribute, $result[0], $result[1]);
         } else {
             $model->$attribute = $result;
@@ -353,7 +353,7 @@ class IpValidator extends Validator
      */
     private function validateSubnet($ip)
     {
-        if (!is_string($ip)) {
+        if (!\is_string($ip)) {
             return [$this->message, []];
         }
 
@@ -361,7 +361,7 @@ class IpValidator extends Validator
         $cidr = null;
         $isCidrDefault = false;
 
-        if (preg_match($this->getIpParsePattern(), $ip, $matches)) {
+        if (\preg_match($this->getIpParsePattern(), $ip, $matches)) {
             $negation = ($matches[1] !== '') ? $matches[1] : null;
             $ip = $matches[2];
             $cidr = $matches[4] ?? null;
@@ -482,9 +482,9 @@ class IpValidator extends Validator
      */
     private function parseNegatedRange($string)
     {
-        $isNegated = str_starts_with($string, static::NEGATION_CHAR);
+        $isNegated = \str_starts_with($string, static::NEGATION_CHAR);
 
-        return [$isNegated, $isNegated ? substr($string, strlen(static::NEGATION_CHAR)) : $string];
+        return [$isNegated, $isNegated ? \substr($string, \strlen(static::NEGATION_CHAR)) : $string];
     }
 
     /**
@@ -516,7 +516,7 @@ class IpValidator extends Validator
             }
         }
 
-        return array_unique($result);
+        return \array_unique($result);
     }
 
     /**
@@ -528,7 +528,7 @@ class IpValidator extends Validator
      */
     protected function validateIPv4($value)
     {
-        return preg_match($this->ipv4Pattern, $value) !== 0;
+        return \preg_match($this->ipv4Pattern, $value) !== 0;
     }
 
     /**
@@ -540,7 +540,7 @@ class IpValidator extends Validator
      */
     protected function validateIPv6($value)
     {
-        return preg_match($this->ipv6Pattern, $value) !== 0;
+        return \preg_match($this->ipv6Pattern, $value) !== 0;
     }
 
     /**
@@ -562,7 +562,7 @@ class IpValidator extends Validator
      */
     private function getIpParsePattern()
     {
-        return '/^(' . preg_quote(static::NEGATION_CHAR, '/') . '?)(.+?)(\/(\d+))?$/';
+        return '/^(' . \preg_quote(static::NEGATION_CHAR, '/') . '?)(.+?)(\/(\d+))?$/';
     }
 
     /**

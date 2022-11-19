@@ -301,7 +301,7 @@ class DataFilter extends Model
      */
     public function getSearchModel()
     {
-        if (!is_object($this->_searchModel) || $this->_searchModel instanceof Closure) {
+        if (!\is_object($this->_searchModel) || $this->_searchModel instanceof Closure) {
             $model = Yii::createObject($this->_searchModel);
 
             if (!$model instanceof Model) {
@@ -320,7 +320,7 @@ class DataFilter extends Model
      */
     public function setSearchModel($model): void
     {
-        if (is_object($model) && !$model instanceof Model && !$model instanceof Closure) {
+        if (\is_object($model) && !$model instanceof Model && !$model instanceof Closure) {
             throw new InvalidConfigException('`' . static::class . '::$searchModel` should be an instance of `' . Model::className() . '` or its DI compatible configuration.');
         }
         $this->_searchModel = $model;
@@ -419,11 +419,11 @@ class DataFilter extends Model
      */
     public function getErrorMessages()
     {
-        if (!is_array($this->_errorMessages)) {
+        if (!\is_array($this->_errorMessages)) {
             if ($this->_errorMessages === null) {
                 $this->_errorMessages = $this->defaultErrorMessages();
             } else {
-                $this->_errorMessages = array_merge($this->defaultErrorMessages(), call_user_func($this->_errorMessages));
+                $this->_errorMessages = \array_merge($this->defaultErrorMessages(), \call_user_func($this->_errorMessages));
             }
         }
 
@@ -439,8 +439,8 @@ class DataFilter extends Model
      */
     public function setErrorMessages($errorMessages): void
     {
-        if (is_array($errorMessages)) {
-            $errorMessages = array_merge($this->defaultErrorMessages(), $errorMessages);
+        if (\is_array($errorMessages)) {
+            $errorMessages = \array_merge($this->defaultErrorMessages(), $errorMessages);
         }
         $this->_errorMessages = $errorMessages;
     }
@@ -480,7 +480,7 @@ class DataFilter extends Model
             $message = Yii::t('yii', 'The format of {filter} is invalid.');
         }
 
-        $params = array_merge([
+        $params = \array_merge([
                 'filter' => $this->getAttributeLabel($this->filterAttributeName),
             ], $params);
 
@@ -548,7 +548,7 @@ class DataFilter extends Model
      */
     protected function validateCondition($condition): void
     {
-        if (!is_array($condition)) {
+        if (!\is_array($condition)) {
             $this->addError($this->filterAttributeName, $this->parseErrorMessage('invalidFilter'));
 
             return;
@@ -581,7 +581,7 @@ class DataFilter extends Model
      */
     protected function validateConjunctionCondition($operator, $condition): void
     {
-        if (!is_array($condition) || !ArrayHelper::isIndexed($condition)) {
+        if (!\is_array($condition) || !ArrayHelper::isIndexed($condition)) {
             $this->addError($this->filterAttributeName, $this->parseErrorMessage('operatorRequireMultipleOperands', ['operator' => $operator]));
 
             return;
@@ -620,7 +620,7 @@ class DataFilter extends Model
             return;
         }
 
-        if (is_array($condition)) {
+        if (\is_array($condition)) {
             $operatorCount = 0;
 
             foreach ($condition as $rawOperator => $value) {
@@ -635,7 +635,7 @@ class DataFilter extends Model
             }
 
             if ($operatorCount > 0) {
-                if ($operatorCount < count($condition)) {
+                if ($operatorCount < \count($condition)) {
                     $this->addError($this->filterAttributeName, $this->parseErrorMessage('invalidAttributeValueFormat', ['attribute' => $attribute]));
                 }
             } else {
@@ -672,16 +672,16 @@ class DataFilter extends Model
             $attributeTypes = $this->getSearchAttributeTypes();
             $attributeType = $attributeTypes[$attribute];
 
-            if (!in_array($attributeType, $operatorTypes, true)) {
+            if (!\in_array($attributeType, $operatorTypes, true)) {
                 $this->addError($this->filterAttributeName, $this->parseErrorMessage('unsupportedOperatorType', ['attribute' => $attribute, 'operator' => $operator]));
 
                 return;
             }
         }
 
-        if (in_array($internalOperator, $this->multiValueOperators, true)) {
+        if (\in_array($internalOperator, $this->multiValueOperators, true)) {
             // multi-value operator:
-            if (!is_array($condition)) {
+            if (!\is_array($condition)) {
                 $this->addError($this->filterAttributeName, $this->parseErrorMessage('operatorRequireMultipleOperands', ['operator' => $operator]));
             } else {
                 foreach ($condition as $v) {
@@ -796,7 +796,7 @@ class DataFilter extends Model
 
         $filter = $this->getFilter();
 
-        if (!is_array($filter) || empty($filter)) {
+        if (!\is_array($filter) || empty($filter)) {
             return [];
         }
 
@@ -821,7 +821,7 @@ class DataFilter extends Model
                 $key = $this->attributeMap[$key];
             }
 
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $result[$key] = $this->normalizeComplexFilter($value);
             } elseif ($value === $this->nullValue) {
                 $result[$key] = null;

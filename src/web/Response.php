@@ -282,7 +282,7 @@ class Response extends \yii\base\Response
         if ($this->charset === null) {
             $this->charset = Yii::$app->charset;
         }
-        $this->formatters = array_merge($this->defaultFormatters(), $this->formatters);
+        $this->formatters = \array_merge($this->defaultFormatters(), $this->formatters);
     }
 
     /**
@@ -398,24 +398,24 @@ class Response extends \yii\base\Response
      */
     protected function sendHeaders(): void
     {
-        if (headers_sent($file, $line)) {
+        if (\headers_sent($file, $line)) {
             throw new HeadersAlreadySentException($file, $line);
         }
 
         if ($this->_headers) {
             foreach ($this->getHeaders() as $name => $values) {
-                $name = str_replace(' ', '-', ucwords(str_replace('-', ' ', $name)));
+                $name = \str_replace(' ', '-', \ucwords(\str_replace('-', ' ', $name)));
                 // set replace for first occurrence of header but false afterwards to allow multiple
                 $replace = true;
 
                 foreach ($values as $value) {
-                    header("$name: $value", $replace);
+                    \header("$name: $value", $replace);
                     $replace = false;
                 }
             }
         }
         $statusCode = $this->getStatusCode();
-        header("HTTP/{$this->version} {$statusCode} {$this->statusText}");
+        \header("HTTP/{$this->version} {$statusCode} {$this->statusText}");
         $this->sendCookies();
     }
 
@@ -431,7 +431,7 @@ class Response extends \yii\base\Response
 
         if ($request->enableCookieValidation) {
             if ($request->cookieValidationKey == '') {
-                throw new InvalidConfigException(get_class($request) . '::cookieValidationKey must be configured with a secret key.');
+                throw new InvalidConfigException(\get_class($request) . '::cookieValidationKey must be configured with a secret key.');
             }
             $validationKey = $request->cookieValidationKey;
         }
@@ -440,10 +440,10 @@ class Response extends \yii\base\Response
             $value = $cookie->value;
 
             if ($cookie->expire != 1 && isset($validationKey)) {
-                $value = Yii::$app->getSecurity()->hashData(serialize([$cookie->name, $value]), $validationKey);
+                $value = Yii::$app->getSecurity()->hashData(\serialize([$cookie->name, $value]), $validationKey);
             }
 
-            setcookie($cookie->name, $value, [
+            \setcookie($cookie->name, $value, [
                 'expires' => $cookie->expire,
                 'path' => $cookie->path,
                 'domain' => $cookie->domain,
@@ -466,16 +466,16 @@ class Response extends \yii\base\Response
         }
 
         // Try to reset time limit for big files
-        if (!function_exists('set_time_limit') || !@set_time_limit(0)) {
+        if (!\function_exists('set_time_limit') || !@\set_time_limit(0)) {
             Yii::warning('set_time_limit() is not available', __METHOD__);
         }
 
-        if (is_callable($this->stream)) {
-            $data = call_user_func($this->stream);
+        if (\is_callable($this->stream)) {
+            $data = \call_user_func($this->stream);
 
             foreach ($data as $datum) {
                 echo $datum;
-                flush();
+                \flush();
             }
 
             return;
@@ -483,32 +483,32 @@ class Response extends \yii\base\Response
 
         $chunkSize = 8 * 1024 * 1024; // 8MB per chunk
 
-        if (is_array($this->stream)) {
+        if (\is_array($this->stream)) {
             [$handle, $begin, $end] = $this->stream;
 
             // only seek if stream is seekable
             if ($this->isSeekable($handle)) {
-                if (is_string($begin) && is_numeric($begin)) {
-                    fseek($handle, (int) $begin);
+                if (\is_string($begin) && \is_numeric($begin)) {
+                    \fseek($handle, (int) $begin);
                 } else {
-                    fseek($handle, $begin);
+                    \fseek($handle, $begin);
                 }
             }
 
-            while (!feof($handle) && ($pos = ftell($handle)) <= $end) {
+            while (!\feof($handle) && ($pos = \ftell($handle)) <= $end) {
                 if ($pos + $chunkSize > $end) {
                     $chunkSize = $end - $pos + 1;
                 }
-                echo fread($handle, $chunkSize);
-                flush(); // Free up memory. Otherwise large files will trigger PHP's memory limit.
+                echo \fread($handle, $chunkSize);
+                \flush(); // Free up memory. Otherwise large files will trigger PHP's memory limit.
             }
-            fclose($handle);
+            \fclose($handle);
         } else {
-            while (!feof($this->stream)) {
-                echo fread($this->stream, $chunkSize);
-                flush();
+            while (!\feof($this->stream)) {
+                echo \fread($this->stream, $chunkSize);
+                \flush();
             }
-            fclose($this->stream);
+            \fclose($this->stream);
         }
     }
 
@@ -555,9 +555,9 @@ class Response extends \yii\base\Response
         }
 
         if ($attachmentName === null) {
-            $attachmentName = basename($filePath);
+            $attachmentName = \basename($filePath);
         }
-        $handle = fopen($filePath, 'rb');
+        $handle = \fopen($filePath, 'rb');
         $this->sendStreamAsFile($handle, $attachmentName, $options);
 
         return $this;
@@ -646,8 +646,8 @@ class Response extends \yii\base\Response
             $fileSize = $options['fileSize'];
         } else {
             if ($this->isSeekable($handle)) {
-                fseek($handle, 0, SEEK_END);
-                $fileSize = ftell($handle);
+                \fseek($handle, 0, \SEEK_END);
+                $fileSize = \ftell($handle);
             } else {
                 $fileSize = 0;
             }
@@ -727,7 +727,7 @@ class Response extends \yii\base\Response
             return [0, $fileSize - 1];
         }
 
-        if (!preg_match('/^bytes=(\d*)-(\d*)$/', $rangeHeader, $matches)) {
+        if (!\preg_match('/^bytes=(\d*)-(\d*)$/', $rangeHeader, $matches)) {
             return false;
         }
 
@@ -815,7 +815,7 @@ class Response extends \yii\base\Response
     public function xSendFile($filePath, $attachmentName = null, $options = [])
     {
         if ($attachmentName === null) {
-            $attachmentName = basename($filePath);
+            $attachmentName = \basename($filePath);
         }
 
         if (isset($options['mimeType'])) {
@@ -868,8 +868,8 @@ class Response extends \yii\base\Response
      */
     protected function getDispositionHeaderValue($disposition, $attachmentName)
     {
-        $fallbackName = str_replace(['%', '/', '\\', '"', "\x7F"], ['_', '_', '_', '\\"', '_'], Inflector::transliterate($attachmentName, Inflector::TRANSLITERATE_LOOSE));
-        $utfName = rawurlencode(str_replace(['%', '/', '\\'], '', $attachmentName));
+        $fallbackName = \str_replace(['%', '/', '\\', '"', "\x7F"], ['_', '_', '_', '\\"', '_'], Inflector::transliterate($attachmentName, Inflector::TRANSLITERATE_LOOSE));
+        $utfName = \rawurlencode(\str_replace(['%', '/', '\\'], '', $attachmentName));
 
         $dispositionHeader = "{$disposition}; filename=\"{$fallbackName}\"";
 
@@ -938,25 +938,25 @@ class Response extends \yii\base\Response
      */
     public function redirect($url, $statusCode = 302, $checkAjax = true)
     {
-        if (is_array($url) && isset($url[0])) {
+        if (\is_array($url) && isset($url[0])) {
             // ensure the route is absolute
-            $url[0] = '/' . ltrim($url[0], '/');
+            $url[0] = '/' . \ltrim($url[0], '/');
         }
         $request = Yii::$app->getRequest();
         $normalizedUrl = Url::to($url);
 
         if (
             $normalizedUrl !== null
-            && strncmp($normalizedUrl, '/', 1) === 0
-            && strncmp($normalizedUrl, '//', 2) !== 0
+            && \strncmp($normalizedUrl, '/', 1) === 0
+            && \strncmp($normalizedUrl, '//', 2) !== 0
         ) {
             $normalizedUrl = $request->getHostInfo() . $normalizedUrl;
         }
 
         if ($checkAjax && $request->getIsAjax()) {
             if (
-                in_array($statusCode, [301, 302])
-                && preg_match('/Trident\/|MSIE /', (string) $request->userAgent)
+                \in_array($statusCode, [301, 302])
+                && \preg_match('/Trident\/|MSIE /', (string) $request->userAgent)
             ) {
                 $statusCode = 200;
             }
@@ -1104,7 +1104,7 @@ class Response extends \yii\base\Response
      */
     public function getIsEmpty()
     {
-        return in_array($this->getStatusCode(), [201, 204, 304]);
+        return \in_array($this->getStatusCode(), [201, 204, 304]);
     }
 
     /**
@@ -1140,7 +1140,7 @@ class Response extends \yii\base\Response
      */
     protected function prepare(): void
     {
-        if (in_array($this->getStatusCode(), [204, 304])) {
+        if (\in_array($this->getStatusCode(), [204, 304])) {
             // A 204/304 response cannot contain a message body according to rfc7231/rfc7232
             $this->content = '';
             $this->stream = null;
@@ -1155,7 +1155,7 @@ class Response extends \yii\base\Response
         if (isset($this->formatters[$this->format])) {
             $formatter = $this->formatters[$this->format];
 
-            if (!is_object($formatter)) {
+            if (!\is_object($formatter)) {
                 $this->formatters[$this->format] = $formatter = Yii::createObject($formatter);
             }
 
@@ -1172,10 +1172,10 @@ class Response extends \yii\base\Response
             throw new InvalidConfigException("Unsupported response format: {$this->format}");
         }
 
-        if (is_array($this->content)) {
+        if (\is_array($this->content)) {
             throw new InvalidArgumentException('Response content must not be an array.');
-        } elseif (is_object($this->content)) {
-            if (method_exists($this->content, '__toString')) {
+        } elseif (\is_object($this->content)) {
+            if (\method_exists($this->content, '__toString')) {
                 $this->content = $this->content->__toString();
             } else {
                 throw new InvalidArgumentException('Response content must be a string or an object implementing __toString().');
@@ -1190,11 +1190,11 @@ class Response extends \yii\base\Response
      */
     private function isSeekable($handle)
     {
-        if (!is_resource($handle)) {
+        if (!\is_resource($handle)) {
             return true;
         }
 
-        $metaData = stream_get_meta_data($handle);
+        $metaData = \stream_get_meta_data($handle);
 
         return isset($metaData['seekable']) && $metaData['seekable'] === true;
     }

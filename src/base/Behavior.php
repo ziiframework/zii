@@ -83,7 +83,7 @@ class Behavior extends BaseObject
 
         foreach ($this->events() as $event => $handler) {
             $this->_attachedEvents[$event] = $handler;
-            $owner->on($event, is_string($handler) ? [$this, $handler] : $handler);
+            $owner->on($event, \is_string($handler) ? [$this, $handler] : $handler);
         }
     }
 
@@ -97,7 +97,7 @@ class Behavior extends BaseObject
     {
         if ($this->owner) {
             foreach ($this->_attachedEvents as $event => $handler) {
-                $this->owner->off($event, is_string($handler) ? [$this, $handler] : $handler);
+                $this->owner->off($event, \is_string($handler) ? [$this, $handler] : $handler);
             }
             $this->_attachedEvents = [];
             $this->owner = null;

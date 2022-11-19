@@ -124,8 +124,8 @@ class Security extends Component
         if ($this->_useLibreSSL === null) {
             // Parse OPENSSL_VERSION_TEXT because OPENSSL_VERSION_NUMBER is no use for LibreSSL.
             // https://bugs.php.net/bug.php?id=71143
-            $this->_useLibreSSL = defined('OPENSSL_VERSION_TEXT')
-                && preg_match('{^LibreSSL (\d\d?)\.(\d\d?)\.(\d\d?)$}', OPENSSL_VERSION_TEXT, $matches)
+            $this->_useLibreSSL = \defined('OPENSSL_VERSION_TEXT')
+                && \preg_match('{^LibreSSL (\d\d?)\.(\d\d?)\.(\d\d?)$}', \OPENSSL_VERSION_TEXT, $matches)
                 && (10000 * $matches[1]) + (100 * $matches[2]) + $matches[3] >= 20105;
         }
 
@@ -227,7 +227,7 @@ class Security extends Component
      */
     protected function encrypt($data, $passwordBased, $secret, $info)
     {
-        if (!extension_loaded('openssl')) {
+        if (!\extension_loaded('openssl')) {
             throw new InvalidConfigException('Encryption requires the OpenSSL PHP extension');
         }
 
@@ -247,10 +247,10 @@ class Security extends Component
 
         $iv = $this->generateRandomKey($blockSize);
 
-        $encrypted = openssl_encrypt($data, $this->cipher, $key, OPENSSL_RAW_DATA, $iv);
+        $encrypted = \openssl_encrypt($data, $this->cipher, $key, \OPENSSL_RAW_DATA, $iv);
 
         if ($encrypted === false) {
-            throw new \yii\base\Exception('OpenSSL failure on encryption: ' . openssl_error_string());
+            throw new \yii\base\Exception('OpenSSL failure on encryption: ' . \openssl_error_string());
         }
 
         $authKey = $this->hkdf($this->kdfHash, $key, null, $this->authKeyInfo, $keySize);
@@ -282,7 +282,7 @@ class Security extends Component
      */
     protected function decrypt($data, $passwordBased, $secret, $info)
     {
-        if (!extension_loaded('openssl')) {
+        if (!\extension_loaded('openssl')) {
             throw new InvalidConfigException('Encryption requires the OpenSSL PHP extension');
         }
 
@@ -310,10 +310,10 @@ class Security extends Component
         $iv = StringHelper::byteSubstr($data, 0, $blockSize);
         $encrypted = StringHelper::byteSubstr($data, $blockSize, null);
 
-        $decrypted = openssl_decrypt($encrypted, $this->cipher, $key, OPENSSL_RAW_DATA, $iv);
+        $decrypted = \openssl_decrypt($encrypted, $this->cipher, $key, \OPENSSL_RAW_DATA, $iv);
 
         if ($decrypted === false) {
-            throw new \yii\base\Exception('OpenSSL failure on decryption: ' . openssl_error_string());
+            throw new \yii\base\Exception('OpenSSL failure on decryption: ' . \openssl_error_string());
         }
 
         return $decrypted;
@@ -339,8 +339,8 @@ class Security extends Component
      */
     public function hkdf($algo, $inputKey, $salt = null, $info = null, $length = 0)
     {
-        if (function_exists('hash_hkdf')) {
-            $outputKey = hash_hkdf($algo, $inputKey, $length, $info ?? '', $salt ?? '');
+        if (\function_exists('hash_hkdf')) {
+            $outputKey = \hash_hkdf($algo, $inputKey, $length, $info ?? '', $salt ?? '');
 
             if ($outputKey === false) {
                 throw new InvalidArgumentException('Invalid parameters to hash_hkdf()');
@@ -349,32 +349,32 @@ class Security extends Component
             return $outputKey;
         }
 
-        $test = @hash_hmac($algo, '', '', true);
+        $test = @\hash_hmac($algo, '', '', true);
 
         if (!$test) {
             throw new InvalidArgumentException('Failed to generate HMAC with hash algorithm: ' . $algo);
         }
         $hashLength = StringHelper::byteLength($test);
 
-        if (is_string($length) && preg_match('{^\d{1,16}$}', $length)) {
+        if (\is_string($length) && \preg_match('{^\d{1,16}$}', $length)) {
             $length = (int) $length;
         }
 
-        if (!is_int($length) || $length < 0 || $length > 255 * $hashLength) {
+        if (!\is_int($length) || $length < 0 || $length > 255 * $hashLength) {
             throw new InvalidArgumentException('Invalid length');
         }
-        $blocks = $length !== 0 ? ceil($length / $hashLength) : 1;
+        $blocks = $length !== 0 ? \ceil($length / $hashLength) : 1;
 
         if ($salt === null) {
-            $salt = str_repeat("\0", $hashLength);
+            $salt = \str_repeat("\0", $hashLength);
         }
-        $prKey = hash_hmac($algo, $inputKey, $salt, true);
+        $prKey = \hash_hmac($algo, $inputKey, $salt, true);
 
         $hmac = '';
         $outputKey = '';
 
         for ($i = 1; $i <= $blocks; ++$i) {
-            $hmac = hash_hmac($algo, $hmac . $info . chr($i), $prKey, true);
+            $hmac = \hash_hmac($algo, $hmac . $info . \chr($i), $prKey, true);
             $outputKey .= $hmac;
         }
 
@@ -404,8 +404,8 @@ class Security extends Component
      */
     public function pbkdf2($algo, $password, $salt, $iterations, $length = 0)
     {
-        if (function_exists('hash_pbkdf2')) {
-            $outputKey = hash_pbkdf2($algo, $password, $salt, $iterations, $length, true);
+        if (\function_exists('hash_pbkdf2')) {
+            $outputKey = \hash_pbkdf2($algo, $password, $salt, $iterations, $length, true);
 
             if ($outputKey === false) {
                 throw new InvalidArgumentException('Invalid parameters to hash_pbkdf2()');
@@ -415,38 +415,38 @@ class Security extends Component
         }
 
         // todo: is there a nice way to reduce the code repetition in hkdf() and pbkdf2()?
-        $test = @hash_hmac($algo, '', '', true);
+        $test = @\hash_hmac($algo, '', '', true);
 
         if (!$test) {
             throw new InvalidArgumentException('Failed to generate HMAC with hash algorithm: ' . $algo);
         }
 
-        if (is_string($iterations) && preg_match('{^\d{1,16}$}', $iterations)) {
+        if (\is_string($iterations) && \preg_match('{^\d{1,16}$}', $iterations)) {
             $iterations = (int) $iterations;
         }
 
-        if (!is_int($iterations) || $iterations < 1) {
+        if (!\is_int($iterations) || $iterations < 1) {
             throw new InvalidArgumentException('Invalid iterations');
         }
 
-        if (is_string($length) && preg_match('{^\d{1,16}$}', $length)) {
+        if (\is_string($length) && \preg_match('{^\d{1,16}$}', $length)) {
             $length = (int) $length;
         }
 
-        if (!is_int($length) || $length < 0) {
+        if (!\is_int($length) || $length < 0) {
             throw new InvalidArgumentException('Invalid length');
         }
         $hashLength = StringHelper::byteLength($test);
-        $blocks = $length !== 0 ? ceil($length / $hashLength) : 1;
+        $blocks = $length !== 0 ? \ceil($length / $hashLength) : 1;
 
         $outputKey = '';
 
         for ($j = 1; $j <= $blocks; ++$j) {
-            $hmac = hash_hmac($algo, $salt . pack('N', $j), $password, true);
+            $hmac = \hash_hmac($algo, $salt . \pack('N', $j), $password, true);
             $xorsum = $hmac;
 
             for ($i = 1; $i < $iterations; ++$i) {
-                $hmac = hash_hmac($algo, $hmac, $password, true);
+                $hmac = \hash_hmac($algo, $hmac, $password, true);
                 $xorsum ^= $hmac;
             }
             $outputKey .= $xorsum;
@@ -481,7 +481,7 @@ class Security extends Component
      */
     public function hashData($data, $key, $rawHash = false)
     {
-        $hash = hash_hmac($this->macHash, $data, $key, $rawHash);
+        $hash = \hash_hmac($this->macHash, $data, $key, $rawHash);
 
         if (!$hash) {
             throw new InvalidConfigException('Failed to generate HMAC with hash algorithm: ' . $this->macHash);
@@ -511,7 +511,7 @@ class Security extends Component
      */
     public function validateData($data, $key, $rawHash = false)
     {
-        $test = @hash_hmac($this->macHash, '', '', $rawHash);
+        $test = @\hash_hmac($this->macHash, '', '', $rawHash);
 
         if (!$test) {
             throw new InvalidConfigException('Failed to generate HMAC with hash algorithm: ' . $this->macHash);
@@ -522,7 +522,7 @@ class Security extends Component
             $hash = StringHelper::byteSubstr($data, 0, $hashLength);
             $pureData = StringHelper::byteSubstr($data, $hashLength, null);
 
-            $calculatedHash = hash_hmac($this->macHash, $pureData, $key, $rawHash);
+            $calculatedHash = \hash_hmac($this->macHash, $pureData, $key, $rawHash);
 
             if ($this->compareString($hash, $calculatedHash)) {
                 return $pureData;
@@ -547,7 +547,7 @@ class Security extends Component
      */
     public function generateRandomKey($length = 32)
     {
-        if (!is_int($length)) {
+        if (!\is_int($length)) {
             throw new InvalidArgumentException('First parameter ($length) must be an integer');
         }
 
@@ -555,7 +555,7 @@ class Security extends Component
             throw new InvalidArgumentException('First parameter ($length) must be greater than 0');
         }
 
-        return random_bytes($length);
+        return \random_bytes($length);
     }
 
     /**
@@ -570,7 +570,7 @@ class Security extends Component
      */
     public function generateRandomString($length = 32)
     {
-        if (!is_int($length)) {
+        if (!\is_int($length)) {
             throw new InvalidArgumentException('First parameter ($length) must be an integer');
         }
 
@@ -580,7 +580,7 @@ class Security extends Component
 
         $bytes = $this->generateRandomKey($length);
 
-        return substr(StringHelper::base64UrlEncode($bytes), 0, $length);
+        return \substr(StringHelper::base64UrlEncode($bytes), 0, $length);
     }
 
     /**
@@ -625,15 +625,15 @@ class Security extends Component
             $cost = $this->passwordHashCost;
         }
 
-        if (function_exists('password_hash')) {
+        if (\function_exists('password_hash')) {
             /* @noinspection PhpUndefinedConstantInspection */
-            return password_hash($password, PASSWORD_DEFAULT, ['cost' => $cost]);
+            return \password_hash($password, \PASSWORD_DEFAULT, ['cost' => $cost]);
         }
 
         $salt = $this->generateSalt($cost);
-        $hash = crypt($password, $salt);
+        $hash = \crypt($password, $salt);
         // strlen() is safe since crypt() returns only ascii
-        if (!is_string($hash) || strlen($hash) !== 60) {
+        if (!\is_string($hash) || \strlen($hash) !== 60) {
             throw new Exception('Unknown error occurred while generating hash.');
         }
 
@@ -654,23 +654,23 @@ class Security extends Component
      */
     public function validatePassword($password, $hash)
     {
-        if (!is_string($password) || $password === '') {
+        if (!\is_string($password) || $password === '') {
             throw new InvalidArgumentException('Password must be a string and cannot be empty.');
         }
 
-        if (!preg_match('/^\$2[axy]\$(\d\d)\$[\.\/0-9A-Za-z]{22}/', $hash, $matches)
+        if (!\preg_match('/^\$2[axy]\$(\d\d)\$[\.\/0-9A-Za-z]{22}/', $hash, $matches)
             || $matches[1] < 4
             || $matches[1] > 30
         ) {
             throw new InvalidArgumentException('Hash is invalid.');
         }
 
-        if (function_exists('password_verify')) {
-            return password_verify($password, $hash);
+        if (\function_exists('password_verify')) {
+            return \password_verify($password, $hash);
         }
 
-        $test = crypt($password, $hash);
-        $n = strlen($test);
+        $test = \crypt($password, $hash);
+        $n = \strlen($test);
 
         if ($n !== 60) {
             return false;
@@ -704,9 +704,9 @@ class Security extends Component
         // Get a 20-byte random string
         $rand = $this->generateRandomKey(20);
         // Form the prefix that specifies Blowfish (bcrypt) algorithm and cost parameter.
-        $salt = sprintf('$2y$%02d$', $cost);
+        $salt = \sprintf('$2y$%02d$', $cost);
         // Append the random salt data in the required base64 format.
-        $salt .= str_replace('+', '.', substr(base64_encode($rand), 0, 22));
+        $salt .= \str_replace('+', '.', \substr(\base64_encode($rand), 0, 22));
 
         return $salt;
     }
@@ -723,16 +723,16 @@ class Security extends Component
      */
     public function compareString($expected, $actual)
     {
-        if (!is_string($expected)) {
-            throw new InvalidArgumentException('Expected expected value to be a string, ' . gettype($expected) . ' given.');
+        if (!\is_string($expected)) {
+            throw new InvalidArgumentException('Expected expected value to be a string, ' . \gettype($expected) . ' given.');
         }
 
-        if (!is_string($actual)) {
-            throw new InvalidArgumentException('Expected actual value to be a string, ' . gettype($actual) . ' given.');
+        if (!\is_string($actual)) {
+            throw new InvalidArgumentException('Expected actual value to be a string, ' . \gettype($actual) . ' given.');
         }
 
-        if (function_exists('hash_equals')) {
-            return hash_equals($expected, $actual);
+        if (\function_exists('hash_equals')) {
+            return \hash_equals($expected, $actual);
         }
 
         $expected .= "\0";
@@ -742,7 +742,7 @@ class Security extends Component
         $diff = $expectedLength - $actualLength;
 
         for ($i = 0; $i < $actualLength; ++$i) {
-            $diff |= (ord($actual[$i]) ^ ord($expected[$i % $expectedLength]));
+            $diff |= (\ord($actual[$i]) ^ \ord($expected[$i % $expectedLength]));
         }
 
         return $diff === 0;
@@ -781,7 +781,7 @@ class Security extends Component
         $decoded = StringHelper::base64UrlDecode($maskedToken);
         $length = StringHelper::byteLength($decoded) / 2;
         // Check if the masked token has an even length.
-        if (!is_int($length)) {
+        if (!\is_int($length)) {
             return '';
         }
 

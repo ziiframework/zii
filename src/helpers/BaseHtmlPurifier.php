@@ -62,7 +62,7 @@ class BaseHtmlPurifier
         static::configure($configInstance);
 
         if ($config instanceof Closure) {
-            call_user_func($config, $configInstance);
+            \call_user_func($config, $configInstance);
         }
 
         return $purifier->purify($content);

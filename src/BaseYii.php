@@ -20,37 +20,37 @@ use yii\base\InvalidArgumentException;
 /*
  * Gets the application start timestamp.
  */
-defined('YII_BEGIN_TIME') || define('YII_BEGIN_TIME', microtime(true));
+\defined('YII_BEGIN_TIME') || \define('YII_BEGIN_TIME', \microtime(true));
 /*
  * This constant defines the framework installation directory.
  */
-defined('YII2_PATH') || define('YII2_PATH', __DIR__);
+\defined('YII2_PATH') || \define('YII2_PATH', __DIR__);
 /*
  * This constant defines whether the application should be in debug mode or not. Defaults to false.
  */
-defined('YII_DEBUG') || define('YII_DEBUG', false);
+\defined('YII_DEBUG') || \define('YII_DEBUG', false);
 /*
  * This constant defines in which environment the application is running. Defaults to 'prod', meaning production environment.
  * You may define this constant in the bootstrap script. The value could be 'prod' (production), 'dev' (development), 'test', 'staging', etc.
  */
-defined('YII_ENV') || define('YII_ENV', 'prod');
+\defined('YII_ENV') || \define('YII_ENV', 'prod');
 /*
  * Whether the application is running in the production environment.
  */
-defined('YII_ENV_PROD') || define('YII_ENV_PROD', YII_ENV === 'prod');
+\defined('YII_ENV_PROD') || \define('YII_ENV_PROD', YII_ENV === 'prod');
 /*
  * Whether the application is running in the development environment.
  */
-defined('YII_ENV_DEV') || define('YII_ENV_DEV', YII_ENV === 'dev');
+\defined('YII_ENV_DEV') || \define('YII_ENV_DEV', YII_ENV === 'dev');
 /*
  * Whether the application is running in the testing environment.
  */
-defined('YII_ENV_TEST') || define('YII_ENV_TEST', YII_ENV === 'test');
+\defined('YII_ENV_TEST') || \define('YII_ENV_TEST', YII_ENV === 'test');
 
 /*
  * This constant defines whether error handling should be enabled. Defaults to true.
  */
-defined('YII_ENABLE_ERROR_HANDLER') || define('YII_ENABLE_ERROR_HANDLER', true);
+\defined('YII_ENABLE_ERROR_HANDLER') || \define('YII_ENABLE_ERROR_HANDLER', true);
 
 /**
  * BaseYii is the core helper class for the Yii framework.
@@ -144,22 +144,22 @@ class BaseYii
      */
     public static function getAlias(?string $alias, $throwException = true)
     {
-        if (strncmp(pf_string_argument($alias), '@', 1) !== 0) {
+        if (\strncmp(pf_string_argument($alias), '@', 1) !== 0) {
             // not an alias
             return $alias;
         }
 
-        $pos = strpos($alias, '/');
-        $root = $pos === false ? $alias : substr($alias, 0, $pos);
+        $pos = \strpos($alias, '/');
+        $root = $pos === false ? $alias : \substr($alias, 0, $pos);
 
         if (isset(static::$aliases[$root])) {
-            if (is_string(static::$aliases[$root])) {
-                return $pos === false ? static::$aliases[$root] : static::$aliases[$root] . substr($alias, $pos);
+            if (\is_string(static::$aliases[$root])) {
+                return $pos === false ? static::$aliases[$root] : static::$aliases[$root] . \substr($alias, $pos);
             }
 
             foreach (static::$aliases[$root] as $name => $path) {
-                if (str_starts_with($alias . '/', $name . '/')) {
-                    return $path . substr($alias, strlen($name));
+                if (\str_starts_with($alias . '/', $name . '/')) {
+                    return $path . \substr($alias, \strlen($name));
                 }
             }
         }
@@ -182,16 +182,16 @@ class BaseYii
      */
     public static function getRootAlias($alias)
     {
-        $pos = strpos($alias, '/');
-        $root = $pos === false ? $alias : substr($alias, 0, $pos);
+        $pos = \strpos($alias, '/');
+        $root = $pos === false ? $alias : \substr($alias, 0, $pos);
 
         if (isset(static::$aliases[$root])) {
-            if (is_string(static::$aliases[$root])) {
+            if (\is_string(static::$aliases[$root])) {
                 return $root;
             }
 
             foreach (static::$aliases[$root] as $name => $path) {
-                if (str_starts_with($alias . '/', $name . '/')) {
+                if (\str_starts_with($alias . '/', $name . '/')) {
                     return $name;
                 }
             }
@@ -233,14 +233,14 @@ class BaseYii
      */
     public static function setAlias($alias, $path): void
     {
-        if (strncmp($alias, '@', 1)) {
+        if (\strncmp($alias, '@', 1)) {
             $alias = '@' . $alias;
         }
-        $pos = strpos($alias, '/');
-        $root = $pos === false ? $alias : substr($alias, 0, $pos);
+        $pos = \strpos($alias, '/');
+        $root = $pos === false ? $alias : \substr($alias, 0, $pos);
 
         if ($path !== null) {
-            $path = strncmp($path, '@', 1) ? rtrim($path, '\\/') : static::getAlias($path);
+            $path = \strncmp($path, '@', 1) ? \rtrim($path, '\\/') : static::getAlias($path);
 
             if (!isset(static::$aliases[$root])) {
                 if ($pos === false) {
@@ -248,7 +248,7 @@ class BaseYii
                 } else {
                     static::$aliases[$root] = [$alias => $path];
                 }
-            } elseif (is_string(static::$aliases[$root])) {
+            } elseif (\is_string(static::$aliases[$root])) {
                 if ($pos === false) {
                     static::$aliases[$root] = $path;
                 } else {
@@ -259,10 +259,10 @@ class BaseYii
                 }
             } else {
                 static::$aliases[$root][$alias] = $path;
-                krsort(static::$aliases[$root]);
+                \krsort(static::$aliases[$root]);
             }
         } elseif (isset(static::$aliases[$root])) {
-            if (is_array(static::$aliases[$root])) {
+            if (\is_array(static::$aliases[$root])) {
                 unset(static::$aliases[$root][$alias]);
             } elseif ($pos === false) {
                 unset(static::$aliases[$root]);
@@ -299,13 +299,13 @@ class BaseYii
         if (isset(static::$classMap[$className])) {
             $classFile = static::$classMap[$className];
 
-            if (strncmp($classFile, '@', 1) === 0) {
+            if (\strncmp($classFile, '@', 1) === 0) {
                 $classFile = static::getAlias($classFile);
             }
-        } elseif (str_contains($className, '\\')) {
-            $classFile = static::getAlias('@' . str_replace('\\', '/', $className) . '.php', false);
+        } elseif (\str_contains($className, '\\')) {
+            $classFile = static::getAlias('@' . \str_replace('\\', '/', $className) . '.php', false);
 
-            if ($classFile === false || !is_file($classFile)) {
+            if ($classFile === false || !\is_file($classFile)) {
                 return;
             }
         } else {
@@ -314,7 +314,7 @@ class BaseYii
 
         include $classFile;
 
-        if (YII_DEBUG && !class_exists($className, false) && !interface_exists($className, false) && !trait_exists($className, false)) {
+        if (YII_DEBUG && !\class_exists($className, false) && !\interface_exists($className, false) && !\trait_exists($className, false)) {
             throw new UnknownClassException("Unable to find '$className' in file: $classFile. Namespace missing?");
         }
     }
@@ -365,16 +365,16 @@ class BaseYii
      */
     public static function createObject($type, array $params = [])
     {
-        if (is_string($type)) {
+        if (\is_string($type)) {
             return static::$container->get($type, $params);
         }
 
-        if (is_callable($type, true)) {
+        if (\is_callable($type, true)) {
             return static::$container->invoke($type, $params);
         }
 
-        if (!is_array($type)) {
-            throw new InvalidConfigException('Unsupported configuration type: ' . gettype($type));
+        if (!\is_array($type)) {
+            throw new InvalidConfigException('Unsupported configuration type: ' . \gettype($type));
         }
 
         if (isset($type['__class'])) {
@@ -584,7 +584,7 @@ class BaseYii
             $placeholders['{' . $name . '}'] = $value;
         }
 
-        return ($placeholders === []) ? $message : strtr($message, $placeholders);
+        return ($placeholders === []) ? $message : \strtr($message, $placeholders);
     }
 
     /**
@@ -616,6 +616,6 @@ class BaseYii
      */
     public static function getObjectVars($object)
     {
-        return get_object_vars($object);
+        return \get_object_vars($object);
     }
 }

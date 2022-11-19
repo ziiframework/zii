@@ -105,7 +105,7 @@ class AttributeBehavior extends Behavior
      */
     public function events()
     {
-        return array_fill_keys(array_keys($this->attributes), 'evaluateAttributes');
+        return \array_fill_keys(\array_keys($this->attributes), 'evaluateAttributes');
     }
 
     /**
@@ -128,7 +128,7 @@ class AttributeBehavior extends Behavior
 
             foreach ($attributes as $attribute) {
                 // ignore attribute names which are not string (e.g. when set by TimestampBehavior::updatedAtAttribute)
-                if (is_string($attribute)) {
+                if (\is_string($attribute)) {
                     if ($this->preserveNonEmptyValues && !empty($this->owner->$attribute)) {
                         continue;
                     }
@@ -149,8 +149,8 @@ class AttributeBehavior extends Behavior
      */
     protected function getValue($event)
     {
-        if ($this->value instanceof Closure || (is_array($this->value) && is_callable($this->value))) {
-            return call_user_func($this->value, $event);
+        if ($this->value instanceof Closure || (\is_array($this->value) && \is_callable($this->value))) {
+            return \call_user_func($this->value, $event);
         }
 
         return $this->value;

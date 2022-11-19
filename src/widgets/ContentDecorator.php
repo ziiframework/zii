@@ -67,8 +67,8 @@ class ContentDecorator extends Widget
         if ($this->viewFile === null) {
             throw new InvalidConfigException('ContentDecorator::viewFile must be set.');
         }
-        ob_start();
-        ob_implicit_flush(false);
+        \ob_start();
+        \ob_implicit_flush(false);
     }
 
     /**
@@ -78,7 +78,7 @@ class ContentDecorator extends Widget
     public function run(): void
     {
         $params = $this->params;
-        $params['content'] = ob_get_clean();
+        $params['content'] = \ob_get_clean();
         // render under the existing context
         echo $this->view->renderFile($this->viewFile, $params);
     }

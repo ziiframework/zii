@@ -48,7 +48,7 @@ class ApcCache extends Cache
         parent::init();
         $extension = $this->useApcu ? 'apcu' : 'apc';
 
-        if (!extension_loaded($extension)) {
+        if (!\extension_loaded($extension)) {
             throw new InvalidConfigException("ApcCache requires PHP $extension extension to be loaded.");
         }
     }
@@ -96,7 +96,7 @@ class ApcCache extends Cache
     {
         $values = $this->useApcu ? apcu_fetch($keys) : apc_fetch($keys);
 
-        return is_array($values) ? $values : [];
+        return \is_array($values) ? $values : [];
     }
 
     /**
@@ -127,7 +127,7 @@ class ApcCache extends Cache
     {
         $result = $this->useApcu ? apcu_store($data, null, $duration) : apc_store($data, null, $duration);
 
-        return is_array($result) ? array_keys($result) : [];
+        return \is_array($result) ? \array_keys($result) : [];
     }
 
     /**
@@ -158,7 +158,7 @@ class ApcCache extends Cache
     {
         $result = $this->useApcu ? apcu_add($data, null, $duration) : apc_add($data, null, $duration);
 
-        return is_array($result) ? array_keys($result) : [];
+        return \is_array($result) ? \array_keys($result) : [];
     }
 
     /**
