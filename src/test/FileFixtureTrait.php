@@ -52,13 +52,13 @@ trait FileFixtureTrait
             return [];
         }
 
-        if (basename($file) === $file && $this->dataDirectory !== null) {
+        if (\basename($file) === $file && $this->dataDirectory !== null) {
             $file = $this->dataDirectory . '/' . $file;
         }
 
         $file = Yii::getAlias($file);
 
-        if (is_file($file)) {
+        if (\is_file($file)) {
             return require $file;
         }
 

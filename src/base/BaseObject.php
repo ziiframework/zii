@@ -143,9 +143,9 @@ class BaseObject implements Configurable
     {
         $getter = 'get' . $name;
 
-        if (method_exists($this, $getter)) {
+        if (\method_exists($this, $getter)) {
             return $this->$getter();
-        } elseif (method_exists($this, 'set' . $name)) {
+        } elseif (\method_exists($this, 'set' . $name)) {
             throw new InvalidCallException('Getting write-only property: ' . static::class . '::' . $name);
         }
 
@@ -170,9 +170,9 @@ class BaseObject implements Configurable
     {
         $setter = 'set' . $name;
 
-        if (method_exists($this, $setter)) {
+        if (\method_exists($this, $setter)) {
             $this->$setter($value);
-        } elseif (method_exists($this, 'get' . $name)) {
+        } elseif (\method_exists($this, 'get' . $name)) {
             throw new InvalidCallException('Setting read-only property: ' . static::class . '::' . $name);
         } else {
             throw new UnknownPropertyException('Setting unknown property: ' . static::class . '::' . $name);
@@ -197,7 +197,7 @@ class BaseObject implements Configurable
     {
         $getter = 'get' . $name;
 
-        if (method_exists($this, $getter)) {
+        if (\method_exists($this, $getter)) {
             return $this->$getter() !== null;
         }
 
@@ -223,9 +223,9 @@ class BaseObject implements Configurable
     {
         $setter = 'set' . $name;
 
-        if (method_exists($this, $setter)) {
+        if (\method_exists($this, $setter)) {
             $this->$setter(null);
-        } elseif (method_exists($this, 'get' . $name)) {
+        } elseif (\method_exists($this, 'get' . $name)) {
             throw new InvalidCallException('Unsetting read-only property: ' . static::class . '::' . $name);
         }
     }
@@ -288,7 +288,7 @@ class BaseObject implements Configurable
      */
     public function canGetProperty($name, $checkVars = true)
     {
-        return method_exists($this, 'get' . $name) || $checkVars && property_exists($this, $name);
+        return \method_exists($this, 'get' . $name) || $checkVars && \property_exists($this, $name);
     }
 
     /**
@@ -309,7 +309,7 @@ class BaseObject implements Configurable
      */
     public function canSetProperty($name, $checkVars = true)
     {
-        return method_exists($this, 'set' . $name) || $checkVars && property_exists($this, $name);
+        return \method_exists($this, 'set' . $name) || $checkVars && \property_exists($this, $name);
     }
 
     /**
@@ -324,6 +324,6 @@ class BaseObject implements Configurable
      */
     public function hasMethod($name)
     {
-        return method_exists($this, $name);
+        return \method_exists($this, $name);
     }
 }

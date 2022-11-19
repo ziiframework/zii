@@ -37,7 +37,7 @@ class SessionIterator implements Iterator
      */
     public function __construct()
     {
-        $this->_keys = array_keys($_SESSION ?? []);
+        $this->_keys = \array_keys($_SESSION ?? []);
         $this->rewind();
     }
 
@@ -48,7 +48,7 @@ class SessionIterator implements Iterator
     #[ReturnTypeWillChange]
     public function rewind(): void
     {
-        $this->_key = reset($this->_keys);
+        $this->_key = \reset($this->_keys);
     }
 
     /**
@@ -83,7 +83,7 @@ class SessionIterator implements Iterator
     public function next(): void
     {
         do {
-            $this->_key = next($this->_keys);
+            $this->_key = \next($this->_keys);
         } while ($this->_key !== false && !isset($_SESSION[$this->_key]));
     }
 

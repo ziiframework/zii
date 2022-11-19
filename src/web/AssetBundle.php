@@ -146,15 +146,15 @@ class AssetBundle extends BaseObject
     public function init(): void
     {
         if ($this->sourcePath !== null) {
-            $this->sourcePath = rtrim(Yii::getAlias($this->sourcePath), '/\\');
+            $this->sourcePath = \rtrim(Yii::getAlias($this->sourcePath), '/\\');
         }
 
         if ($this->basePath !== null) {
-            $this->basePath = rtrim(Yii::getAlias($this->basePath), '/\\');
+            $this->basePath = \rtrim(Yii::getAlias($this->basePath), '/\\');
         }
 
         if ($this->baseUrl !== null) {
-            $this->baseUrl = rtrim(Yii::getAlias($this->baseUrl), '/');
+            $this->baseUrl = \rtrim(Yii::getAlias($this->baseUrl), '/');
         }
     }
 
@@ -168,8 +168,8 @@ class AssetBundle extends BaseObject
         $manager = $view->getAssetManager();
 
         foreach ($this->js as $js) {
-            if (is_array($js)) {
-                $file = array_shift($js);
+            if (\is_array($js)) {
+                $file = \array_shift($js);
                 $options = ArrayHelper::merge($this->jsOptions, $js);
                 $view->registerJsFile($manager->getAssetUrl($this, $file, ArrayHelper::getValue($options, 'appendTimestamp')), $options);
             } elseif ($js !== null) {
@@ -178,8 +178,8 @@ class AssetBundle extends BaseObject
         }
 
         foreach ($this->css as $css) {
-            if (is_array($css)) {
-                $file = array_shift($css);
+            if (\is_array($css)) {
+                $file = \array_shift($css);
                 $options = ArrayHelper::merge($this->cssOptions, $css);
                 $view->registerCssFile($manager->getAssetUrl($this, $file, ArrayHelper::getValue($options, 'appendTimestamp')), $options);
             } elseif ($css !== null) {
@@ -203,12 +203,12 @@ class AssetBundle extends BaseObject
 
         if (isset($this->basePath, $this->baseUrl) && ($converter = $am->getConverter()) !== null) {
             foreach ($this->js as $i => $js) {
-                if (is_array($js)) {
-                    $file = array_shift($js);
+                if (\is_array($js)) {
+                    $file = \array_shift($js);
 
                     if (Url::isRelative($file)) {
                         $js = ArrayHelper::merge($this->jsOptions, $js);
-                        array_unshift($js, $converter->convert($file, $this->basePath));
+                        \array_unshift($js, $converter->convert($file, $this->basePath));
                         $this->js[$i] = $js;
                     }
                 } elseif (Url::isRelative($js)) {
@@ -217,12 +217,12 @@ class AssetBundle extends BaseObject
             }
 
             foreach ($this->css as $i => $css) {
-                if (is_array($css)) {
-                    $file = array_shift($css);
+                if (\is_array($css)) {
+                    $file = \array_shift($css);
 
                     if (Url::isRelative($file)) {
                         $css = ArrayHelper::merge($this->cssOptions, $css);
-                        array_unshift($css, $converter->convert($file, $this->basePath));
+                        \array_unshift($css, $converter->convert($file, $this->basePath));
                         $this->css[$i] = $css;
                     }
                 } elseif (Url::isRelative($css)) {

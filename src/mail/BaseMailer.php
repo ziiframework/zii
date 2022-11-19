@@ -129,8 +129,8 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
      */
     public function setView($view): void
     {
-        if (!is_array($view) && !is_object($view)) {
-            throw new InvalidConfigException('"' . static::class . '::view" should be either object or configuration array, "' . gettype($view) . '" given.');
+        if (!\is_array($view) && !\is_object($view)) {
+            throw new InvalidConfigException('"' . static::class . '::view" should be either object or configuration array, "' . \gettype($view) . '" given.');
         }
         $this->_view = $view;
     }
@@ -140,7 +140,7 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
      */
     public function getView()
     {
-        if (!is_object($this->_view)) {
+        if (!\is_object($this->_view)) {
             $this->_view = $this->createView($this->_view);
         }
 
@@ -156,7 +156,7 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
      */
     protected function createView(array $config)
     {
-        if (!array_key_exists('class', $config)) {
+        if (!\array_key_exists('class', $config)) {
             $config['class'] = View::className();
         }
 
@@ -193,13 +193,13 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
             return $message;
         }
 
-        if (!array_key_exists('message', $params)) {
+        if (!\array_key_exists('message', $params)) {
             $params['message'] = $message;
         }
 
         $this->_message = $message;
 
-        if (is_array($view)) {
+        if (\is_array($view)) {
             if (isset($view['html'])) {
                 $html = $this->render($view['html'], $params, $this->htmlLayout);
             }
@@ -220,16 +220,16 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
         if (isset($text)) {
             $message->setTextBody($text);
         } elseif (isset($html)) {
-            if (preg_match('~<body[^>]*>(.*?)</body>~is', $html, $match)) {
+            if (\preg_match('~<body[^>]*>(.*?)</body>~is', $html, $match)) {
                 $html = $match[1];
             }
             // remove style and script
-            $html = preg_replace('~<((style|script))[^>]*>(.*?)</\1>~is', '', $html);
+            $html = \preg_replace('~<((style|script))[^>]*>(.*?)</\1>~is', '', $html);
             // strip all HTML tags and decoded HTML entities
-            $text = html_entity_decode(strip_tags($html), ENT_QUOTES | ENT_HTML5, Yii::$app ? Yii::$app->charset : 'UTF-8');
+            $text = \html_entity_decode(\strip_tags($html), \ENT_QUOTES | \ENT_HTML5, Yii::$app ? Yii::$app->charset : 'UTF-8');
             // improve whitespace
-            $text = preg_replace("~^[ \t]+~m", '', trim($text));
-            $text = preg_replace('~\R\R+~mu', "\n\n", $text);
+            $text = \preg_replace("~^[ \t]+~m", '', \trim($text));
+            $text = \preg_replace('~\R\R+~mu', "\n\n", $text);
             $message->setTextBody($text);
         }
 
@@ -248,7 +248,7 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
     {
         $config = $this->messageConfig;
 
-        if (!array_key_exists('class', $config)) {
+        if (!\array_key_exists('class', $config)) {
             $config['class'] = $this->messageClass;
         }
         $config['mailer'] = $this;
@@ -275,8 +275,8 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
 
         $address = $message->getTo();
 
-        if (is_array($address)) {
-            $address = implode(', ', array_keys($address));
+        if (\is_array($address)) {
+            $address = \implode(', ', \array_keys($address));
         }
         Yii::info('Sending email "' . $message->getSubject() . '" to "' . $address . '"', __METHOD__);
 
@@ -356,16 +356,16 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
     {
         $path = Yii::getAlias($this->fileTransportPath);
 
-        if (!is_dir($path)) {
-            mkdir($path, 0777, true);
+        if (!\is_dir($path)) {
+            \mkdir($path, 0777, true);
         }
 
         if ($this->fileTransportCallback !== null) {
-            $file = $path . '/' . call_user_func($this->fileTransportCallback, $this, $message);
+            $file = $path . '/' . \call_user_func($this->fileTransportCallback, $this, $message);
         } else {
             $file = $path . '/' . $this->generateMessageFileName();
         }
-        file_put_contents($file, $message->toString());
+        \file_put_contents($file, $message->toString());
 
         return true;
     }
@@ -375,9 +375,9 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
      */
     public function generateMessageFileName()
     {
-        $time = microtime(true);
+        $time = \microtime(true);
 
-        return date('Ymd-His-', (int) $time) . sprintf('%04d', (int) (($time - (int) $time) * 10000)) . '-' . sprintf('%04d', random_int(0, 10000)) . '.eml';
+        return \date('Ymd-His-', (int) $time) . \sprintf('%04d', (int) (($time - (int) $time) * 10000)) . '-' . \sprintf('%04d', \random_int(0, 10000)) . '.eml';
     }
 
     /**

@@ -145,7 +145,7 @@ class Component extends BaseObject
     {
         $getter = 'get' . $name;
 
-        if (method_exists($this, $getter)) {
+        if (\method_exists($this, $getter)) {
             // read property, e.g. getName()
             return $this->$getter();
         }
@@ -159,7 +159,7 @@ class Component extends BaseObject
             }
         }
 
-        if (method_exists($this, 'set' . $name)) {
+        if (\method_exists($this, 'set' . $name)) {
             throw new InvalidCallException('Getting write-only property: ' . static::class . '::' . $name);
         }
 
@@ -191,19 +191,19 @@ class Component extends BaseObject
     {
         $setter = 'set' . $name;
 
-        if (method_exists($this, $setter)) {
+        if (\method_exists($this, $setter)) {
             // set property
             $this->$setter($value);
 
             return;
-        } elseif (strncmp($name, 'on ', 3) === 0) {
+        } elseif (\strncmp($name, 'on ', 3) === 0) {
             // on event: attach event handler
-            $this->on(trim(substr($name, 3)), $value);
+            $this->on(\trim(\substr($name, 3)), $value);
 
             return;
-        } elseif (strncmp($name, 'as ', 3) === 0) {
+        } elseif (\strncmp($name, 'as ', 3) === 0) {
             // as behavior: attach behavior
-            $name = trim(substr($name, 3));
+            $name = \trim(\substr($name, 3));
             $this->attachBehavior($name, $value instanceof Behavior ? $value : Yii::createObject($value));
 
             return;
@@ -220,7 +220,7 @@ class Component extends BaseObject
             }
         }
 
-        if (method_exists($this, 'get' . $name)) {
+        if (\method_exists($this, 'get' . $name)) {
             throw new InvalidCallException('Setting read-only property: ' . static::class . '::' . $name);
         }
 
@@ -249,7 +249,7 @@ class Component extends BaseObject
     {
         $getter = 'get' . $name;
 
-        if (method_exists($this, $getter)) {
+        if (\method_exists($this, $getter)) {
             return $this->$getter() !== null;
         }
 
@@ -286,7 +286,7 @@ class Component extends BaseObject
     {
         $setter = 'set' . $name;
 
-        if (method_exists($this, $setter)) {
+        if (\method_exists($this, $setter)) {
             $this->$setter(null);
 
             return;
@@ -328,7 +328,7 @@ class Component extends BaseObject
 
         foreach ($this->_behaviors as $object) {
             if ($object->hasMethod($name)) {
-                return call_user_func_array([$object, $name], $params);
+                return \call_user_func_array([$object, $name], $params);
             }
         }
 
@@ -390,7 +390,7 @@ class Component extends BaseObject
      */
     public function canGetProperty($name, $checkVars = true, $checkBehaviors = true)
     {
-        if (method_exists($this, 'get' . $name) || $checkVars && property_exists($this, $name)) {
+        if (\method_exists($this, 'get' . $name) || $checkVars && \property_exists($this, $name)) {
             return true;
         } elseif ($checkBehaviors) {
             $this->ensureBehaviors();
@@ -425,7 +425,7 @@ class Component extends BaseObject
      */
     public function canSetProperty($name, $checkVars = true, $checkBehaviors = true)
     {
-        if (method_exists($this, 'set' . $name) || $checkVars && property_exists($this, $name)) {
+        if (\method_exists($this, 'set' . $name) || $checkVars && \property_exists($this, $name)) {
             return true;
         } elseif ($checkBehaviors) {
             $this->ensureBehaviors();
@@ -455,7 +455,7 @@ class Component extends BaseObject
      */
     public function hasMethod($name, $checkBehaviors = true)
     {
-        if (method_exists($this, $name)) {
+        if (\method_exists($this, $name)) {
             return true;
         } elseif ($checkBehaviors) {
             $this->ensureBehaviors();
@@ -567,11 +567,11 @@ class Component extends BaseObject
     {
         $this->ensureBehaviors();
 
-        if (str_contains($name, '*')) {
+        if (\str_contains($name, '*')) {
             if ($append || empty($this->_eventWildcards[$name])) {
                 $this->_eventWildcards[$name][] = [$handler, $data];
             } else {
-                array_unshift($this->_eventWildcards[$name], [$handler, $data]);
+                \array_unshift($this->_eventWildcards[$name], [$handler, $data]);
             }
 
             return;
@@ -580,7 +580,7 @@ class Component extends BaseObject
         if ($append || empty($this->_events[$name])) {
             $this->_events[$name][] = [$handler, $data];
         } else {
-            array_unshift($this->_events[$name], [$handler, $data]);
+            \array_unshift($this->_events[$name], [$handler, $data]);
         }
     }
 
@@ -625,7 +625,7 @@ class Component extends BaseObject
             }
 
             if ($removed) {
-                $this->_events[$name] = array_values($this->_events[$name]);
+                $this->_events[$name] = \array_values($this->_events[$name]);
 
                 return true;
             }
@@ -641,7 +641,7 @@ class Component extends BaseObject
             }
 
             if ($removed) {
-                $this->_eventWildcards[$name] = array_values($this->_eventWildcards[$name]);
+                $this->_eventWildcards[$name] = \array_values($this->_eventWildcards[$name]);
                 // remove empty wildcards to save future redundant regex checks:
                 if (empty($this->_eventWildcards[$name])) {
                     unset($this->_eventWildcards[$name]);
@@ -678,7 +678,7 @@ class Component extends BaseObject
         }
 
         if (!empty($eventHandlers)) {
-            $eventHandlers = call_user_func_array('array_merge', $eventHandlers);
+            $eventHandlers = \call_user_func_array('array_merge', $eventHandlers);
 
             if ($event === null) {
                 $event = new Event();
@@ -692,7 +692,7 @@ class Component extends BaseObject
 
             foreach ($eventHandlers as $handler) {
                 $event->data = $handler[1];
-                call_user_func($handler[0], $event);
+                \call_user_func($handler[0], $event);
                 // stop further handling if the event is handled
                 if ($event->handled) {
                     return;
@@ -837,7 +837,7 @@ class Component extends BaseObject
             $behavior = Yii::createObject($behavior);
         }
 
-        if (is_int($name)) {
+        if (\is_int($name)) {
             $behavior->attach($this);
             $this->_behaviors[] = $behavior;
         } else {

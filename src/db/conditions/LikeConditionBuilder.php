@@ -53,7 +53,7 @@ class LikeConditionBuilder implements ExpressionBuilderInterface
      */
     public function build(ExpressionInterface $expression, array &$params = [])
     {
-        $operator = strtoupper($expression->getOperator());
+        $operator = \strtoupper($expression->getOperator());
         $column = $expression->getColumn();
         $values = $expression->getValue();
         $escape = $expression->getEscapingReplacements();
@@ -64,7 +64,7 @@ class LikeConditionBuilder implements ExpressionBuilderInterface
 
         [$andor, $not, $operator] = $this->parseOperator($operator);
 
-        if (!is_array($values)) {
+        if (!\is_array($values)) {
             $values = [$values];
         }
 
@@ -74,7 +74,7 @@ class LikeConditionBuilder implements ExpressionBuilderInterface
 
         if ($column instanceof ExpressionInterface) {
             $column = $this->queryBuilder->buildExpression($column, $params);
-        } elseif (is_string($column) && !str_contains($column, '(')) {
+        } elseif (\is_string($column) && !\str_contains($column, '(')) {
             $column = $this->queryBuilder->db->quoteColumnName($column);
         }
 
@@ -85,12 +85,12 @@ class LikeConditionBuilder implements ExpressionBuilderInterface
             if ($value instanceof ExpressionInterface) {
                 $phName = $this->queryBuilder->buildExpression($value, $params);
             } else {
-                $phName = $this->queryBuilder->bindParam(empty($escape) ? $value : ('%' . strtr($value, $escape) . '%'), $params);
+                $phName = $this->queryBuilder->bindParam(empty($escape) ? $value : ('%' . \strtr($value, $escape) . '%'), $params);
             }
             $parts[] = "{$column} {$operator} {$phName}{$escapeSql}";
         }
 
-        return implode($andor, $parts);
+        return \implode($andor, $parts);
     }
 
     /**
@@ -112,7 +112,7 @@ class LikeConditionBuilder implements ExpressionBuilderInterface
      */
     protected function parseOperator($operator)
     {
-        if (!preg_match('/^(AND |OR |)(((NOT |))I?LIKE)/', $operator, $matches)) {
+        if (!\preg_match('/^(AND |OR |)(((NOT |))I?LIKE)/', $operator, $matches)) {
             throw new InvalidArgumentException("Invalid operator '$operator'.");
         }
         $andor = ' ' . (!empty($matches[1]) ? $matches[1] : 'AND ');

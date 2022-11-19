@@ -98,8 +98,8 @@ class UrlNormalizer extends BaseObject
             throw new UrlNormalizerRedirectException([$route[0]] + $route[1], $this->action);
         } elseif ($this->action === static::ACTION_NOT_FOUND) {
             throw new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
-        } elseif (is_callable($this->action)) {
-            return call_user_func($this->action, $route, $this);
+        } elseif (\is_callable($this->action)) {
+            return \call_user_func($this->action, $route, $this);
         }
 
         throw new InvalidConfigException('Invalid normalizer action.');
@@ -145,7 +145,7 @@ class UrlNormalizer extends BaseObject
      */
     protected function collapseSlashes($pathInfo)
     {
-        return ltrim(preg_replace('#/{2,}#', '/', $pathInfo), '/');
+        return \ltrim(\preg_replace('#/{2,}#', '/', $pathInfo), '/');
     }
 
     /**
@@ -159,10 +159,10 @@ class UrlNormalizer extends BaseObject
      */
     protected function normalizeTrailingSlash($pathInfo, $suffix)
     {
-        if (substr($suffix, -1) === '/' && substr($pathInfo, -1) !== '/') {
+        if (\substr($suffix, -1) === '/' && \substr($pathInfo, -1) !== '/') {
             $pathInfo .= '/';
-        } elseif (substr($suffix, -1) !== '/' && substr($pathInfo, -1) === '/') {
-            $pathInfo = rtrim($pathInfo, '/');
+        } elseif (\substr($suffix, -1) !== '/' && \substr($pathInfo, -1) === '/') {
+            $pathInfo = \rtrim($pathInfo, '/');
         }
 
         return $pathInfo;

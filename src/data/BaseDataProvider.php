@@ -167,7 +167,7 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
      */
     public function getCount()
     {
-        return count($this->getModels());
+        return \count($this->getModels());
     }
 
     /**
@@ -229,14 +229,14 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
      */
     public function setPagination($value): void
     {
-        if (is_array($value)) {
+        if (\is_array($value)) {
             $config = ['class' => Pagination::className()];
 
             if ($this->id !== null) {
                 $config['pageParam'] = $this->id . '-page';
                 $config['pageSizeParam'] = $this->id . '-per-page';
             }
-            $this->_pagination = Yii::createObject(array_merge($config, $value));
+            $this->_pagination = Yii::createObject(\array_merge($config, $value));
         } elseif ($value instanceof Pagination || $value === false) {
             $this->_pagination = $value;
         } else {
@@ -273,13 +273,13 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
      */
     public function setSort($value): void
     {
-        if (is_array($value)) {
+        if (\is_array($value)) {
             $config = ['class' => Sort::className()];
 
             if ($this->id !== null) {
                 $config['sortParam'] = $this->id . '-sort';
             }
-            $this->_sort = Yii::createObject(array_merge($config, $value));
+            $this->_sort = Yii::createObject(\array_merge($config, $value));
         } elseif ($value instanceof Sort || $value === false) {
             $this->_sort = $value;
         } else {

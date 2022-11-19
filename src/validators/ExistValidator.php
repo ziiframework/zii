@@ -140,17 +140,17 @@ class ExistValidator extends Validator
         $exists = false;
 
         /** @var ActiveQuery $relationQuery */
-        $relationQuery = $model->{'get' . ucfirst($this->targetRelation)}();
+        $relationQuery = $model->{'get' . \ucfirst($this->targetRelation)}();
 
         if ($this->filter instanceof Closure) {
-            call_user_func($this->filter, $relationQuery);
+            \call_user_func($this->filter, $relationQuery);
         } elseif ($this->filter !== null) {
             $relationQuery->andWhere($this->filter);
         }
 
         $connection = $model::getDb();
 
-        if ($this->forceMasterDb && method_exists($connection, 'useMaster')) {
+        if ($this->forceMasterDb && \method_exists($connection, 'useMaster')) {
             $exists = $connection->useMaster(static fn () => $relationQuery->exists());
         } else {
             $exists = $relationQuery->exists();
@@ -173,7 +173,7 @@ class ExistValidator extends Validator
 
         if ($this->skipOnError) {
             foreach ((array) $targetAttribute as $k => $v) {
-                if ($model->hasErrors(is_int($k) ? $v : $k)) {
+                if ($model->hasErrors(\is_int($k) ? $v : $k)) {
                     return;
                 }
             }
@@ -184,7 +184,7 @@ class ExistValidator extends Validator
 
         if (!$this->allowArray) {
             foreach ($params as $key => $value) {
-                if (is_array($value)) {
+                if (\is_array($value)) {
                     $this->addError($model, $attribute, Yii::t('yii', '{attribute} is invalid.'));
 
                     return;
@@ -222,14 +222,14 @@ class ExistValidator extends Validator
      */
     private function prepareConditions($targetAttribute, $model, $attribute)
     {
-        if (is_array($targetAttribute)) {
+        if (\is_array($targetAttribute)) {
             if ($this->allowArray) {
                 throw new InvalidConfigException('The "targetAttribute" property must be configured as a string.');
             }
             $conditions = [];
 
             foreach ($targetAttribute as $k => $v) {
-                $conditions[$v] = is_int($k) ? $model->$v : $model->$k;
+                $conditions[$v] = \is_int($k) ? $model->$v : $model->$k;
             }
         } else {
             $conditions = [$targetAttribute => $model->$attribute];
@@ -237,7 +237,7 @@ class ExistValidator extends Validator
 
         $targetModelClass = $this->getTargetClass($model);
 
-        if (!is_subclass_of($targetModelClass, 'yii\db\ActiveRecord')) {
+        if (!\is_subclass_of($targetModelClass, 'yii\db\ActiveRecord')) {
             return $conditions;
         }
 
@@ -252,7 +252,7 @@ class ExistValidator extends Validator
      */
     private function getTargetClass($model)
     {
-        return $this->targetClass === null ? get_class($model) : $this->targetClass;
+        return $this->targetClass === null ? \get_class($model) : $this->targetClass;
     }
 
     /**
@@ -264,11 +264,11 @@ class ExistValidator extends Validator
             throw new InvalidConfigException('The "targetClass" property must be set.');
         }
 
-        if (!is_string($this->targetAttribute)) {
+        if (!\is_string($this->targetAttribute)) {
             throw new InvalidConfigException('The "targetAttribute" property must be configured as a string.');
         }
 
-        if (is_array($value) && !$this->allowArray) {
+        if (\is_array($value) && !$this->allowArray) {
             return [$this->message, []];
         }
 
@@ -290,7 +290,7 @@ class ExistValidator extends Validator
     {
         $db = $targetClass::getDb();
 
-        if ($this->forceMasterDb && method_exists($db, 'useMaster')) {
+        if ($this->forceMasterDb && \method_exists($db, 'useMaster')) {
             return $db->useMaster(fn () => $this->queryValueExists($query, $value));
         }
 
@@ -307,8 +307,8 @@ class ExistValidator extends Validator
      */
     private function queryValueExists($query, $value)
     {
-        if (is_array($value)) {
-            return $query->count("DISTINCT [[$this->targetAttribute]]") == count(array_unique($value));
+        if (\is_array($value)) {
+            return $query->count("DISTINCT [[$this->targetAttribute]]") == \count(\array_unique($value));
         }
 
         return $query->exists();
@@ -328,7 +328,7 @@ class ExistValidator extends Validator
         $query = $targetClass::find()->andWhere($condition);
 
         if ($this->filter instanceof Closure) {
-            call_user_func($this->filter, $query);
+            \call_user_func($this->filter, $query);
         } elseif ($this->filter !== null) {
             $query->andWhere($this->filter);
         }
@@ -348,13 +348,13 @@ class ExistValidator extends Validator
     private function applyTableAlias($query, $conditions, $alias = null)
     {
         if ($alias === null) {
-            $alias = array_keys($query->getTablesUsedInFrom())[0];
+            $alias = \array_keys($query->getTablesUsedInFrom())[0];
         }
         $prefixedConditions = [];
 
         foreach ($conditions as $columnName => $columnValue) {
-            if (!str_contains($columnName, '(')) {
-                $prefixedColumn = "{$alias}.[[" . preg_replace('/^' . preg_quote($alias, '/') . '\.(.*)$/', '$1', $columnName) . ']]';
+            if (!\str_contains($columnName, '(')) {
+                $prefixedColumn = "{$alias}.[[" . \preg_replace('/^' . \preg_quote($alias, '/') . '\.(.*)$/', '$1', $columnName) . ']]';
             } else {
                 // there is an expression, can't prefix it reliably
                 $prefixedColumn = $columnName;

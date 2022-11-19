@@ -130,7 +130,7 @@ class SqlTokenizer extends \yii\db\SqlTokenizer
         $content = $this->substring($length - 2, true, $this->offset + 1);
 
         if ($delimiter !== ']') {
-            $content = strtr($content, ["$delimiter$delimiter" => $delimiter]);
+            $content = \strtr($content, ["$delimiter$delimiter" => $delimiter]);
         }
 
         return true;
@@ -155,7 +155,7 @@ class SqlTokenizer extends \yii\db\SqlTokenizer
             }
         }
         $length = $offset - $this->offset;
-        $content = strtr($this->substring($length - 2, true, $this->offset + 1), ["''" => "'"]);
+        $content = \strtr($this->substring($length - 2, true, $this->offset + 1), ["''" => "'"]);
 
         return true;
     }
@@ -292,7 +292,7 @@ class SqlTokenizer extends \yii\db\SqlTokenizer
             'WITHOUT' => true,
         ];
 
-        $string = mb_strtoupper($string, 'UTF-8');
+        $string = \mb_strtoupper($string, 'UTF-8');
 
         if (!isset($keywords[$string])) {
             return false;

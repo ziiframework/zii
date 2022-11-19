@@ -205,7 +205,7 @@ class Sort extends BaseObject
      *
      * @since 2.0.33
      */
-    public $sortFlags = SORT_REGULAR;
+    public $sortFlags = \SORT_REGULAR;
 
     /**
      * Normalizes the [[attributes]] property.
@@ -215,15 +215,15 @@ class Sort extends BaseObject
         $attributes = [];
 
         foreach ($this->attributes as $name => $attribute) {
-            if (!is_array($attribute)) {
+            if (!\is_array($attribute)) {
                 $attributes[$attribute] = [
-                    'asc' => [$attribute => SORT_ASC],
-                    'desc' => [$attribute => SORT_DESC],
+                    'asc' => [$attribute => \SORT_ASC],
+                    'desc' => [$attribute => \SORT_DESC],
                 ];
             } elseif (!isset($attribute['asc'], $attribute['desc'])) {
-                $attributes[$name] = array_merge([
-                    'asc' => [$name => SORT_ASC],
-                    'desc' => [$name => SORT_DESC],
+                $attributes[$name] = \array_merge([
+                    'asc' => [$name => \SORT_ASC],
+                    'desc' => [$name => \SORT_DESC],
                 ], $attribute);
             } else {
                 $attributes[$name] = $attribute;
@@ -247,9 +247,9 @@ class Sort extends BaseObject
 
         foreach ($attributeOrders as $attribute => $direction) {
             $definition = $this->attributes[$attribute];
-            $columns = $definition[$direction === SORT_ASC ? 'asc' : 'desc'];
+            $columns = $definition[$direction === \SORT_ASC ? 'asc' : 'desc'];
 
-            if (is_array($columns) || $columns instanceof Traversable) {
+            if (\is_array($columns) || $columns instanceof Traversable) {
                 foreach ($columns as $name => $dir) {
                     $orders[$name] = $dir;
                 }
@@ -289,13 +289,13 @@ class Sort extends BaseObject
                 foreach ($this->parseSortParam($params[$this->sortParam]) as $attribute) {
                     $descending = false;
 
-                    if (strncmp($attribute, '-', 1) === 0) {
+                    if (\strncmp($attribute, '-', 1) === 0) {
                         $descending = true;
-                        $attribute = substr($attribute, 1);
+                        $attribute = \substr($attribute, 1);
                     }
 
                     if (isset($this->attributes[$attribute])) {
-                        $this->_attributeOrders[$attribute] = $descending ? SORT_DESC : SORT_ASC;
+                        $this->_attributeOrders[$attribute] = $descending ? \SORT_DESC : \SORT_ASC;
 
                         if (!$this->enableMultiSort) {
                             return $this->_attributeOrders;
@@ -304,7 +304,7 @@ class Sort extends BaseObject
                 }
             }
 
-            if (empty($this->_attributeOrders) && is_array($this->defaultOrder)) {
+            if (empty($this->_attributeOrders) && \is_array($this->defaultOrder)) {
                 $this->_attributeOrders = $this->defaultOrder;
             }
         }
@@ -338,7 +338,7 @@ class Sort extends BaseObject
      */
     protected function parseSortParam($param)
     {
-        return is_scalar($param) ? explode($this->separator, $param) : [];
+        return \is_scalar($param) ? \explode($this->separator, $param) : [];
     }
 
     /**
@@ -406,7 +406,7 @@ class Sort extends BaseObject
     public function link($attribute, $options = [])
     {
         if (($direction = $this->getAttributeOrder($attribute)) !== null) {
-            $class = $direction === SORT_DESC ? 'desc' : 'asc';
+            $class = $direction === \SORT_DESC ? 'desc' : 'asc';
 
             if (isset($options['class'])) {
                 $options['class'] .= ' ' . $class;
@@ -486,23 +486,23 @@ class Sort extends BaseObject
 
         if (isset($directions[$attribute])) {
             if ($this->enableMultiSort) {
-                if ($directions[$attribute] === SORT_ASC) {
-                    $direction = SORT_DESC;
+                if ($directions[$attribute] === \SORT_ASC) {
+                    $direction = \SORT_DESC;
                 } else {
                     $direction = null;
                 }
             } else {
-                $direction = $directions[$attribute] === SORT_DESC ? SORT_ASC : SORT_DESC;
+                $direction = $directions[$attribute] === \SORT_DESC ? \SORT_ASC : \SORT_DESC;
             }
 
             unset($directions[$attribute]);
         } else {
-            $direction = $definition['default'] ?? SORT_ASC;
+            $direction = $definition['default'] ?? \SORT_ASC;
         }
 
         if ($this->enableMultiSort) {
             if ($direction !== null) {
-                $directions = array_merge([$attribute => $direction], $directions);
+                $directions = \array_merge([$attribute => $direction], $directions);
             }
         } else {
             $directions = [$attribute => $direction];
@@ -511,10 +511,10 @@ class Sort extends BaseObject
         $sorts = [];
 
         foreach ($directions as $attribute => $direction) {
-            $sorts[] = $direction === SORT_DESC ? '-' . $attribute : $attribute;
+            $sorts[] = $direction === \SORT_DESC ? '-' . $attribute : $attribute;
         }
 
-        return implode($this->separator, $sorts);
+        return \implode($this->separator, $sorts);
     }
 
     /**

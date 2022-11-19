@@ -59,11 +59,11 @@ class ServeController extends Controller
         $documentRoot = Yii::getAlias($this->docroot);
         $router = $this->router !== null ? Yii::getAlias($this->router) : null;
 
-        if (!str_contains($address, ':')) {
+        if (!\str_contains($address, ':')) {
             $address = $address . ':' . $this->port;
         }
 
-        if (!is_dir($documentRoot)) {
+        if (!\is_dir($documentRoot)) {
             $this->stdout("Document root \"$documentRoot\" does not exist.\n", Console::FG_RED);
 
             return self::EXIT_CODE_NO_DOCUMENT_ROOT;
@@ -75,7 +75,7 @@ class ServeController extends Controller
             return self::EXIT_CODE_ADDRESS_TAKEN_BY_ANOTHER_PROCESS;
         }
 
-        if ($this->router !== null && !file_exists($router)) {
+        if ($this->router !== null && !\file_exists($router)) {
             $this->stdout("Routing file \"$router\" does not exist.\n", Console::FG_RED);
 
             return self::EXIT_CODE_NO_ROUTING_FILE;
@@ -89,7 +89,7 @@ class ServeController extends Controller
         }
         $this->stdout("Quit the server with CTRL-C or COMMAND-C.\n");
 
-        passthru('"' . PHP_BINARY . '"' . " -S {$address} -t \"{$documentRoot}\" $router");
+        \passthru('"' . \PHP_BINARY . '"' . " -S {$address} -t \"{$documentRoot}\" $router");
     }
 
     /**
@@ -97,7 +97,7 @@ class ServeController extends Controller
      */
     public function options($actionID)
     {
-        return array_merge(parent::options($actionID), [
+        return \array_merge(parent::options($actionID), [
             'docroot',
             'router',
             'port',
@@ -111,7 +111,7 @@ class ServeController extends Controller
      */
     public function optionAliases()
     {
-        return array_merge(parent::optionAliases(), [
+        return \array_merge(parent::optionAliases(), [
             't' => 'docroot',
             'p' => 'port',
             'r' => 'router',
@@ -125,13 +125,13 @@ class ServeController extends Controller
      */
     protected function isAddressTaken($address)
     {
-        [$hostname, $port] = explode(':', $address);
-        $fp = @fsockopen($hostname, $port, $errno, $errstr, 3);
+        [$hostname, $port] = \explode(':', $address);
+        $fp = @\fsockopen($hostname, $port, $errno, $errstr, 3);
 
         if ($fp === false) {
             return false;
         }
-        fclose($fp);
+        \fclose($fp);
 
         return true;
     }

@@ -111,8 +111,8 @@ class AccessControl extends ActionFilter
         }
 
         foreach ($this->rules as $i => $rule) {
-            if (is_array($rule)) {
-                $this->rules[$i] = Yii::createObject(array_merge($this->ruleConfig, $rule));
+            if (\is_array($rule)) {
+                $this->rules[$i] = Yii::createObject(\array_merge($this->ruleConfig, $rule));
             }
         }
     }
@@ -135,9 +135,9 @@ class AccessControl extends ActionFilter
                 return true;
             } elseif ($allow === false) {
                 if (isset($rule->denyCallback)) {
-                    call_user_func($rule->denyCallback, $rule, $action);
+                    \call_user_func($rule->denyCallback, $rule, $action);
                 } elseif ($this->denyCallback !== null) {
-                    call_user_func($this->denyCallback, $rule, $action);
+                    \call_user_func($this->denyCallback, $rule, $action);
                 } else {
                     $this->denyAccess($user);
                 }
@@ -147,7 +147,7 @@ class AccessControl extends ActionFilter
         }
 
         if ($this->denyCallback !== null) {
-            call_user_func($this->denyCallback, null, $action);
+            \call_user_func($this->denyCallback, null, $action);
         } else {
             $this->denyAccess($user);
         }

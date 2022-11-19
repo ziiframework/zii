@@ -132,7 +132,7 @@ class AttributesBehavior extends Behavior
      */
     public function events()
     {
-        return array_fill_keys(array_reduce($this->attributes, static fn ($carry, $item) => array_merge($carry, array_keys($item)), []), 'evaluateAttributes');
+        return \array_fill_keys(\array_reduce($this->attributes, static fn ($carry, $item) => \array_merge($carry, \array_keys($item)), []), 'evaluateAttributes');
     }
 
     /**
@@ -148,10 +148,10 @@ class AttributesBehavior extends Behavior
         ) {
             return;
         }
-        $attributes = array_keys(array_filter($this->attributes, static fn ($carry) => array_key_exists($event->name, $carry)));
+        $attributes = \array_keys(\array_filter($this->attributes, static fn ($carry) => \array_key_exists($event->name, $carry)));
 
         if (!empty($this->order[$event->name])) {
-            $attributes = array_merge(array_intersect((array) $this->order[$event->name], $attributes), array_diff($attributes, (array) $this->order[$event->name]));
+            $attributes = \array_merge(\array_intersect((array) $this->order[$event->name], $attributes), \array_diff($attributes, (array) $this->order[$event->name]));
         }
 
         foreach ($attributes as $attribute) {
@@ -179,7 +179,7 @@ class AttributesBehavior extends Behavior
         }
         $value = $this->attributes[$attribute][$event->name];
 
-        if ($value instanceof Closure || (is_array($value) && is_callable($value))) {
+        if ($value instanceof Closure || (\is_array($value) && \is_callable($value))) {
             return $value($event, $attribute);
         }
 

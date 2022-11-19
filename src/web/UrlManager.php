@@ -224,9 +224,9 @@ class UrlManager extends Component
         $rules = $this->buildRules($rules);
 
         if ($append) {
-            $this->rules = array_merge($this->rules, $rules);
+            $this->rules = \array_merge($this->rules, $rules);
         } else {
-            $this->rules = array_merge($rules, $this->rules);
+            $this->rules = \array_merge($rules, $this->rules);
         }
     }
 
@@ -252,18 +252,18 @@ class UrlManager extends Component
         $verbs = 'GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS';
 
         foreach ($ruleDeclarations as $key => $rule) {
-            if (is_string($rule)) {
+            if (\is_string($rule)) {
                 $rule = ['route' => $rule];
 
-                if (preg_match("/^((?:($verbs),)*($verbs))\\s+(.*)$/", $key, $matches)) {
-                    $rule['verb'] = explode(',', $matches[1]);
+                if (\preg_match("/^((?:($verbs),)*($verbs))\\s+(.*)$/", $key, $matches)) {
+                    $rule['verb'] = \explode(',', $matches[1]);
                     $key = $matches[4];
                 }
                 $rule['pattern'] = $key;
             }
 
-            if (is_array($rule)) {
-                $rule = Yii::createObject(array_merge($this->ruleConfig, $rule));
+            if (\is_array($rule)) {
+                $rule = Yii::createObject(\array_merge($this->ruleConfig, $rule));
             }
 
             if (!$rule instanceof UrlRuleInterface) {
@@ -355,7 +355,7 @@ class UrlManager extends Component
 
                 if (YII_DEBUG) {
                     Yii::debug([
-                        'rule' => method_exists($rule, '__toString') ? $rule->__toString() : get_class($rule),
+                        'rule' => \method_exists($rule, '__toString') ? $rule->__toString() : \get_class($rule),
                         'match' => $result !== false,
                         'parent' => null,
                     ], __METHOD__);
@@ -381,10 +381,10 @@ class UrlManager extends Component
             }
 
             if ($suffix !== '' && $pathInfo !== '') {
-                $n = strlen($this->suffix);
+                $n = \strlen($this->suffix);
 
-                if (substr_compare($pathInfo, $this->suffix, -$n, $n) === 0) {
-                    $pathInfo = substr($pathInfo, 0, -$n);
+                if (\substr_compare($pathInfo, $this->suffix, -$n, $n) === 0) {
+                    $pathInfo = \substr($pathInfo, 0, -$n);
 
                     if ($pathInfo === '') {
                         // suffix alone is not allowed
@@ -407,7 +407,7 @@ class UrlManager extends Component
         Yii::debug('Pretty URL not enabled. Using default URL parsing logic.', __METHOD__);
         $route = $request->getQueryParam($this->routeParam, '');
 
-        if (is_array($route)) {
+        if (\is_array($route)) {
             $route = '';
         }
 
@@ -450,7 +450,7 @@ class UrlManager extends Component
         $anchor = isset($params['#']) ? '#' . $params['#'] : '';
         unset($params['#'], $params[$this->routeParam]);
 
-        $route = trim($params[0], '/');
+        $route = \trim($params[0], '/');
         unset($params[0]);
 
         $baseUrl = $this->showScriptName || !$this->enablePrettyUrl ? $this->getScriptUrl() : $this->getBaseUrl();
@@ -469,7 +469,7 @@ class UrlManager extends Component
             if ($url === false) {
                 /* @var $rule UrlRule */
                 foreach ($this->rules as $rule) {
-                    if (in_array($rule, $this->_ruleCache[$cacheKey], true)) {
+                    if (\in_array($rule, $this->_ruleCache[$cacheKey], true)) {
                         // avoid redundant calls of `UrlRule::createUrl()` for rules checked in `getUrlFromCache()`
                         // @see https://github.com/yiisoft/yii2/issues/14094
                         continue;
@@ -487,21 +487,21 @@ class UrlManager extends Component
             }
 
             if ($url !== false) {
-                if (str_contains($url, '://')) {
-                    if ($baseUrl !== '' && ($pos = strpos($url, '/', 8)) !== false) {
-                        return substr($url, 0, $pos) . $baseUrl . substr($url, $pos) . $anchor;
+                if (\str_contains($url, '://')) {
+                    if ($baseUrl !== '' && ($pos = \strpos($url, '/', 8)) !== false) {
+                        return \substr($url, 0, $pos) . $baseUrl . \substr($url, $pos) . $anchor;
                     }
 
                     return $url . $baseUrl . $anchor;
-                } elseif (strncmp($url, '//', 2) === 0) {
-                    if ($baseUrl !== '' && ($pos = strpos($url, '/', 2)) !== false) {
-                        return substr($url, 0, $pos) . $baseUrl . substr($url, $pos) . $anchor;
+                } elseif (\strncmp($url, '//', 2) === 0) {
+                    if ($baseUrl !== '' && ($pos = \strpos($url, '/', 2)) !== false) {
+                        return \substr($url, 0, $pos) . $baseUrl . \substr($url, $pos) . $anchor;
                     }
 
                     return $url . $baseUrl . $anchor;
                 }
 
-                $url = ltrim($url, '/');
+                $url = \ltrim($url, '/');
 
                 return "$baseUrl/{$url}{$anchor}";
             }
@@ -510,18 +510,18 @@ class UrlManager extends Component
                 $route .= $this->suffix;
             }
 
-            if (!empty($params) && ($query = http_build_query($params)) !== '') {
+            if (!empty($params) && ($query = \http_build_query($params)) !== '') {
                 $route .= '?' . $query;
             }
 
-            $route = ltrim($route, '/');
+            $route = \ltrim($route, '/');
 
             return "$baseUrl/{$route}{$anchor}";
         }
 
-        $url = "$baseUrl?{$this->routeParam}=" . urlencode($route);
+        $url = "$baseUrl?{$this->routeParam}=" . \urlencode($route);
 
-        if (!empty($params) && ($query = http_build_query($params)) !== '') {
+        if (!empty($params) && ($query = \http_build_query($params)) !== '') {
             $url .= '&' . $query;
         }
 
@@ -543,7 +543,7 @@ class UrlManager extends Component
         return
             // if rule does not provide info about create status, we cache it every time to prevent bugs like #13350
             // @see https://github.com/yiisoft/yii2/pull/13350#discussion_r114873476
-            !method_exists($rule, 'getCreateUrlStatus') || ($status = $rule->getCreateUrlStatus()) === null
+            !\method_exists($rule, 'getCreateUrlStatus') || ($status = $rule->getCreateUrlStatus()) === null
             || $status === UrlRule::CREATE_STATUS_SUCCESS
             || $status & UrlRule::CREATE_STATUS_PARAMS_MISMATCH;
     }
@@ -609,11 +609,11 @@ class UrlManager extends Component
         $params = (array) $params;
         $url = $this->createUrl($params);
 
-        if (!str_contains($url, '://')) {
+        if (!\str_contains($url, '://')) {
             $hostInfo = $this->getHostInfo();
 
-            if (strncmp($url, '//', 2) === 0) {
-                $url = substr($hostInfo, 0, strpos($hostInfo, '://')) . ':' . $url;
+            if (\strncmp($url, '//', 2) === 0) {
+                $url = \substr($hostInfo, 0, \strpos($hostInfo, '://')) . ':' . $url;
             } else {
                 $url = $hostInfo . $url;
             }
@@ -654,7 +654,7 @@ class UrlManager extends Component
      */
     public function setBaseUrl($value): void
     {
-        $this->_baseUrl = $value === null ? null : rtrim(Yii::getAlias($value), '/');
+        $this->_baseUrl = $value === null ? null : \rtrim(Yii::getAlias($value), '/');
     }
 
     /**
@@ -721,6 +721,6 @@ class UrlManager extends Component
      */
     public function setHostInfo($value): void
     {
-        $this->_hostInfo = $value === null ? null : rtrim($value, '/');
+        $this->_hostInfo = $value === null ? null : \rtrim($value, '/');
     }
 }

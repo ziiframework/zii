@@ -67,16 +67,16 @@ trait DynamicContentAwareTrait
      */
     protected function updateDynamicContent($content, $placeholders, $isRestoredFromCache = false)
     {
-        if (empty($placeholders) || !is_array($placeholders)) {
+        if (empty($placeholders) || !\is_array($placeholders)) {
             return $content;
         }
 
-        if (count($this->getView()->getDynamicContents()) === 0) {
+        if (\count($this->getView()->getDynamicContents()) === 0) {
             // outermost cache: replace placeholder with dynamic content
             foreach ($placeholders as $name => $statements) {
                 $placeholders[$name] = $this->getView()->evaluateDynamicContent($statements);
             }
-            $content = strtr($content, $placeholders);
+            $content = \strtr($content, $placeholders);
         }
 
         if ($isRestoredFromCache) {

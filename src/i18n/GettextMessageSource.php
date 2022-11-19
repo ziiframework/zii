@@ -78,8 +78,8 @@ class GettextMessageSource extends MessageSource
         $messageFile = $this->getMessageFilePath($language);
         $messages = $this->loadMessagesFromFile($messageFile, $category);
 
-        $fallbackLanguage = substr($language ?? '', 0, 2);
-        $fallbackSourceLanguage = substr($this->sourceLanguage, 0, 2);
+        $fallbackLanguage = \substr($language ?? '', 0, 2);
+        $fallbackSourceLanguage = \substr($this->sourceLanguage, 0, 2);
 
         if ($fallbackLanguage !== '' && $fallbackLanguage !== $language) {
             $messages = $this->loadFallbackMessages($category, $fallbackLanguage, $messages, $messageFile);
@@ -115,7 +115,7 @@ class GettextMessageSource extends MessageSource
         if (
             $messages === null && $fallbackMessages === null
             && $fallbackLanguage !== $this->sourceLanguage
-            && !str_starts_with($this->sourceLanguage, $fallbackLanguage)
+            && !\str_starts_with($this->sourceLanguage, $fallbackLanguage)
         ) {
             Yii::error("The message file for category '$category' does not exist: $originalMessageFile "
                 . "Fallback file does not exist as well: $fallbackMessageFile", __METHOD__);
@@ -143,8 +143,8 @@ class GettextMessageSource extends MessageSource
     {
         $language = (string) $language;
 
-        if ($language !== '' && !preg_match('/^[a-z0-9_-]+$/i', $language)) {
-            throw new InvalidArgumentException(sprintf('Invalid language code: "%s".', $language));
+        if ($language !== '' && !\preg_match('/^[a-z0-9_-]+$/i', $language)) {
+            throw new InvalidArgumentException(\sprintf('Invalid language code: "%s".', $language));
         }
         $messageFile = Yii::getAlias($this->basePath) . '/' . $language . '/' . $this->catalog;
 
@@ -167,7 +167,7 @@ class GettextMessageSource extends MessageSource
      */
     protected function loadMessagesFromFile($messageFile, $category)
     {
-        if (is_file($messageFile)) {
+        if (\is_file($messageFile)) {
             if ($this->useMoFile) {
                 $gettextFile = new GettextMoFile(['useBigEndian' => $this->useBigEndian]);
             } else {
@@ -175,7 +175,7 @@ class GettextMessageSource extends MessageSource
             }
             $messages = $gettextFile->load($messageFile, $category);
 
-            if (!is_array($messages)) {
+            if (!\is_array($messages)) {
                 $messages = [];
             }
 

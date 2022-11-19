@@ -76,9 +76,9 @@ trait ArrayableTrait
      */
     public function fields()
     {
-        $fields = array_keys(Yii::getObjectVars($this));
+        $fields = \array_keys(Yii::getObjectVars($this));
 
-        return array_combine($fields, $fields);
+        return \array_combine($fields, $fields);
     }
 
     /**
@@ -133,7 +133,7 @@ trait ArrayableTrait
         $data = [];
 
         foreach ($this->resolveFields($fields, $expand) as $field => $definition) {
-            $attribute = is_string($definition) ? $this->$definition : $definition($this, $field);
+            $attribute = \is_string($definition) ? $this->$definition : $definition($this, $field);
 
             if ($recursive) {
                 $nestedFields = $this->extractFieldsFor($fields, $field);
@@ -143,8 +143,8 @@ trait ArrayableTrait
                     $attribute = $attribute->toArray($nestedFields, $nestedExpand);
                 } elseif ($attribute instanceof JsonSerializable) {
                     $attribute = $attribute->jsonSerialize();
-                } elseif (is_array($attribute)) {
-                    $attribute = array_map(static function ($item) use ($nestedFields, $nestedExpand) {
+                } elseif (\is_array($attribute)) {
+                    $attribute = \array_map(static function ($item) use ($nestedFields, $nestedExpand) {
                         if ($item instanceof Arrayable) {
                             return $item->toArray($nestedFields, $nestedExpand);
                         } elseif ($item instanceof JsonSerializable) {
@@ -181,14 +181,14 @@ trait ArrayableTrait
         $result = [];
 
         foreach ($fields as $field) {
-            $result[] = current(explode('.', $field, 2));
+            $result[] = \current(\explode('.', $field, 2));
         }
 
-        if (in_array('*', $result, true)) {
+        if (\in_array('*', $result, true)) {
             $result = [];
         }
 
-        return array_unique($result);
+        return \array_unique($result);
     }
 
     /**
@@ -208,12 +208,12 @@ trait ArrayableTrait
         $result = [];
 
         foreach ($fields as $field) {
-            if (str_starts_with($field, "{$rootField}.")) {
-                $result[] = preg_replace('/^' . preg_quote($rootField, '/') . '\./i', '', $field);
+            if (\str_starts_with($field, "{$rootField}.")) {
+                $result[] = \preg_replace('/^' . \preg_quote($rootField, '/') . '\./i', '', $field);
             }
         }
 
-        return array_unique($result);
+        return \array_unique($result);
     }
 
     /**
@@ -235,11 +235,11 @@ trait ArrayableTrait
         $result = [];
 
         foreach ($this->fields() as $field => $definition) {
-            if (is_int($field)) {
+            if (\is_int($field)) {
                 $field = $definition;
             }
 
-            if (empty($fields) || in_array($field, $fields, true)) {
+            if (empty($fields) || \in_array($field, $fields, true)) {
                 $result[$field] = $definition;
             }
         }
@@ -249,11 +249,11 @@ trait ArrayableTrait
         }
 
         foreach ($this->extraFields() as $field => $definition) {
-            if (is_int($field)) {
+            if (\is_int($field)) {
                 $field = $definition;
             }
 
-            if (in_array($field, $expand, true)) {
+            if (\in_array($field, $expand, true)) {
                 $result[$field] = $definition;
             }
         }

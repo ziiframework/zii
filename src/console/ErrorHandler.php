@@ -45,10 +45,10 @@ class ErrorHandler extends \yii\base\ErrorHandler
             $message = $this->formatMessage($exception->getName() . ': ') . $exception->command;
             $alternatives = $exception->getSuggestedAlternatives();
 
-            if (count($alternatives) === 1) {
-                $message .= "\n\nDid you mean \"" . reset($alternatives) . '"?';
-            } elseif (count($alternatives) > 1) {
-                $message .= "\n\nDid you mean one of these?\n    - " . implode("\n    - ", $alternatives);
+            if (\count($alternatives) === 1) {
+                $message .= "\n\nDid you mean \"" . \reset($alternatives) . '"?';
+            } elseif (\count($alternatives) > 1) {
+                $message .= "\n\nDid you mean one of these?\n    - " . \implode("\n    - ", $alternatives);
             }
         } elseif ($exception instanceof UserException && ($exception instanceof Exception || !YII_DEBUG)) {
             $message = $this->formatMessage($exception->getName() . ': ') . $exception->getMessage();
@@ -60,13 +60,13 @@ class ErrorHandler extends \yii\base\ErrorHandler
             } else {
                 $message = $this->formatMessage('Exception');
             }
-            $message .= $this->formatMessage(" '" . get_class($exception) . "'", [Console::BOLD, Console::FG_BLUE])
+            $message .= $this->formatMessage(" '" . \get_class($exception) . "'", [Console::BOLD, Console::FG_BLUE])
                 . ' with message ' . $this->formatMessage("'{$exception->getMessage()}'", [Console::BOLD]) // . "\n"
-                . "\n\nin " . dirname($exception->getFile()) . DIRECTORY_SEPARATOR . $this->formatMessage(basename($exception->getFile()), [Console::BOLD])
+                . "\n\nin " . \dirname($exception->getFile()) . \DIRECTORY_SEPARATOR . $this->formatMessage(\basename($exception->getFile()), [Console::BOLD])
                 . ':' . $this->formatMessage($exception->getLine(), [Console::BOLD, Console::FG_YELLOW]) . "\n";
 
             if ($exception instanceof \yii\db\Exception && !empty($exception->errorInfo)) {
-                $message .= "\n" . $this->formatMessage("Error Info:\n", [Console::BOLD]) . print_r($exception->errorInfo, true);
+                $message .= "\n" . $this->formatMessage("Error Info:\n", [Console::BOLD]) . \print_r($exception->errorInfo, true);
             }
 
             if ($previous === null) {
@@ -76,7 +76,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
             $message = $this->formatMessage('Error: ') . $exception->getMessage();
         }
 
-        if (PHP_SAPI === 'cli') {
+        if (\PHP_SAPI === 'cli') {
             Console::stderr($message . "\n");
         } else {
             echo $message . "\n";
@@ -85,7 +85,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
         if (YII_DEBUG && $previous !== null) {
             $causedBy = $this->formatMessage('Caused by: ', [Console::BOLD]);
 
-            if (PHP_SAPI === 'cli') {
+            if (\PHP_SAPI === 'cli') {
                 Console::stderr($causedBy);
             } else {
                 echo $causedBy;
@@ -106,7 +106,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
      */
     protected function formatMessage($message, $format = [Console::FG_RED, Console::BOLD])
     {
-        $stream = (PHP_SAPI === 'cli') ? STDERR : STDOUT;
+        $stream = (\PHP_SAPI === 'cli') ? STDERR : STDOUT;
         // try controller first to allow check for --color switch
         if (Yii::$app->controller instanceof \yii\console\Controller && Yii::$app->controller->isColorEnabled($stream)
             || Yii::$app instanceof \yii\console\Application && Console::streamSupportsAnsiColors($stream)) {

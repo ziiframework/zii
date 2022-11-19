@@ -140,11 +140,11 @@ class HttpCache extends ActionFilter
         $lastModified = $etag = null;
 
         if ($this->lastModified !== null) {
-            $lastModified = call_user_func($this->lastModified, $action, $this->params);
+            $lastModified = \call_user_func($this->lastModified, $action, $this->params);
         }
 
         if ($this->etagSeed !== null) {
-            $seed = call_user_func($this->etagSeed, $action, $this->params);
+            $seed = \call_user_func($this->etagSeed, $action, $this->params);
 
             if ($seed !== null) {
                 $etag = $this->generateEtag($seed);
@@ -162,7 +162,7 @@ class HttpCache extends ActionFilter
         $cacheValid = $this->validateCache($lastModified, $etag);
         // https://tools.ietf.org/html/rfc7232#section-4.1
         if ($lastModified !== null && (!$cacheValid || ($cacheValid && $etag === null))) {
-            $response->getHeaders()->set('Last-Modified', gmdate('D, d M Y H:i:s', $lastModified) . ' GMT');
+            $response->getHeaders()->set('Last-Modified', \gmdate('D, d M Y H:i:s', $lastModified) . ' GMT');
         }
 
         if ($cacheValid) {
@@ -189,9 +189,9 @@ class HttpCache extends ActionFilter
         if (Yii::$app->request->headers->has('If-None-Match')) {
             // HTTP_IF_NONE_MATCH takes precedence over HTTP_IF_MODIFIED_SINCE
             // https://datatracker.ietf.org/doc/html/rfc7232#section-3.3
-            return $etag !== null && in_array($etag, Yii::$app->request->getETags(), true);
+            return $etag !== null && \in_array($etag, Yii::$app->request->getETags(), true);
         } elseif (Yii::$app->request->headers->has('If-Modified-Since')) {
-            return $lastModified !== null && @strtotime(Yii::$app->request->headers->get('If-Modified-Since')) >= $lastModified;
+            return $lastModified !== null && @\strtotime(Yii::$app->request->headers->get('If-Modified-Since')) >= $lastModified;
         }
 
         return false;
@@ -205,11 +205,11 @@ class HttpCache extends ActionFilter
     protected function sendCacheControlHeader(): void
     {
         if ($this->sessionCacheLimiter !== null) {
-            if ($this->sessionCacheLimiter === '' && !headers_sent() && Yii::$app->getSession()->getIsActive()) {
-                header_remove('Expires');
-                header_remove('Cache-Control');
-                header_remove('Last-Modified');
-                header_remove('Pragma');
+            if ($this->sessionCacheLimiter === '' && !\headers_sent() && Yii::$app->getSession()->getIsActive()) {
+                \header_remove('Expires');
+                \header_remove('Cache-Control');
+                \header_remove('Last-Modified');
+                \header_remove('Pragma');
             }
 
             Yii::$app->getSession()->setCacheLimiter($this->sessionCacheLimiter);
@@ -231,7 +231,7 @@ class HttpCache extends ActionFilter
      */
     protected function generateEtag($seed)
     {
-        $etag = '"' . rtrim(base64_encode(sha1($seed, true)), '=') . '"';
+        $etag = '"' . \rtrim(\base64_encode(\sha1($seed, true)), '=') . '"';
 
         return $this->weakEtag ? 'W/' . $etag : $etag;
     }

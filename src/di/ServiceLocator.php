@@ -144,7 +144,7 @@ class ServiceLocator extends Component
         if (isset($this->_definitions[$id])) {
             $definition = $this->_definitions[$id];
 
-            if (is_object($definition) && !$definition instanceof Closure) {
+            if (\is_object($definition) && !$definition instanceof Closure) {
                 return $this->_components[$id] = $definition;
             }
 
@@ -209,10 +209,10 @@ class ServiceLocator extends Component
             return;
         }
 
-        if (is_object($definition) || is_callable($definition, true)) {
+        if (\is_object($definition) || \is_callable($definition, true)) {
             // an object, a class name, or a PHP callable
             $this->_definitions[$id] = $definition;
-        } elseif (is_array($definition)) {
+        } elseif (\is_array($definition)) {
             // a configuration array
             if (isset($definition['__class'])) {
                 $this->_definitions[$id] = $definition;
@@ -224,7 +224,7 @@ class ServiceLocator extends Component
                 throw new InvalidConfigException("The configuration for the \"$id\" component must contain a \"class\" element.");
             }
         } else {
-            throw new InvalidConfigException("Unexpected configuration type for the \"$id\" component: " . gettype($definition));
+            throw new InvalidConfigException("Unexpected configuration type for the \"$id\" component: " . \gettype($definition));
         }
     }
 

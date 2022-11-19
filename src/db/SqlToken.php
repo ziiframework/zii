@@ -152,7 +152,7 @@ class SqlToken extends BaseObject implements ArrayAccess
         $offset = $this->calculateOffset($offset);
 
         if (isset($this->_children[$offset])) {
-            array_splice($this->_children, $offset, 1);
+            \array_splice($this->_children, $offset, 1);
         }
         $this->updateCollectionOffsets();
     }
@@ -190,7 +190,7 @@ class SqlToken extends BaseObject implements ArrayAccess
      */
     public function getIsCollection()
     {
-        return in_array($this->type, [
+        return \in_array($this->type, [
             self::TYPE_CODE,
             self::TYPE_STATEMENT,
             self::TYPE_PARENTHESIS,
@@ -220,7 +220,7 @@ class SqlToken extends BaseObject implements ArrayAccess
             $code = $code->parent;
         }
 
-        return mb_substr($code->content, $this->startOffset, $this->endOffset - $this->startOffset, 'UTF-8');
+        return \mb_substr($code->content, $this->startOffset, $this->endOffset - $this->startOffset, 'UTF-8');
     }
 
     /**
@@ -281,7 +281,7 @@ class SqlToken extends BaseObject implements ArrayAccess
         $firstMatchIndex = $lastMatchIndex = null;
         $wildcard = false;
 
-        for ($index = 0, $count = count($patternToken->children); $index < $count; ++$index) {
+        for ($index = 0, $count = \count($patternToken->children); $index < $count; ++$index) {
             // Here we iterate token by token with an exception of "any" that toggles
             // an iteration until we matched with a next pattern token or EOF.
             if ($patternToken[$index]->content === 'any') {
@@ -290,7 +290,7 @@ class SqlToken extends BaseObject implements ArrayAccess
                 continue;
             }
 
-            for ($limit = $wildcard ? count($token->children) : $offset + 1; $offset < $limit; ++$offset) {
+            for ($limit = $wildcard ? \count($token->children) : $offset + 1; $offset < $limit; ++$offset) {
                 if (!$wildcard && !isset($token[$offset])) {
                     break;
                 }
@@ -328,7 +328,7 @@ class SqlToken extends BaseObject implements ArrayAccess
             return $offset;
         }
 
-        return count($this->_children) + $offset;
+        return \count($this->_children) + $offset;
     }
 
     /**
@@ -337,8 +337,8 @@ class SqlToken extends BaseObject implements ArrayAccess
     private function updateCollectionOffsets(): void
     {
         if (!empty($this->_children)) {
-            $this->startOffset = reset($this->_children)->startOffset;
-            $this->endOffset = end($this->_children)->endOffset;
+            $this->startOffset = \reset($this->_children)->startOffset;
+            $this->endOffset = \end($this->_children)->endOffset;
         }
 
         if ($this->parent !== null) {

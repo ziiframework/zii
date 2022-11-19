@@ -94,7 +94,7 @@ class OptimisticLockBehavior extends AttributeBehavior
 
         if (empty($this->attributes)) {
             $lock = $this->getLockAttribute();
-            $this->attributes = array_fill_keys(array_keys($this->events()), $lock);
+            $this->attributes = \array_fill_keys(\array_keys($this->events()), $lock);
         }
     }
 

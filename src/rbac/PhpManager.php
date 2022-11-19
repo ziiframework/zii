@@ -154,7 +154,7 @@ class PhpManager extends BaseManager
             return false;
         }
 
-        if (isset($assignments[$itemName]) || in_array($itemName, $this->defaultRoles)) {
+        if (isset($assignments[$itemName]) || \in_array($itemName, $this->defaultRoles)) {
             return true;
         }
 
@@ -287,7 +287,7 @@ class PhpManager extends BaseManager
         $this->assignments[$userId][$role->name] = new Assignment([
             'userId' => $userId,
             'roleName' => $role->name,
-            'createdAt' => time(),
+            'createdAt' => \time(),
         ]);
         $this->saveAssignments();
 
@@ -314,7 +314,7 @@ class PhpManager extends BaseManager
      */
     public function revokeAll($userId)
     {
-        if (isset($this->assignments[$userId]) && is_array($this->assignments[$userId])) {
+        if (isset($this->assignments[$userId]) && \is_array($this->assignments[$userId])) {
             foreach ($this->assignments[$userId] as $itemName => $value) {
                 unset($this->assignments[$userId][$itemName]);
             }
@@ -447,7 +447,7 @@ class PhpManager extends BaseManager
 
         $roles = [$roleName => $role];
 
-        $roles += array_filter($this->getRoles(), static fn (Role $roleItem) => array_key_exists($roleItem->name, $result));
+        $roles += \array_filter($this->getRoles(), static fn (Role $roleItem) => \array_key_exists($roleItem->name, $result));
 
         return $roles;
     }
@@ -465,7 +465,7 @@ class PhpManager extends BaseManager
         }
         $permissions = [];
 
-        foreach (array_keys($result) as $itemName) {
+        foreach (\array_keys($result) as $itemName) {
             if (isset($this->items[$itemName]) && $this->items[$itemName] instanceof Permission) {
                 $permissions[$itemName] = $this->items[$itemName];
             }
@@ -498,7 +498,7 @@ class PhpManager extends BaseManager
         $directPermission = $this->getDirectPermissionsByUser($userId);
         $inheritedPermission = $this->getInheritedPermissionsByUser($userId);
 
-        return array_merge($directPermission, $inheritedPermission);
+        return \array_merge($directPermission, $inheritedPermission);
     }
 
     /**
@@ -539,7 +539,7 @@ class PhpManager extends BaseManager
         $assignments = $this->getAssignments($userId);
         $result = [];
 
-        foreach (array_keys($assignments) as $roleName) {
+        foreach (\array_keys($assignments) as $roleName) {
             $this->getChildrenRecursive($roleName, $result);
         }
 
@@ -549,7 +549,7 @@ class PhpManager extends BaseManager
 
         $permissions = [];
 
-        foreach (array_keys($result) as $itemName) {
+        foreach (\array_keys($result) as $itemName) {
             if (isset($this->items[$itemName]) && $this->items[$itemName] instanceof Permission) {
                 $permissions[$itemName] = $this->items[$itemName];
             }
@@ -738,7 +738,7 @@ class PhpManager extends BaseManager
      */
     protected function addItem($item)
     {
-        $time = time();
+        $time = \time();
 
         if ($item->createdAt === null) {
             $item->createdAt = $time;
@@ -766,9 +766,9 @@ class PhpManager extends BaseManager
         $this->items = [];
 
         $items = $this->loadFromFile($this->itemFile);
-        $itemsMtime = @filemtime($this->itemFile);
+        $itemsMtime = @\filemtime($this->itemFile);
         $assignments = $this->loadFromFile($this->assignmentFile);
-        $assignmentsMtime = @filemtime($this->assignmentFile);
+        $assignmentsMtime = @\filemtime($this->assignmentFile);
         $rules = $this->loadFromFile($this->ruleFile);
 
         foreach ($items as $name => $item) {
@@ -805,7 +805,7 @@ class PhpManager extends BaseManager
         }
 
         foreach ($rules as $name => $ruleData) {
-            $this->rules[$name] = unserialize($ruleData);
+            $this->rules[$name] = \unserialize($ruleData);
         }
     }
 
@@ -830,7 +830,7 @@ class PhpManager extends BaseManager
      */
     protected function loadFromFile($file)
     {
-        if (is_file($file)) {
+        if (\is_file($file)) {
             return require $file;
         }
 
@@ -847,7 +847,7 @@ class PhpManager extends BaseManager
      */
     protected function saveToFile($data, $file): void
     {
-        file_put_contents($file, "<?php\n\nreturn " . VarDumper::export($data) . ";\n", LOCK_EX);
+        \file_put_contents($file, "<?php\n\nreturn " . VarDumper::export($data) . ";\n", \LOCK_EX);
         $this->invalidateScriptCache($file);
     }
 
@@ -860,11 +860,11 @@ class PhpManager extends BaseManager
      */
     protected function invalidateScriptCache($file): void
     {
-        if (function_exists('opcache_invalidate')) {
-            opcache_invalidate($file, true);
+        if (\function_exists('opcache_invalidate')) {
+            \opcache_invalidate($file, true);
         }
 
-        if (function_exists('apc_delete_file')) {
+        if (\function_exists('apc_delete_file')) {
             @apc_delete_file($file);
         }
     }
@@ -878,7 +878,7 @@ class PhpManager extends BaseManager
 
         foreach ($this->items as $name => $item) {
             /* @var $item Item */
-            $items[$name] = array_filter([
+            $items[$name] = \array_filter([
                     'type' => $item->type,
                     'description' => $item->description,
                     'ruleName' => $item->ruleName,
@@ -919,7 +919,7 @@ class PhpManager extends BaseManager
         $rules = [];
 
         foreach ($this->rules as $name => $rule) {
-            $rules[$name] = serialize($rule);
+            $rules[$name] = \serialize($rule);
         }
         $this->saveToFile($rules, $this->ruleFile);
     }

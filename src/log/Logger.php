@@ -148,12 +148,12 @@ class Logger extends Component
     public function init(): void
     {
         parent::init();
-        register_shutdown_function(function (): void {
+        \register_shutdown_function(function (): void {
             // make regular flush before other shutdown functions, which allows session data collection and so on
             $this->flush();
             // make sure log entries written by shutdown functions are also flushed
             // ensure "flush()" is called last when there are multiple shutdown functions
-            register_shutdown_function([$this, 'flush'], true);
+            \register_shutdown_function([$this, 'flush'], true);
         });
     }
 
@@ -171,16 +171,16 @@ class Logger extends Component
      */
     public function log($message, $level, $category = 'application'): void
     {
-        $time = microtime(true);
+        $time = \microtime(true);
         $traces = [];
 
         if ($this->traceLevel > 0) {
             $count = 0;
-            $ts = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-            array_pop($ts); // remove the last trace since it would be the entry script, not very useful
+            $ts = \debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS);
+            \array_pop($ts); // remove the last trace since it would be the entry script, not very useful
 
             foreach ($ts as $trace) {
-                if (isset($trace['file'], $trace['line']) && !str_starts_with($trace['file'], YII2_PATH)) {
+                if (isset($trace['file'], $trace['line']) && !\str_starts_with($trace['file'], YII2_PATH)) {
                     unset($trace['object'], $trace['args']);
                     $traces[] = $trace;
 
@@ -190,15 +190,15 @@ class Logger extends Component
                 }
             }
         }
-        $data = [$message, $level, $category, $time, $traces, memory_get_usage()];
+        $data = [$message, $level, $category, $time, $traces, \memory_get_usage()];
 
-        if ($this->profilingAware && in_array($level, [self::LEVEL_PROFILE_BEGIN, self::LEVEL_PROFILE_END])) {
-            $this->messages[($level == self::LEVEL_PROFILE_BEGIN ? 'begin-' : 'end-') . md5(json_encode($message))] = $data;
+        if ($this->profilingAware && \in_array($level, [self::LEVEL_PROFILE_BEGIN, self::LEVEL_PROFILE_END])) {
+            $this->messages[($level == self::LEVEL_PROFILE_BEGIN ? 'begin-' : 'end-') . \md5(\json_encode($message))] = $data;
         } else {
             $this->messages[] = $data;
         }
 
-        if ($this->flushInterval > 0 && count($this->messages) >= $this->flushInterval) {
+        if ($this->flushInterval > 0 && \count($this->messages) >= $this->flushInterval) {
             $this->flush();
         }
     }
@@ -215,16 +215,16 @@ class Logger extends Component
             $messages = [];
 
             foreach ($this->messages as $index => $message) {
-                if (is_int($index)) {
+                if (\is_int($index)) {
                     $messages[] = $message;
                 } else {
-                    if (strncmp($index, 'begin-', 6) === 0) {
-                        $oppositeProfile = 'end-' . substr($index, 6);
+                    if (\strncmp($index, 'begin-', 6) === 0) {
+                        $oppositeProfile = 'end-' . \substr($index, 6);
                     } else {
-                        $oppositeProfile = 'begin-' . substr($index, 4);
+                        $oppositeProfile = 'begin-' . \substr($index, 4);
                     }
 
-                    if (array_key_exists($oppositeProfile, $this->messages)) {
+                    if (\array_key_exists($oppositeProfile, $this->messages)) {
                         $messages[] = $message;
                     } else {
                         $keep[$index] = $message;
@@ -232,10 +232,10 @@ class Logger extends Component
                 }
             }
 
-            if ($this->flushInterval > 0 && count($keep) >= $this->flushInterval) {
+            if ($this->flushInterval > 0 && \count($keep) >= $this->flushInterval) {
                 $this->messages = [];
                 $this->log('Number of dangling profiling block messages reached flushInterval value and therefore these were flushed. Please consider setting higher flushInterval value or making profiling blocks shorter.', self::LEVEL_WARNING);
-                $messages = array_merge($messages, array_values($keep));
+                $messages = \array_merge($messages, \array_values($keep));
             } else {
                 $this->messages = $keep;
             }
@@ -259,7 +259,7 @@ class Logger extends Component
      */
     public function getElapsedTime()
     {
-        return microtime(true) - YII_BEGIN_TIME;
+        return \microtime(true) - YII_BEGIN_TIME;
     }
 
     /**
@@ -292,11 +292,11 @@ class Logger extends Component
             $matched = empty($categories);
 
             foreach ($categories as $category) {
-                $prefix = rtrim($category, '*');
+                $prefix = \rtrim($category, '*');
 
                 if (
                     ($outerTimingItem['category'] === $category || $prefix !== $category)
-                    && str_starts_with($outerTimingItem['category'], $prefix)
+                    && \str_starts_with($outerTimingItem['category'], $prefix)
                 ) {
                     $matched = true;
                     break;
@@ -305,14 +305,14 @@ class Logger extends Component
 
             if ($matched) {
                 foreach ($excludeCategories as $category) {
-                    $prefix = rtrim($category, '*');
+                    $prefix = \rtrim($category, '*');
 
                     foreach ($timings as $innerIndex => $innerTimingItem) {
                         $currentIndex = $innerIndex;
 
                         if (
                             ($innerTimingItem['category'] === $category || $prefix !== $category)
-                            && str_starts_with($innerTimingItem['category'], $prefix)
+                            && \str_starts_with($innerTimingItem['category'], $prefix)
                         ) {
                             $matched = false;
                             break;
@@ -326,7 +326,7 @@ class Logger extends Component
             }
         }
 
-        return array_values($timings);
+        return \array_values($timings);
     }
 
     /**
@@ -340,7 +340,7 @@ class Logger extends Component
     public function getDbProfiling()
     {
         $timings = $this->getProfiling($this->dbEventNames);
-        $count = count($timings);
+        $count = \count($timings);
         $time = 0;
 
         foreach ($timings as $timing) {
@@ -368,7 +368,7 @@ class Logger extends Component
             [$token, $level, $category, $timestamp, $traces] = $log;
             $memory = $log[5] ?? 0;
             $log[6] = $i;
-            $hash = md5(json_encode($token));
+            $hash = \md5(\json_encode($token));
 
             if ($level == self::LEVEL_PROFILE_BEGIN) {
                 $stack[$hash] = $log;
@@ -379,7 +379,7 @@ class Logger extends Component
                         'category' => $stack[$hash][2],
                         'timestamp' => $stack[$hash][3],
                         'trace' => $stack[$hash][4],
-                        'level' => count($stack) - 1,
+                        'level' => \count($stack) - 1,
                         'duration' => $timestamp - $stack[$hash][3],
                         'memory' => $memory,
                         'memoryDiff' => $memory - ($stack[$hash][5] ?? 0),
@@ -389,9 +389,9 @@ class Logger extends Component
             }
         }
 
-        ksort($timings);
+        \ksort($timings);
 
-        return array_values($timings);
+        return \array_values($timings);
     }
 
     /**

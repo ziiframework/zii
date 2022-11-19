@@ -359,9 +359,9 @@ class Query extends Component implements QueryInterface, ExpressionInterface
             return $this->createCommand($db)->queryColumn();
         }
 
-        if (is_string($this->indexBy) && is_array($this->select) && count($this->select) === 1) {
-            if (!str_contains($this->indexBy, '.') && count($tables = $this->getTablesUsedInFrom()) > 0) {
-                $this->select[] = key($tables) . '.' . $this->indexBy;
+        if (\is_string($this->indexBy) && \is_array($this->select) && \count($this->select) === 1) {
+            if (!\str_contains($this->indexBy, '.') && \count($tables = $this->getTablesUsedInFrom()) > 0) {
+                $this->select[] = \key($tables) . '.' . $this->indexBy;
             } else {
                 $this->select[] = $this->indexBy;
             }
@@ -370,19 +370,19 @@ class Query extends Component implements QueryInterface, ExpressionInterface
         $results = [];
         $column = null;
 
-        if (is_string($this->indexBy)) {
-            if (($dotPos = strpos($this->indexBy, '.')) === false) {
+        if (\is_string($this->indexBy)) {
+            if (($dotPos = \strpos($this->indexBy, '.')) === false) {
                 $column = $this->indexBy;
             } else {
-                $column = substr($this->indexBy, $dotPos + 1);
+                $column = \substr($this->indexBy, $dotPos + 1);
             }
         }
 
         foreach ($rows as $row) {
-            $value = reset($row);
+            $value = \reset($row);
 
             if ($this->indexBy instanceof Closure) {
-                $results[call_user_func($this->indexBy, $row)] = $value;
+                $results[\call_user_func($this->indexBy, $row)] = $value;
             } else {
                 $results[$row[$column]] = $value;
             }
@@ -580,14 +580,14 @@ class Query extends Component implements QueryInterface, ExpressionInterface
             return [];
         }
 
-        if (is_array($this->from)) {
+        if (\is_array($this->from)) {
             $tableNames = $this->from;
-        } elseif (is_string($this->from)) {
-            $tableNames = preg_split('/\s*,\s*/', trim($this->from), -1, PREG_SPLIT_NO_EMPTY);
+        } elseif (\is_string($this->from)) {
+            $tableNames = \preg_split('/\s*,\s*/', \trim($this->from), -1, \PREG_SPLIT_NO_EMPTY);
         } elseif ($this->from instanceof Expression) {
             $tableNames = [$this->from];
         } else {
-            throw new InvalidConfigException(gettype($this->from) . ' in $from is not supported.');
+            throw new InvalidConfigException(\gettype($this->from) . ' in $from is not supported.');
         }
 
         return $this->cleanUpTableNames($tableNames);
@@ -608,7 +608,7 @@ class Query extends Component implements QueryInterface, ExpressionInterface
         $cleanedUpTableNames = [];
 
         foreach ($tableNames as $alias => $tableName) {
-            if (is_string($tableName) && !is_string($alias)) {
+            if (\is_string($tableName) && !\is_string($alias)) {
                 $pattern = <<<PATTERN
 ~
 ^
@@ -641,7 +641,7 @@ $
 ~iux
 PATTERN;
 
-                if (preg_match($pattern, $tableName, $matches)) {
+                if (\preg_match($pattern, $tableName, $matches)) {
                     if (isset($matches[2])) {
                         [, $tableName, $alias] = $matches;
                     } else {
@@ -651,7 +651,7 @@ PATTERN;
             }
 
             if ($tableName instanceof Expression) {
-                if (!is_string($alias)) {
+                if (!\is_string($alias)) {
                     throw new InvalidArgumentException('To use Expression in from() method, pass it in array format with alias.');
                 }
                 $cleanedUpTableNames[$this->ensureNameQuoted($alias)] = $tableName;
@@ -674,9 +674,9 @@ PATTERN;
      */
     private function ensureNameQuoted($name)
     {
-        $name = str_replace(["'", '"', '`', '[', ']'], '', $name);
+        $name = \str_replace(["'", '"', '`', '[', ']'], '', $name);
 
-        if ($name && !preg_match('/^{{.*}}$/', $name)) {
+        if ($name && !\preg_match('/^{{.*}}$/', $name)) {
             return '{{' . $name . '}}';
         }
 
@@ -737,10 +737,10 @@ PATTERN;
             return $this->select($columns);
         }
 
-        if (!is_array($this->select)) {
+        if (!\is_array($this->select)) {
             $this->select = $this->normalizeSelect($this->select);
         }
-        $this->select = array_merge($this->select, $this->normalizeSelect($columns));
+        $this->select = \array_merge($this->select, $this->normalizeSelect($columns));
 
         return $this;
     }
@@ -758,24 +758,24 @@ PATTERN;
     {
         if ($columns instanceof ExpressionInterface) {
             $columns = [$columns];
-        } elseif (!is_array($columns)) {
-            $columns = preg_split('/\s*,\s*/', trim(pf_string_argument($columns)), -1, PREG_SPLIT_NO_EMPTY);
+        } elseif (!\is_array($columns)) {
+            $columns = \preg_split('/\s*,\s*/', \trim(pf_string_argument($columns)), -1, \PREG_SPLIT_NO_EMPTY);
         }
         $select = [];
 
         foreach ($columns as $columnAlias => $columnDefinition) {
-            if (is_string($columnAlias)) {
+            if (\is_string($columnAlias)) {
                 // Already in the normalized format, good for them
                 $select[$columnAlias] = $columnDefinition;
 
                 continue;
             }
 
-            if (is_string($columnDefinition)) {
+            if (\is_string($columnDefinition)) {
                 if (
-                    preg_match('/^(.*?)(?i:\s+as\s+|\s+)([\w\-_\.]+)$/', $columnDefinition, $matches) &&
-                    !preg_match('/^\d+$/', $matches[2]) &&
-                    !str_contains($matches[2], '.')
+                    \preg_match('/^(.*?)(?i:\s+as\s+|\s+)([\w\-_\.]+)$/', $columnDefinition, $matches) &&
+                    !\preg_match('/^\d+$/', $matches[2]) &&
+                    !\str_contains($matches[2], '.')
                 ) {
                     // Using "columnName as alias" or "columnName alias" syntax
                     $select[$matches[2]] = $matches[1];
@@ -783,7 +783,7 @@ PATTERN;
                     continue;
                 }
 
-                if (!str_contains($columnDefinition, '(')) {
+                if (!\str_contains($columnDefinition, '(')) {
                     // Normal column name, just alias it to itself to ensure it's not selected twice
                     $select[$columnDefinition] = $columnDefinition;
 
@@ -816,15 +816,15 @@ PATTERN;
 
         foreach ($columns as $columnAlias => $columnDefinition) {
             if (!$columnDefinition instanceof self) {
-                if (is_string($columnAlias)) {
+                if (\is_string($columnAlias)) {
                     $existsInSelect = isset($this->select[$columnAlias]) && $this->select[$columnAlias] === $columnDefinition;
 
                     if ($existsInSelect) {
                         continue;
                     }
-                } elseif (is_int($columnAlias)) {
-                    $existsInSelect = in_array($columnDefinition, $unaliasedColumns, true);
-                    $existsInResultSet = in_array($columnDefinition, $result, true);
+                } elseif (\is_int($columnAlias)) {
+                    $existsInSelect = \in_array($columnDefinition, $unaliasedColumns, true);
+                    $existsInResultSet = \in_array($columnDefinition, $result, true);
 
                     if ($existsInSelect || $existsInResultSet) {
                         continue;
@@ -848,15 +848,15 @@ PATTERN;
     {
         $result = [];
 
-        if (is_array($this->select)) {
+        if (\is_array($this->select)) {
             foreach ($this->select as $name => $value) {
-                if (is_int($name)) {
+                if (\is_int($name)) {
                     $result[] = $value;
                 }
             }
         }
 
-        return array_unique($result);
+        return \array_unique($result);
     }
 
     /**
@@ -914,8 +914,8 @@ PATTERN;
             $tables = [$tables];
         }
 
-        if (is_string($tables)) {
-            $tables = preg_split('/\s*,\s*/', trim($tables), -1, PREG_SPLIT_NO_EMPTY);
+        if (\is_string($tables)) {
+            $tables = \preg_split('/\s*,\s*/', \trim($tables), -1, \PREG_SPLIT_NO_EMPTY);
         }
         $this->from = $tables;
 
@@ -966,7 +966,7 @@ PATTERN;
     {
         if ($this->where === null) {
             $this->where = $condition;
-        } elseif (is_array($this->where) && isset($this->where[0]) && strcasecmp($this->where[0], 'and') === 0) {
+        } elseif (\is_array($this->where) && isset($this->where[0]) && \strcasecmp($this->where[0], 'and') === 0) {
             $this->where[] = $condition;
         } else {
             $this->where = ['and', $this->where, $condition];
@@ -1031,9 +1031,9 @@ PATTERN;
      */
     public function andFilterCompare($name, $value, $defaultOperator = '=')
     {
-        if (preg_match('/^(<>|>=|>|<=|<|=)/', $value ?? '', $matches)) {
+        if (\preg_match('/^(<>|>=|>|<=|<|=)/', $value ?? '', $matches)) {
             $operator = $matches[1];
-            $value = substr($value, strlen($operator));
+            $value = \substr($value, \strlen($operator));
         } else {
             $operator = $defaultOperator;
         }
@@ -1187,8 +1187,8 @@ PATTERN;
     {
         if ($columns instanceof ExpressionInterface) {
             $columns = [$columns];
-        } elseif (!is_array($columns)) {
-            $columns = preg_split('/\s*,\s*/', trim($columns), -1, PREG_SPLIT_NO_EMPTY);
+        } elseif (!\is_array($columns)) {
+            $columns = \preg_split('/\s*,\s*/', \trim($columns), -1, \PREG_SPLIT_NO_EMPTY);
         }
         $this->groupBy = $columns;
 
@@ -1218,14 +1218,14 @@ PATTERN;
     {
         if ($columns instanceof ExpressionInterface) {
             $columns = [$columns];
-        } elseif (!is_array($columns)) {
-            $columns = preg_split('/\s*,\s*/', trim($columns), -1, PREG_SPLIT_NO_EMPTY);
+        } elseif (!\is_array($columns)) {
+            $columns = \preg_split('/\s*,\s*/', \trim($columns), -1, \PREG_SPLIT_NO_EMPTY);
         }
 
         if ($this->groupBy === null) {
             $this->groupBy = $columns;
         } else {
-            $this->groupBy = array_merge($this->groupBy, $columns);
+            $this->groupBy = \array_merge($this->groupBy, $columns);
         }
 
         return $this;
@@ -1465,7 +1465,7 @@ PATTERN;
                 $this->params = $params;
             } else {
                 foreach ($params as $name => $value) {
-                    if (is_int($name)) {
+                    if (\is_int($name)) {
                         $this->params[] = $value;
                     } else {
                         $this->params[$name] = $value;
@@ -1568,6 +1568,6 @@ PATTERN;
      */
     public function __toString()
     {
-        return serialize($this);
+        return \serialize($this);
     }
 }

@@ -230,8 +230,8 @@ class AssetManager extends Component
         parent::init();
         $this->basePath = Yii::getAlias($this->basePath);
 
-        $this->basePath = realpath($this->basePath);
-        $this->baseUrl = rtrim(Yii::getAlias($this->baseUrl), '/');
+        $this->basePath = \realpath($this->basePath);
+        $this->baseUrl = \rtrim(Yii::getAlias($this->baseUrl), '/');
     }
 
     /**
@@ -251,11 +251,11 @@ class AssetManager extends Component
             return;
         }
 
-        if (!is_dir($this->basePath)) {
+        if (!\is_dir($this->basePath)) {
             throw new InvalidConfigException("The directory does not exist: {$this->basePath}");
         }
 
-        if (!is_writable($this->basePath)) {
+        if (!\is_writable($this->basePath)) {
             throw new InvalidConfigException("The directory is not writable by the Web process: {$this->basePath}");
         }
 
@@ -284,7 +284,7 @@ class AssetManager extends Component
             return $this->bundles[$name] = $this->loadBundle($name, [], $publish);
         } elseif ($this->bundles[$name] instanceof AssetBundle) {
             return $this->bundles[$name];
-        } elseif (is_array($this->bundles[$name])) {
+        } elseif (\is_array($this->bundles[$name])) {
             return $this->bundles[$name] = $this->loadBundle($name, $this->bundles[$name], $publish);
         } elseif ($this->bundles[$name] === false) {
             return $this->loadDummyBundle($name);
@@ -361,7 +361,7 @@ class AssetManager extends Component
             $withTimestamp = $appendTimestamp;
         }
 
-        if ($withTimestamp && $assetPath && ($timestamp = @filemtime($assetPath)) > 0) {
+        if ($withTimestamp && $assetPath && ($timestamp = @\filemtime($assetPath)) > 0) {
             return "$assetUrl?v=$timestamp";
         }
 
@@ -401,12 +401,12 @@ class AssetManager extends Component
             $asset = $bundle->sourcePath . '/' . $asset;
         }
 
-        $n = mb_strlen($asset, Yii::$app->charset);
+        $n = \mb_strlen($asset, Yii::$app->charset);
 
         foreach ($this->assetMap as $from => $to) {
-            $n2 = mb_strlen($from, Yii::$app->charset);
+            $n2 = \mb_strlen($from, Yii::$app->charset);
 
-            if ($n2 <= $n && substr_compare($asset, $from, $n - $n2, $n2) === 0) {
+            if ($n2 <= $n && \substr_compare($asset, $from, $n - $n2, $n2) === 0) {
                 return $to;
             }
         }
@@ -428,8 +428,8 @@ class AssetManager extends Component
     {
         if ($this->_converter === null) {
             $this->_converter = Yii::createObject(AssetConverter::className());
-        } elseif (is_array($this->_converter) || is_string($this->_converter)) {
-            if (is_array($this->_converter) && !isset($this->_converter['class'])) {
+        } elseif (\is_array($this->_converter) || \is_string($this->_converter)) {
+            if (\is_array($this->_converter) && !isset($this->_converter['class'])) {
                 $this->_converter['class'] = AssetConverter::className();
             }
             $this->_converter = Yii::createObject($this->_converter);
@@ -507,15 +507,15 @@ class AssetManager extends Component
             return $this->_published[$path];
         }
 
-        if (!is_string($path) || ($src = realpath($path)) === false) {
+        if (!\is_string($path) || ($src = \realpath($path)) === false) {
             throw new InvalidArgumentException("The file or directory to be published does not exist: $path");
         }
 
-        if (!is_readable($path)) {
+        if (!\is_readable($path)) {
             throw new InvalidArgumentException("The file or directory to be published is not readable: $path");
         }
 
-        if (is_file($src)) {
+        if (\is_file($src)) {
             return $this->_published[$path] = $this->publishFile($src);
         }
 
@@ -536,33 +536,33 @@ class AssetManager extends Component
         $this->checkBasePathPermission();
 
         $dir = $this->hash($src);
-        $fileName = basename($src);
-        $dstDir = $this->basePath . DIRECTORY_SEPARATOR . $dir;
-        $dstFile = $dstDir . DIRECTORY_SEPARATOR . $fileName;
+        $fileName = \basename($src);
+        $dstDir = $this->basePath . \DIRECTORY_SEPARATOR . $dir;
+        $dstFile = $dstDir . \DIRECTORY_SEPARATOR . $fileName;
 
-        if (!is_dir($dstDir)) {
+        if (!\is_dir($dstDir)) {
             FileHelper::createDirectory($dstDir, $this->dirMode, true);
         }
 
         if ($this->linkAssets) {
-            if (!is_file($dstFile)) {
+            if (!\is_file($dstFile)) {
                 try { // fix #6226 symlinking multi threaded
-                    symlink($src, $dstFile);
+                    \symlink($src, $dstFile);
                 } catch (Exception $e) {
-                    if (!is_file($dstFile)) {
+                    if (!\is_file($dstFile)) {
                         throw $e;
                     }
                 }
             }
-        } elseif (@filemtime($dstFile) < @filemtime($src)) {
-            copy($src, $dstFile);
+        } elseif (@\filemtime($dstFile) < @\filemtime($src)) {
+            \copy($src, $dstFile);
 
             if ($this->fileMode !== null) {
-                @chmod($dstFile, $this->fileMode);
+                @\chmod($dstFile, $this->fileMode);
             }
         }
 
-        if ($this->appendTimestamp && ($timestamp = @filemtime($dstFile)) > 0) {
+        if ($this->appendTimestamp && ($timestamp = @\filemtime($dstFile)) > 0) {
             $fileName = $fileName . "?v=$timestamp";
         }
 
@@ -596,22 +596,22 @@ class AssetManager extends Component
         $this->checkBasePathPermission();
 
         $dir = $this->hash($src);
-        $dstDir = $this->basePath . DIRECTORY_SEPARATOR . $dir;
+        $dstDir = $this->basePath . \DIRECTORY_SEPARATOR . $dir;
 
         if ($this->linkAssets) {
-            if (!is_dir($dstDir)) {
-                FileHelper::createDirectory(dirname($dstDir), $this->dirMode, true);
+            if (!\is_dir($dstDir)) {
+                FileHelper::createDirectory(\dirname($dstDir), $this->dirMode, true);
 
                 try { // fix #6226 symlinking multi threaded
-                    symlink($src, $dstDir);
+                    \symlink($src, $dstDir);
                 } catch (Exception $e) {
-                    if (!is_dir($dstDir)) {
+                    if (!\is_dir($dstDir)) {
                         throw $e;
                     }
                 }
             }
-        } elseif (!empty($options['forceCopy']) || ($this->forceCopy && !isset($options['forceCopy'])) || !is_dir($dstDir)) {
-            $opts = array_merge($options, [
+        } elseif (!empty($options['forceCopy']) || ($this->forceCopy && !isset($options['forceCopy'])) || !\is_dir($dstDir)) {
+            $opts = \array_merge($options, [
                     'dirMode' => $this->dirMode,
                     'fileMode' => $this->fileMode,
                     'copyEmptyDirectories' => false,
@@ -621,7 +621,7 @@ class AssetManager extends Component
                 if ($this->beforeCopy !== null) {
                     $opts['beforeCopy'] = $this->beforeCopy;
                 } else {
-                    $opts['beforeCopy'] = static fn ($from, $to) => strncmp(basename($from), '.', 1) !== 0;
+                    $opts['beforeCopy'] = static fn ($from, $to) => \strncmp(\basename($from), '.', 1) !== 0;
                 }
             }
 
@@ -651,8 +651,8 @@ class AssetManager extends Component
             return $this->_published[$path][0];
         }
 
-        if (is_string($path) && ($path = realpath($path)) !== false) {
-            return $this->basePath . DIRECTORY_SEPARATOR . $this->hash($path) . (is_file($path) ? DIRECTORY_SEPARATOR . basename($path) : '');
+        if (\is_string($path) && ($path = \realpath($path)) !== false) {
+            return $this->basePath . \DIRECTORY_SEPARATOR . $this->hash($path) . (\is_file($path) ? \DIRECTORY_SEPARATOR . \basename($path) : '');
         }
 
         return false;
@@ -675,8 +675,8 @@ class AssetManager extends Component
             return $this->_published[$path][1];
         }
 
-        if (is_string($path) && ($path = realpath($path)) !== false) {
-            return $this->baseUrl . '/' . $this->hash($path) . (is_file($path) ? '/' . basename($path) : '');
+        if (\is_string($path) && ($path = \realpath($path)) !== false) {
+            return $this->baseUrl . '/' . $this->hash($path) . (\is_file($path) ? '/' . \basename($path) : '');
         }
 
         return false;
@@ -692,12 +692,12 @@ class AssetManager extends Component
      */
     protected function hash($path)
     {
-        if (is_callable($this->hashCallback)) {
-            return call_user_func($this->hashCallback, $path);
+        if (\is_callable($this->hashCallback)) {
+            return \call_user_func($this->hashCallback, $path);
         }
-        $path = (is_file($path) ? dirname($path) : $path) . filemtime($path);
+        $path = (\is_file($path) ? \dirname($path) : $path) . \filemtime($path);
 
-        return sprintf('%x', crc32($path . Yii::getVersion() . '|' . $this->linkAssets));
+        return \sprintf('%x', \crc32($path . Yii::getVersion() . '|' . $this->linkAssets));
     }
 
     /**
@@ -714,8 +714,8 @@ class AssetManager extends Component
     public function getActualAssetUrl($bundle, $asset)
     {
         if (($actualAsset = $this->resolveAsset($bundle, $asset)) !== false) {
-            if (strncmp($actualAsset, '@web/', 5) === 0) {
-                $asset = substr($actualAsset, 5);
+            if (\strncmp($actualAsset, '@web/', 5) === 0) {
+                $asset = \substr($actualAsset, 5);
                 $baseUrl = Yii::getAlias('@web');
             } else {
                 $asset = Yii::getAlias($actualAsset);
@@ -725,7 +725,7 @@ class AssetManager extends Component
             $baseUrl = $bundle->baseUrl;
         }
 
-        if (!Url::isRelative($asset) || strncmp($asset, '/', 1) === 0) {
+        if (!Url::isRelative($asset) || \strncmp($asset, '/', 1) === 0) {
             return $asset;
         }
 

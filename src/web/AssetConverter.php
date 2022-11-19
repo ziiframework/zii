@@ -71,16 +71,16 @@ class AssetConverter extends Component implements AssetConverterInterface
      */
     public function convert($asset, $basePath)
     {
-        $pos = strrpos($asset, '.');
+        $pos = \strrpos($asset, '.');
 
         if ($pos !== false) {
-            $ext = substr($asset, $pos + 1);
+            $ext = \substr($asset, $pos + 1);
 
             if (isset($this->commands[$ext])) {
                 [$ext, $command] = $this->commands[$ext];
-                $result = substr($asset, 0, $pos + 1) . $ext;
+                $result = \substr($asset, 0, $pos + 1) . $ext;
 
-                if ($this->forceConvert || @filemtime("$basePath/$result") < @filemtime("$basePath/$asset")) {
+                if ($this->forceConvert || @\filemtime("$basePath/$result") < @\filemtime("$basePath/$asset")) {
                     $this->runCommand($command, $basePath, $asset, $result);
                 }
 
@@ -108,23 +108,23 @@ class AssetConverter extends Component implements AssetConverterInterface
     {
         $command = Yii::getAlias($command);
 
-        $command = strtr($command, [
-            '{from}' => escapeshellarg("$basePath/$asset"),
-            '{to}' => escapeshellarg("$basePath/$result"),
+        $command = \strtr($command, [
+            '{from}' => \escapeshellarg("$basePath/$asset"),
+            '{to}' => \escapeshellarg("$basePath/$result"),
         ]);
         $descriptor = [
             1 => ['pipe', 'w'],
             2 => ['pipe', 'w'],
         ];
         $pipes = [];
-        $proc = proc_open($command, $descriptor, $pipes, $basePath);
-        $stdout = stream_get_contents($pipes[1]);
-        $stderr = stream_get_contents($pipes[2]);
+        $proc = \proc_open($command, $descriptor, $pipes, $basePath);
+        $stdout = \stream_get_contents($pipes[1]);
+        $stderr = \stream_get_contents($pipes[2]);
 
         foreach ($pipes as $pipe) {
-            fclose($pipe);
+            \fclose($pipe);
         }
-        $status = proc_close($proc);
+        $status = \proc_close($proc);
 
         if ($status === 0) {
             Yii::debug("Converted $asset into $result:\nSTDOUT:\n$stdout\nSTDERR:\n$stderr", __METHOD__);

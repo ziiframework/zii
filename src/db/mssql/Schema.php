@@ -111,7 +111,7 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
     {
         $resolvedName = new TableSchema();
         $parts = $this->getTableNameParts($name);
-        $partCount = count($parts);
+        $partCount = \count($parts);
 
         if ($partCount === 4) {
             // server name, catalog name, schema name and table name passed
@@ -151,13 +151,13 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
     protected function getTableNameParts($name)
     {
         $parts = [$name];
-        preg_match_all('/([^.\[\]]+)|\[([^\[\]]+)\]/', $name, $matches);
+        \preg_match_all('/([^.\[\]]+)|\[([^\[\]]+)\]/', $name, $matches);
 
-        if (isset($matches[0]) && is_array($matches[0]) && !empty($matches[0])) {
+        if (isset($matches[0]) && \is_array($matches[0]) && !empty($matches[0])) {
             $parts = $matches[0];
         }
 
-        $parts = str_replace(['[', ']'], '', $parts);
+        $parts = \str_replace(['[', ']'], '', $parts);
 
         return $parts;
     }
@@ -223,8 +223,8 @@ SQL;
     protected function getSchemaMetadata($schema, $type, $refresh)
     {
         $metadata = [];
-        $methodName = 'getTable' . ucfirst($type);
-        $tableNames = array_map(fn ($table) => $this->quoteSimpleTableName($table), $this->getTableNames($schema, $refresh));
+        $methodName = 'getTable' . \ucfirst($type);
+        $tableNames = \array_map(fn ($table) => $this->quoteSimpleTableName($table), $this->getTableNames($schema, $refresh));
 
         foreach ($tableNames as $name) {
             if ($schema !== '') {
@@ -363,7 +363,7 @@ SQL;
     protected function resolveTableNames($table, $name): void
     {
         $parts = $this->getTableNameParts($name);
-        $partCount = count($parts);
+        $partCount = \count($parts);
 
         if ($partCount === 4) {
             // server name, catalog name, schema name and table name passed
@@ -407,12 +407,12 @@ SQL;
         $column->isPrimaryKey = null; // primary key will be determined in findColumns() method
         $column->autoIncrement = $info['is_identity'] == 1;
         $column->isComputed = (bool) $info['is_computed'];
-        $column->unsigned = stripos($column->dbType, 'unsigned') !== false;
+        $column->unsigned = \stripos($column->dbType, 'unsigned') !== false;
         $column->comment = $info['comment'] === null ? '' : $info['comment'];
 
         $column->type = self::TYPE_STRING;
 
-        if (preg_match('/^(\w+)(?:\(([^\)]+)\))?/', $column->dbType, $matches)) {
+        if (\preg_match('/^(\w+)(?:\(([^\)]+)\))?/', $column->dbType, $matches)) {
             $type = $matches[1];
 
             if (isset($this->typeMap[$type])) {
@@ -420,7 +420,7 @@ SQL;
             }
 
             if (!empty($matches[2])) {
-                $values = explode(',', $matches[2]);
+                $values = \explode(',', $matches[2]);
                 $column->size = $column->precision = (int) $values[0];
 
                 if (isset($values[1])) {
@@ -518,7 +518,7 @@ SQL;
             $column = $this->loadColumnSchema($column);
 
             foreach ($table->primaryKey as $primaryKey) {
-                if (strcasecmp($column->name, $primaryKey) === 0) {
+                if (\strcasecmp($column->name, $primaryKey) === 0) {
                     $column->isPrimaryKey = true;
                     break;
                 }
@@ -781,8 +781,8 @@ SQL;
                             'foreignSchemaName' => $constraint[0]['foreign_table_schema'],
                             'foreignTableName' => $constraint[0]['foreign_table_name'],
                             'foreignColumnNames' => ArrayHelper::getColumn($constraint, 'foreign_column_name'),
-                            'onDelete' => str_replace('_', '', $constraint[0]['on_delete']),
-                            'onUpdate' => str_replace('_', '', $constraint[0]['on_update']),
+                            'onDelete' => \str_replace('_', '', $constraint[0]['on_delete']),
+                            'onUpdate' => \str_replace('_', '', $constraint[0]['on_update']),
                         ]);
                         break;
 
@@ -824,7 +824,7 @@ SQL;
      */
     public function quoteColumnName($name)
     {
-        if (preg_match('/^\[.*\]$/', $name)) {
+        if (\preg_match('/^\[.*\]$/', $name)) {
             return $name;
         }
 
@@ -843,7 +843,7 @@ SQL;
             return false;
         }
 
-        $isVersion2005orLater = version_compare($this->db->getSchema()->getServerVersion(), '9', '>=');
+        $isVersion2005orLater = \version_compare($this->db->getSchema()->getServerVersion(), '9', '>=');
         $inserted = $isVersion2005orLater ? $command->pdoStatement->fetch() : [];
 
         $tableSchema = $this->getTableSchema($table);

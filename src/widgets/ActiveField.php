@@ -248,9 +248,9 @@ class ActiveField extends Component
             if (!isset($this->parts['{hint}'])) {
                 $this->hint(null);
             }
-            $content = strtr($this->template, $this->parts);
-        } elseif (!is_string($content)) {
-            $content = call_user_func($content, $this);
+            $content = \strtr($this->template, $this->parts);
+        } elseif (!\is_string($content)) {
+            $content = \call_user_func($content, $this);
         }
 
         return $this->begin() . "\n" . $content . "\n" . $this->end();
@@ -280,7 +280,7 @@ class ActiveField extends Component
         if ($this->model->isAttributeRequired($attribute)) {
             $class[] = $this->form->requiredCssClass;
         }
-        $options['class'] = implode(' ', $class);
+        $options['class'] = \implode(' ', $class);
 
         if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_CONTAINER) {
             $this->addErrorClassIfNeeded($options);
@@ -320,7 +320,7 @@ class ActiveField extends Component
             return $this;
         }
 
-        $options = array_merge($this->labelOptions, $options);
+        $options = \array_merge($this->labelOptions, $options);
 
         if ($label !== null) {
             $options['label'] = $label;
@@ -361,7 +361,7 @@ class ActiveField extends Component
 
             return $this;
         }
-        $options = array_merge($this->errorOptions, $options);
+        $options = \array_merge($this->errorOptions, $options);
         $this->parts['{error}'] = Html::error($this->model, $this->attribute, $options);
 
         return $this;
@@ -392,7 +392,7 @@ class ActiveField extends Component
             return $this;
         }
 
-        $options = array_merge($this->hintOptions, $options);
+        $options = \array_merge($this->hintOptions, $options);
 
         if ($content !== null) {
             $options['hint'] = $content;
@@ -415,7 +415,7 @@ class ActiveField extends Component
      */
     public function input($type, $options = [])
     {
-        $options = array_merge($this->inputOptions, $options);
+        $options = \array_merge($this->inputOptions, $options);
 
         if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
             $this->addErrorClassIfNeeded($options);
@@ -448,7 +448,7 @@ class ActiveField extends Component
      */
     public function textInput($options = [])
     {
-        $options = array_merge($this->inputOptions, $options);
+        $options = \array_merge($this->inputOptions, $options);
 
         if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
             $this->addErrorClassIfNeeded($options);
@@ -480,7 +480,7 @@ class ActiveField extends Component
      */
     public function hiddenInput($options = [])
     {
-        $options = array_merge($this->inputOptions, $options);
+        $options = \array_merge($this->inputOptions, $options);
         $this->adjustLabelFor($options);
         $this->parts['{input}'] = Html::activeHiddenInput($this->model, $this->attribute, $options);
 
@@ -501,7 +501,7 @@ class ActiveField extends Component
      */
     public function passwordInput($options = [])
     {
-        $options = array_merge($this->inputOptions, $options);
+        $options = \array_merge($this->inputOptions, $options);
 
         if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
             $this->addErrorClassIfNeeded($options);
@@ -530,7 +530,7 @@ class ActiveField extends Component
     {
         // https://github.com/yiisoft/yii2/pull/795
         if ($this->inputOptions !== ['class' => 'form-control']) {
-            $options = array_merge($this->inputOptions, $options);
+            $options = \array_merge($this->inputOptions, $options);
         }
         // https://github.com/yiisoft/yii2/issues/8779
         if (!isset($this->form->options['enctype'])) {
@@ -561,7 +561,7 @@ class ActiveField extends Component
      */
     public function textarea($options = [])
     {
-        $options = array_merge($this->inputOptions, $options);
+        $options = \array_merge($this->inputOptions, $options);
 
         if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
             $this->addErrorClassIfNeeded($options);
@@ -704,7 +704,7 @@ class ActiveField extends Component
      */
     public function dropDownList($items, $options = [])
     {
-        $options = array_merge($this->inputOptions, $options);
+        $options = \array_merge($this->inputOptions, $options);
 
         if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
             $this->addErrorClassIfNeeded($options);
@@ -739,7 +739,7 @@ class ActiveField extends Component
      */
     public function listBox($items, $options = [])
     {
-        $options = array_merge($this->inputOptions, $options);
+        $options = \array_merge($this->inputOptions, $options);
 
         if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
             $this->addErrorClassIfNeeded($options);
@@ -843,7 +843,7 @@ class ActiveField extends Component
         $config['attribute'] = $this->attribute;
         $config['view'] = $this->form->getView();
 
-        if (is_subclass_of($class, 'yii\widgets\InputWidget')) {
+        if (\is_subclass_of($class, 'yii\widgets\InputWidget')) {
             foreach ($this->inputOptions as $key => $value) {
                 if (!isset($config['options'][$key])) {
                     $config['options'][$key] = $value;
@@ -894,7 +894,7 @@ class ActiveField extends Component
     {
         $attribute = Html::getAttributeName($this->attribute);
 
-        if (!in_array($attribute, $this->model->activeAttributes(), true)) {
+        if (!\in_array($attribute, $this->model->activeAttributes(), true)) {
             return [];
         }
 
@@ -933,7 +933,7 @@ class ActiveField extends Component
         if (isset($this->selectors['error'])) {
             $options['error'] = $this->selectors['error'];
         } elseif (isset($this->errorOptions['class'])) {
-            $options['error'] = '.' . implode('.', preg_split('/\s+/', $this->errorOptions['class'], -1, PREG_SPLIT_NO_EMPTY));
+            $options['error'] = '.' . \implode('.', \preg_split('/\s+/', $this->errorOptions['class'], -1, \PREG_SPLIT_NO_EMPTY));
         } else {
             $options['error'] = $this->errorOptions['tag'] ?? 'span';
         }
@@ -949,7 +949,7 @@ class ActiveField extends Component
         }
 
         if (!empty($validators)) {
-            $options['validate'] = new JsExpression('function (attribute, value, messages, deferred, $form) {' . implode('', $validators) . '}');
+            $options['validate'] = new JsExpression('function (attribute, value, messages, deferred, $form) {' . \implode('', $validators) . '}');
         }
 
         if ($this->addAriaAttributes === false) {
@@ -957,7 +957,7 @@ class ActiveField extends Component
         }
 
         // only get the options that are different from the default ones (set in yii.activeForm.js)
-        return array_diff_assoc($options, [
+        return \array_diff_assoc($options, [
             'validateOnChange' => true,
             'validateOnBlur' => true,
             'validateOnType' => false,

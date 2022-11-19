@@ -119,7 +119,7 @@ class IndexAction extends Action
     public function run()
     {
         if ($this->checkAccess) {
-            call_user_func($this->checkAccess, $this->id);
+            \call_user_func($this->checkAccess, $this->id);
         }
 
         return $this->prepareDataProvider();
@@ -153,7 +153,7 @@ class IndexAction extends Action
         }
 
         if ($this->prepareDataProvider !== null) {
-            return call_user_func($this->prepareDataProvider, $this, $filter);
+            return \call_user_func($this->prepareDataProvider, $this, $filter);
         }
 
         /* @var $modelClass \yii\db\BaseActiveRecord */
@@ -165,11 +165,11 @@ class IndexAction extends Action
             $query->andWhere($filter);
         }
 
-        if (is_callable($this->prepareSearchQuery)) {
-            $query = call_user_func($this->prepareSearchQuery, $query, $requestParams);
+        if (\is_callable($this->prepareSearchQuery)) {
+            $query = \call_user_func($this->prepareSearchQuery, $query, $requestParams);
         }
 
-        if (is_array($this->pagination)) {
+        if (\is_array($this->pagination)) {
             $pagination = ArrayHelper::merge([
                     'params' => $requestParams,
                 ], $this->pagination);
@@ -181,7 +181,7 @@ class IndexAction extends Action
             }
         }
 
-        if (is_array($this->sort)) {
+        if (\is_array($this->sort)) {
             $sort = ArrayHelper::merge([
                     'params' => $requestParams,
                 ], $this->sort);

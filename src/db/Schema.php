@@ -309,7 +309,7 @@ abstract class Schema extends BaseObject
             'resource' => PDO::PARAM_LOB,
             'NULL' => PDO::PARAM_NULL,
         ];
-        $type = gettype($data);
+        $type = \gettype($data);
 
         return $typeMap[$type] ?? PDO::PARAM_STR;
     }
@@ -322,7 +322,7 @@ abstract class Schema extends BaseObject
     public function refresh(): void
     {
         /* @var $cache CacheInterface */
-        $cache = is_string($this->db->schemaCache) ? Yii::$app->get($this->db->schemaCache, false) : $this->db->schemaCache;
+        $cache = \is_string($this->db->schemaCache) ? Yii::$app->get($this->db->schemaCache, false) : $this->db->schemaCache;
 
         if ($this->db->enableSchemaCache && $cache instanceof CacheInterface) {
             TagDependency::invalidate($cache, $this->getCacheTag());
@@ -346,7 +346,7 @@ abstract class Schema extends BaseObject
         unset($this->_tableMetadata[$rawName]);
         $this->_tableNames = [];
         /* @var $cache CacheInterface */
-        $cache = is_string($this->db->schemaCache) ? Yii::$app->get($this->db->schemaCache, false) : $this->db->schemaCache;
+        $cache = \is_string($this->db->schemaCache) ? Yii::$app->get($this->db->schemaCache, false) : $this->db->schemaCache;
 
         if ($this->db->enableSchemaCache && $cache instanceof CacheInterface) {
             $cache->delete($this->getCacheKey($rawName));
@@ -524,16 +524,16 @@ abstract class Schema extends BaseObject
      */
     public function quoteValue($str)
     {
-        if (!is_string($str)) {
+        if (!\is_string($str)) {
             return $str;
         }
 
-        if (mb_stripos($this->db->dsn, 'odbc:') === false && ($value = $this->db->getSlavePdo()->quote($str)) !== false) {
+        if (\mb_stripos($this->db->dsn, 'odbc:') === false && ($value = $this->db->getSlavePdo()->quote($str)) !== false) {
             return $value;
         }
 
         // the driver doesn't support quote (e.g. oci)
-        return "'" . addcslashes(str_replace("'", "''", $str), "\000\n\r\\\032") . "'";
+        return "'" . \addcslashes(\str_replace("'", "''", $str), "\000\n\r\\\032") . "'";
     }
 
     /**
@@ -552,15 +552,15 @@ abstract class Schema extends BaseObject
     {
         $name = pf_string_argument($name);
 
-        if (strncmp($name, '(', 1) === 0 && strpos($name, ')') === strlen($name) - 1) {
+        if (\strncmp($name, '(', 1) === 0 && \strpos($name, ')') === \strlen($name) - 1) {
             return $name;
         }
 
-        if (str_contains($name, '{{')) {
+        if (\str_contains($name, '{{')) {
             return $name;
         }
 
-        if (!str_contains($name, '.')) {
+        if (!\str_contains($name, '.')) {
             return $this->quoteSimpleTableName($name);
         }
         $parts = $this->getTableNameParts($name);
@@ -569,7 +569,7 @@ abstract class Schema extends BaseObject
             $parts[$i] = $this->quoteSimpleTableName($part);
         }
 
-        return implode('.', $parts);
+        return \implode('.', $parts);
     }
 
     /**
@@ -583,7 +583,7 @@ abstract class Schema extends BaseObject
      */
     protected function getTableNameParts($name)
     {
-        return explode('.', $name);
+        return \explode('.', $name);
     }
 
     /**
@@ -600,18 +600,18 @@ abstract class Schema extends BaseObject
      */
     public function quoteColumnName($name)
     {
-        if (str_contains($name, '(') || str_contains($name, '[[')) {
+        if (\str_contains($name, '(') || \str_contains($name, '[[')) {
             return $name;
         }
 
-        if (($pos = strrpos($name, '.')) !== false) {
-            $prefix = $this->quoteTableName(substr($name, 0, $pos)) . '.';
-            $name = substr($name, $pos + 1);
+        if (($pos = \strrpos($name, '.')) !== false) {
+            $prefix = $this->quoteTableName(\substr($name, 0, $pos)) . '.';
+            $name = \substr($name, $pos + 1);
         } else {
             $prefix = '';
         }
 
-        if (str_contains($name, '{{')) {
+        if (\str_contains($name, '{{')) {
             return $name;
         }
 
@@ -629,13 +629,13 @@ abstract class Schema extends BaseObject
      */
     public function quoteSimpleTableName($name)
     {
-        if (is_string($this->tableQuoteCharacter)) {
+        if (\is_string($this->tableQuoteCharacter)) {
             $startingCharacter = $endingCharacter = $this->tableQuoteCharacter;
         } else {
             [$startingCharacter, $endingCharacter] = $this->tableQuoteCharacter;
         }
 
-        return str_contains($name, $startingCharacter) ? $name : $startingCharacter . $name . $endingCharacter;
+        return \str_contains($name, $startingCharacter) ? $name : $startingCharacter . $name . $endingCharacter;
     }
 
     /**
@@ -649,13 +649,13 @@ abstract class Schema extends BaseObject
      */
     public function quoteSimpleColumnName($name)
     {
-        if (is_string($this->columnQuoteCharacter)) {
+        if (\is_string($this->columnQuoteCharacter)) {
             $startingCharacter = $endingCharacter = $this->columnQuoteCharacter;
         } else {
             [$startingCharacter, $endingCharacter] = $this->columnQuoteCharacter;
         }
 
-        return $name === '*' || str_contains($name, $startingCharacter) ? $name : $startingCharacter . $name . $endingCharacter;
+        return $name === '*' || \str_contains($name, $startingCharacter) ? $name : $startingCharacter . $name . $endingCharacter;
     }
 
     /**
@@ -671,13 +671,13 @@ abstract class Schema extends BaseObject
      */
     public function unquoteSimpleTableName($name)
     {
-        if (is_string($this->tableQuoteCharacter)) {
+        if (\is_string($this->tableQuoteCharacter)) {
             $startingCharacter = $this->tableQuoteCharacter;
         } else {
             $startingCharacter = $this->tableQuoteCharacter[0];
         }
 
-        return !str_contains($name, $startingCharacter) ? $name : substr($name, 1, -1);
+        return !\str_contains($name, $startingCharacter) ? $name : \substr($name, 1, -1);
     }
 
     /**
@@ -693,13 +693,13 @@ abstract class Schema extends BaseObject
      */
     public function unquoteSimpleColumnName($name)
     {
-        if (is_string($this->columnQuoteCharacter)) {
+        if (\is_string($this->columnQuoteCharacter)) {
             $startingCharacter = $this->columnQuoteCharacter;
         } else {
             $startingCharacter = $this->columnQuoteCharacter[0];
         }
 
-        return !str_contains($name, $startingCharacter) ? $name : substr($name, 1, -1);
+        return !\str_contains($name, $startingCharacter) ? $name : \substr($name, 1, -1);
     }
 
     /**
@@ -713,10 +713,10 @@ abstract class Schema extends BaseObject
      */
     public function getRawTableName($name)
     {
-        if (str_contains($name, '{{')) {
-            $name = preg_replace('/\\{\\{(.*?)\\}\\}/', '\1', $name);
+        if (\str_contains($name, '{{')) {
+            $name = \preg_replace('/\\{\\{(.*?)\\}\\}/', '\1', $name);
 
-            return str_replace('%', $this->db->tablePrefix, $name);
+            return \str_replace('%', $this->db->tablePrefix, $name);
         }
 
         return $name;
@@ -746,9 +746,9 @@ abstract class Schema extends BaseObject
 
         if (isset($typeMap[$column->type])) {
             if ($column->type === 'bigint') {
-                return PHP_INT_SIZE === 8 && !$column->unsigned ? 'integer' : 'string';
+                return \PHP_INT_SIZE === 8 && !$column->unsigned ? 'integer' : 'string';
             } elseif ($column->type === 'integer') {
-                return PHP_INT_SIZE === 4 && $column->unsigned ? 'string' : 'integer';
+                return \PHP_INT_SIZE === 4 && $column->unsigned ? 'string' : 'integer';
             }
 
             return $typeMap[$column->type];
@@ -773,7 +773,7 @@ abstract class Schema extends BaseObject
         $exceptionClass = '\yii\db\Exception';
 
         foreach ($this->exceptionMap as $error => $class) {
-            if (str_contains($e->getMessage(), $error)) {
+            if (\str_contains($e->getMessage(), $error)) {
                 $exceptionClass = $class;
             }
         }
@@ -794,7 +794,7 @@ abstract class Schema extends BaseObject
     {
         $pattern = '/^\s*(SELECT|SHOW|DESCRIBE)\b/i';
 
-        return preg_match($pattern, $sql) > 0;
+        return \preg_match($pattern, $sql) > 0;
     }
 
     /**
@@ -838,7 +838,7 @@ abstract class Schema extends BaseObject
      */
     protected function getCacheTag()
     {
-        return md5(serialize([
+        return \md5(\serialize([
             __CLASS__,
             $this->db->dsn,
             $this->db->username,
@@ -862,8 +862,8 @@ abstract class Schema extends BaseObject
     {
         $cache = null;
 
-        if ($this->db->enableSchemaCache && !in_array($name, $this->db->schemaCacheExclude, true)) {
-            $schemaCache = is_string($this->db->schemaCache) ? Yii::$app->get($this->db->schemaCache, false) : $this->db->schemaCache;
+        if ($this->db->enableSchemaCache && !\in_array($name, $this->db->schemaCacheExclude, true)) {
+            $schemaCache = \is_string($this->db->schemaCache) ? Yii::$app->get($this->db->schemaCache, false) : $this->db->schemaCache;
 
             if ($schemaCache instanceof CacheInterface) {
                 $cache = $schemaCache;
@@ -875,8 +875,8 @@ abstract class Schema extends BaseObject
             $this->loadTableMetadataFromCache($cache, $rawName);
         }
 
-        if ($refresh || !array_key_exists($type, $this->_tableMetadata[$rawName])) {
-            $this->_tableMetadata[$rawName][$type] = $this->{'loadTable' . ucfirst($type)}($rawName);
+        if ($refresh || !\array_key_exists($type, $this->_tableMetadata[$rawName])) {
+            $this->_tableMetadata[$rawName][$type] = $this->{'loadTable' . \ucfirst($type)}($rawName);
             $this->saveTableMetadataToCache($cache, $rawName);
         }
 
@@ -900,7 +900,7 @@ abstract class Schema extends BaseObject
     protected function getSchemaMetadata($schema, $type, $refresh)
     {
         $metadata = [];
-        $methodName = 'getTable' . ucfirst($type);
+        $methodName = 'getTable' . \ucfirst($type);
 
         foreach ($this->getTableNames($schema, $refresh) as $name) {
             if ($schema !== '') {
@@ -947,10 +947,10 @@ abstract class Schema extends BaseObject
         }
 
         if ($multiple) {
-            return array_map(static fn (array $row) => array_change_key_case($row, CASE_LOWER), $row);
+            return \array_map(static fn (array $row) => \array_change_key_case($row, \CASE_LOWER), $row);
         }
 
-        return array_change_key_case($row, CASE_LOWER);
+        return \array_change_key_case($row, \CASE_LOWER);
     }
 
     /**
@@ -969,7 +969,7 @@ abstract class Schema extends BaseObject
 
         $metadata = $cache->get($this->getCacheKey($name));
 
-        if (!is_array($metadata) || !isset($metadata['cacheVersion']) || $metadata['cacheVersion'] !== static::SCHEMA_CACHE_VERSION) {
+        if (!\is_array($metadata) || !isset($metadata['cacheVersion']) || $metadata['cacheVersion'] !== static::SCHEMA_CACHE_VERSION) {
             $this->_tableMetadata[$name] = [];
 
             return;

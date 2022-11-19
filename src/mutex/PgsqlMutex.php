@@ -64,7 +64,7 @@ class PgsqlMutex extends DbMutex
      */
     private function getKeysFromName($name)
     {
-        return array_values(unpack('n2', sha1($name, true)));
+        return \array_values(\unpack('n2', \sha1($name, true)));
     }
 
     /**

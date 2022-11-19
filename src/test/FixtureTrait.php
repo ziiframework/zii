@@ -103,7 +103,7 @@ trait FixtureTrait
             $fixture->load();
         }
 
-        foreach (array_reverse($fixtures) as $fixture) {
+        foreach (\array_reverse($fixtures) as $fixture) {
             $fixture->afterLoad();
         }
     }
@@ -125,7 +125,7 @@ trait FixtureTrait
         foreach ($fixtures as $fixture) {
             $fixture->beforeUnload();
         }
-        $fixtures = array_reverse($fixtures);
+        $fixtures = \array_reverse($fixtures);
 
         foreach ($fixtures as $fixture) {
             $fixture->unload();
@@ -155,7 +155,7 @@ trait FixtureTrait
     public function getFixtures()
     {
         if ($this->_fixtures === null) {
-            $this->_fixtures = $this->createFixtures(array_merge($this->globalFixtures(), $this->fixtures()));
+            $this->_fixtures = $this->createFixtures(\array_merge($this->globalFixtures(), $this->fixtures()));
         }
 
         return $this->_fixtures;
@@ -171,9 +171,9 @@ trait FixtureTrait
     public function getFixture($name)
     {
         if ($this->_fixtures === null) {
-            $this->_fixtures = $this->createFixtures(array_merge($this->globalFixtures(), $this->fixtures()));
+            $this->_fixtures = $this->createFixtures(\array_merge($this->globalFixtures(), $this->fixtures()));
         }
-        $name = ltrim($name, '\\');
+        $name = \ltrim($name, '\\');
 
         return $this->_fixtures[$name] ?? null;
     }
@@ -196,12 +196,12 @@ trait FixtureTrait
         $aliases = [];  // class name => alias or class name
 
         foreach ($fixtures as $name => $fixture) {
-            if (!is_array($fixture)) {
-                $class = ltrim($fixture, '\\');
+            if (!\is_array($fixture)) {
+                $class = \ltrim($fixture, '\\');
                 $fixtures[$name] = ['class' => $class];
-                $aliases[$class] = is_int($name) ? $class : $name;
+                $aliases[$class] = \is_int($name) ? $class : $name;
             } elseif (isset($fixture['class'])) {
-                $class = ltrim($fixture['class'], '\\');
+                $class = \ltrim($fixture['class'], '\\');
                 $config[$class] = $fixture;
                 $aliases[$class] = $name;
             } else {
@@ -211,16 +211,16 @@ trait FixtureTrait
 
         // create fixture instances
         $instances = [];
-        $stack = array_reverse($fixtures);
+        $stack = \array_reverse($fixtures);
 
-        while (($fixture = array_pop($stack)) !== null) {
+        while (($fixture = \array_pop($stack)) !== null) {
             if ($fixture instanceof Fixture) {
-                $class = get_class($fixture);
+                $class = \get_class($fixture);
                 $name = $aliases[$class] ?? $class;
                 unset($instances[$name]);  // unset so that the fixture is added to the last in the next line
                 $instances[$name] = $fixture;
             } else {
-                $class = ltrim($fixture['class'], '\\');
+                $class = \ltrim($fixture['class'], '\\');
                 $name = $aliases[$class] ?? $class;
 
                 if (!isset($instances[$name])) {

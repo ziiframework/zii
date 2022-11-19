@@ -173,7 +173,7 @@ class Serializer extends Component
             return $data->jsonSerialize();
         } elseif ($data instanceof DataProviderInterface) {
             return $this->serializeDataProvider($data);
-        } elseif (is_array($data)) {
+        } elseif (\is_array($data)) {
             $serializedArray = [];
 
             foreach ($data as $key => $value) {
@@ -200,8 +200,8 @@ class Serializer extends Component
         $expand = $this->request->get($this->expandParam);
 
         return [
-            is_string($fields) ? preg_split('/\s*,\s*/', $fields, -1, PREG_SPLIT_NO_EMPTY) : [],
-            is_string($expand) ? preg_split('/\s*,\s*/', $expand, -1, PREG_SPLIT_NO_EMPTY) : [],
+            \is_string($fields) ? \preg_split('/\s*,\s*/', $fields, -1, \PREG_SPLIT_NO_EMPTY) : [],
+            \is_string($expand) ? \preg_split('/\s*,\s*/', $expand, -1, \PREG_SPLIT_NO_EMPTY) : [],
         ];
     }
 
@@ -217,7 +217,7 @@ class Serializer extends Component
         if ($this->preserveKeys) {
             $models = $dataProvider->getModels();
         } else {
-            $models = array_values($dataProvider->getModels());
+            $models = \array_values($dataProvider->getModels());
         }
         $models = $this->serializeModels($models);
 
@@ -236,7 +236,7 @@ class Serializer extends Component
         ];
 
         if ($pagination !== false) {
-            return array_merge($result, $this->serializePagination($pagination));
+            return \array_merge($result, $this->serializePagination($pagination));
         }
 
         return $result;
@@ -282,7 +282,7 @@ class Serializer extends Component
             ->set($this->pageCountHeader, $pagination->getPageCount())
             ->set($this->currentPageHeader, $pagination->getPage() + 1)
             ->set($this->perPageHeader, $pagination->pageSize)
-            ->set('Link', implode(', ', $links));
+            ->set('Link', \implode(', ', $links));
     }
 
     /**
@@ -337,7 +337,7 @@ class Serializer extends Component
         foreach ($models as $i => $model) {
             if ($model instanceof Arrayable) {
                 $models[$i] = $model->toArray($fields, $expand);
-            } elseif (is_array($model)) {
+            } elseif (\is_array($model)) {
                 $models[$i] = ArrayHelper::toArray($model);
             }
         }

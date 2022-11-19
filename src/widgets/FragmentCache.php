@@ -94,8 +94,8 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
 
         if ($this->cache instanceof CacheInterface && $this->getCachedContent() === false) {
             $this->getView()->pushDynamicContent($this);
-            ob_start();
-            ob_implicit_flush(false);
+            \ob_start();
+            \ob_implicit_flush(false);
         }
     }
 
@@ -112,13 +112,13 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
         } elseif ($this->cache instanceof CacheInterface) {
             $this->getView()->popDynamicContent();
 
-            $content = ob_get_clean();
+            $content = \ob_get_clean();
 
             if ($content === false || $content === '') {
                 return;
             }
 
-            if (is_array($this->dependency)) {
+            if (\is_array($this->dependency)) {
                 $this->dependency = Yii::createObject($this->dependency);
             }
             $data = [$content, $this->getDynamicPlaceholders()];
@@ -152,13 +152,13 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
         $key = $this->calculateKey();
         $data = $this->cache->get($key);
 
-        if (!is_array($data) || count($data) !== 2) {
+        if (!\is_array($data) || \count($data) !== 2) {
             return $this->_content;
         }
 
         [$this->_content, $placeholders] = $data;
 
-        if (!is_array($placeholders) || count($placeholders) === 0) {
+        if (!\is_array($placeholders) || \count($placeholders) === 0) {
             return $this->_content;
         }
 
@@ -175,6 +175,6 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
      */
     protected function calculateKey()
     {
-        return array_merge([__CLASS__, $this->getId()], (array) $this->variations);
+        return \array_merge([__CLASS__, $this->getId()], (array) $this->variations);
     }
 }

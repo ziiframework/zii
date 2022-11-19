@@ -119,7 +119,7 @@ class TimestampBehavior extends AttributeBehavior
     protected function getValue($event)
     {
         if ($this->value === null) {
-            return time();
+            return \time();
         }
 
         return parent::getValue($event);
@@ -144,6 +144,6 @@ class TimestampBehavior extends AttributeBehavior
         if ($owner->getIsNewRecord()) {
             throw new InvalidCallException('Updating the timestamp is not possible on a new record.');
         }
-        $owner->updateAttributes(array_fill_keys((array) $attribute, $this->getValue(null)));
+        $owner->updateAttributes(\array_fill_keys((array) $attribute, $this->getValue(null)));
     }
 }

@@ -83,13 +83,13 @@ class LinkSorter extends Widget
      */
     protected function renderSortLinks()
     {
-        $attributes = empty($this->attributes) ? array_keys($this->sort->attributes) : $this->attributes;
+        $attributes = empty($this->attributes) ? \array_keys($this->sort->attributes) : $this->attributes;
         $links = [];
 
         foreach ($attributes as $name) {
             $links[] = $this->sort->link($name, $this->linkOptions);
         }
 
-        return Html::ul($links, array_merge($this->options, ['encode' => false]));
+        return Html::ul($links, \array_merge($this->options, ['encode' => false]));
     }
 }

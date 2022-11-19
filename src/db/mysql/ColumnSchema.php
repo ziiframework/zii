@@ -62,7 +62,7 @@ class ColumnSchema extends \yii\db\ColumnSchema
         }
 
         if (!$this->disableJsonSupport && $this->type === Schema::TYPE_JSON) {
-            return json_decode($value, true);
+            return \json_decode($value, true);
         }
 
         return parent::phpTypecast($value);

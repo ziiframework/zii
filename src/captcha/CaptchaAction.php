@@ -134,7 +134,7 @@ class CaptchaAction extends Action
     {
         $this->fontFile = Yii::getAlias($this->fontFile);
 
-        if (!is_file($this->fontFile)) {
+        if (!\is_file($this->fontFile)) {
             throw new InvalidConfigException("The font file does not exist: {$this->fontFile}");
         }
     }
@@ -151,10 +151,10 @@ class CaptchaAction extends Action
 
             return [
                 'hash1' => $this->generateValidationHash($code),
-                'hash2' => $this->generateValidationHash(strtolower($code)),
+                'hash2' => $this->generateValidationHash(\strtolower($code)),
                 // we add a random 'v' parameter so that FireFox can refresh the image
                 // when src attribute of image tag is changed
-                'url' => Url::to([$this->id, 'v' => uniqid('', true)]),
+                'url' => Url::to([$this->id, 'v' => \uniqid('', true)]),
             ];
         }
 
@@ -173,8 +173,8 @@ class CaptchaAction extends Action
      */
     public function generateValidationHash($code)
     {
-        for ($h = 0, $i = strlen($code) - 1; $i >= 0; --$i) {
-            $h += ord($code[$i]) << $i;
+        for ($h = 0, $i = \strlen($code) - 1; $i >= 0; --$i) {
+            $h += \ord($code[$i]) << $i;
         }
 
         return $h;
@@ -216,7 +216,7 @@ class CaptchaAction extends Action
     public function validate($input, $caseSensitive)
     {
         $code = $this->getVerifyCode();
-        $valid = $caseSensitive ? ($input === $code) : strcasecmp($input, $code) === 0;
+        $valid = $caseSensitive ? ($input === $code) : \strcasecmp($input, $code) === 0;
         $session = Yii::$app->getSession();
         $session->open();
         $name = $this->getSessionKey() . 'count';
@@ -248,17 +248,17 @@ class CaptchaAction extends Action
             $this->maxLength = 20;
         }
 
-        $length = random_int($this->minLength, $this->maxLength);
+        $length = \random_int($this->minLength, $this->maxLength);
 
         $letters = 'bcdfghjklmnpqrstvwxyz';
         $vowels = 'aeiou';
         $code = '';
 
         for ($i = 0; $i < $length; ++$i) {
-            if ($i % 2 && random_int(0, 10) > 2 || !($i % 2) && random_int(0, 10) > 9) {
-                $code .= $vowels[random_int(0, 4)];
+            if ($i % 2 && \random_int(0, 10) > 2 || !($i % 2) && \random_int(0, 10) > 9) {
+                $code .= $vowels[\random_int(0, 4)];
             } else {
-                $code .= $letters[random_int(0, 20)];
+                $code .= $letters[\random_int(0, 20)];
             }
         }
 
@@ -310,41 +310,41 @@ class CaptchaAction extends Action
      */
     protected function renderImageByGD($code)
     {
-        $image = imagecreatetruecolor($this->width, $this->height);
+        $image = \imagecreatetruecolor($this->width, $this->height);
 
-        $backColor = imagecolorallocate($image, (int) ($this->backColor % 0x1000000 / 0x10000), (int) ($this->backColor % 0x10000 / 0x100), $this->backColor % 0x100);
-        imagefilledrectangle($image, 0, 0, $this->width - 1, $this->height - 1, $backColor);
-        imagecolordeallocate($image, $backColor);
+        $backColor = \imagecolorallocate($image, (int) ($this->backColor % 0x1000000 / 0x10000), (int) ($this->backColor % 0x10000 / 0x100), $this->backColor % 0x100);
+        \imagefilledrectangle($image, 0, 0, $this->width - 1, $this->height - 1, $backColor);
+        \imagecolordeallocate($image, $backColor);
 
         if ($this->transparent) {
-            imagecolortransparent($image, $backColor);
+            \imagecolortransparent($image, $backColor);
         }
 
-        $foreColor = imagecolorallocate($image, (int) ($this->foreColor % 0x1000000 / 0x10000), (int) ($this->foreColor % 0x10000 / 0x100), $this->foreColor % 0x100);
+        $foreColor = \imagecolorallocate($image, (int) ($this->foreColor % 0x1000000 / 0x10000), (int) ($this->foreColor % 0x10000 / 0x100), $this->foreColor % 0x100);
 
-        $length = strlen($code);
-        $box = imagettfbbox(30, 0, $this->fontFile, $code);
+        $length = \strlen($code);
+        $box = \imagettfbbox(30, 0, $this->fontFile, $code);
         $w = $box[4] - $box[0] + $this->offset * ($length - 1);
         $h = $box[1] - $box[5];
-        $scale = min(($this->width - $this->padding * 2) / $w, ($this->height - $this->padding * 2) / $h);
+        $scale = \min(($this->width - $this->padding * 2) / $w, ($this->height - $this->padding * 2) / $h);
         $x = 10;
-        $y = round($this->height * 27 / 40);
+        $y = \round($this->height * 27 / 40);
 
         for ($i = 0; $i < $length; ++$i) {
-            $fontSize = (int) (random_int(26, 32) * $scale * 0.8);
-            $angle = random_int(-10, 10);
+            $fontSize = (int) (\random_int(26, 32) * $scale * 0.8);
+            $angle = \random_int(-10, 10);
             $letter = $code[$i];
-            $box = imagettftext($image, $fontSize, $angle, $x, $y, $foreColor, $this->fontFile, $letter);
+            $box = \imagettftext($image, $fontSize, $angle, $x, $y, $foreColor, $this->fontFile, $letter);
             $x = $box[2] + $this->offset;
         }
 
-        imagecolordeallocate($image, $foreColor);
+        \imagecolordeallocate($image, $foreColor);
 
-        ob_start();
-        imagepng($image);
-        imagedestroy($image);
+        \ob_start();
+        \imagepng($image);
+        \imagedestroy($image);
 
-        return ob_get_clean();
+        return \ob_get_clean();
     }
 
     /**
@@ -356,8 +356,8 @@ class CaptchaAction extends Action
      */
     protected function renderImageByImagick($code)
     {
-        $backColor = $this->transparent ? new ImagickPixel('transparent') : new ImagickPixel('#' . str_pad(dechex($this->backColor), 6, 0, STR_PAD_LEFT));
-        $foreColor = new ImagickPixel('#' . str_pad(dechex($this->foreColor), 6, 0, STR_PAD_LEFT));
+        $backColor = $this->transparent ? new ImagickPixel('transparent') : new ImagickPixel('#' . \str_pad(\dechex($this->backColor), 6, 0, \STR_PAD_LEFT));
+        $foreColor = new ImagickPixel('#' . \str_pad(\dechex($this->foreColor), 6, 0, \STR_PAD_LEFT));
 
         $image = new Imagick();
         $image->newImage($this->width, $this->height, $backColor);
@@ -367,19 +367,19 @@ class CaptchaAction extends Action
         $draw->setFontSize(30);
         $fontMetrics = $image->queryFontMetrics($draw, $code);
 
-        $length = strlen($code);
+        $length = \strlen($code);
         $w = (int) $fontMetrics['textWidth'] - 8 + $this->offset * ($length - 1);
         $h = (int) $fontMetrics['textHeight'] - 8;
-        $scale = min(($this->width - $this->padding * 2) / $w, ($this->height - $this->padding * 2) / $h);
+        $scale = \min(($this->width - $this->padding * 2) / $w, ($this->height - $this->padding * 2) / $h);
         $x = 10;
-        $y = round($this->height * 27 / 40);
+        $y = \round($this->height * 27 / 40);
 
         for ($i = 0; $i < $length; ++$i) {
             $draw = new ImagickDraw();
             $draw->setFont($this->fontFile);
-            $draw->setFontSize((int) (random_int(26, 32) * $scale * 0.8));
+            $draw->setFontSize((int) (\random_int(26, 32) * $scale * 0.8));
             $draw->setFillColor($foreColor);
-            $image->annotateImage($draw, $x, $y, random_int(-10, 10), $code[$i]);
+            $image->annotateImage($draw, $x, $y, \random_int(-10, 10), $code[$i]);
             $fontMetrics = $image->queryFontMetrics($draw, $code[$i]);
             $x += (int) $fontMetrics['textWidth'] + $this->offset;
         }

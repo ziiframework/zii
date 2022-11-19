@@ -177,17 +177,17 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
 
         $this->cache = Instance::ensure($this->cache, 'yii\caching\CacheInterface');
 
-        if (is_array($this->dependency)) {
+        if (\is_array($this->dependency)) {
             $this->dependency = Yii::createObject($this->dependency);
         }
 
         $response = Yii::$app->getResponse();
         $data = $this->cache->get($this->calculateCacheKey());
 
-        if (!is_array($data) || !isset($data['cacheVersion']) || $data['cacheVersion'] !== static::PAGE_CACHE_VERSION) {
+        if (!\is_array($data) || !isset($data['cacheVersion']) || $data['cacheVersion'] !== static::PAGE_CACHE_VERSION) {
             $this->view->pushDynamicContent($this);
-            ob_start();
-            ob_implicit_flush(false);
+            \ob_start();
+            \ob_implicit_flush(false);
             $response->on(Response::EVENT_AFTER_SEND, [$this, 'cacheResponse']);
             Yii::debug('Valid page content is not found in the cache.', __METHOD__);
 
@@ -241,12 +241,12 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
         }
 
         foreach (['headers', 'cookies'] as $name) {
-            if (isset($data[$name]) && is_array($data[$name])) {
-                $response->{$name}->fromArray(array_merge($data[$name], $response->{$name}->toArray()));
+            if (isset($data[$name]) && \is_array($data[$name])) {
+                $response->{$name}->fromArray(\array_merge($data[$name], $response->{$name}->toArray()));
             }
         }
 
-        if (!empty($data['dynamicPlaceholders']) && is_array($data['dynamicPlaceholders'])) {
+        if (!empty($data['dynamicPlaceholders']) && \is_array($data['dynamicPlaceholders'])) {
             $response->content = $this->updateDynamicContent($response->content, $data['dynamicPlaceholders'], true);
         }
         $this->afterRestoreResponse($data['cacheData'] ?? null);
@@ -263,7 +263,7 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
         $beforeCacheResponseResult = $this->beforeCacheResponse();
 
         if ($beforeCacheResponseResult === false) {
-            echo $this->updateDynamicContent(ob_get_clean(), $this->getDynamicPlaceholders());
+            echo $this->updateDynamicContent(\ob_get_clean(), $this->getDynamicPlaceholders());
 
             return;
         }
@@ -272,8 +272,8 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
         $response->off(Response::EVENT_AFTER_SEND, [$this, 'cacheResponse']);
         $data = [
             'cacheVersion' => static::PAGE_CACHE_VERSION,
-            'cacheData' => is_array($beforeCacheResponseResult) ? $beforeCacheResponseResult : null,
-            'content' => ob_get_clean(),
+            'cacheData' => \is_array($beforeCacheResponseResult) ? $beforeCacheResponseResult : null,
+            'content' => \ob_get_clean(),
         ];
 
         if ($data['content'] === false || $data['content'] === '') {
@@ -306,7 +306,7 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
 
         $all = $response->cookies->toArray();
 
-        if (is_array($this->cacheCookies)) {
+        if (\is_array($this->cacheCookies)) {
             $filtered = [];
 
             foreach ($this->cacheCookies as $name) {
@@ -333,7 +333,7 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
 
         $all = $response->headers->toOriginalArray();
 
-        if (is_array($this->cacheHeaders)) {
+        if (\is_array($this->cacheHeaders)) {
             $filtered = [];
 
             foreach ($this->cacheHeaders as $name) {
@@ -359,7 +359,7 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
             $key[] = Yii::$app->requestedRoute;
         }
 
-        return array_merge($key, (array) $this->variations);
+        return \array_merge($key, (array) $this->variations);
     }
 
     /**

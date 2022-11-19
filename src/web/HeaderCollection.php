@@ -77,7 +77,7 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
     #[ReturnTypeWillChange]
     public function getCount()
     {
-        return count($this->_headers);
+        return \count($this->_headers);
     }
 
     /**
@@ -93,10 +93,10 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      */
     public function get($name, $default = null, $first = true)
     {
-        $normalizedName = strtolower($name);
+        $normalizedName = \strtolower($name);
 
         if (isset($this->_headers[$normalizedName])) {
-            return $first ? reset($this->_headers[$normalizedName]) : $this->_headers[$normalizedName];
+            return $first ? \reset($this->_headers[$normalizedName]) : $this->_headers[$normalizedName];
         }
 
         return $default;
@@ -113,7 +113,7 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      */
     public function set($name, $value = '')
     {
-        $normalizedName = strtolower($name);
+        $normalizedName = \strtolower($name);
         $this->_headers[$normalizedName] = (array) $value;
         $this->_originalHeaderNames[$normalizedName] = $name;
 
@@ -132,7 +132,7 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      */
     public function add($name, $value)
     {
-        $normalizedName = strtolower($name);
+        $normalizedName = \strtolower($name);
         $this->_headers[$normalizedName][] = $value;
 
         if (!array_key_exists($normalizedName, $this->_originalHeaderNames)) {
@@ -153,7 +153,7 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      */
     public function setDefault($name, $value)
     {
-        $normalizedName = strtolower($name);
+        $normalizedName = \strtolower($name);
 
         if (empty($this->_headers[$normalizedName])) {
             $this->_headers[$normalizedName][] = $value;
@@ -172,7 +172,7 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      */
     public function has($name)
     {
-        return isset($this->_headers[strtolower($name)]);
+        return isset($this->_headers[\strtolower($name)]);
     }
 
     /**
@@ -184,7 +184,7 @@ class HeaderCollection extends BaseObject implements IteratorAggregate, ArrayAcc
      */
     public function remove($name)
     {
-        $normalizedName = strtolower($name);
+        $normalizedName = \strtolower($name);
 
         if (isset($this->_headers[$normalizedName])) {
             $value = $this->_headers[$normalizedName];

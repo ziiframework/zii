@@ -326,8 +326,8 @@ class BaseInflector
         }
 
         foreach (static::$plurals as $rule => $replacement) {
-            if (preg_match($rule, $word)) {
-                return preg_replace($rule, $replacement, $word);
+            if (\preg_match($rule, $word)) {
+                return \preg_replace($rule, $replacement, $word);
             }
         }
 
@@ -346,15 +346,15 @@ class BaseInflector
         if (empty($word)) {
             return (string) $word;
         }
-        $result = array_search($word, static::$specials, true);
+        $result = \array_search($word, static::$specials, true);
 
         if ($result !== false) {
             return $result;
         }
 
         foreach (static::$singulars as $rule => $replacement) {
-            if (preg_match($rule, $word)) {
-                return preg_replace($rule, $replacement, $word);
+            if (\preg_match($rule, $word)) {
+                return \preg_replace($rule, $replacement, $word);
             }
         }
 
@@ -399,7 +399,7 @@ class BaseInflector
             return (string) $word;
         }
 
-        return str_replace(' ', '', StringHelper::mb_ucwords(preg_replace('/[^\pL\pN]+/u', ' ', $word), self::encoding()));
+        return \str_replace(' ', '', StringHelper::mb_ucwords(\preg_replace('/[^\pL\pN]+/u', ' ', $word), self::encoding()));
     }
 
     /**
@@ -418,9 +418,9 @@ class BaseInflector
         }
         // Add a space before any uppercase letter preceded by a lowercase letter (xY => x Y)
         // and any uppercase letter preceded by an uppercase letter and followed by a lowercase letter (XYz => X Yz)
-        $label = preg_replace('/(?<=\p{Ll})\p{Lu}|(?<=\p{L})\p{Lu}(?=\p{Ll})/u', ' \0', $name);
+        $label = \preg_replace('/(?<=\p{Ll})\p{Lu}|(?<=\p{L})\p{Lu}(?=\p{Ll})/u', ' \0', $name);
 
-        $label = mb_strtolower(trim(str_replace(['-', '_', '.'], ' ', $label)), self::encoding());
+        $label = \mb_strtolower(\trim(\str_replace(['-', '_', '.'], ' ', $label)), self::encoding());
 
         return $ucwords ? StringHelper::mb_ucwords($label, self::encoding()) : $label;
     }
@@ -444,10 +444,10 @@ class BaseInflector
         $regex = $strict ? '/\p{Lu}/u' : '/(?<!\p{Lu})\p{Lu}/u';
 
         if ($separator === '_') {
-            return mb_strtolower(trim(preg_replace($regex, '_\0', $name), '_'), self::encoding());
+            return \mb_strtolower(\trim(\preg_replace($regex, '_\0', $name), '_'), self::encoding());
         }
 
-        return mb_strtolower(trim(str_replace('_', $separator, preg_replace($regex, $separator . '\0', $name)), $separator), self::encoding());
+        return \mb_strtolower(\trim(\str_replace('_', $separator, \preg_replace($regex, $separator . '\0', $name)), $separator), self::encoding());
     }
 
     /**
@@ -466,7 +466,7 @@ class BaseInflector
             return (string) $id;
         }
 
-        return str_replace(' ', '', StringHelper::mb_ucwords(str_replace($separator, ' ', $id), self::encoding()));
+        return \str_replace(' ', '', StringHelper::mb_ucwords(\str_replace($separator, ' ', $id), self::encoding()));
     }
 
     /**
@@ -482,7 +482,7 @@ class BaseInflector
             return (string) $words;
         }
 
-        return mb_strtolower(preg_replace('/(?<=\\pL)(\\p{Lu})/u', '_\\1', $words), self::encoding());
+        return \mb_strtolower(\preg_replace('/(?<=\\pL)(\\p{Lu})/u', '_\\1', $words), self::encoding());
     }
 
     /**
@@ -498,7 +498,7 @@ class BaseInflector
         if (empty($word)) {
             return (string) $word;
         }
-        $word = str_replace('_', ' ', preg_replace('/_id$/', '', $word));
+        $word = \str_replace('_', ' ', \preg_replace('/_id$/', '', $word));
         $encoding = self::encoding();
 
         return $ucAll ? StringHelper::mb_ucwords($word, $encoding) : StringHelper::mb_ucfirst($word, $encoding);
@@ -522,7 +522,7 @@ class BaseInflector
         }
         $word = static::camelize($word);
 
-        return mb_strtolower(mb_substr($word, 0, 1, self::encoding())) . mb_substr($word, 1, null, self::encoding());
+        return \mb_strtolower(\mb_substr($word, 0, 1, self::encoding())) . \mb_substr($word, 1, null, self::encoding());
     }
 
     /**
@@ -564,24 +564,24 @@ class BaseInflector
         }
 
         if ((string) $replacement !== '') {
-            $parts = explode($replacement, static::transliterate($string));
+            $parts = \explode($replacement, static::transliterate($string));
         } else {
             $parts = [static::transliterate($string)];
         }
 
-        $replaced = array_map(static function ($element) use ($replacement) {
-            $element = preg_replace('/[^a-zA-Z0-9=\s—–-]+/u', '', $element);
+        $replaced = \array_map(static function ($element) use ($replacement) {
+            $element = \preg_replace('/[^a-zA-Z0-9=\s—–-]+/u', '', $element);
 
-            return preg_replace('/[=\s—–-]+/u', $replacement, $element);
+            return \preg_replace('/[=\s—–-]+/u', $replacement, $element);
         }, $parts);
 
-        $string = trim(implode($replacement, $replaced), $replacement);
+        $string = \trim(\implode($replacement, $replaced), $replacement);
 
         if ((string) $replacement !== '') {
-            $string = preg_replace('#' . preg_quote($replacement, '#') . '+#', $replacement, $string);
+            $string = \preg_replace('#' . \preg_quote($replacement, '#') . '+#', $replacement, $string);
         }
 
-        return $lowercase ? strtolower($string) : $string;
+        return $lowercase ? \strtolower($string) : $string;
     }
 
     /**
@@ -610,10 +610,10 @@ class BaseInflector
                 $transliterator = static::$transliterator;
             }
 
-            return transliterator_transliterate($transliterator, $string);
+            return \transliterator_transliterate($transliterator, $string);
         }
 
-        return strtr($string, static::$transliteration);
+        return \strtr($string, static::$transliteration);
     }
 
     /**
@@ -621,7 +621,7 @@ class BaseInflector
      */
     protected static function hasIntl()
     {
-        return extension_loaded('intl');
+        return \extension_loaded('intl');
     }
 
     /**
@@ -651,7 +651,7 @@ class BaseInflector
      */
     public static function ordinalize($number)
     {
-        if (in_array($number % 100, range(11, 13))) {
+        if (\in_array($number % 100, \range(11, 13))) {
             return $number . 'th';
         }
 
@@ -710,18 +710,18 @@ class BaseInflector
             $lastWordConnector = $twoWordsConnector;
         }
 
-        switch (count($words)) {
+        switch (\count($words)) {
             case 0:
                 return '';
 
             case 1:
-                return reset($words);
+                return \reset($words);
 
             case 2:
-                return implode($twoWordsConnector, $words);
+                return \implode($twoWordsConnector, $words);
 
             default:
-                return implode($connector, array_slice($words, 0, -1)) . $lastWordConnector . end($words);
+                return \implode($connector, \array_slice($words, 0, -1)) . $lastWordConnector . \end($words);
         }
     }
 

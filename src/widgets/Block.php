@@ -55,8 +55,8 @@ class Block extends Widget
     {
         parent::init();
 
-        ob_start();
-        ob_implicit_flush(false);
+        \ob_start();
+        \ob_implicit_flush(false);
     }
 
     /**
@@ -65,7 +65,7 @@ class Block extends Widget
      */
     public function run(): void
     {
-        $block = ob_get_clean();
+        $block = \ob_get_clean();
 
         if ($this->renderInPlace) {
             echo $block;

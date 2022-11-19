@@ -46,7 +46,7 @@ class HashConditionBuilder implements ExpressionBuilderInterface
                 // IN condition
                 $parts[] = $this->queryBuilder->buildCondition(new InCondition($column, 'IN', $value), $params);
             } else {
-                if (!str_contains($column, '(')) {
+                if (!\str_contains($column, '(')) {
                     $column = $this->queryBuilder->db->quoteColumnName($column);
                 }
 
@@ -61,6 +61,6 @@ class HashConditionBuilder implements ExpressionBuilderInterface
             }
         }
 
-        return count($parts) === 1 ? $parts[0] : '(' . implode(') AND (', $parts) . ')';
+        return \count($parts) === 1 ? $parts[0] : '(' . \implode(') AND (', $parts) . ')';
     }
 }

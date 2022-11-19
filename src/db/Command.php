@@ -236,23 +236,23 @@ class Command extends Component
         $params = [];
 
         foreach ($this->params as $name => $value) {
-            if (is_string($name) && strncmp(':', $name, 1)) {
+            if (\is_string($name) && \strncmp(':', $name, 1)) {
                 $name = ':' . $name;
             }
 
-            if (is_string($value) || $value instanceof Expression) {
+            if (\is_string($value) || $value instanceof Expression) {
                 $params[$name] = $this->db->quoteValue((string) $value);
-            } elseif (is_bool($value)) {
+            } elseif (\is_bool($value)) {
                 $params[$name] = ($value ? 'TRUE' : 'FALSE');
             } elseif ($value === null) {
                 $params[$name] = 'NULL';
-            } elseif (!is_object($value) && !is_resource($value)) {
+            } elseif (!\is_object($value) && !\is_resource($value)) {
                 $params[$name] = $value;
             }
         }
 
         if (!isset($params[1])) {
-            return preg_replace_callback('#(:\w+)#', static function ($matches) use ($params) {
+            return \preg_replace_callback('#(:\w+)#', static function ($matches) use ($params) {
                 $m = $matches[1];
 
                 return $params[$m] ?? $m;
@@ -260,7 +260,7 @@ class Command extends Component
         }
         $sql = '';
 
-        foreach (explode('?', $this->_sql) as $i => $part) {
+        foreach (\explode('?', $this->_sql) as $i => $part) {
             $sql .= ($params[$i] ?? '') . $part;
         }
 
@@ -423,7 +423,7 @@ class Command extends Component
         $schema = $this->db->getSchema();
 
         foreach ($values as $name => $value) {
-            if (is_array($value)) { // TODO: Drop in Yii 2.1
+            if (\is_array($value)) { // TODO: Drop in Yii 2.1
                 $this->pendingParams[$name] = $value;
                 $this->params[$name] = $value[0];
             } elseif ($value instanceof PdoValue) {
@@ -498,8 +498,8 @@ class Command extends Component
     {
         $result = $this->queryInternal('fetchColumn', 0);
 
-        if (is_resource($result) && get_resource_type($result) === 'stream') {
-            return stream_get_contents($result);
+        if (\is_resource($result) && \get_resource_type($result) === 'stream') {
+            return \stream_get_contents($result);
         }
 
         return $result;
@@ -578,7 +578,7 @@ class Command extends Component
     public function batchInsert($table, $columns, $rows)
     {
         $table = $this->db->quoteSql($table);
-        $columns = array_map(fn ($column) => $this->db->quoteSql($column), $columns);
+        $columns = \array_map(fn ($column) => $this->db->quoteSql($column), $columns);
 
         $params = [];
         $sql = $this->db->getQueryBuilder()->batchInsert($table, $columns, $rows, $params);
@@ -1295,13 +1295,13 @@ class Command extends Component
         if ($method !== '') {
             $info = $this->db->getQueryCacheInfo($this->queryCacheDuration, $this->queryCacheDependency);
 
-            if (is_array($info)) {
+            if (\is_array($info)) {
                 /* @var $cache \yii\caching\CacheInterface */
                 $cache = $info[0];
                 $cacheKey = $this->getCacheKey($method, $fetchMode, '');
                 $result = $cache->get($cacheKey);
 
-                if (is_array($result) && isset($result[0])) {
+                if (\is_array($result) && isset($result[0])) {
                     Yii::debug('Query result served from cache', 'yii\db\Command::query');
 
                     return $result[0];
@@ -1322,7 +1322,7 @@ class Command extends Component
                 if ($fetchMode === null) {
                     $fetchMode = $this->fetchMode;
                 }
-                $result = call_user_func_array([$this->pdoStatement, $method], (array) $fetchMode);
+                $result = \call_user_func_array([$this->pdoStatement, $method], (array) $fetchMode);
                 $this->pdoStatement->closeCursor();
             }
 
@@ -1355,7 +1355,7 @@ class Command extends Component
     protected function getCacheKey($method, $fetchMode, $rawSql)
     {
         $params = $this->params;
-        ksort($params);
+        \ksort($params);
 
         return [
             __CLASS__,
@@ -1364,7 +1364,7 @@ class Command extends Component
             $this->db->dsn,
             $this->db->username,
             $this->getSql(),
-            json_encode($params),
+            \json_encode($params),
         ];
     }
 
@@ -1474,7 +1474,7 @@ class Command extends Component
                 $rawSql = $rawSql ?: $this->getRawSql();
                 $e = $this->db->getSchema()->convertException($e, $rawSql);
 
-                if ($this->_retryHandler === null || !call_user_func($this->_retryHandler, $e, $attempt)) {
+                if ($this->_retryHandler === null || !\call_user_func($this->_retryHandler, $e, $attempt)) {
                     throw $e;
                 }
             }

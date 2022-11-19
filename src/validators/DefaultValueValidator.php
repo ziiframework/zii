@@ -51,7 +51,7 @@ class DefaultValueValidator extends Validator
     {
         if ($this->isEmpty($model->$attribute)) {
             if ($this->value instanceof Closure) {
-                $model->$attribute = call_user_func($this->value, $model, $attribute);
+                $model->$attribute = \call_user_func($this->value, $model, $attribute);
             } else {
                 $model->$attribute = $this->value;
             }

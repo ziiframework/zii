@@ -121,45 +121,45 @@ class FileTarget extends Target
      */
     public function export(): void
     {
-        if (!str_contains($this->logFile, '://') || strncmp($this->logFile, 'file://', 7) === 0) {
-            $logPath = dirname($this->logFile);
+        if (!\str_contains($this->logFile, '://') || \strncmp($this->logFile, 'file://', 7) === 0) {
+            $logPath = \dirname($this->logFile);
             FileHelper::createDirectory($logPath, $this->dirMode, true);
         }
 
-        $text = implode("\n", array_map([$this, 'formatMessage'], $this->messages)) . "\n";
+        $text = \implode("\n", \array_map([$this, 'formatMessage'], $this->messages)) . "\n";
 
-        if (($fp = @fopen($this->logFile, 'ab')) === false) {
+        if (($fp = @\fopen($this->logFile, 'ab')) === false) {
             throw new InvalidConfigException("Unable to append to log file: {$this->logFile}");
         }
-        @flock($fp, LOCK_EX);
+        @\flock($fp, \LOCK_EX);
 
         if ($this->enableRotation) {
             // clear stat cache to ensure getting the real current file size and not a cached one
             // this may result in rotating twice when cached file size is used on subsequent calls
-            clearstatcache();
+            \clearstatcache();
         }
 
-        if ($this->enableRotation && @filesize($this->logFile) > $this->maxFileSize * 1024) {
+        if ($this->enableRotation && @\filesize($this->logFile) > $this->maxFileSize * 1024) {
             $this->rotateFiles();
         }
-        $writeResult = @fwrite($fp, $text);
+        $writeResult = @\fwrite($fp, $text);
 
         if ($writeResult === false) {
-            $error = error_get_last();
+            $error = \error_get_last();
 
             throw new LogRuntimeException("Unable to export log through file ({$this->logFile})!: {$error['message']}");
         }
-        $textSize = strlen($text);
+        $textSize = \strlen($text);
 
         if ($writeResult < $textSize) {
             throw new LogRuntimeException("Unable to export whole log through file ({$this->logFile})! Wrote $writeResult out of $textSize bytes.");
         }
-        @fflush($fp);
-        @flock($fp, LOCK_UN);
-        @fclose($fp);
+        @\fflush($fp);
+        @\flock($fp, \LOCK_UN);
+        @\fclose($fp);
 
         if ($this->fileMode !== null) {
-            @chmod($this->logFile, $this->fileMode);
+            @\chmod($this->logFile, $this->fileMode);
         }
     }
 
@@ -174,10 +174,10 @@ class FileTarget extends Target
             // $i == 0 is the original log file
             $rotateFile = $file . ($i === 0 ? '' : '.' . $i);
 
-            if (is_file($rotateFile)) {
+            if (\is_file($rotateFile)) {
                 // suppress errors because it's possible multiple processes enter into this section
                 if ($i === $this->maxLogFiles) {
-                    @unlink($rotateFile);
+                    @\unlink($rotateFile);
 
                     continue;
                 }
@@ -197,9 +197,9 @@ class FileTarget extends Target
      */
     private function clearLogFile($rotateFile): void
     {
-        if ($filePointer = @fopen($rotateFile, 'ab')) {
-            @ftruncate($filePointer, 0);
-            @fclose($filePointer);
+        if ($filePointer = @\fopen($rotateFile, 'ab')) {
+            @\ftruncate($filePointer, 0);
+            @\fclose($filePointer);
         }
     }
 
@@ -210,10 +210,10 @@ class FileTarget extends Target
      */
     private function rotateByCopy($rotateFile, $newFile): void
     {
-        @copy($rotateFile, $newFile);
+        @\copy($rotateFile, $newFile);
 
         if ($this->fileMode !== null) {
-            @chmod($newFile, $this->fileMode);
+            @\chmod($newFile, $this->fileMode);
         }
     }
 }

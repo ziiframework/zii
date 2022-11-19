@@ -192,7 +192,7 @@ class ActionColumn extends Column
      */
     protected function initDefaultButton($name, $iconName, $additionalOptions = []): void
     {
-        if (!isset($this->buttons[$name]) && str_contains($this->template, '{' . $name . '}')) {
+        if (!isset($this->buttons[$name]) && \str_contains($this->template, '{' . $name . '}')) {
             $this->buttons[$name] = function ($url, $model, $key) use ($name, $iconName, $additionalOptions) {
                 switch ($name) {
                     case 'view':
@@ -208,9 +208,9 @@ class ActionColumn extends Column
                         break;
 
                     default:
-                        $title = ucfirst($name);
+                        $title = \ucfirst($name);
                 }
-                $options = array_merge([
+                $options = \array_merge([
                     'title' => $title,
                     'aria-label' => $title,
                     'data-pjax' => '0',
@@ -236,11 +236,11 @@ class ActionColumn extends Column
      */
     public function createUrl($action, $model, $key, $index)
     {
-        if (is_callable($this->urlCreator)) {
-            return call_user_func($this->urlCreator, $action, $model, $key, $index, $this);
+        if (\is_callable($this->urlCreator)) {
+            return \call_user_func($this->urlCreator, $action, $model, $key, $index, $this);
         }
 
-        $params = is_array($key) ? $key : ['id' => (string) $key];
+        $params = \is_array($key) ? $key : ['id' => (string) $key];
         $params[0] = $this->controller ? $this->controller . '/' . $action : $action;
 
         return Url::toRoute($params);
@@ -251,12 +251,12 @@ class ActionColumn extends Column
      */
     protected function renderDataCellContent($model, $key, $index)
     {
-        return preg_replace_callback('/\\{([\w\-\/]+)\\}/', function ($matches) use ($model, $key, $index) {
+        return \preg_replace_callback('/\\{([\w\-\/]+)\\}/', function ($matches) use ($model, $key, $index) {
             $name = $matches[1];
 
             if (isset($this->visibleButtons[$name])) {
                 $isVisible = $this->visibleButtons[$name] instanceof Closure
-                    ? call_user_func($this->visibleButtons[$name], $model, $key, $index)
+                    ? \call_user_func($this->visibleButtons[$name], $model, $key, $index)
                     : $this->visibleButtons[$name];
             } else {
                 $isVisible = true;
@@ -265,7 +265,7 @@ class ActionColumn extends Column
             if ($isVisible && isset($this->buttons[$name])) {
                 $url = $this->createUrl($name, $model, $key, $index);
 
-                return call_user_func($this->buttons[$name], $url, $model, $key);
+                return \call_user_func($this->buttons[$name], $url, $model, $key);
             }
 
             return '';

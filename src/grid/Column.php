@@ -121,7 +121,7 @@ class Column extends BaseObject
     public function renderDataCell($model, $key, $index)
     {
         if ($this->contentOptions instanceof Closure) {
-            $options = call_user_func($this->contentOptions, $model, $key, $index, $this);
+            $options = \call_user_func($this->contentOptions, $model, $key, $index, $this);
         } else {
             $options = $this->contentOptions;
         }
@@ -146,7 +146,7 @@ class Column extends BaseObject
      */
     protected function renderHeaderCellContent()
     {
-        return $this->header !== null && trim($this->header) !== '' ? $this->header : $this->getHeaderCellLabel();
+        return $this->header !== null && \trim($this->header) !== '' ? $this->header : $this->getHeaderCellLabel();
     }
 
     /**
@@ -171,7 +171,7 @@ class Column extends BaseObject
      */
     protected function renderFooterCellContent()
     {
-        return $this->footer !== null && trim($this->footer) !== '' ? $this->footer : $this->grid->emptyCell;
+        return $this->footer !== null && \trim($this->footer) !== '' ? $this->footer : $this->grid->emptyCell;
     }
 
     /**
@@ -186,7 +186,7 @@ class Column extends BaseObject
     protected function renderDataCellContent($model, $key, $index)
     {
         if ($this->content !== null) {
-            return call_user_func($this->content, $model, $key, $index, $this);
+            return \call_user_func($this->content, $model, $key, $index, $this);
         }
 
         return $this->grid->emptyCell;

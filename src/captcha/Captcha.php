@@ -115,13 +115,13 @@ class Captcha extends InputWidget
         $input = $this->renderInputHtml('text');
         $route = $this->captchaAction;
 
-        if (is_array($route)) {
-            $route['v'] = uniqid('', true);
+        if (\is_array($route)) {
+            $route['v'] = \uniqid('', true);
         } else {
-            $route = [$route, 'v' => uniqid('', true)];
+            $route = [$route, 'v' => \uniqid('', true)];
         }
         $image = Html::img($route, $this->imageOptions);
-        echo strtr($this->template, [
+        echo \strtr($this->template, [
             '{input}' => $input,
             '{image}' => $image,
         ]);
@@ -149,7 +149,7 @@ class Captcha extends InputWidget
     {
         $route = $this->captchaAction;
 
-        if (is_array($route)) {
+        if (\is_array($route)) {
             $route[CaptchaAction::REFRESH_GET_VAR] = 1;
         } else {
             $route = [$route, CaptchaAction::REFRESH_GET_VAR => 1];
@@ -157,7 +157,7 @@ class Captcha extends InputWidget
 
         $options = [
             'refreshUrl' => Url::toRoute($route),
-            'hashKey' => 'yiiCaptcha/' . trim($route[0], '/'),
+            'hashKey' => 'yiiCaptcha/' . \trim($route[0], '/'),
         ];
 
         return $options;
@@ -173,16 +173,16 @@ class Captcha extends InputWidget
      */
     public static function checkRequirements()
     {
-        if (extension_loaded('imagick')) {
+        if (\extension_loaded('imagick')) {
             $imagickFormats = (new Imagick())->queryFormats('PNG');
 
-            if (in_array('PNG', $imagickFormats, true)) {
+            if (\in_array('PNG', $imagickFormats, true)) {
                 return 'imagick';
             }
         }
 
-        if (extension_loaded('gd')) {
-            $gdInfo = gd_info();
+        if (\extension_loaded('gd')) {
+            $gdInfo = \gd_info();
 
             if (!empty($gdInfo['FreeType Support'])) {
                 return 'gd';

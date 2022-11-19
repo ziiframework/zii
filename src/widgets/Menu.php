@@ -217,11 +217,11 @@ class Menu extends Widget
      */
     protected function renderItems($items)
     {
-        $n = count($items);
+        $n = \count($items);
         $lines = [];
 
         foreach ($items as $i => $item) {
-            $options = array_merge($this->itemOptions, ArrayHelper::getValue($item, 'options', []));
+            $options = \array_merge($this->itemOptions, ArrayHelper::getValue($item, 'options', []));
             $tag = ArrayHelper::remove($options, 'tag', 'li');
             $class = [];
 
@@ -242,14 +242,14 @@ class Menu extends Widget
 
             if (!empty($item['items'])) {
                 $submenuTemplate = ArrayHelper::getValue($item, 'submenuTemplate', $this->submenuTemplate);
-                $menu .= strtr($submenuTemplate, [
+                $menu .= \strtr($submenuTemplate, [
                     '{items}' => $this->renderItems($item['items']),
                 ]);
             }
             $lines[] = Html::tag($tag, $menu, $options);
         }
 
-        return implode("\n", $lines);
+        return \implode("\n", $lines);
     }
 
     /**
@@ -265,7 +265,7 @@ class Menu extends Widget
         if (isset($item['url'])) {
             $template = ArrayHelper::getValue($item, 'template', $this->linkTemplate);
 
-            return strtr($template, [
+            return \strtr($template, [
                 '{url}' => Html::encode(Url::to($item['url'])),
                 '{label}' => $item['label'],
             ]);
@@ -273,7 +273,7 @@ class Menu extends Widget
 
         $template = ArrayHelper::getValue($item, 'template', $this->labelTemplate);
 
-        return strtr($template, [
+        return \strtr($template, [
             '{label}' => $item['label'],
         ]);
     }
@@ -323,13 +323,13 @@ class Menu extends Widget
                     $items[$i]['active'] = false;
                 }
             } elseif ($item['active'] instanceof Closure) {
-                $active = $items[$i]['active'] = call_user_func($item['active'], $item, $hasActiveChild, $this->isItemActive($item), $this);
+                $active = $items[$i]['active'] = \call_user_func($item['active'], $item, $hasActiveChild, $this->isItemActive($item), $this);
             } elseif ($item['active']) {
                 $active = true;
             }
         }
 
-        return array_values($items);
+        return \array_values($items);
     }
 
     /**
@@ -346,19 +346,19 @@ class Menu extends Widget
      */
     protected function isItemActive($item)
     {
-        if (isset($item['url']) && is_array($item['url']) && isset($item['url'][0])) {
+        if (isset($item['url']) && \is_array($item['url']) && isset($item['url'][0])) {
             $route = Yii::getAlias($item['url'][0]);
 
-            if (strncmp($route, '/', 1) !== 0 && Yii::$app->controller) {
+            if (\strncmp($route, '/', 1) !== 0 && Yii::$app->controller) {
                 $route = Yii::$app->controller->module->getUniqueId() . '/' . $route;
             }
 
-            if (ltrim($route, '/') !== $this->route) {
+            if (\ltrim($route, '/') !== $this->route) {
                 return false;
             }
             unset($item['url']['#']);
 
-            if (count($item['url']) > 1) {
+            if (\count($item['url']) > 1) {
                 $params = $item['url'];
                 unset($params[0]);
 

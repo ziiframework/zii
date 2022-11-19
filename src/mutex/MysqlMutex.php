@@ -112,6 +112,6 @@ class MysqlMutex extends DbMutex
      */
     protected function hashLockName($name)
     {
-        return sha1($name);
+        return \sha1($name);
     }
 }

@@ -160,8 +160,8 @@ abstract class Target extends Component
      */
     public function collect($messages, $final): void
     {
-        $this->messages = array_merge($this->messages, static::filterMessages($messages, $this->getLevels(), $this->categories, $this->except));
-        $count = count($this->messages);
+        $this->messages = \array_merge($this->messages, static::filterMessages($messages, $this->getLevels(), $this->categories, $this->except));
+        $count = \count($this->messages);
 
         if ($count > 0 && ($final || $this->exportInterval > 0 && $count >= $this->exportInterval)) {
             if (($context = $this->getContextMessage()) !== '') {
@@ -198,7 +198,7 @@ abstract class Target extends Component
             $result[] = "\${$key} = " . VarDumper::dumpAsString($value);
         }
 
-        return implode("\n\n", $result);
+        return \implode("\n\n", $result);
     }
 
     /**
@@ -241,7 +241,7 @@ abstract class Target extends Component
             'profile' => Logger::LEVEL_PROFILE,
         ];
 
-        if (is_array($levels)) {
+        if (\is_array($levels)) {
             $this->_levels = 0;
 
             foreach ($levels as $level) {
@@ -252,7 +252,7 @@ abstract class Target extends Component
                 }
             }
         } else {
-            $bitmapValues = array_reduce($levelMap, static fn ($carry, $item) => $carry | $item);
+            $bitmapValues = \array_reduce($levelMap, static fn ($carry, $item) => $carry | $item);
 
             if (!($bitmapValues & $levels) && $levels !== 0) {
                 throw new InvalidConfigException("Incorrect $levels value");
@@ -285,7 +285,7 @@ abstract class Target extends Component
             $matched = empty($categories);
 
             foreach ($categories as $category) {
-                if ($message[2] === $category || !empty($category) && substr_compare($category, '*', -1, 1) === 0 && str_starts_with($message[2], rtrim($category, '*'))) {
+                if ($message[2] === $category || !empty($category) && \substr_compare($category, '*', -1, 1) === 0 && \str_starts_with($message[2], \rtrim($category, '*'))) {
                     $matched = true;
                     break;
                 }
@@ -293,9 +293,9 @@ abstract class Target extends Component
 
             if ($matched) {
                 foreach ($except as $category) {
-                    $prefix = rtrim($category, '*');
+                    $prefix = \rtrim($category, '*');
 
-                    if (($message[2] === $category || $prefix !== $category) && str_starts_with($message[2], $prefix)) {
+                    if (($message[2] === $category || $prefix !== $category) && \str_starts_with($message[2], $prefix)) {
                         $matched = false;
                         break;
                     }
@@ -323,7 +323,7 @@ abstract class Target extends Component
         [$text, $level, $category, $timestamp] = $message;
         $level = Logger::getLevelName($level);
 
-        if (!is_string($text)) {
+        if (!\is_string($text)) {
             // exceptions may not be serializable if in the call stack somewhere is a Closure
             if ($text instanceof Exception || $text instanceof Throwable) {
                 $text = (string) $text;
@@ -342,7 +342,7 @@ abstract class Target extends Component
         $prefix = $this->getMessagePrefix($message);
 
         return $this->getTime($timestamp) . " {$prefix}[$level][$category] $text"
-            . (empty($traces) ? '' : "\n    " . implode("\n    ", $traces));
+            . (empty($traces) ? '' : "\n    " . \implode("\n    ", $traces));
     }
 
     /**
@@ -358,7 +358,7 @@ abstract class Target extends Component
     public function getMessagePrefix($message)
     {
         if ($this->prefix !== null) {
-            return call_user_func($this->prefix, $message);
+            return \call_user_func($this->prefix, $message);
         }
 
         if (Yii::$app === null) {
@@ -414,8 +414,8 @@ abstract class Target extends Component
      */
     public function getEnabled()
     {
-        if (is_callable($this->_enabled)) {
-            return call_user_func($this->_enabled, $this);
+        if (\is_callable($this->_enabled)) {
+            return \call_user_func($this->_enabled, $this);
         }
 
         return $this->_enabled;
@@ -433,12 +433,12 @@ abstract class Target extends Component
      */
     protected function getTime($timestamp)
     {
-        $parts = explode('.', sprintf('%F', $timestamp));
+        $parts = \explode('.', \sprintf('%F', $timestamp));
 
-        if (is_numeric($parts[0])) {
+        if (\is_numeric($parts[0])) {
             $parts[0] = (int) $parts[0];
         }
 
-        return date('Y-m-d H:i:s', $parts[0]) . ($this->microtime ? ('.' . $parts[1]) : '');
+        return \date('Y-m-d H:i:s', $parts[0]) . ($this->microtime ? ('.' . $parts[1]) : '');
     }
 }

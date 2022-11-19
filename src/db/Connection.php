@@ -572,16 +572,16 @@ class Connection extends Component
         $this->_queryCacheInfo[] = [$duration === null ? $this->queryCacheDuration : $duration, $dependency];
 
         try {
-            $result = call_user_func($callable, $this);
-            array_pop($this->_queryCacheInfo);
+            $result = \call_user_func($callable, $this);
+            \array_pop($this->_queryCacheInfo);
 
             return $result;
         } catch (\Exception $e) {
-            array_pop($this->_queryCacheInfo);
+            \array_pop($this->_queryCacheInfo);
 
             throw $e;
         } catch (Throwable $e) {
-            array_pop($this->_queryCacheInfo);
+            \array_pop($this->_queryCacheInfo);
 
             throw $e;
         }
@@ -620,16 +620,16 @@ class Connection extends Component
         $this->_queryCacheInfo[] = false;
 
         try {
-            $result = call_user_func($callable, $this);
-            array_pop($this->_queryCacheInfo);
+            $result = \call_user_func($callable, $this);
+            \array_pop($this->_queryCacheInfo);
 
             return $result;
         } catch (\Exception $e) {
-            array_pop($this->_queryCacheInfo);
+            \array_pop($this->_queryCacheInfo);
 
             throw $e;
         } catch (Throwable $e) {
-            array_pop($this->_queryCacheInfo);
+            \array_pop($this->_queryCacheInfo);
 
             throw $e;
         }
@@ -652,9 +652,9 @@ class Connection extends Component
             return null;
         }
 
-        $info = end($this->_queryCacheInfo);
+        $info = \end($this->_queryCacheInfo);
 
-        if (is_array($info)) {
+        if (\is_array($info)) {
             if ($duration === null) {
                 $duration = $info[0];
             }
@@ -665,7 +665,7 @@ class Connection extends Component
         }
 
         if ($duration === 0 || $duration > 0) {
-            if (is_string($this->queryCache) && Yii::$app) {
+            if (\is_string($this->queryCache) && Yii::$app) {
                 $cache = Yii::$app->get($this->queryCache, false);
             } else {
                 $cache = $this->queryCache;
@@ -784,8 +784,8 @@ class Connection extends Component
 
             if ($this->_driverName !== null) {
                 $driver = $this->_driverName;
-            } elseif (($pos = strpos($this->dsn, ':')) !== false) {
-                $driver = strtolower(substr($this->dsn, 0, $pos));
+            } elseif (($pos = \strpos($this->dsn, ':')) !== false) {
+                $driver = \strtolower(\substr($this->dsn, 0, $pos));
             }
 
             switch ($driver) {
@@ -808,8 +808,8 @@ class Connection extends Component
 
         $dsn = $this->dsn;
 
-        if (strncmp('sqlite:@', $dsn, 8) === 0) {
-            $dsn = 'sqlite:' . Yii::getAlias(substr($dsn, 7));
+        if (\strncmp('sqlite:@', $dsn, 8) === 0) {
+            $dsn = 'sqlite:' . Yii::getAlias(\substr($dsn, 7));
         }
 
         return new $pdoClass($dsn, $this->username, $this->password, $this->attributes);
@@ -826,21 +826,21 @@ class Connection extends Component
     {
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        if ($this->emulatePrepare !== null && constant('PDO::ATTR_EMULATE_PREPARES')) {
+        if ($this->emulatePrepare !== null && \constant('PDO::ATTR_EMULATE_PREPARES')) {
             if ($this->driverName !== 'sqlsrv') {
                 $this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, $this->emulatePrepare);
             }
         }
 
-        if (PHP_VERSION_ID >= 80100 && $this->getDriverName() === 'sqlite') {
+        if (\PHP_VERSION_ID >= 80100 && $this->getDriverName() === 'sqlite') {
             $this->pdo->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, true);
         }
 
-        if (!$this->isSybase && in_array($this->getDriverName(), ['mssql', 'dblib'], true)) {
+        if (!$this->isSybase && \in_array($this->getDriverName(), ['mssql', 'dblib'], true)) {
             $this->pdo->exec('SET ANSI_NULL_DFLT_ON ON');
         }
 
-        if ($this->charset !== null && in_array($this->getDriverName(), ['pgsql', 'mysql', 'mysqli'], true)) {
+        if ($this->charset !== null && \in_array($this->getDriverName(), ['pgsql', 'mysql', 'mysqli'], true)) {
             $this->pdo->exec('SET NAMES ' . $this->pdo->quote($this->charset));
         }
         $this->trigger(self::EVENT_AFTER_OPEN);
@@ -862,7 +862,7 @@ class Connection extends Component
         if ($this->commandClass !== $config['class']) {
             $config['class'] = $this->commandClass;
         } elseif (isset($this->commandMap[$driver])) {
-            $config = !is_array($this->commandMap[$driver]) ? ['class' => $this->commandMap[$driver]] : $this->commandMap[$driver];
+            $config = !\is_array($this->commandMap[$driver]) ? ['class' => $this->commandMap[$driver]] : $this->commandMap[$driver];
         }
         $config['db'] = $this;
         $config['sql'] = $sql;
@@ -920,7 +920,7 @@ class Connection extends Component
         $level = $transaction->level;
 
         try {
-            $result = call_user_func($callback, $this);
+            $result = \call_user_func($callback, $this);
 
             if ($transaction->isActive && $transaction->level === $level) {
                 $transaction->commit();
@@ -975,7 +975,7 @@ class Connection extends Component
         $driver = $this->getDriverName();
 
         if (isset($this->schemaMap[$driver])) {
-            $config = !is_array($this->schemaMap[$driver]) ? ['class' => $this->schemaMap[$driver]] : $this->schemaMap[$driver];
+            $config = !\is_array($this->schemaMap[$driver]) ? ['class' => $this->schemaMap[$driver]] : $this->schemaMap[$driver];
             $config['db'] = $this;
 
             $this->_schema = Yii::createObject($config);
@@ -1120,12 +1120,12 @@ class Connection extends Component
      */
     public function quoteSql($sql)
     {
-        return preg_replace_callback('/(\\{\\{(%?[\w\-\. ]+%?)\\}\\}|\\[\\[([\w\-\. ]+)\\]\\])/', function ($matches) {
+        return \preg_replace_callback('/(\\{\\{(%?[\w\-\. ]+%?)\\}\\}|\\[\\[([\w\-\. ]+)\\]\\])/', function ($matches) {
             if (isset($matches[3])) {
                 return $this->quoteColumnName($matches[3]);
             }
 
-            return str_replace('%', $this->tablePrefix, $this->quoteTableName($matches[2]));
+            return \str_replace('%', $this->tablePrefix, $this->quoteTableName($matches[2]));
         }, $sql);
     }
 
@@ -1138,10 +1138,10 @@ class Connection extends Component
     public function getDriverName()
     {
         if ($this->_driverName === null) {
-            if (($pos = strpos((string) $this->dsn, ':')) !== false) {
-                $this->_driverName = strtolower(substr($this->dsn, 0, $pos));
+            if (($pos = \strpos((string) $this->dsn, ':')) !== false) {
+                $this->_driverName = \strtolower(\substr($this->dsn, 0, $pos));
             } else {
-                $this->_driverName = strtolower($this->getSlavePdo()->getAttribute(PDO::ATTR_DRIVER_NAME));
+                $this->_driverName = \strtolower($this->getSlavePdo()->getAttribute(PDO::ATTR_DRIVER_NAME));
             }
         }
 
@@ -1155,7 +1155,7 @@ class Connection extends Component
      */
     public function setDriverName($driverName): void
     {
-        $this->_driverName = strtolower($driverName);
+        $this->_driverName = \strtolower($driverName);
     }
 
     /**
@@ -1270,7 +1270,7 @@ class Connection extends Component
             $this->enableSlaves = false;
 
             try {
-                $result = call_user_func($callback, $this);
+                $result = \call_user_func($callback, $this);
             } catch (\Exception $e) {
                 $this->enableSlaves = true;
 
@@ -1283,7 +1283,7 @@ class Connection extends Component
             // TODO: use "finally" keyword when miminum required PHP version is >= 5.5
             $this->enableSlaves = true;
         } else {
-            $result = call_user_func($callback, $this);
+            $result = \call_user_func($callback, $this);
         }
 
         return $result;
@@ -1307,7 +1307,7 @@ class Connection extends Component
      */
     protected function openFromPool(array $pool, array $sharedConfig)
     {
-        shuffle($pool);
+        \shuffle($pool);
 
         return $this->openFromPoolSequentially($pool, $sharedConfig);
     }
@@ -1348,10 +1348,10 @@ class Connection extends Component
             $sharedConfig['class'] = static::class;
         }
 
-        $cache = is_string($this->serverStatusCache) ? Yii::$app->get($this->serverStatusCache, false) : $this->serverStatusCache;
+        $cache = \is_string($this->serverStatusCache) ? Yii::$app->get($this->serverStatusCache, false) : $this->serverStatusCache;
 
         foreach ($pool as $i => $config) {
-            $pool[$i] = $config = array_merge($sharedConfig, $config);
+            $pool[$i] = $config = \array_merge($sharedConfig, $config);
 
             if (empty($config['dsn'])) {
                 throw new InvalidConfigException('The "dsn" option must be specified.');
@@ -1424,7 +1424,7 @@ class Connection extends Component
         unset($fields["\000" . __CLASS__ . "\000" . '_transaction']);
         unset($fields["\000" . __CLASS__ . "\000" . '_schema']);
 
-        return array_keys($fields);
+        return \array_keys($fields);
     }
 
     /**
@@ -1439,7 +1439,7 @@ class Connection extends Component
         $this->_schema = null;
         $this->_transaction = null;
 
-        if (strncmp($this->dsn, 'sqlite::memory:', 15) !== 0) {
+        if (\strncmp($this->dsn, 'sqlite::memory:', 15) !== 0) {
             // reset PDO connection, unless its sqlite in-memory, which can only have one connection
             $this->pdo = null;
         }

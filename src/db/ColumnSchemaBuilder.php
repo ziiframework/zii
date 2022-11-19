@@ -380,8 +380,8 @@ class ColumnSchemaBuilder extends BaseObject
             return '';
         }
 
-        if (is_array($this->length)) {
-            $this->length = implode(',', $this->length);
+        if (\is_array($this->length)) {
+            $this->length = \implode(',', $this->length);
         }
 
         return "({$this->length})";
@@ -425,7 +425,7 @@ class ColumnSchemaBuilder extends BaseObject
             return $this->isNotNull === false ? 'NULL' : null;
         }
 
-        switch (gettype($this->default)) {
+        switch (\gettype($this->default)) {
             case 'double':
                 // ensure type cast always has . as decimal separator in all locales
                 $defaultValue = StringHelper::floatToString($this->default);
@@ -569,6 +569,6 @@ class ColumnSchemaBuilder extends BaseObject
             '{append}' => $this->buildAppendString(),
         ];
 
-        return strtr($format, $placeholderValues);
+        return \strtr($format, $placeholderValues);
     }
 }

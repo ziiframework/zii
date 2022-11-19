@@ -160,7 +160,7 @@ class MigrateController extends BaseMigrateController
      */
     public function options($actionID)
     {
-        return array_merge(parent::options($actionID), ['migrationTable', 'db'], // global for all actions
+        return \array_merge(parent::options($actionID), ['migrationTable', 'db'], // global for all actions
             $actionID === 'create'
                 ? ['templateFile', 'fields', 'useTablePrefix', 'comment']
                 : []);
@@ -173,7 +173,7 @@ class MigrateController extends BaseMigrateController
      */
     public function optionAliases()
     {
-        return array_merge(parent::optionAliases(), [
+        return \array_merge(parent::optionAliases(), [
             'C' => 'comment',
             'f' => 'fields',
             'p' => 'migrationPath',
@@ -232,7 +232,7 @@ class MigrateController extends BaseMigrateController
         $query = (new Query())
             ->select(['version', 'apply_time'])
             ->from($this->migrationTable)
-            ->orderBy(['apply_time' => SORT_DESC, 'version' => SORT_DESC]);
+            ->orderBy(['apply_time' => \SORT_DESC, 'version' => \SORT_DESC]);
 
         if (empty($this->migrationNamespaces)) {
             $query->limit($limit);
@@ -252,8 +252,8 @@ class MigrateController extends BaseMigrateController
                 continue;
             }
 
-            if (preg_match('/m?(\d{6}_?\d{6})(\D.*)?$/is', $row['version'], $matches)) {
-                $time = str_replace('_', '', $matches[1]);
+            if (\preg_match('/m?(\d{6}_?\d{6})(\D.*)?$/is', $row['version'], $matches)) {
+                $time = \str_replace('_', '', $matches[1]);
                 $row['canonicalVersion'] = $time;
             } else {
                 $row['canonicalVersion'] = $row['version'];
@@ -262,19 +262,19 @@ class MigrateController extends BaseMigrateController
             $history[] = $row;
         }
 
-        usort($history, static function ($a, $b) {
+        \usort($history, static function ($a, $b) {
             if ($a['apply_time'] === $b['apply_time']) {
-                if (($compareResult = strcasecmp($b['canonicalVersion'], $a['canonicalVersion'])) !== 0) {
+                if (($compareResult = \strcasecmp($b['canonicalVersion'], $a['canonicalVersion'])) !== 0) {
                     return $compareResult;
                 }
 
-                return strcasecmp($b['version'], $a['version']);
+                return \strcasecmp($b['version'], $a['version']);
             }
 
             return ($a['apply_time'] > $b['apply_time']) ? -1 : +1;
         });
 
-        $history = array_slice($history, 0, $limit);
+        $history = \array_slice($history, 0, $limit);
 
         $history = ArrayHelper::map($history, 'version', 'apply_time');
 
@@ -294,7 +294,7 @@ class MigrateController extends BaseMigrateController
         ])->execute();
         $this->db->createCommand()->insert($this->migrationTable, [
             'version' => self::BASE_MIGRATION,
-            'apply_time' => time(),
+            'apply_time' => \time(),
         ])->execute();
         $this->stdout("Done.\n", Console::FG_GREEN);
     }
@@ -307,7 +307,7 @@ class MigrateController extends BaseMigrateController
         $command = $this->db->createCommand();
         $command->insert($this->migrationTable, [
             'version' => $version,
-            'apply_time' => time(),
+            'apply_time' => \time(),
         ])->execute();
     }
 
@@ -360,7 +360,7 @@ class MigrateController extends BaseMigrateController
         ];
 
         foreach ($dropViewErrors as $dropViewError) {
-            if (str_contains($errorMessage, $dropViewError)) {
+            if (\str_contains($errorMessage, $dropViewError)) {
                 return true;
             }
         }
@@ -411,12 +411,12 @@ class MigrateController extends BaseMigrateController
      */
     private function normalizeTableName($name)
     {
-        if (substr($name, -1) === '_') {
-            $name = substr($name, 0, -1);
+        if (\substr($name, -1) === '_') {
+            $name = \substr($name, 0, -1);
         }
 
-        if (strncmp($name, '_', 1) === 0) {
-            return substr($name, 1);
+        if (\strncmp($name, '_', 1) === 0) {
+            return \substr($name, 1);
         }
 
         return Inflector::underscore($name);
@@ -436,18 +436,18 @@ class MigrateController extends BaseMigrateController
         $name = $params['name'];
 
         if ($params['namespace']) {
-            $name = substr($name, (strrpos($name, '\\') ?: -1) + 1);
+            $name = \substr($name, (\strrpos($name, '\\') ?: -1) + 1);
         }
 
         $templateFile = $this->templateFile;
         $table = null;
 
-        if (preg_match('/^create_?junction_?(?:table)?_?(?:for)?(.+)_?and(.+)_?tables?$/i', $name, $matches)) {
+        if (\preg_match('/^create_?junction_?(?:table)?_?(?:for)?(.+)_?and(.+)_?tables?$/i', $name, $matches)) {
             $templateFile = $this->generatorTemplateFiles['create_junction'];
             $firstTable = $this->normalizeTableName($matches[1]);
             $secondTable = $this->normalizeTableName($matches[2]);
 
-            $fields = array_merge([
+            $fields = \array_merge([
                     [
                         'property' => $firstTable . '_id',
                         'decorators' => 'integer()',
@@ -469,17 +469,17 @@ class MigrateController extends BaseMigrateController
             $foreignKeys[$firstTable . '_id']['column'] = null;
             $foreignKeys[$secondTable . '_id']['column'] = null;
             $table = $firstTable . '_' . $secondTable;
-        } elseif (preg_match('/^add(.+)columns?_?to(.+)table$/i', $name, $matches)) {
+        } elseif (\preg_match('/^add(.+)columns?_?to(.+)table$/i', $name, $matches)) {
             $templateFile = $this->generatorTemplateFiles['add_column'];
             $table = $this->normalizeTableName($matches[2]);
-        } elseif (preg_match('/^drop(.+)columns?_?from(.+)table$/i', $name, $matches)) {
+        } elseif (\preg_match('/^drop(.+)columns?_?from(.+)table$/i', $name, $matches)) {
             $templateFile = $this->generatorTemplateFiles['drop_column'];
             $table = $this->normalizeTableName($matches[2]);
-        } elseif (preg_match('/^create(.+)table$/i', $name, $matches)) {
+        } elseif (\preg_match('/^create(.+)table$/i', $name, $matches)) {
             $this->addDefaultPrimaryKey($fields);
             $templateFile = $this->generatorTemplateFiles['create_table'];
             $table = $this->normalizeTableName($matches[1]);
-        } elseif (preg_match('/^drop(.+)table$/i', $name, $matches)) {
+        } elseif (\preg_match('/^drop(.+)table$/i', $name, $matches)) {
             $this->addDefaultPrimaryKey($fields);
             $templateFile = $this->generatorTemplateFiles['drop_table'];
             $table = $this->normalizeTableName($matches[1]);
@@ -499,7 +499,7 @@ class MigrateController extends BaseMigrateController
                     $relatedTableSchema = $this->db->getTableSchema($relatedTable);
 
                     if ($relatedTableSchema !== null) {
-                        $primaryKeyCount = count($relatedTableSchema->primaryKey);
+                        $primaryKeyCount = \count($relatedTableSchema->primaryKey);
 
                         if ($primaryKeyCount === 1) {
                             $relatedColumn = $relatedTableSchema->primaryKey[0];
@@ -521,7 +521,7 @@ class MigrateController extends BaseMigrateController
             ];
         }
 
-        return $this->renderFile(Yii::getAlias($templateFile), array_merge($params, [
+        return $this->renderFile(Yii::getAlias($templateFile), \array_merge($params, [
             'table' => $this->generateTableName($table),
             'fields' => $fields,
             'foreignKeys' => $foreignKeys,
@@ -565,14 +565,14 @@ class MigrateController extends BaseMigrateController
 
         foreach ($this->fields as $index => $field) {
             $chunks = $this->splitFieldIntoChunks($field);
-            $property = array_shift($chunks);
+            $property = \array_shift($chunks);
 
             foreach ($chunks as $i => &$chunk) {
-                if (strncmp($chunk, 'foreignKey', 10) === 0) {
-                    preg_match('/foreignKey\((\w*)\s?(\w*)\)/', $chunk, $matches);
+                if (\strncmp($chunk, 'foreignKey', 10) === 0) {
+                    \preg_match('/foreignKey\((\w*)\s?(\w*)\)/', $chunk, $matches);
                     $foreignKeys[$property] = [
                         'table' => $matches[1]
-                            ?? preg_replace('/_id$/', '', $property),
+                            ?? \preg_replace('/_id$/', '', $property),
                         'column' => !empty($matches[2])
                             ? $matches[2]
                             : null,
@@ -583,13 +583,13 @@ class MigrateController extends BaseMigrateController
                     continue;
                 }
 
-                if (!preg_match('/^(.+?)\(([^(]+)\)$/', $chunk)) {
+                if (!\preg_match('/^(.+?)\(([^(]+)\)$/', $chunk)) {
                     $chunk .= '()';
                 }
             }
             $fields[] = [
                 'property' => $property,
-                'decorators' => implode('->', $chunks),
+                'decorators' => \implode('->', $chunks),
             ];
         }
 
@@ -610,19 +610,19 @@ class MigrateController extends BaseMigrateController
     {
         $originalDefaultValue = null;
         $defaultValue = null;
-        preg_match_all('/defaultValue\(["\'].*?:?.*?["\']\)/', $field, $matches, PREG_SET_ORDER, 0);
+        \preg_match_all('/defaultValue\(["\'].*?:?.*?["\']\)/', $field, $matches, \PREG_SET_ORDER, 0);
 
         if (isset($matches[0][0])) {
             $originalDefaultValue = $matches[0][0];
-            $defaultValue = str_replace(':', '{{colon}}', $originalDefaultValue);
-            $field = str_replace($originalDefaultValue, $defaultValue, $field);
+            $defaultValue = \str_replace(':', '{{colon}}', $originalDefaultValue);
+            $field = \str_replace($originalDefaultValue, $defaultValue, $field);
         }
 
-        $chunks = preg_split('/\s?:\s?/', $field);
+        $chunks = \preg_split('/\s?:\s?/', $field);
 
-        if (is_array($chunks) && $defaultValue !== null && $originalDefaultValue !== null) {
+        if (\is_array($chunks) && $defaultValue !== null && $originalDefaultValue !== null) {
             foreach ($chunks as $key => $chunk) {
-                $chunks[$key] = str_replace($defaultValue, $originalDefaultValue, $chunk);
+                $chunks[$key] = \str_replace($defaultValue, $originalDefaultValue, $chunk);
             }
         }
 
@@ -639,10 +639,10 @@ class MigrateController extends BaseMigrateController
     protected function addDefaultPrimaryKey(&$fields): void
     {
         foreach ($fields as $field) {
-            if ($field['property'] === 'id' || false !== strripos($field['decorators'], 'primarykey()')) {
+            if ($field['property'] === 'id' || false !== \strripos($field['decorators'], 'primarykey()')) {
                 return;
             }
         }
-        array_unshift($fields, ['property' => 'id', 'decorators' => 'primaryKey()']);
+        \array_unshift($fields, ['property' => 'id', 'decorators' => 'primaryKey()']);
     }
 }

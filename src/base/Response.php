@@ -40,9 +40,9 @@ class Response extends Component
     public function clearOutputBuffers(): void
     {
         // the following manual level counting is to deal with zlib.output_compression set to On
-        for ($level = ob_get_level(); $level > 0; --$level) {
-            if (!@ob_end_clean()) {
-                ob_clean();
+        for ($level = \ob_get_level(); $level > 0; --$level) {
+            if (!@\ob_end_clean()) {
+                \ob_clean();
             }
         }
     }

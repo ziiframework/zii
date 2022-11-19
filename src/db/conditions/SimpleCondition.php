@@ -81,7 +81,7 @@ class SimpleCondition implements ConditionInterface
      */
     public static function fromArrayDefinition($operator, $operands)
     {
-        if (count($operands) !== 2) {
+        if (\count($operands) !== 2) {
             throw new InvalidArgumentException("Operator '$operator' requires two operands.");
         }
 

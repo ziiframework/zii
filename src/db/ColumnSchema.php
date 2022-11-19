@@ -140,7 +140,7 @@ class ColumnSchema extends BaseObject
     protected function typecast($value)
     {
         if ($value === ''
-            && !in_array($this->type, [
+            && !\in_array($this->type, [
                     Schema::TYPE_TEXT,
                     Schema::TYPE_STRING,
                     Schema::TYPE_BINARY,
@@ -151,17 +151,17 @@ class ColumnSchema extends BaseObject
         }
 
         if ($value === null
-            || gettype($value) === $this->phpType
+            || \gettype($value) === $this->phpType
             || $value instanceof ExpressionInterface
             || $value instanceof Query
         ) {
             return $value;
         }
 
-        if (is_array($value)
-            && count($value) === 2
+        if (\is_array($value)
+            && \count($value) === 2
             && isset($value[1])
-            && in_array($value[1], $this->getPdoParamTypes(), true)
+            && \in_array($value[1], $this->getPdoParamTypes(), true)
         ) {
             return new PdoValue($value[0], $value[1]);
         }
@@ -169,30 +169,30 @@ class ColumnSchema extends BaseObject
         switch ($this->phpType) {
             case 'resource':
             case 'string':
-                if (is_resource($value)) {
+                if (\is_resource($value)) {
                     return $value;
                 }
 
-                if (is_float($value)) {
+                if (\is_float($value)) {
                     // ensure type cast always has . as decimal separator in all locales
                     return StringHelper::floatToString($value);
                 }
 
-                if (is_numeric($value)
+                if (\is_numeric($value)
                     && ColumnSchemaBuilder::CATEGORY_NUMERIC === ColumnSchemaBuilder::$typeCategoryMap[$this->type]
                 ) {
                     // https://github.com/yiisoft/yii2/issues/14663
                     return $value;
                 }
 
-                if (PHP_VERSION_ID >= 80100 && is_object($value) && $value instanceof BackedEnum) {
+                if (\PHP_VERSION_ID >= 80100 && \is_object($value) && $value instanceof BackedEnum) {
                     return (string) $value->value;
                 }
 
                 return (string) $value;
 
             case 'integer':
-                if (PHP_VERSION_ID >= 80100 && is_object($value) && $value instanceof BackedEnum) {
+                if (\PHP_VERSION_ID >= 80100 && \is_object($value) && $value instanceof BackedEnum) {
                     return (int) $value->value;
                 }
 

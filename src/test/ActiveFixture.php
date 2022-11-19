@@ -92,7 +92,7 @@ class ActiveFixture extends BaseActiveFixture
 
         foreach ($this->getData() as $alias => $row) {
             $primaryKeys = $this->db->schema->insert($table->fullName, $row);
-            $this->data[$alias] = array_merge($row, $primaryKeys);
+            $this->data[$alias] = \array_merge($row, $primaryKeys);
         }
     }
 
@@ -113,7 +113,7 @@ class ActiveFixture extends BaseActiveFixture
                 $dataFile = $this->getTableSchema()->fullName . '.php';
             } else {
                 $class = new ReflectionClass($this);
-                $dataFile = dirname($class->getFileName()) . '/data/' . $this->getTableSchema()->fullName . '.php';
+                $dataFile = \dirname($class->getFileName()) . '/data/' . $this->getTableSchema()->fullName . '.php';
             }
 
             return $this->loadData($dataFile, false);

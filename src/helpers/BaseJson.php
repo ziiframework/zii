@@ -85,22 +85,22 @@ class BaseJson
     public static function encode($value, $options = 320)
     {
         $expressions = [];
-        $value = static::processData($value, $expressions, uniqid('', true));
-        set_error_handler(static function (): void {
-            static::handleJsonError(JSON_ERROR_SYNTAX);
-        }, E_WARNING);
+        $value = static::processData($value, $expressions, \uniqid('', true));
+        \set_error_handler(static function (): void {
+            static::handleJsonError(\JSON_ERROR_SYNTAX);
+        }, \E_WARNING);
 
         if (static::$prettyPrint === true) {
-            $options |= JSON_PRETTY_PRINT;
+            $options |= \JSON_PRETTY_PRINT;
         } elseif (static::$prettyPrint === false) {
-            $options &= ~JSON_PRETTY_PRINT;
+            $options &= ~\JSON_PRETTY_PRINT;
         }
 
-        $json = json_encode($value, $options);
-        restore_error_handler();
-        static::handleJsonError(json_last_error());
+        $json = \json_encode($value, $options);
+        \restore_error_handler();
+        static::handleJsonError(\json_last_error());
 
-        return $expressions === [] ? $json : strtr($json, $expressions);
+        return $expressions === [] ? $json : \strtr($json, $expressions);
     }
 
     /**
@@ -123,7 +123,7 @@ class BaseJson
      */
     public static function htmlEncode($value)
     {
-        return static::encode($value, JSON_UNESCAPED_UNICODE | JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS);
+        return static::encode($value, \JSON_UNESCAPED_UNICODE | \JSON_HEX_QUOT | \JSON_HEX_TAG | \JSON_HEX_AMP | \JSON_HEX_APOS);
     }
 
     /**
@@ -138,13 +138,13 @@ class BaseJson
      */
     public static function decode($json, $asArray = true)
     {
-        if (is_array($json)) {
+        if (\is_array($json)) {
             throw new InvalidArgumentException('Invalid JSON data.');
         } elseif ($json === null || $json === '') {
             return null;
         }
-        $decode = json_decode((string) $json, $asArray);
-        static::handleJsonError(json_last_error());
+        $decode = \json_decode((string) $json, $asArray);
+        static::handleJsonError(\json_last_error());
 
         return $decode;
     }
@@ -160,16 +160,16 @@ class BaseJson
      */
     protected static function handleJsonError($lastError): void
     {
-        if ($lastError === JSON_ERROR_NONE) {
+        if ($lastError === \JSON_ERROR_NONE) {
             return;
         }
 
-        if (PHP_VERSION_ID >= 50500) {
-            throw new InvalidArgumentException(json_last_error_msg(), $lastError);
+        if (\PHP_VERSION_ID >= 50500) {
+            throw new InvalidArgumentException(\json_last_error_msg(), $lastError);
         }
 
         foreach (static::$jsonErrorMessages as $const => $message) {
-            if (defined($const) && constant($const) === $lastError) {
+            if (\defined($const) && \constant($const) === $lastError) {
                 throw new InvalidArgumentException($message, $lastError);
             }
         }
@@ -190,9 +190,9 @@ class BaseJson
     {
         $revertToObject = false;
 
-        if (is_object($data)) {
+        if (\is_object($data)) {
             if ($data instanceof JsExpression) {
-                $token = "!{[$expPrefix=" . count($expressions) . ']}!';
+                $token = "!{[$expPrefix=" . \count($expressions) . ']}!';
                 $expressions['"' . $token . '"'] = $data->expression;
 
                 return $token;
@@ -236,9 +236,9 @@ class BaseJson
             }
         }
 
-        if (is_array($data)) {
+        if (\is_array($data)) {
             foreach ($data as $key => $value) {
-                if (is_array($value) || is_object($value)) {
+                if (\is_array($value) || \is_object($value)) {
                     $data[$key] = static::processData($value, $expressions, $expPrefix);
                 }
             }
@@ -283,7 +283,7 @@ class BaseJson
     {
         $lines = [];
 
-        if (!is_array($models)) {
+        if (!\is_array($models)) {
             $models = [$models];
         }
 
@@ -291,6 +291,6 @@ class BaseJson
             $lines[] = $model->getErrorSummary($showAllErrors);
         }
 
-        return array_unique(call_user_func_array('array_merge', $lines));
+        return \array_unique(\call_user_func_array('array_merge', $lines));
     }
 }

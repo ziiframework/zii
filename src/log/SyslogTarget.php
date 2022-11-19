@@ -31,7 +31,7 @@ class SyslogTarget extends Target
     /**
      * @var int syslog facility.
      */
-    public $facility = LOG_USER;
+    public $facility = \LOG_USER;
 
     /**
      * @var int|null openlog options. This is a bitfield passed as the `$option` parameter to [openlog()](https://www.php.net/openlog).
@@ -46,13 +46,13 @@ class SyslogTarget extends Target
      * @var array syslog levels
      */
     private $_syslogLevels = [
-        Logger::LEVEL_TRACE => LOG_DEBUG,
-        Logger::LEVEL_PROFILE_BEGIN => LOG_DEBUG,
-        Logger::LEVEL_PROFILE_END => LOG_DEBUG,
-        Logger::LEVEL_PROFILE => LOG_DEBUG,
-        Logger::LEVEL_INFO => LOG_INFO,
-        Logger::LEVEL_WARNING => LOG_WARNING,
-        Logger::LEVEL_ERROR => LOG_ERR,
+        Logger::LEVEL_TRACE => \LOG_DEBUG,
+        Logger::LEVEL_PROFILE_BEGIN => \LOG_DEBUG,
+        Logger::LEVEL_PROFILE_END => \LOG_DEBUG,
+        Logger::LEVEL_PROFILE => \LOG_DEBUG,
+        Logger::LEVEL_INFO => \LOG_INFO,
+        Logger::LEVEL_WARNING => \LOG_WARNING,
+        Logger::LEVEL_ERROR => \LOG_ERR,
     ];
 
     /**
@@ -63,7 +63,7 @@ class SyslogTarget extends Target
         parent::init();
 
         if ($this->options === null) {
-            $this->options = LOG_ODELAY | LOG_PID;
+            $this->options = \LOG_ODELAY | \LOG_PID;
         }
     }
 
@@ -75,14 +75,14 @@ class SyslogTarget extends Target
      */
     public function export(): void
     {
-        openlog($this->identity, $this->options, $this->facility);
+        \openlog($this->identity, $this->options, $this->facility);
 
         foreach ($this->messages as $message) {
-            if (syslog($this->_syslogLevels[$message[1]], $this->formatMessage($message)) === false) {
+            if (\syslog($this->_syslogLevels[$message[1]], $this->formatMessage($message)) === false) {
                 throw new LogRuntimeException('Unable to export log through system log!');
             }
         }
-        closelog();
+        \closelog();
     }
 
     /**
@@ -93,7 +93,7 @@ class SyslogTarget extends Target
         [$text, $level, $category, $timestamp] = $message;
         $level = Logger::getLevelName($level);
 
-        if (!is_string($text)) {
+        if (!\is_string($text)) {
             // exceptions may not be serializable if in the call stack somewhere is a Closure
             if ($text instanceof Exception || $text instanceof Throwable) {
                 $text = (string) $text;

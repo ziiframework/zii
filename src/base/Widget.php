@@ -123,7 +123,7 @@ class Widget extends Component implements ViewContextInterface
     public static function end()
     {
         if (!empty(self::$stack)) {
-            $widget = array_pop(self::$stack);
+            $widget = \array_pop(self::$stack);
 
             $calledClass = static::class;
 
@@ -131,7 +131,7 @@ class Widget extends Component implements ViewContextInterface
                 $calledClass = Yii::$container->getDefinitions()[$calledClass]['class'];
             }
 
-            if (get_class($widget) === $calledClass) {
+            if (\get_class($widget) === $calledClass) {
                 /* @var $widget Widget */
                 if ($widget->beforeRun()) {
                     $result = $widget->run();
@@ -142,7 +142,7 @@ class Widget extends Component implements ViewContextInterface
                 return $widget;
             }
 
-            throw new InvalidCallException('Expecting end() of ' . get_class($widget) . ', found ' . static::class);
+            throw new InvalidCallException('Expecting end() of ' . \get_class($widget) . ', found ' . static::class);
         }
 
         throw new InvalidCallException('Unexpected ' . static::class . '::end() call. A matching begin() is not found.');
@@ -160,8 +160,8 @@ class Widget extends Component implements ViewContextInterface
      */
     public static function widget($config = [])
     {
-        ob_start();
-        ob_implicit_flush(false);
+        \ob_start();
+        \ob_implicit_flush(false);
 
         try {
             /* @var $widget Widget */
@@ -175,21 +175,21 @@ class Widget extends Component implements ViewContextInterface
             }
         } catch (Exception $e) {
             // close the output buffer opened above if it has not been closed already
-            if (ob_get_level() > 0) {
-                ob_end_clean();
+            if (\ob_get_level() > 0) {
+                \ob_end_clean();
             }
 
             throw $e;
         } catch (Throwable $e) {
             // close the output buffer opened above if it has not been closed already
-            if (ob_get_level() > 0) {
-                ob_end_clean();
+            if (\ob_get_level() > 0) {
+                \ob_end_clean();
             }
 
             throw $e;
         }
 
-        return ob_get_clean() . $out;
+        return \ob_get_clean() . $out;
     }
 
     private $_id;
@@ -310,7 +310,7 @@ class Widget extends Component implements ViewContextInterface
     {
         $class = new ReflectionClass($this);
 
-        return dirname($class->getFileName()) . DIRECTORY_SEPARATOR . 'views';
+        return \dirname($class->getFileName()) . \DIRECTORY_SEPARATOR . 'views';
     }
 
     /**

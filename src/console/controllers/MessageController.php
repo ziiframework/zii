@@ -181,7 +181,7 @@ class MessageController extends \yii\console\Controller
      */
     public function options($actionID)
     {
-        return array_merge(parent::options($actionID), [
+        return \array_merge(parent::options($actionID), [
             'sourcePath',
             'messagePath',
             'languages',
@@ -210,7 +210,7 @@ class MessageController extends \yii\console\Controller
      */
     public function optionAliases()
     {
-        return array_merge(parent::optionAliases(), [
+        return \array_merge(parent::optionAliases(), [
             'c' => 'catalog',
             'e' => 'except',
             'f' => 'format',
@@ -244,9 +244,9 @@ class MessageController extends \yii\console\Controller
     public function actionConfig($filePath)
     {
         $filePath = Yii::getAlias($filePath);
-        $dir = dirname($filePath);
+        $dir = \dirname($filePath);
 
-        if (file_exists($filePath)) {
+        if (\file_exists($filePath)) {
             if (!$this->confirm("File '{$filePath}' already exists. Do you wish to overwrite it?")) {
                 return ExitCode::OK;
             }
@@ -269,7 +269,7 @@ return $array;
 
 EOD;
 
-        if (FileHelper::createDirectory($dir) === false || file_put_contents($filePath, $content, LOCK_EX) === false) {
+        if (FileHelper::createDirectory($dir) === false || \file_put_contents($filePath, $content, \LOCK_EX) === false) {
             $this->stdout("Configuration file was NOT created: '{$filePath}'.\n\n", Console::FG_RED);
 
             return ExitCode::UNSPECIFIED_ERROR;
@@ -297,13 +297,13 @@ EOD;
     {
         $filePath = Yii::getAlias($filePath);
 
-        if (file_exists($filePath)) {
+        if (\file_exists($filePath)) {
             if (!$this->confirm("File '{$filePath}' already exists. Do you wish to overwrite it?")) {
                 return ExitCode::OK;
             }
         }
 
-        if (!copy(Yii::getAlias('@yii/views/messageConfig.php'), $filePath)) {
+        if (!\copy(Yii::getAlias('@yii/views/messageConfig.php'), $filePath)) {
             $this->stdout("Configuration file template was NOT created at '{$filePath}'.\n\n", Console::FG_RED);
 
             return ExitCode::UNSPECIFIED_ERROR;
@@ -330,21 +330,21 @@ EOD;
     {
         $this->initConfig($configFile);
 
-        $files = FileHelper::findFiles(realpath($this->config['sourcePath']), $this->config);
+        $files = FileHelper::findFiles(\realpath($this->config['sourcePath']), $this->config);
 
         $messages = [];
 
         foreach ($files as $file) {
-            $messages = array_merge_recursive($messages, $this->extractMessages($file, $this->config['translator'], $this->config['ignoreCategories']));
+            $messages = \array_merge_recursive($messages, $this->extractMessages($file, $this->config['translator'], $this->config['ignoreCategories']));
         }
 
         $catalog = $this->config['catalog'] ?? 'messages';
 
-        if (in_array($this->config['format'], ['php', 'po'])) {
+        if (\in_array($this->config['format'], ['php', 'po'])) {
             foreach ($this->config['languages'] as $language) {
-                $dir = $this->config['messagePath'] . DIRECTORY_SEPARATOR . $language;
+                $dir = $this->config['messagePath'] . \DIRECTORY_SEPARATOR . $language;
 
-                if (!is_dir($dir) && !@mkdir($dir)) {
+                if (!\is_dir($dir) && !@\mkdir($dir)) {
                     throw new Exception("Directory '{$dir}' can not be created.");
                 }
 
@@ -394,36 +394,36 @@ EOD;
         $missingLanguages = [];
 
         if (!empty($currentLanguages)) {
-            $missingLanguages = array_diff($languages, $currentLanguages);
+            $missingLanguages = \array_diff($languages, $currentLanguages);
         }
 
         $new = [];
         $obsolete = [];
 
         foreach ($messages as $category => $msgs) {
-            $msgs = array_unique($msgs);
+            $msgs = \array_unique($msgs);
 
             if (isset($currentMessages[$category])) {
-                $new[$category] = array_diff($msgs, $currentMessages[$category]);
-                $obsolete += array_diff($currentMessages[$category], $msgs);
+                $new[$category] = \array_diff($msgs, $currentMessages[$category]);
+                $obsolete += \array_diff($currentMessages[$category], $msgs);
             } else {
                 $new[$category] = $msgs;
             }
         }
 
-        foreach (array_diff(array_keys($currentMessages), array_keys($messages)) as $category) {
+        foreach (\array_diff(\array_keys($currentMessages), \array_keys($messages)) as $category) {
             $obsolete += $currentMessages[$category];
         }
 
         if (!$removeUnused) {
             foreach ($obsolete as $pk => $msg) {
-                if (strncmp($msg, '@@', 2) === 0 && substr($msg, -2) === '@@') {
+                if (\strncmp($msg, '@@', 2) === 0 && \substr($msg, -2) === '@@') {
                     unset($obsolete[$pk]);
                 }
             }
         }
 
-        $obsolete = array_keys($obsolete);
+        $obsolete = \array_keys($obsolete);
         $this->stdout('Inserting new messages...');
         $savedFlag = false;
 
@@ -507,14 +507,14 @@ EOD;
         $this->stdout($fileName, Console::FG_CYAN);
         $this->stdout("...\n");
 
-        $subject = file_get_contents($fileName);
+        $subject = \file_get_contents($fileName);
         $messages = [];
-        $tokens = token_get_all($subject);
+        $tokens = \token_get_all($subject);
 
         foreach ((array) $translator as $currentTranslator) {
-            $translatorTokens = token_get_all('<?php ' . $currentTranslator);
-            array_shift($translatorTokens);
-            $messages = array_merge_recursive($messages, $this->extractMessagesFromTokens($tokens, $translatorTokens, $ignoreCategories));
+            $translatorTokens = \token_get_all('<?php ' . $currentTranslator);
+            \array_shift($translatorTokens);
+            $messages = \array_merge_recursive($messages, $this->extractMessagesFromTokens($tokens, $translatorTokens, $ignoreCategories));
         }
 
         $this->stdout("\n");
@@ -534,7 +534,7 @@ EOD;
     protected function extractMessagesFromTokens(array $tokens, array $translatorTokens, array $ignoreCategories)
     {
         $messages = [];
-        $translatorTokensCount = count($translatorTokens);
+        $translatorTokensCount = \count($translatorTokens);
         $matchedTokensCount = 0;
         $buffer = [];
         $pendingParenthesisCount = 0;
@@ -556,29 +556,29 @@ EOD;
 
                     if ($pendingParenthesisCount === 0) {
                         // end of translator call or end of something that we can't extract
-                        if (isset($buffer[0][0], $buffer[1], $buffer[2][0]) && $buffer[0][0] === T_CONSTANT_ENCAPSED_STRING && $buffer[1] === ',' && $buffer[2][0] === T_CONSTANT_ENCAPSED_STRING) {
+                        if (isset($buffer[0][0], $buffer[1], $buffer[2][0]) && $buffer[0][0] === \T_CONSTANT_ENCAPSED_STRING && $buffer[1] === ',' && $buffer[2][0] === \T_CONSTANT_ENCAPSED_STRING) {
                             // is valid call we can extract
-                            $category = stripcslashes($buffer[0][1]);
-                            $category = mb_substr($category, 1, -1);
+                            $category = \stripcslashes($buffer[0][1]);
+                            $category = \mb_substr($category, 1, -1);
 
                             if (!$this->isCategoryIgnored($category, $ignoreCategories)) {
-                                $fullMessage = mb_substr($buffer[2][1], 1, -1);
+                                $fullMessage = \mb_substr($buffer[2][1], 1, -1);
                                 $i = 3;
 
-                                while ($i < count($buffer) - 1 && !is_array($buffer[$i]) && $buffer[$i] === '.') {
-                                    $fullMessage .= mb_substr($buffer[$i + 1][1], 1, -1);
+                                while ($i < \count($buffer) - 1 && !\is_array($buffer[$i]) && $buffer[$i] === '.') {
+                                    $fullMessage .= \mb_substr($buffer[$i + 1][1], 1, -1);
                                     $i += 2;
                                 }
 
-                                $message = stripcslashes($fullMessage);
+                                $message = \stripcslashes($fullMessage);
                                 $messages[$category][] = $message;
                             }
 
-                            $nestedTokens = array_slice($buffer, 3);
+                            $nestedTokens = \array_slice($buffer, 3);
 
-                            if (count($nestedTokens) > $translatorTokensCount) {
+                            if (\count($nestedTokens) > $translatorTokensCount) {
                                 // search for possible nested translator calls
-                                $messages = array_merge_recursive($messages, $this->extractMessagesFromTokens($nestedTokens, $translatorTokens, $ignoreCategories));
+                                $messages = \array_merge_recursive($messages, $this->extractMessagesFromTokens($nestedTokens, $translatorTokens, $ignoreCategories));
                             }
                         } else {
                             // invalid call or dynamic call we can't extract
@@ -602,10 +602,10 @@ EOD;
                     if ($pendingParenthesisCount === 0) {
                         $previousTokenIndex = $tokenIndex - $matchedTokensCount - 1;
 
-                        if (is_array($tokens[$previousTokenIndex])) {
+                        if (\is_array($tokens[$previousTokenIndex])) {
                             $previousToken = $tokens[$previousTokenIndex][0];
 
-                            if (in_array($previousToken, [T_OBJECT_OPERATOR, T_PAAMAYIM_NEKUDOTAYIM], true)) {
+                            if (\in_array($previousToken, [\T_OBJECT_OPERATOR, \T_PAAMAYIM_NEKUDOTAYIM], true)) {
                                 $matchedTokensCount = 0;
 
                                 continue;
@@ -617,7 +617,7 @@ EOD;
                         $buffer[] = $token;
                     }
                     ++$pendingParenthesisCount;
-                } elseif (isset($token[0]) && !in_array($token[0], [T_WHITESPACE, T_COMMENT])) {
+                } elseif (isset($token[0]) && !\in_array($token[0], [\T_WHITESPACE, \T_COMMENT])) {
                     // ignore comments and whitespaces
                     $buffer[] = $token;
                 }
@@ -645,12 +645,12 @@ EOD;
     protected function isCategoryIgnored($category, array $ignoreCategories)
     {
         if (!empty($ignoreCategories)) {
-            if (in_array($category, $ignoreCategories, true)) {
+            if (\in_array($category, $ignoreCategories, true)) {
                 return true;
             }
 
             foreach ($ignoreCategories as $pattern) {
-                if (strpos($pattern, '*') > 0 && str_starts_with($category, rtrim($pattern, '*'))) {
+                if (\strpos($pattern, '*') > 0 && \str_starts_with($category, \rtrim($pattern, '*'))) {
                     return true;
                 }
             }
@@ -671,7 +671,7 @@ EOD;
      */
     protected function tokensEqual($a, $b)
     {
-        if (is_string($a) && is_string($b)) {
+        if (\is_string($a) && \is_string($b)) {
             return $a === $b;
         }
 
@@ -715,17 +715,17 @@ EOD;
     protected function saveMessagesToPHP($messages, $dirName, $overwrite, $removeUnused, $sort, $markUnused): void
     {
         foreach ($messages as $category => $msgs) {
-            $file = str_replace('\\', '/', "$dirName/$category.php");
-            $path = dirname($file);
+            $file = \str_replace('\\', '/', "$dirName/$category.php");
+            $path = \dirname($file);
             FileHelper::createDirectory($path);
-            $msgs = array_values(array_unique($msgs));
+            $msgs = \array_values(\array_unique($msgs));
             $coloredFileName = Console::ansiFormat($file, [Console::FG_CYAN]);
             $this->stdout("Saving messages to $coloredFileName...\n");
             $this->saveMessagesCategoryToPHP($msgs, $file, $overwrite, $removeUnused, $sort, $category, $markUnused);
         }
 
         if ($removeUnused) {
-            $this->deleteUnusedPhpMessageFiles(array_keys($messages), $dirName);
+            $this->deleteUnusedPhpMessageFiles(\array_keys($messages), $dirName);
         }
     }
 
@@ -744,13 +744,13 @@ EOD;
      */
     protected function saveMessagesCategoryToPHP($messages, $fileName, $overwrite, $removeUnused, $sort, $category, $markUnused)
     {
-        if (is_file($fileName)) {
+        if (\is_file($fileName)) {
             $rawExistingMessages = require $fileName;
             $existingMessages = $rawExistingMessages;
-            sort($messages);
-            ksort($existingMessages);
+            \sort($messages);
+            \ksort($existingMessages);
 
-            if (array_keys($existingMessages) === $messages && (!$sort || array_keys($rawExistingMessages) === $messages)) {
+            if (\array_keys($existingMessages) === $messages && (!$sort || \array_keys($rawExistingMessages) === $messages)) {
                 $this->stdout("Nothing new in \"$category\" category... Nothing to save.\n\n", Console::FG_GREEN);
 
                 return ExitCode::OK;
@@ -760,34 +760,34 @@ EOD;
             $untranslated = [];
 
             foreach ($messages as $message) {
-                if (array_key_exists($message, $existingMessages) && $existingMessages[$message] !== '') {
+                if (\array_key_exists($message, $existingMessages) && $existingMessages[$message] !== '') {
                     $merged[$message] = $existingMessages[$message];
                 } else {
                     $untranslated[] = $message;
                 }
             }
-            ksort($merged);
-            sort($untranslated);
+            \ksort($merged);
+            \sort($untranslated);
             $todo = [];
 
             foreach ($untranslated as $message) {
                 $todo[$message] = '';
             }
-            ksort($existingMessages);
+            \ksort($existingMessages);
 
             foreach ($existingMessages as $message => $translation) {
                 if (!$removeUnused && !isset($merged[$message]) && !isset($todo[$message])) {
-                    if (!$markUnused || (!empty($translation) && (strncmp($translation, '@@', 2) === 0 && substr_compare($translation, '@@', -2, 2) === 0))) {
+                    if (!$markUnused || (!empty($translation) && (\strncmp($translation, '@@', 2) === 0 && \substr_compare($translation, '@@', -2, 2) === 0))) {
                         $todo[$message] = $translation;
                     } else {
                         $todo[$message] = '@@' . $translation . '@@';
                     }
                 }
             }
-            $merged = array_merge($merged, $todo);
+            $merged = \array_merge($merged, $todo);
 
             if ($sort) {
-                ksort($merged);
+                \ksort($merged);
             }
 
             if (false === $overwrite) {
@@ -800,7 +800,7 @@ EOD;
             foreach ($messages as $message) {
                 $merged[$message] = '';
             }
-            ksort($merged);
+            \ksort($merged);
         }
 
         $array = VarDumper::export($merged);
@@ -811,7 +811,7 @@ return $array;
 
 EOD;
 
-        if (file_put_contents($fileName, $content, LOCK_EX) === false) {
+        if (\file_put_contents($fileName, $content, \LOCK_EX) === false) {
             $this->stdout("Translation was NOT saved.\n\n", Console::FG_RED);
 
             return ExitCode::UNSPECIFIED_ERROR;
@@ -835,8 +835,8 @@ EOD;
      */
     protected function saveMessagesToPO($messages, $dirName, $overwrite, $removeUnused, $sort, $catalog, $markUnused): void
     {
-        $file = str_replace('\\', '/', "$dirName/$catalog.po");
-        FileHelper::createDirectory(dirname($file));
+        $file = \str_replace('\\', '/', "$dirName/$catalog.po");
+        FileHelper::createDirectory(\dirname($file));
         $this->stdout("Saving messages to $file...\n");
 
         $poFile = new GettextPoFile();
@@ -848,70 +848,70 @@ EOD;
 
         foreach ($messages as $category => $msgs) {
             $notTranslatedYet = [];
-            $msgs = array_values(array_unique($msgs));
+            $msgs = \array_values(\array_unique($msgs));
 
-            if (is_file($file)) {
+            if (\is_file($file)) {
                 $existingMessages = $poFile->load($file, $category);
 
-                sort($msgs);
-                ksort($existingMessages);
+                \sort($msgs);
+                \ksort($existingMessages);
 
-                if (array_keys($existingMessages) == $msgs) {
+                if (\array_keys($existingMessages) == $msgs) {
                     $this->stdout("Nothing new in \"$category\" category...\n");
 
-                    sort($msgs);
+                    \sort($msgs);
 
                     foreach ($msgs as $message) {
-                        $merged[$category . chr(4) . $message] = $existingMessages[$message];
+                        $merged[$category . \chr(4) . $message] = $existingMessages[$message];
                     }
-                    ksort($merged);
+                    \ksort($merged);
 
                     continue;
                 }
 
                 // merge existing message translations with new message translations
                 foreach ($msgs as $message) {
-                    if (array_key_exists($message, $existingMessages) && $existingMessages[$message] !== '') {
-                        $merged[$category . chr(4) . $message] = $existingMessages[$message];
+                    if (\array_key_exists($message, $existingMessages) && $existingMessages[$message] !== '') {
+                        $merged[$category . \chr(4) . $message] = $existingMessages[$message];
                     } else {
                         $notTranslatedYet[] = $message;
                     }
                 }
-                ksort($merged);
-                sort($notTranslatedYet);
+                \ksort($merged);
+                \sort($notTranslatedYet);
 
                 // collect not yet translated messages
                 foreach ($notTranslatedYet as $message) {
-                    $todos[$category . chr(4) . $message] = '';
+                    $todos[$category . \chr(4) . $message] = '';
                 }
 
                 // add obsolete unused messages
                 foreach ($existingMessages as $message => $translation) {
-                    if (!$removeUnused && !isset($merged[$category . chr(4) . $message]) && !isset($todos[$category . chr(4) . $message])) {
-                        if (!$markUnused || (!empty($translation) && (substr($translation, 0, 2) === '@@' && substr($translation, -2) === '@@'))) {
-                            $todos[$category . chr(4) . $message] = $translation;
+                    if (!$removeUnused && !isset($merged[$category . \chr(4) . $message]) && !isset($todos[$category . \chr(4) . $message])) {
+                        if (!$markUnused || (!empty($translation) && (\substr($translation, 0, 2) === '@@' && \substr($translation, -2) === '@@'))) {
+                            $todos[$category . \chr(4) . $message] = $translation;
                         } else {
-                            $todos[$category . chr(4) . $message] = '@@' . $translation . '@@';
+                            $todos[$category . \chr(4) . $message] = '@@' . $translation . '@@';
                         }
                     }
                 }
 
-                $merged = array_merge($merged, $todos);
+                $merged = \array_merge($merged, $todos);
 
                 if ($sort) {
-                    ksort($merged);
+                    \ksort($merged);
                 }
 
                 if ($overwrite === false) {
                     $file .= '.merged';
                 }
             } else {
-                sort($msgs);
+                \sort($msgs);
 
                 foreach ($msgs as $message) {
-                    $merged[$category . chr(4) . $message] = '';
+                    $merged[$category . \chr(4) . $message] = '';
                 }
-                ksort($merged);
+                \ksort($merged);
             }
             $this->stdout("Category \"$category\" merged.\n");
             $hasSomethingToWrite = true;
@@ -936,8 +936,8 @@ EOD;
      */
     protected function saveMessagesToPOT($messages, $dirName, $catalog): void
     {
-        $file = str_replace('\\', '/', "$dirName/$catalog.pot");
-        FileHelper::createDirectory(dirname($file));
+        $file = \str_replace('\\', '/', "$dirName/$catalog.pot");
+        FileHelper::createDirectory(\dirname($file));
         $this->stdout("Saving messages to $file...\n");
 
         $poFile = new GettextPoFile();
@@ -947,19 +947,19 @@ EOD;
         $hasSomethingToWrite = false;
 
         foreach ($messages as $category => $msgs) {
-            $msgs = array_values(array_unique($msgs));
+            $msgs = \array_values(\array_unique($msgs));
 
-            sort($msgs);
+            \sort($msgs);
 
             foreach ($msgs as $message) {
-                $merged[$category . chr(4) . $message] = '';
+                $merged[$category . \chr(4) . $message] = '';
             }
             $this->stdout("Category \"$category\" merged.\n");
             $hasSomethingToWrite = true;
         }
 
         if ($hasSomethingToWrite) {
-            ksort($merged);
+            \ksort($merged);
             $poFile->save($file, $merged);
             $this->stdout("Translation saved.\n", Console::FG_GREEN);
         } else {
@@ -972,13 +972,13 @@ EOD;
         $messageFiles = FileHelper::findFiles($dirName);
 
         foreach ($messageFiles as $messageFile) {
-            $categoryFileName = str_replace($dirName, '', $messageFile);
-            $categoryFileName = ltrim($categoryFileName, DIRECTORY_SEPARATOR);
-            $category = preg_replace('#\.php$#', '', $categoryFileName);
-            $category = str_replace(DIRECTORY_SEPARATOR, '/', $category);
+            $categoryFileName = \str_replace($dirName, '', $messageFile);
+            $categoryFileName = \ltrim($categoryFileName, \DIRECTORY_SEPARATOR);
+            $category = \preg_replace('#\.php$#', '', $categoryFileName);
+            $category = \str_replace(\DIRECTORY_SEPARATOR, '/', $category);
 
-            if (!in_array($category, $existingCategories, true)) {
-                unlink($messageFile);
+            if (!\in_array($category, $existingCategories, true)) {
+                \unlink($messageFile);
             }
         }
     }
@@ -997,13 +997,13 @@ EOD;
         if ($configFile !== null) {
             $configFile = Yii::getAlias($configFile);
 
-            if (!is_file($configFile)) {
+            if (!\is_file($configFile)) {
                 throw new Exception("The configuration file does not exist: $configFile");
             }
             $configFileContent = require $configFile;
         }
 
-        $this->config = array_merge($this->getOptionValues($this->action->id), $configFileContent, $this->getPassedOptionValues());
+        $this->config = \array_merge($this->getOptionValues($this->action->id), $configFileContent, $this->getPassedOptionValues());
         $this->config['sourcePath'] = Yii::getAlias($this->config['sourcePath']);
         $this->config['messagePath'] = Yii::getAlias($this->config['messagePath']);
 
@@ -1011,20 +1011,20 @@ EOD;
             throw new Exception('The configuration file must specify "sourcePath" and "languages".');
         }
 
-        if (!is_dir($this->config['sourcePath'])) {
+        if (!\is_dir($this->config['sourcePath'])) {
             throw new Exception("The source path {$this->config['sourcePath']} is not a valid directory.");
         }
 
-        if (empty($this->config['format']) || !in_array($this->config['format'], ['php', 'po', 'pot', 'db'])) {
+        if (empty($this->config['format']) || !\in_array($this->config['format'], ['php', 'po', 'pot', 'db'])) {
             throw new Exception('Format should be either "php", "po", "pot" or "db".');
         }
 
-        if (in_array($this->config['format'], ['php', 'po', 'pot'])) {
+        if (\in_array($this->config['format'], ['php', 'po', 'pot'])) {
             if (!isset($this->config['messagePath'])) {
                 throw new Exception('The configuration file must specify "messagePath".');
             }
 
-            if (!is_dir($this->config['messagePath'])) {
+            if (!\is_dir($this->config['messagePath'])) {
                 throw new Exception("The message path {$this->config['messagePath']} is not a valid directory.");
             }
         }

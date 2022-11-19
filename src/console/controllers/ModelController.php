@@ -242,7 +242,7 @@ class ModelController extends Controller
     {
         $tableNames = Yii::$app->db->getSchema()->getTableNames('', true);
 
-        $exclude = array_merge([
+        $exclude = \array_merge([
             'dbcache',
             'dbsession',
             'dbqueue',
@@ -254,7 +254,7 @@ class ModelController extends Controller
         ], $this->exclude);
 
         foreach ($tableNames as $tableName) {
-            if (!in_array($tableName, $exclude, true)) {
+            if (!\in_array($tableName, $exclude, true)) {
                 $this->actionGii($tableName, $this->override);
             }
         }
@@ -304,16 +304,16 @@ class ModelController extends Controller
                 $varType = 'int';
             }
 
-            if (str_contains($column->dbType, 'decimal')) {
+            if (\str_contains($column->dbType, 'decimal')) {
                 $varType = 'float';
             }
 
-            if (str_contains($column->dbType, 'tinyint') && preg_match('/^(is|has|can|enable|use|require)_/', $column->name)) {
+            if (\str_contains($column->dbType, 'tinyint') && \preg_match('/^(is|has|can|enable|use|require)_/', $column->name)) {
                 $varType = 'bool';
             }
 
             if ($column->isPrimaryKey) {
-                $this->_targetClass->addComment(implode(' ', [
+                $this->_targetClass->addComment(\implode(' ', [
                     '@property',
                     $varType,
                     '$' . $column->name,
@@ -321,7 +321,7 @@ class ModelController extends Controller
                     "This property is PrimaryKey.",
                 ]));
             } else {
-                $this->_targetClass->addComment(implode(' ', [
+                $this->_targetClass->addComment(\implode(' ', [
                     '@property',
                     $varType . ($column->allowNull ? '|null' : ''),
                     '$' . $column->name,
@@ -330,7 +330,7 @@ class ModelController extends Controller
                 ]));
             }
 
-            if (in_array($column->name, array_keys(self::$specialKeys), true)) {
+            if (\in_array($column->name, \array_keys(self::$specialKeys), true)) {
                 continue;
             }
 
@@ -353,13 +353,13 @@ class ModelController extends Controller
             $this->_targetClass->addMethod('behaviors')
                 ->setReturnType('array')
                 // ->addComment('@inheritdoc')
-                ->setBody(implode("\n", array_merge(
+                ->setBody(\implode("\n", \array_merge(
                     [
                         '$behaviors = parent::behaviors();' . "\n",
                     ],
-                    array_map(function (string $k, string $v): string {
+                    \array_map(function (string $k, string $v): string {
                         return "\$behaviors['typecast']['attributeTypes']['$k'] = AttributeTypecastBehavior::$v;";
-                    }, array_keys($this->_typeCastAttributes), array_values($this->_typeCastAttributes)),
+                    }, \array_keys($this->_typeCastAttributes), \array_values($this->_typeCastAttributes)),
                     [
                         "\n" . 'return $behaviors;',
                     ]
@@ -373,22 +373,22 @@ class ModelController extends Controller
             ->setBody('return ?;', [$this->_primaryKeys]);
 
         // public function attributeLabels()
-        $_fields = array_column($_schema->columns, 'name');
-        $_comments = array_column($_schema->columns, 'comment');
+        $_fields = \array_column($_schema->columns, 'name');
+        $_comments = \array_column($_schema->columns, 'comment');
 
         // for field without comment
         foreach ($_comments as $_ci => $_c) {
-            if (!is_string($_c) || trim($_c) === '') {
-                $_comments[$_ci] = strtoupper($_fields[$_ci]);
+            if (!\is_string($_c) || \trim($_c) === '') {
+                $_comments[$_ci] = \strtoupper($_fields[$_ci]);
             }
         }
 
         $this->_targetClass->addMethod('attributeLabels')
             ->setReturnType('array')
             ->setBody('return array_merge(parent::attributeLabels(), ?);', [
-                    array_combine(
+                    \array_combine(
                         $_fields,
-                        array_map(static fn(string $value): string => "%zii_t(\"$value\")%", $_comments)
+                        \array_map(static fn(string $value): string => "%zii_t(\"$value\")%", $_comments)
                     ),
                 ]
             );
@@ -409,7 +409,7 @@ class ModelController extends Controller
             ->setReturnType('array')
             // ->addComment('@inheritdoc')
             ->setBody('return array_merge(parent::extraFields(), ?);', [
-                array_map(fn (string $field): string => 'db' . $this->getRelationMethodName($field), array_column($this->_ruleExist, 'name')),
+                \array_map(fn (string $field): string => 'db' . $this->getRelationMethodName($field), \array_column($this->_ruleExist, 'name')),
             ]);
 
         // rules
@@ -456,16 +456,16 @@ class ModelController extends Controller
 
         $file = Yii::getAlias($this->modelDir) . '/Base' . Inflector::camelize($tableName) . '.php';
 
-        if ($override === true || !file_exists($file)) {
-            $objectBody = str_replace(array_keys(self::$_codeReplacements), array_values(self::$_codeReplacements), (string) $this->_targetNamespace);
-            $objectBody = preg_replace('/["]([^$"]+)["]/u', "'$1'", $objectBody);
-            $objectBody = preg_replace('/["](\s+)(\d+)(\s+)["]/u', "'$1$2$3'", $objectBody);
-            $objectBody = preg_replace('/["](\s+)(\d+)["]/u', "'$1$2'", $objectBody);
+        if ($override === true || !\file_exists($file)) {
+            $objectBody = \str_replace(\array_keys(self::$_codeReplacements), \array_values(self::$_codeReplacements), (string) $this->_targetNamespace);
+            $objectBody = \preg_replace('/["]([^$"]+)["]/u', "'$1'", $objectBody);
+            $objectBody = \preg_replace('/["](\s+)(\d+)(\s+)["]/u', "'$1$2$3'", $objectBody);
+            $objectBody = \preg_replace('/["](\s+)(\d+)["]/u', "'$1$2'", $objectBody);
 
-            if (file_put_contents($file, "<?php\n\ndeclare(strict_types=1);\n\n" . $objectBody) !== false) {
-                $fileContent = file_get_contents($file);
-                $fileContent = str_replace(': \\?', ': ?', $fileContent);
-                file_put_contents($file, $fileContent);
+            if (\file_put_contents($file, "<?php\n\ndeclare(strict_types=1);\n\n" . $objectBody) !== false) {
+                $fileContent = \file_get_contents($file);
+                $fileContent = \str_replace(': \\?', ': ?', $fileContent);
+                \file_put_contents($file, $fileContent);
                 echo '✔ Successfully created abstract model Base' . Inflector::camelize($tableName) . "\n";
                 $this->createAbstractModelInstance($tableName);
                 $this->fixCodeStyle($file);
@@ -482,7 +482,7 @@ class ModelController extends Controller
     {
         $file = Yii::getAlias($this->modelDir) . "/" . Inflector::camelize($tableName) . '.php';
 
-        if (file_exists($file)) {
+        if (\file_exists($file)) {
             echo "Skipped createAbstractModelInstance()\n";
             return;
         }
@@ -493,7 +493,7 @@ class ModelController extends Controller
         $class->setExtends('\\Zpp\\Models\\Base' . Inflector::camelize($tableName));
         $class->setFinal();
 
-        if (file_put_contents($file, "<?php\n\ndeclare(strict_types=1);\n\n" . $namespace->__toString()) !== false) {
+        if (\file_put_contents($file, "<?php\n\ndeclare(strict_types=1);\n\n" . $namespace->__toString()) !== false) {
             echo '✔ Successfully created model ' . Inflector::camelize($tableName);
         } else {
             echo '✘ Failed to create model ' . Inflector::camelize($tableName);
@@ -502,20 +502,20 @@ class ModelController extends Controller
 
     private function fixCodeStyle(string $file): void
     {
-        $rootDir = dirname(Yii::getAlias('@webroot'));
+        $rootDir = \dirname(Yii::getAlias('@webroot'));
 
         $cmd = "php D:/phpcsfixer.phar --version  2>&1";
-        exec($cmd, $output, $outCode);
+        \exec($cmd, $output, $outCode);
         echo "exec: $cmd" . "\n",
-            implode("\n", $output)
+            \implode("\n", $output)
             . "\nresult code: $outCode\n";
         unset($cmd, $output, $outCode);
 
         $cmd = "php D:/phpcsfixer.phar --config=$rootDir/.php-cs-fixer.dist.php fix $file  2>&1";
-        exec($cmd, $output, $outCode);
-        echo implode("\n", $output) . "\nresult code: $outCode\n";
+        \exec($cmd, $output, $outCode);
+        echo \implode("\n", $output) . "\nresult code: $outCode\n";
         echo "exec: $cmd" . "\n",
-            implode("\n", $output)
+            \implode("\n", $output)
             . "\nresult code: $outCode\n";
         unset($cmd, $output, $outCode);
     }
@@ -531,7 +531,7 @@ class ModelController extends Controller
         if ($this->fieldTypeCast($column->dbType) === 'tinyint') {
             // $column->size === 1
             // Warning: #1681 Integer display width is deprecated and will be removed in a future release.
-            if (preg_match('/^(is|has|can|enable|use|require)_/', $column->name)) {
+            if (\preg_match('/^(is|has|can|enable|use|require)_/', $column->name)) {
                 $this->_typeCastAttributes[$column->name] = 'TYPE_BOOLEAN';
                 $this->_ruleBoolean[] = ['name' => $column->name];
             } else {
@@ -544,7 +544,7 @@ class ModelController extends Controller
         }
 
         // int
-        if (in_array($this->fieldTypeCast($column->dbType), ['smallint', 'mediumint', 'int', 'integer', 'bigint'], true)) {
+        if (\in_array($this->fieldTypeCast($column->dbType), ['smallint', 'mediumint', 'int', 'integer', 'bigint'], true)) {
             $this->_ruleInteger[] = [
                 'name' => $column->name,
                 'max' => $this->getColumnEdge($column),
@@ -604,13 +604,13 @@ class ModelController extends Controller
 
         // set
         if ($this->fieldTypeCast($column->dbType) === 'set') {
-            $isMatch = preg_match('/^([\w ]+)(?:\(([^)]+)\))?$/', $column->dbType, $matches);
+            $isMatch = \preg_match('/^([\w ]+)(?:\(([^)]+)\))?$/', $column->dbType, $matches);
 
             if ($isMatch !== false && !empty($matches[2])) {
-                $values = preg_split('/\s*,\s*/', $matches[2]);
+                $values = \preg_split('/\s*,\s*/', $matches[2]);
 
                 foreach ($values as $i => $value) {
-                    $values[$i] = trim($value, "'");
+                    $values[$i] = \trim($value, "'");
                 }
                 $this->_ruleRange[] = [
                     'name' => $column->name,
@@ -642,7 +642,7 @@ class ModelController extends Controller
                 ->addParameter('value');
 
             $rules[] = [
-                $this->arrayOrString(array_unique(array_merge(array_column($this->_ruleString, 'name'), array_column($this->_ruleRange, 'name')))),
+                $this->arrayOrString(\array_unique(\array_merge(\array_column($this->_ruleString, 'name'), \array_column($this->_ruleRange, 'name')))),
                 'filter',
                 'filter' => "%$closure%",
             ];
@@ -655,7 +655,7 @@ class ModelController extends Controller
                 ->addParameter('value');
 
             $rules[] = [
-                $this->arrayOrString(array_column($this->_ruleText, 'name')),
+                $this->arrayOrString(\array_column($this->_ruleText, 'name')),
                 'filter',
                 'filter' => "%$closure%",
             ];
@@ -734,9 +734,9 @@ class ModelController extends Controller
             }
 
             foreach ($groupBySize as $scale => $names) {
-                $scale0 = explode('--', $scale)[0];
-                $scale1 = explode('--', $scale)[1];
-                $scaleLength = mb_strlen(explode('.', $scale1)[1]);
+                $scale0 = \explode('--', $scale)[0];
+                $scale1 = \explode('--', $scale)[1];
+                $scaleLength = \mb_strlen(\explode('.', $scale1)[1]);
                 $scaleLengthSC = ['一', '两', '三', '四', '五', '六', '七'][$scaleLength - 1];
 
                 $rules[] = [
@@ -754,7 +754,7 @@ class ModelController extends Controller
         // Boolean Type
         if (!empty($this->_ruleBoolean)) {
             $rules[] = [
-                $this->arrayOrString(array_column($this->_ruleBoolean, 'name')),
+                $this->arrayOrString(\array_column($this->_ruleBoolean, 'name')),
                 'boolean',
                 'trueValue' => '1',
                 'falseValue' => '0',
@@ -777,7 +777,7 @@ class ModelController extends Controller
         // Required Type
         if (!empty($this->_ruleRequired)) {
             $rules[] = [
-                $this->arrayOrString(array_column($this->_ruleRequired, 'name')),
+                $this->arrayOrString(\array_column($this->_ruleRequired, 'name')),
                 'required',
                 'strict' => true,
                 'message' => '%"{attribute}" . " " . zii_t("不能为空")%',
@@ -803,7 +803,7 @@ class ModelController extends Controller
                     ->setBody("return \$this->hasOne({$item['targetClassName']}::class, ['{$item['targetAttribute']}' => '" . $item['name'] . "']);");
 
                 // Class Comment
-                $this->_targetClass->addComment(implode(' ', [
+                $this->_targetClass->addComment(\implode(' ', [
                     '@property',
                     $item['targetClassName'],
                     '$db' . $this->getRelationMethodName($item['name']),
@@ -834,14 +834,14 @@ class ModelController extends Controller
 
     private function arrayOrString($value)
     {
-        if (is_string($value)) {
+        if (\is_string($value)) {
             return $value;
         }
 
-        if (is_array($value)) {
-            $value = array_merge($value);
+        if (\is_array($value)) {
+            $value = \array_merge($value);
 
-            if (count($value, COUNT_RECURSIVE) === 1 && isset($value[0])) {
+            if (\count($value, \COUNT_RECURSIVE) === 1 && isset($value[0])) {
                 return $value[0];
             }
         }
@@ -851,7 +851,7 @@ class ModelController extends Controller
 
     private function getRelationMethodName(string $field): string
     {
-        return Inflector::camelize(str_replace(['_id', '_hashtag', 'ref_'], '', $field));
+        return Inflector::camelize(\str_replace(['_id', '_hashtag', 'ref_'], '', $field));
     }
 
     private function getTableComment(string $tableName): ?string
@@ -881,7 +881,7 @@ class ModelController extends Controller
 
     private function getTableForeignKeys(string $tableName): array
     {
-        preg_match('/dbname=([^;]+)/', Yii::$app->db->dsn, $matches);
+        \preg_match('/dbname=([^;]+)/', Yii::$app->db->dsn, $matches);
 
         $databaseName = $matches[1];
         $tableName = Yii::$app->db->schema->getRawTableName($tableName);
@@ -917,11 +917,11 @@ EOT;
 
     private function fieldTypeCast(string $dbType): string
     {
-        if (!str_contains($dbType, '(')) {
+        if (!\str_contains($dbType, '(')) {
             return $dbType;
         }
 
-        return explode('(', $dbType)[0];
+        return \explode('(', $dbType)[0];
     }
 
     /**
@@ -935,24 +935,24 @@ EOT;
 
         switch ($dbType) {
             case Schema::TYPE_TINYINT:
-                $max = $column->size === null || $column->size >= 3 ? 127 : str_repeat('9', $column->size);
+                $max = $column->size === null || $column->size >= 3 ? 127 : \str_repeat('9', $column->size);
 
                 break;
             case Schema::TYPE_SMALLINT:
-                $max = $column->size === null || $column->size >= 5 ? 32767 : str_repeat('9', $column->size);
+                $max = $column->size === null || $column->size >= 5 ? 32767 : \str_repeat('9', $column->size);
 
                 break;
             case 'mediumint':
-                $max = $column->size === null || $column->size >= 7 ? 8388607 : str_repeat('9', $column->size);
+                $max = $column->size === null || $column->size >= 7 ? 8388607 : \str_repeat('9', $column->size);
 
                 break;
             case 'int':
             case Schema::TYPE_INTEGER:
-                $max = $column->size === null || $column->size >= 10 ? 2147483647 : str_repeat('9', $column->size);
+                $max = $column->size === null || $column->size >= 10 ? 2147483647 : \str_repeat('9', $column->size);
 
                 break;
             case Schema::TYPE_BIGINT:
-                $max = $column->size === null || $column->size >= 19 ? 9223372036854775807 : str_repeat('9', $column->size);
+                $max = $column->size === null || $column->size >= 19 ? 9223372036854775807 : \str_repeat('9', $column->size);
 
                 break;
             case Schema::TYPE_DECIMAL:
@@ -961,10 +961,10 @@ EOT;
                 $scale = $column->scale === null ? 0 : $column->scale;
 
                 if ($edge === self::EDGE_MAX) {
-                    return str_repeat('9', $precision - $scale) . '.' . str_repeat('9', $scale);
+                    return \str_repeat('9', $precision - $scale) . '.' . \str_repeat('9', $scale);
                 }
                 if ($edge === self::EDGE_MIN) {
-                    return '0.' . str_repeat('0', $scale);
+                    return '0.' . \str_repeat('0', $scale);
                 }
 
                 return null;

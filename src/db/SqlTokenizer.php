@@ -94,7 +94,7 @@ abstract class SqlTokenizer extends Component
      */
     public function tokenize()
     {
-        $this->length = mb_strlen($this->sql, 'UTF-8');
+        $this->length = \mb_strlen($this->sql, 'UTF-8');
         $this->offset = 0;
         $this->_substrings = [];
         $this->_buffer = '';
@@ -218,12 +218,12 @@ abstract class SqlTokenizer extends Component
             return false;
         }
 
-        if (!is_array(reset($with))) {
-            usort($with, static fn ($string1, $string2) => mb_strlen($string2, 'UTF-8') - mb_strlen($string1, 'UTF-8'));
+        if (!\is_array(\reset($with))) {
+            \usort($with, static fn ($string1, $string2) => \mb_strlen($string2, 'UTF-8') - \mb_strlen($string1, 'UTF-8'));
             $map = [];
 
             foreach ($with as $string) {
-                $map[mb_strlen($string, 'UTF-8')][$caseSensitive ? $string : mb_strtoupper($string, 'UTF-8')] = true;
+                $map[\mb_strlen($string, 'UTF-8')][$caseSensitive ? $string : \mb_strtoupper($string, 'UTF-8')] = true;
             }
             $with = $map;
         }
@@ -263,11 +263,11 @@ abstract class SqlTokenizer extends Component
         $cacheKey = $offset . ',' . $length;
 
         if (!isset($this->_substrings[$cacheKey . ',1'])) {
-            $this->_substrings[$cacheKey . ',1'] = mb_substr($this->sql, $offset, $length, 'UTF-8');
+            $this->_substrings[$cacheKey . ',1'] = \mb_substr($this->sql, $offset, $length, 'UTF-8');
         }
 
         if (!$caseSensitive && !isset($this->_substrings[$cacheKey . ',0'])) {
-            $this->_substrings[$cacheKey . ',0'] = mb_strtoupper($this->_substrings[$cacheKey . ',1'], 'UTF-8');
+            $this->_substrings[$cacheKey . ',0'] = \mb_strtoupper($this->_substrings[$cacheKey . ',1'], 'UTF-8');
         }
 
         return $this->_substrings[$cacheKey . ',' . (int) $caseSensitive];
@@ -287,16 +287,16 @@ abstract class SqlTokenizer extends Component
             $offset = $this->offset;
         }
 
-        if ($offset + mb_strlen($string, 'UTF-8') > $this->length) {
+        if ($offset + \mb_strlen($string, 'UTF-8') > $this->length) {
             return $this->length;
         }
 
-        $afterIndexOf = mb_strpos($this->sql, $string, $offset, 'UTF-8');
+        $afterIndexOf = \mb_strpos($this->sql, $string, $offset, 'UTF-8');
 
         if ($afterIndexOf === false) {
             $afterIndexOf = $this->length;
         } else {
-            $afterIndexOf += mb_strlen($string, 'UTF-8');
+            $afterIndexOf += \mb_strlen($string, 'UTF-8');
         }
 
         return $afterIndexOf;
@@ -321,7 +321,7 @@ abstract class SqlTokenizer extends Component
         $this->addTokenFromBuffer();
         $this->_currentToken[] = new SqlToken([
             'type' => $isIdentifier ? SqlToken::TYPE_IDENTIFIER : SqlToken::TYPE_STRING_LITERAL,
-            'content' => is_string($content) ? $content : $this->substring($length),
+            'content' => \is_string($content) ? $content : $this->substring($length),
             'startOffset' => $this->offset,
             'endOffset' => $this->offset + $length,
         ]);
@@ -348,7 +348,7 @@ abstract class SqlTokenizer extends Component
             case '(':
                 $this->_currentToken[] = new SqlToken([
                     'type' => SqlToken::TYPE_OPERATOR,
-                    'content' => is_string($content) ? $content : $this->substring($length),
+                    'content' => \is_string($content) ? $content : $this->substring($length),
                     'startOffset' => $this->offset,
                     'endOffset' => $this->offset + $length,
                 ]);
@@ -375,7 +375,7 @@ abstract class SqlTokenizer extends Component
 
                 $this->_currentToken[] = new SqlToken([
                     'type' => SqlToken::TYPE_OPERATOR,
-                    'content' => is_string($content) ? $content : $this->substring($length),
+                    'content' => \is_string($content) ? $content : $this->substring($length),
                     'startOffset' => $this->offset,
                     'endOffset' => $this->offset + $length,
                 ]);
@@ -389,7 +389,7 @@ abstract class SqlTokenizer extends Component
             default:
                 $this->_currentToken[] = new SqlToken([
                     'type' => SqlToken::TYPE_OPERATOR,
-                    'content' => is_string($content) ? $content : $this->substring($length),
+                    'content' => \is_string($content) ? $content : $this->substring($length),
                     'startOffset' => $this->offset,
                     'endOffset' => $this->offset + $length,
                 ]);
@@ -411,8 +411,8 @@ abstract class SqlTokenizer extends Component
         $isKeyword = $this->isKeyword($this->_buffer, $content);
         $this->_currentToken[] = new SqlToken([
             'type' => $isKeyword ? SqlToken::TYPE_KEYWORD : SqlToken::TYPE_TOKEN,
-            'content' => is_string($content) ? $content : $this->_buffer,
-            'startOffset' => $this->offset - mb_strlen($this->_buffer, 'UTF-8'),
+            'content' => \is_string($content) ? $content : $this->_buffer,
+            'startOffset' => $this->offset - \mb_strlen($this->_buffer, 'UTF-8'),
             'endOffset' => $this->offset,
         ]);
         $this->_buffer = '';

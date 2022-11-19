@@ -129,7 +129,7 @@ class Instance
      */
     public static function ensure($reference, $type = null, $container = null)
     {
-        if (is_array($reference)) {
+        if (\is_array($reference)) {
             $class = $reference['class'] ?? $type;
 
             if (!$container instanceof Container) {
@@ -147,7 +147,7 @@ class Instance
             throw new InvalidConfigException('The required component is not specified.');
         }
 
-        if (is_string($reference)) {
+        if (\is_string($reference)) {
             $reference = new static($reference);
         } elseif ($type === null || $reference instanceof $type) {
             return $reference;
@@ -164,10 +164,10 @@ class Instance
                 return $component;
             }
 
-            throw new InvalidConfigException('"' . $reference->id . '" refers to a ' . get_class($component) . " component. $type is expected.");
+            throw new InvalidConfigException('"' . $reference->id . '" refers to a ' . \get_class($component) . " component. $type is expected.");
         }
 
-        $valueType = is_object($reference) ? get_class($reference) : gettype($reference);
+        $valueType = \is_object($reference) ? \get_class($reference) : \gettype($reference);
 
         throw new InvalidConfigException("Invalid data type: $valueType. $type is expected.");
     }

@@ -56,8 +56,8 @@ class JsonParser implements RequestParserInterface
     public function parse($rawBody, $contentType)
     {
         // converts JSONP to JSON
-        if (str_contains($contentType, 'application/javascript')) {
-            $rawBody = preg_filter('/(^[^{]+|[^}]+$)/', '', $rawBody);
+        if (\str_contains($contentType, 'application/javascript')) {
+            $rawBody = \preg_filter('/(^[^{]+|[^}]+$)/', '', $rawBody);
         }
 
         try {

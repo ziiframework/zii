@@ -106,7 +106,7 @@ class BaseFormatConverter
     public static function convertDateIcuToPhp($pattern, $type = 'date', $locale = null)
     {
         if (isset(self::$_icuShortFormats[$pattern])) {
-            if (extension_loaded('intl')) {
+            if (\extension_loaded('intl')) {
                 if ($locale === null) {
                     $locale = Yii::$app->language;
                 }
@@ -127,14 +127,14 @@ class BaseFormatConverter
         // escaped text
         $escaped = [];
 
-        if (preg_match_all('/(?<!\')\'(.*?[^\'])\'(?!\')/', $pattern, $matches, PREG_SET_ORDER)) {
+        if (\preg_match_all('/(?<!\')\'(.*?[^\'])\'(?!\')/', $pattern, $matches, \PREG_SET_ORDER)) {
             foreach ($matches as $match) {
-                $match[1] = str_replace('\'\'', '\'', $match[1]);
-                $escaped[$match[0]] = '\\' . implode('\\', preg_split('//u', $match[1], -1, PREG_SPLIT_NO_EMPTY));
+                $match[1] = \str_replace('\'\'', '\'', $match[1]);
+                $escaped[$match[0]] = '\\' . \implode('\\', \preg_split('//u', $match[1], -1, \PREG_SPLIT_NO_EMPTY));
             }
         }
 
-        return strtr($pattern, array_merge($escaped, [
+        return \strtr($pattern, \array_merge($escaped, [
             "''" => "\\'",  // two single quotes produce one
             'G' => '',      // era designator like (Anno Domini)
             'Y' => 'o',     // 4digit year of "Week of Year"
@@ -253,7 +253,7 @@ class BaseFormatConverter
     public static function convertDatePhpToIcu($pattern)
     {
         // https://www.php.net/manual/en/function.date
-        $result = strtr($pattern, [
+        $result = \strtr($pattern, [
             "'" => "''''",  // single `'` should be encoded as `''`, which internally should be encoded as `''''`
             // Day
             '\d' => "'d'",
@@ -341,7 +341,7 @@ class BaseFormatConverter
 
         // remove `''` - they're result of consecutive escaped chars (`\A\B` will be `'A''B'`, but should be `'AB'`)
         // real `'` are encoded as `''''`
-        return strtr($result, [
+        return \strtr($result, [
             "''''" => "''",
             "''" => '',
         ]);
@@ -363,7 +363,7 @@ class BaseFormatConverter
     public static function convertDateIcuToJui($pattern, $type = 'date', $locale = null)
     {
         if (isset(self::$_icuShortFormats[$pattern])) {
-            if (extension_loaded('intl')) {
+            if (\extension_loaded('intl')) {
                 if ($locale === null) {
                     $locale = Yii::$app->language;
                 }
@@ -384,13 +384,13 @@ class BaseFormatConverter
         // escaped text
         $escaped = [];
 
-        if (preg_match_all('/(?<!\')\'.*?[^\']\'(?!\')/', $pattern, $matches)) {
+        if (\preg_match_all('/(?<!\')\'.*?[^\']\'(?!\')/', $pattern, $matches)) {
             foreach ($matches[0] as $match) {
                 $escaped[$match] = $match;
             }
         }
 
-        return strtr($pattern, array_merge($escaped, [
+        return \strtr($pattern, \array_merge($escaped, [
             'G' => '',      // era designator like (Anno Domini)
             'Y' => '',      // 4digit year of "Week of Year"
             'y' => 'yy',    // 4digit year e.g. 2014
@@ -510,7 +510,7 @@ class BaseFormatConverter
     public static function convertDatePhpToJui($pattern)
     {
         // https://www.php.net/manual/en/function.date
-        return strtr($pattern, [
+        return \strtr($pattern, [
             // Day
             'd' => 'dd',    // Day of the month, 2 digits with leading zeros 	01 to 31
             'D' => 'D',     // A textual representation of a day, three letters 	Mon through Sun

@@ -156,7 +156,7 @@ class AssetController extends Controller
      */
     public function getAssetManager()
     {
-        if (!is_object($this->_assetManager)) {
+        if (!\is_object($this->_assetManager)) {
             $options = $this->_assetManager;
 
             if (!isset($options['class'])) {
@@ -190,8 +190,8 @@ class AssetController extends Controller
      */
     public function setAssetManager($assetManager): void
     {
-        if (is_scalar($assetManager)) {
-            throw new Exception('"' . static::class . '::assetManager" should be either object or array - "' . gettype($assetManager) . '" given.');
+        if (\is_scalar($assetManager)) {
+            throw new Exception('"' . static::class . '::assetManager" should be either object or array - "' . \gettype($assetManager) . '" given.');
         }
         $this->_assetManager = $assetManager;
     }
@@ -244,7 +244,7 @@ class AssetController extends Controller
         $config = require $configFile;
 
         foreach ($config as $name => $value) {
-            if (property_exists($this, $name) || $this->canSetProperty($name)) {
+            if (\property_exists($this, $name) || $this->canSetProperty($name)) {
                 $this->$name = $value;
             } else {
                 throw new Exception("Unknown configuration option: $name");
@@ -321,7 +321,7 @@ class AssetController extends Controller
         foreach ($bundles as $name => $bundle) {
             $this->registerBundle($bundles, $name, $registered);
         }
-        $bundleOrders = array_combine(array_keys($registered), range(0, count($bundles) - 1));
+        $bundleOrders = \array_combine(\array_keys($registered), \range(0, \count($bundles) - 1));
 
         // fill up the target which has empty 'depends'.
         $referenced = [];
@@ -345,7 +345,7 @@ class AssetController extends Controller
         }
 
         if (isset($all)) {
-            $targets[$all]['depends'] = array_diff(array_keys($registered), array_keys($referenced));
+            $targets[$all]['depends'] = \array_diff(\array_keys($registered), \array_keys($referenced));
         }
 
         // adjust the 'depends' order for each target according to the dependency order of bundles
@@ -358,7 +358,7 @@ class AssetController extends Controller
             if (!isset($target['baseUrl'])) {
                 throw new Exception("Please specify 'baseUrl' for the '$name' target.");
             }
-            usort($target['depends'], static function ($a, $b) use ($bundleOrders) {
+            \usort($target['depends'], static function ($a, $b) use ($bundleOrders) {
                 if ($bundleOrders[$a] == $bundleOrders[$b]) {
                     return 0;
                 }
@@ -392,7 +392,7 @@ class AssetController extends Controller
             if (isset($bundles[$name])) {
                 if (!$this->isBundleExternal($bundles[$name])) {
                     foreach ($bundles[$name]->$type as $file) {
-                        if (is_array($file)) {
+                        if (\is_array($file)) {
                             $inputFiles[] = $bundles[$name]->basePath . '/' . $file[0];
                         } else {
                             $inputFiles[] = $bundles[$name]->basePath . '/' . $file;
@@ -408,7 +408,7 @@ class AssetController extends Controller
             $target->$type = [];
         } else {
             FileHelper::createDirectory($target->basePath, $this->getAssetManager()->dirMode);
-            $tempFile = $target->basePath . '/' . strtr($target->$type, ['{hash}' => 'temp']);
+            $tempFile = $target->basePath . '/' . \strtr($target->$type, ['{hash}' => 'temp']);
 
             if ($type === 'js') {
                 $this->compressJsFiles($inputFiles, $tempFile);
@@ -416,9 +416,9 @@ class AssetController extends Controller
                 $this->compressCssFiles($inputFiles, $tempFile);
             }
 
-            $targetFile = strtr($target->$type, ['{hash}' => md5_file($tempFile)]);
+            $targetFile = \strtr($target->$type, ['{hash}' => \md5_file($tempFile)]);
             $outputFile = $target->basePath . '/' . $targetFile;
-            rename($tempFile, $outputFile);
+            \rename($tempFile, $outputFile);
             $target->$type = [$targetFile];
         }
     }
@@ -452,7 +452,7 @@ class AssetController extends Controller
                 }
             }
             unset($depends[$name]);
-            $target->depends = array_keys($depends);
+            $target->depends = \array_keys($depends);
         }
 
         // detect possible circular dependencies
@@ -515,8 +515,8 @@ class AssetController extends Controller
 
         foreach ($targets as $name => $target) {
             if (isset($this->targets[$name])) {
-                $array[$name] = array_merge($this->targets[$name], [
-                    'class' => get_class($target),
+                $array[$name] = \array_merge($this->targets[$name], [
+                    'class' => \get_class($target),
                     'sourcePath' => null,
                     'basePath' => $this->targets[$name]['basePath'],
                     'baseUrl' => $this->targets[$name]['baseUrl'],
@@ -538,7 +538,7 @@ class AssetController extends Controller
             }
         }
         $array = VarDumper::export($array);
-        $version = date('Y-m-d H:i:s');
+        $version = \date('Y-m-d H:i:s');
         $bundleFileContent = <<<EOD
 <?php
 /**
@@ -549,7 +549,7 @@ class AssetController extends Controller
 return {$array};
 EOD;
 
-        if (!file_put_contents($bundleFile, $bundleFileContent, LOCK_EX)) {
+        if (!\file_put_contents($bundleFile, $bundleFileContent, \LOCK_EX)) {
             throw new Exception("Unable to write output bundle configuration at '{$bundleFile}'.");
         }
         $this->stdout("Output bundle configuration created at '{$bundleFile}'.\n", Console::FG_GREEN);
@@ -570,19 +570,19 @@ EOD;
         }
         $this->stdout("  Compressing JavaScript files...\n");
 
-        if (is_string($this->jsCompressor)) {
+        if (\is_string($this->jsCompressor)) {
             $tmpFile = $outputFile . '.tmp';
             $this->combineJsFiles($inputFiles, $tmpFile);
-            $this->stdout(shell_exec(strtr($this->jsCompressor, [
-                '{from}' => escapeshellarg($tmpFile),
-                '{to}' => escapeshellarg($outputFile),
+            $this->stdout(\shell_exec(\strtr($this->jsCompressor, [
+                '{from}' => \escapeshellarg($tmpFile),
+                '{to}' => \escapeshellarg($outputFile),
             ])));
-            @unlink($tmpFile);
+            @\unlink($tmpFile);
         } else {
-            call_user_func($this->jsCompressor, $this, $inputFiles, $outputFile);
+            \call_user_func($this->jsCompressor, $this, $inputFiles, $outputFile);
         }
 
-        if (!file_exists($outputFile)) {
+        if (!\file_exists($outputFile)) {
             throw new Exception("Unable to compress JavaScript files into '{$outputFile}'.");
         }
         $this->stdout("  JavaScript files compressed into '{$outputFile}'.\n");
@@ -603,19 +603,19 @@ EOD;
         }
         $this->stdout("  Compressing CSS files...\n");
 
-        if (is_string($this->cssCompressor)) {
+        if (\is_string($this->cssCompressor)) {
             $tmpFile = $outputFile . '.tmp';
             $this->combineCssFiles($inputFiles, $tmpFile);
-            $this->stdout((string) shell_exec(strtr($this->cssCompressor, [
-                '{from}' => escapeshellarg($tmpFile),
-                '{to}' => escapeshellarg($outputFile),
+            $this->stdout((string) \shell_exec(\strtr($this->cssCompressor, [
+                '{from}' => \escapeshellarg($tmpFile),
+                '{to}' => \escapeshellarg($outputFile),
             ])));
-            @unlink($tmpFile);
+            @\unlink($tmpFile);
         } else {
-            call_user_func($this->cssCompressor, $this, $inputFiles, $outputFile);
+            \call_user_func($this->cssCompressor, $this, $inputFiles, $outputFile);
         }
 
-        if (!file_exists($outputFile)) {
+        if (!\file_exists($outputFile)) {
             throw new Exception("Unable to compress CSS files into '{$outputFile}'.");
         }
         $this->stdout("  CSS files compressed into '{$outputFile}'.\n");
@@ -636,9 +636,9 @@ EOD;
         foreach ($inputFiles as $file) {
             // Add a semicolon to source code if trailing semicolon missing.
             // Notice: It needs a new line before `;` to avoid affection of line comment. (// ...;)
-            $fileContent = rtrim(file_get_contents($file));
+            $fileContent = \rtrim(\file_get_contents($file));
 
-            if (substr($fileContent, -1) !== ';') {
+            if (\substr($fileContent, -1) !== ';') {
                 $fileContent .= "\n;";
             }
             $content .= "/*** BEGIN FILE: $file ***/\n"
@@ -646,7 +646,7 @@ EOD;
                 . "/*** END FILE: $file ***/\n";
         }
 
-        if (!file_put_contents($outputFile, $content)) {
+        if (!\file_put_contents($outputFile, $content)) {
             throw new Exception("Unable to write output JavaScript file '{$outputFile}'.");
         }
     }
@@ -662,15 +662,15 @@ EOD;
     public function combineCssFiles($inputFiles, $outputFile): void
     {
         $content = '';
-        $outputFilePath = dirname($this->findRealPath($outputFile));
+        $outputFilePath = \dirname($this->findRealPath($outputFile));
 
         foreach ($inputFiles as $file) {
             $content .= "/*** BEGIN FILE: $file ***/\n"
-                . $this->adjustCssUrl(file_get_contents($file), dirname($this->findRealPath($file)), $outputFilePath)
+                . $this->adjustCssUrl(\file_get_contents($file), \dirname($this->findRealPath($file)), $outputFilePath)
                 . "/*** END FILE: $file ***/\n";
         }
 
-        if (!file_put_contents($outputFile, $content)) {
+        if (!\file_put_contents($outputFile, $content)) {
             throw new Exception("Unable to write output CSS file '{$outputFile}'.");
         }
     }
@@ -686,14 +686,14 @@ EOD;
      */
     protected function adjustCssUrl($cssContent, $inputFilePath, $outputFilePath)
     {
-        $inputFilePath = str_replace('\\', '/', $inputFilePath);
-        $outputFilePath = str_replace('\\', '/', $outputFilePath);
+        $inputFilePath = \str_replace('\\', '/', $inputFilePath);
+        $outputFilePath = \str_replace('\\', '/', $outputFilePath);
 
         $sharedPathParts = [];
-        $inputFilePathParts = explode('/', $inputFilePath);
-        $inputFilePathPartsCount = count($inputFilePathParts);
-        $outputFilePathParts = explode('/', $outputFilePath);
-        $outputFilePathPartsCount = count($outputFilePathParts);
+        $inputFilePathParts = \explode('/', $inputFilePath);
+        $inputFilePathPartsCount = \count($inputFilePathParts);
+        $outputFilePathParts = \explode('/', $outputFilePath);
+        $outputFilePathPartsCount = \count($outputFilePathParts);
 
         for ($i = 0; $i < $inputFilePathPartsCount && $i < $outputFilePathPartsCount; ++$i) {
             if ($inputFilePathParts[$i] == $outputFilePathParts[$i]) {
@@ -702,28 +702,28 @@ EOD;
                 break;
             }
         }
-        $sharedPath = implode('/', $sharedPathParts);
+        $sharedPath = \implode('/', $sharedPathParts);
 
-        $inputFileRelativePath = trim(str_replace($sharedPath, '', $inputFilePath), '/');
-        $outputFileRelativePath = trim(str_replace($sharedPath, '', $outputFilePath), '/');
+        $inputFileRelativePath = \trim(\str_replace($sharedPath, '', $inputFilePath), '/');
+        $outputFileRelativePath = \trim(\str_replace($sharedPath, '', $outputFilePath), '/');
 
         if (empty($inputFileRelativePath)) {
             $inputFileRelativePathParts = [];
         } else {
-            $inputFileRelativePathParts = explode('/', $inputFileRelativePath);
+            $inputFileRelativePathParts = \explode('/', $inputFileRelativePath);
         }
 
         if (empty($outputFileRelativePath)) {
             $outputFileRelativePathParts = [];
         } else {
-            $outputFileRelativePathParts = explode('/', $outputFileRelativePath);
+            $outputFileRelativePathParts = \explode('/', $outputFileRelativePath);
         }
 
         $callback = static function ($matches) use ($inputFileRelativePathParts, $outputFileRelativePathParts) {
             $fullMatch = $matches[0];
             $inputUrl = $matches[1];
 
-            if (strncmp($inputUrl, '/', 1) === 0 || strncmp($inputUrl, '#', 1) === 0 || preg_match('/^https?:\/\//i', $inputUrl) || preg_match('/^data:/i', $inputUrl)) {
+            if (\strncmp($inputUrl, '/', 1) === 0 || \strncmp($inputUrl, '#', 1) === 0 || \preg_match('/^https?:\/\//i', $inputUrl) || \preg_match('/^data:/i', $inputUrl)) {
                 return $fullMatch;
             }
 
@@ -734,29 +734,29 @@ EOD;
             if (empty($outputFileRelativePathParts)) {
                 $outputUrlParts = [];
             } else {
-                $outputUrlParts = array_fill(0, count($outputFileRelativePathParts), '..');
+                $outputUrlParts = \array_fill(0, \count($outputFileRelativePathParts), '..');
             }
-            $outputUrlParts = array_merge($outputUrlParts, $inputFileRelativePathParts);
+            $outputUrlParts = \array_merge($outputUrlParts, $inputFileRelativePathParts);
 
-            if (str_contains($inputUrl, '/')) {
-                $inputUrlParts = explode('/', $inputUrl);
+            if (\str_contains($inputUrl, '/')) {
+                $inputUrlParts = \explode('/', $inputUrl);
 
                 foreach ($inputUrlParts as $key => $inputUrlPart) {
                     if ($inputUrlPart === '..') {
-                        array_pop($outputUrlParts);
+                        \array_pop($outputUrlParts);
                         unset($inputUrlParts[$key]);
                     }
                 }
-                $outputUrlParts[] = implode('/', $inputUrlParts);
+                $outputUrlParts[] = \implode('/', $inputUrlParts);
             } else {
                 $outputUrlParts[] = $inputUrl;
             }
-            $outputUrl = implode('/', $outputUrlParts);
+            $outputUrl = \implode('/', $outputUrlParts);
 
-            return str_replace($inputUrl, $outputUrl, $fullMatch);
+            return \str_replace($inputUrl, $outputUrl, $fullMatch);
         };
 
-        $cssContent = preg_replace_callback('/url\(["\']?([^)^"\']*)["\']?\)/i', $callback, $cssContent);
+        $cssContent = \preg_replace_callback('/url\(["\']?([^)^"\']*)["\']?\)/i', $callback, $cssContent);
 
         return $cssContent;
     }
@@ -816,13 +816,13 @@ return [
 ];
 EOD;
 
-        if (file_exists($configFile)) {
+        if (\file_exists($configFile)) {
             if (!$this->confirm("File '{$configFile}' already exists. Do you wish to overwrite it?")) {
                 return ExitCode::OK;
             }
         }
 
-        if (!file_put_contents($configFile, $template, LOCK_EX)) {
+        if (!\file_put_contents($configFile, $template, \LOCK_EX)) {
             throw new Exception("Unable to write template file '{$configFile}'.");
         }
 
@@ -841,20 +841,20 @@ EOD;
      */
     private function findRealPath($path)
     {
-        $path = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $path);
-        $pathParts = explode(DIRECTORY_SEPARATOR, $path);
+        $path = \str_replace(['/', '\\'], \DIRECTORY_SEPARATOR, $path);
+        $pathParts = \explode(\DIRECTORY_SEPARATOR, $path);
 
         $realPathParts = [];
 
         foreach ($pathParts as $pathPart) {
             if ($pathPart === '..') {
-                array_pop($realPathParts);
+                \array_pop($realPathParts);
             } else {
                 $realPathParts[] = $pathPart;
             }
         }
 
-        return implode(DIRECTORY_SEPARATOR, $realPathParts);
+        return \implode(\DIRECTORY_SEPARATOR, $realPathParts);
     }
 
     /**
@@ -875,7 +875,7 @@ EOD;
     private function composeBundleConfig($bundle)
     {
         $config = Yii::getObjectVars($bundle);
-        $config['class'] = get_class($bundle);
+        $config['class'] = \get_class($bundle);
 
         return $config;
     }
@@ -904,7 +904,7 @@ EOD;
         }
         $dependencyTrace[] = $circularDependencyName;
 
-        return implode(' -> ', $dependencyTrace);
+        return \implode(' -> ', $dependencyTrace);
     }
 
     /**
@@ -927,11 +927,11 @@ EOD;
         foreach ($bundles as $bundle) {
             if ($bundle->sourcePath !== null) {
                 foreach ($bundle->js as $jsFile) {
-                    @unlink($bundle->basePath . DIRECTORY_SEPARATOR . $jsFile);
+                    @\unlink($bundle->basePath . \DIRECTORY_SEPARATOR . $jsFile);
                 }
 
                 foreach ($bundle->css as $cssFile) {
-                    @unlink($bundle->basePath . DIRECTORY_SEPARATOR . $cssFile);
+                    @\unlink($bundle->basePath . \DIRECTORY_SEPARATOR . $cssFile);
                 }
             }
         }

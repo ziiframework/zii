@@ -62,7 +62,7 @@ class UrlValidator extends Validator
     {
         parent::init();
 
-        if ($this->enableIDN && !function_exists('idn_to_ascii')) {
+        if ($this->enableIDN && !\function_exists('idn_to_ascii')) {
             throw new InvalidConfigException('In order to use IDN validation intl extension must be installed and enabled.');
         }
 
@@ -81,7 +81,7 @@ class UrlValidator extends Validator
 
         if (!empty($result)) {
             $this->addError($model, $attribute, $result[0], $result[1]);
-        } elseif ($this->defaultScheme !== null && !str_contains($value, '://')) {
+        } elseif ($this->defaultScheme !== null && !\str_contains($value, '://')) {
             $model->$attribute = $this->defaultScheme . '://' . $value;
         }
     }
@@ -92,22 +92,22 @@ class UrlValidator extends Validator
     protected function validateValue($value)
     {
         // make sure the length is limited to avoid DOS attacks
-        if (is_string($value) && strlen($value) < 2000) {
-            if ($this->defaultScheme !== null && !str_contains($value, '://')) {
+        if (\is_string($value) && \strlen($value) < 2000) {
+            if ($this->defaultScheme !== null && !\str_contains($value, '://')) {
                 $value = $this->defaultScheme . '://' . $value;
             }
 
-            if (str_contains($this->pattern, '{schemes}')) {
-                $pattern = str_replace('{schemes}', '(' . implode('|', $this->validSchemes) . ')', $this->pattern);
+            if (\str_contains($this->pattern, '{schemes}')) {
+                $pattern = \str_replace('{schemes}', '(' . \implode('|', $this->validSchemes) . ')', $this->pattern);
             } else {
                 $pattern = $this->pattern;
             }
 
             if ($this->enableIDN) {
-                $value = preg_replace_callback('/:\/\/([^\/]+)/', fn ($matches) => '://' . $this->idnToAscii($matches[1]), $value);
+                $value = \preg_replace_callback('/:\/\/([^\/]+)/', fn ($matches) => '://' . $this->idnToAscii($matches[1]), $value);
             }
 
-            if (preg_match($pattern, $value)) {
+            if (\preg_match($pattern, $value)) {
                 return null;
             }
         }
@@ -117,7 +117,7 @@ class UrlValidator extends Validator
 
     private function idnToAscii($idn)
     {
-        return idn_to_ascii($idn, IDNA_NONTRANSITIONAL_TO_ASCII, INTL_IDNA_VARIANT_UTS46);
+        return \idn_to_ascii($idn, \IDNA_NONTRANSITIONAL_TO_ASCII, \INTL_IDNA_VARIANT_UTS46);
     }
 
     /**
@@ -140,8 +140,8 @@ class UrlValidator extends Validator
      */
     public function getClientOptions($model, $attribute)
     {
-        if (str_contains($this->pattern, '{schemes}')) {
-            $pattern = str_replace('{schemes}', '(' . implode('|', $this->validSchemes) . ')', $this->pattern);
+        if (\str_contains($this->pattern, '{schemes}')) {
+            $pattern = \str_replace('{schemes}', '(' . \implode('|', $this->validSchemes) . ')', $this->pattern);
         } else {
             $pattern = $this->pattern;
         }

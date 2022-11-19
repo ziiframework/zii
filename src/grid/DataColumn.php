@@ -170,7 +170,7 @@ class DataColumn extends Column
 
         if ($this->attribute !== null && $this->enableSorting &&
             ($sort = $this->grid->dataProvider->getSort()) !== false && $sort->hasAttribute($this->attribute)) {
-            return $sort->link($this->attribute, array_merge($this->sortLinkOptions, ['label' => $label]));
+            return $sort->link($this->attribute, \array_merge($this->sortLinkOptions, ['label' => $label]));
         }
 
         return $label;
@@ -203,7 +203,7 @@ class DataColumn extends Column
             } else {
                 $models = $provider->getModels();
 
-                if (($model = reset($models)) instanceof Model) {
+                if (($model = \reset($models)) instanceof Model) {
                     /* @var $model Model */
                     $label = $model->getAttributeLabel($this->attribute);
                 } else {
@@ -222,7 +222,7 @@ class DataColumn extends Column
      */
     protected function renderFilterCellContent()
     {
-        if (is_string($this->filter)) {
+        if (\is_string($this->filter)) {
             return $this->filter;
         }
 
@@ -236,19 +236,19 @@ class DataColumn extends Column
                 $error = '';
             }
 
-            if (is_array($this->filter)) {
-                $options = array_merge(['prompt' => '', 'strict' => true], $this->filterInputOptions);
+            if (\is_array($this->filter)) {
+                $options = \array_merge(['prompt' => '', 'strict' => true], $this->filterInputOptions);
 
                 return Html::activeDropDownList($model, $this->filterAttribute, $this->filter, $options) . $error;
             } elseif ($this->format === 'boolean') {
-                $options = array_merge(['prompt' => '', 'strict' => true], $this->filterInputOptions);
+                $options = \array_merge(['prompt' => '', 'strict' => true], $this->filterInputOptions);
 
                 return Html::activeDropDownList($model, $this->filterAttribute, [
                     1 => $this->grid->formatter->booleanFormat[1],
                     0 => $this->grid->formatter->booleanFormat[0],
                 ], $options) . $error;
             }
-            $options = array_merge(['maxlength' => true], $this->filterInputOptions);
+            $options = \array_merge(['maxlength' => true], $this->filterInputOptions);
 
             return Html::activeTextInput($model, $this->filterAttribute, $options) . $error;
         }
@@ -268,11 +268,11 @@ class DataColumn extends Column
     public function getDataCellValue($model, $key, $index)
     {
         if ($this->value !== null) {
-            if (is_string($this->value)) {
+            if (\is_string($this->value)) {
                 return ArrayHelper::getValue($model, $this->value);
             }
 
-            return call_user_func($this->value, $model, $key, $index, $this);
+            return \call_user_func($this->value, $model, $key, $index, $this);
         } elseif ($this->attribute !== null) {
             return ArrayHelper::getValue($model, $this->attribute);
         }

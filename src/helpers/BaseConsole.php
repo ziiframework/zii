@@ -262,7 +262,7 @@ class BaseConsole
      */
     public static function ansiFormatCode($format)
     {
-        return "\033[" . implode(';', $format) . 'm';
+        return "\033[" . \implode(';', $format) . 'm';
     }
 
     /**
@@ -277,7 +277,7 @@ class BaseConsole
      */
     public static function beginAnsiFormat($format): void
     {
-        echo "\033[" . implode(';', $format) . 'm';
+        echo "\033[" . \implode(';', $format) . 'm';
     }
 
     /**
@@ -306,7 +306,7 @@ class BaseConsole
      */
     public static function ansiFormat($string, $format = [])
     {
-        $code = implode(';', $format);
+        $code = \implode(';', $format);
 
         return "\033[0m" . ($code !== '' ? "\033[" . $code . 'm' : '') . $string . "\033[0m";
     }
@@ -354,7 +354,7 @@ class BaseConsole
      */
     public static function stripAnsiFormat($string)
     {
-        return preg_replace(self::ansiCodesPattern(), '', (string) $string);
+        return \preg_replace(self::ansiCodesPattern(), '', (string) $string);
     }
 
     /**
@@ -366,7 +366,7 @@ class BaseConsole
      */
     public static function ansiStrlen($string)
     {
-        return mb_strlen(static::stripAnsiFormat($string));
+        return \mb_strlen(static::stripAnsiFormat($string));
     }
 
     /**
@@ -380,7 +380,7 @@ class BaseConsole
      */
     public static function ansiStrwidth($string)
     {
-        return mb_strwidth(static::stripAnsiFormat($string), Yii::$app->charset);
+        return \mb_strwidth(static::stripAnsiFormat($string), Yii::$app->charset);
     }
 
     /**
@@ -400,11 +400,11 @@ class BaseConsole
             return '';
         }
 
-        $textItems = preg_split(self::ansiCodesPattern(), (string) $string);
+        $textItems = \preg_split(self::ansiCodesPattern(), (string) $string);
 
-        preg_match_all(self::ansiCodesPattern(), (string) $string, $colors);
-        $colors = count($colors) ? $colors[0] : [];
-        array_unshift($colors, '');
+        \preg_match_all(self::ansiCodesPattern(), (string) $string, $colors);
+        $colors = \count($colors) ? $colors[0] : [];
+        \array_unshift($colors, '');
 
         $result = '';
         $curPos = 0;
@@ -414,7 +414,7 @@ class BaseConsole
             $color = $colors[$k];
 
             if ($curPos <= $start && $start < $curPos + Console::ansiStrwidth($textItem)) {
-                $text = mb_substr($textItem, $start - $curPos, null, Yii::$app->charset);
+                $text = \mb_substr($textItem, $start - $curPos, null, Yii::$app->charset);
                 $inRange = true;
             } else {
                 $text = $textItem;
@@ -426,7 +426,7 @@ class BaseConsole
 
                 if ($diff <= 0) {
                     if ($diff < 0) {
-                        $result = mb_substr($result, 0, $diff, Yii::$app->charset);
+                        $result = \mb_substr($result, 0, $diff, Yii::$app->charset);
                     }
                     $defaultColor = static::renderColoredString('%n');
 
@@ -437,7 +437,7 @@ class BaseConsole
                 }
             }
 
-            $curPos += mb_strlen($textItem, Yii::$app->charset);
+            $curPos += \mb_strlen($textItem, Yii::$app->charset);
         }
 
         return $result;
@@ -494,12 +494,12 @@ class BaseConsole
         ] + $styleMap;
 
         $tags = 0;
-        $result = preg_replace_callback('/\033\[([\d;]+)m/', static function ($ansi) use (&$tags, $styleMap) {
+        $result = \preg_replace_callback('/\033\[([\d;]+)m/', static function ($ansi) use (&$tags, $styleMap) {
             $style = [];
             $reset = false;
             $negative = false;
 
-            foreach (explode(';', $ansi[1]) as $controlCode) {
+            foreach (\explode(';', $ansi[1]) as $controlCode) {
                 if ($controlCode == 0) {
                     $style = [];
                     $reset = true;
@@ -551,8 +551,8 @@ class BaseConsole
             $styleString = '';
 
             foreach ($currentStyle as $name => $value) {
-                if (is_array($value)) {
-                    $value = implode(' ', $value);
+                if (\is_array($value)) {
+                    $value = \implode(' ', $value);
                 }
                 $styleString .= "$name: $value;";
             }
@@ -659,14 +659,14 @@ class BaseConsole
         ];
 
         if ($colored) {
-            $string = str_replace('%%', '% ', $string);
+            $string = \str_replace('%%', '% ', $string);
 
             foreach ($conversions as $key => $value) {
-                $string = str_replace($key, static::ansiFormatCode($value), $string);
+                $string = \str_replace($key, static::ansiFormatCode($value), $string);
             }
-            $string = str_replace('% ', '%', $string);
+            $string = \str_replace('% ', '%', $string);
         } else {
-            $string = preg_replace('/%((%)|.)/', '$2', $string);
+            $string = \preg_replace('/%((%)|.)/', '$2', $string);
         }
 
         return $string;
@@ -683,7 +683,7 @@ class BaseConsole
     public static function escape($string)
     {
         // TODO rework/refactor according to https://github.com/yiisoft/yii2/issues/746
-        return str_replace('%', '%%', $string);
+        return \str_replace('%', '%%', $string);
     }
 
     /**
@@ -698,9 +698,9 @@ class BaseConsole
      */
     public static function streamSupportsAnsiColors($stream)
     {
-        return DIRECTORY_SEPARATOR === '\\'
-            ? getenv('ANSICON') !== false || getenv('ConEmuANSI') === 'ON'
-            : function_exists('posix_isatty') && @posix_isatty($stream);
+        return \DIRECTORY_SEPARATOR === '\\'
+            ? \getenv('ANSICON') !== false || \getenv('ConEmuANSI') === 'ON'
+            : \function_exists('posix_isatty') && @posix_isatty($stream);
     }
 
     /**
@@ -710,7 +710,7 @@ class BaseConsole
      */
     public static function isRunningOnWindows()
     {
-        return DIRECTORY_SEPARATOR === '\\';
+        return \DIRECTORY_SEPARATOR === '\\';
     }
 
     /**
@@ -738,7 +738,7 @@ class BaseConsole
         }
 
         if ($execDisabled === null) {
-            $execDisabled = !function_exists('ini_get') || preg_match('/(\bexec\b)/i', ini_get('disable_functions'));
+            $execDisabled = !\function_exists('ini_get') || \preg_match('/(\bexec\b)/i', \ini_get('disable_functions'));
 
             if ($execDisabled) {
                 return $size = false;
@@ -747,36 +747,36 @@ class BaseConsole
 
         if (static::isRunningOnWindows()) {
             $output = [];
-            exec('mode con', $output);
+            \exec('mode con', $output);
 
-            if (isset($output[1]) && str_contains($output[1], 'CON')) {
-                return $size = [(int) preg_replace('~\D~', '', $output[4]), (int) preg_replace('~\D~', '', $output[3])];
+            if (isset($output[1]) && \str_contains($output[1], 'CON')) {
+                return $size = [(int) \preg_replace('~\D~', '', $output[4]), (int) \preg_replace('~\D~', '', $output[3])];
             }
         } else {
             // try stty if available
             $stty = [];
 
-            if (exec('stty -a 2>&1', $stty)) {
-                $stty = implode(' ', $stty);
+            if (\exec('stty -a 2>&1', $stty)) {
+                $stty = \implode(' ', $stty);
 
                 // Linux stty output
-                if (preg_match('/rows\s+(\d+);\s*columns\s+(\d+);/mi', $stty, $matches)) {
+                if (\preg_match('/rows\s+(\d+);\s*columns\s+(\d+);/mi', $stty, $matches)) {
                     return $size = [(int) $matches[2], (int) $matches[1]];
                 }
 
                 // MacOS stty output
-                if (preg_match('/(\d+)\s+rows;\s*(\d+)\s+columns;/mi', $stty, $matches)) {
+                if (\preg_match('/(\d+)\s+rows;\s*(\d+)\s+columns;/mi', $stty, $matches)) {
                     return $size = [(int) $matches[2], (int) $matches[1]];
                 }
             }
 
             // fallback to tput, which may not be updated on terminal resize
-            if (($width = (int) exec('tput cols 2>&1')) > 0 && ($height = (int) exec('tput lines 2>&1')) > 0) {
+            if (($width = (int) \exec('tput cols 2>&1')) > 0 && ($height = (int) \exec('tput lines 2>&1')) > 0) {
                 return $size = [$width, $height];
             }
 
             // fallback to ENV variables, which may not be updated on terminal resize
-            if (($width = (int) getenv('COLUMNS')) > 0 && ($height = (int) getenv('LINES')) > 0) {
+            if (($width = (int) \getenv('COLUMNS')) > 0 && ($height = (int) \getenv('LINES')) > 0) {
                 return $size = [$width, $height];
             }
         }
@@ -814,8 +814,8 @@ class BaseConsole
         if ($size === false || $size[0] <= $indent) {
             return $text;
         }
-        $pad = str_repeat(' ', $indent);
-        $lines = explode("\n", wordwrap($text, $size[0] - $indent, "\n"));
+        $pad = \str_repeat(' ', $indent);
+        $lines = \explode("\n", \wordwrap($text, $size[0] - $indent, "\n"));
         $first = true;
 
         foreach ($lines as $i => $line) {
@@ -827,7 +827,7 @@ class BaseConsole
             $lines[$i] = $pad . $line;
         }
 
-        return implode("\n", $lines);
+        return \implode("\n", $lines);
     }
 
     /**
@@ -839,7 +839,7 @@ class BaseConsole
      */
     public static function stdin($raw = false)
     {
-        return $raw ? fgets(STDIN) : rtrim(fgets(STDIN), PHP_EOL);
+        return $raw ? \fgets(STDIN) : \rtrim(\fgets(STDIN), \PHP_EOL);
     }
 
     /**
@@ -851,7 +851,7 @@ class BaseConsole
      */
     public static function stdout($string)
     {
-        return fwrite(\STDOUT, $string);
+        return \fwrite(\STDOUT, $string);
     }
 
     /**
@@ -863,7 +863,7 @@ class BaseConsole
      */
     public static function stderr($string)
     {
-        return fwrite(STDERR, $string);
+        return \fwrite(STDERR, $string);
     }
 
     /**
@@ -892,7 +892,7 @@ class BaseConsole
      */
     public static function output($string = null)
     {
-        return static::stdout($string . PHP_EOL);
+        return static::stdout($string . \PHP_EOL);
     }
 
     /**
@@ -904,7 +904,7 @@ class BaseConsole
      */
     public static function error($string = null)
     {
-        return static::stderr($string . PHP_EOL);
+        return static::stderr($string . \PHP_EOL);
     }
 
     /**
@@ -946,12 +946,12 @@ class BaseConsole
 
                 goto top;
             }
-        } elseif ($options['pattern'] && !preg_match($options['pattern'], $input)) {
+        } elseif ($options['pattern'] && !\preg_match($options['pattern'], $input)) {
             static::output($options['error']);
 
             goto top;
         } elseif ($options['validator'] &&
-            !call_user_func_array($options['validator'], [$input, &$error])
+            !\call_user_func_array($options['validator'], [$input, &$error])
         ) {
             static::output($error ?? $options['error']);
 
@@ -983,17 +983,17 @@ class BaseConsole
     {
         while (true) {
             static::stdout($message . ' (yes|no) [' . ($default ? 'yes' : 'no') . ']:');
-            $input = trim(static::stdin());
+            $input = \trim(static::stdin());
 
             if (empty($input)) {
                 return $default;
             }
 
-            if (!strcasecmp($input, 'y') || !strcasecmp($input, 'yes')) {
+            if (!\strcasecmp($input, 'y') || !\strcasecmp($input, 'yes')) {
                 return true;
             }
 
-            if (!strcasecmp($input, 'n') || !strcasecmp($input, 'no')) {
+            if (!\strcasecmp($input, 'n') || !\strcasecmp($input, 'no')) {
                 return false;
             }
         }
@@ -1012,7 +1012,7 @@ class BaseConsole
     public static function select($prompt, $options = [])
     {
         top:
-        static::stdout("$prompt [" . implode(',', array_keys($options)) . ',?]: ');
+        static::stdout("$prompt [" . \implode(',', \array_keys($options)) . ',?]: ');
         $input = static::stdin();
 
         if ($input === '?') {
@@ -1022,7 +1022,7 @@ class BaseConsole
             static::output(' ? - Show help');
 
             goto top;
-        } elseif (!array_key_exists($input, $options)) {
+        } elseif (!\array_key_exists($input, $options)) {
             goto top;
         }
 
@@ -1079,12 +1079,12 @@ class BaseConsole
      */
     public static function startProgress($done, $total, $prefix = '', $width = null): void
     {
-        self::$_progressStart = time();
+        self::$_progressStart = \time();
         self::$_progressWidth = $width;
         self::$_progressPrefix = $prefix;
         self::$_progressEta = null;
         self::$_progressEtaLastDone = 0;
-        self::$_progressEtaLastUpdate = time();
+        self::$_progressEtaLastUpdate = \time();
 
         static::updateProgress($done, $total);
     }
@@ -1110,9 +1110,9 @@ class BaseConsole
         }
         $width = static::getProgressbarWidth($prefix);
         $percent = ($total == 0) ? 1 : $done / $total;
-        $info = sprintf('%d%% (%d/%d)', $percent * 100, $done, $total);
+        $info = \sprintf('%d%% (%d/%d)', $percent * 100, $done, $total);
         self::setETA($done, $total);
-        $info .= self::$_progressEta === null ? ' ETA: n/a' : sprintf(' ETA: %d sec.', self::$_progressEta);
+        $info .= self::$_progressEta === null ? ' ETA: n/a' : \sprintf(' ETA: %d sec.', self::$_progressEta);
 
         // Number extra characters outputted. These are opening [, closing ], and space before info
         // Since Windows uses \r\n\ for line endings, there's one more in the case
@@ -1127,16 +1127,16 @@ class BaseConsole
             } elseif ($percent > 1) {
                 $percent = 1;
             }
-            $bar = floor($percent * $width);
-            $status = str_repeat('=', $bar);
+            $bar = \floor($percent * $width);
+            $status = \str_repeat('=', $bar);
 
             if ($bar < $width) {
                 $status .= '>';
-                $status .= str_repeat(' ', $width - $bar - 1);
+                $status .= \str_repeat(' ', $width - $bar - 1);
             }
             static::stdout("\r$prefix" . "[$status] $info");
         }
-        flush();
+        \flush();
     }
 
     /**
@@ -1167,7 +1167,7 @@ class BaseConsole
         if ($width === null) {
             $width = $screenSize[0];
         } elseif ($width > 0 && $width < 1) {
-            $width = floor($screenSize[0] * $width);
+            $width = \floor($screenSize[0] * $width);
         }
 
         $width -= static::ansiStrlen($prefix);
@@ -1188,15 +1188,15 @@ class BaseConsole
     {
         if ($done > $total || $done == 0) {
             self::$_progressEta = null;
-            self::$_progressEtaLastUpdate = time();
+            self::$_progressEtaLastUpdate = \time();
 
             return;
         }
 
-        if ($done < $total && (time() - self::$_progressEtaLastUpdate > 1 && $done > self::$_progressEtaLastDone)) {
-            $rate = (time() - (self::$_progressEtaLastUpdate ?: self::$_progressStart)) / ($done - self::$_progressEtaLastDone);
+        if ($done < $total && (\time() - self::$_progressEtaLastUpdate > 1 && $done > self::$_progressEtaLastDone)) {
+            $rate = (\time() - (self::$_progressEtaLastUpdate ?: self::$_progressStart)) / ($done - self::$_progressEtaLastDone);
             self::$_progressEta = $rate * ($total - $done);
-            self::$_progressEtaLastUpdate = time();
+            self::$_progressEtaLastUpdate = \time();
             self::$_progressEtaLastDone = $done;
         }
     }
@@ -1216,14 +1216,14 @@ class BaseConsole
     public static function endProgress($remove = false, $keepPrefix = true): void
     {
         if ($remove === false) {
-            static::stdout(PHP_EOL);
+            static::stdout(\PHP_EOL);
         } else {
-            if (static::streamSupportsAnsiColors(STDOUT)) {
+            if (static::streamSupportsAnsiColors(\STDOUT)) {
                 static::clearLine();
             }
-            static::stdout("\r" . ($keepPrefix ? self::$_progressPrefix : '') . (is_string($remove) ? $remove : ''));
+            static::stdout("\r" . ($keepPrefix ? self::$_progressPrefix : '') . (\is_string($remove) ? $remove : ''));
         }
-        flush();
+        \flush();
 
         self::$_progressStart = null;
         self::$_progressWidth = null;
@@ -1251,7 +1251,7 @@ class BaseConsole
         $showAllErrors = ArrayHelper::remove($options, 'showAllErrors', false);
         $lines = self::collectErrors($models, $showAllErrors);
 
-        return implode(PHP_EOL, $lines);
+        return \implode(\PHP_EOL, $lines);
     }
 
     /**
@@ -1269,12 +1269,12 @@ class BaseConsole
     {
         $lines = [];
 
-        if (!is_array($models)) {
+        if (!\is_array($models)) {
             $models = [$models];
         }
 
         foreach ($models as $model) {
-            $lines = array_unique(array_merge($lines, $model->getErrorSummary($showAllErrors)));
+            $lines = \array_unique(\array_merge($lines, $model->getErrorSummary($showAllErrors)));
         }
 
         return $lines;

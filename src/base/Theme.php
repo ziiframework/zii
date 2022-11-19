@@ -102,7 +102,7 @@ class Theme extends Component
      */
     public function setBaseUrl($url): void
     {
-        $this->_baseUrl = $url === null ? null : rtrim(Yii::getAlias($url), '/');
+        $this->_baseUrl = $url === null ? null : \rtrim(Yii::getAlias($url), '/');
     }
 
     private $_basePath;
@@ -151,16 +151,16 @@ class Theme extends Component
         $path = FileHelper::normalizePath($path);
 
         foreach ($pathMap as $from => $tos) {
-            $from = FileHelper::normalizePath(Yii::getAlias($from)) . DIRECTORY_SEPARATOR;
+            $from = FileHelper::normalizePath(Yii::getAlias($from)) . \DIRECTORY_SEPARATOR;
 
-            if (str_starts_with($path, $from)) {
-                $n = strlen($from);
+            if (\str_starts_with($path, $from)) {
+                $n = \strlen($from);
 
                 foreach ((array) $tos as $to) {
-                    $to = FileHelper::normalizePath(Yii::getAlias($to)) . DIRECTORY_SEPARATOR;
-                    $file = $to . substr($path, $n);
+                    $to = FileHelper::normalizePath(Yii::getAlias($to)) . \DIRECTORY_SEPARATOR;
+                    $file = $to . \substr($path, $n);
 
-                    if (is_file($file)) {
+                    if (\is_file($file)) {
                         return $file;
                     }
                 }
@@ -182,7 +182,7 @@ class Theme extends Component
     public function getUrl($url)
     {
         if (($baseUrl = $this->getBaseUrl()) !== null) {
-            return $baseUrl . '/' . ltrim($url, '/');
+            return $baseUrl . '/' . \ltrim($url, '/');
         }
 
         throw new InvalidConfigException('The "baseUrl" property must be set.');
@@ -200,7 +200,7 @@ class Theme extends Component
     public function getPath($path)
     {
         if (($basePath = $this->getBasePath()) !== null) {
-            return $basePath . DIRECTORY_SEPARATOR . ltrim($path, '/\\');
+            return $basePath . \DIRECTORY_SEPARATOR . \ltrim($path, '/\\');
         }
 
         throw new InvalidConfigException('The "basePath" property must be set.');

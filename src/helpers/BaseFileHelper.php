@@ -64,36 +64,36 @@ class BaseFileHelper
      *
      * @return string the normalized file/directory path
      */
-    public static function normalizePath($path, $ds = DIRECTORY_SEPARATOR)
+    public static function normalizePath($path, $ds = \DIRECTORY_SEPARATOR)
     {
-        $path = rtrim(strtr($path, '/\\', $ds . $ds), $ds);
+        $path = \rtrim(\strtr($path, '/\\', $ds . $ds), $ds);
 
-        if (!str_contains($ds . $path, "{$ds}.") && !str_contains($path, "{$ds}{$ds}")) {
+        if (!\str_contains($ds . $path, "{$ds}.") && !\str_contains($path, "{$ds}{$ds}")) {
             return $path;
         }
         // fix #17235 stream wrappers
-        foreach (stream_get_wrappers() as $protocol) {
-            if (str_starts_with($path, "{$protocol}://")) {
+        foreach (\stream_get_wrappers() as $protocol) {
+            if (\str_starts_with($path, "{$protocol}://")) {
                 return $path;
             }
         }
         // the path may contain ".", ".." or double slashes, need to clean them up
-        if (str_starts_with($path, "{$ds}{$ds}") && $ds == '\\') {
+        if (\str_starts_with($path, "{$ds}{$ds}") && $ds == '\\') {
             $parts = [$ds];
         } else {
             $parts = [];
         }
 
-        foreach (explode($ds, $path) as $part) {
-            if ($part === '..' && !empty($parts) && end($parts) !== '..') {
-                array_pop($parts);
+        foreach (\explode($ds, $path) as $part) {
+            if ($part === '..' && !empty($parts) && \end($parts) !== '..') {
+                \array_pop($parts);
             } elseif ($part === '.' || $part === '' && !empty($parts)) {
                 continue;
             } else {
                 $parts[] = $part;
             }
         }
-        $path = implode($ds, $parts);
+        $path = \implode($ds, $parts);
 
         return $path === '' ? '.' : $path;
     }
@@ -132,20 +132,20 @@ class BaseFileHelper
         if ($language === $sourceLanguage) {
             return $file;
         }
-        $desiredFile = dirname($file) . DIRECTORY_SEPARATOR . $language . DIRECTORY_SEPARATOR . basename($file);
+        $desiredFile = \dirname($file) . \DIRECTORY_SEPARATOR . $language . \DIRECTORY_SEPARATOR . \basename($file);
 
-        if (is_file($desiredFile)) {
+        if (\is_file($desiredFile)) {
             return $desiredFile;
         }
 
-        $language = substr($language, 0, 2);
+        $language = \substr($language, 0, 2);
 
         if ($language === $sourceLanguage) {
             return $file;
         }
-        $desiredFile = dirname($file) . DIRECTORY_SEPARATOR . $language . DIRECTORY_SEPARATOR . basename($file);
+        $desiredFile = \dirname($file) . \DIRECTORY_SEPARATOR . $language . \DIRECTORY_SEPARATOR . \basename($file);
 
-        return is_file($desiredFile) ? $desiredFile : $file;
+        return \is_file($desiredFile) ? $desiredFile : $file;
     }
 
     /**
@@ -172,7 +172,7 @@ class BaseFileHelper
             $magicFile = Yii::getAlias($magicFile);
         }
 
-        if (!extension_loaded('fileinfo')) {
+        if (!\extension_loaded('fileinfo')) {
             if ($checkExtension) {
                 return static::getMimeTypeByExtension($file, $magicFile);
             }
@@ -180,11 +180,11 @@ class BaseFileHelper
             throw new InvalidConfigException('The fileinfo PHP extension is not installed.');
         }
 
-        $info = finfo_open(FILEINFO_MIME_TYPE, $magicFile);
+        $info = \finfo_open(\FILEINFO_MIME_TYPE, $magicFile);
 
         if ($info) {
-            $result = finfo_file($info, $file);
-            finfo_close($info);
+            $result = \finfo_file($info, $file);
+            \finfo_close($info);
 
             if ($result !== false) {
                 return $result;
@@ -208,8 +208,8 @@ class BaseFileHelper
     {
         $mimeTypes = static::loadMimeTypes($magicFile);
 
-        if (($ext = pathinfo($file, PATHINFO_EXTENSION)) !== '') {
-            $ext = strtolower($ext);
+        if (($ext = \pathinfo($file, \PATHINFO_EXTENSION)) !== '') {
+            $ext = \strtolower($ext);
 
             if (isset($mimeTypes[$ext])) {
                 return $mimeTypes[$ext];
@@ -239,7 +239,7 @@ class BaseFileHelper
 
         $mimeTypes = static::loadMimeTypes($magicFile);
 
-        return array_keys($mimeTypes, mb_strtolower($mimeType, 'UTF-8'), true);
+        return \array_keys($mimeTypes, \mb_strtolower($mimeType, 'UTF-8'), true);
     }
 
     private static $_mimeTypes = [];
@@ -342,17 +342,17 @@ class BaseFileHelper
         $src = static::normalizePath($src);
         $dst = static::normalizePath($dst);
 
-        if ($src === $dst || str_starts_with($dst, $src . DIRECTORY_SEPARATOR)) {
+        if ($src === $dst || \str_starts_with($dst, $src . \DIRECTORY_SEPARATOR)) {
             throw new InvalidArgumentException('Trying to copy a directory to itself or a subdirectory.');
         }
-        $dstExists = is_dir($dst);
+        $dstExists = \is_dir($dst);
 
         if (!$dstExists && (!isset($options['copyEmptyDirectories']) || $options['copyEmptyDirectories'])) {
             static::createDirectory($dst, $options['dirMode'] ?? 0775, true);
             $dstExists = true;
         }
 
-        $handle = opendir($src);
+        $handle = \opendir($src);
 
         if ($handle === false) {
             throw new InvalidArgumentException("Unable to open directory: $src");
@@ -360,32 +360,32 @@ class BaseFileHelper
 
         if (!isset($options['basePath'])) {
             // this should be done only once
-            $options['basePath'] = realpath($src);
+            $options['basePath'] = \realpath($src);
             $options = static::normalizeOptions($options);
         }
 
-        while (($file = readdir($handle)) !== false) {
+        while (($file = \readdir($handle)) !== false) {
             if ($file === '.' || $file === '..') {
                 continue;
             }
-            $from = $src . DIRECTORY_SEPARATOR . $file;
-            $to = $dst . DIRECTORY_SEPARATOR . $file;
+            $from = $src . \DIRECTORY_SEPARATOR . $file;
+            $to = $dst . \DIRECTORY_SEPARATOR . $file;
 
             if (static::filterPath($from, $options)) {
-                if (isset($options['beforeCopy']) && !call_user_func($options['beforeCopy'], $from, $to)) {
+                if (isset($options['beforeCopy']) && !\call_user_func($options['beforeCopy'], $from, $to)) {
                     continue;
                 }
 
-                if (is_file($from)) {
+                if (\is_file($from)) {
                     if (!$dstExists) {
                         // delay creation of destination directory until the first file is copied to avoid creating empty directories
                         static::createDirectory($dst, $options['dirMode'] ?? 0775, true);
                         $dstExists = true;
                     }
-                    copy($from, $to);
+                    \copy($from, $to);
 
                     if (isset($options['fileMode'])) {
-                        @chmod($to, $options['fileMode']);
+                        @\chmod($to, $options['fileMode']);
                     }
                 } else {
                     // recursive copy, defaults to true
@@ -395,11 +395,11 @@ class BaseFileHelper
                 }
 
                 if (isset($options['afterCopy'])) {
-                    call_user_func($options['afterCopy'], $from, $to);
+                    \call_user_func($options['afterCopy'], $from, $to);
                 }
             }
         }
-        closedir($handle);
+        \closedir($handle);
     }
 
     /**
@@ -416,34 +416,34 @@ class BaseFileHelper
      */
     public static function removeDirectory($dir, $options = []): void
     {
-        if (!is_dir($dir)) {
+        if (!\is_dir($dir)) {
             return;
         }
 
-        if (!empty($options['traverseSymlinks']) || !is_link($dir)) {
-            if (!($handle = opendir($dir))) {
+        if (!empty($options['traverseSymlinks']) || !\is_link($dir)) {
+            if (!($handle = \opendir($dir))) {
                 return;
             }
 
-            while (($file = readdir($handle)) !== false) {
+            while (($file = \readdir($handle)) !== false) {
                 if ($file === '.' || $file === '..') {
                     continue;
                 }
-                $path = $dir . DIRECTORY_SEPARATOR . $file;
+                $path = $dir . \DIRECTORY_SEPARATOR . $file;
 
-                if (is_dir($path)) {
+                if (\is_dir($path)) {
                     static::removeDirectory($path, $options);
                 } else {
                     static::unlink($path);
                 }
             }
-            closedir($handle);
+            \closedir($handle);
         }
 
-        if (is_link($dir)) {
+        if (\is_link($dir)) {
             static::unlink($dir);
         } else {
-            rmdir($dir);
+            \rmdir($dir);
         }
     }
 
@@ -458,28 +458,28 @@ class BaseFileHelper
      */
     public static function unlink($path)
     {
-        $isWindows = DIRECTORY_SEPARATOR === '\\';
+        $isWindows = \DIRECTORY_SEPARATOR === '\\';
 
         if (!$isWindows) {
-            return unlink($path);
+            return \unlink($path);
         }
 
-        if (is_link($path) && is_dir($path)) {
-            return rmdir($path);
+        if (\is_link($path) && \is_dir($path)) {
+            return \rmdir($path);
         }
 
         try {
-            return unlink($path);
+            return \unlink($path);
         } catch (ErrorException $e) {
             // last resort measure for Windows
-            if (is_dir($path) && count(static::findFiles($path)) !== 0) {
+            if (\is_dir($path) && \count(static::findFiles($path)) !== 0) {
                 return false;
             }
 
-            if (function_exists('exec') && file_exists($path)) {
-                exec('DEL /F/Q ' . escapeshellarg($path));
+            if (\function_exists('exec') && \file_exists($path)) {
+                \exec('DEL /F/Q ' . \escapeshellarg($path));
 
-                return !file_exists($path);
+                return !\file_exists($path);
             }
 
             return false;
@@ -531,21 +531,21 @@ class BaseFileHelper
         $list = [];
         $handle = self::openDir($dir);
 
-        while (($file = readdir($handle)) !== false) {
+        while (($file = \readdir($handle)) !== false) {
             if ($file === '.' || $file === '..') {
                 continue;
             }
-            $path = $dir . DIRECTORY_SEPARATOR . $file;
+            $path = $dir . \DIRECTORY_SEPARATOR . $file;
 
             if (static::filterPath($path, $options)) {
-                if (is_file($path)) {
+                if (\is_file($path)) {
                     $list[] = $path;
-                } elseif (is_dir($path) && (!isset($options['recursive']) || $options['recursive'])) {
-                    $list = array_merge($list, static::findFiles($path, $options));
+                } elseif (\is_dir($path) && (!isset($options['recursive']) || $options['recursive'])) {
+                    $list = \array_merge($list, static::findFiles($path, $options));
                 }
             }
         }
-        closedir($handle);
+        \closedir($handle);
 
         return $list;
     }
@@ -579,21 +579,21 @@ class BaseFileHelper
         $list = [];
         $handle = self::openDir($dir);
 
-        while (($file = readdir($handle)) !== false) {
+        while (($file = \readdir($handle)) !== false) {
             if ($file === '.' || $file === '..') {
                 continue;
             }
-            $path = $dir . DIRECTORY_SEPARATOR . $file;
+            $path = $dir . \DIRECTORY_SEPARATOR . $file;
 
-            if (is_dir($path) && static::filterPath($path, $options)) {
+            if (\is_dir($path) && static::filterPath($path, $options)) {
                 $list[] = $path;
 
                 if (!isset($options['recursive']) || $options['recursive']) {
-                    $list = array_merge($list, static::findDirectories($path, $options));
+                    $list = \array_merge($list, static::findDirectories($path, $options));
                 }
             }
         }
-        closedir($handle);
+        \closedir($handle);
 
         return $list;
     }
@@ -608,7 +608,7 @@ class BaseFileHelper
     {
         if (!isset($options['basePath'])) {
             // this should be done only once
-            $options['basePath'] = realpath($dir);
+            $options['basePath'] = \realpath($dir);
             $options = static::normalizeOptions($options);
         }
 
@@ -624,7 +624,7 @@ class BaseFileHelper
      */
     private static function openDir($dir)
     {
-        $handle = opendir($dir);
+        $handle = \opendir($dir);
 
         if ($handle === false) {
             throw new InvalidArgumentException("Unable to open directory: $dir");
@@ -642,11 +642,11 @@ class BaseFileHelper
      */
     private static function clearDir($dir)
     {
-        if (!is_dir($dir)) {
+        if (!\is_dir($dir)) {
             throw new InvalidArgumentException("The dir argument must be a directory: $dir");
         }
 
-        return rtrim($dir, '\/');
+        return \rtrim($dir, '\/');
     }
 
     /**
@@ -661,9 +661,9 @@ class BaseFileHelper
     public static function filterPath($path, $options)
     {
         if (isset($options['filter'])) {
-            $result = call_user_func($options['filter'], $path);
+            $result = \call_user_func($options['filter'], $path);
 
-            if (is_bool($result)) {
+            if (\is_bool($result)) {
                 return $result;
             }
         }
@@ -672,7 +672,7 @@ class BaseFileHelper
             return true;
         }
 
-        $path = str_replace('\\', '/', $path);
+        $path = \str_replace('\\', '/', $path);
 
         if (
             !empty($options['except'])
@@ -681,7 +681,7 @@ class BaseFileHelper
             return $except['flags'] & self::PATTERN_NEGATIVE;
         }
 
-        if (!empty($options['only']) && !is_dir($path)) {
+        if (!empty($options['only']) && !\is_dir($path)) {
             return self::lastExcludeMatchingFromList($options['basePath'], $path, $options['only']) !== null;
         }
 
@@ -705,27 +705,27 @@ class BaseFileHelper
      */
     public static function createDirectory($path, $mode = 0775, $recursive = true)
     {
-        if (is_dir($path)) {
+        if (\is_dir($path)) {
             return true;
         }
-        $parentDir = dirname($path);
+        $parentDir = \dirname($path);
         // recurse if parent dir does not exist and we are not at the root of the file system.
-        if ($recursive && !is_dir($parentDir) && $parentDir !== $path) {
+        if ($recursive && !\is_dir($parentDir) && $parentDir !== $path) {
             static::createDirectory($parentDir, $mode, true);
         }
 
         try {
-            if (!mkdir($path, $mode)) {
+            if (!\mkdir($path, $mode)) {
                 return false;
             }
         } catch (\Exception $e) {
-            if (!is_dir($path)) {// https://github.com/yiisoft/yii2/issues/9288
+            if (!\is_dir($path)) {// https://github.com/yiisoft/yii2/issues/9288
                 throw new \yii\base\Exception("Failed to create directory \"$path\": " . $e->getMessage(), $e->getCode(), $e);
             }
         }
 
         try {
-            return chmod($path, $mode);
+            return \chmod($path, $mode);
         } catch (\Exception $e) {
             throw new \yii\base\Exception("Failed to change permissions for directory \"$path\": " . $e->getMessage(), $e->getCode(), $e);
         }
@@ -783,7 +783,7 @@ class BaseFileHelper
     private static function matchPathname($path, $basePath, $pattern, $firstWildcard, $flags)
     {
         // match with FNM_PATHNAME; the pattern has base implicitly in front of it.
-        if (strncmp($pattern, '/', 1) === 0) {
+        if (\strncmp($pattern, '/', 1) === 0) {
             $pattern = StringHelper::byteSubstr($pattern, 1, StringHelper::byteLength($pattern));
 
             if ($firstWildcard !== false && $firstWildcard !== 0) {
@@ -803,7 +803,7 @@ class BaseFileHelper
                 return false;
             }
 
-            if (strncmp($pattern, $name, $firstWildcard)) {
+            if (\strncmp($pattern, $name, $firstWildcard)) {
                 return false;
             }
             $pattern = StringHelper::byteSubstr($pattern, $firstWildcard, StringHelper::byteLength($pattern));
@@ -844,8 +844,8 @@ class BaseFileHelper
      */
     private static function lastExcludeMatchingFromList($basePath, $path, $excludes)
     {
-        foreach (array_reverse($excludes) as $exclude) {
-            if (is_string($exclude)) {
+        foreach (\array_reverse($excludes) as $exclude) {
+            if (\is_string($exclude)) {
                 $exclude = self::parseExcludePattern($exclude, false);
             }
 
@@ -853,12 +853,12 @@ class BaseFileHelper
                 throw new InvalidArgumentException('If exclude/include pattern is an array it must contain the pattern, flags and firstWildcard keys.');
             }
 
-            if ($exclude['flags'] & self::PATTERN_MUSTBEDIR && !is_dir($path)) {
+            if ($exclude['flags'] & self::PATTERN_MUSTBEDIR && !\is_dir($path)) {
                 continue;
             }
 
             if ($exclude['flags'] & self::PATTERN_NODIR) {
-                if (self::matchBasename(basename($path), $exclude['pattern'], $exclude['firstWildcard'], $exclude['flags'])) {
+                if (self::matchBasename(\basename($path), $exclude['pattern'], $exclude['firstWildcard'], $exclude['flags'])) {
                     return $exclude;
                 }
 
@@ -885,7 +885,7 @@ class BaseFileHelper
      */
     private static function parseExcludePattern($pattern, $caseSensitive)
     {
-        if (!is_string($pattern)) {
+        if (!\is_string($pattern)) {
             throw new InvalidArgumentException('Exclude/include pattern must be a string.');
         }
 
@@ -903,7 +903,7 @@ class BaseFileHelper
             return $result;
         }
 
-        if (strncmp($pattern, '!', 1) === 0) {
+        if (\strncmp($pattern, '!', 1) === 0) {
             $result['flags'] |= self::PATTERN_NEGATIVE;
             $pattern = StringHelper::byteSubstr($pattern, 1, StringHelper::byteLength($pattern));
         }
@@ -913,12 +913,12 @@ class BaseFileHelper
             $result['flags'] |= self::PATTERN_MUSTBEDIR;
         }
 
-        if (!str_contains($pattern, '/')) {
+        if (!\str_contains($pattern, '/')) {
             $result['flags'] |= self::PATTERN_NODIR;
         }
         $result['firstWildcard'] = self::firstWildcardInPattern($pattern);
 
-        if (strncmp($pattern, '*', 1) === 0 && self::firstWildcardInPattern(StringHelper::byteSubstr($pattern, 1, StringHelper::byteLength($pattern))) === false) {
+        if (\strncmp($pattern, '*', 1) === 0 && self::firstWildcardInPattern(StringHelper::byteSubstr($pattern, 1, StringHelper::byteLength($pattern))) === false) {
             $result['flags'] |= self::PATTERN_ENDSWITH;
         }
         $result['pattern'] = $pattern;
@@ -937,12 +937,12 @@ class BaseFileHelper
     {
         $wildcards = ['*', '?', '[', '\\'];
         $wildcardSearch = static function ($r, $c) use ($pattern) {
-            $p = strpos($pattern, $c);
+            $p = \strpos($pattern, $c);
 
-            return $r === false ? $p : ($p === false ? $r : min($r, $p));
+            return $r === false ? $p : ($p === false ? $r : \min($r, $p));
         };
 
-        return array_reduce($wildcards, $wildcardSearch, false);
+        return \array_reduce($wildcards, $wildcardSearch, false);
     }
 
     /**
@@ -954,13 +954,13 @@ class BaseFileHelper
      */
     protected static function normalizeOptions(array $options)
     {
-        if (!array_key_exists('caseSensitive', $options)) {
+        if (!\array_key_exists('caseSensitive', $options)) {
             $options['caseSensitive'] = true;
         }
 
         if (isset($options['except'])) {
             foreach ($options['except'] as $key => $value) {
-                if (is_string($value)) {
+                if (\is_string($value)) {
                     $options['except'][$key] = self::parseExcludePattern($value, $options['caseSensitive']);
                 }
             }
@@ -968,7 +968,7 @@ class BaseFileHelper
 
         if (isset($options['only'])) {
             foreach ($options['only'] as $key => $value) {
-                if (is_string($value)) {
+                if (\is_string($value)) {
                     $options['only'][$key] = self::parseExcludePattern($value, $options['caseSensitive']);
                 }
             }
@@ -1000,7 +1000,7 @@ class BaseFileHelper
      */
     public static function changeOwnership($path, $ownership, $mode = null): void
     {
-        if ($path === null || !file_exists($path)) {
+        if ($path === null || !\file_exists($path)) {
             throw new InvalidArgumentException('Unable to change ownership, "' . $path . '" is not a file or directory.');
         }
 
@@ -1011,16 +1011,16 @@ class BaseFileHelper
         $user = $group = null;
 
         if (!empty($ownership) || $ownership === 0 || $ownership === '0') {
-            if (is_int($ownership)) {
+            if (\is_int($ownership)) {
                 $user = $ownership;
-            } elseif (is_string($ownership)) {
-                $ownerParts = explode(':', $ownership);
+            } elseif (\is_string($ownership)) {
+                $ownerParts = \explode(':', $ownership);
                 $user = $ownerParts[0];
 
-                if (count($ownerParts) > 1) {
+                if (\count($ownerParts) > 1) {
                     $group = $ownerParts[1];
                 }
-            } elseif (is_array($ownership)) {
+            } elseif (\is_array($ownership)) {
                 $ownershipIsIndexed = ArrayHelper::isIndexed($ownership);
                 $user = ArrayHelper::getValue($ownership, $ownershipIsIndexed ? 0 : 'user');
                 $group = ArrayHelper::getValue($ownership, $ownershipIsIndexed ? 1 : 'group');
@@ -1030,35 +1030,35 @@ class BaseFileHelper
         }
 
         if ($mode !== null) {
-            if (!is_int($mode)) {
+            if (!\is_int($mode)) {
                 throw new InvalidArgumentException('$mode must be an integer or null.');
             }
 
-            if (!chmod($path, $mode)) {
-                throw new Exception('Unable to change mode of "' . $path . '" to "0' . decoct($mode) . '".');
+            if (!\chmod($path, $mode)) {
+                throw new Exception('Unable to change mode of "' . $path . '" to "0' . \decoct($mode) . '".');
             }
         }
 
         if ($user !== null && $user !== '') {
-            if (is_numeric($user)) {
+            if (\is_numeric($user)) {
                 $user = (int) $user;
-            } elseif (!is_string($user)) {
+            } elseif (!\is_string($user)) {
                 throw new InvalidArgumentException('The user part of $ownership must be an integer, string, or null.');
             }
 
-            if (!chown($path, $user)) {
+            if (!\chown($path, $user)) {
                 throw new Exception('Unable to change user ownership of "' . $path . '" to "' . $user . '".');
             }
         }
 
         if ($group !== null && $group !== '') {
-            if (is_numeric($group)) {
+            if (\is_numeric($group)) {
                 $group = (int) $group;
-            } elseif (!is_string($group)) {
+            } elseif (!\is_string($group)) {
                 throw new InvalidArgumentException('The group part of $ownership must be an integer, string or null.');
             }
 
-            if (!chgrp($path, $group)) {
+            if (!\chgrp($path, $group)) {
                 throw new Exception('Unable to change group ownership of "' . $path . '" to "' . $group . '".');
             }
         }

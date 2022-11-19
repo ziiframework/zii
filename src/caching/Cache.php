@@ -117,16 +117,16 @@ abstract class Cache extends Component implements CacheInterface
      */
     public function buildKey($key)
     {
-        if (is_string($key)) {
-            $key = ctype_alnum($key) && StringHelper::byteLength($key) <= 32 ? $key : md5($key);
+        if (\is_string($key)) {
+            $key = \ctype_alnum($key) && StringHelper::byteLength($key) <= 32 ? $key : \md5($key);
         } else {
             if ($this->_igbinaryAvailable) {
                 $serializedKey = igbinary_serialize($key);
             } else {
-                $serializedKey = serialize($key);
+                $serializedKey = \serialize($key);
             }
 
-            $key = md5($serializedKey);
+            $key = \md5($serializedKey);
         }
 
         return $this->keyPrefix . $key;
@@ -149,12 +149,12 @@ abstract class Cache extends Component implements CacheInterface
         if ($value === false || $this->serializer === false) {
             return $value;
         } elseif ($this->serializer === null) {
-            $value = unserialize($value ?? '');
+            $value = \unserialize($value ?? '');
         } else {
-            $value = call_user_func($this->serializer[1], $value);
+            $value = \call_user_func($this->serializer[1], $value);
         }
 
-        if (is_array($value) && !($value[1] instanceof Dependency && $value[1]->isChanged($this))) {
+        if (\is_array($value) && !($value[1] instanceof Dependency && $value[1]->isChanged($this))) {
             return $value[0];
         }
 
@@ -223,7 +223,7 @@ abstract class Cache extends Component implements CacheInterface
         foreach ($keys as $key) {
             $keyMap[$key] = $this->buildKey($key);
         }
-        $values = $this->getValues(array_values($keyMap));
+        $values = $this->getValues(\array_values($keyMap));
         $results = [];
 
         foreach ($keyMap as $key => $newKey) {
@@ -234,12 +234,12 @@ abstract class Cache extends Component implements CacheInterface
                     $results[$key] = $values[$newKey];
                 } else {
                     if ($this->serializer === null) {
-                        $value = $values[$newKey] === false ? false : unserialize($values[$newKey]);
+                        $value = $values[$newKey] === false ? false : \unserialize($values[$newKey]);
                     } else {
-                        $value = call_user_func($this->serializer[1], $values[$newKey]);
+                        $value = \call_user_func($this->serializer[1], $values[$newKey]);
                     }
 
-                    if (is_array($value) && !($value[1] instanceof Dependency && $value[1]->isChanged($this))) {
+                    if (\is_array($value) && !($value[1] instanceof Dependency && $value[1]->isChanged($this))) {
                         $results[$key] = $value[0];
                     }
                 }
@@ -276,9 +276,9 @@ abstract class Cache extends Component implements CacheInterface
         }
 
         if ($this->serializer === null) {
-            $value = serialize([$value, $dependency]);
+            $value = \serialize([$value, $dependency]);
         } elseif ($this->serializer !== false) {
-            $value = call_user_func($this->serializer[0], [$value, $dependency]);
+            $value = \call_user_func($this->serializer[0], [$value, $dependency]);
         }
         $key = $this->buildKey($key);
 
@@ -336,9 +336,9 @@ abstract class Cache extends Component implements CacheInterface
 
         foreach ($items as $key => $value) {
             if ($this->serializer === null) {
-                $value = serialize([$value, $dependency]);
+                $value = \serialize([$value, $dependency]);
             } elseif ($this->serializer !== false) {
-                $value = call_user_func($this->serializer[0], [$value, $dependency]);
+                $value = \call_user_func($this->serializer[0], [$value, $dependency]);
             }
 
             $key = $this->buildKey($key);
@@ -391,9 +391,9 @@ abstract class Cache extends Component implements CacheInterface
 
         foreach ($items as $key => $value) {
             if ($this->serializer === null) {
-                $value = serialize([$value, $dependency]);
+                $value = \serialize([$value, $dependency]);
             } elseif ($this->serializer !== false) {
-                $value = call_user_func($this->serializer[0], [$value, $dependency]);
+                $value = \call_user_func($this->serializer[0], [$value, $dependency]);
             }
 
             $key = $this->buildKey($key);
@@ -424,9 +424,9 @@ abstract class Cache extends Component implements CacheInterface
         }
 
         if ($this->serializer === null) {
-            $value = serialize([$value, $dependency]);
+            $value = \serialize([$value, $dependency]);
         } elseif ($this->serializer !== false) {
-            $value = call_user_func($this->serializer[0], [$value, $dependency]);
+            $value = \call_user_func($this->serializer[0], [$value, $dependency]);
         }
         $key = $this->buildKey($key);
 
@@ -676,10 +676,10 @@ abstract class Cache extends Component implements CacheInterface
             return $value;
         }
 
-        $value = call_user_func($callable, $this);
+        $value = \call_user_func($callable, $this);
 
         if (!$this->set($key, $value, $duration, $dependency)) {
-            Yii::warning('Failed to set cache value for key ' . json_encode($key), __METHOD__);
+            Yii::warning('Failed to set cache value for key ' . \json_encode($key), __METHOD__);
         }
 
         return $value;

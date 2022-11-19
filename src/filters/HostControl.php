@@ -132,14 +132,14 @@ class HostControl extends ActionFilter
         $allowedHosts = $this->allowedHosts;
 
         if ($allowedHosts instanceof Closure) {
-            $allowedHosts = call_user_func($allowedHosts, $action);
+            $allowedHosts = \call_user_func($allowedHosts, $action);
         }
 
         if ($allowedHosts === null) {
             return true;
         }
 
-        if (!is_array($allowedHosts) && !$allowedHosts instanceof Traversable) {
+        if (!\is_array($allowedHosts) && !$allowedHosts instanceof Traversable) {
             $allowedHosts = (array) $allowedHosts;
         }
 
@@ -157,7 +157,7 @@ class HostControl extends ActionFilter
         }
 
         if ($this->denyCallback !== null) {
-            call_user_func($this->denyCallback, $action);
+            \call_user_func($this->denyCallback, $action);
         } else {
             $this->denyAccess($action);
         }

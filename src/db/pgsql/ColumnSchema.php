@@ -82,7 +82,7 @@ class ColumnSchema extends \yii\db\ColumnSchema
                 : new ArrayExpression($value, $this->dbType, $this->dimension);
         }
 
-        if (!$this->disableJsonSupport && in_array($this->dbType, [Schema::TYPE_JSON, Schema::TYPE_JSONB], true)) {
+        if (!$this->disableJsonSupport && \in_array($this->dbType, [Schema::TYPE_JSON, Schema::TYPE_JSONB], true)) {
             return new JsonExpression($value, $this->dbType);
         }
 
@@ -99,12 +99,12 @@ class ColumnSchema extends \yii\db\ColumnSchema
                 return $value;
             }
 
-            if (!is_array($value)) {
+            if (!\is_array($value)) {
                 $value = $this->getArrayParser()->parse($value);
             }
 
-            if (is_array($value)) {
-                array_walk_recursive($value, function (&$val, $key): void {
+            if (\is_array($value)) {
+                \array_walk_recursive($value, function (&$val, $key): void {
                     $val = $this->phpTypecastValue($val);
                 });
             } elseif ($value === null) {
@@ -134,11 +134,11 @@ class ColumnSchema extends \yii\db\ColumnSchema
 
         switch ($this->type) {
             case Schema::TYPE_BOOLEAN:
-                if (is_bool($value)) {
+                if (\is_bool($value)) {
                     return $value;
                 }
 
-                switch (strtolower($value)) {
+                switch (\strtolower($value)) {
                     case 't':
                     case 'true':
                         return true;
@@ -151,7 +151,7 @@ class ColumnSchema extends \yii\db\ColumnSchema
                 return (bool) $value;
 
             case Schema::TYPE_JSON:
-                return $this->disableJsonSupport ? $value : json_decode($value, true);
+                return $this->disableJsonSupport ? $value : \json_decode($value, true);
         }
 
         return parent::phpTypecast($value);

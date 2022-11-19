@@ -100,7 +100,7 @@ class MessageFormatter extends Component
             return $pattern;
         }
 
-        if (!class_exists('MessageFormatter', false)) {
+        if (!\class_exists('MessageFormatter', false)) {
             return $this->fallbackFormat($pattern, $params, $language);
         }
 
@@ -118,8 +118,8 @@ class MessageFormatter extends Component
 
             if ($formatter === null) {
                 // formatter may be null in PHP 5.x
-                $this->_errorCode = intl_get_error_code();
-                $this->_errorMessage = 'Message pattern is invalid: ' . intl_get_error_message();
+                $this->_errorCode = \intl_get_error_code();
+                $this->_errorMessage = 'Message pattern is invalid: ' . \intl_get_error_message();
 
                 return false;
             }
@@ -169,7 +169,7 @@ class MessageFormatter extends Component
         $this->_errorCode = 0;
         $this->_errorMessage = '';
 
-        if (!class_exists('MessageFormatter', false)) {
+        if (!\class_exists('MessageFormatter', false)) {
             throw new NotSupportedException('You have to install PHP intl extension to use this feature.');
         }
 
@@ -183,18 +183,18 @@ class MessageFormatter extends Component
         $map = [];
 
         foreach ($tokens as $i => $token) {
-            if (is_array($token)) {
-                $param = trim($token[0]);
+            if (\is_array($token)) {
+                $param = \trim($token[0]);
 
                 if (!isset($map[$param])) {
-                    $map[$param] = count($map);
+                    $map[$param] = \count($map);
                 }
                 $token[0] = $map[$param];
-                $tokens[$i] = '{' . implode(',', $token) . '}';
+                $tokens[$i] = '{' . \implode(',', $token) . '}';
             }
         }
-        $pattern = implode('', $tokens);
-        $map = array_flip($map);
+        $pattern = \implode('', $tokens);
+        $map = \array_flip($map);
 
         $formatter = new \MessageFormatter($language, $pattern);
 
@@ -239,15 +239,15 @@ class MessageFormatter extends Component
         }
 
         foreach ($tokens as $i => $token) {
-            if (!is_array($token)) {
+            if (!\is_array($token)) {
                 continue;
             }
-            $param = trim($token[0]);
+            $param = \trim($token[0]);
 
-            if (array_key_exists($param, $givenParams)) {
+            if (\array_key_exists($param, $givenParams)) {
                 // if param is given, replace it with a number
                 if (!isset($map[$param])) {
-                    $map[$param] = count($map);
+                    $map[$param] = \count($map);
                     // make sure only used params are passed to format method
                     $resultingParams[$map[$param]] = $givenParams[$param];
                 }
@@ -257,7 +257,7 @@ class MessageFormatter extends Component
                 // quote unused token
                 $quote = "'";
             }
-            $type = isset($token[1]) ? trim($token[1]) : 'none';
+            $type = isset($token[1]) ? \trim($token[1]) : 'none';
             // replace plural and select format recursively
             if ($type === 'plural' || $type === 'select') {
                 if (!isset($token[2])) {
@@ -267,21 +267,21 @@ class MessageFormatter extends Component
                 if (($subtokens = self::tokenizePattern($token[2])) === false) {
                     return false;
                 }
-                $c = count($subtokens);
+                $c = \count($subtokens);
 
                 for ($k = 0; $k + 1 < $c; ++$k) {
-                    if (is_array($subtokens[$k]) || !is_array($subtokens[++$k])) {
+                    if (\is_array($subtokens[$k]) || !\is_array($subtokens[++$k])) {
                         return false;
                     }
-                    $subpattern = $this->replaceNamedArguments(implode(',', $subtokens[$k]), $givenParams, $resultingParams, $map);
+                    $subpattern = $this->replaceNamedArguments(\implode(',', $subtokens[$k]), $givenParams, $resultingParams, $map);
                     $subtokens[$k] = $quote . '{' . $quote . $subpattern . $quote . '}' . $quote;
                 }
-                $token[2] = implode('', $subtokens);
+                $token[2] = \implode('', $subtokens);
             }
-            $tokens[$i] = $quote . '{' . $quote . implode(',', $token) . $quote . '}' . $quote;
+            $tokens[$i] = $quote . '{' . $quote . \implode(',', $token) . $quote . '}' . $quote;
         }
 
-        return implode('', $tokens);
+        return \implode('', $tokens);
     }
 
     /**
@@ -303,7 +303,7 @@ class MessageFormatter extends Component
         }
 
         foreach ($tokens as $i => $token) {
-            if (is_array($token)) {
+            if (\is_array($token)) {
                 if (($tokens[$i] = $this->parseToken($token, $args, $locale)) === false) {
                     $this->_errorCode = -1;
                     $this->_errorMessage = 'Message pattern is invalid.';
@@ -313,7 +313,7 @@ class MessageFormatter extends Component
             }
         }
 
-        return implode('', $tokens);
+        return \implode('', $tokens);
     }
 
     /**
@@ -328,21 +328,21 @@ class MessageFormatter extends Component
         $charset = Yii::$app ? Yii::$app->charset : 'UTF-8';
         $depth = 1;
 
-        if (($start = $pos = mb_strpos($pattern, '{', 0, $charset)) === false) {
+        if (($start = $pos = \mb_strpos($pattern, '{', 0, $charset)) === false) {
             return [$pattern];
         }
-        $tokens = [mb_substr($pattern, 0, $pos, $charset)];
+        $tokens = [\mb_substr($pattern, 0, $pos, $charset)];
 
         while (true) {
-            $open = mb_strpos($pattern, '{', $pos + 1, $charset);
-            $close = mb_strpos($pattern, '}', $pos + 1, $charset);
+            $open = \mb_strpos($pattern, '{', $pos + 1, $charset);
+            $close = \mb_strpos($pattern, '}', $pos + 1, $charset);
 
             if ($open === false && $close === false) {
                 break;
             }
 
             if ($open === false) {
-                $open = mb_strlen($pattern, $charset);
+                $open = \mb_strlen($pattern, $charset);
             }
 
             if ($close > $open) {
@@ -354,9 +354,9 @@ class MessageFormatter extends Component
             }
 
             if ($depth === 0) {
-                $tokens[] = explode(',', mb_substr($pattern, $start + 1, $pos - $start - 1, $charset), 3);
+                $tokens[] = \explode(',', \mb_substr($pattern, $start + 1, $pos - $start - 1, $charset), 3);
                 $start = $pos + 1;
-                $tokens[] = mb_substr($pattern, $start, $open - $start, $charset);
+                $tokens[] = \mb_substr($pattern, $start, $open - $start, $charset);
                 $start = $open;
             }
 
@@ -388,14 +388,14 @@ class MessageFormatter extends Component
         // parsing pattern based on ICU grammar:
         // https://unicode-org.github.io/icu-docs/#/icu4c/classMessageFormat.html
         $charset = Yii::$app ? Yii::$app->charset : 'UTF-8';
-        $param = trim($token[0]);
+        $param = \trim($token[0]);
 
         if (isset($args[$param])) {
             $arg = $args[$param];
         } else {
-            return '{' . implode(',', $token) . '}';
+            return '{' . \implode(',', $token) . '}';
         }
-        $type = isset($token[1]) ? trim($token[1]) : 'none';
+        $type = isset($token[1]) ? \trim($token[1]) : 'none';
 
         switch ($type) {
             case 'date':
@@ -408,14 +408,14 @@ class MessageFormatter extends Component
                 throw new NotSupportedException("Message format '$type' is not supported. You have to install PHP intl extension to use this feature.");
 
             case 'number':
-                $format = isset($token[2]) ? trim($token[2]) : null;
+                $format = isset($token[2]) ? \trim($token[2]) : null;
 
-                if (is_numeric($arg) && ($format === null || $format === 'integer')) {
-                    $number = number_format($arg);
+                if (\is_numeric($arg) && ($format === null || $format === 'integer')) {
+                    $number = \number_format($arg);
 
-                    if ($format === null && ($pos = strpos(pf_string_argument($arg), '.')) !== false) {
+                    if ($format === null && ($pos = \strpos(pf_string_argument($arg), '.')) !== false) {
                         // add decimals with unknown length
-                        $number .= '.' . substr(pf_string_argument($arg), $pos + 1);
+                        $number .= '.' . \substr(pf_string_argument($arg), $pos + 1);
                     }
 
                     return $number;
@@ -434,17 +434,17 @@ class MessageFormatter extends Component
                     return false;
                 }
                 $select = self::tokenizePattern($token[2]);
-                $c = count($select);
+                $c = \count($select);
                 $message = false;
 
                 for ($i = 0; $i + 1 < $c; ++$i) {
-                    if (is_array($select[$i]) || !is_array($select[$i + 1])) {
+                    if (\is_array($select[$i]) || !\is_array($select[$i + 1])) {
                         return false;
                     }
-                    $selector = trim($select[$i++]);
+                    $selector = \trim($select[$i++]);
 
                     if ($message === false && $selector === 'other' || $selector == $arg) {
-                        $message = implode(',', $select[$i]);
+                        $message = \implode(',', $select[$i]);
                     }
                 }
 
@@ -466,26 +466,26 @@ class MessageFormatter extends Component
                     return false;
                 }
                 $plural = self::tokenizePattern($token[2]);
-                $c = count($plural);
+                $c = \count($plural);
                 $message = false;
                 $offset = 0;
 
                 for ($i = 0; $i + 1 < $c; ++$i) {
-                    if (is_array($plural[$i]) || !is_array($plural[$i + 1])) {
+                    if (\is_array($plural[$i]) || !\is_array($plural[$i + 1])) {
                         return false;
                     }
-                    $selector = trim($plural[$i++]);
+                    $selector = \trim($plural[$i++]);
 
-                    if ($i == 1 && strncmp($selector, 'offset:', 7) === 0) {
-                        $offset = (int) trim(mb_substr($selector, 7, ($pos = mb_strpos(str_replace(["\n", "\r", "\t"], ' ', $selector), ' ', 7, $charset)) - 7, $charset));
-                        $selector = trim(mb_substr($selector, $pos + 1, mb_strlen($selector, $charset), $charset));
+                    if ($i == 1 && \strncmp($selector, 'offset:', 7) === 0) {
+                        $offset = (int) \trim(\mb_substr($selector, 7, ($pos = \mb_strpos(\str_replace(["\n", "\r", "\t"], ' ', $selector), ' ', 7, $charset)) - 7, $charset));
+                        $selector = \trim(\mb_substr($selector, $pos + 1, \mb_strlen($selector, $charset), $charset));
                     }
 
                     if ($message === false && $selector === 'other' ||
-                        strncmp($selector, '=', 1) === 0 && (int) mb_substr($selector, 1, mb_strlen($selector, $charset), $charset) === $arg ||
+                        \strncmp($selector, '=', 1) === 0 && (int) \mb_substr($selector, 1, \mb_strlen($selector, $charset), $charset) === $arg ||
                         $selector === 'one' && $arg - $offset == 1
                     ) {
-                        $message = implode(',', str_replace('#', pf_string_argument($arg - $offset), $plural[$i]));
+                        $message = \implode(',', \str_replace('#', pf_string_argument($arg - $offset), $plural[$i]));
                     }
                 }
 

@@ -203,7 +203,7 @@ class Module extends ServiceLocator
         if ($instance === null) {
             unset(Yii::$app->loadedModules[static::class]);
         } else {
-            Yii::$app->loadedModules[get_class($instance)] = $instance;
+            Yii::$app->loadedModules[\get_class($instance)] = $instance;
         }
     }
 
@@ -221,8 +221,8 @@ class Module extends ServiceLocator
         if ($this->controllerNamespace === null) {
             $class = static::class;
 
-            if (($pos = strrpos($class, '\\')) !== false) {
-                $this->controllerNamespace = substr($class, 0, $pos) . '\\controllers';
+            if (($pos = \strrpos($class, '\\')) !== false) {
+                $this->controllerNamespace = \substr($class, 0, $pos) . '\\controllers';
             }
         }
     }
@@ -235,7 +235,7 @@ class Module extends ServiceLocator
      */
     public function getUniqueId()
     {
-        return $this->module ? ltrim($this->module->getUniqueId() . '/' . $this->id, '/') : $this->id;
+        return $this->module ? \ltrim($this->module->getUniqueId() . '/' . $this->id, '/') : $this->id;
     }
 
     /**
@@ -248,7 +248,7 @@ class Module extends ServiceLocator
     {
         if ($this->_basePath === null) {
             $class = new ReflectionClass($this);
-            $this->_basePath = dirname($class->getFileName());
+            $this->_basePath = \dirname($class->getFileName());
         }
 
         return $this->_basePath;
@@ -265,9 +265,9 @@ class Module extends ServiceLocator
     public function setBasePath($path): void
     {
         $path = Yii::getAlias($path);
-        $p = strncmp($path, 'phar://', 7) === 0 ? $path : realpath($path);
+        $p = \strncmp($path, 'phar://', 7) === 0 ? $path : \realpath($path);
 
-        if (is_string($p) && is_dir($p)) {
+        if (\is_string($p) && \is_dir($p)) {
             $this->_basePath = $p;
         } else {
             throw new InvalidArgumentException("The directory does not exist: $path");
@@ -286,7 +286,7 @@ class Module extends ServiceLocator
     public function getControllerPath()
     {
         if ($this->_controllerPath === null) {
-            $this->_controllerPath = Yii::getAlias('@' . str_replace('\\', '/', $this->controllerNamespace));
+            $this->_controllerPath = Yii::getAlias('@' . \str_replace('\\', '/', $this->controllerNamespace));
         }
 
         return $this->_controllerPath;
@@ -314,7 +314,7 @@ class Module extends ServiceLocator
     public function getViewPath()
     {
         if ($this->_viewPath === null) {
-            $this->_viewPath = $this->getBasePath() . DIRECTORY_SEPARATOR . 'views';
+            $this->_viewPath = $this->getBasePath() . \DIRECTORY_SEPARATOR . 'views';
         }
 
         return $this->_viewPath;
@@ -340,7 +340,7 @@ class Module extends ServiceLocator
     public function getLayoutPath()
     {
         if ($this->_layoutPath === null) {
-            $this->_layoutPath = $this->getViewPath() . DIRECTORY_SEPARATOR . 'layouts';
+            $this->_layoutPath = $this->getViewPath() . \DIRECTORY_SEPARATOR . 'layouts';
         }
 
         return $this->_layoutPath;
@@ -371,8 +371,8 @@ class Module extends ServiceLocator
         if ($this->_version === null) {
             $this->_version = $this->defaultVersion();
         } else {
-            if (!is_scalar($this->_version)) {
-                $this->_version = call_user_func($this->_version, $this);
+            if (!\is_scalar($this->_version)) {
+                $this->_version = \call_user_func($this->_version, $this);
             }
         }
 
@@ -454,11 +454,11 @@ class Module extends ServiceLocator
      */
     public function hasModule($id)
     {
-        if (($pos = strpos($id, '/')) !== false) {
+        if (($pos = \strpos($id, '/')) !== false) {
             // sub-module
-            $module = $this->getModule(substr($id, 0, $pos));
+            $module = $this->getModule(\substr($id, 0, $pos));
 
-            return $module === null ? false : $module->hasModule(substr($id, $pos + 1));
+            return $module === null ? false : $module->hasModule(\substr($id, $pos + 1));
         }
 
         return isset($this->_modules[$id]);
@@ -478,11 +478,11 @@ class Module extends ServiceLocator
      */
     public function getModule($id, $load = true)
     {
-        if (($pos = strpos($id, '/')) !== false) {
+        if (($pos = \strpos($id, '/')) !== false) {
             // sub-module
-            $module = $this->getModule(substr($id, 0, $pos));
+            $module = $this->getModule(\substr($id, 0, $pos));
 
-            return $module === null ? null : $module->getModule(substr($id, $pos + 1), $load);
+            return $module === null ? null : $module->getModule(\substr($id, $pos + 1), $load);
         }
 
         if (isset($this->_modules[$id])) {
@@ -604,7 +604,7 @@ class Module extends ServiceLocator
     {
         $parts = $this->createController($route);
 
-        if (is_array($parts)) {
+        if (\is_array($parts)) {
             /* @var $controller Controller */
             [$controller, $actionID] = $parts;
             $oldController = Yii::$app->controller;
@@ -654,14 +654,14 @@ class Module extends ServiceLocator
         }
 
         // double slashes or leading/ending slashes may cause substr problem
-        $route = trim($route, '/');
+        $route = \trim($route, '/');
 
-        if (str_contains($route, '//')) {
+        if (\str_contains($route, '//')) {
             return false;
         }
 
-        if (str_contains($route, '/')) {
-            [$id, $route] = explode('/', $route, 2);
+        if (\str_contains($route, '/')) {
+            [$id, $route] = \explode('/', $route, 2);
         } else {
             $id = $route;
             $route = '';
@@ -679,9 +679,9 @@ class Module extends ServiceLocator
             return $module->createController($route);
         }
 
-        if (($pos = strrpos($route, '/')) !== false) {
-            $id .= '/' . substr($route, 0, $pos);
-            $route = substr($route, $pos + 1);
+        if (($pos = \strrpos($route, '/')) !== false) {
+            $id .= '/' . \substr($route, 0, $pos);
+            $route = \substr($route, $pos + 1);
         }
 
         $controller = $this->createControllerByID($id);
@@ -711,31 +711,31 @@ class Module extends ServiceLocator
      */
     public function createControllerByID($id)
     {
-        $pos = strrpos($id, '/');
+        $pos = \strrpos($id, '/');
 
         if ($pos === false) {
             $prefix = '';
             $className = $id;
         } else {
-            $prefix = substr($id, 0, $pos + 1);
-            $className = substr($id, $pos + 1);
+            $prefix = \substr($id, 0, $pos + 1);
+            $className = \substr($id, $pos + 1);
         }
 
         if ($this->isIncorrectClassNameOrPrefix($className, $prefix)) {
             return null;
         }
 
-        $className = preg_replace_callback('%-([a-z0-9_])%i', static fn ($matches) => ucfirst($matches[1]), ucfirst($className)) . 'Controller';
-        $className = ltrim($this->controllerNamespace . '\\' . str_replace('/', '\\', $prefix) . $className, '\\');
+        $className = \preg_replace_callback('%-([a-z0-9_])%i', static fn ($matches) => \ucfirst($matches[1]), \ucfirst($className)) . 'Controller';
+        $className = \ltrim($this->controllerNamespace . '\\' . \str_replace('/', '\\', $prefix) . $className, '\\');
 
-        if (str_contains($className, '-') || !class_exists($className)) {
+        if (\str_contains($className, '-') || !\class_exists($className)) {
             return null;
         }
 
-        if (is_subclass_of($className, 'yii\base\Controller')) {
+        if (\is_subclass_of($className, 'yii\base\Controller')) {
             $controller = Yii::createObject($className, [$id, $this]);
 
-            return get_class($controller) === $className ? $controller : null;
+            return \get_class($controller) === $className ? $controller : null;
         } elseif (YII_DEBUG) {
             throw new InvalidConfigException('Controller class must extend from \\yii\\base\\Controller.');
         }
@@ -753,11 +753,11 @@ class Module extends ServiceLocator
      */
     private function isIncorrectClassNameOrPrefix($className, $prefix)
     {
-        if (!preg_match('%^[a-z][a-z0-9\\-_]*$%', $className)) {
+        if (!\preg_match('%^[a-z][a-z0-9\\-_]*$%', $className)) {
             return true;
         }
 
-        if ($prefix !== '' && !preg_match('%^[a-z0-9_/]+$%i', $prefix)) {
+        if ($prefix !== '' && !\preg_match('%^[a-z0-9_/]+$%i', $prefix)) {
             return true;
         }
 

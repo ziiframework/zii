@@ -61,7 +61,7 @@ abstract class BaseActiveFixture extends DbFixture implements IteratorAggregate,
             return null;
         }
 
-        if (array_key_exists($name, $this->_models)) {
+        if (\array_key_exists($name, $this->_models)) {
             return $this->_models[$name];
         }
 

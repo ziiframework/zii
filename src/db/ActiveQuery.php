@@ -176,7 +176,7 @@ class ActiveQuery extends Query implements ActiveQueryInterface
                 // via junction table
                 $viaModels = $this->via->findJunctionRows([$this->primaryModel]);
                 $this->filterByModels($viaModels);
-            } elseif (is_array($this->via)) {
+            } elseif (\is_array($this->via)) {
                 // via relation
                 /* @var $viaQuery ActiveQuery */
                 [$viaName, $viaQuery, $viaCallableUsed] = $this->via;
@@ -266,7 +266,7 @@ class ActiveQuery extends Query implements ActiveQueryInterface
         $class = $this->modelClass;
         $pks = $class::primaryKey();
 
-        if (count($pks) > 1) {
+        if (\count($pks) > 1) {
             // composite primary key
             foreach ($models as $i => $model) {
                 $key = [];
@@ -278,7 +278,7 @@ class ActiveQuery extends Query implements ActiveQueryInterface
                     }
                     $key[] = $model[$pk];
                 }
-                $key = serialize($key);
+                $key = \serialize($key);
 
                 if (isset($hash[$key])) {
                     unset($models[$i]);
@@ -290,7 +290,7 @@ class ActiveQuery extends Query implements ActiveQueryInterface
             throw new InvalidConfigException("Primary key of '{$class}' can not be empty.");
         } else {
             // single column primary key
-            $pk = reset($pks);
+            $pk = \reset($pks);
 
             foreach ($models as $i => $model) {
                 if (!isset($model[$pk])) {
@@ -307,7 +307,7 @@ class ActiveQuery extends Query implements ActiveQueryInterface
             }
         }
 
-        return array_values($models);
+        return \array_values($models);
     }
 
     /**
@@ -327,7 +327,7 @@ class ActiveQuery extends Query implements ActiveQueryInterface
         if ($row !== false) {
             $models = $this->populate([$row]);
 
-            return reset($models) ?: null;
+            return \reset($models) ?: null;
         }
 
         return null;
@@ -449,12 +449,12 @@ class ActiveQuery extends Query implements ActiveQueryInterface
         $relations = [];
 
         foreach ((array) $with as $name => $callback) {
-            if (is_int($name)) {
+            if (\is_int($name)) {
                 $name = $callback;
                 $callback = null;
             }
 
-            if (preg_match('/^(.*?)(?:\s+AS\s+|\s+)(\w+)$/i', $name, $matches)) {
+            if (\preg_match('/^(.*?)(?:\s+AS\s+|\s+)(\w+)$/i', $name, $matches)) {
                 // relation is defined with an alias, adjust callback to apply alias
                 [, $relation, $alias] = $matches;
                 $name = $relation;
@@ -463,7 +463,7 @@ class ActiveQuery extends Query implements ActiveQueryInterface
                     $query->alias($alias);
 
                     if ($callback !== null) {
-                        call_user_func($callback, $query);
+                        \call_user_func($callback, $query);
                     }
                 };
             }
@@ -492,13 +492,13 @@ class ActiveQuery extends Query implements ActiveQueryInterface
             [$with, $eagerLoading, $joinType] = $config;
             $this->joinWithRelations($model, $with, $joinType);
 
-            if (is_array($eagerLoading)) {
+            if (\is_array($eagerLoading)) {
                 foreach ($with as $name => $callback) {
-                    if (is_int($name)) {
-                        if (!in_array($callback, $eagerLoading, true)) {
+                    if (\is_int($name)) {
+                        if (!\in_array($callback, $eagerLoading, true)) {
                             unset($with[$name]);
                         }
-                    } elseif (!in_array($name, $eagerLoading, true)) {
+                    } elseif (!\in_array($name, $eagerLoading, true)) {
                         unset($with[$name]);
                     }
                 }
@@ -514,26 +514,26 @@ class ActiveQuery extends Query implements ActiveQueryInterface
         $uniqueJoins = [];
 
         foreach ($this->join as $j) {
-            $uniqueJoins[serialize($j)] = $j;
+            $uniqueJoins[\serialize($j)] = $j;
         }
-        $this->join = array_values($uniqueJoins);
+        $this->join = \array_values($uniqueJoins);
 
         // https://github.com/yiisoft/yii2/issues/16092
         $uniqueJoinsByTableName = [];
 
         foreach ($this->join as $config) {
-            $tableName = serialize($config[1]);
+            $tableName = \serialize($config[1]);
 
-            if (!array_key_exists($tableName, $uniqueJoinsByTableName)) {
+            if (!\array_key_exists($tableName, $uniqueJoinsByTableName)) {
                 $uniqueJoinsByTableName[$tableName] = $config;
             }
         }
-        $this->join = array_values($uniqueJoinsByTableName);
+        $this->join = \array_values($uniqueJoinsByTableName);
 
         if (!empty($join)) {
             // append explicit join to joinWith()
             // https://github.com/yiisoft/yii2/issues/2880
-            $this->join = empty($this->join) ? $join : array_merge($this->join, $join);
+            $this->join = empty($this->join) ? $join : \array_merge($this->join, $join);
         }
     }
 
@@ -569,7 +569,7 @@ class ActiveQuery extends Query implements ActiveQueryInterface
         $relations = [];
 
         foreach ($with as $name => $callback) {
-            if (is_int($name)) {
+            if (\is_int($name)) {
                 $name = $callback;
                 $callback = null;
             }
@@ -578,9 +578,9 @@ class ActiveQuery extends Query implements ActiveQueryInterface
             $parent = $this;
             $prefix = '';
 
-            while (($pos = strpos($name, '.')) !== false) {
-                $childName = substr($name, $pos + 1);
-                $name = substr($name, 0, $pos);
+            while (($pos = \strpos($name, '.')) !== false) {
+                $childName = \substr($name, $pos + 1);
+                $name = \substr($name, 0, $pos);
                 $fullName = $prefix === '' ? $name : "$prefix.$name";
 
                 if (!isset($relations[$fullName])) {
@@ -603,7 +603,7 @@ class ActiveQuery extends Query implements ActiveQueryInterface
                 $relations[$fullName] = $relation = $primaryModel->getRelation($name);
 
                 if ($callback !== null) {
-                    call_user_func($callback, $relation);
+                    \call_user_func($callback, $relation);
                 }
 
                 if (!empty($relation->joinWith)) {
@@ -624,11 +624,11 @@ class ActiveQuery extends Query implements ActiveQueryInterface
      */
     private function getJoinType($joinType, $name)
     {
-        if (is_array($joinType) && isset($joinType[$name])) {
+        if (\is_array($joinType) && isset($joinType[$name])) {
             return $joinType[$name];
         }
 
-        return is_string($joinType) ? $joinType : 'INNER JOIN';
+        return \is_string($joinType) ? $joinType : 'INNER JOIN';
     }
 
     /**
@@ -646,14 +646,14 @@ class ActiveQuery extends Query implements ActiveQueryInterface
             $tableName = '';
             // if the first entry in "from" is an alias-tablename-pair return it directly
             foreach ($this->from as $alias => $tableName) {
-                if (is_string($alias)) {
+                if (\is_string($alias)) {
                     return [$tableName, $alias];
                 }
                 break;
             }
         }
 
-        if (preg_match('/^(.*?)\s+({{\w+}}|\w+)$/', $tableName, $matches)) {
+        if (\preg_match('/^(.*?)\s+({{\w+}}|\w+)$/', $tableName, $matches)) {
             $alias = $matches[2];
         } else {
             $alias = $tableName;
@@ -681,7 +681,7 @@ class ActiveQuery extends Query implements ActiveQueryInterface
             $this->joinWithRelation($via, $child, $joinType);
 
             return;
-        } elseif (is_array($via)) {
+        } elseif (\is_array($via)) {
             // via relation
             $this->joinWithRelation($parent, $via[1], $joinType);
             $this->joinWithRelation($via[1], $child, $joinType);
@@ -693,11 +693,11 @@ class ActiveQuery extends Query implements ActiveQueryInterface
         [$childTable, $childAlias] = $child->getTableNameAndAlias();
 
         if (!empty($child->link)) {
-            if (!str_contains($parentAlias, '{{')) {
+            if (!\str_contains($parentAlias, '{{')) {
                 $parentAlias = '{{' . $parentAlias . '}}';
             }
 
-            if (!str_contains($childAlias, '{{')) {
+            if (!\str_contains($childAlias, '{{')) {
                 $childAlias = '{{' . $childAlias . '}}';
             }
 
@@ -706,7 +706,7 @@ class ActiveQuery extends Query implements ActiveQueryInterface
             foreach ($child->link as $childColumn => $parentColumn) {
                 $on[] = "$parentAlias.[[$parentColumn]] = $childAlias.[[$childColumn]]";
             }
-            $on = implode(' AND ', $on);
+            $on = \implode(' AND ', $on);
 
             if (!empty($child->on)) {
                 $on = ['and', $on, $child->on];
@@ -859,7 +859,7 @@ class ActiveQuery extends Query implements ActiveQueryInterface
      */
     public function viaTable($tableName, $link, callable $callable = null)
     {
-        $modelClass = $this->primaryModel ? get_class($this->primaryModel) : $this->modelClass;
+        $modelClass = $this->primaryModel ? \get_class($this->primaryModel) : $this->modelClass;
         $relation = new self($modelClass, [
             'from' => [$tableName],
             'link' => $link,
@@ -869,7 +869,7 @@ class ActiveQuery extends Query implements ActiveQueryInterface
         $this->via = $relation;
 
         if ($callable !== null) {
-            call_user_func($callable, $relation);
+            \call_user_func($callable, $relation);
         }
 
         return $this;
@@ -889,7 +889,7 @@ class ActiveQuery extends Query implements ActiveQueryInterface
      */
     public function alias($alias)
     {
-        if (empty($this->from) || count($this->from) < 2) {
+        if (empty($this->from) || \count($this->from) < 2) {
             [$tableName] = $this->getTableNameAndAlias();
             $this->from = [$alias => $tableName];
         } else {

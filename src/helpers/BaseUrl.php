@@ -104,7 +104,7 @@ class BaseUrl
         $route[0] = static::normalizeRoute($route[0]);
 
         if ($scheme !== false) {
-            return static::getUrlManager()->createAbsoluteUrl($route, is_string($scheme) ? $scheme : null);
+            return static::getUrlManager()->createAbsoluteUrl($route, \is_string($scheme) ? $scheme : null);
         }
 
         return static::getUrlManager()->createUrl($route);
@@ -135,9 +135,9 @@ class BaseUrl
     {
         $route = Yii::getAlias((string) $route);
 
-        if (strncmp($route, '/', 1) === 0) {
+        if (\strncmp($route, '/', 1) === 0) {
             // absolute route
-            return ltrim($route, '/');
+            return \ltrim($route, '/');
         }
 
         // relative route
@@ -145,13 +145,13 @@ class BaseUrl
             throw new InvalidArgumentException("Unable to resolve the relative route: $route. No active controller is available.");
         }
 
-        if (!str_contains($route, '/')) {
+        if (!\str_contains($route, '/')) {
             // empty or an action ID
             return $route === '' ? Yii::$app->controller->getRoute() : Yii::$app->controller->getUniqueId() . '/' . $route;
         }
 
         // relative to module
-        return ltrim(Yii::$app->controller->module->getUniqueId() . '/' . $route, '/');
+        return \ltrim(Yii::$app->controller->module->getUniqueId() . '/' . $route, '/');
     }
 
     /**
@@ -218,7 +218,7 @@ class BaseUrl
      */
     public static function to($url = '', $scheme = false)
     {
-        if (is_array($url)) {
+        if (\is_array($url)) {
             return static::toRoute($url, $scheme);
         }
 
@@ -234,7 +234,7 @@ class BaseUrl
 
         if (static::isRelative($url)) {
             // turn relative URL into absolute
-            $url = static::getUrlManager()->getHostInfo() . '/' . ltrim($url, '/');
+            $url = static::getUrlManager()->getHostInfo() . '/' . \ltrim($url, '/');
         }
 
         return static::ensureScheme($url, $scheme);
@@ -255,20 +255,20 @@ class BaseUrl
      */
     public static function ensureScheme($url, $scheme)
     {
-        if (static::isRelative($url) || !is_string($scheme)) {
+        if (static::isRelative($url) || !\is_string($scheme)) {
             return $url;
         }
 
-        if (strncmp($url, '//', 2) === 0) {
+        if (\strncmp($url, '//', 2) === 0) {
             // e.g. //example.com/path/to/resource
             return $scheme === '' ? $url : "$scheme:$url";
         }
 
-        if (($pos = strpos($url, '://')) !== false) {
+        if (($pos = \strpos($url, '://')) !== false) {
             if ($scheme === '') {
-                $url = substr($url, $pos + 1);
+                $url = \substr($url, $pos + 1);
             } else {
-                $url = $scheme . substr($url, $pos);
+                $url = $scheme . \substr($url, $pos);
             }
         }
 
@@ -397,7 +397,7 @@ class BaseUrl
      */
     public static function isRelative($url)
     {
-        return strncmp($url, '//', 2) && !str_contains($url, '://');
+        return \strncmp($url, '//', 2) && !\str_contains($url, '://');
     }
 
     /**
@@ -449,7 +449,7 @@ class BaseUrl
     {
         $currentParams = Yii::$app->getRequest()->getQueryParams();
         $currentParams[0] = '/' . Yii::$app->controller->getRoute();
-        $route = array_replace_recursive($currentParams, $params);
+        $route = \array_replace_recursive($currentParams, $params);
 
         return static::toRoute($route, $scheme);
     }

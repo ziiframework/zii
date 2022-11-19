@@ -128,7 +128,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
     public function init(): void
     {
         parent::init();
-        register_shutdown_function([$this, 'close']);
+        \register_shutdown_function([$this, 'close']);
 
         if ($this->getIsActive()) {
             Yii::warning('Session is already started', __METHOD__);
@@ -162,7 +162,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
 
         $this->setCookieParamsInternal();
 
-        YII_DEBUG ? session_start() : @session_start();
+        YII_DEBUG ? \session_start() : @\session_start();
 
         if ($this->getUseStrictMode() && $this->_forceRegenerateId) {
             $this->regenerateID();
@@ -173,7 +173,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
             Yii::info('Session started', __METHOD__);
             $this->updateFlashCounters();
         } else {
-            $error = error_get_last();
+            $error = \error_get_last();
             $message = $error['message'] ?? 'Failed to start session.';
             Yii::error($message, __METHOD__);
         }
@@ -186,33 +186,33 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
      */
     protected function registerSessionHandler(): void
     {
-        $sessionModuleName = session_module_name();
+        $sessionModuleName = \session_module_name();
 
         if (static::$_originalSessionModule === null) {
             static::$_originalSessionModule = $sessionModuleName;
         }
 
         if ($this->handler !== null) {
-            if (!is_object($this->handler)) {
+            if (!\is_object($this->handler)) {
                 $this->handler = Yii::createObject($this->handler);
             }
 
             if (!$this->handler instanceof SessionHandlerInterface) {
                 throw new InvalidConfigException('"' . static::class . '::handler" must implement the SessionHandlerInterface.');
             }
-            YII_DEBUG ? session_set_save_handler($this->handler, false) : @session_set_save_handler($this->handler, false);
+            YII_DEBUG ? \session_set_save_handler($this->handler, false) : @\session_set_save_handler($this->handler, false);
         } elseif ($this->getUseCustomStorage()) {
             if (YII_DEBUG) {
-                session_set_save_handler([$this, 'openSession'], [$this, 'closeSession'], [$this, 'readSession'], [$this, 'writeSession'], [$this, 'destroySession'], [$this, 'gcSession']);
+                \session_set_save_handler([$this, 'openSession'], [$this, 'closeSession'], [$this, 'readSession'], [$this, 'writeSession'], [$this, 'destroySession'], [$this, 'gcSession']);
             } else {
-                @session_set_save_handler([$this, 'openSession'], [$this, 'closeSession'], [$this, 'readSession'], [$this, 'writeSession'], [$this, 'destroySession'], [$this, 'gcSession']);
+                @\session_set_save_handler([$this, 'openSession'], [$this, 'closeSession'], [$this, 'readSession'], [$this, 'writeSession'], [$this, 'destroySession'], [$this, 'gcSession']);
             }
         } elseif (
             $sessionModuleName !== static::$_originalSessionModule
             && static::$_originalSessionModule !== null
             && static::$_originalSessionModule !== 'user'
         ) {
-            session_module_name(static::$_originalSessionModule);
+            \session_module_name(static::$_originalSessionModule);
         }
     }
 
@@ -222,7 +222,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
     public function close(): void
     {
         if ($this->getIsActive()) {
-            YII_DEBUG ? session_write_close() : @session_write_close();
+            YII_DEBUG ? \session_write_close() : @\session_write_close();
         }
 
         $this->_forceRegenerateId = null;
@@ -240,12 +240,12 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
     public function destroy(): void
     {
         if ($this->getIsActive()) {
-            $sessionId = session_id();
+            $sessionId = \session_id();
             $this->close();
             $this->setId($sessionId);
             $this->open();
-            session_unset();
-            session_destroy();
+            \session_unset();
+            \session_destroy();
             $this->setId($sessionId);
         }
     }
@@ -255,7 +255,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
      */
     public function getIsActive()
     {
-        return session_status() === PHP_SESSION_ACTIVE;
+        return \session_status() === \PHP_SESSION_ACTIVE;
     }
 
     private $_hasSessionId;
@@ -274,9 +274,9 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
             $name = $this->getName();
             $request = Yii::$app->getRequest();
 
-            if (!empty($_COOKIE[$name]) && ini_get('session.use_cookies')) {
+            if (!empty($_COOKIE[$name]) && \ini_get('session.use_cookies')) {
                 $this->_hasSessionId = true;
-            } elseif (!ini_get('session.use_only_cookies') && ini_get('session.use_trans_sid')) {
+            } elseif (!\ini_get('session.use_only_cookies') && \ini_get('session.use_trans_sid')) {
                 $this->_hasSessionId = $request->get($name) != '';
             } else {
                 $this->_hasSessionId = false;
@@ -306,7 +306,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
      */
     public function getId()
     {
-        return session_id();
+        return \session_id();
     }
 
     /**
@@ -317,7 +317,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
      */
     public function setId($value): void
     {
-        session_id($value);
+        \session_id($value);
     }
 
     /**
@@ -338,10 +338,10 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
         if ($this->getIsActive()) {
             // add @ to inhibit possible warning due to race condition
             // https://github.com/yiisoft/yii2/pull/1812
-            if (YII_DEBUG && !headers_sent()) {
-                session_regenerate_id($deleteOldSession);
+            if (YII_DEBUG && !\headers_sent()) {
+                \session_regenerate_id($deleteOldSession);
             } else {
-                @session_regenerate_id($deleteOldSession);
+                @\session_regenerate_id($deleteOldSession);
             }
         }
     }
@@ -354,7 +354,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
      */
     public function getName()
     {
-        return session_name();
+        return \session_name();
     }
 
     /**
@@ -367,7 +367,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
     public function setName($value): void
     {
         $this->freeze();
-        session_name($value);
+        \session_name($value);
         $this->unfreeze();
     }
 
@@ -379,7 +379,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
      */
     public function getSavePath()
     {
-        return session_save_path();
+        return \session_save_path();
     }
 
     /**
@@ -394,8 +394,8 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
     {
         $path = Yii::getAlias($value);
 
-        if (is_dir($path)) {
-            session_save_path($path);
+        if (\is_dir($path)) {
+            \session_save_path($path);
         } else {
             throw new InvalidArgumentException("Session save path is not a valid directory: $value");
         }
@@ -408,7 +408,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
      */
     public function getCookieParams()
     {
-        return array_merge(session_get_cookie_params(), array_change_key_case($this->_cookieParams));
+        return \array_merge(\session_get_cookie_params(), \array_change_key_case($this->_cookieParams));
     }
 
     /**
@@ -449,7 +449,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
         $data = $this->getCookieParams();
 
         if (isset($data['lifetime'], $data['path'], $data['domain'], $data['secure'], $data['httponly'])) {
-            session_set_cookie_params($data);
+            \session_set_cookie_params($data);
         } else {
             throw new InvalidArgumentException('Please make sure cookieParams contains these elements: lifetime, path, domain, secure and httponly.');
         }
@@ -464,9 +464,9 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
      */
     public function getUseCookies()
     {
-        if (ini_get('session.use_cookies') === '0') {
+        if (\ini_get('session.use_cookies') === '0') {
             return false;
-        } elseif (ini_get('session.use_only_cookies') === '1') {
+        } elseif (\ini_get('session.use_only_cookies') === '1') {
             return true;
         }
 
@@ -489,14 +489,14 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
         $this->freeze();
 
         if ($value === false) {
-            ini_set('session.use_cookies', '0');
-            ini_set('session.use_only_cookies', '0');
+            \ini_set('session.use_cookies', '0');
+            \ini_set('session.use_only_cookies', '0');
         } elseif ($value === true) {
-            ini_set('session.use_cookies', '1');
-            ini_set('session.use_only_cookies', '1');
+            \ini_set('session.use_cookies', '1');
+            \ini_set('session.use_only_cookies', '1');
         } else {
-            ini_set('session.use_cookies', '1');
-            ini_set('session.use_only_cookies', '0');
+            \ini_set('session.use_cookies', '1');
+            \ini_set('session.use_only_cookies', '0');
         }
         $this->unfreeze();
     }
@@ -506,7 +506,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
      */
     public function getGCProbability()
     {
-        return (float) (ini_get('session.gc_probability') / ini_get('session.gc_divisor') * 100);
+        return (float) (\ini_get('session.gc_probability') / \ini_get('session.gc_divisor') * 100);
     }
 
     /**
@@ -520,8 +520,8 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
 
         if ($value >= 0 && $value <= 100) {
             // percent * 21474837 / 2147483647 ≈ percent * 0.01
-            ini_set('session.gc_probability', (string) floor($value * 21474836.47));
-            ini_set('session.gc_divisor', '2147483647');
+            \ini_set('session.gc_probability', (string) \floor($value * 21474836.47));
+            \ini_set('session.gc_divisor', '2147483647');
         } else {
             throw new InvalidArgumentException('GCProbability must be a value between 0 and 100.');
         }
@@ -533,7 +533,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
      */
     public function getUseTransparentSessionID()
     {
-        return ini_get('session.use_trans_sid') == 1;
+        return \ini_get('session.use_trans_sid') == 1;
     }
 
     /**
@@ -542,7 +542,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
     public function setUseTransparentSessionID($value): void
     {
         $this->freeze();
-        ini_set('session.use_trans_sid', $value ? '1' : '0');
+        \ini_set('session.use_trans_sid', $value ? '1' : '0');
         $this->unfreeze();
     }
 
@@ -552,7 +552,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
      */
     public function getTimeout()
     {
-        return (int) ini_get('session.gc_maxlifetime');
+        return (int) \ini_get('session.gc_maxlifetime');
     }
 
     /**
@@ -560,12 +560,12 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
      */
     public function setTimeout($value): void
     {
-        if (is_int($value)) {
+        if (\is_int($value)) {
             $value = (string) $value;
         }
 
         $this->freeze();
-        ini_set('session.gc_maxlifetime', $value);
+        \ini_set('session.gc_maxlifetime', $value);
         $this->unfreeze();
     }
 
@@ -581,7 +581,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
     public function setUseStrictMode($value): void
     {
         $this->freeze();
-        ini_set('session.use_strict_mode', $value ? '1' : '0');
+        \ini_set('session.use_strict_mode', $value ? '1' : '0');
         $this->unfreeze();
     }
 
@@ -593,7 +593,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
      */
     public function getUseStrictMode()
     {
-        return (bool) ini_get('session.use_strict_mode');
+        return (bool) \ini_get('session.use_strict_mode');
     }
 
     /**
@@ -709,7 +709,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
     {
         $this->open();
 
-        return count($_SESSION);
+        return \count($_SESSION);
     }
 
     /**
@@ -781,7 +781,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
     {
         $this->open();
 
-        foreach (array_keys($_SESSION) as $key) {
+        foreach (\array_keys($_SESSION) as $key) {
             unset($_SESSION[$key]);
         }
     }
@@ -806,7 +806,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
     {
         $counters = $this->get($this->flashParam, []);
 
-        if (is_array($counters)) {
+        if (\is_array($counters)) {
             foreach ($counters as $key => $count) {
                 if ($count > 0) {
                     unset($counters[$key], $_SESSION[$key]);
@@ -893,8 +893,8 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
         $counters = $this->get($this->flashParam, []);
         $flashes = [];
 
-        foreach (array_keys($counters) as $key) {
-            if (array_key_exists($key, $_SESSION)) {
+        foreach (\array_keys($counters) as $key) {
+            if (\array_key_exists($key, $_SESSION)) {
                 $flashes[$key] = $_SESSION[$key];
 
                 if ($delete) {
@@ -963,7 +963,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
 
         if (empty($_SESSION[$key])) {
             $_SESSION[$key] = [$value];
-        } elseif (is_array($_SESSION[$key])) {
+        } elseif (\is_array($_SESSION[$key])) {
             $_SESSION[$key][] = $value;
         } else {
             $_SESSION[$key] = [$_SESSION[$key], $value];
@@ -1009,7 +1009,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
     {
         $counters = $this->get($this->flashParam, []);
 
-        foreach (array_keys($counters) as $key) {
+        foreach (\array_keys($counters) as $key) {
             unset($_SESSION[$key]);
         }
         unset($_SESSION[$this->flashParam]);
@@ -1107,12 +1107,12 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
     protected function unfreeze(): void
     {
         if (null !== $this->frozenSessionData) {
-            YII_DEBUG ? session_start() : @session_start();
+            YII_DEBUG ? \session_start() : @\session_start();
 
             if ($this->getIsActive()) {
                 Yii::info('Session unfrozen', __METHOD__);
             } else {
-                $error = error_get_last();
+                $error = \error_get_last();
                 $message = $error['message'] ?? 'Failed to unfreeze session.';
                 Yii::error($message, __METHOD__);
             }
@@ -1132,7 +1132,7 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
     public function setCacheLimiter($cacheLimiter): void
     {
         $this->freeze();
-        session_cache_limiter($cacheLimiter);
+        \session_cache_limiter($cacheLimiter);
         $this->unfreeze();
     }
 
@@ -1145,6 +1145,6 @@ class Session extends Component implements IteratorAggregate, ArrayAccess, Count
      */
     public function getCacheLimiter()
     {
-        return session_cache_limiter();
+        return \session_cache_limiter();
     }
 }

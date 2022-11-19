@@ -126,24 +126,24 @@ class UnknownCommandException extends Exception
 
         // suggest alternatives that begin with $command first
         foreach ($actions as $action) {
-            if (str_starts_with($action, $command)) {
+            if (\str_starts_with($action, $command)) {
                 $alternatives[] = $action;
             }
         }
 
         // calculate the Levenshtein distance between the unknown command and all available commands.
-        $distances = array_map(static function ($action) use ($command) {
-            $action = strlen($action) > 255 ? substr($action, 0, 255) : $action;
-            $command = strlen($command) > 255 ? substr($command, 0, 255) : $command;
+        $distances = \array_map(static function ($action) use ($command) {
+            $action = \strlen($action) > 255 ? \substr($action, 0, 255) : $action;
+            $command = \strlen($command) > 255 ? \substr($command, 0, 255) : $command;
 
-            return levenshtein($action, $command);
-        }, array_combine($actions, $actions));
+            return \levenshtein($action, $command);
+        }, \array_combine($actions, $actions));
 
         // we assume a typo if the levensthein distance is no more than 3, i.e. 3 replacements needed
-        $relevantTypos = array_filter($distances, static fn ($distance) => $distance <= 3);
-        asort($relevantTypos);
-        $alternatives = array_merge($alternatives, array_flip($relevantTypos));
+        $relevantTypos = \array_filter($distances, static fn ($distance) => $distance <= 3);
+        \asort($relevantTypos);
+        $alternatives = \array_merge($alternatives, \array_flip($relevantTypos));
 
-        return array_unique($alternatives);
+        return \array_unique($alternatives);
     }
 }

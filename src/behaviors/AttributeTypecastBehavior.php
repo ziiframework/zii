@@ -214,7 +214,7 @@ class AttributeTypecastBehavior extends Behavior
         parent::attach($owner);
 
         if ($this->attributeTypes === null) {
-            $ownerClass = get_class($this->owner);
+            $ownerClass = \get_class($this->owner);
 
             if (!isset(self::$autoDetectedAttributeTypes[$ownerClass])) {
                 self::$autoDetectedAttributeTypes[$ownerClass] = $this->detectAttributeTypes();
@@ -265,8 +265,8 @@ class AttributeTypecastBehavior extends Behavior
      */
     protected function typecastValue($value, $type)
     {
-        if (is_scalar($type)) {
-            if (is_object($value) && method_exists($value, '__toString')) {
+        if (\is_scalar($type)) {
+            if (\is_object($value) && \method_exists($value, '__toString')) {
                 $value = $value->__toString();
             }
 
@@ -281,7 +281,7 @@ class AttributeTypecastBehavior extends Behavior
                     return (bool) $value;
 
                 case self::TYPE_STRING:
-                    if (is_float($value)) {
+                    if (\is_float($value)) {
                         return StringHelper::floatToString($value);
                     }
 
@@ -292,7 +292,7 @@ class AttributeTypecastBehavior extends Behavior
             }
         }
 
-        return call_user_func($type, $value);
+        return \call_user_func($type, $value);
     }
 
     /**
@@ -316,7 +316,7 @@ class AttributeTypecastBehavior extends Behavior
             }
 
             if ($type !== null) {
-                $attributeTypes += array_fill_keys($validator->getAttributeNames(), $type);
+                $attributeTypes += \array_fill_keys($validator->getAttributeNames(), $type);
             }
         }
 

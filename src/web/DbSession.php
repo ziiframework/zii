@@ -130,7 +130,7 @@ class DbSession extends MultiFieldSession
      */
     public function regenerateID($deleteOldSession = false): void
     {
-        $oldID = session_id();
+        $oldID = \session_id();
 
         // if no session is started, there is nothing to regenerate
         if (empty($oldID)) {
@@ -138,7 +138,7 @@ class DbSession extends MultiFieldSession
         }
 
         parent::regenerateID(false);
-        $newID = session_id();
+        $newID = \session_id();
         // if session id regeneration failed, no need to create/update it.
         if (empty($newID)) {
             Yii::warning('Failed to generate new session ID', __METHOD__);
@@ -177,7 +177,7 @@ class DbSession extends MultiFieldSession
         if ($this->getIsActive()) {
             // prepare writeCallback fields before session closes
             $this->fields = $this->composeFields();
-            YII_DEBUG ? session_write_close() : @session_write_close();
+            YII_DEBUG ? \session_write_close() : @\session_write_close();
         }
     }
 
@@ -236,9 +236,9 @@ class DbSession extends MultiFieldSession
                 $_SESSION = $this->fields['data'];
             }
             // ensure 'id' and 'expire' are never affected by [[writeCallback]]
-            $this->fields = array_merge($this->fields, [
+            $this->fields = \array_merge($this->fields, [
                 'id' => $id,
-                'expire' => time() + $this->getTimeout(),
+                'expire' => \time() + $this->getTimeout(),
             ]);
             $this->fields = $this->typecastFields($this->fields);
             $this->db->createCommand()->upsert($this->sessionTable, $this->fields)->execute();
@@ -282,7 +282,7 @@ class DbSession extends MultiFieldSession
     public function gcSession($maxLifetime)
     {
         $this->db->createCommand()
-            ->delete($this->sessionTable, '[[expire]]<:expire', [':expire' => time()])
+            ->delete($this->sessionTable, '[[expire]]<:expire', [':expire' => \time()])
             ->execute();
 
         return true;
@@ -299,7 +299,7 @@ class DbSession extends MultiFieldSession
     {
         return (new Query())
             ->from($this->sessionTable)
-            ->where('[[expire]]>:expire AND [[id]]=:id', [':expire' => time(), ':id' => $id]);
+            ->where('[[expire]]>:expire AND [[id]]=:id', [':expire' => \time(), ':id' => $id]);
     }
 
     /**
@@ -315,7 +315,7 @@ class DbSession extends MultiFieldSession
      */
     protected function typecastFields($fields)
     {
-        if (isset($fields['data']) && !is_array($fields['data']) && !is_object($fields['data'])) {
+        if (isset($fields['data']) && !\is_array($fields['data']) && !\is_object($fields['data'])) {
             $fields['data'] = new PdoValue($fields['data'], PDO::PARAM_LOB);
         }
 

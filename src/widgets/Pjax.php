@@ -135,8 +135,8 @@ class Pjax extends Widget
         }
 
         if ($this->requiresPjax()) {
-            ob_start();
-            ob_implicit_flush(false);
+            \ob_start();
+            \ob_implicit_flush(false);
             $view = $this->getView();
             $view->clear();
             $view->beginPage();
@@ -149,7 +149,7 @@ class Pjax extends Widget
         } else {
             $options = $this->options;
             $tag = ArrayHelper::remove($options, 'tag', 'div');
-            echo Html::beginTag($tag, array_merge([
+            echo Html::beginTag($tag, \array_merge([
                 'data-pjax-container' => '',
                 'data-pjax-push-state' => $this->enablePushState,
                 'data-pjax-replace-state' => $this->enableReplaceState,
@@ -176,7 +176,7 @@ class Pjax extends Widget
 
         $view->endPage(true);
 
-        $content = ob_get_clean();
+        $content = \ob_get_clean();
 
         // only need the content enclosed within this widget
         $response = Yii::$app->getResponse();
@@ -196,7 +196,7 @@ class Pjax extends Widget
     {
         $headers = Yii::$app->getRequest()->getHeaders();
 
-        return $headers->get('X-Pjax') && explode(' ', $headers->get('X-Pjax-Container'))[0] === '#' . $this->options['id'];
+        return $headers->get('X-Pjax') && \explode(' ', $headers->get('X-Pjax-Container'))[0] === '#' . $this->options['id'];
     }
 
     /**

@@ -109,7 +109,7 @@ class BaseMarkdown
         /* @var $parser \cebe\markdown\Markdown */
         if (!isset(static::$flavors[$flavor])) {
             throw new InvalidArgumentException("Markdown flavor '$flavor' is not defined.'");
-        } elseif (!is_object($config = static::$flavors[$flavor])) {
+        } elseif (!\is_object($config = static::$flavors[$flavor])) {
             static::$flavors[$flavor] = Yii::createObject($config);
         }
 

@@ -90,7 +90,7 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
     protected function resolveTableName($name)
     {
         $resolvedName = new TableSchema();
-        $parts = explode('.', str_replace('`', '', $name));
+        $parts = \explode('.', \str_replace('`', '', $name));
 
         if (isset($parts[1])) {
             $resolvedName->schemaName = $parts[0];
@@ -234,7 +234,7 @@ SQL;
      */
     protected function resolveTableNames($table, $name): void
     {
-        $parts = explode('.', str_replace('`', '', $name));
+        $parts = \explode('.', \str_replace('`', '', $name));
 
         if (isset($parts[1])) {
             $table->schemaName = $parts[0];
@@ -258,17 +258,17 @@ SQL;
 
         $column->name = $info['field'];
         $column->allowNull = $info['null'] === 'YES';
-        $column->isPrimaryKey = str_contains($info['key'], 'PRI');
-        $column->autoIncrement = stripos($info['extra'], 'auto_increment') !== false;
+        $column->isPrimaryKey = \str_contains($info['key'], 'PRI');
+        $column->autoIncrement = \stripos($info['extra'], 'auto_increment') !== false;
         $column->comment = $info['comment'];
 
         $column->dbType = $info['type'];
-        $column->unsigned = stripos($column->dbType, 'unsigned') !== false;
+        $column->unsigned = \stripos($column->dbType, 'unsigned') !== false;
 
         $column->type = self::TYPE_STRING;
 
-        if (preg_match('/^(\w+)(?:\(([^\)]+)\))?/', $column->dbType, $matches)) {
-            $type = strtolower($matches[1]);
+        if (\preg_match('/^(\w+)(?:\(([^\)]+)\))?/', $column->dbType, $matches)) {
+            $type = \strtolower($matches[1]);
 
             if (isset($this->typeMap[$type])) {
                 $column->type = $this->typeMap[$type];
@@ -276,14 +276,14 @@ SQL;
 
             if (!empty($matches[2])) {
                 if ($type === 'enum') {
-                    preg_match_all("/'[^']*'/", $matches[2], $values);
+                    \preg_match_all("/'[^']*'/", $matches[2], $values);
 
                     foreach ($values[0] as $i => $value) {
-                        $values[$i] = trim($value, "'");
+                        $values[$i] = \trim($value, "'");
                     }
                     $column->enumValues = $values;
                 } else {
-                    $values = explode(',', $matches[2]);
+                    $values = \explode(',', $matches[2]);
                     $column->size = $column->precision = (int) $values[0];
 
                     if (isset($values[1])) {
@@ -312,12 +312,12 @@ SQL;
              *
              * See details here: https://mariadb.com/kb/en/library/now/#description
              */
-            if (in_array($column->type, ['timestamp', 'datetime', 'date', 'time'])
+            if (\in_array($column->type, ['timestamp', 'datetime', 'date', 'time'])
                 && isset($info['default'])
-                && preg_match('/^current_timestamp(?:\(([0-9]*)\))?$/i', $info['default'], $matches)) {
+                && \preg_match('/^current_timestamp(?:\(([0-9]*)\))?$/i', $info['default'], $matches)) {
                 $column->defaultValue = new Expression('CURRENT_TIMESTAMP' . (!empty($matches[1]) ? '(' . $matches[1] . ')' : ''));
             } elseif (isset($type) && $type === 'bit') {
-                $column->defaultValue = bindec(trim($info['default'] ?? '', 'b\''));
+                $column->defaultValue = \bindec(\trim($info['default'] ?? '', 'b\''));
             } else {
                 $column->defaultValue = $column->phpTypecast($info['default']);
             }
@@ -344,7 +344,7 @@ SQL;
         } catch (Exception $e) {
             $previous = $e->getPrevious();
 
-            if ($previous instanceof PDOException && str_contains($previous->getMessage(), 'SQLSTATE[42S02')) {
+            if ($previous instanceof PDOException && \str_contains($previous->getMessage(), 'SQLSTATE[42S02')) {
                 // table does not exist
                 // https://dev.mysql.com/doc/refman/5.5/en/error-messages-server.html#error_er_bad_table_error
                 return false;
@@ -355,7 +355,7 @@ SQL;
 
         foreach ($columns as $info) {
             if ($this->db->slavePdo->getAttribute(PDO::ATTR_CASE) !== PDO::CASE_LOWER) {
-                $info = array_change_key_case($info, CASE_LOWER);
+                $info = \array_change_key_case($info, \CASE_LOWER);
             }
             $column = $this->loadColumnSchema($info);
             $table->columns[$column->name] = $column;
@@ -386,7 +386,7 @@ SQL;
         if (isset($row['Create Table'])) {
             $sql = $row['Create Table'];
         } else {
-            $row = array_values($row);
+            $row = \array_values($row);
             $sql = $row[1];
         }
 
@@ -432,12 +432,12 @@ SQL;
             $table->foreignKeys = [];
 
             foreach ($constraints as $name => $constraint) {
-                $table->foreignKeys[$name] = array_merge([$constraint['referenced_table_name']], $constraint['columns']);
+                $table->foreignKeys[$name] = \array_merge([$constraint['referenced_table_name']], $constraint['columns']);
             }
         } catch (Exception $e) {
             $previous = $e->getPrevious();
 
-            if (!$previous instanceof PDOException || !str_contains($previous->getMessage(), 'SQLSTATE[42S02')) {
+            if (!$previous instanceof PDOException || !\str_contains($previous->getMessage(), 'SQLSTATE[42S02')) {
                 throw $e;
             }
 
@@ -445,18 +445,18 @@ SQL;
             $sql = $this->getCreateTableSql($table);
             $regexp = '/FOREIGN KEY\s+\(([^\)]+)\)\s+REFERENCES\s+([^\(^\s]+)\s*\(([^\)]+)\)/mi';
 
-            if (preg_match_all($regexp, $sql, $matches, PREG_SET_ORDER)) {
+            if (\preg_match_all($regexp, $sql, $matches, \PREG_SET_ORDER)) {
                 foreach ($matches as $match) {
-                    $fks = array_map('trim', explode(',', str_replace(['`', '"'], '', $match[1])));
-                    $pks = array_map('trim', explode(',', str_replace(['`', '"'], '', $match[3])));
-                    $constraint = [str_replace(['`', '"'], '', $match[2])];
+                    $fks = \array_map('trim', \explode(',', \str_replace(['`', '"'], '', $match[1])));
+                    $pks = \array_map('trim', \explode(',', \str_replace(['`', '"'], '', $match[3])));
+                    $constraint = [\str_replace(['`', '"'], '', $match[2])];
 
                     foreach ($fks as $k => $name) {
                         $constraint[$name] = $pks[$k];
                     }
-                    $table->foreignKeys[md5(serialize($constraint))] = $constraint;
+                    $table->foreignKeys[\md5(\serialize($constraint))] = $constraint;
                 }
-                $table->foreignKeys = array_values($table->foreignKeys);
+                $table->foreignKeys = \array_values($table->foreignKeys);
             }
         }
     }
@@ -484,10 +484,10 @@ SQL;
 
         $regexp = '/UNIQUE KEY\s+[`"](.+)[`"]\s*\(([`"].+[`"])+\)/mi';
 
-        if (preg_match_all($regexp, $sql, $matches, PREG_SET_ORDER)) {
+        if (\preg_match_all($regexp, $sql, $matches, \PREG_SET_ORDER)) {
             foreach ($matches as $match) {
                 $indexName = $match[1];
-                $indexColumns = array_map('trim', preg_split('/[`"],[`"]/', trim($match[2], '`"')));
+                $indexColumns = \array_map('trim', \preg_split('/[`"],[`"]/', \trim($match[2], '`"')));
                 $uniqueIndexes[$indexName] = $indexColumns;
             }
         }

@@ -131,7 +131,7 @@ class BaseHtml
      */
     public static function encode($content, $doubleEncode = true)
     {
-        return htmlspecialchars(pf_string_argument($content), ENT_QUOTES | ENT_SUBSTITUTE, Yii::$app ? Yii::$app->charset : 'UTF-8', $doubleEncode);
+        return \htmlspecialchars(pf_string_argument($content), \ENT_QUOTES | \ENT_SUBSTITUTE, Yii::$app ? Yii::$app->charset : 'UTF-8', $doubleEncode);
     }
 
     /**
@@ -147,7 +147,7 @@ class BaseHtml
      */
     public static function decode($content)
     {
-        return htmlspecialchars_decode($content, ENT_QUOTES);
+        return \htmlspecialchars_decode($content, \ENT_QUOTES);
     }
 
     /**
@@ -177,7 +177,7 @@ class BaseHtml
         }
         $html = "<$name" . static::renderTagAttributes($options) . '>';
 
-        return isset(static::$voidElements[strtolower($name)]) ? $html : "$html$content</$name>";
+        return isset(static::$voidElements[\strtolower($name)]) ? $html : "$html$content</$name>";
     }
 
     /**
@@ -336,7 +336,7 @@ class BaseHtml
      */
     private static function wrapIntoCondition($content, $condition)
     {
-        if (str_contains($condition, '!IE')) {
+        if (\str_contains($condition, '!IE')) {
             return "<!--[if $condition]><!-->\n" . $content . "\n<!--<![endif]-->";
         }
 
@@ -392,29 +392,29 @@ class BaseHtml
         $request = Yii::$app->getRequest();
 
         if ($request instanceof Request) {
-            if (strcasecmp($method, 'get') && strcasecmp($method, 'post')) {
+            if (\strcasecmp($method, 'get') && \strcasecmp($method, 'post')) {
                 // simulate PUT, DELETE, etc. via POST
                 $hiddenInputs[] = static::hiddenInput($request->methodParam, $method);
                 $method = 'post';
             }
             $csrf = ArrayHelper::remove($options, 'csrf', true);
 
-            if ($csrf && $request->enableCsrfValidation && strcasecmp($method, 'post') === 0) {
+            if ($csrf && $request->enableCsrfValidation && \strcasecmp($method, 'post') === 0) {
                 $hiddenInputs[] = static::hiddenInput($request->csrfParam, $request->getCsrfToken());
             }
         }
 
-        if (!strcasecmp($method, 'get') && ($pos = strpos($action, '?')) !== false) {
+        if (!\strcasecmp($method, 'get') && ($pos = \strpos($action, '?')) !== false) {
             // query parameters in the action are ignored for GET method
             // we use hidden fields to add them back
-            foreach (explode('&', substr($action, $pos + 1)) as $pair) {
-                if (($pos1 = strpos($pair, '=')) !== false) {
-                    $hiddenInputs[] = static::hiddenInput(urldecode(substr($pair, 0, $pos1)), urldecode(substr($pair, $pos1 + 1)));
+            foreach (\explode('&', \substr($action, $pos + 1)) as $pair) {
+                if (($pos1 = \strpos($pair, '=')) !== false) {
+                    $hiddenInputs[] = static::hiddenInput(\urldecode(\substr($pair, 0, $pos1)), \urldecode(\substr($pair, $pos1 + 1)));
                 } else {
-                    $hiddenInputs[] = static::hiddenInput(urldecode($pair), '');
+                    $hiddenInputs[] = static::hiddenInput(\urldecode($pair), '');
                 }
             }
-            $action = substr($action, 0, $pos);
+            $action = \substr($action, 0, $pos);
         }
 
         $options['action'] = $action;
@@ -422,7 +422,7 @@ class BaseHtml
         $form = static::beginTag('form', $options);
 
         if (!empty($hiddenInputs)) {
-            $form .= "\n" . implode("\n", $hiddenInputs);
+            $form .= "\n" . \implode("\n", $hiddenInputs);
         }
 
         return $form;
@@ -514,13 +514,13 @@ class BaseHtml
     {
         $options['src'] = Url::to($src);
 
-        if (isset($options['srcset']) && is_array($options['srcset'])) {
+        if (isset($options['srcset']) && \is_array($options['srcset'])) {
             $srcset = [];
 
             foreach ($options['srcset'] as $descriptor => $url) {
                 $srcset[] = Url::to($url) . ' ' . $descriptor;
             }
-            $options['srcset'] = implode(',', $srcset);
+            $options['srcset'] = \implode(',', $srcset);
         }
 
         if (!isset($options['alt'])) {
@@ -855,7 +855,7 @@ class BaseHtml
         if (!isset($options['checked'])) {
             $options['checked'] = (bool) $checked;
         }
-        $value = array_key_exists('value', $options) ? $options['value'] : '1';
+        $value = \array_key_exists('value', $options) ? $options['value'] : '1';
 
         if (isset($options['uncheck'])) {
             // add a hidden field so that if the checkbox is not selected, it still submits a value
@@ -997,19 +997,19 @@ class BaseHtml
      */
     public static function listBox($name, $selection = null, $items = [], $options = [])
     {
-        if (!array_key_exists('size', $options)) {
+        if (!\array_key_exists('size', $options)) {
             $options['size'] = 4;
         }
 
-        if (!empty($options['multiple']) && !empty($name) && substr_compare($name, '[]', -2, 2)) {
+        if (!empty($options['multiple']) && !empty($name) && \substr_compare($name, '[]', -2, 2)) {
             $name .= '[]';
         }
         $options['name'] = $name;
 
         if (isset($options['unselect'])) {
             // add a hidden field so that if the list box has no option being selected, it still submits a value
-            if (!empty($name) && substr_compare($name, '[]', -2, 2) === 0) {
-                $name = substr($name, 0, -2);
+            if (!empty($name) && \substr_compare($name, '[]', -2, 2) === 0) {
+                $name = \substr($name, 0, -2);
             }
             $hiddenOptions = [];
             // make sure disabled input is not sending any value
@@ -1067,12 +1067,12 @@ class BaseHtml
      */
     public static function checkboxList($name, $selection = null, $items = [], $options = [])
     {
-        if (substr($name, -2) !== '[]') {
+        if (\substr($name, -2) !== '[]') {
             $name .= '[]';
         }
 
         if (ArrayHelper::isTraversable($selection)) {
-            $selection = array_map('strval', ArrayHelper::toArray($selection));
+            $selection = \array_map('strval', ArrayHelper::toArray($selection));
         }
 
         $formatter = ArrayHelper::remove($options, 'item');
@@ -1087,14 +1087,14 @@ class BaseHtml
 
         foreach ($items as $value => $label) {
             $checked = $selection !== null
-                && ((!ArrayHelper::isTraversable($selection) && !strcmp(pf_string_argument($value), pf_string_argument($selection)))
+                && ((!ArrayHelper::isTraversable($selection) && !\strcmp(pf_string_argument($value), pf_string_argument($selection)))
                     ||
                     (ArrayHelper::isTraversable($selection) && ArrayHelper::isIn(pf_string_argument($value), $selection, $strict)));
 
             if ($formatter !== null) {
-                $lines[] = call_user_func($formatter, $index, $label, $name, $checked, $value);
+                $lines[] = \call_user_func($formatter, $index, $label, $name, $checked, $value);
             } else {
-                $lines[] = static::checkbox($name, $checked, array_merge([
+                $lines[] = static::checkbox($name, $checked, \array_merge([
                     'value' => $value,
                     'label' => $encode ? static::encode($label) : $label,
                 ], $itemOptions));
@@ -1104,7 +1104,7 @@ class BaseHtml
 
         if (isset($options['unselect'])) {
             // add a hidden field so that if the list box has no option being selected, it still submits a value
-            $name2 = substr($name, -2) === '[]' ? substr($name, 0, -2) : $name;
+            $name2 = \substr($name, -2) === '[]' ? \substr($name, 0, -2) : $name;
             $hiddenOptions = [];
             // make sure disabled input is not sending any value
             if (!empty($options['disabled'])) {
@@ -1116,7 +1116,7 @@ class BaseHtml
             $hidden = '';
         }
 
-        $visibleContent = implode($separator, $lines);
+        $visibleContent = \implode($separator, $lines);
 
         if ($tag === false) {
             return $hidden . $visibleContent;
@@ -1166,7 +1166,7 @@ class BaseHtml
     public static function radioList($name, $selection = null, $items = [], $options = [])
     {
         if (ArrayHelper::isTraversable($selection)) {
-            $selection = array_map('strval', ArrayHelper::toArray($selection));
+            $selection = \array_map('strval', ArrayHelper::toArray($selection));
         }
 
         $formatter = ArrayHelper::remove($options, 'item');
@@ -1194,21 +1194,21 @@ class BaseHtml
 
         foreach ($items as $value => $label) {
             $checked = $selection !== null
-                && ((!ArrayHelper::isTraversable($selection) && !strcmp(pf_string_argument($value), pf_string_argument($selection)))
+                && ((!ArrayHelper::isTraversable($selection) && !\strcmp(pf_string_argument($value), pf_string_argument($selection)))
                     ||
                     (ArrayHelper::isTraversable($selection) && ArrayHelper::isIn(pf_string_argument($value), $selection, $strict)));
 
             if ($formatter !== null) {
-                $lines[] = call_user_func($formatter, $index, $label, $name, $checked, $value);
+                $lines[] = \call_user_func($formatter, $index, $label, $name, $checked, $value);
             } else {
-                $lines[] = static::radio($name, $checked, array_merge([
+                $lines[] = static::radio($name, $checked, \array_merge([
                     'value' => $value,
                     'label' => $encode ? static::encode($label) : $label,
                 ], $itemOptions));
             }
             ++$index;
         }
-        $visibleContent = implode($separator, $lines);
+        $visibleContent = \implode($separator, $lines);
 
         if ($tag === false) {
             return $hidden . $visibleContent;
@@ -1259,13 +1259,13 @@ class BaseHtml
 
         foreach ($items as $index => $item) {
             if ($formatter !== null) {
-                $results[] = call_user_func($formatter, $item, $index);
+                $results[] = \call_user_func($formatter, $item, $index);
             } else {
                 $results[] = static::tag('li', $encode ? static::encode($item) : $item, $itemOptions);
             }
         }
 
-        return static::tag($tag, $separator . implode($separator, $results) . $separator, $options);
+        return static::tag($tag, $separator . \implode($separator, $results) . $separator, $options);
     }
 
     /**
@@ -1395,9 +1395,9 @@ class BaseHtml
         if (empty($lines)) {
             // still render the placeholder for client-side validation use
             $content = '<ul></ul>';
-            $options['style'] = isset($options['style']) ? rtrim($options['style'], ';') . '; display:none' : 'display:none';
+            $options['style'] = isset($options['style']) ? \rtrim($options['style'], ';') . '; display:none' : 'display:none';
         } else {
-            $content = '<ul><li>' . implode("</li>\n<li>", $lines) . '</li></ul>';
+            $content = '<ul><li>' . \implode("</li>\n<li>", $lines) . '</li></ul>';
         }
 
         return Html::tag('div', $header . $content . $footer, $options);
@@ -1419,17 +1419,17 @@ class BaseHtml
     {
         $lines = [];
 
-        if (!is_array($models)) {
+        if (!\is_array($models)) {
             $models = [$models];
         }
 
         foreach ($models as $model) {
-            $lines = array_unique(array_merge($lines, $model->getErrorSummary($showAllErrors)));
+            $lines = \array_unique(\array_merge($lines, $model->getErrorSummary($showAllErrors)));
         }
 
         // If there are the same error messages for different attributes, array_unique will leave gaps
         // between sequential keys. Applying array_values to reorder array keys.
-        $lines = array_values($lines);
+        $lines = \array_values($lines);
 
         if ($encode) {
             foreach ($lines as &$line) {
@@ -1469,7 +1469,7 @@ class BaseHtml
         $errorSource = ArrayHelper::remove($options, 'errorSource');
 
         if ($errorSource !== null) {
-            $error = call_user_func($errorSource, $model, $attribute);
+            $error = \call_user_func($errorSource, $model, $attribute);
         } else {
             $error = $model->getFirstError($attribute);
         }
@@ -1499,7 +1499,7 @@ class BaseHtml
         $name = $options['name'] ?? static::getInputName($model, $attribute);
         $value = $options['value'] ?? static::getAttributeValue($model, $attribute);
 
-        if (!array_key_exists('id', $options)) {
+        if (!\array_key_exists('id', $options)) {
             $options['id'] = static::getInputId($model, $attribute);
         }
 
@@ -1526,7 +1526,7 @@ class BaseHtml
 
             foreach ($model->getActiveValidators($attrName) as $validator) {
                 if ($validator instanceof StringValidator && ($validator->max !== null || $validator->length !== null)) {
-                    $options['maxlength'] = max($validator->max, $validator->length);
+                    $options['maxlength'] = \max($validator->max, $validator->length);
                     break;
                 }
             }
@@ -1697,7 +1697,7 @@ class BaseHtml
             $value = static::getAttributeValue($model, $attribute);
         }
 
-        if (!array_key_exists('id', $options)) {
+        if (!\array_key_exists('id', $options)) {
             $options['id'] = static::getInputId($model, $attribute);
         }
         self::normalizeMaxLength($model, $attribute, $options);
@@ -1760,17 +1760,17 @@ class BaseHtml
         $name = $options['name'] ?? static::getInputName($model, $attribute);
         $value = static::getAttributeValue($model, $attribute);
 
-        if (!array_key_exists('value', $options)) {
+        if (!\array_key_exists('value', $options)) {
             $options['value'] = '1';
         }
 
-        if (!array_key_exists('uncheck', $options)) {
+        if (!\array_key_exists('uncheck', $options)) {
             $options['uncheck'] = '0';
         } elseif ($options['uncheck'] === false) {
             unset($options['uncheck']);
         }
 
-        if (!array_key_exists('label', $options)) {
+        if (!\array_key_exists('label', $options)) {
             $options['label'] = static::encode($model->getAttributeLabel(static::getAttributeName($attribute)));
         } elseif ($options['label'] === false) {
             unset($options['label']);
@@ -1778,7 +1778,7 @@ class BaseHtml
 
         $checked = "$value" === "{$options['value']}";
 
-        if (!array_key_exists('id', $options)) {
+        if (!\array_key_exists('id', $options)) {
             $options['id'] = static::getInputId($model, $attribute);
         }
 
@@ -2001,11 +2001,11 @@ class BaseHtml
         $name = ArrayHelper::remove($options, 'name', static::getInputName($model, $attribute));
         $selection = ArrayHelper::remove($options, 'value', static::getAttributeValue($model, $attribute));
 
-        if (!array_key_exists('unselect', $options)) {
+        if (!\array_key_exists('unselect', $options)) {
             $options['unselect'] = '';
         }
 
-        if (!array_key_exists('id', $options)) {
+        if (!\array_key_exists('id', $options)) {
             $options['id'] = static::getInputId($model, $attribute);
         }
 
@@ -2036,14 +2036,14 @@ class BaseHtml
             $normalizedSelection = [];
 
             foreach (ArrayHelper::toArray($selection) as $selectionItem) {
-                if (is_bool($selectionItem)) {
+                if (\is_bool($selectionItem)) {
                     $normalizedSelection[] = $selectionItem ? '1' : '0';
                 } else {
                     $normalizedSelection[] = (string) $selectionItem;
                 }
             }
             $selection = $normalizedSelection;
-        } elseif (is_bool($selection)) {
+        } elseif (\is_bool($selection)) {
             $selection = $selection ? '1' : '0';
         }
 
@@ -2055,16 +2055,16 @@ class BaseHtml
         if (isset($tagOptions['prompt'])) {
             $promptOptions = ['value' => ''];
 
-            if (is_string($tagOptions['prompt'])) {
+            if (\is_string($tagOptions['prompt'])) {
                 $promptText = $tagOptions['prompt'];
             } else {
                 $promptText = $tagOptions['prompt']['text'];
-                $promptOptions = array_merge($promptOptions, $tagOptions['prompt']['options']);
+                $promptOptions = \array_merge($promptOptions, $tagOptions['prompt']['options']);
             }
             $promptText = $encode ? static::encode($promptText) : $promptText;
 
             if ($encodeSpaces) {
-                $promptText = str_replace(' ', '&nbsp;', $promptText);
+                $promptText = \str_replace(' ', '&nbsp;', $promptText);
             }
             $lines[] = static::tag('option', $promptText, $promptOptions);
         }
@@ -2076,7 +2076,7 @@ class BaseHtml
         $options['encode'] = ArrayHelper::getValue($options, 'encode', $encode);
 
         foreach ($items as $key => $value) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $groupAttrs = $groups[$key] ?? [];
 
                 if (!isset($groupAttrs['label'])) {
@@ -2089,7 +2089,7 @@ class BaseHtml
                 $attrs = $options[$key] ?? [];
                 $attrs['value'] = (string) $key;
 
-                if (!array_key_exists('selected', $attrs)) {
+                if (!\array_key_exists('selected', $attrs)) {
                     $selected = false;
 
                     if ($selection !== null) {
@@ -2098,7 +2098,7 @@ class BaseHtml
                         } elseif ($key === '' || $selection === '') {
                             $selected = $selection === $key;
                         } elseif ($strict) {
-                            $selected = !strcmp((string) $key, (string) $selection);
+                            $selected = !\strcmp((string) $key, (string) $selection);
                         } else {
                             $selected = $selection == $key;
                         }
@@ -2109,13 +2109,13 @@ class BaseHtml
                 $text = $encode ? static::encode($value) : $value;
 
                 if ($encodeSpaces) {
-                    $text = str_replace(' ', '&nbsp;', $text);
+                    $text = \str_replace(' ', '&nbsp;', $text);
                 }
                 $lines[] = static::tag('option', $text, $attrs);
             }
         }
 
-        return implode("\n", $lines);
+        return \implode("\n", $lines);
     }
 
     /**
@@ -2147,7 +2147,7 @@ class BaseHtml
      */
     public static function renderTagAttributes($attributes)
     {
-        if (count($attributes) > 1) {
+        if (\count($attributes) > 1) {
             $sorted = [];
 
             foreach (static::$attributeOrder as $name) {
@@ -2155,22 +2155,22 @@ class BaseHtml
                     $sorted[$name] = $attributes[$name];
                 }
             }
-            $attributes = array_merge($sorted, $attributes);
+            $attributes = \array_merge($sorted, $attributes);
         }
 
         $html = '';
 
         foreach ($attributes as $name => $value) {
-            if (is_bool($value)) {
+            if (\is_bool($value)) {
                 if ($value) {
                     $html .= " $name";
                 }
-            } elseif (is_array($value)) {
-                if (in_array($name, static::$dataAttributes)) {
+            } elseif (\is_array($value)) {
+                if (\in_array($name, static::$dataAttributes)) {
                     foreach ($value as $n => $v) {
-                        if (is_array($v)) {
+                        if (\is_array($v)) {
                             $html .= " $name-$n='" . Json::htmlEncode($v) . "'";
-                        } elseif (is_bool($v)) {
+                        } elseif (\is_bool($v)) {
                             if ($v) {
                                 $html .= " $name-$n";
                             }
@@ -2183,12 +2183,12 @@ class BaseHtml
                         continue;
                     }
 
-                    if (static::$normalizeClassAttribute === true && count($value) > 1) {
+                    if (static::$normalizeClassAttribute === true && \count($value) > 1) {
                         // removes duplicate classes
-                        $value = explode(' ', implode(' ', $value));
-                        $value = array_unique($value);
+                        $value = \explode(' ', \implode(' ', $value));
+                        $value = \array_unique($value);
                     }
-                    $html .= " $name=\"" . static::encode(implode(' ', $value)) . '"';
+                    $html .= " $name=\"" . static::encode(\implode(' ', $value)) . '"';
                 } elseif ($name === 'style') {
                     if (empty($value)) {
                         continue;
@@ -2226,11 +2226,11 @@ class BaseHtml
     public static function addCssClass(&$options, $class): void
     {
         if (isset($options['class'])) {
-            if (is_array($options['class'])) {
+            if (\is_array($options['class'])) {
                 $options['class'] = self::mergeCssClasses($options['class'], (array) $class);
             } else {
-                $classes = preg_split('/\s+/', $options['class'], -1, PREG_SPLIT_NO_EMPTY);
-                $options['class'] = implode(' ', self::mergeCssClasses($classes, (array) $class));
+                $classes = \preg_split('/\s+/', $options['class'], -1, \PREG_SPLIT_NO_EMPTY);
+                $options['class'] = \implode(' ', self::mergeCssClasses($classes, (array) $class));
             }
         } else {
             $options['class'] = $class;
@@ -2251,14 +2251,14 @@ class BaseHtml
     private static function mergeCssClasses(array $existingClasses, array $additionalClasses)
     {
         foreach ($additionalClasses as $key => $class) {
-            if (is_int($key) && !in_array($class, $existingClasses)) {
+            if (\is_int($key) && !\in_array($class, $existingClasses)) {
                 $existingClasses[] = $class;
             } elseif (!isset($existingClasses[$key])) {
                 $existingClasses[$key] = $class;
             }
         }
 
-        return static::$normalizeClassAttribute ? array_unique($existingClasses) : $existingClasses;
+        return static::$normalizeClassAttribute ? \array_unique($existingClasses) : $existingClasses;
     }
 
     /**
@@ -2272,8 +2272,8 @@ class BaseHtml
     public static function removeCssClass(&$options, $class): void
     {
         if (isset($options['class'])) {
-            if (is_array($options['class'])) {
-                $classes = array_diff($options['class'], (array) $class);
+            if (\is_array($options['class'])) {
+                $classes = \array_diff($options['class'], (array) $class);
 
                 if (empty($classes)) {
                     unset($options['class']);
@@ -2281,13 +2281,13 @@ class BaseHtml
                     $options['class'] = $classes;
                 }
             } else {
-                $classes = preg_split('/\s+/', $options['class'], -1, PREG_SPLIT_NO_EMPTY);
-                $classes = array_diff($classes, (array) $class);
+                $classes = \preg_split('/\s+/', $options['class'], -1, \PREG_SPLIT_NO_EMPTY);
+                $classes = \array_diff($classes, (array) $class);
 
                 if (empty($classes)) {
                     unset($options['class']);
                 } else {
-                    $options['class'] = implode(' ', $classes);
+                    $options['class'] = \implode(' ', $classes);
                 }
             }
         }
@@ -2319,8 +2319,8 @@ class BaseHtml
     public static function addCssStyle(&$options, $style, $overwrite = true): void
     {
         if (!empty($options['style'])) {
-            $oldStyle = is_array($options['style']) ? $options['style'] : static::cssStyleToArray($options['style']);
-            $newStyle = is_array($style) ? $style : static::cssStyleToArray($style);
+            $oldStyle = \is_array($options['style']) ? $options['style'] : static::cssStyleToArray($options['style']);
+            $newStyle = \is_array($style) ? $style : static::cssStyleToArray($style);
 
             if (!$overwrite) {
                 foreach ($newStyle as $property => $value) {
@@ -2329,9 +2329,9 @@ class BaseHtml
                     }
                 }
             }
-            $style = array_merge($oldStyle, $newStyle);
+            $style = \array_merge($oldStyle, $newStyle);
         }
-        $options['style'] = is_array($style) ? static::cssStyleFromArray($style) : $style;
+        $options['style'] = \is_array($style) ? static::cssStyleFromArray($style) : $style;
     }
 
     /**
@@ -2352,7 +2352,7 @@ class BaseHtml
     public static function removeCssStyle(&$options, $properties): void
     {
         if (!empty($options['style'])) {
-            $style = is_array($options['style']) ? $options['style'] : static::cssStyleToArray($options['style']);
+            $style = \is_array($options['style']) ? $options['style'] : static::cssStyleToArray($options['style']);
 
             foreach ((array) $properties as $property) {
                 unset($style[$property]);
@@ -2384,7 +2384,7 @@ class BaseHtml
             $result .= "$name: $value; ";
         }
         // return null if empty to avoid rendering the "style" attribute
-        return $result === '' ? null : rtrim($result);
+        return $result === '' ? null : \rtrim($result);
     }
 
     /**
@@ -2408,11 +2408,11 @@ class BaseHtml
     {
         $result = [];
 
-        foreach (explode(';', $style) as $property) {
-            $property = explode(':', $property);
+        foreach (\explode(';', $style) as $property) {
+            $property = \explode(':', $property);
 
-            if (count($property) > 1) {
-                $result[trim($property[0])] = trim($property[1]);
+            if (\count($property) > 1) {
+                $result[\trim($property[0])] = \trim($property[1]);
             }
         }
 
@@ -2441,7 +2441,7 @@ class BaseHtml
      */
     public static function getAttributeName($attribute)
     {
-        if (preg_match(static::$attributeRegex, $attribute, $matches)) {
+        if (\preg_match(static::$attributeRegex, $attribute, $matches)) {
             return $matches[2];
         }
 
@@ -2466,15 +2466,15 @@ class BaseHtml
      */
     public static function getAttributeValue($model, $attribute)
     {
-        if (!preg_match(static::$attributeRegex, $attribute, $matches)) {
+        if (!\preg_match(static::$attributeRegex, $attribute, $matches)) {
             throw new InvalidArgumentException('Attribute name must contain word characters only.');
         }
         $attribute = $matches[2];
         $value = $model->$attribute;
 
         if ($matches[3] !== '') {
-            foreach (explode('][', trim($matches[3], '[]')) as $id) {
-                if ((is_array($value) || $value instanceof ArrayAccess) && isset($value[$id])) {
+            foreach (\explode('][', \trim($matches[3], '[]')) as $id) {
+                if ((\is_array($value) || $value instanceof ArrayAccess) && isset($value[$id])) {
                     $value = $value[$id];
                 } else {
                     return null;
@@ -2483,17 +2483,17 @@ class BaseHtml
         }
 
         // https://github.com/yiisoft/yii2/issues/1457
-        if (is_array($value)) {
+        if (\is_array($value)) {
             foreach ($value as $i => $v) {
                 if ($v instanceof ActiveRecordInterface) {
                     $v = $v->getPrimaryKey(false);
-                    $value[$i] = is_array($v) ? json_encode($v) : $v;
+                    $value[$i] = \is_array($v) ? \json_encode($v) : $v;
                 }
             }
         } elseif ($value instanceof ActiveRecordInterface) {
             $value = $value->getPrimaryKey(false);
 
-            return is_array($value) ? json_encode($value) : $value;
+            return \is_array($value) ? \json_encode($value) : $value;
         }
 
         return $value;
@@ -2520,7 +2520,7 @@ class BaseHtml
     {
         $formName = $model->formName();
 
-        if (!preg_match(static::$attributeRegex, $attribute, $matches)) {
+        if (!\preg_match(static::$attributeRegex, $attribute, $matches)) {
             throw new InvalidArgumentException('Attribute name must contain word characters only.');
         }
         $prefix = $matches[1];
@@ -2533,7 +2533,7 @@ class BaseHtml
             return $formName . $prefix . "[$attribute]" . $suffix;
         }
 
-        throw new InvalidArgumentException(get_class($model) . '::formName() cannot be empty for tabular inputs.');
+        throw new InvalidArgumentException(\get_class($model) . '::formName() cannot be empty for tabular inputs.');
     }
 
     /**
@@ -2550,9 +2550,9 @@ class BaseHtml
     public static function getInputIdByName($name)
     {
         $charset = Yii::$app ? Yii::$app->charset : 'UTF-8';
-        $name = mb_strtolower($name, $charset);
+        $name = \mb_strtolower($name, $charset);
 
-        return str_replace(['[]', '][', '[', ']', ' ', '.', '--'], ['', '-', '-', '', '-', '-', '-'], $name);
+        return \str_replace(['[]', '][', '[', ']', ' ', '.', '--'], ['', '-', '-', '', '-', '-', '-'], $name);
     }
 
     /**
@@ -2583,19 +2583,19 @@ class BaseHtml
      */
     public static function escapeJsRegularExpression($regexp)
     {
-        $pattern = preg_replace('/\\\\x\{?([0-9a-fA-F]+)\}?/', '\u$1', $regexp);
-        $deliminator = substr($pattern, 0, 1);
-        $pos = strrpos($pattern, $deliminator, 1);
-        $flag = substr($pattern, $pos + 1);
+        $pattern = \preg_replace('/\\\\x\{?([0-9a-fA-F]+)\}?/', '\u$1', $regexp);
+        $deliminator = \substr($pattern, 0, 1);
+        $pos = \strrpos($pattern, $deliminator, 1);
+        $flag = \substr($pattern, $pos + 1);
 
         if ($deliminator !== '/') {
-            $pattern = '/' . str_replace('/', '\\/', substr($pattern, 1, $pos - 1)) . '/';
+            $pattern = '/' . \str_replace('/', '\\/', \substr($pattern, 1, $pos - 1)) . '/';
         } else {
-            $pattern = substr($pattern, 0, $pos + 1);
+            $pattern = \substr($pattern, 0, $pos + 1);
         }
 
         if (!empty($flag)) {
-            $pattern .= preg_replace('/[^igmu]/', '', $flag);
+            $pattern .= \preg_replace('/[^igmu]/', '', $flag);
         }
 
         return $pattern;

@@ -135,8 +135,8 @@ class BlameableBehavior extends AttributeBehavior
      */
     protected function getDefaultValue($event)
     {
-        if ($this->defaultValue instanceof Closure || (is_array($this->defaultValue) && is_callable($this->defaultValue))) {
-            return call_user_func($this->defaultValue, $event);
+        if ($this->defaultValue instanceof Closure || (\is_array($this->defaultValue) && \is_callable($this->defaultValue))) {
+            return \call_user_func($this->defaultValue, $event);
         }
 
         return $this->defaultValue;

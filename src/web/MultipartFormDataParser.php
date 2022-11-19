@@ -94,7 +94,7 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
     public function getUploadFileMaxSize()
     {
         if ($this->_uploadFileMaxSize === null) {
-            $this->_uploadFileMaxSize = $this->getByteSize(ini_get('upload_max_filesize'));
+            $this->_uploadFileMaxSize = $this->getByteSize(\ini_get('upload_max_filesize'));
         }
 
         return $this->_uploadFileMaxSize;
@@ -114,7 +114,7 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
     public function getUploadFileMaxCount()
     {
         if ($this->_uploadFileMaxCount === null) {
-            $this->_uploadFileMaxCount = (int) ini_get('max_file_uploads');
+            $this->_uploadFileMaxCount = (int) \ini_get('max_file_uploads');
         }
 
         return $this->_uploadFileMaxCount;
@@ -146,14 +146,14 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
             return [];
         }
 
-        if (!preg_match('/boundary="?(.*)"?$/is', $contentType, $matches)) {
+        if (!\preg_match('/boundary="?(.*)"?$/is', $contentType, $matches)) {
             return [];
         }
 
-        $boundary = trim($matches[1], '"');
+        $boundary = \trim($matches[1], '"');
 
-        $bodyParts = preg_split('/\\R?-+' . preg_quote($boundary, '/') . '/s', $rawBody);
-        array_pop($bodyParts); // last block always has no data, contains boundary ending like `--`
+        $bodyParts = \preg_split('/\\R?-+' . \preg_quote($boundary, '/') . '/s', $rawBody);
+        \array_pop($bodyParts); // last block always has no data, contains boundary ending like `--`
 
         $bodyParams = [];
         $filesCount = 0;
@@ -162,7 +162,7 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
             if (empty($bodyPart)) {
                 continue;
             }
-            [$headers, $value] = preg_split('/\\R\\R/', $bodyPart, 2);
+            [$headers, $value] = \preg_split('/\\R\\R/', $bodyPart, 2);
             $headers = $this->parseHeaders($headers);
 
             if (!isset($headers['content-disposition']['name'])) {
@@ -179,27 +179,27 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
                     'name' => $headers['content-disposition']['filename'],
                     'type' => ArrayHelper::getValue($headers, 'content-type', 'application/octet-stream'),
                     'size' => StringHelper::byteLength($value),
-                    'error' => UPLOAD_ERR_OK,
+                    'error' => \UPLOAD_ERR_OK,
                     'tmp_name' => null,
                 ];
 
                 if ($fileInfo['size'] > $this->getUploadFileMaxSize()) {
-                    $fileInfo['error'] = UPLOAD_ERR_INI_SIZE;
+                    $fileInfo['error'] = \UPLOAD_ERR_INI_SIZE;
                 } else {
-                    $tmpResource = tmpfile();
+                    $tmpResource = \tmpfile();
 
                     if ($tmpResource === false) {
-                        $fileInfo['error'] = UPLOAD_ERR_CANT_WRITE;
+                        $fileInfo['error'] = \UPLOAD_ERR_CANT_WRITE;
                     } else {
-                        $tmpResourceMetaData = stream_get_meta_data($tmpResource);
+                        $tmpResourceMetaData = \stream_get_meta_data($tmpResource);
                         $tmpFileName = $tmpResourceMetaData['uri'];
 
                         if (empty($tmpFileName)) {
-                            $fileInfo['error'] = UPLOAD_ERR_CANT_WRITE;
-                            @fclose($tmpResource);
+                            $fileInfo['error'] = \UPLOAD_ERR_CANT_WRITE;
+                            @\fclose($tmpResource);
                         } else {
-                            fwrite($tmpResource, $value);
-                            rewind($tmpResource);
+                            \fwrite($tmpResource, $value);
+                            \rewind($tmpResource);
                             $fileInfo['tmp_name'] = $tmpFileName;
                             $fileInfo['tmp_resource'] = $tmpResource; // save file resource, otherwise it will be deleted
                         }
@@ -228,31 +228,31 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
     private function parseHeaders($headerContent)
     {
         $headers = [];
-        $headerParts = preg_split('/\\R/su', $headerContent, -1, PREG_SPLIT_NO_EMPTY);
+        $headerParts = \preg_split('/\\R/su', $headerContent, -1, \PREG_SPLIT_NO_EMPTY);
 
         foreach ($headerParts as $headerPart) {
-            if (!str_contains($headerPart, ':')) {
+            if (!\str_contains($headerPart, ':')) {
                 continue;
             }
 
-            [$headerName, $headerValue] = explode(':', $headerPart, 2);
-            $headerName = strtolower(trim($headerName));
-            $headerValue = trim($headerValue);
+            [$headerName, $headerValue] = \explode(':', $headerPart, 2);
+            $headerName = \strtolower(\trim($headerName));
+            $headerValue = \trim($headerValue);
 
-            if (!str_contains($headerValue, ';')) {
+            if (!\str_contains($headerValue, ';')) {
                 $headers[$headerName] = $headerValue;
             } else {
                 $headers[$headerName] = [];
 
-                foreach (explode(';', $headerValue) as $part) {
-                    $part = trim($part);
+                foreach (\explode(';', $headerValue) as $part) {
+                    $part = \trim($part);
 
-                    if (!str_contains($part, '=')) {
+                    if (!\str_contains($part, '=')) {
                         $headers[$headerName][] = $part;
                     } else {
-                        [$name, $value] = explode('=', $part, 2);
-                        $name = strtolower(trim($name));
-                        $value = trim(trim($value), '"');
+                        [$name, $value] = \explode('=', $part, 2);
+                        $name = \strtolower(\trim($name));
+                        $value = \trim(\trim($value), '"');
                         $headers[$headerName][$name] = $value;
                     }
                 }
@@ -271,16 +271,16 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
      */
     private function addValue(&$array, $name, $value): void
     {
-        $nameParts = preg_split('/\\]\\[|\\[/s', $name);
+        $nameParts = \preg_split('/\\]\\[|\\[/s', $name);
         $current = &$array;
 
         foreach ($nameParts as $namePart) {
-            $namePart = trim($namePart, ']');
+            $namePart = \trim($namePart, ']');
 
             if ($namePart === '') {
                 $current[] = [];
-                $keys = array_keys($current);
-                $lastKey = array_pop($keys);
+                $keys = \array_keys($current);
+                $lastKey = \array_pop($keys);
                 $current = &$current[$lastKey];
             } else {
                 if (!isset($current[$namePart])) {
@@ -301,7 +301,7 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
      */
     private function addFile(&$files, $name, $info): void
     {
-        if (!str_contains($name, '[')) {
+        if (!\str_contains($name, '[')) {
             $files[$name] = $info;
 
             return;
@@ -316,8 +316,8 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
             'tmp_resource',
         ];
 
-        $nameParts = preg_split('/\\]\\[|\\[/s', $name);
-        $baseName = array_shift($nameParts);
+        $nameParts = \preg_split('/\\]\\[|\\[/s', $name);
+        $baseName = \array_shift($nameParts);
 
         if (!isset($files[$baseName])) {
             $files[$baseName] = [];
@@ -339,12 +339,12 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
             $current = &$files[$baseName][$attribute];
 
             foreach ($nameParts as $namePart) {
-                $namePart = trim($namePart, ']');
+                $namePart = \trim($namePart, ']');
 
                 if ($namePart === '') {
                     $current[] = [];
-                    $keys = array_keys($current);
-                    $lastKey = array_pop($keys);
+                    $keys = \array_keys($current);
+                    $lastKey = \array_pop($keys);
                     $current = &$current[$lastKey];
                 } else {
                     if (!isset($current[$namePart])) {
@@ -372,17 +372,17 @@ class MultipartFormDataParser extends BaseObject implements RequestParserInterfa
             return 0;
         }
 
-        if (is_numeric($verboseSize)) {
+        if (\is_numeric($verboseSize)) {
             return (int) $verboseSize;
         }
-        $sizeUnit = trim($verboseSize, '0123456789');
-        $size = trim(str_replace($sizeUnit, '', $verboseSize));
+        $sizeUnit = \trim($verboseSize, '0123456789');
+        $size = \trim(\str_replace($sizeUnit, '', $verboseSize));
 
-        if (!is_numeric($size)) {
+        if (!\is_numeric($size)) {
             return 0;
         }
 
-        switch (strtolower($sizeUnit)) {
+        switch (\strtolower($sizeUnit)) {
             case 'kb':
             case 'k':
                 return $size * 1024;

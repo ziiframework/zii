@@ -205,11 +205,11 @@ class ActiveRecord extends BaseActiveRecord
                     $pk = static::tableName() . '.' . $pk;
                 }
                 // if condition is scalar, search for a single primary key, if it is array, search for multiple primary key values
-                $condition = [$pk => is_array($condition) ? array_values($condition) : $condition];
+                $condition = [$pk => \is_array($condition) ? \array_values($condition) : $condition];
             } else {
                 throw new InvalidConfigException('"' . static::class . '" must have a primary key.');
             }
-        } elseif (is_array($condition)) {
+        } elseif (\is_array($condition)) {
             $aliases = static::filterValidAliases($query);
             $condition = static::filterCondition($condition, $aliases);
         }
@@ -232,9 +232,9 @@ class ActiveRecord extends BaseActiveRecord
     {
         $tables = $query->getTablesUsedInFrom();
 
-        $aliases = array_diff(array_keys($tables), $tables);
+        $aliases = \array_diff(\array_keys($tables), $tables);
 
-        return array_map(static fn ($alias) => preg_replace('/{{(\w+)}}/', '$1', $alias), array_values($aliases));
+        return \array_map(static fn ($alias) => \preg_replace('/{{(\w+)}}/', '$1', $alias), \array_values($aliases));
     }
 
     /**
@@ -260,10 +260,10 @@ class ActiveRecord extends BaseActiveRecord
         $columnNames = static::filterValidColumnNames($db, $aliases);
 
         foreach ($condition as $key => $value) {
-            if (is_string($key) && !in_array($db->quoteSql($key), $columnNames, true)) {
+            if (\is_string($key) && !\in_array($db->quoteSql($key), $columnNames, true)) {
                 throw new InvalidArgumentException('Key "' . $key . '" is not a column name and can not be used as a filter');
             }
-            $result[$key] = is_array($value) ? array_values($value) : $value;
+            $result[$key] = \is_array($value) ? \array_values($value) : $value;
         }
 
         return $result;
@@ -310,7 +310,7 @@ class ActiveRecord extends BaseActiveRecord
     public function refresh()
     {
         $query = static::find();
-        $tableName = key($query->getTablesUsedInFrom());
+        $tableName = \key($query->getTablesUsedInFrom());
         $pk = [];
         // disambiguate column names in case ActiveQuery adds a JOIN
         foreach ($this->getPrimaryKey(true) as $key => $value) {
@@ -658,7 +658,7 @@ class ActiveRecord extends BaseActiveRecord
             $values[$name] = $id;
         }
 
-        $changedAttributes = array_fill_keys(array_keys($values), null);
+        $changedAttributes = \array_fill_keys(\array_keys($values), null);
         $this->setOldAttributes($values);
         $this->afterSave(true, $changedAttributes);
 

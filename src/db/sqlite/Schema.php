@@ -126,7 +126,7 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
         $foreignKeys = $this->db->createCommand('PRAGMA FOREIGN_KEY_LIST (' . $this->quoteValue($tableName) . ')')->queryAll();
         $foreignKeys = $this->normalizePdoRowKeyCase($foreignKeys, true);
         $foreignKeys = ArrayHelper::index($foreignKeys, null, 'table');
-        ArrayHelper::multisort($foreignKeys, 'seq', SORT_ASC, SORT_NUMERIC);
+        ArrayHelper::multisort($foreignKeys, 'seq', \SORT_ASC, \SORT_NUMERIC);
         $result = [];
 
         foreach ($foreignKeys as $table => $foreignKey) {
@@ -258,7 +258,7 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
             }
         }
 
-        if (count($table->primaryKey) === 1 && !strncasecmp($table->columns[$table->primaryKey[0]]->dbType, 'int', 3)) {
+        if (\count($table->primaryKey) === 1 && !\strncasecmp($table->columns[$table->primaryKey[0]]->dbType, 'int', 3)) {
             $table->sequenceName = '';
             $table->columns[$table->primaryKey[0]]->autoIncrement = true;
         }
@@ -340,20 +340,20 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
         $column->allowNull = !$info['notnull'];
         $column->isPrimaryKey = $info['pk'] != 0;
 
-        $column->dbType = strtolower($info['type']);
-        $column->unsigned = str_contains($column->dbType, 'unsigned');
+        $column->dbType = \strtolower($info['type']);
+        $column->unsigned = \str_contains($column->dbType, 'unsigned');
 
         $column->type = self::TYPE_STRING;
 
-        if (preg_match('/^(\w+)(?:\(([^\)]+)\))?/', $column->dbType, $matches)) {
-            $type = strtolower($matches[1]);
+        if (\preg_match('/^(\w+)(?:\(([^\)]+)\))?/', $column->dbType, $matches)) {
+            $type = \strtolower($matches[1]);
 
             if (isset($this->typeMap[$type])) {
                 $column->type = $this->typeMap[$type];
             }
 
             if (!empty($matches[2])) {
-                $values = explode(',', $matches[2]);
+                $values = \explode(',', $matches[2]);
                 $column->size = $column->precision = (int) $values[0];
 
                 if (isset($values[1])) {
@@ -379,7 +379,7 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
             } elseif ($column->type === 'timestamp' && $info['dflt_value'] === 'CURRENT_TIMESTAMP') {
                 $column->defaultValue = new Expression('CURRENT_TIMESTAMP');
             } else {
-                $value = trim($info['dflt_value'], "'\"");
+                $value = \trim($info['dflt_value'], "'\"");
                 $column->defaultValue = $column->phpTypecast($value);
             }
         }
@@ -462,7 +462,7 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
         foreach ($indexes as $index) {
             $columns = $this->db->createCommand('PRAGMA INDEX_INFO (' . $this->quoteValue($index['name']) . ')')->queryAll();
             $columns = $this->normalizePdoRowKeyCase($columns, true);
-            ArrayHelper::multisort($columns, 'seqno', SORT_ASC, SORT_NUMERIC);
+            ArrayHelper::multisort($columns, 'seqno', \SORT_ASC, \SORT_NUMERIC);
 
             if ($tableColumns !== null) {
                 // SQLite may not have an "origin" column in INDEX_LIST
@@ -530,6 +530,6 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
      */
     private function isSystemIdentifier($identifier)
     {
-        return strncmp($identifier, 'sqlite_', 7) === 0;
+        return \strncmp($identifier, 'sqlite_', 7) === 0;
     }
 }

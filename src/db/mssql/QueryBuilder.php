@@ -57,7 +57,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      */
     protected function defaultExpressionBuilders()
     {
-        return array_merge(parent::defaultExpressionBuilders(), [
+        return \array_merge(parent::defaultExpressionBuilders(), [
             'yii\db\conditions\InCondition' => 'yii\db\mssql\conditions\InConditionBuilder',
             'yii\db\conditions\LikeCondition' => 'yii\db\mssql\conditions\LikeConditionBuilder',
         ]);
@@ -74,7 +74,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
             return $orderBy === '' ? $sql : $sql . $this->separator . $orderBy;
         }
 
-        if (version_compare($this->db->getSchema()->getServerVersion(), '11', '<')) {
+        if (\version_compare($this->db->getSchema()->getServerVersion(), '11', '<')) {
             return $this->oldBuildOrderByAndLimit($sql, $orderBy, $limit, $offset);
         }
 
@@ -131,7 +131,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
             $orderBy = 'ORDER BY (SELECT NULL)';
         }
 
-        $sql = preg_replace('/^([\s(])*SELECT(\s+DISTINCT)?(?!\s*TOP\s*\()/i', "\\1SELECT\\2 rowNum = ROW_NUMBER() over ($orderBy),", $sql);
+        $sql = \preg_replace('/^([\s(])*SELECT(\s+DISTINCT)?(?!\s*TOP\s*\()/i', "\\1SELECT\\2 rowNum = ROW_NUMBER() over ($orderBy),", $sql);
 
         if ($this->hasLimit($limit)) {
             if ($limit instanceof Expression) {
@@ -199,7 +199,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
 
         $columnName = $this->db->quoteColumnName($column);
         $tableName = $this->db->quoteTableName($table);
-        $constraintBase = preg_replace('/[^a-z0-9_]/i', '', $table . '_' . $column);
+        $constraintBase = \preg_replace('/[^a-z0-9_]/i', '', $table . '_' . $column);
 
         if ($type instanceof \yii\db\mssql\ColumnSchemaBuilder) {
             $type->setAlterColumnFormat();
@@ -226,7 +226,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
         return 'ALTER TABLE ' . $tableName . ' ALTER COLUMN '
             . $columnName . ' '
             . $this->getColumnType($type) . "\n"
-            . implode("\n", $sqlAfter);
+            . \implode("\n", $sqlAfter);
     }
 
     /**
@@ -269,7 +269,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
             $tableName = $this->db->quoteTableName($tableName);
 
             if ($value === null) {
-                $key = $this->db->quoteColumnName(reset($table->primaryKey));
+                $key = $this->db->quoteColumnName(\reset($table->primaryKey));
                 $value = "(SELECT COALESCE(MAX({$key}),0) FROM {$tableName})+1";
             } else {
                 $value = (int) $value;
@@ -298,7 +298,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
         $schema = $schema ?: $this->db->getSchema()->defaultSchema;
         $tableNames = $this->db->getTableSchema($table) ? [$table] : $this->db->getSchema()->getTableNames($schema);
         $viewNames = $this->db->getSchema()->getViewNames($schema);
-        $tableNames = array_diff($tableNames, $viewNames);
+        $tableNames = \array_diff($tableNames, $viewNames);
         $command = '';
 
         foreach ($tableNames as $tableName) {
@@ -460,7 +460,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
         /* @var $modelClass \yii\db\ActiveRecord */
         $schema = $modelClass::getTableSchema();
 
-        return array_keys($schema->columns);
+        return \array_keys($schema->columns);
     }
 
     /**
@@ -473,7 +473,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      */
     protected function isOldMssql()
     {
-        return version_compare($this->db->getSchema()->getServerVersion(), '11', '<');
+        return \version_compare($this->db->getSchema()->getServerVersion(), '11', '<');
     }
 
     /**
@@ -501,7 +501,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
 
             foreach ($columns as $name => $value) {
                 // @see https://github.com/yiisoft/yii2/issues/12599
-                if (isset($columnSchemas[$name]) && $columnSchemas[$name]->type === Schema::TYPE_BINARY && $columnSchemas[$name]->dbType === 'varbinary' && (is_string($value) || $value === null)) {
+                if (isset($columnSchemas[$name]) && $columnSchemas[$name]->type === Schema::TYPE_BINARY && $columnSchemas[$name]->dbType === 'varbinary' && (\is_string($value) || $value === null)) {
                     $phName = $this->bindParam($value, $params);
                     // @see https://github.com/yiisoft/yii2/issues/12599
                     $columns[$name] = new Expression("CONVERT(VARBINARY(MAX), $phName)", $params);
@@ -522,7 +522,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         $columns = $this->normalizeTableRowData($table, $columns, $params);
 
-        $version2005orLater = version_compare($this->db->getSchema()->getServerVersion(), '9', '>=');
+        $version2005orLater = \version_compare($this->db->getSchema()->getServerVersion(), '9', '>=');
 
         [$names, $placeholders, $values, $params] = $this->prepareInsertValues($table, $columns, $params);
         $cols = [];
@@ -539,7 +539,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
 
                 $dbType = $column->dbType;
 
-                if (in_array($dbType, ['char', 'varchar', 'nchar', 'nvarchar', 'binary', 'varbinary'])) {
+                if (\in_array($dbType, ['char', 'varchar', 'nchar', 'nvarchar', 'binary', 'varbinary'])) {
                     $dbType .= '(MAX)';
                 }
 
@@ -553,15 +553,15 @@ class QueryBuilder extends \yii\db\QueryBuilder
             }
         }
 
-        $countColumns = count($outputColumns);
+        $countColumns = \count($outputColumns);
 
         $sql = 'INSERT INTO ' . $this->db->quoteTableName($table)
-            . (!empty($names) ? ' (' . implode(', ', $names) . ')' : '')
-            . (($version2005orLater && $countColumns) ? ' OUTPUT ' . implode(',', $outputColumns) . ' INTO @temporary_inserted' : '')
-            . (!empty($placeholders) ? ' VALUES (' . implode(', ', $placeholders) . ')' : $values);
+            . (!empty($names) ? ' (' . \implode(', ', $names) . ')' : '')
+            . (($version2005orLater && $countColumns) ? ' OUTPUT ' . \implode(',', $outputColumns) . ' INTO @temporary_inserted' : '')
+            . (!empty($placeholders) ? ' VALUES (' . \implode(', ', $placeholders) . ')' : $values);
 
         if ($version2005orLater && $countColumns) {
-            $sql = 'SET NOCOUNT ON;DECLARE @temporary_inserted TABLE (' . implode(', ', $cols) . ');' . $sql .
+            $sql = 'SET NOCOUNT ON;DECLARE @temporary_inserted TABLE (' . \implode(', ', $cols) . ');' . $sql .
                 ';SELECT * FROM @temporary_inserted';
         }
 
@@ -612,25 +612,25 @@ class QueryBuilder extends \yii\db\QueryBuilder
          */
         $insertNamesUsing = $insertNames;
 
-        if (strstr($values, 'rowNum = ROW_NUMBER()') !== false) {
-            $insertNamesUsing = array_merge(['[rowNum]'], $insertNames);
+        if (\strstr($values, 'rowNum = ROW_NUMBER()') !== false) {
+            $insertNamesUsing = \array_merge(['[rowNum]'], $insertNames);
         }
 
         $mergeSql = 'MERGE ' . $this->db->quoteTableName($table) . ' WITH (HOLDLOCK) '
-            . 'USING (' . (!empty($placeholders) ? 'VALUES (' . implode(', ', $placeholders) . ')' : ltrim($values, ' ')) . ') AS [EXCLUDED] (' . implode(', ', $insertNamesUsing) . ') '
+            . 'USING (' . (!empty($placeholders) ? 'VALUES (' . \implode(', ', $placeholders) . ')' : \ltrim($values, ' ')) . ') AS [EXCLUDED] (' . \implode(', ', $insertNamesUsing) . ') '
             . "ON ($on)";
         $insertValues = [];
 
         foreach ($insertNames as $name) {
             $quotedName = $this->db->quoteColumnName($name);
 
-            if (strrpos($quotedName, '.') === false) {
+            if (\strrpos($quotedName, '.') === false) {
                 $quotedName = '[EXCLUDED].' . $quotedName;
             }
             $insertValues[] = $quotedName;
         }
-        $insertSql = 'INSERT (' . implode(', ', $insertNames) . ')'
-            . ' VALUES (' . implode(', ', $insertValues) . ')';
+        $insertSql = 'INSERT (' . \implode(', ', $insertNames) . ')'
+            . ' VALUES (' . \implode(', ', $insertValues) . ')';
 
         if ($updateColumns === false) {
             return "$mergeSql WHEN NOT MATCHED THEN $insertSql;";
@@ -642,7 +642,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
             foreach ($updateNames as $name) {
                 $quotedName = $this->db->quoteColumnName($name);
 
-                if (strrpos($quotedName, '.') === false) {
+                if (\strrpos($quotedName, '.') === false) {
                     $quotedName = '[EXCLUDED].' . $quotedName;
                 }
                 $updateColumns[$name] = new Expression($quotedName);
@@ -651,7 +651,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
         $updateColumns = $this->normalizeTableRowData($table, $updateColumns, $params);
 
         [$updates, $params] = $this->prepareUpdateSets($table, $updateColumns, $params);
-        $updateSql = 'UPDATE SET ' . implode(', ', $updates);
+        $updateSql = 'UPDATE SET ' . \implode(', ', $updates);
 
         return "$mergeSql WHEN MATCHED THEN $updateSql WHEN NOT MATCHED THEN $insertSql;";
     }
@@ -671,8 +671,8 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         $columnType = parent::getColumnType($type);
         // remove unsupported keywords
-        $columnType = preg_replace("/\s*comment '.*'/i", '', $columnType);
-        $columnType = preg_replace('/ first$/i', '', $columnType);
+        $columnType = \preg_replace("/\s*comment '.*'/i", '', $columnType);
+        $columnType = \preg_replace('/ first$/i', '', $columnType);
 
         return $columnType;
     }
@@ -682,7 +682,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      */
     protected function extractAlias($table)
     {
-        if (preg_match('/^\[.*\]$/', $table)) {
+        if (\preg_match('/^\[.*\]$/', $table)) {
             return false;
         }
 

@@ -137,7 +137,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
                 // if there is an error during error rendering it's useful to
                 // display PHP error in debug mode instead of a blank screen
                 if (YII_DEBUG) {
-                    ini_set('display_errors', '1');
+                    \ini_set('display_errors', '1');
                 }
                 $file = $useErrorView ? $this->errorView : $this->exceptionView;
                 $response->data = $this->renderFile($file, [
@@ -177,12 +177,12 @@ class ErrorHandler extends \yii\base\ErrorHandler
         }
 
         if (YII_DEBUG) {
-            $array['type'] = get_class($exception);
+            $array['type'] = \get_class($exception);
 
             if (!$exception instanceof UserException) {
                 $array['file'] = $exception->getFile();
                 $array['line'] = $exception->getLine();
-                $array['stack-trace'] = explode("\n", $exception->getTraceAsString());
+                $array['stack-trace'] = \explode("\n", $exception->getTraceAsString());
 
                 if ($exception instanceof \yii\db\Exception) {
                     $array['error-info'] = $exception->errorInfo;
@@ -206,7 +206,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
      */
     public function htmlEncode($text)
     {
-        return htmlspecialchars($text, ENT_NOQUOTES | ENT_SUBSTITUTE | ENT_HTML5, 'UTF-8');
+        return \htmlspecialchars($text, \ENT_NOQUOTES | \ENT_SUBSTITUTE | \ENT_HTML5, 'UTF-8');
     }
 
     /**
@@ -218,7 +218,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
      */
     public function addTypeLinks($code)
     {
-        if (preg_match('/(.*?)::([^(]+)/', $code, $matches)) {
+        if (\preg_match('/(.*?)::([^(]+)/', $code, $matches)) {
             $class = $matches[1];
             $method = $matches[2];
             $text = $this->htmlEncode($class) . '::' . $this->htmlEncode($method);
@@ -232,7 +232,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
 
         $shouldGenerateLink = true;
 
-        if ($method !== null && substr_compare($method, '{closure}', -9) !== 0) {
+        if ($method !== null && \substr_compare($method, '{closure}', -9) !== 0) {
             $reflection = new ReflectionClass($class);
 
             if ($reflection->hasMethod($method)) {
@@ -266,11 +266,11 @@ class ErrorHandler extends \yii\base\ErrorHandler
      */
     protected function getTypeUrl($class, $method)
     {
-        if (strncmp($class, 'yii\\', 4) !== 0) {
+        if (\strncmp($class, 'yii\\', 4) !== 0) {
             return null;
         }
 
-        $page = $this->htmlEncode(strtolower(str_replace('\\', '-', $class)));
+        $page = $this->htmlEncode(\strtolower(\str_replace('\\', '-', $class)));
         $url = "https://www.yiiframework.com/doc-2.0/$page.html";
 
         if ($method) {
@@ -293,13 +293,13 @@ class ErrorHandler extends \yii\base\ErrorHandler
         $_params_['handler'] = $this;
 
         if ($this->exception instanceof ErrorException || !Yii::$app->has('view')) {
-            ob_start();
-            ob_implicit_flush(false);
-            extract($_params_, EXTR_OVERWRITE);
+            \ob_start();
+            \ob_implicit_flush(false);
+            \extract($_params_, \EXTR_OVERWRITE);
 
             require Yii::getAlias($_file_);
 
-            return ob_get_clean();
+            return \ob_get_clean();
         }
 
         $view = Yii::$app->getView();
@@ -344,9 +344,9 @@ class ErrorHandler extends \yii\base\ErrorHandler
 
         if ($file !== null && $line !== null) {
             --$line; // adjust line number from one-based to zero-based
-            $lines = @file($file);
+            $lines = @\file($file);
 
-            if ($line < 0 || $lines === false || ($lineCount = count($lines)) < $line) {
+            if ($line < 0 || $lines === false || ($lineCount = \count($lines)) < $line) {
                 return '';
             }
 
@@ -382,7 +382,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
         $out = '<ul>';
         $out .= $this->renderCallStackItem($exception->getFile(), $exception->getLine(), null, null, [], 1);
 
-        for ($i = 0, $trace = $exception->getTrace(), $length = count($trace); $i < $length; ++$i) {
+        for ($i = 0, $trace = $exception->getTrace(), $length = \count($trace); $i < $length; ++$i) {
             $file = !empty($trace[$i]['file']) ? $trace[$i]['file'] : null;
             $line = !empty($trace[$i]['line']) ? $trace[$i]['line'] : null;
             $class = !empty($trace[$i]['class']) ? $trace[$i]['class'] : null;
@@ -417,7 +417,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
             }
         }
 
-        return '<pre>' . $this->htmlEncode(rtrim($request, "\n")) . '</pre>';
+        return '<pre>' . $this->htmlEncode(\rtrim($request, "\n")) . '</pre>';
     }
 
     /**
@@ -429,7 +429,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
      */
     public function isCoreFile($file)
     {
-        return $file === null || str_starts_with(realpath($file), YII2_PATH . DIRECTORY_SEPARATOR);
+        return $file === null || \str_starts_with(\realpath($file), YII2_PATH . \DIRECTORY_SEPARATOR);
     }
 
     /**
@@ -465,7 +465,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
         if (isset($_SERVER['SERVER_SOFTWARE'])) {
             foreach ($serverUrls as $url => $keywords) {
                 foreach ($keywords as $keyword) {
-                    if (stripos($_SERVER['SERVER_SOFTWARE'], $keyword) !== false) {
+                    if (\stripos($_SERVER['SERVER_SOFTWARE'], $keyword) !== false) {
                         return '<a href="' . $url . '" target="_blank">' . $this->htmlEncode($_SERVER['SERVER_SOFTWARE']) . '</a>';
                     }
                 }
@@ -496,7 +496,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
     public function argumentsToString($args)
     {
         $count = 0;
-        $isAssoc = $args !== array_values($args);
+        $isAssoc = $args !== \array_values($args);
 
         foreach ($args as $key => $value) {
             ++$count;
@@ -511,37 +511,37 @@ class ErrorHandler extends \yii\base\ErrorHandler
                 continue;
             }
 
-            if (is_object($value)) {
-                $args[$key] = '<span class="title">' . $this->htmlEncode(get_class($value)) . '</span>';
-            } elseif (is_bool($value)) {
+            if (\is_object($value)) {
+                $args[$key] = '<span class="title">' . $this->htmlEncode(\get_class($value)) . '</span>';
+            } elseif (\is_bool($value)) {
                 $args[$key] = '<span class="keyword">' . ($value ? 'true' : 'false') . '</span>';
-            } elseif (is_string($value)) {
+            } elseif (\is_string($value)) {
                 $fullValue = $this->htmlEncode($value);
 
-                if (mb_strlen($value, 'UTF-8') > 32) {
-                    $displayValue = $this->htmlEncode(mb_substr($value, 0, 32, 'UTF-8')) . '...';
+                if (\mb_strlen($value, 'UTF-8') > 32) {
+                    $displayValue = $this->htmlEncode(\mb_substr($value, 0, 32, 'UTF-8')) . '...';
                     $args[$key] = "<span class=\"string\" title=\"$fullValue\">'$displayValue'</span>";
                 } else {
                     $args[$key] = "<span class=\"string\">'$fullValue'</span>";
                 }
-            } elseif (is_array($value)) {
+            } elseif (\is_array($value)) {
                 $args[$key] = '[' . $this->argumentsToString($value) . ']';
             } elseif ($value === null) {
                 $args[$key] = '<span class="keyword">null</span>';
-            } elseif (is_resource($value)) {
+            } elseif (\is_resource($value)) {
                 $args[$key] = '<span class="keyword">resource</span>';
             } else {
                 $args[$key] = '<span class="number">' . $value . '</span>';
             }
 
-            if (is_string($key)) {
+            if (\is_string($key)) {
                 $args[$key] = '<span class="string">\'' . $this->htmlEncode($key) . "'</span> => $args[$key]";
             } elseif ($isAssoc) {
                 $args[$key] = "<span class=\"number\">$key</span> => $args[$key]";
             }
         }
 
-        return implode(', ', $args);
+        return \implode(', ', $args);
     }
 
     /**

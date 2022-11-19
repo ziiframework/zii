@@ -36,7 +36,7 @@ class Request extends \yii\base\Request
         if ($this->_params === null) {
             if (isset($_SERVER['argv'])) {
                 $this->_params = $_SERVER['argv'];
-                array_shift($this->_params);
+                \array_shift($this->_params);
             } else {
                 $this->_params = [];
             }
@@ -68,11 +68,11 @@ class Request extends \yii\base\Request
         $endOfOptionsFound = false;
 
         if (isset($rawParams[0])) {
-            $route = array_shift($rawParams);
+            $route = \array_shift($rawParams);
 
             if ($route === '--') {
                 $endOfOptionsFound = true;
-                $route = array_shift($rawParams);
+                $route = \array_shift($rawParams);
             }
         } else {
             $route = '';
@@ -86,10 +86,10 @@ class Request extends \yii\base\Request
                 $params[] = $param;
             } elseif ($param === '--') {
                 $endOfOptionsFound = true;
-            } elseif (preg_match('/^--([\w-]+)(?:=(.*))?$/', $param, $matches)) {
+            } elseif (\preg_match('/^--([\w-]+)(?:=(.*))?$/', $param, $matches)) {
                 $name = $matches[1];
 
-                if (is_numeric(substr($name, 0, 1))) {
+                if (\is_numeric(\substr($name, 0, 1))) {
                     throw new Exception('Parameter "' . $name . '" is not valid');
                 }
 
@@ -97,10 +97,10 @@ class Request extends \yii\base\Request
                     $params[$name] = $matches[2] ?? true;
                     $prevOption = &$params[$name];
                 }
-            } elseif (preg_match('/^-([\w-]+)(?:=(.*))?$/', $param, $matches)) {
+            } elseif (\preg_match('/^-([\w-]+)(?:=(.*))?$/', $param, $matches)) {
                 $name = $matches[1];
 
-                if (is_numeric($name)) {
+                if (\is_numeric($name)) {
                     $params[] = $param;
                 } else {
                     $params['_aliases'][$name] = $matches[2] ?? true;

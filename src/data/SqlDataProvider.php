@@ -130,9 +130,9 @@ class SqlDataProvider extends BaseDataProvider
             $orders = $sort->getOrders();
             $pattern = '/\s+order\s+by\s+([\w\s,\."`\[\]]+)$/i';
 
-            if (preg_match($pattern, $sql, $matches)) {
-                array_unshift($orders, new Expression($matches[1]));
-                $sql = preg_replace($pattern, '', $sql);
+            if (\preg_match($pattern, $sql, $matches)) {
+                \array_unshift($orders, new Expression($matches[1]));
+                $sql = \preg_replace($pattern, '', $sql);
             }
         }
 
@@ -156,17 +156,17 @@ class SqlDataProvider extends BaseDataProvider
 
         if ($this->key !== null) {
             foreach ($models as $model) {
-                if (is_string($this->key)) {
+                if (\is_string($this->key)) {
                     $keys[] = $model[$this->key];
                 } else {
-                    $keys[] = call_user_func($this->key, $model);
+                    $keys[] = \call_user_func($this->key, $model);
                 }
             }
 
             return $keys;
         }
 
-        return array_keys($models);
+        return \array_keys($models);
     }
 
     /**

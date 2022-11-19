@@ -33,14 +33,14 @@ trait RetryAcquireTrait
 
     private function retryAcquire($timeout, Closure $callback)
     {
-        $start = microtime(true);
+        $start = \microtime(true);
 
         do {
             if ($callback()) {
                 return true;
             }
-            usleep($this->retryDelay * 1000);
-        } while (microtime(true) - $start < $timeout);
+            \usleep($this->retryDelay * 1000);
+        } while (\microtime(true) - $start < $timeout);
 
         return false;
     }

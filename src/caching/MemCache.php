@@ -220,7 +220,7 @@ class MemCache extends Cache
         if ($this->_cache === null) {
             $extension = $this->useMemcached ? 'memcached' : 'memcache';
 
-            if (!extension_loaded($extension)) {
+            if (!\extension_loaded($extension)) {
                 throw new InvalidConfigException("MemCache requires PHP $extension extension to be loaded.");
             }
 
@@ -327,7 +327,7 @@ class MemCache extends Cache
 
             // Memcached::setMulti() returns boolean
             // @see https://www.php.net/manual/en/memcached.setmulti.php
-            return $this->_cache->setMulti($data, $expire) ? [] : array_keys($data);
+            return $this->_cache->setMulti($data, $expire) ? [] : \array_keys($data);
         }
 
         return parent::setValues($data, $duration);
@@ -395,6 +395,6 @@ class MemCache extends Cache
             return $duration;
         }
 
-        return $duration + time();
+        return $duration + \time();
     }
 }

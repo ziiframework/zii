@@ -262,7 +262,7 @@ trait QueryTrait
      */
     protected function filterCondition($condition)
     {
-        if (!is_array($condition)) {
+        if (!\is_array($condition)) {
             return $condition;
         }
 
@@ -279,9 +279,9 @@ trait QueryTrait
 
         // operator format: operator, operand 1, operand 2, ...
 
-        $operator = array_shift($condition);
+        $operator = \array_shift($condition);
 
-        switch (strtoupper($operator)) {
+        switch (\strtoupper($operator)) {
             case 'NOT':
             case 'AND':
             case 'OR':
@@ -302,7 +302,7 @@ trait QueryTrait
 
             case 'BETWEEN':
             case 'NOT BETWEEN':
-                if (array_key_exists(1, $condition) && array_key_exists(2, $condition)) {
+                if (\array_key_exists(1, $condition) && \array_key_exists(2, $condition)) {
                     if ($this->isEmpty($condition[1]) || $this->isEmpty($condition[2])) {
                         return [];
                     }
@@ -310,12 +310,12 @@ trait QueryTrait
                 break;
 
             default:
-                if (array_key_exists(1, $condition) && $this->isEmpty($condition[1])) {
+                if (\array_key_exists(1, $condition) && $this->isEmpty($condition[1])) {
                     return [];
                 }
         }
 
-        array_unshift($condition, $operator);
+        \array_unshift($condition, $operator);
 
         return $condition;
     }
@@ -336,7 +336,7 @@ trait QueryTrait
      */
     protected function isEmpty($value)
     {
-        return $value === '' || $value === [] || $value === null || is_string($value) && trim($value) === '';
+        return $value === '' || $value === [] || $value === null || \is_string($value) && \trim($value) === '';
     }
 
     /**
@@ -393,7 +393,7 @@ trait QueryTrait
         if ($this->orderBy === null) {
             $this->orderBy = $columns;
         } else {
-            $this->orderBy = array_merge($this->orderBy, $columns);
+            $this->orderBy = \array_merge($this->orderBy, $columns);
         }
 
         return $this;
@@ -410,18 +410,18 @@ trait QueryTrait
     {
         if ($columns instanceof ExpressionInterface) {
             return [$columns];
-        } elseif (is_array($columns)) {
+        } elseif (\is_array($columns)) {
             return $columns;
         }
 
-        $columns = preg_split('/\s*,\s*/', trim($columns), -1, PREG_SPLIT_NO_EMPTY);
+        $columns = \preg_split('/\s*,\s*/', \trim($columns), -1, \PREG_SPLIT_NO_EMPTY);
         $result = [];
 
         foreach ($columns as $column) {
-            if (preg_match('/^(.*?)\s+(asc|desc)$/i', $column, $matches)) {
-                $result[$matches[1]] = strcasecmp($matches[2], 'desc') ? SORT_ASC : SORT_DESC;
+            if (\preg_match('/^(.*?)\s+(asc|desc)$/i', $column, $matches)) {
+                $result[$matches[1]] = \strcasecmp($matches[2], 'desc') ? \SORT_ASC : \SORT_DESC;
             } else {
-                $result[$column] = SORT_ASC;
+                $result[$column] = \SORT_ASC;
             }
         }
 

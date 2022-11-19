@@ -342,7 +342,7 @@ class Request extends \yii\base\Request
 
         // remove all secure headers unless they are trusted
         foreach ($this->secureHeaders as $secureHeader) {
-            if (!in_array($secureHeader, $trustedHeaders)) {
+            if (!\in_array($secureHeader, $trustedHeaders)) {
                 $headerCollection->remove($secureHeader);
             }
         }
@@ -366,7 +366,7 @@ class Request extends \yii\base\Request
             $ip = $this->getRemoteIP();
 
             foreach ($this->trustedHosts as $cidr => $headers) {
-                if (!is_array($headers)) {
+                if (!\is_array($headers)) {
                     $cidr = $headers;
                     $headers = $this->secureHeaders;
                 }
@@ -406,13 +406,13 @@ class Request extends \yii\base\Request
         if ($this->_headers === null) {
             $this->_headers = new HeaderCollection();
 
-            if (function_exists('getallheaders')) {
+            if (\function_exists('getallheaders')) {
                 $headers = getallheaders();
 
                 foreach ($headers as $name => $value) {
                     $this->_headers->add($name, $value);
                 }
-            } elseif (function_exists('http_get_request_headers')) {
+            } elseif (\function_exists('http_get_request_headers')) {
                 $headers = http_get_request_headers();
 
                 foreach ($headers as $name => $value) {
@@ -424,8 +424,8 @@ class Request extends \yii\base\Request
 
                 foreach ($_SERVER as $name => $value) {
                     foreach ($headerPrefixes as $prefix => $length) {
-                        if (strncmp($name, $prefix, $length) === 0) {
-                            $name = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, $length)))));
+                        if (\strncmp($name, $prefix, $length) === 0) {
+                            $name = \str_replace(' ', '-', \ucwords(\strtolower(\str_replace('_', ' ', \substr($name, $length)))));
                             $this->_headers->add($name, $value);
 
                             continue 2;
@@ -451,17 +451,17 @@ class Request extends \yii\base\Request
             isset($_POST[$this->methodParam])
             // Never allow to downgrade request from WRITE methods (POST, PATCH, DELETE, etc)
             // to read methods (GET, HEAD, OPTIONS) for security reasons.
-            && !in_array(strtoupper($_POST[$this->methodParam]), ['GET', 'HEAD', 'OPTIONS'], true)
+            && !\in_array(\strtoupper($_POST[$this->methodParam]), ['GET', 'HEAD', 'OPTIONS'], true)
         ) {
-            return strtoupper($_POST[$this->methodParam]);
+            return \strtoupper($_POST[$this->methodParam]);
         }
 
         if ($this->headers->has('X-Http-Method-Override')) {
-            return strtoupper($this->headers->get('X-Http-Method-Override'));
+            return \strtoupper($this->headers->get('X-Http-Method-Override'));
         }
 
         if (isset($_SERVER['REQUEST_METHOD'])) {
-            return strtoupper($_SERVER['REQUEST_METHOD']);
+            return \strtoupper($_SERVER['REQUEST_METHOD']);
         }
 
         return 'GET';
@@ -578,8 +578,8 @@ class Request extends \yii\base\Request
     {
         $userAgent = $this->headers->get('User-Agent', '');
 
-        return stripos($userAgent, 'Shockwave') !== false
-            || stripos($userAgent, 'Flash') !== false;
+        return \stripos($userAgent, 'Shockwave') !== false
+            || \stripos($userAgent, 'Flash') !== false;
     }
 
     private $_rawBody;
@@ -592,7 +592,7 @@ class Request extends \yii\base\Request
     public function getRawBody()
     {
         if ($this->_rawBody === null) {
-            $this->_rawBody = file_get_contents('php://input');
+            $this->_rawBody = \file_get_contents('php://input');
         }
 
         return $this->_rawBody;
@@ -637,9 +637,9 @@ class Request extends \yii\base\Request
 
             $rawContentType = $this->getContentType();
 
-            if (($pos = strpos((string) $rawContentType, ';')) !== false) {
+            if (($pos = \strpos((string) $rawContentType, ';')) !== false) {
                 // e.g. text/html; charset=UTF-8
-                $contentType = substr($rawContentType, 0, $pos);
+                $contentType = \substr($rawContentType, 0, $pos);
             } else {
                 $contentType = $rawContentType;
             }
@@ -663,7 +663,7 @@ class Request extends \yii\base\Request
                 $this->_bodyParams = $_POST;
             } else {
                 $this->_bodyParams = [];
-                mb_parse_str($this->getRawBody(), $this->_bodyParams);
+                \mb_parse_str($this->getRawBody(), $this->_bodyParams);
             }
         }
 
@@ -699,7 +699,7 @@ class Request extends \yii\base\Request
     {
         $params = $this->getBodyParams();
 
-        if (is_object($params)) {
+        if (\is_object($params)) {
             // unable to use `ArrayHelper::getValue()` due to different dots in key logic and lack of exception handling
             try {
                 return $params->{$name} ?? $defaultValue;
@@ -837,9 +837,9 @@ class Request extends \yii\base\Request
             if ($this->getSecureForwardedHeaderTrustedPart('host') !== null) {
                 $this->_hostInfo = $http . '://' . $this->getSecureForwardedHeaderTrustedPart('host');
             } elseif ($this->headers->has('X-Forwarded-Host')) {
-                $this->_hostInfo = $http . '://' . trim(explode(',', $this->headers->get('X-Forwarded-Host'))[0]);
+                $this->_hostInfo = $http . '://' . \trim(\explode(',', $this->headers->get('X-Forwarded-Host'))[0]);
             } elseif ($this->headers->has('X-Original-Host')) {
-                $this->_hostInfo = $http . '://' . trim(explode(',', $this->headers->get('X-Original-Host'))[0]);
+                $this->_hostInfo = $http . '://' . \trim(\explode(',', $this->headers->get('X-Original-Host'))[0]);
             } elseif ($this->headers->has('Host')) {
                 $this->_hostInfo = $http . '://' . $this->headers->get('Host');
             } elseif (isset($_SERVER['SERVER_NAME'])) {
@@ -867,7 +867,7 @@ class Request extends \yii\base\Request
     public function setHostInfo($value): void
     {
         $this->_hostName = null;
-        $this->_hostInfo = $value === null ? null : rtrim($value, '/');
+        $this->_hostInfo = $value === null ? null : \rtrim($value, '/');
     }
 
     /**
@@ -885,7 +885,7 @@ class Request extends \yii\base\Request
     public function getHostName()
     {
         if ($this->_hostName === null) {
-            $this->_hostName = parse_url((string) $this->getHostInfo(), PHP_URL_HOST);
+            $this->_hostName = \parse_url((string) $this->getHostInfo(), \PHP_URL_HOST);
         }
 
         return $this->_hostName;
@@ -905,7 +905,7 @@ class Request extends \yii\base\Request
     public function getBaseUrl()
     {
         if ($this->_baseUrl === null) {
-            $this->_baseUrl = rtrim(dirname($this->getScriptUrl()), '\\/');
+            $this->_baseUrl = \rtrim(\dirname($this->getScriptUrl()), '\\/');
         }
 
         return $this->_baseUrl;
@@ -937,18 +937,18 @@ class Request extends \yii\base\Request
     {
         if ($this->_scriptUrl === null) {
             $scriptFile = $this->getScriptFile();
-            $scriptName = basename($scriptFile);
+            $scriptName = \basename($scriptFile);
 
-            if (isset($_SERVER['SCRIPT_NAME']) && basename($_SERVER['SCRIPT_NAME']) === $scriptName) {
+            if (isset($_SERVER['SCRIPT_NAME']) && \basename($_SERVER['SCRIPT_NAME']) === $scriptName) {
                 $this->_scriptUrl = $_SERVER['SCRIPT_NAME'];
-            } elseif (isset($_SERVER['PHP_SELF']) && basename($_SERVER['PHP_SELF']) === $scriptName) {
+            } elseif (isset($_SERVER['PHP_SELF']) && \basename($_SERVER['PHP_SELF']) === $scriptName) {
                 $this->_scriptUrl = $_SERVER['PHP_SELF'];
-            } elseif (isset($_SERVER['ORIG_SCRIPT_NAME']) && basename($_SERVER['ORIG_SCRIPT_NAME']) === $scriptName) {
+            } elseif (isset($_SERVER['ORIG_SCRIPT_NAME']) && \basename($_SERVER['ORIG_SCRIPT_NAME']) === $scriptName) {
                 $this->_scriptUrl = $_SERVER['ORIG_SCRIPT_NAME'];
-            } elseif (isset($_SERVER['PHP_SELF']) && ($pos = strpos($_SERVER['PHP_SELF'], '/' . $scriptName)) !== false) {
-                $this->_scriptUrl = substr($_SERVER['SCRIPT_NAME'], 0, $pos) . '/' . $scriptName;
-            } elseif (!empty($_SERVER['DOCUMENT_ROOT']) && str_starts_with($scriptFile, $_SERVER['DOCUMENT_ROOT'])) {
-                $this->_scriptUrl = str_replace([$_SERVER['DOCUMENT_ROOT'], '\\'], ['', '/'], $scriptFile);
+            } elseif (isset($_SERVER['PHP_SELF']) && ($pos = \strpos($_SERVER['PHP_SELF'], '/' . $scriptName)) !== false) {
+                $this->_scriptUrl = \substr($_SERVER['SCRIPT_NAME'], 0, $pos) . '/' . $scriptName;
+            } elseif (!empty($_SERVER['DOCUMENT_ROOT']) && \str_starts_with($scriptFile, $_SERVER['DOCUMENT_ROOT'])) {
+                $this->_scriptUrl = \str_replace([$_SERVER['DOCUMENT_ROOT'], '\\'], ['', '/'], $scriptFile);
             } else {
                 throw new InvalidConfigException('Unable to determine the entry script URL.');
             }
@@ -966,7 +966,7 @@ class Request extends \yii\base\Request
      */
     public function setScriptUrl($value): void
     {
-        $this->_scriptUrl = $value === null ? null : '/' . trim($value, '/');
+        $this->_scriptUrl = $value === null ? null : '/' . \trim($value, '/');
     }
 
     private $_scriptFile;
@@ -1034,7 +1034,7 @@ class Request extends \yii\base\Request
      */
     public function setPathInfo($value): void
     {
-        $this->_pathInfo = $value === null ? null : ltrim($value, '/');
+        $this->_pathInfo = $value === null ? null : \ltrim($value, '/');
     }
 
     /**
@@ -1051,15 +1051,15 @@ class Request extends \yii\base\Request
     {
         $pathInfo = $this->getUrl();
 
-        if (($pos = strpos($pathInfo, '?')) !== false) {
-            $pathInfo = substr($pathInfo, 0, $pos);
+        if (($pos = \strpos($pathInfo, '?')) !== false) {
+            $pathInfo = \substr($pathInfo, 0, $pos);
         }
 
-        $pathInfo = urldecode($pathInfo);
+        $pathInfo = \urldecode($pathInfo);
 
         // try to encode in UTF8 if not so
         // https://www.w3.org/International/questions/qa-forms-utf-8.en.html
-        if (!preg_match('%^(?:
+        if (!\preg_match('%^(?:
             [\x09\x0A\x0D\x20-\x7E]              # ASCII
             | [\xC2-\xDF][\x80-\xBF]             # non-overlong 2-byte
             | \xE0[\xA0-\xBF][\x80-\xBF]         # excluding overlongs
@@ -1076,18 +1076,18 @@ class Request extends \yii\base\Request
         $scriptUrl = $this->getScriptUrl();
         $baseUrl = $this->getBaseUrl();
 
-        if (str_starts_with($pathInfo, $scriptUrl)) {
-            $pathInfo = substr($pathInfo, strlen($scriptUrl));
-        } elseif ($baseUrl === '' || str_starts_with($pathInfo, $baseUrl)) {
-            $pathInfo = substr($pathInfo, strlen($baseUrl));
-        } elseif (isset($_SERVER['PHP_SELF']) && str_starts_with($_SERVER['PHP_SELF'], $scriptUrl)) {
-            $pathInfo = substr($_SERVER['PHP_SELF'], strlen($scriptUrl));
+        if (\str_starts_with($pathInfo, $scriptUrl)) {
+            $pathInfo = \substr($pathInfo, \strlen($scriptUrl));
+        } elseif ($baseUrl === '' || \str_starts_with($pathInfo, $baseUrl)) {
+            $pathInfo = \substr($pathInfo, \strlen($baseUrl));
+        } elseif (isset($_SERVER['PHP_SELF']) && \str_starts_with($_SERVER['PHP_SELF'], $scriptUrl)) {
+            $pathInfo = \substr($_SERVER['PHP_SELF'], \strlen($scriptUrl));
         } else {
             throw new InvalidConfigException('Unable to determine the path info of the current request.');
         }
 
-        if (strncmp($pathInfo, '/', 1) === 0) {
-            $pathInfo = substr($pathInfo, 1);
+        if (\strncmp($pathInfo, '/', 1) === 0) {
+            $pathInfo = \substr($pathInfo, 1);
         }
 
         return (string) $pathInfo;
@@ -1122,7 +1122,7 @@ class Request extends \yii\base\Request
             }
         }
 
-        return substr($s, 0, $j);
+        return \substr($s, 0, $j);
     }
 
     /**
@@ -1186,7 +1186,7 @@ class Request extends \yii\base\Request
             $requestUri = $_SERVER['REQUEST_URI'];
 
             if ($requestUri !== '' && $requestUri[0] !== '/') {
-                $requestUri = preg_replace('/^(http|https):\/\/[^\/]+/i', '', $requestUri);
+                $requestUri = \preg_replace('/^(http|https):\/\/[^\/]+/i', '', $requestUri);
             }
         } elseif (isset($_SERVER['ORIG_PATH_INFO'])) { // IIS 5.0 CGI
             $requestUri = $_SERVER['ORIG_PATH_INFO'];
@@ -1220,20 +1220,20 @@ class Request extends \yii\base\Request
     {
         if (
             isset($_SERVER['HTTPS'])
-            && ((is_string($_SERVER['HTTPS']) && strcasecmp($_SERVER['HTTPS'], 'on') === 0)
-                || in_array($_SERVER['HTTPS'], [1, '1', true], true))
+            && ((\is_string($_SERVER['HTTPS']) && \strcasecmp($_SERVER['HTTPS'], 'on') === 0)
+                || \in_array($_SERVER['HTTPS'], [1, '1', true], true))
         ) {
             return true;
         }
 
         if (($proto = $this->getSecureForwardedHeaderTrustedPart('proto')) !== null) {
-            return strcasecmp($proto, 'https') === 0;
+            return \strcasecmp($proto, 'https') === 0;
         }
 
         foreach ($this->secureProtocolHeaders as $header => $values) {
             if (($headerValue = $this->headers->get($header, null)) !== null) {
                 foreach ($values as $value) {
-                    if (strcasecmp($headerValue, $value) === 0) {
+                    if (\strcasecmp($headerValue, $value) === 0) {
                         return true;
                     }
                 }
@@ -1330,7 +1330,7 @@ class Request extends \yii\base\Request
     {
         $ip = $this->getSecureForwardedHeaderTrustedPart('for');
 
-        if ($ip !== null && preg_match('/^\[?(?P<ip>(?:(?:(?:[0-9a-f]{1,4}:){1,6}(?:[0-9a-f]{1,4})?(?:(?::[0-9a-f]{1,4}){1,6}))|(?:\d{1,3}\.){3}\d{1,3}))\]?(?::(?P<port>\d+))?$/', $ip, $matches)) {
+        if ($ip !== null && \preg_match('/^\[?(?P<ip>(?:(?:(?:[0-9a-f]{1,4}:){1,6}(?:[0-9a-f]{1,4})?(?:(?::[0-9a-f]{1,4}){1,6}))|(?:\d{1,3}\.){3}\d{1,3}))\]?(?::(?P<port>\d+))?$/', $ip, $matches)) {
             $ip = $this->getUserIpFromIpHeader($matches['ip']);
 
             if ($ip !== null) {
@@ -1378,13 +1378,13 @@ class Request extends \yii\base\Request
      */
     protected function getUserIpFromIpHeader($ips)
     {
-        $ips = trim($ips);
+        $ips = \trim($ips);
 
         if ($ips === '') {
             return null;
         }
-        $ips = preg_split('/\s*,\s*/', $ips, -1, PREG_SPLIT_NO_EMPTY);
-        krsort($ips);
+        $ips = \preg_split('/\s*,\s*/', $ips, -1, \PREG_SPLIT_NO_EMPTY);
+        \krsort($ips);
         $validator = $this->getIpValidator();
         $resultIp = null;
 
@@ -1398,7 +1398,7 @@ class Request extends \yii\base\Request
             $isTrusted = false;
 
             foreach ($this->trustedHosts as $trustedCidr => $trustedCidrOrHeaders) {
-                if (!is_array($trustedCidrOrHeaders)) {
+                if (!\is_array($trustedCidrOrHeaders)) {
                     $trustedCidr = $trustedCidrOrHeaders;
                 }
                 $validator->setRanges($trustedCidr);
@@ -1431,7 +1431,7 @@ class Request extends \yii\base\Request
             return $this->getRemoteHost();
         }
 
-        return gethostbyaddr($userIp);
+        return \gethostbyaddr($userIp);
     }
 
     /**
@@ -1510,10 +1510,10 @@ class Request extends \yii\base\Request
          */
         $auth_token = $this->getHeaders()->get('Authorization');
 
-        if ($auth_token !== null && strncasecmp($auth_token, 'basic', 5) === 0) {
-            $parts = array_map(static fn ($value) => strlen($value) === 0 ? null : $value, explode(':', base64_decode(mb_substr($auth_token, 6)), 2));
+        if ($auth_token !== null && \strncasecmp($auth_token, 'basic', 5) === 0) {
+            $parts = \array_map(static fn ($value) => \strlen($value) === 0 ? null : $value, \explode(':', \base64_decode(\mb_substr($auth_token, 6)), 2));
 
-            if (count($parts) < 2) {
+            if (\count($parts) < 2) {
                 return [$parts[0], null];
             }
 
@@ -1681,7 +1681,7 @@ class Request extends \yii\base\Request
     {
         if ($this->_languages === null) {
             if ($this->headers->has('Accept-Language')) {
-                $this->_languages = array_keys($this->parseAcceptHeader($this->headers->get('Accept-Language')));
+                $this->_languages = \array_keys($this->parseAcceptHeader($this->headers->get('Accept-Language')));
             } else {
                 $this->_languages = [];
             }
@@ -1728,19 +1728,19 @@ class Request extends \yii\base\Request
     {
         $accepts = [];
 
-        foreach (explode(',', $header) as $i => $part) {
-            $params = preg_split('/\s*;\s*/', trim($part), -1, PREG_SPLIT_NO_EMPTY);
+        foreach (\explode(',', $header) as $i => $part) {
+            $params = \preg_split('/\s*;\s*/', \trim($part), -1, \PREG_SPLIT_NO_EMPTY);
 
             if (empty($params)) {
                 continue;
             }
             $values = [
-                'q' => [$i, array_shift($params), 1],
+                'q' => [$i, \array_shift($params), 1],
             ];
 
             foreach ($params as $param) {
-                if (str_contains($param, '=')) {
-                    [$key, $value] = explode('=', $param, 2);
+                if (\str_contains($param, '=')) {
+                    [$key, $value] = \explode('=', $param, 2);
 
                     if ($key === 'q') {
                         $values['q'][2] = (float) $value;
@@ -1754,7 +1754,7 @@ class Request extends \yii\base\Request
             $accepts[] = $values;
         }
 
-        usort($accepts, static function ($a, $b) {
+        \usort($accepts, static function ($a, $b) {
             $a = $a['q']; // index, name, q
             $b = $b['q'];
 
@@ -1778,8 +1778,8 @@ class Request extends \yii\base\Request
                 return -1;
             }
 
-            $wa = $a[1][strlen($a[1]) - 1] === '*';
-            $wb = $b[1][strlen($b[1]) - 1] === '*';
+            $wa = $a[1][\strlen($a[1]) - 1] === '*';
+            $wb = $b[1][\strlen($b[1]) - 1] === '*';
 
             if ($wa xor $wb) {
                 return $wa ? 1 : -1;
@@ -1816,22 +1816,22 @@ class Request extends \yii\base\Request
         }
 
         foreach ($this->getAcceptableLanguages() as $acceptableLanguage) {
-            $acceptableLanguage = str_replace('_', '-', strtolower($acceptableLanguage));
+            $acceptableLanguage = \str_replace('_', '-', \strtolower($acceptableLanguage));
 
             foreach ($languages as $language) {
-                $normalizedLanguage = str_replace('_', '-', strtolower($language));
+                $normalizedLanguage = \str_replace('_', '-', \strtolower($language));
 
                 if (
                     $normalizedLanguage === $acceptableLanguage // en-us==en-us
-                    || str_starts_with($acceptableLanguage, $normalizedLanguage . '-')   // en==en-us
-                    || str_starts_with($normalizedLanguage, $acceptableLanguage . '-')   // en-us==en
+                    || \str_starts_with($acceptableLanguage, $normalizedLanguage . '-')   // en==en-us
+                    || \str_starts_with($normalizedLanguage, $acceptableLanguage . '-')   // en-us==en
                 ) {
                     return $language;
                 }
             }
         }
 
-        return reset($languages);
+        return \reset($languages);
     }
 
     /**
@@ -1842,7 +1842,7 @@ class Request extends \yii\base\Request
     public function getETags()
     {
         if ($this->headers->has('If-None-Match')) {
-            return preg_split('/[\s,]+/', str_replace('-gzip', '', $this->headers->get('If-None-Match')), -1, PREG_SPLIT_NO_EMPTY);
+            return \preg_split('/[\s,]+/', \str_replace('-gzip', '', $this->headers->get('If-None-Match')), -1, \PREG_SPLIT_NO_EMPTY);
         }
 
         return [];
@@ -1893,7 +1893,7 @@ class Request extends \yii\base\Request
             }
 
             foreach ($_COOKIE as $name => $value) {
-                if (!is_string($value)) {
+                if (!\is_string($value)) {
                     continue;
                 }
                 $data = Yii::$app->getSecurity()->validateData($value, $this->cookieValidationKey);
@@ -1902,9 +1902,9 @@ class Request extends \yii\base\Request
                     continue;
                 }
 
-                $data = @unserialize($data, ['allowed_classes' => false]);
+                $data = @\unserialize($data, ['allowed_classes' => false]);
 
-                if (is_array($data) && isset($data[0], $data[1]) && $data[0] === $name) {
+                if (\is_array($data) && isset($data[0], $data[1]) && $data[0] === $name) {
                     $cookies[$name] = Yii::createObject([
                         'class' => 'yii\web\Cookie',
                         'name' => $name,
@@ -2010,7 +2010,7 @@ class Request extends \yii\base\Request
     {
         $options = $this->csrfCookie;
 
-        return Yii::createObject(array_merge($options, [
+        return Yii::createObject(\array_merge($options, [
             'class' => 'yii\web\Cookie',
             'name' => $this->csrfParam,
             'value' => $token,
@@ -2036,7 +2036,7 @@ class Request extends \yii\base\Request
     {
         $method = $this->getMethod();
         // only validate CSRF token on non-"safe" methods https://tools.ietf.org/html/rfc2616#section-9.1.1
-        if (!$this->enableCsrfValidation || in_array($method, ['GET', 'HEAD', 'OPTIONS'], true)) {
+        if (!$this->enableCsrfValidation || \in_array($method, ['GET', 'HEAD', 'OPTIONS'], true)) {
             return true;
         }
 
@@ -2060,7 +2060,7 @@ class Request extends \yii\base\Request
      */
     private function validateCsrfTokenInternal($clientSuppliedToken, $trueToken)
     {
-        if (!is_string($clientSuppliedToken)) {
+        if (!\is_string($clientSuppliedToken)) {
             return false;
         }
 
@@ -2080,10 +2080,10 @@ class Request extends \yii\base\Request
      */
     protected function getSecureForwardedHeaderTrustedPart($token)
     {
-        $token = strtolower($token);
+        $token = \strtolower($token);
 
         if ($parts = $this->getSecureForwardedHeaderTrustedParts()) {
-            $lastElement = array_pop($parts);
+            $lastElement = \array_pop($parts);
 
             if ($lastElement && isset($lastElement[$token])) {
                 return $lastElement[$token];
@@ -2106,14 +2106,14 @@ class Request extends \yii\base\Request
         $trustedHosts = [];
 
         foreach ($this->trustedHosts as $trustedCidr => $trustedCidrOrHeaders) {
-            if (!is_array($trustedCidrOrHeaders)) {
+            if (!\is_array($trustedCidrOrHeaders)) {
                 $trustedCidr = $trustedCidrOrHeaders;
             }
             $trustedHosts[] = $trustedCidr;
         }
         $validator->setRanges($trustedHosts);
 
-        return array_filter($this->getSecureForwardedHeaderParts(), static fn ($headerPart) => isset($headerPart['for']) ? !$validator->validate($headerPart['for']) : true);
+        return \array_filter($this->getSecureForwardedHeaderParts(), static fn ($headerPart) => isset($headerPart['for']) ? !$validator->validate($headerPart['for']) : true);
     }
 
     private $_secureForwardedHeaderParts;
@@ -2131,7 +2131,7 @@ class Request extends \yii\base\Request
             return $this->_secureForwardedHeaderParts;
         }
 
-        if (count(preg_grep('/^forwarded$/i', $this->secureHeaders)) === 0) {
+        if (\count(\preg_grep('/^forwarded$/i', $this->secureHeaders)) === 0) {
             return $this->_secureForwardedHeaderParts = [];
         }
         /*
@@ -2150,17 +2150,17 @@ class Request extends \yii\base\Request
             return $this->_secureForwardedHeaderParts = [];
         }
 
-        preg_match_all('/(?:[^",]++|"[^"]++")+/', $forwarded, $forwardedElements);
+        \preg_match_all('/(?:[^",]++|"[^"]++")+/', $forwarded, $forwardedElements);
 
         foreach ($forwardedElements[0] as $forwardedPairs) {
-            preg_match_all('/(?P<key>\w+)\s*=\s*(?:(?P<value>[^",;]*[^",;\s])|"(?P<value2>[^"]+)")/', $forwardedPairs, $matches, PREG_SET_ORDER);
-            $this->_secureForwardedHeaderParts[] = array_reduce($matches, static function ($carry, $item) {
+            \preg_match_all('/(?P<key>\w+)\s*=\s*(?:(?P<value>[^",;]*[^",;\s])|"(?P<value2>[^"]+)")/', $forwardedPairs, $matches, \PREG_SET_ORDER);
+            $this->_secureForwardedHeaderParts[] = \array_reduce($matches, static function ($carry, $item) {
                 $value = $item['value'];
 
                 if (isset($item['value2']) && $item['value2'] !== '') {
                     $value = $item['value2'];
                 }
-                $carry[strtolower($item['key'])] = $value;
+                $carry[\strtolower($item['key'])] = $value;
 
                 return $carry;
             }, []);
