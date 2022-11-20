@@ -551,24 +551,7 @@ class ModelController extends Controller
             ];
         }
 
-        // double
-        if ($this->fieldTypeCast($column->dbType) === 'double') {
-            $this->_ruleInteger[] = [
-                'name' => $column->name,
-                'max' => $this->getColumnEdge($column),
-            ];
-        }
-
-        // float TODO
-        if ($this->fieldTypeCast($column->dbType) === 'float') {
-            dump($column);
-            $this->_ruleInteger[] = [
-                'name' => $column->name,
-                'max' => $this->getColumnEdge($column),
-            ];
-        }
-
-        if ($this->fieldTypeCast($column->dbType) === 'decimal') {
+        if (in_array($this->fieldTypeCast($column->dbType), ['double', 'float', 'decimal'])) {
             $this->_ruleDecimal[] = [
                 'name' => $column->name,
                 'max' => $this->getColumnEdge($column),
@@ -955,8 +938,9 @@ EOT;
                 $max = $column->size === null || $column->size >= 19 ? 9223372036854775807 : str_repeat('9', $column->size);
 
                 break;
-            case Schema::TYPE_DECIMAL:
             case Schema::TYPE_DOUBLE:
+            case Schema::TYPE_FLOAT:
+            case Schema::TYPE_DECIMAL:
                 $precision = $column->precision === null || $column->precision >= 9 ? 9 : $column->precision;
                 $scale = $column->scale === null ? 0 : $column->scale;
 
