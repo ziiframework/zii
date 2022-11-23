@@ -126,6 +126,16 @@ class CaptchaAction extends Action
     public $imageLibrary;
 
     /**
+     * @since 3.9.2
+     */
+    public string $fromLetters = 'bcdfghjklmnpqrstvwxyz';
+
+    /**
+     * @since 3.9.2
+     */
+    public string $fromVowels = 'aeiou';
+
+    /**
      * Initializes the action.
      *
      * @throws InvalidConfigException if the font file does not exist.
@@ -250,15 +260,13 @@ class CaptchaAction extends Action
 
         $length = random_int($this->minLength, $this->maxLength);
 
-        $letters = 'bcdfghjklmnpqrstvwxyz';
-        $vowels = 'aeiou';
         $code = '';
 
         for ($i = 0; $i < $length; ++$i) {
             if ($i % 2 && random_int(0, 10) > 2 || !($i % 2) && random_int(0, 10) > 9) {
-                $code .= $vowels[random_int(0, 4)];
+                $code .= $this->fromVowels[random_int(0, mb_strlen($this->fromVowels) - 1)];
             } else {
-                $code .= $letters[random_int(0, 20)];
+                $code .= $this->fromLetters[random_int(0, mb_strlen($this->fromLetters) - 1)];
             }
         }
 
@@ -328,7 +336,7 @@ class CaptchaAction extends Action
         $h = $box[1] - $box[5];
         $scale = min(($this->width - $this->padding * 2) / $w, ($this->height - $this->padding * 2) / $h);
         $x = 10;
-        $y = round($this->height * 27 / 40);
+        $y = (int) round($this->height * 27 / 40);
 
         for ($i = 0; $i < $length; ++$i) {
             $fontSize = (int) (random_int(26, 32) * $scale * 0.8);
@@ -372,7 +380,7 @@ class CaptchaAction extends Action
         $h = (int) $fontMetrics['textHeight'] - 8;
         $scale = min(($this->width - $this->padding * 2) / $w, ($this->height - $this->padding * 2) / $h);
         $x = 10;
-        $y = round($this->height * 27 / 40);
+        $y = (int) round($this->height * 27 / 40);
 
         for ($i = 0; $i < $length; ++$i) {
             $draw = new ImagickDraw();
