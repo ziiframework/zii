@@ -252,8 +252,8 @@ class MigrateController extends BaseMigrateController
                 continue;
             }
 
-            if (preg_match('/m?(\d{6}_?\d{6})(\D.*)?$/is', $row['version'], $matches)) {
-                $time = str_replace('_', '', $matches[1]);
+            if (preg_match('/[mM]?(\d{6}[_V]?\d{6})(\D.*)?$/is', $row['version'], $matches)) {
+                $time = str_replace(['_', 'V'], '', $matches[1]);
                 $row['canonicalVersion'] = $time;
             } else {
                 $row['canonicalVersion'] = $row['version'];
