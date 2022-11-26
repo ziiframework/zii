@@ -18,6 +18,15 @@ use IntlDateFormatter;
 use yii\helpers\FormatConverter;
 use yii\base\InvalidConfigException;
 
+use function is_int;
+use function substr;
+use function strncmp;
+use function strpbrk;
+use function is_array;
+use function is_string;
+use function mb_strlen;
+use function extension_loaded;
+
 /**
  * DateValidator verifies if the attribute represents a date, time or datetime in a proper [[format]].
  *

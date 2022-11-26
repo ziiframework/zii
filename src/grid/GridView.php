@@ -20,6 +20,21 @@ use yii\i18n\Formatter;
 use yii\widgets\BaseListView;
 use yii\base\InvalidConfigException;
 
+use function count;
+use function reset;
+use function implode;
+use function is_array;
+use function is_object;
+use function is_scalar;
+use function is_string;
+use function preg_match;
+use function array_merge;
+use function is_callable;
+use function json_encode;
+use function array_filter;
+use function array_values;
+use function call_user_func;
+
 /**
  * The GridView widget is used to display data in a grid.
  *

@@ -12,6 +12,10 @@ namespace yii\base;
 
 use yii\helpers\StringHelper;
 
+use function strlen;
+use function substr;
+use function str_starts_with;
+
 /**
  * ActionFilter is the base class for action filters.
  *

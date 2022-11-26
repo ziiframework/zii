@@ -10,7 +10,12 @@ declare(strict_types=1);
 
 namespace yii\base;
 
+use const PHP_SAPI;
+
 use Yii;
+
+use function is_file;
+use function realpath;
 
 /**
  * Request represents a request that is handled by an [[Application]].

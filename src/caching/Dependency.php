@@ -13,6 +13,11 @@ namespace yii\caching;
 use Closure;
 use Exception;
 
+use function sha1;
+use function is_object;
+use function serialize;
+use function array_key_exists;
+
 /**
  * Dependency is the base class for cache dependency classes.
  *

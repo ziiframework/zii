@@ -17,6 +17,16 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 
+use function count;
+use function ltrim;
+use function strtr;
+use function implode;
+use function strncmp;
+use function is_array;
+use function array_merge;
+use function array_values;
+use function call_user_func;
+
 /**
  * Menu displays a multi-level menu using nested HTML lists.
  *

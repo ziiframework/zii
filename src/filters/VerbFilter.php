@@ -16,6 +16,10 @@ use yii\web\Controller;
 use yii\base\ActionEvent;
 use yii\web\MethodNotAllowedHttpException;
 
+use function implode;
+use function in_array;
+use function array_map;
+
 /**
  * VerbFilter is an action filter that filters by HTTP request methods.
  *

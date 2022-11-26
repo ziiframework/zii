@@ -10,9 +10,20 @@ declare(strict_types=1);
 
 namespace yii\widgets;
 
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
+
 use Closure;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
+
+use function implode;
+use function is_array;
+use function is_string;
+use function array_merge;
+use function json_encode;
+use function array_values;
+use function call_user_func;
 
 /**
  * The ListView widget is used to display data from data

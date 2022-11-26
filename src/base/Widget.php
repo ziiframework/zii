@@ -10,10 +10,21 @@ declare(strict_types=1);
 
 namespace yii\base;
 
+use const DIRECTORY_SEPARATOR;
+
 use Yii;
 use Exception;
 use Throwable;
 use ReflectionClass;
+
+use function dirname;
+use function ob_start;
+use function array_pop;
+use function get_class;
+use function ob_end_clean;
+use function ob_get_clean;
+use function ob_get_level;
+use function ob_implicit_flush;
 
 /**
  * Widget is the base class for widgets.

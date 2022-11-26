@@ -16,6 +16,10 @@ use yii\db\ExpressionInterface;
 use yii\db\ExpressionBuilderTrait;
 use yii\db\ExpressionBuilderInterface;
 
+use function count;
+use function implode;
+use function str_contains;
+
 /**
  * Class HashConditionBuilder builds objects of [[HashCondition]].
  *

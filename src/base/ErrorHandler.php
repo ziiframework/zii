@@ -10,10 +10,35 @@ declare(strict_types=1);
 
 namespace yii\base;
 
+use const PHP_SAPI;
+use const ENT_QUOTES;
+use const E_USER_ERROR;
+
 use Yii;
 use Throwable;
 use yii\helpers\VarDumper;
 use yii\web\HttpException;
+
+use function chdir;
+use function getcwd;
+use function ini_set;
+use function str_pad;
+use function ob_clean;
+use function error_log;
+use function get_class;
+use function class_exists;
+use function ob_end_clean;
+use function ob_get_level;
+use function trigger_error;
+use function error_get_last;
+use function error_reporting;
+use function htmlspecialchars;
+use function set_error_handler;
+use function http_response_code;
+use function restore_error_handler;
+use function set_exception_handler;
+use function restore_exception_handler;
+use function register_shutdown_function;
 
 /**
  * ErrorHandler handles uncaught PHP errors and exceptions.

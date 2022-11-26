@@ -19,6 +19,13 @@ use yii\di\Instance;
 use yii\db\Connection;
 use yii\base\InvalidConfigException;
 
+use function time;
+use function is_array;
+use function is_object;
+use function session_id;
+use function array_merge;
+use function session_write_close;
+
 /**
  * DbSession extends [[Session]] by using database as session data storage.
  *

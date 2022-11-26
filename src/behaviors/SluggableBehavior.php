@@ -17,6 +17,11 @@ use yii\helpers\ArrayHelper;
 use yii\validators\UniqueValidator;
 use yii\base\InvalidConfigException;
 
+use function implode;
+use function array_merge;
+use function is_callable;
+use function call_user_func;
+
 /**
  * SluggableBehavior automatically fills the specified attribute with a value that can be used a slug in a URL.
  *

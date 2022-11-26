@@ -10,10 +10,29 @@ declare(strict_types=1);
 
 namespace yii\web;
 
+use const UPLOAD_ERR_OK;
+use const PATHINFO_FILENAME;
+use const PATHINFO_EXTENSION;
+use const UPLOAD_ERR_NO_FILE;
+
 use Yii;
 use yii\helpers\Html;
 use yii\base\BaseObject;
 use yii\helpers\ArrayHelper;
+
+use function copy;
+use function fopen;
+use function fclose;
+use function is_array;
+use function pathinfo;
+use function is_string;
+use function mb_strlen;
+use function mb_substr;
+use function strtolower;
+use function is_resource;
+use function str_starts_with;
+use function move_uploaded_file;
+use function stream_copy_to_stream;
 
 /**
  * UploadedFile represents the information for an uploaded file.

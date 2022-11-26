@@ -12,6 +12,10 @@ namespace yii\base;
 
 use Yii;
 
+use function get_class;
+use function method_exists;
+use function call_user_func_array;
+
 /**
  * Action is the base class for all controller action classes.
  *

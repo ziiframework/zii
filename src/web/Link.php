@@ -12,6 +12,9 @@ namespace yii\web;
 
 use yii\base\BaseObject;
 
+use function is_array;
+use function array_filter;
+
 /**
  * Link represents a link object as defined in [JSON Hypermedia API Language](https://tools.ietf.org/html/draft-kelly-json-hal-03).
  *

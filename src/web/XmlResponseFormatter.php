@@ -18,6 +18,14 @@ use yii\base\Arrayable;
 use yii\base\Component;
 use yii\helpers\StringHelper;
 
+use function is_int;
+use function stripos;
+use function is_array;
+use function is_float;
+use function get_class;
+use function is_object;
+use function strtolower;
+
 /**
  * XmlResponseFormatter formats the given data into an XML response content.
  *

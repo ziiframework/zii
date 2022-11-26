@@ -13,6 +13,9 @@ namespace yii\behaviors;
 use yii\db\BaseActiveRecord;
 use yii\base\InvalidCallException;
 
+use function time;
+use function array_fill_keys;
+
 /**
  * TimestampBehavior automatically fills the specified attributes with the current timestamp.
  *

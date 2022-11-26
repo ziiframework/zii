@@ -10,6 +10,14 @@ declare(strict_types=1);
 
 namespace yii\console\controllers;
 
+use const LOCK_EX;
+use const T_COMMENT;
+use const T_WHITESPACE;
+use const T_OBJECT_OPERATOR;
+use const DIRECTORY_SEPARATOR;
+use const T_PAAMAYIM_NEKUDOTAYIM;
+use const T_CONSTANT_ENCAPSED_STRING;
+
 use Yii;
 use yii\db\Query;
 use yii\di\Instance;
@@ -20,6 +28,45 @@ use yii\console\Exception;
 use yii\helpers\VarDumper;
 use yii\helpers\FileHelper;
 use yii\i18n\GettextPoFile;
+
+use function chr;
+use function copy;
+use function sort;
+use function count;
+use function ksort;
+use function ltrim;
+use function mkdir;
+use function rtrim;
+use function is_dir;
+use function strpos;
+use function substr;
+use function unlink;
+use function dirname;
+use function is_file;
+use function strncmp;
+use function in_array;
+use function is_array;
+use function realpath;
+use function is_string;
+use function mb_substr;
+use function array_diff;
+use function array_keys;
+use function array_merge;
+use function array_shift;
+use function array_slice;
+use function file_exists;
+use function str_replace;
+use function array_unique;
+use function array_values;
+use function preg_replace;
+use function stripcslashes;
+use function token_get_all;
+use function substr_compare;
+use function str_starts_with;
+use function array_key_exists;
+use function file_get_contents;
+use function file_put_contents;
+use function array_merge_recursive;
 
 /**
  * Extracts messages to be translated from source files.

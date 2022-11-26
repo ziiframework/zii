@@ -10,6 +10,9 @@ declare(strict_types=1);
 
 namespace yii\console\controllers;
 
+use const LOCK_EX;
+use const DIRECTORY_SEPARATOR;
+
 use Yii;
 use yii\base\BaseObject;
 use yii\helpers\Console;
@@ -21,6 +24,40 @@ use yii\helpers\FileHelper;
 use yii\db\MigrationInterface;
 use yii\base\NotSupportedException;
 use yii\base\InvalidConfigException;
+
+use function date;
+use function trim;
+use function count;
+use function ksort;
+use function reset;
+use function gmdate;
+use function is_dir;
+use function strlen;
+use function substr;
+use function is_file;
+use function opendir;
+use function readdir;
+use function sprintf;
+use function strrpos;
+use function closedir;
+use function in_array;
+use function is_array;
+use function is_string;
+use function microtime;
+use function strtotime;
+use function array_keys;
+use function is_numeric;
+use function preg_match;
+use function array_merge;
+use function array_shift;
+use function array_slice;
+use function file_exists;
+use function str_replace;
+use function array_values;
+use function str_contains;
+use function array_reverse;
+use function str_starts_with;
+use function file_put_contents;
 
 /**
  * BaseMigrateController is the base class for migrate controllers.

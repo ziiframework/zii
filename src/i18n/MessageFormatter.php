@@ -16,6 +16,26 @@ use IntlException;
 use yii\base\Component;
 use yii\base\NotSupportedException;
 
+use function trim;
+use function count;
+use function strpos;
+use function substr;
+use function explode;
+use function implode;
+use function strncmp;
+use function is_array;
+use function mb_strlen;
+use function mb_strpos;
+use function mb_substr;
+use function array_flip;
+use function is_numeric;
+use function str_replace;
+use function class_exists;
+use function number_format;
+use function array_key_exists;
+use function intl_get_error_code;
+use function intl_get_error_message;
+
 /**
  * MessageFormatter allows formatting messages via [ICU message format](https://unicode-org.github.io/icu/userguide/format_parse/messages/).
  *

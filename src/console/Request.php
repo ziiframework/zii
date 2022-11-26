@@ -10,6 +10,11 @@ declare(strict_types=1);
 
 namespace yii\console;
 
+use function substr;
+use function is_numeric;
+use function preg_match;
+use function array_shift;
+
 /**
  * The console Request represents the environment information for a console application.
  *

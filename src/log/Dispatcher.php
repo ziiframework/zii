@@ -16,6 +16,11 @@ use Throwable;
 use yii\base\Component;
 use yii\base\ErrorHandler;
 
+use function is_array;
+use function get_class;
+use function is_string;
+use function microtime;
+
 /**
  * Dispatcher manages a set of [[Target|log targets]].
  *

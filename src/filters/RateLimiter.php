@@ -17,6 +17,9 @@ use yii\web\Response;
 use yii\base\ActionFilter;
 use yii\web\TooManyRequestsHttpException;
 
+use function time;
+use function call_user_func;
+
 /**
  * RateLimiter implements a rate limiting algorithm based on the [leaky bucket algorithm](https://en.wikipedia.org/wiki/Leaky_bucket).
  *

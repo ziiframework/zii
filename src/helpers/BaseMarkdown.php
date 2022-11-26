@@ -13,6 +13,8 @@ namespace yii\helpers;
 use Yii;
 use yii\base\InvalidArgumentException;
 
+use function is_object;
+
 /**
  * BaseMarkdown provides concrete implementation for [[Markdown]].
  *

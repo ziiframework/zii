@@ -14,6 +14,16 @@ use Yii;
 use yii\base\Action;
 use yii\base\ActionFilter;
 
+use function sha1;
+use function rtrim;
+use function gmdate;
+use function in_array;
+use function strtotime;
+use function headers_sent;
+use function base64_encode;
+use function header_remove;
+use function call_user_func;
+
 /**
  * HttpCache implements client-side caching by utilizing the `Last-Modified` and `ETag` HTTP headers.
  *

@@ -17,6 +17,13 @@ use yii\db\Connection;
 use yii\db\Expression;
 use yii\base\InvalidConfigException;
 
+use function is_string;
+use function array_keys;
+use function preg_match;
+use function preg_replace;
+use function array_unshift;
+use function call_user_func;
+
 /**
  * SqlDataProvider implements a data provider based on a plain SQL statement.
  *

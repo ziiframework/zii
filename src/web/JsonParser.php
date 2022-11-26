@@ -14,6 +14,9 @@ use stdClass;
 use yii\helpers\Json;
 use yii\base\InvalidArgumentException;
 
+use function preg_filter;
+use function str_contains;
+
 /**
  * Parses a raw HTTP request using [[\yii\helpers\Json::decode()]].
  *

@@ -16,6 +16,12 @@ use yii\base\Component;
 use ReturnTypeWillChange;
 use BadMethodCallException;
 
+use function key;
+use function next;
+use function reset;
+use function current;
+use function array_keys;
+
 /**
  * BatchQueryResult represents a batch query from which you can retrieve data in batches.
  *

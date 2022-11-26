@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace yii\web;
 
+use const PHP_SESSION_ACTIVE;
+
 use Yii;
 use Countable;
 use ArrayAccess;
@@ -19,6 +21,36 @@ use ReturnTypeWillChange;
 use SessionHandlerInterface;
 use yii\base\InvalidConfigException;
 use yii\base\InvalidArgumentException;
+
+use function count;
+use function floor;
+use function is_dir;
+use function is_int;
+use function ini_get;
+use function ini_set;
+use function is_array;
+use function is_object;
+use function array_keys;
+use function session_id;
+use function array_merge;
+use function headers_sent;
+use function session_name;
+use function session_start;
+use function session_unset;
+use function error_get_last;
+use function session_status;
+use function session_destroy;
+use function array_key_exists;
+use function session_save_path;
+use function session_module_name;
+use function session_write_close;
+use function array_change_key_case;
+use function session_cache_limiter;
+use function session_regenerate_id;
+use function session_set_save_handler;
+use function session_get_cookie_params;
+use function session_set_cookie_params;
+use function register_shutdown_function;
 
 /**
  * Session provides session data management and the related configurations.

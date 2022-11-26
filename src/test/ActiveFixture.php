@@ -15,6 +15,9 @@ use yii\db\TableSchema;
 use yii\db\ActiveRecord;
 use yii\base\InvalidConfigException;
 
+use function dirname;
+use function array_merge;
+
 /**
  * ActiveFixture represents a fixture backed up by a [[modelClass|ActiveRecord class]] or a [[tableName|database table]].
  *

@@ -14,6 +14,9 @@ use Yii;
 use yii\base\Action;
 use yii\base\ViewNotFoundException;
 
+use function is_string;
+use function preg_match;
+
 /**
  * ViewAction represents an action that displays a view according to a user-specified parameter.
  *

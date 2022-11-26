@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace yii\console\controllers;
 
+use const PATHINFO_DIRNAME;
+
 use Yii;
 use RegexIterator;
 use ReflectionClass;
@@ -21,6 +23,35 @@ use RecursiveRegexIterator;
 use yii\console\Controller;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
+
+use function max;
+use function sort;
+use function trim;
+use function count;
+use function ksort;
+use function ltrim;
+use function rtrim;
+use function strtr;
+use function is_dir;
+use function strlen;
+use function substr;
+use function gettype;
+use function is_bool;
+use function strncmp;
+use function basename;
+use function is_array;
+use function pathinfo;
+use function is_string;
+use function array_keys;
+use function str_repeat;
+use function var_export;
+use function addcslashes;
+use function str_replace;
+use function array_filter;
+use function array_unique;
+use function class_exists;
+use function preg_replace;
+use function mb_strtolower;
 
 /**
  * Provides help information about console commands.

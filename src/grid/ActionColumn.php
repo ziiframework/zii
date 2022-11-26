@@ -15,6 +15,14 @@ use Closure;
 use yii\helpers\Url;
 use yii\helpers\Html;
 
+use function ucfirst;
+use function is_array;
+use function array_merge;
+use function is_callable;
+use function str_contains;
+use function call_user_func;
+use function preg_replace_callback;
+
 /**
  * ActionColumn is a column for the [[GridView]] widget that displays buttons for viewing and manipulating the items.
  *

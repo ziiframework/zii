@@ -12,6 +12,8 @@ namespace yii\rest;
 
 use Yii;
 
+use function implode;
+
 /**
  * OptionsAction responds to the OPTIONS request by sending back an `Allow` header.
  *

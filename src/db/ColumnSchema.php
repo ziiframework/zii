@@ -10,10 +10,21 @@ declare(strict_types=1);
 
 namespace yii\db;
 
+use const PHP_VERSION_ID;
+
 use PDO;
 use BackedEnum;
 use yii\base\BaseObject;
 use yii\helpers\StringHelper;
+
+use function count;
+use function gettype;
+use function in_array;
+use function is_array;
+use function is_float;
+use function is_object;
+use function is_numeric;
+use function is_resource;
 
 /**
  * ColumnSchema class describes the metadata of a column in a database table.

@@ -14,6 +14,16 @@ use Yii;
 use yii\base\Component;
 use yii\base\Exception;
 
+use function strtr;
+use function fclose;
+use function substr;
+use function strrpos;
+use function filemtime;
+use function proc_open;
+use function proc_close;
+use function escapeshellarg;
+use function stream_get_contents;
+
 /**
  * AssetConverter supports conversion of several popular formats into JS or CSS files.
  *

@@ -18,6 +18,18 @@ use yii\db\ExpressionInterface;
 use yii\db\ExpressionBuilderTrait;
 use yii\db\ExpressionBuilderInterface;
 
+use function count;
+use function reset;
+use function implode;
+use function sprintf;
+use function in_array;
+use function is_array;
+use function strtoupper;
+use function array_merge;
+use function array_values;
+use function str_contains;
+use function iterator_count;
+
 /**
  * Class InConditionBuilder builds objects of [[InCondition]].
  *

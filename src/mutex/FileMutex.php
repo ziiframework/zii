@@ -10,9 +10,25 @@ declare(strict_types=1);
 
 namespace yii\mutex;
 
+use const LOCK_EX;
+use const LOCK_NB;
+use const LOCK_UN;
+use const DIRECTORY_SEPARATOR;
+
 use Yii;
 use yii\helpers\FileHelper;
 use yii\base\InvalidConfigException;
+
+use function md5;
+use function chmod;
+use function flock;
+use function fopen;
+use function fstat;
+use function fclose;
+use function is_dir;
+use function unlink;
+use function fileinode;
+use function clearstatcache;
 
 /**
  * FileMutex implements mutex "lock" mechanism via local file system files.

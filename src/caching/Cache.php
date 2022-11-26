@@ -16,6 +16,15 @@ use yii\base\Component;
 use ReturnTypeWillChange;
 use yii\helpers\StringHelper;
 
+use function md5;
+use function is_array;
+use function is_string;
+use function serialize;
+use function ctype_alnum;
+use function json_encode;
+use function unserialize;
+use function array_values;
+use function call_user_func;
 use function extension_loaded;
 
 /**

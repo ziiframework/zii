@@ -13,6 +13,15 @@ namespace yii\helpers;
 use Yii;
 use yii\base\InvalidArgumentException;
 
+use function ltrim;
+use function strpos;
+use function substr;
+use function strncmp;
+use function is_array;
+use function is_string;
+use function str_contains;
+use function array_replace_recursive;
+
 /**
  * BaseUrl provides concrete implementation for [[Url]].
  *

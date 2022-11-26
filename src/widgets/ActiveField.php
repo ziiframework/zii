@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace yii\widgets;
 
+use const PREG_SPLIT_NO_EMPTY;
+
 use Yii;
 use Exception;
 use Throwable;
@@ -19,6 +21,16 @@ use yii\base\Component;
 use yii\web\JsExpression;
 use yii\base\ErrorHandler;
 use yii\helpers\ArrayHelper;
+
+use function strtr;
+use function implode;
+use function in_array;
+use function is_string;
+use function preg_split;
+use function array_merge;
+use function call_user_func;
+use function is_subclass_of;
+use function array_diff_assoc;
 
 /**
  * ActiveField represents a form input field within an [[ActiveForm]].

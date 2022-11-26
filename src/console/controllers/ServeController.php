@@ -10,9 +10,20 @@ declare(strict_types=1);
 
 namespace yii\console\controllers;
 
+use const PHP_BINARY;
+
 use Yii;
 use yii\helpers\Console;
 use yii\console\Controller;
+
+use function fclose;
+use function is_dir;
+use function explode;
+use function passthru;
+use function fsockopen;
+use function array_merge;
+use function file_exists;
+use function str_contains;
 
 /**
  * Runs PHP built-in web server.

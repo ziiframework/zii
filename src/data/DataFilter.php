@@ -22,6 +22,13 @@ use yii\validators\StringValidator;
 use yii\base\InvalidConfigException;
 use yii\validators\BooleanValidator;
 
+use function count;
+use function in_array;
+use function is_array;
+use function is_object;
+use function array_merge;
+use function call_user_func;
+
 /**
  * DataFilter is a special [[Model]] for processing query filtering specification.
  * It allows validating and building a filter condition passed via request.

@@ -12,6 +12,10 @@ namespace yii\mutex;
 
 use yii\base\InvalidConfigException;
 
+use function sha1;
+use function unpack;
+use function array_values;
+
 /**
  * PgsqlMutex implements mutex "lock" mechanism via PgSQL locks.
  *

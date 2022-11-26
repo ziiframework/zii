@@ -12,10 +12,50 @@ namespace yii\helpers;
 
 use const STDIN;
 use const STDERR;
+use const STDOUT;
+use const PHP_EOL;
+use const DIRECTORY_SEPARATOR;
 
 use Yii;
 use yii\base\Model;
 use yii\console\Markdown as ConsoleMarkdown;
+
+use function exec;
+use function time;
+use function trim;
+use function count;
+use function fgets;
+use function floor;
+use function flush;
+use function rtrim;
+use function fwrite;
+use function getenv;
+use function explode;
+use function implode;
+use function ini_get;
+use function sprintf;
+use function is_array;
+use function wordwrap;
+use function is_string;
+use function mb_strlen;
+use function mb_substr;
+use function array_keys;
+use function preg_match;
+use function preg_split;
+use function str_repeat;
+use function strcasecmp;
+use function array_merge;
+use function mb_strwidth;
+use function str_replace;
+use function array_unique;
+use function preg_replace;
+use function str_contains;
+use function array_unshift;
+use function preg_match_all;
+use function function_exists;
+use function array_key_exists;
+use function call_user_func_array;
+use function preg_replace_callback;
 
 /**
  * BaseConsole provides concrete implementation for [[Console]].
@@ -851,7 +891,7 @@ class BaseConsole
      */
     public static function stdout($string)
     {
-        return fwrite(\STDOUT, $string);
+        return fwrite(STDOUT, $string);
     }
 
     /**

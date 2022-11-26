@@ -12,6 +12,10 @@ namespace yii\mutex;
 
 use yii\base\Component;
 
+use function in_array;
+use function array_search;
+use function register_shutdown_function;
+
 /**
  * The Mutex component allows mutual execution of concurrent processes in order to prevent "race conditions".
  *

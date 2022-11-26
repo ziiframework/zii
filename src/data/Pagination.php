@@ -16,6 +16,8 @@ use yii\web\Request;
 use yii\web\Linkable;
 use yii\base\BaseObject;
 
+use function is_scalar;
+
 /**
  * Pagination represents information relevant to pagination of data items.
  *

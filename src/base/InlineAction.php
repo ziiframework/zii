@@ -12,6 +12,9 @@ namespace yii\base;
 
 use Yii;
 
+use function get_class;
+use function call_user_func_array;
+
 /**
  * InlineAction represents an action that is defined as a controller method.
  *

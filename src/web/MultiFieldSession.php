@@ -10,6 +10,11 @@ declare(strict_types=1);
 
 namespace yii\web;
 
+use function array_merge;
+use function call_user_func;
+use function session_decode;
+use function session_encode;
+
 /**
  * MultiFieldSession is the base class for session storage implementations with multi-field data storage support.
  *

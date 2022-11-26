@@ -10,6 +10,9 @@ declare(strict_types=1);
 
 namespace yii\console\controllers;
 
+use const LOCK_EX;
+use const DIRECTORY_SEPARATOR;
+
 use Yii;
 use yii\helpers\Console;
 use yii\web\AssetBundle;
@@ -18,6 +21,45 @@ use yii\console\Exception;
 use yii\helpers\VarDumper;
 use yii\console\Controller;
 use yii\helpers\FileHelper;
+
+use function date;
+use function trim;
+use function count;
+use function range;
+use function rtrim;
+use function strtr;
+use function usort;
+use function rename;
+use function substr;
+use function unlink;
+use function dirname;
+use function explode;
+use function gettype;
+use function implode;
+use function strncmp;
+use function is_array;
+use function md5_file;
+use function array_pop;
+use function get_class;
+use function is_object;
+use function is_scalar;
+use function is_string;
+use function array_diff;
+use function array_fill;
+use function array_keys;
+use function preg_match;
+use function shell_exec;
+use function array_merge;
+use function file_exists;
+use function str_replace;
+use function str_contains;
+use function array_combine;
+use function call_user_func;
+use function escapeshellarg;
+use function property_exists;
+use function file_get_contents;
+use function file_put_contents;
+use function preg_replace_callback;
 
 /**
  * Allows you to combine and compress your JavaScript and CSS files.

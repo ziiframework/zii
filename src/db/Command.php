@@ -19,6 +19,22 @@ use PDOStatement;
 use yii\base\Component;
 use yii\base\NotSupportedException;
 
+use function ksort;
+use function explode;
+use function is_bool;
+use function strncmp;
+use function is_array;
+use function array_map;
+use function is_object;
+use function is_string;
+use function is_resource;
+use function json_encode;
+use function call_user_func;
+use function get_resource_type;
+use function stream_get_contents;
+use function call_user_func_array;
+use function preg_replace_callback;
+
 /**
  * Command represents a SQL statement to be executed against a database.
  *

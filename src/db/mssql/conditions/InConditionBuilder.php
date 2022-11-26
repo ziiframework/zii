@@ -13,6 +13,10 @@ namespace yii\db\mssql\conditions;
 use yii\db\Expression;
 use yii\base\NotSupportedException;
 
+use function implode;
+use function is_array;
+use function str_contains;
+
 /**
  * {@inheritdoc}
  *

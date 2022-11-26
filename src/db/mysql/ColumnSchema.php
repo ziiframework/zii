@@ -13,6 +13,8 @@ namespace yii\db\mysql;
 use yii\db\JsonExpression;
 use yii\db\ExpressionInterface;
 
+use function json_decode;
+
 /**
  * Class ColumnSchema for MySQL database.
  *

@@ -17,6 +17,9 @@ use yii\base\ActionFilter;
 use yii\helpers\StringHelper;
 use yii\web\NotFoundHttpException;
 
+use function is_array;
+use function call_user_func;
+
 /**
  * HostControl provides simple control over requested host name.
  *

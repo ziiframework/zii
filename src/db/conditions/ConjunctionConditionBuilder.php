@@ -14,6 +14,11 @@ use yii\db\ExpressionInterface;
 use yii\db\ExpressionBuilderTrait;
 use yii\db\ExpressionBuilderInterface;
 
+use function count;
+use function reset;
+use function implode;
+use function is_array;
+
 /**
  * Class ConjunctionConditionBuilder builds objects of abstract class [[ConjunctionCondition]].
  *

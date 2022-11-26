@@ -10,6 +10,10 @@ declare(strict_types=1);
 
 namespace yii\helpers;
 
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
+use const PREG_SPLIT_NO_EMPTY;
+
 use Yii;
 use ArrayAccess;
 use Traversable;
@@ -18,6 +22,43 @@ use yii\web\Request;
 use yii\db\ActiveRecordInterface;
 use yii\validators\StringValidator;
 use yii\base\InvalidArgumentException;
+
+use function max;
+use function trim;
+use function count;
+use function rtrim;
+use function is_int;
+use function strcmp;
+use function strpos;
+use function substr;
+use function explode;
+use function implode;
+use function is_bool;
+use function strrpos;
+use function in_array;
+use function is_array;
+use function array_map;
+use function get_class;
+use function is_string;
+use function urldecode;
+use function array_diff;
+use function preg_match;
+use function preg_split;
+use function strcasecmp;
+use function strtolower;
+use function array_merge;
+use function json_encode;
+use function str_replace;
+use function array_unique;
+use function array_values;
+use function preg_replace;
+use function str_contains;
+use function mb_strtolower;
+use function call_user_func;
+use function substr_compare;
+use function array_key_exists;
+use function htmlspecialchars;
+use function htmlspecialchars_decode;
 
 /**
  * BaseHtml provides concrete implementation for [[Html]].

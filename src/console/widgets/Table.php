@@ -15,6 +15,18 @@ use yii\base\Widget;
 use yii\helpers\Console;
 use yii\helpers\ArrayHelper;
 
+use function max;
+use function ceil;
+use function count;
+use function is_array;
+use function array_map;
+use function array_sum;
+use function is_numeric;
+use function str_repeat;
+use function mb_strwidth;
+use function array_values;
+use function array_key_exists;
+
 /**
  * Table class displays a table in console.
  *

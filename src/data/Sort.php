@@ -10,6 +10,10 @@ declare(strict_types=1);
 
 namespace yii\data;
 
+use const SORT_ASC;
+use const SORT_DESC;
+use const SORT_REGULAR;
+
 use Yii;
 use Traversable;
 use yii\web\Request;
@@ -17,6 +21,14 @@ use yii\helpers\Html;
 use yii\base\BaseObject;
 use yii\helpers\Inflector;
 use yii\base\InvalidConfigException;
+
+use function substr;
+use function explode;
+use function implode;
+use function strncmp;
+use function is_array;
+use function is_scalar;
+use function array_merge;
 
 /**
  * Sort represents information relevant to sorting.

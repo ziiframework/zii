@@ -13,6 +13,9 @@ namespace yii\validators;
 use Yii;
 use yii\helpers\Json;
 
+use function trim;
+use function is_string;
+
 /**
  * RequiredValidator validates that the specified attribute does not have null or empty value.
  *

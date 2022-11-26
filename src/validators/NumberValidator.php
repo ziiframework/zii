@@ -15,6 +15,14 @@ use yii\helpers\Json;
 use yii\web\JsExpression;
 use yii\helpers\StringHelper;
 
+use function is_bool;
+use function is_array;
+use function is_object;
+use function is_scalar;
+use function is_string;
+use function preg_match;
+use function method_exists;
+
 /**
  * NumberValidator validates that the attribute value is a number.
  *

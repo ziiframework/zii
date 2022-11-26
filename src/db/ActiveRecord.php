@@ -19,6 +19,17 @@ use yii\helpers\StringHelper;
 use yii\base\InvalidConfigException;
 use yii\base\InvalidArgumentException;
 
+use function key;
+use function in_array;
+use function is_array;
+use function array_map;
+use function is_string;
+use function array_diff;
+use function array_keys;
+use function array_values;
+use function preg_replace;
+use function array_fill_keys;
+
 /**
  * ActiveRecord is the base class for classes representing relational data in terms of objects.
  *

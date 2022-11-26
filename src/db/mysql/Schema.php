@@ -10,6 +10,9 @@ declare(strict_types=1);
 
 namespace yii\db\mysql;
 
+use const CASE_LOWER;
+use const PREG_SET_ORDER;
+
 use PDO;
 use Exception;
 use PDOException;
@@ -22,6 +25,24 @@ use yii\db\ForeignKeyConstraint;
 use yii\db\ConstraintFinderTrait;
 use yii\base\NotSupportedException;
 use yii\db\ConstraintFinderInterface;
+
+use function md5;
+use function trim;
+use function bindec;
+use function explode;
+use function stripos;
+use function in_array;
+use function array_map;
+use function serialize;
+use function preg_match;
+use function preg_split;
+use function strtolower;
+use function array_merge;
+use function str_replace;
+use function array_values;
+use function str_contains;
+use function preg_match_all;
+use function array_change_key_case;
 
 /**
  * Schema is the class for retrieving metadata from a MySQL database (version 4.1.x and 5.x).

@@ -17,6 +17,12 @@ use yii\helpers\Json;
 use yii\web\Response;
 use yii\helpers\ArrayHelper;
 
+use function explode;
+use function ob_start;
+use function array_merge;
+use function ob_get_clean;
+use function ob_implicit_flush;
+
 /**
  * Pjax is a widget integrating the [pjax](https://github.com/yiisoft/jquery-pjax) jQuery plugin.
  *

@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace yii\caching;
 
+use function microtime;
+
 /**
  * ArrayCache provides caching for the current request only by storing the values in an array.
  *

@@ -10,12 +10,21 @@ declare(strict_types=1);
 
 namespace yii\data;
 
+use const SORT_ASC;
+use const SORT_DESC;
+
 use yii\base\Model;
 use yii\di\Instance;
 use yii\db\Connection;
 use yii\db\QueryInterface;
 use yii\db\ActiveQueryInterface;
 use yii\base\InvalidConfigException;
+
+use function count;
+use function is_object;
+use function is_string;
+use function array_keys;
+use function call_user_func;
 
 /**
  * ActiveDataProvider implements a data provider based on [[\yii\db\Query]] and [[\yii\db\ActiveQuery]].

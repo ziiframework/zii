@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace yii\i18n;
 
+use const PHP_INT_SIZE;
+
 use Yii;
 use Closure;
 use DateTime;
@@ -32,6 +34,38 @@ use yii\helpers\HtmlPurifier;
 use yii\helpers\FormatConverter;
 use yii\base\InvalidConfigException;
 use yii\base\InvalidArgumentException;
+
+use function abs;
+use function count;
+use function nl2br;
+use function round;
+use function rtrim;
+use function is_int;
+use function strlen;
+use function strrev;
+use function strtok;
+use function substr;
+use function gettype;
+use function implode;
+use function print_r;
+use function sprintf;
+use function str_pad;
+use function strncmp;
+use function strrpos;
+use function is_array;
+use function is_string;
+use function str_split;
+use function array_keys;
+use function date_parse;
+use function is_numeric;
+use function str_repeat;
+use function str_replace;
+use function array_values;
+use function preg_replace;
+use function str_contains;
+use function number_format;
+use function extension_loaded;
+use function call_user_func_array;
 
 /**
  * Formatter provides a set of commonly used data formatting methods.

@@ -12,6 +12,10 @@ namespace yii\console;
 
 use const STDERR;
 use const STDOUT;
+use const PHP_VERSION_ID;
+use const PHP_MAJOR_VERSION;
+use const PREG_OFFSET_CAPTURE;
+use const PREG_SPLIT_NO_EMPTY;
 
 use Yii;
 use ReflectionClass;
@@ -25,6 +29,30 @@ use yii\base\InlineAction;
 use yii\helpers\Inflector;
 use ReflectionFunctionAbstract;
 use yii\base\InvalidRouteException;
+
+use function trim;
+use function reset;
+use function rtrim;
+use function strtr;
+use function fwrite;
+use function is_int;
+use function substr;
+use function gettype;
+use function implode;
+use function lcfirst;
+use function settype;
+use function in_array;
+use function is_array;
+use function is_string;
+use function preg_match;
+use function preg_split;
+use function array_merge;
+use function array_shift;
+use function preg_replace;
+use function str_contains;
+use function func_get_args;
+use function method_exists;
+use function array_key_exists;
 
 /**
  * Controller is the base class of console command classes.

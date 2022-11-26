@@ -10,6 +10,10 @@ declare(strict_types=1);
 
 namespace yii\base;
 
+use function ob_clean;
+use function ob_end_clean;
+use function ob_get_level;
+
 /**
  * Response represents the response of an [[Application]] to a [[Request]].
  *

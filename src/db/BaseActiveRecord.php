@@ -25,6 +25,28 @@ use yii\base\InvalidConfigException;
 use yii\base\UnknownMethodException;
 use yii\base\InvalidArgumentException;
 
+use function count;
+use function reset;
+use function is_int;
+use function strpos;
+use function substr;
+use function explode;
+use function lcfirst;
+use function in_array;
+use function is_array;
+use function array_pop;
+use function get_class;
+use function array_flip;
+use function array_keys;
+use function array_search;
+use function array_values;
+use function array_combine;
+use function method_exists;
+use function call_user_func;
+use function array_intersect;
+use function property_exists;
+use function array_key_exists;
+
 /**
  * ActiveRecord is the base class for classes representing relational data in terms of objects.
  *

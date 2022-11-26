@@ -19,6 +19,8 @@ use yii\helpers\ArrayHelper;
 use yii\caching\CacheInterface;
 use yii\base\InvalidConfigException;
 
+use function substr;
+
 /**
  * DbMessageSource extends [[MessageSource]] and represents a message source that stores translated
  * messages in database.

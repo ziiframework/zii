@@ -13,6 +13,14 @@ namespace yii\i18n;
 use Yii;
 use yii\base\InvalidArgumentException;
 
+use function substr;
+use function is_file;
+use function sprintf;
+use function is_array;
+use function preg_match;
+use function str_replace;
+use function str_starts_with;
+
 /**
  * PhpMessageSource represents a message source that stores translated messages in PHP scripts.
  *

@@ -12,6 +12,10 @@ namespace yii\validators;
 
 use yii\helpers\Json;
 
+use function trim;
+use function is_array;
+use function array_map;
+
 /**
  * This class converts the attribute value(s) to string(s) and strip characters.
  *

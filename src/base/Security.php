@@ -10,8 +10,41 @@ declare(strict_types=1);
 
 namespace yii\base;
 
+use const OPENSSL_RAW_DATA;
+use const PASSWORD_DEFAULT;
+use const OPENSSL_VERSION_TEXT;
+
 use Yii;
 use yii\helpers\StringHelper;
+
+use function chr;
+use function ord;
+use function ceil;
+use function pack;
+use function crypt;
+use function is_int;
+use function strlen;
+use function substr;
+use function defined;
+use function gettype;
+use function sprintf;
+use function hash_hkdf;
+use function hash_hmac;
+use function is_string;
+use function preg_match;
+use function str_repeat;
+use function hash_equals;
+use function hash_pbkdf2;
+use function str_replace;
+use function random_bytes;
+use function base64_encode;
+use function password_hash;
+use function function_exists;
+use function openssl_decrypt;
+use function openssl_encrypt;
+use function password_verify;
+use function extension_loaded;
+use function openssl_error_string;
 
 /**
  * Security provides a set of methods to handle common security-related tasks.

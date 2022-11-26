@@ -10,9 +10,22 @@ declare(strict_types=1);
 
 namespace yii\log;
 
+use const LOG_ERR;
+use const LOG_PID;
+use const LOG_INFO;
+use const LOG_USER;
+use const LOG_DEBUG;
+use const LOG_ODELAY;
+use const LOG_WARNING;
+
 use Exception;
 use Throwable;
 use yii\helpers\VarDumper;
+
+use function syslog;
+use function openlog;
+use function closelog;
+use function is_string;
 
 /**
  * SyslogTarget writes log to syslog.

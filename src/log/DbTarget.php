@@ -18,6 +18,8 @@ use yii\db\Connection;
 use yii\helpers\VarDumper;
 use yii\base\InvalidConfigException;
 
+use function is_string;
+
 /**
  * DbTarget stores log messages in a database table.
  *

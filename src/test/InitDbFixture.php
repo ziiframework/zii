@@ -12,6 +12,8 @@ namespace yii\test;
 
 use Yii;
 
+use function is_file;
+
 /**
  * InitDbFixture represents the initial state needed for DB-related tests.
  *

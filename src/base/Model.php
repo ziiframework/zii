@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace yii\base;
 
+use const PHP_VERSION_ID;
+
 use Yii;
 use ArrayAccess;
 use ArrayObject;
@@ -21,6 +23,17 @@ use ReturnTypeWillChange;
 use yii\helpers\Inflector;
 use yii\validators\Validator;
 use yii\validators\RequiredValidator;
+
+use function reset;
+use function substr;
+use function strncmp;
+use function in_array;
+use function is_array;
+use function array_flip;
+use function array_keys;
+use function array_merge;
+use function array_slice;
+use function array_combine;
 
 /**
  * Model is the base class for data models.

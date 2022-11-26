@@ -13,6 +13,11 @@ namespace yii\db;
 use yii\base\BaseObject;
 use yii\helpers\StringHelper;
 
+use function strtr;
+use function gettype;
+use function implode;
+use function is_array;
+
 /**
  * ColumnSchemaBuilder helps to define database schema types using a PHP interface.
  *

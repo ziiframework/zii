@@ -13,6 +13,14 @@ namespace yii\test;
 use Yii;
 use yii\base\InvalidConfigException;
 
+use function ltrim;
+use function is_int;
+use function is_array;
+use function array_pop;
+use function get_class;
+use function array_merge;
+use function array_reverse;
+
 /**
  * FixtureTrait provides functionalities for loading, unloading and accessing fixtures for a test case.
  *

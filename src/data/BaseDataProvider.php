@@ -14,6 +14,10 @@ use Yii;
 use yii\base\Component;
 use yii\base\InvalidArgumentException;
 
+use function count;
+use function is_array;
+use function array_merge;
+
 /**
  * BaseDataProvider provides a base class that implements the [[DataProviderInterface]].
  *

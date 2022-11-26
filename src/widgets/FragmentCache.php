@@ -18,6 +18,13 @@ use yii\caching\CacheInterface;
 use yii\base\DynamicContentAwareTrait;
 use yii\base\DynamicContentAwareInterface;
 
+use function count;
+use function is_array;
+use function ob_start;
+use function array_merge;
+use function ob_get_clean;
+use function ob_implicit_flush;
+
 /**
  * FragmentCache is used by [[\yii\base\View]] to provide caching of page fragments.
  *

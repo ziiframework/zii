@@ -10,7 +10,24 @@ declare(strict_types=1);
 
 namespace yii\helpers;
 
+use const STR_PAD_LEFT;
+
 use yii\base\NotSupportedException;
+
+use function pack;
+use function decbin;
+use function strlen;
+use function substr;
+use function unpack;
+use function explode;
+use function ip2long;
+use function str_pad;
+use function array_pad;
+use function inet_pton;
+use function is_string;
+use function is_numeric;
+use function preg_replace;
+use function str_contains;
 
 /**
  * Class BaseIpHelper provides concrete implementation for [[IpHelper]].

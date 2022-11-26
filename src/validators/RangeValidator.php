@@ -17,6 +17,9 @@ use yii\helpers\Json;
 use yii\helpers\ArrayHelper;
 use yii\base\InvalidConfigException;
 
+use function is_array;
+use function call_user_func;
+
 /**
  * RangeValidator validates that the attribute value is among a list of values.
  *

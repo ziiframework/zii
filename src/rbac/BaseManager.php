@@ -18,6 +18,9 @@ use yii\base\InvalidValueException;
 use yii\base\InvalidConfigException;
 use yii\base\InvalidArgumentException;
 
+use function is_array;
+use function call_user_func;
+
 /**
  * BaseManager is a base class implementing [[ManagerInterface]] for RBAC management.
  *

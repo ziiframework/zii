@@ -15,6 +15,8 @@ use NumberFormatter;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
 
+use function extension_loaded;
+
 /**
  * Locale provides various locale information via convenient methods.
  *

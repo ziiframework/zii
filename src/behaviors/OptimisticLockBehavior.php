@@ -16,6 +16,9 @@ use yii\helpers\ArrayHelper;
 use yii\base\InvalidCallException;
 use yii\validators\NumberValidator;
 
+use function array_keys;
+use function array_fill_keys;
+
 /**
  * OptimisticLockBehavior automatically upgrades a model's lock version using the column name
  * returned by [[\yii\db\BaseActiveRecord::optimisticLock()|optimisticLock()]].

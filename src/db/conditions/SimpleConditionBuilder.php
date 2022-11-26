@@ -14,6 +14,9 @@ use yii\db\ExpressionInterface;
 use yii\db\ExpressionBuilderTrait;
 use yii\db\ExpressionBuilderInterface;
 
+use function is_string;
+use function str_contains;
+
 /**
  * Class NotConditionBuilder builds objects of [[SimpleCondition]].
  *

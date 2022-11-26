@@ -12,6 +12,9 @@ namespace yii\db\conditions;
 
 use yii\base\InvalidArgumentException;
 
+use function count;
+use function array_shift;
+
 /**
  * Condition that inverts passed [[condition]].
  *

@@ -19,6 +19,14 @@ use yii\validators\StringValidator;
 use yii\validators\BooleanValidator;
 use yii\base\InvalidArgumentException;
 
+use function is_float;
+use function get_class;
+use function is_object;
+use function is_scalar;
+use function method_exists;
+use function call_user_func;
+use function array_fill_keys;
+
 /**
  * AttributeTypecastBehavior provides an ability of automatic model attribute typecasting.
  * This behavior is very useful in case of usage of ActiveRecord for the schema-less databases like MongoDB or Redis.

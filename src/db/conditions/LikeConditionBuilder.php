@@ -15,6 +15,14 @@ use yii\db\ExpressionBuilderTrait;
 use yii\base\InvalidArgumentException;
 use yii\db\ExpressionBuilderInterface;
 
+use function strtr;
+use function implode;
+use function is_array;
+use function is_string;
+use function preg_match;
+use function strtoupper;
+use function str_contains;
+
 /**
  * Class LikeConditionBuilder builds objects of [[LikeCondition]].
  *

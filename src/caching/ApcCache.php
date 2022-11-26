@@ -12,6 +12,10 @@ namespace yii\caching;
 
 use yii\base\InvalidConfigException;
 
+use function is_array;
+use function array_keys;
+use function extension_loaded;
+
 /**
  * ApcCache provides APC caching in terms of an application component.
  *

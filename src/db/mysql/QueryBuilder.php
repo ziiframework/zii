@@ -20,6 +20,18 @@ use yii\caching\CacheInterface;
 use yii\base\NotSupportedException;
 use yii\base\InvalidArgumentException;
 
+use function trim;
+use function reset;
+use function implode;
+use function is_string;
+use function preg_match;
+use function array_merge;
+use function ctype_digit;
+use function array_values;
+use function preg_replace;
+use function preg_match_all;
+use function version_compare;
+
 /**
  * QueryBuilder is the query builder for MySQL databases.
  *

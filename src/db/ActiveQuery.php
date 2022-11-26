@@ -12,6 +12,24 @@ namespace yii\db;
 
 use yii\base\InvalidConfigException;
 
+use function count;
+use function reset;
+use function is_int;
+use function strpos;
+use function substr;
+use function implode;
+use function in_array;
+use function is_array;
+use function get_class;
+use function is_string;
+use function serialize;
+use function preg_match;
+use function array_merge;
+use function array_values;
+use function str_contains;
+use function call_user_func;
+use function array_key_exists;
+
 /**
  * ActiveQuery represents a DB query associated with an Active Record class.
  *

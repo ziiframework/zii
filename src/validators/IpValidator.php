@@ -17,6 +17,16 @@ use yii\helpers\IpHelper;
 use yii\web\JsExpression;
 use yii\base\InvalidConfigException;
 
+use function strlen;
+use function substr;
+use function is_array;
+use function is_string;
+use function preg_match;
+use function preg_quote;
+use function array_merge;
+use function array_unique;
+use function str_starts_with;
+
 /**
  * The validator checks if the attribute value is a valid IPv4/IPv6 address or subnet.
  *

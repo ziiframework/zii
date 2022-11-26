@@ -18,6 +18,9 @@ use yii\caching\Dependency;
 use yii\caching\CacheInterface;
 use yii\base\InvalidConfigException;
 
+use function get_class;
+use function array_merge;
+
 /**
  * Cacheable widget behavior automatically caches widget contents according to duration and dependencies specified.
  *

@@ -12,6 +12,8 @@ namespace yii\validators;
 
 use Closure;
 
+use function is_string;
+
 /**
  * InlineValidator represents a validator which is defined as a method in the object being validated.
  *

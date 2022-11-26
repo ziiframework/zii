@@ -10,6 +10,9 @@ declare(strict_types=1);
 
 namespace yii\console\controllers;
 
+use const SORT_DESC;
+use const PREG_SET_ORDER;
+
 use Yii;
 use Exception;
 use yii\db\Query;
@@ -19,6 +22,27 @@ use ReflectionException;
 use yii\helpers\Console;
 use yii\helpers\Inflector;
 use yii\helpers\ArrayHelper;
+
+use function time;
+use function count;
+use function usort;
+use function substr;
+use function implode;
+use function strncmp;
+use function strrpos;
+use function is_array;
+use function strripos;
+use function preg_match;
+use function preg_split;
+use function strcasecmp;
+use function array_merge;
+use function array_shift;
+use function array_slice;
+use function str_replace;
+use function preg_replace;
+use function str_contains;
+use function array_unshift;
+use function preg_match_all;
 
 /**
  * Manages application migrations.

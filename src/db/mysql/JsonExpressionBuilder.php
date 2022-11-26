@@ -17,6 +17,8 @@ use yii\db\ExpressionInterface;
 use yii\db\ExpressionBuilderTrait;
 use yii\db\ExpressionBuilderInterface;
 
+use function count;
+
 /**
  * Class JsonExpressionBuilder builds [[JsonExpression]] for MySQL DBMS.
  *

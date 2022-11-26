@@ -14,6 +14,8 @@ use yii\db\ExpressionInterface;
 use yii\db\ExpressionBuilderTrait;
 use yii\db\ExpressionBuilderInterface;
 
+use function str_contains;
+
 /**
  * Class BetweenConditionBuilder builds objects of [[BetweenCondition]].
  *

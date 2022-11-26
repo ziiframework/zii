@@ -10,8 +10,19 @@ declare(strict_types=1);
 
 namespace yii\helpers;
 
+use const PREG_SET_ORDER;
+use const PREG_SPLIT_NO_EMPTY;
+
 use Yii;
 use IntlDateFormatter;
+
+use function strtr;
+use function implode;
+use function preg_split;
+use function array_merge;
+use function str_replace;
+use function preg_match_all;
+use function extension_loaded;
 
 /**
  * BaseFormatConverter provides concrete implementation for [[FormatConverter]].

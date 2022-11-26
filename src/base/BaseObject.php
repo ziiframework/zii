@@ -12,6 +12,9 @@ namespace yii\base;
 
 use Yii;
 
+use function method_exists;
+use function property_exists;
+
 /**
  * BaseObject is the base class that implements the *property* feature.
  *

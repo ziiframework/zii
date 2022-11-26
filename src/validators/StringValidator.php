@@ -13,6 +13,11 @@ namespace yii\validators;
 use Yii;
 use yii\helpers\Json;
 
+use function is_array;
+use function is_scalar;
+use function is_string;
+use function mb_strlen;
+
 /**
  * StringValidator validates that the attribute value is of certain length.
  *

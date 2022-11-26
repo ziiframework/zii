@@ -13,6 +13,28 @@ namespace yii\helpers;
 use Yii;
 use Transliterator;
 
+use function end;
+use function trim;
+use function count;
+use function range;
+use function reset;
+use function strtr;
+use function explode;
+use function implode;
+use function in_array;
+use function array_map;
+use function mb_substr;
+use function preg_match;
+use function preg_quote;
+use function strtolower;
+use function array_slice;
+use function str_replace;
+use function array_search;
+use function preg_replace;
+use function mb_strtolower;
+use function extension_loaded;
+use function transliterator_transliterate;
+
 /**
  * BaseInflector provides concrete implementation for [[Inflector]].
  *

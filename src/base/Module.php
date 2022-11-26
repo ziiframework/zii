@@ -10,9 +10,34 @@ declare(strict_types=1);
 
 namespace yii\base;
 
+use const DIRECTORY_SEPARATOR;
+
 use Yii;
 use ReflectionClass;
 use yii\di\ServiceLocator;
+
+use function trim;
+use function ltrim;
+use function is_dir;
+use function strpos;
+use function substr;
+use function dirname;
+use function explode;
+use function strncmp;
+use function strrpos;
+use function ucfirst;
+use function is_array;
+use function realpath;
+use function get_class;
+use function is_scalar;
+use function is_string;
+use function preg_match;
+use function str_replace;
+use function class_exists;
+use function str_contains;
+use function call_user_func;
+use function is_subclass_of;
+use function preg_replace_callback;
 
 /**
  * Module is the base class for module and application classes.

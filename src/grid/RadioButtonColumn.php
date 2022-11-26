@@ -10,9 +10,16 @@ declare(strict_types=1);
 
 namespace yii\grid;
 
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
+
 use Closure;
 use yii\helpers\Html;
 use yii\base\InvalidConfigException;
+
+use function is_array;
+use function json_encode;
+use function call_user_func;
 
 /**
  * RadioButtonColumn displays a column of radio buttons in a grid view.

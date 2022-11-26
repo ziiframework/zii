@@ -14,6 +14,13 @@ use Yii;
 use yii\base\BaseObject;
 use yii\base\InvalidConfigException;
 
+use function ltrim;
+use function rtrim;
+use function substr;
+use function is_callable;
+use function preg_replace;
+use function call_user_func;
+
 /**
  * UrlNormalizer normalizes URLs for [[UrlManager]] and [[UrlRule]].
  *

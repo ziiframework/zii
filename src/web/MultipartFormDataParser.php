@@ -10,9 +10,33 @@ declare(strict_types=1);
 
 namespace yii\web;
 
+use const UPLOAD_ERR_OK;
+use const PREG_SPLIT_NO_EMPTY;
+use const UPLOAD_ERR_INI_SIZE;
+use const UPLOAD_ERR_CANT_WRITE;
+
 use yii\base\BaseObject;
 use yii\helpers\ArrayHelper;
 use yii\helpers\StringHelper;
+
+use function trim;
+use function fclose;
+use function fwrite;
+use function rewind;
+use function explode;
+use function ini_get;
+use function tmpfile;
+use function array_pop;
+use function array_keys;
+use function is_numeric;
+use function preg_match;
+use function preg_quote;
+use function preg_split;
+use function strtolower;
+use function array_shift;
+use function str_replace;
+use function str_contains;
+use function stream_get_meta_data;
 
 /**
  * MultipartFormDataParser parses content encoded as 'multipart/form-data'.

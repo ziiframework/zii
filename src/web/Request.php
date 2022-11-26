@@ -10,6 +10,10 @@ declare(strict_types=1);
 
 namespace yii\web;
 
+use const PHP_URL_HOST;
+use const PREG_SET_ORDER;
+use const PREG_SPLIT_NO_EMPTY;
+
 use Yii;
 use Exception;
 use yii\validators\IpValidator;
@@ -17,6 +21,54 @@ use yii\base\InvalidConfigException;
 
 use function chr;
 use function ord;
+use function trim;
+use function count;
+use function ltrim;
+use function reset;
+use function rtrim;
+use function usort;
+use function krsort;
+use function strlen;
+use function strpos;
+use function substr;
+use function dirname;
+use function explode;
+use function stripos;
+use function strncmp;
+use function ucwords;
+use function basename;
+use function in_array;
+use function is_array;
+use function array_map;
+use function array_pop;
+use function is_object;
+use function is_string;
+use function mb_substr;
+use function parse_url;
+use function preg_grep;
+use function urldecode;
+use function array_keys;
+use function preg_match;
+use function preg_split;
+use function strcasecmp;
+use function strtolower;
+use function strtoupper;
+use function array_merge;
+use function array_shift;
+use function str_replace;
+use function strncasecmp;
+use function unserialize;
+use function array_filter;
+use function array_reduce;
+use function mb_parse_str;
+use function preg_replace;
+use function str_contains;
+use function base64_decode;
+use function gethostbyaddr;
+use function preg_match_all;
+use function function_exists;
+use function str_starts_with;
+use function file_get_contents;
 
 /**
  * The web Request class represents an HTTP request.
@@ -1105,7 +1157,7 @@ class Request extends \yii\base\Request
     private function utf8Encode($s)
     {
         $s .= $s;
-        $len = \strlen($s);
+        $len = strlen($s);
 
         for ($i = $len >> 1, $j = 0; $i < $len; ++$i, ++$j) {
             switch (true) {

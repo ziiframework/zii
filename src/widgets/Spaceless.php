@@ -12,6 +12,12 @@ namespace yii\widgets;
 
 use yii\base\Widget;
 
+use function trim;
+use function ob_start;
+use function ob_get_clean;
+use function preg_replace;
+use function ob_implicit_flush;
+
 /**
  * Spaceless widget removes whitespace characters between HTML tags. Whitespaces within HTML tags
  * or in a plain text are always left untouched.
