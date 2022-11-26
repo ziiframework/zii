@@ -82,14 +82,6 @@ jobs:
           composer self-update -vvv
           composer install $COMPOSER_INSTALL_FLAGS
 
-      - name: Install PHPUnit10 on PHP8.2
-        if: ${{ matrix.php-version == '8.2' }}
-        run: |
-          rm -rf vendor/
-          rm -f composer.lock
-          composer require --dev phpunit/phpunit:10.0.x-dev
-          composer redo-install
-
       - run: git diff
 
       - name: PHPUnit
