@@ -11,7 +11,7 @@ env:
   COMPOSER_INSTALL_FLAGS: "--prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi"
 
 jobs:
-  phpunit:
+  matrix_tests:
     name: PHP${{ matrix.php-version }} MySQL${{ matrix.mysql-version }} PgSQL${{ matrix.pgsql-version }} MSSQL${{ matrix.mssql-version }}
     if: ${{ !contains(github.event.head_commit.message, 'skip ci') }}
 
@@ -57,8 +57,7 @@ jobs:
         options: --name=mssql --health-cmd="/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'YourStrong!Passw0rd' -Q 'SELECT 1'" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-      - name: Generate french locale
-        run: sudo locale-gen fr_FR.UTF-8
+      - run: sudo locale-gen fr_FR.UTF-8
 
       - uses: actions/checkout@v3
 
@@ -90,3 +89,31 @@ jobs:
 
       - name: PHPUnit
         run: vendor/bin/phpunit --verbose --colors=always
+
+  container_tests:
+    name: Ubuntu-20.04 PHP-8.0 MySQL-8.0
+    if: ${{ !contains(github.event.head_commit.message, 'skip ci') }}
+
+    runs-on: ubuntu-20.04
+
+    container: charescape/web:6.2.0
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - run: sudo ln -s /usr/local/php/bin/php /usr/local/bin/php
+
+      - run: /usr/local/mysql/support-files/mysql.server start
+
+      - run: php -v
+
+      - run: composer self-update -vvv
+
+      - name: Install dependencies
+        run: |
+          rm -rf vendor/
+          rm -f composer.lock
+          composer install --no-interaction
+
+      - name: PHPUnit
+        run: vendor/bin/phpunit --group mysql --colors=always
