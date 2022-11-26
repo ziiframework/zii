@@ -88,7 +88,7 @@ jobs:
         run: vendor/bin/phpunit --colors=always
 
   container_tests:
-    name: Ubuntu-20.04 PHP-8.0 MySQL-8.0
+    name: Ubuntu20.04 PHP8.0 MySQL8.0
     if: ${{ !contains(github.event.head_commit.message, 'skip ci') }}
 
     runs-on: ubuntu-20.04
