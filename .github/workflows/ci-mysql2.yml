@@ -18,7 +18,7 @@ jobs:
     name: Ubuntu-20.04 PHP-8.0 MySQL-8.0
     if: "!contains(github.event.head_commit.message, 'skip ci')"
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     container: charescape/web:6.2.0
 
