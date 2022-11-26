@@ -1,4 +1,4 @@
-name: ci-mysql
+name: ci-mysql2
 
 on:
   push:
