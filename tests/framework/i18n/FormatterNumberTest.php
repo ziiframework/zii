@@ -519,9 +519,6 @@ class FormatterNumberTest extends TestCase
 
     public function testIntlAsScientific(): void
     {
-        // see https://github.com/yiisoft/yii2/issues/17708
-        // $this->markTestSkipped('The test is unreliable since output depends on ICU version');
-
         $this->assertSame('1.23E2', $this->formatter->asScientific('123'));
         $this->assertSame('1.23456E5', $this->formatter->asScientific('123456'));
         $this->assertSame('-1.23456123E5', $this->formatter->asScientific('-123456.123'));
@@ -533,7 +530,9 @@ class FormatterNumberTest extends TestCase
         // null display
         $this->assertSame($this->formatter->nullDisplay, $this->formatter->asScientific(null));
 
-        $this->assertSame('8.76543210987654E16', $this->formatter->asScientific('87654321098765436'));
+        // see https://github.com/yiisoft/yii2/issues/17708
+        $this->markTestIncomplete('The test is unreliable since output depends on ICU version');
+        // $this->assertSame('8.76543210987654E16', $this->formatter->asScientific('87654321098765436'));
     }
 
     public function testAsScientific(): void
