@@ -1,14 +1,13 @@
 name: ci-pgsql
 
 on:
-  push:
-    branches:
-      - master
-      - main
   pull_request:
     branches:
       - master
-      - main
+
+  schedule:
+    # every day at 1:15 and 12:15 UTC
+    - cron: '15 1,12 * * *'
 
 env:
   COMPOSER_INSTALL_FLAGS: "--prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi"
