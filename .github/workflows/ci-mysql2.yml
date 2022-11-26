@@ -13,7 +13,7 @@ on:
 jobs:
   tests:
     name: Ubuntu-20.04 PHP-8.0 MySQL-8.0
-    if: "!contains(github.event.head_commit.message, 'skip ci')"
+    if: "!contains(github.event.head_commit.message, 'skip ci2')"
 
     runs-on: ubuntu-20.04
 
@@ -23,6 +23,8 @@ jobs:
       - uses: actions/checkout@v3
 
       - run: sudo ln -s /usr/local/php/bin/php /usr/local/bin/php
+
+      - run: /usr/local/mysql/support-files/mysql.server start
 
       - run: php -v
 
