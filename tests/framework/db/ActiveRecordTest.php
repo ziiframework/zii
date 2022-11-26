@@ -1949,7 +1949,14 @@ abstract class ActiveRecordTest extends DatabaseTestCase
     {
         /** @var Query $query */
         $query = $this->invokeMethod(Yii::createObject($modelClassName), 'findByCondition', [$validFilter]);
-        Customer::getDb()->queryBuilder->build($query);
+        $result = Customer::getDb()->queryBuilder->build($query);
+
+        fwrite(STDOUT, print_r([
+            'testLegalValuesForFindByCondition',
+            $modelClassName,
+            $validFilter,
+            $result,
+        ], true));
     }
 
     public function illegalValuesForFindByCondition()
@@ -1991,7 +1998,14 @@ abstract class ActiveRecordTest extends DatabaseTestCase
 
         /** @var Query $query */
         $query = $this->invokeMethod(Yii::createObject($modelClassName), 'findByCondition', $filterWithInjection);
-        Customer::getDb()->queryBuilder->build($query);
+        $result = Customer::getDb()->queryBuilder->build($query);
+
+        fwrite(STDOUT, print_r([
+            'testValueEscapingInFindByCondition',
+            $modelClassName,
+            $filterWithInjection,
+            $result,
+        ], true));
     }
 
     /**
