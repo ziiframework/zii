@@ -93,7 +93,7 @@ jobs:
       - run: git diff
 
       - name: PHPUnit
-        run: vendor/bin/phpunit --verbose --colors=always
+        run: vendor/bin/phpunit --colors=always
 
   container_tests:
     name: Ubuntu-20.04 PHP-8.0 MySQL-8.0
