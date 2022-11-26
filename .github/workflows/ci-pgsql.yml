@@ -15,7 +15,7 @@ env:
 
 jobs:
   tests:
-    name: PHP ${{ matrix.php-version }} pgsql ${{ matrix.pgsql-version }} on ${{ matrix.os-version }}
+    name: PHP${{ matrix.php-version }} PgSQL${{ matrix.pgsql-version }} on ${{ matrix.os-version }}
     if: ${{ !contains(github.event.head_commit.message, 'skip ci') }}
 
     runs-on: ${{ matrix.os-version }}
@@ -24,6 +24,7 @@ jobs:
       matrix:
         os-version:
           - ubuntu-20.04
+          - ubuntu-22.04
 
         php-version:
           - "8.0"
@@ -32,6 +33,7 @@ jobs:
 
         pgsql-version:
           - "14"
+          - "15"
 
     services:
       postgres:
@@ -45,8 +47,7 @@ jobs:
         options: --name=postgres --health-cmd=pg_isready --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Install PHP with extensions
         uses: shivammathur/setup-php@v2

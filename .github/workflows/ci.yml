@@ -12,7 +12,7 @@ env:
 
 jobs:
   phpunit:
-    name: PHP ${{ matrix.php-version }} mysql ${{ matrix.mysql-version }} on ${{ matrix.os-version }}
+    name: PHP${{ matrix.php-version }} MySQL${{ matrix.mysql-version }} PgSQL{{ matrix.pgsql-version }} MSSQL${{ matrix.mssql-version }}
     if: ${{ !contains(github.event.head_commit.message, 'skip ci') }}
 
     runs-on: ${{ matrix.os-version }}
@@ -20,9 +20,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os-version: [ubuntu-20.04, ubuntu-22.04]
+        os-version: [ubuntu-20.04]
         php-version: ['8.0', '8.1', '8.2']
         mysql-version: ['5.7', '8.0']
+        pgsql-version: ['14']
+        mssql-version: ['2019-latest']
 
     services:
       mysql:
@@ -35,7 +37,7 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
       postgres:
-        image: postgres:14
+        image: postgres:${{ matrix.pgsql-version }}
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -44,20 +46,29 @@ jobs:
           - 5432:5432
         options: --name=postgres --health-cmd=pg_isready --health-interval=10s --health-timeout=5s --health-retries=3
 
+      mssql:
+        image: mcr.microsoft.com/mssql/server:${{ matrix.mssql-version }}
+        env:
+          SA_PASSWORD: YourStrong!Passw0rd
+          ACCEPT_EULA: Y
+          MSSQL_PID: Developer
+        ports:
+          - 1433:1433
+        options: --name=mssql --health-cmd="/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'YourStrong!Passw0rd' -Q 'SELECT 1'" --health-interval=10s --health-timeout=5s --health-retries=3
+
     steps:
       - name: Generate french locale
         run: sudo locale-gen fr_FR.UTF-8
 
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
           tools: pecl
-          extensions: curl, dom, imagick, intl, mbstring, mcrypt, memcached, mysql, pdo, pdo_mysql, pdo_pgsql, pdo_sqlite, pgsql, sqlite
-          ini-values: date.timezone='UTC', session.save_path="${{ runner.temp }}", opcache.enable_cli=1, opcache.jit=tracing, opcache.jit_buffer_size=128M
+          extensions: curl, dom, imagick, intl, mbstring, mcrypt, memcached, mysql, pdo, pdo_mysql, pdo_pgsql, pdo_sqlite, pgsql, sqlite, pdo_sqlsrv
+          ini-values: date.timezone='UTC', session.save_path="${{ runner.temp }}"
 
       - name: Install Memcached
         uses: niden/actions-memcached@v7
@@ -70,4 +81,4 @@ jobs:
           composer install $COMPOSER_INSTALL_FLAGS
 
       - name: PHPUnit
-        run: vendor/bin/phpunit --exclude-group mssql --verbose --colors=always
+        run: vendor/bin/phpunit --verbose --colors=always
