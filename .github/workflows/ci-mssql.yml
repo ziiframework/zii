@@ -32,6 +32,7 @@ jobs:
 
         mssql-version:
           - "2019-latest"
+          - "2022-latest"
 
     services:
       mssql:
