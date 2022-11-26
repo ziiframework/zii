@@ -1,0 +1,37 @@
+name: ci-mysql
+
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+    branches:
+      - master
+      - main
+
+env:
+  COMPOSER_INSTALL_FLAGS: "--prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi"
+
+jobs:
+  tests:
+    name: Ubuntu-20.04 PHP-8.0 MySQL-8.0
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+
+    runs-on: ubuntu-latest
+
+    container: charescape/web:6.2.0
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          rm -rf vendor/
+          rm -f composer.lock
+          composer self-update -vvv
+          composer install $COMPOSER_INSTALL_FLAGS
+
+      - name: PHPUnit
+        run: vendor/bin/phpunit --group mysql --colors=always
