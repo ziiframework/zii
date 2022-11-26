@@ -520,7 +520,7 @@ class FormatterNumberTest extends TestCase
     public function testIntlAsScientific(): void
     {
         // see https://github.com/yiisoft/yii2/issues/17708
-        $this->markTestSkipped('The test is unreliable since output depends on ICU version');
+        // $this->markTestSkipped('The test is unreliable since output depends on ICU version');
 
         $this->assertSame('1.23E2', $this->formatter->asScientific('123'));
         $this->assertSame('1.23456E5', $this->formatter->asScientific('123456'));
