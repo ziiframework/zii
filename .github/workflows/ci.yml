@@ -57,7 +57,7 @@ jobs:
           php-version: ${{ matrix.php-version }}
           tools: pecl
           extensions: curl, dom, imagick, intl, mbstring, mcrypt, memcached, mysql, pdo, pdo_mysql, pdo_pgsql, pdo_sqlite, pgsql, sqlite
-          ini-values: date.timezone='UTC', session.save_path="${{ runner.temp }}"
+          ini-values: date.timezone='UTC', session.save_path="${{ runner.temp }}", opcache.enable_cli=1, opcache.jit=tracing, opcache.jit_buffer_size=128M
 
       - name: Install Memcached
         uses: niden/actions-memcached@v7
