@@ -24,9 +24,9 @@ declare(strict_types=1);
 $config = [
     'databases' => [
         'mysql' => [
-            'dsn' => 'mysql:host=127.0.0.1;dbname=yiitest',
+            'dsn' => 'mysql:host=127.0.0.1;dbname=test0db',
             'username' => 'root',
-            'password' => 'root',
+            'password' => 'root12345',
             'fixture' => __DIR__ . '/mysql.sql',
         ],
         'sqlite' => [
