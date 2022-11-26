@@ -83,5 +83,10 @@ jobs:
           composer self-update -vvv
           composer install $COMPOSER_INSTALL_FLAGS
 
+      - run: composer require --dev phpunit/phpunit:10.0.x-dev
+        if: ${{ matrix.php-version == '8.2' }}
+
+      - run: git diff
+
       - name: PHPUnit
         run: vendor/bin/phpunit --verbose --colors=always
