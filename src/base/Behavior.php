@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace yii\base;
 
+use function is_string;
+
 /**
  * Behavior is the base class for all behavior classes.
  *

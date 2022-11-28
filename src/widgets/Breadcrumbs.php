@@ -16,6 +16,11 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\base\InvalidConfigException;
 
+use function strtr;
+use function implode;
+use function is_array;
+use function array_key_exists;
+
 /**
  * Breadcrumbs displays a list of links indicating the position of the current page in the whole site hierarchy.
  *

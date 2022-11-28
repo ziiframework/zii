@@ -13,6 +13,16 @@ namespace yii\console;
 use Yii;
 use yii\base\InvalidRouteException;
 
+use function fopen;
+use function define;
+use function strlen;
+use function substr;
+use function defined;
+use function is_file;
+use function is_object;
+use function array_merge;
+use function str_contains;
+
 // define STDIN, STDOUT and STDERR if the PHP SAPI did not define them (e.g. creating console application in web env)
 // https://www.php.net/manual/en/features.commandline.io-streams.php
 defined('STDIN') || define('STDIN', fopen('php://stdin', 'rb'));

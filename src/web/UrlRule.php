@@ -10,9 +10,39 @@ declare(strict_types=1);
 
 namespace yii\web;
 
+use const PREG_SET_ORDER;
+use const PREG_OFFSET_CAPTURE;
+
 use Yii;
 use yii\base\BaseObject;
 use yii\base\InvalidConfigException;
+
+use function hash;
+use function trim;
+use function rtrim;
+use function strtr;
+use function strcmp;
+use function strlen;
+use function strpos;
+use function substr;
+use function implode;
+use function strncmp;
+use function strrpos;
+use function in_array;
+use function is_array;
+use function urlencode;
+use function preg_match;
+use function strtolower;
+use function strtoupper;
+use function array_merge;
+use function str_replace;
+use function preg_replace;
+use function str_contains;
+use function preg_match_all;
+use function substr_compare;
+use function substr_replace;
+use function array_key_exists;
+use function http_build_query;
 
 /**
  * UrlRule represents a rule used by [[UrlManager]] for parsing and generating URLs.

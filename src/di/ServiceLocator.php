@@ -15,6 +15,11 @@ use Closure;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
 
+use function gettype;
+use function is_array;
+use function is_object;
+use function is_callable;
+
 /**
  * ServiceLocator implements a [service locator](https://en.wikipedia.org/wiki/Service_locator_pattern).
  *

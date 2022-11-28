@@ -10,7 +10,23 @@ declare(strict_types=1);
 
 namespace yii\db;
 
+use const SORT_ASC;
+use const SORT_DESC;
+use const PREG_SPLIT_NO_EMPTY;
+
 use yii\base\NotSupportedException;
+
+use function trim;
+use function is_array;
+use function is_string;
+use function preg_match;
+use function preg_split;
+use function strcasecmp;
+use function strtoupper;
+use function array_merge;
+use function array_shift;
+use function array_unshift;
+use function array_key_exists;
 
 /**
  * The BaseQuery trait represents the minimum method set of a database Query.

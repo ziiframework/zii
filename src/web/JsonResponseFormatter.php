@@ -10,9 +10,15 @@ declare(strict_types=1);
 
 namespace yii\web;
 
+use const JSON_PRETTY_PRINT;
+
 use Yii;
 use yii\helpers\Json;
 use yii\base\Component;
+
+use function sprintf;
+use function is_array;
+use function str_contains;
 
 /**
  * JsonResponseFormatter formats the given data into a JSON or JSONP response content.

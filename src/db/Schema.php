@@ -10,6 +10,9 @@ declare(strict_types=1);
 
 namespace yii\db;
 
+use const CASE_LOWER;
+use const PHP_INT_SIZE;
+
 use PDO;
 use Yii;
 use PDOException;
@@ -20,6 +23,30 @@ use yii\caching\CacheInterface;
 use yii\base\InvalidCallException;
 use yii\base\NotSupportedException;
 use yii\base\InvalidConfigException;
+
+use function md5;
+use function strlen;
+use function strpos;
+use function substr;
+use function explode;
+use function gettype;
+use function implode;
+use function strncmp;
+use function strrpos;
+use function ucfirst;
+use function in_array;
+use function is_array;
+use function array_map;
+use function is_string;
+use function serialize;
+use function mb_stripos;
+use function preg_match;
+use function addcslashes;
+use function str_replace;
+use function preg_replace;
+use function str_contains;
+use function array_key_exists;
+use function array_change_key_case;
 
 /**
  * Schema is the base class for concrete DBMS-specific schema classes.

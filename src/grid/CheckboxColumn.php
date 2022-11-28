@@ -15,6 +15,11 @@ use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\base\InvalidConfigException;
 
+use function substr;
+use function is_array;
+use function call_user_func;
+use function substr_compare;
+
 /**
  * CheckboxColumn displays a column of checkboxes in a grid view.
  *

@@ -19,6 +19,13 @@ use yii\di\Instance;
 use yii\db\Connection;
 use yii\base\InvalidConfigException;
 
+use function time;
+use function in_array;
+use function random_int;
+use function is_resource;
+use function get_resource_type;
+use function stream_get_contents;
+
 /**
  * DbCache implements a cache application component by storing cached data in a database.
  *

@@ -15,6 +15,8 @@ use yii\base\Controller;
 use yii\base\ActionFilter;
 use yii\base\InvalidConfigException;
 
+use function get_class;
+
 /**
  * CompositeAuth is an action filter that supports multiple authentication methods at the same time.
  *

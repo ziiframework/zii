@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace yii\captcha;
 
+use const STR_PAD_LEFT;
+
 use Yii;
 use Imagick;
 use ImagickDraw;
@@ -18,6 +20,30 @@ use yii\base\Action;
 use yii\helpers\Url;
 use yii\web\Response;
 use yii\base\InvalidConfigException;
+
+use function min;
+use function ord;
+use function round;
+use function dechex;
+use function strlen;
+use function uniqid;
+use function is_file;
+use function str_pad;
+use function imagepng;
+use function ob_start;
+use function mb_strlen;
+use function random_int;
+use function strcasecmp;
+use function strtolower;
+use function imagedestroy;
+use function imagettfbbox;
+use function imagettftext;
+use function ob_get_clean;
+use function imagecolorallocate;
+use function imagecolordeallocate;
+use function imagecreatetruecolor;
+use function imagefilledrectangle;
+use function imagecolortransparent;
 
 /**
  * CaptchaAction renders a CAPTCHA image.

@@ -14,6 +14,9 @@ use Closure;
 use yii\helpers\Html;
 use yii\base\BaseObject;
 
+use function trim;
+use function call_user_func;
+
 /**
  * Column is the base class of all [[GridView]] column classes.
  *

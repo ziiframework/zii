@@ -13,6 +13,8 @@ namespace yii\mutex;
 use yii\db\Expression;
 use yii\base\InvalidConfigException;
 
+use function sha1;
+
 /**
  * MysqlMutex implements mutex "lock" mechanism via MySQL locks.
  *

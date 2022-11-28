@@ -10,7 +10,28 @@ declare(strict_types=1);
 
 namespace yii\i18n;
 
+use const LOCK_EX;
+use const LOCK_SH;
+use const LOCK_UN;
+
 use yii\base\Exception;
+
+use function chr;
+use function pack;
+use function count;
+use function flock;
+use function fopen;
+use function fread;
+use function fseek;
+use function fclose;
+use function fwrite;
+use function strlen;
+use function strpos;
+use function substr;
+use function unpack;
+use function current;
+use function strncmp;
+use function array_keys;
 
 /**
  * GettextMoFile represents an MO Gettext message file.

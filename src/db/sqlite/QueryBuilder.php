@@ -20,6 +20,19 @@ use yii\db\ExpressionInterface;
 use yii\base\NotSupportedException;
 use yii\base\InvalidArgumentException;
 
+use function trim;
+use function count;
+use function ltrim;
+use function reset;
+use function explode;
+use function implode;
+use function strrpos;
+use function is_float;
+use function is_string;
+use function array_merge;
+use function array_filter;
+use function version_compare;
+
 /**
  * QueryBuilder is the query builder for SQLite databases.
  *

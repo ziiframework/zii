@@ -16,6 +16,9 @@ use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\base\InvalidConfigException;
 
+use function is_array;
+use function call_user_func;
+
 /**
  * CompareValidator compares the specified attribute value with another value.
  *

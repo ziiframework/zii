@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace yii\filters\auth;
 
+use function is_string;
+
 /**
  * QueryParamAuth is an action filter that supports the authentication based on the access token passed through a query parameter.
  *

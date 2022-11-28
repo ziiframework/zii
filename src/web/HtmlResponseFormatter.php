@@ -12,6 +12,8 @@ namespace yii\web;
 
 use yii\base\Component;
 
+use function stripos;
+
 /**
  * HtmlResponseFormatter formats the given data into an HTML response content.
  *

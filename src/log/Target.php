@@ -19,6 +19,22 @@ use yii\helpers\VarDumper;
 use yii\helpers\ArrayHelper;
 use yii\base\InvalidConfigException;
 
+use function date;
+use function count;
+use function rtrim;
+use function explode;
+use function implode;
+use function sprintf;
+use function is_array;
+use function is_string;
+use function is_numeric;
+use function array_merge;
+use function is_callable;
+use function array_reduce;
+use function call_user_func;
+use function substr_compare;
+use function str_starts_with;
+
 /**
  * Target is the base class for all log target classes.
  *

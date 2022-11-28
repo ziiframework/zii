@@ -14,6 +14,9 @@ use yii\di\Instance;
 use yii\db\QueryInterface;
 use yii\base\InvalidConfigException;
 
+use function is_string;
+use function call_user_func;
+
 /**
  * DbQueryDependency represents a dependency based on the query result of an [[QueryInterface]] instance.
  *

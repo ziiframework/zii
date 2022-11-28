@@ -10,6 +10,9 @@ declare(strict_types=1);
 
 namespace yii\caching;
 
+use function microtime;
+use function array_merge;
+
 /**
  * TagDependency associates a cached data item with one or multiple [[tags]].
  *

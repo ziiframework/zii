@@ -13,6 +13,10 @@ namespace yii\widgets;
 use yii\base\Widget;
 use yii\base\InvalidConfigException;
 
+use function ob_start;
+use function ob_get_clean;
+use function ob_implicit_flush;
+
 /**
  * ContentDecorator records all output between [[begin()]] and [[end()]] calls, passes it to the given view file
  * as `$content` and then echoes rendering result.

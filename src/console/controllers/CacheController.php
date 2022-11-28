@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace yii\console\controllers;
 
+use const PHP_SAPI;
+
 use Yii;
 use Closure;
 use yii\helpers\Console;
@@ -18,6 +20,16 @@ use yii\console\ExitCode;
 use yii\console\Exception;
 use yii\console\Controller;
 use yii\caching\CacheInterface;
+
+use function is_a;
+use function in_array;
+use function is_array;
+use function get_class;
+use function is_string;
+use function array_diff;
+use function array_keys;
+use function func_get_args;
+use function is_subclass_of;
 
 /**
  * Allows you to flush cache.

@@ -19,6 +19,9 @@ use yii\base\BaseObject;
 use ReturnTypeWillChange;
 use yii\base\InvalidCallException;
 
+use function time;
+use function count;
+
 /**
  * CookieCollection maintains the cookies available in the current request.
  *

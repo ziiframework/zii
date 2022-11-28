@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace yii\web;
 
+use const DIRECTORY_SEPARATOR;
+
 use Yii;
 use Exception;
 use yii\helpers\Url;
@@ -17,6 +19,30 @@ use yii\base\Component;
 use yii\helpers\FileHelper;
 use yii\base\InvalidConfigException;
 use yii\base\InvalidArgumentException;
+
+use function copy;
+use function chmod;
+use function crc32;
+use function rtrim;
+use function is_dir;
+use function substr;
+use function dirname;
+use function is_file;
+use function sprintf;
+use function strncmp;
+use function symlink;
+use function basename;
+use function is_array;
+use function realpath;
+use function filemtime;
+use function is_string;
+use function mb_strlen;
+use function array_merge;
+use function is_callable;
+use function is_readable;
+use function is_writable;
+use function call_user_func;
+use function substr_compare;
 
 /**
  * AssetManager manages asset bundle configuration and loading.

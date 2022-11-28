@@ -20,6 +20,23 @@ use yii\db\ColumnSchemaBuilder;
 use yii\db\ExpressionInterface;
 use yii\base\InvalidArgumentException;
 
+use function count;
+use function ltrim;
+use function reset;
+use function explode;
+use function implode;
+use function is_bool;
+use function strrpos;
+use function is_float;
+use function is_string;
+use function array_diff;
+use function preg_match;
+use function array_merge;
+use function preg_replace;
+use function str_contains;
+use function array_unshift;
+use function version_compare;
+
 /**
  * QueryBuilder is the query builder for PostgreSQL databases.
  *

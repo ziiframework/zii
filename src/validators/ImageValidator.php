@@ -14,6 +14,8 @@ use Yii;
 use yii\helpers\Json;
 use yii\web\UploadedFile;
 
+use function getimagesize;
+
 /**
  * ImageValidator verifies if an attribute is receiving a valid image.
  *

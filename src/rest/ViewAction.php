@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace yii\rest;
 
+use function call_user_func;
+
 /**
  * ViewAction implements the API endpoint for returning the detailed information about a model.
  *

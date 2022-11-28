@@ -13,6 +13,9 @@ namespace yii\caching;
 use Yii;
 use yii\base\InvalidConfigException;
 
+use function filemtime;
+use function clearstatcache;
+
 /**
  * FileDependency represents a dependency based on a file's last modification time.
  *

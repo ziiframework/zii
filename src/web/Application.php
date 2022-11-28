@@ -14,6 +14,11 @@ use Yii;
 use yii\helpers\Url;
 use yii\base\InvalidRouteException;
 
+use function ltrim;
+use function dirname;
+use function is_array;
+use function array_merge;
+
 /**
  * Application is the base class for all web application classes.
  *

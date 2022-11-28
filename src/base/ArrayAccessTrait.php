@@ -13,6 +13,8 @@ namespace yii\base;
 use ArrayIterator;
 use ReturnTypeWillChange;
 
+use function count;
+
 /**
  * ArrayAccessTrait provides the implementation for [[\IteratorAggregate]], [[\ArrayAccess]] and [[\Countable]].
  *

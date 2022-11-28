@@ -12,6 +12,8 @@ namespace yii\db\conditions;
 
 use yii\base\InvalidArgumentException;
 
+use function count;
+
 /**
  * Class SimpleCondition represents a simple condition like `"column" operator value`.
  *

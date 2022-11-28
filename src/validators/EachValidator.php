@@ -16,6 +16,10 @@ use yii\base\Model;
 use yii\base\DynamicModel;
 use yii\base\InvalidConfigException;
 
+use function is_array;
+use function is_object;
+use function array_slice;
+
 /**
  * EachValidator validates an array by checking each of its elements against an embedded validation rule.
  *

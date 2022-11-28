@@ -12,6 +12,14 @@ namespace yii\data;
 
 use yii\helpers\ArrayHelper;
 
+use function count;
+use function is_array;
+use function is_string;
+use function array_keys;
+use function array_slice;
+use function array_values;
+use function call_user_func;
+
 /**
  * ArrayDataProvider implements a data provider based on a data array.
  *

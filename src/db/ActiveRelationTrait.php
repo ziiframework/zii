@@ -16,6 +16,27 @@ use ReflectionMethod;
 use yii\base\InvalidConfigException;
 use yii\base\InvalidArgumentException;
 
+use function key;
+use function count;
+use function reset;
+use function substr;
+use function lcfirst;
+use function is_array;
+use function get_class;
+use function is_object;
+use function is_scalar;
+use function is_string;
+use function serialize;
+use function array_keys;
+use function array_merge;
+use function array_filter;
+use function array_unique;
+use function array_values;
+use function array_combine;
+use function method_exists;
+use function call_user_func;
+use function property_exists;
+
 /**
  * ActiveRelationTrait implements the common methods and properties for active record relational queries.
  *

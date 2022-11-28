@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace yii\di;
 
+use const PHP_VERSION_ID;
+
 use Yii;
 use Closure;
 use ReflectionClass;
@@ -23,6 +25,22 @@ use ReflectionUnionType;
 use yii\helpers\ArrayHelper;
 use ReflectionIntersectionType;
 use yii\base\InvalidConfigException;
+
+use function key;
+use function count;
+use function is_int;
+use function gettype;
+use function is_array;
+use function is_object;
+use function is_string;
+use function array_merge;
+use function array_shift;
+use function is_callable;
+use function array_values;
+use function str_contains;
+use function call_user_func;
+use function array_key_exists;
+use function call_user_func_array;
 
 /**
  * Container implements a [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) container.

@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace yii\db\pgsql;
 
+use const CASE_LOWER;
+
 use PDO;
 use yii\db\Constraint;
 use yii\db\Expression;
@@ -22,6 +24,22 @@ use yii\db\ForeignKeyConstraint;
 use yii\db\ConstraintFinderTrait;
 use yii\base\NotSupportedException;
 use yii\db\ConstraintFinderInterface;
+
+use function bindec;
+use function substr;
+use function explode;
+use function implode;
+use function strncmp;
+use function in_array;
+use function array_keys;
+use function preg_match;
+use function strtoupper;
+use function array_merge;
+use function str_replace;
+use function preg_replace;
+use function version_compare;
+use function array_count_values;
+use function array_change_key_case;
 
 /**
  * Schema is the class for retrieving metadata from a PostgreSQL database

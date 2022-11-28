@@ -16,6 +16,9 @@ use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
 use yii\base\InvalidConfigException;
 
+use function max;
+use function implode;
+
 /**
  * LinkPager displays a list of hyperlinks that lead to different pages of target.
  *

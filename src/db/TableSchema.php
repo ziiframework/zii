@@ -13,6 +13,8 @@ namespace yii\db;
 use yii\base\BaseObject;
 use yii\base\InvalidArgumentException;
 
+use function array_keys;
+
 /**
  * TableSchema represents the metadata of a database table.
  *

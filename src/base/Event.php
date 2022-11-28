@@ -12,6 +12,17 @@ namespace yii\base;
 
 use yii\helpers\StringHelper;
 
+use function ltrim;
+use function get_class;
+use function is_object;
+use function array_merge;
+use function array_values;
+use function str_contains;
+use function array_unshift;
+use function class_parents;
+use function call_user_func;
+use function class_implements;
+
 /**
  * Event is the base class for all event classes.
  *

@@ -16,6 +16,20 @@ use JsonSerializable;
 use yii\web\Linkable;
 use yii\helpers\ArrayHelper;
 
+use function is_int;
+use function current;
+use function explode;
+use function in_array;
+use function is_array;
+use function array_map;
+use function is_string;
+use function array_keys;
+use function preg_quote;
+use function array_unique;
+use function preg_replace;
+use function array_combine;
+use function str_starts_with;
+
 /**
  * ArrayableTrait provides a common implementation of the [[Arrayable]] interface.
  *

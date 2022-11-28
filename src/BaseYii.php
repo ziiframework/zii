@@ -17,6 +17,29 @@ use yii\base\UnknownClassException;
 use yii\base\InvalidConfigException;
 use yii\base\InvalidArgumentException;
 
+use function rtrim;
+use function strtr;
+use function define;
+use function krsort;
+use function strlen;
+use function strpos;
+use function substr;
+use function defined;
+use function gettype;
+use function is_file;
+use function strncmp;
+use function is_array;
+use function is_string;
+use function microtime;
+use function is_callable;
+use function str_replace;
+use function class_exists;
+use function str_contains;
+use function trait_exists;
+use function get_object_vars;
+use function str_starts_with;
+use function interface_exists;
+
 /*
  * Gets the application start timestamp.
  */

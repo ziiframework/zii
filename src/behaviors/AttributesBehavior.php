@@ -15,6 +15,17 @@ use yii\base\Event;
 use yii\base\Behavior;
 use yii\db\ActiveRecord;
 
+use function is_array;
+use function array_diff;
+use function array_keys;
+use function array_merge;
+use function is_callable;
+use function array_filter;
+use function array_reduce;
+use function array_fill_keys;
+use function array_intersect;
+use function array_key_exists;
+
 /**
  * AttributesBehavior automatically assigns values specified to one or multiple attributes of an ActiveRecord
  * object when certain events happen.

@@ -15,6 +15,9 @@ use yii\base\Widget;
 use yii\helpers\Html;
 use yii\base\InvalidConfigException;
 
+use function array_keys;
+use function array_merge;
+
 /**
  * LinkSorter renders a list of sort links for the given sort definition.
  *

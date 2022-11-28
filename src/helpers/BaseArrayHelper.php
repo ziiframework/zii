@@ -10,6 +10,12 @@ declare(strict_types=1);
 
 namespace yii\helpers;
 
+use const SORT_ASC;
+use const ENT_QUOTES;
+use const SORT_NUMERIC;
+use const SORT_REGULAR;
+use const ENT_SUBSTITUTE;
+
 use Yii;
 use Closure;
 use Exception;
@@ -18,6 +24,32 @@ use Traversable;
 use DateTimeInterface;
 use yii\base\Arrayable;
 use yii\base\InvalidArgumentException;
+
+use function count;
+use function range;
+use function is_int;
+use function substr;
+use function explode;
+use function strncmp;
+use function strrpos;
+use function in_array;
+use function is_array;
+use function is_float;
+use function array_pop;
+use function get_class;
+use function is_object;
+use function is_scalar;
+use function is_string;
+use function array_fill;
+use function array_keys;
+use function strcasecmp;
+use function array_shift;
+use function func_get_args;
+use function property_exists;
+use function array_key_exists;
+use function htmlspecialchars;
+use function call_user_func_array;
+use function htmlspecialchars_decode;
 
 /**
  * BaseArrayHelper provides concrete implementation for [[ArrayHelper]].

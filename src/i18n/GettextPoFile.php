@@ -12,6 +12,19 @@ namespace yii\i18n;
 
 use Yii;
 
+use function chr;
+use function rtrim;
+use function strpos;
+use function substr;
+use function dirname;
+use function implode;
+use function basename;
+use function str_replace;
+use function preg_replace;
+use function preg_match_all;
+use function file_get_contents;
+use function file_put_contents;
+
 /**
  * GettextPoFile represents a PO Gettext message file.
  *

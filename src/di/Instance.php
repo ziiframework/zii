@@ -16,6 +16,12 @@ use Throwable;
 use ReflectionException;
 use yii\base\InvalidConfigException;
 
+use function gettype;
+use function is_array;
+use function get_class;
+use function is_object;
+use function is_string;
+
 /**
  * Instance represents a reference to a named object in a dependency injection (DI) container or a service locator.
  *

@@ -17,6 +17,18 @@ use yii\web\UrlRuleInterface;
 use yii\web\UrlRule as WebUrlRule;
 use yii\base\InvalidConfigException;
 
+use function trim;
+use function rtrim;
+use function strtr;
+use function is_int;
+use function explode;
+use function get_class;
+use function array_flip;
+use function preg_match;
+use function str_contains;
+use function method_exists;
+use function str_starts_with;
+
 /**
  * UrlRule is provided to simplify the creation of URL rules for RESTful API support.
  *

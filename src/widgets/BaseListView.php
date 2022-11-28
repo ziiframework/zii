@@ -16,6 +16,8 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\base\InvalidConfigException;
 
+use function preg_replace_callback;
+
 /**
  * BaseListView is a base class for widgets displaying data from data provider
  * such as ListView and GridView.

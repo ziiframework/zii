@@ -21,6 +21,18 @@ use yii\helpers\Inflector;
 use yii\helpers\ArrayHelper;
 use yii\base\InvalidConfigException;
 
+use function sort;
+use function strtr;
+use function implode;
+use function is_array;
+use function is_object;
+use function is_string;
+use function array_keys;
+use function preg_match;
+use function call_user_func;
+use function get_object_vars;
+use function array_key_exists;
+
 /**
  * DetailView displays the detail of a single data [[model]].
  *

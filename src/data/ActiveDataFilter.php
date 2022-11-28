@@ -10,6 +10,13 @@ declare(strict_types=1);
 
 namespace yii\data;
 
+use function count;
+use function is_array;
+use function is_string;
+use function array_merge;
+use function array_shift;
+use function array_unshift;
+
 /**
  * ActiveDataFilter allows composing a filtering condition in a format suitable for [[\yii\db\QueryInterface::where()]].
  *

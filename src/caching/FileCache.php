@@ -10,8 +10,39 @@ declare(strict_types=1);
 
 namespace yii\caching;
 
+use const LOCK_EX;
+use const LOCK_SH;
+use const LOCK_UN;
+use const DIRECTORY_SEPARATOR;
+
 use Yii;
 use yii\helpers\FileHelper;
+
+use function time;
+use function chmod;
+use function flock;
+use function fopen;
+use function rmdir;
+use function touch;
+use function fclose;
+use function is_dir;
+use function strlen;
+use function substr;
+use function unlink;
+use function dirname;
+use function is_file;
+use function opendir;
+use function readdir;
+use function strncmp;
+use function closedir;
+use function filemtime;
+use function fileowner;
+use function random_int;
+use function error_get_last;
+use function substr_replace;
+use function function_exists;
+use function file_put_contents;
+use function stream_get_contents;
 
 /**
  * FileCache implements a cache component using files.

@@ -14,6 +14,13 @@ use yii\db\JsonExpression;
 use yii\db\ArrayExpression;
 use yii\db\ExpressionInterface;
 
+use function is_bool;
+use function in_array;
+use function is_array;
+use function strtolower;
+use function json_decode;
+use function array_walk_recursive;
+
 /**
  * Class ColumnSchema for PostgreSQL database.
  *

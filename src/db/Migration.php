@@ -16,6 +16,11 @@ use yii\di\Instance;
 use yii\base\Component;
 use yii\helpers\StringHelper;
 
+use function implode;
+use function sprintf;
+use function is_array;
+use function microtime;
+
 /**
  * Migration is the base class for representing a database migration.
  *

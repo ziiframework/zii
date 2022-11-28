@@ -10,10 +10,27 @@ declare(strict_types=1);
 
 namespace yii\rbac;
 
+use const LOCK_EX;
+
 use Yii;
 use yii\helpers\VarDumper;
 use yii\base\InvalidCallException;
 use yii\base\InvalidArgumentException;
+
+use function time;
+use function is_file;
+use function in_array;
+use function is_array;
+use function filemtime;
+use function serialize;
+use function array_keys;
+use function array_merge;
+use function unserialize;
+use function array_filter;
+use function function_exists;
+use function array_key_exists;
+use function file_put_contents;
+use function opcache_invalidate;
 
 /**
  * PhpManager represents an authorization manager that stores authorization

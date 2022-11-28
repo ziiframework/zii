@@ -10,6 +10,9 @@ declare(strict_types=1);
 
 namespace yii\db\pgsql;
 
+use function strlen;
+use function in_array;
+
 /**
  * The class converts PostgreSQL array representation to PHP array.
  *

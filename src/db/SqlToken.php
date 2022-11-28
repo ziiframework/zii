@@ -14,6 +14,13 @@ use ArrayAccess;
 use yii\base\BaseObject;
 use ReturnTypeWillChange;
 
+use function end;
+use function count;
+use function reset;
+use function in_array;
+use function mb_substr;
+use function array_splice;
+
 /**
  * SqlToken represents SQL tokens produced by [[SqlTokenizer]] or its child classes.
  *

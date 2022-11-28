@@ -10,6 +10,9 @@ declare(strict_types=1);
 
 namespace yii\db\sqlite;
 
+use function strtr;
+use function mb_strtoupper;
+
 /**
  * SqlTokenizer splits SQLite query into individual SQL tokens.
  * It's used to obtain a `CHECK` constraint information from a `CREATE TABLE` SQL code.

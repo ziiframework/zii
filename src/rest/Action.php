@@ -14,6 +14,11 @@ use yii\db\ActiveRecordInterface;
 use yii\web\NotFoundHttpException;
 use yii\base\InvalidConfigException;
 
+use function count;
+use function explode;
+use function array_combine;
+use function call_user_func;
+
 /**
  * Action is the base class for action classes that implement RESTful API.
  *

@@ -18,6 +18,8 @@ use IteratorAggregate;
 use ReturnTypeWillChange;
 use yii\base\InvalidConfigException;
 
+use function count;
+
 /**
  * Class ArrayExpression represents an array SQL expression.
  *

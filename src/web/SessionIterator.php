@@ -13,6 +13,10 @@ namespace yii\web;
 use Iterator;
 use ReturnTypeWillChange;
 
+use function next;
+use function reset;
+use function array_keys;
+
 /**
  * SessionIterator implements an [[\Iterator|iterator]] for traversing session variables managed by [[Session]].
  *

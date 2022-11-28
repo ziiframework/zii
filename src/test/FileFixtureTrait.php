@@ -13,6 +13,9 @@ namespace yii\test;
 use Yii;
 use yii\base\InvalidConfigException;
 
+use function is_file;
+use function basename;
+
 /**
  * FileFixtureTrait provides functionalities for loading data fixture from file.
  *

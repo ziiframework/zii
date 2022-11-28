@@ -15,6 +15,8 @@ use yii\base\Model;
 use yii\db\ActiveRecord;
 use yii\web\ServerErrorHttpException;
 
+use function call_user_func;
+
 /**
  * UpdateAction implements the API endpoint for updating a model.
  *

@@ -19,6 +19,22 @@ use yii\helpers\Inflector;
 use yii\db\ActiveQueryInterface;
 use yii\db\ActiveRecordInterface;
 
+use function count;
+use function reset;
+use function is_int;
+use function implode;
+use function strncmp;
+use function is_array;
+use function get_class;
+use function array_flip;
+use function array_keys;
+use function preg_quote;
+use function preg_replace;
+use function str_contains;
+use function method_exists;
+use function call_user_func;
+use function is_subclass_of;
+
 /**
  * UniqueValidator validates that the attribute value is unique in the specified database table.
  *

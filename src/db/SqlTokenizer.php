@@ -14,6 +14,15 @@ use SplStack;
 use yii\base\Component;
 use yii\base\InvalidArgumentException;
 
+use function reset;
+use function usort;
+use function is_array;
+use function is_string;
+use function mb_strlen;
+use function mb_strpos;
+use function mb_substr;
+use function mb_strtoupper;
+
 /**
  * SqlTokenizer splits an SQL query into individual SQL tokens.
  *

@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace yii\widgets;
 
+use const PREG_SPLIT_NO_EMPTY;
+
 use Yii;
 use Closure;
 use yii\base\Model;
@@ -19,6 +21,16 @@ use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\helpers\ArrayHelper;
 use yii\base\InvalidCallException;
+
+use function implode;
+use function ob_start;
+use function array_pop;
+use function preg_split;
+use function ob_get_clean;
+use function func_get_args;
+use function call_user_func;
+use function array_diff_assoc;
+use function ob_implicit_flush;
 
 /**
  * ActiveForm is a widget that builds an interactive HTML form for one or multiple data models.

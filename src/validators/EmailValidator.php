@@ -10,11 +10,24 @@ declare(strict_types=1);
 
 namespace yii\validators;
 
+use const DNS_A;
+use const DNS_MX;
+use const INTL_IDNA_VARIANT_UTS46;
+use const IDNA_NONTRANSITIONAL_TO_ASCII;
+
 use Yii;
 use yii\helpers\Json;
 use yii\web\JsExpression;
 use yii\base\ErrorException;
 use yii\base\InvalidConfigException;
+
+use function strlen;
+use function is_string;
+use function checkdnsrr;
+use function preg_match;
+use function idn_to_ascii;
+use function dns_get_record;
+use function function_exists;
 
 /**
  * EmailValidator validates that the attribute value is a valid email address.

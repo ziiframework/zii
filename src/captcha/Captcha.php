@@ -17,6 +17,14 @@ use yii\helpers\Json;
 use yii\widgets\InputWidget;
 use yii\base\InvalidConfigException;
 
+use function trim;
+use function strtr;
+use function uniqid;
+use function gd_info;
+use function in_array;
+use function is_array;
+use function extension_loaded;
+
 /**
  * Captcha renders a CAPTCHA image and an input field that takes user-entered verification code.
  *

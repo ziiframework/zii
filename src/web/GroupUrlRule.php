@@ -13,6 +13,14 @@ namespace yii\web;
 use Yii;
 use yii\base\InvalidConfigException;
 
+use function trim;
+use function ltrim;
+use function explode;
+use function is_array;
+use function preg_match;
+use function array_merge;
+use function str_starts_with;
+
 /**
  * GroupUrlRule represents a collection of URL rules sharing the same prefix in their patterns and routes.
  *

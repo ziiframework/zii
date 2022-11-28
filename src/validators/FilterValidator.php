@@ -13,6 +13,9 @@ namespace yii\validators;
 use yii\helpers\Json;
 use yii\base\InvalidConfigException;
 
+use function is_array;
+use function call_user_func;
+
 /**
  * FilterValidator converts the attribute value according to a filter.
  *

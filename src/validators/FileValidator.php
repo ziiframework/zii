@@ -10,6 +10,16 @@ declare(strict_types=1);
 
 namespace yii\validators;
 
+use const UPLOAD_ERR_OK;
+use const UPLOAD_ERR_NO_FILE;
+use const UPLOAD_ERR_PARTIAL;
+use const PREG_SPLIT_NO_EMPTY;
+use const UPLOAD_ERR_INI_SIZE;
+use const UPLOAD_ERR_EXTENSION;
+use const UPLOAD_ERR_FORM_SIZE;
+use const UPLOAD_ERR_CANT_WRITE;
+use const UPLOAD_ERR_NO_TMP_DIR;
+
 use Yii;
 use yii\helpers\Html;
 use yii\helpers\Json;
@@ -17,6 +27,23 @@ use yii\web\JsExpression;
 use yii\web\UploadedFile;
 use yii\helpers\FileHelper;
 use yii\helpers\StringHelper;
+
+use function count;
+use function reset;
+use function substr;
+use function implode;
+use function ini_get;
+use function in_array;
+use function is_array;
+use function array_map;
+use function preg_match;
+use function preg_quote;
+use function preg_split;
+use function strcasecmp;
+use function strtolower;
+use function str_replace;
+use function str_contains;
+use function mb_strtolower;
 
 /**
  * FileValidator verifies if an attribute is receiving a valid uploaded file.

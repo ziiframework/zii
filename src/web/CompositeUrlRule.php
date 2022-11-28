@@ -13,6 +13,9 @@ namespace yii\web;
 use Yii;
 use yii\base\BaseObject;
 
+use function get_class;
+use function method_exists;
+
 /**
  * CompositeUrlRule is the base class for URL rule classes that consist of multiple simpler rules.
  *

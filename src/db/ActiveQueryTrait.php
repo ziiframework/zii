@@ -10,6 +10,15 @@ declare(strict_types=1);
 
 namespace yii\db;
 
+use function reset;
+use function is_int;
+use function strpos;
+use function substr;
+use function is_array;
+use function get_class;
+use function func_get_args;
+use function call_user_func;
+
 /**
  * ActiveQueryTrait implements the common methods and properties for active record query classes.
  *

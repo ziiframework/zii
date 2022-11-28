@@ -10,8 +10,21 @@ declare(strict_types=1);
 
 namespace yii\base;
 
+use const DIRECTORY_SEPARATOR;
+
 use Yii;
 use Closure;
+
+use function ini_get;
+use function is_file;
+use function is_array;
+use function get_class;
+use function is_string;
+use function class_exists;
+use function str_contains;
+use function call_user_func;
+use function date_default_timezone_get;
+use function date_default_timezone_set;
 
 /**
  * Application is the base class for all application classes.

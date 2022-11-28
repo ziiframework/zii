@@ -16,6 +16,21 @@ use yii\db\TableSchema;
 use yii\base\NotSupportedException;
 use yii\base\InvalidArgumentException;
 
+use function count;
+use function ltrim;
+use function reset;
+use function strstr;
+use function implode;
+use function strrpos;
+use function in_array;
+use function is_string;
+use function array_diff;
+use function array_keys;
+use function preg_match;
+use function array_merge;
+use function preg_replace;
+use function version_compare;
+
 /**
  * QueryBuilder is the query builder for MS SQL Server databases (version 2008 and above).
  *

@@ -10,8 +10,29 @@ declare(strict_types=1);
 
 namespace yii\log;
 
+use const DEBUG_BACKTRACE_IGNORE_ARGS;
+
 use Yii;
 use yii\base\Component;
+
+use function md5;
+use function count;
+use function ksort;
+use function rtrim;
+use function is_int;
+use function substr;
+use function strncmp;
+use function in_array;
+use function array_pop;
+use function microtime;
+use function array_merge;
+use function json_encode;
+use function array_values;
+use function debug_backtrace;
+use function str_starts_with;
+use function array_key_exists;
+use function memory_get_usage;
+use function register_shutdown_function;
 
 /**
  * Logger records logged messages in memory and sends them to different targets if [[dispatcher]] is set.

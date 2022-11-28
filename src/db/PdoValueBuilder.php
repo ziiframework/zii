@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace yii\db;
 
+use function count;
+
 /**
  * Class PdoValueBuilder builds object of the [[PdoValue]] expression class.
  *

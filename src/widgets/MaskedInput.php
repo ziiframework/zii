@@ -160,7 +160,7 @@ class MaskedInput extends InputWidget
     protected function hashPluginOptions($view)
     {
         $encOptions = empty($this->clientOptions) ? '{}' : Json::htmlEncode($this->clientOptions);
-        $this->_hashVar = self::PLUGIN_NAME . '_' . hash('crc32', $encOptions);
+        $this->_hashVar = self::PLUGIN_NAME . '_' . \hash('crc32', $encOptions);
         $this->options['data-plugin-' . self::PLUGIN_NAME] = $this->_hashVar;
         $view->registerJs("var {$this->_hashVar} = {$encOptions};", View::POS_HEAD);
     }
@@ -175,7 +175,7 @@ class MaskedInput extends InputWidget
             if (
                 !empty($value)
                 && !$value instanceof JsExpression
-                && in_array($key, $this->_jsCallbacks, true)
+                && \in_array($key, $this->_jsCallbacks, true)
             ) {
                 $options[$key] = new JsExpression($value);
             }
@@ -195,11 +195,11 @@ class MaskedInput extends InputWidget
             $this->clientOptions['mask'] = $this->mask;
         }
         $this->hashPluginOptions($view);
-        if (!empty($this->definitions) && is_array($this->definitions)) {
-            $js .= ucfirst(self::PLUGIN_NAME) . '.extendDefinitions(' . Json::htmlEncode($this->definitions) . ');';
+        if (!empty($this->definitions) && \is_array($this->definitions)) {
+            $js .= \ucfirst(self::PLUGIN_NAME) . '.extendDefinitions(' . Json::htmlEncode($this->definitions) . ');';
         }
-        if (!empty($this->aliases) && is_array($this->aliases)) {
-            $js .= ucfirst(self::PLUGIN_NAME) . '.extendAliases(' . Json::htmlEncode($this->aliases) . ');';
+        if (!empty($this->aliases) && \is_array($this->aliases)) {
+            $js .= \ucfirst(self::PLUGIN_NAME) . '.extendAliases(' . Json::htmlEncode($this->aliases) . ');';
         }
         $id = $this->options['id'];
         $js .= 'jQuery("#' . $id . '").' . self::PLUGIN_NAME . '(' . $this->_hashVar . ');';

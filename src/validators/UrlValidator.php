@@ -10,10 +10,23 @@ declare(strict_types=1);
 
 namespace yii\validators;
 
+use const INTL_IDNA_VARIANT_UTS46;
+use const IDNA_NONTRANSITIONAL_TO_ASCII;
+
 use Yii;
 use yii\helpers\Json;
 use yii\web\JsExpression;
 use yii\base\InvalidConfigException;
+
+use function strlen;
+use function implode;
+use function is_string;
+use function preg_match;
+use function str_replace;
+use function idn_to_ascii;
+use function str_contains;
+use function function_exists;
+use function preg_replace_callback;
 
 /**
  * UrlValidator validates that the attribute value is a valid http or https URL.

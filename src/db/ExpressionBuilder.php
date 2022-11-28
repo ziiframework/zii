@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace yii\db;
 
+use function array_merge;
+
 /**
  * Class ExpressionBuilder builds objects of [[yii\db\Expression]] class.
  *

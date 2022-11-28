@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace yii\db;
 
+use const PREG_SPLIT_NO_EMPTY;
+
 use Yii;
 use Closure;
 use Exception;
@@ -18,6 +20,28 @@ use yii\base\Component;
 use yii\helpers\ArrayHelper;
 use yii\base\InvalidConfigException;
 use yii\base\InvalidArgumentException;
+
+use function key;
+use function trim;
+use function count;
+use function reset;
+use function is_int;
+use function strlen;
+use function strpos;
+use function substr;
+use function gettype;
+use function in_array;
+use function is_array;
+use function is_string;
+use function serialize;
+use function preg_match;
+use function preg_split;
+use function strcasecmp;
+use function array_merge;
+use function str_replace;
+use function array_unique;
+use function str_contains;
+use function call_user_func;
 
 /**
  * Query represents a SELECT SQL statement in a way that is independent of DBMS.

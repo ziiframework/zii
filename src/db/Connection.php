@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace yii\db;
 
+use const PHP_VERSION_ID;
+
 use PDO;
 use Yii;
 use Throwable;
@@ -18,6 +20,23 @@ use yii\base\Component;
 use yii\caching\CacheInterface;
 use yii\base\NotSupportedException;
 use yii\base\InvalidConfigException;
+
+use function end;
+use function strpos;
+use function substr;
+use function shuffle;
+use function strncmp;
+use function constant;
+use function in_array;
+use function is_array;
+use function array_pop;
+use function is_string;
+use function array_keys;
+use function strtolower;
+use function array_merge;
+use function str_replace;
+use function call_user_func;
+use function preg_replace_callback;
 
 /**
  * Connection represents a connection to a database via [PDO](https://www.php.net/manual/en/book.pdo.php).

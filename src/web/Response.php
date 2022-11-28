@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace yii\web;
 
+use const SEEK_END;
+
 use Yii;
 use Throwable;
 use yii\helpers\Url;
@@ -18,6 +20,39 @@ use yii\helpers\FileHelper;
 use yii\helpers\StringHelper;
 use yii\base\InvalidConfigException;
 use yii\base\InvalidArgumentException;
+
+use function feof;
+use function flush;
+use function fopen;
+use function fread;
+use function fseek;
+use function ftell;
+use function ltrim;
+use function fclose;
+use function header;
+use function strncmp;
+use function ucwords;
+use function basename;
+use function in_array;
+use function is_array;
+use function get_class;
+use function is_object;
+use function is_string;
+use function serialize;
+use function setcookie;
+use function is_numeric;
+use function preg_match;
+use function array_merge;
+use function is_callable;
+use function is_resource;
+use function str_replace;
+use function headers_sent;
+use function rawurlencode;
+use function method_exists;
+use function call_user_func;
+use function set_time_limit;
+use function function_exists;
+use function stream_get_meta_data;
 
 /**
  * The web Response class represents an HTTP response.

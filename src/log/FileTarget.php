@@ -10,9 +10,32 @@ declare(strict_types=1);
 
 namespace yii\log;
 
+use const LOCK_EX;
+use const LOCK_UN;
+
 use Yii;
 use yii\helpers\FileHelper;
 use yii\base\InvalidConfigException;
+
+use function copy;
+use function chmod;
+use function flock;
+use function fopen;
+use function fclose;
+use function fflush;
+use function fwrite;
+use function strlen;
+use function unlink;
+use function dirname;
+use function implode;
+use function is_file;
+use function strncmp;
+use function filesize;
+use function array_map;
+use function ftruncate;
+use function str_contains;
+use function clearstatcache;
+use function error_get_last;
 
 /**
  * FileTarget records log messages in a file.

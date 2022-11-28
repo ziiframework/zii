@@ -10,8 +10,17 @@ declare(strict_types=1);
 
 namespace yii\base;
 
+use const DIRECTORY_SEPARATOR;
+
 use Yii;
 use yii\helpers\FileHelper;
+
+use function ltrim;
+use function rtrim;
+use function strlen;
+use function substr;
+use function is_file;
+use function str_starts_with;
 
 /**
  * Theme represents an application theme.

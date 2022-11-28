@@ -16,6 +16,19 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\base\InvalidConfigException;
 
+use function md5;
+use function ltrim;
+use function strtr;
+use function strlen;
+use function substr;
+use function implode;
+use function sprintf;
+use function ob_start;
+use function filemtime;
+use function array_keys;
+use function ob_get_clean;
+use function ob_implicit_flush;
+
 /**
  * View represents a view object in the MVC pattern.
  *

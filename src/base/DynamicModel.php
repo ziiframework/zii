@@ -13,6 +13,12 @@ namespace yii\base;
 use Closure;
 use yii\validators\Validator;
 
+use function is_int;
+use function is_array;
+use function array_keys;
+use function array_slice;
+use function array_key_exists;
+
 /**
  * DynamicModel is a model class that supports defining attributes at run-time (the so-called
  * "dynamic attributes") using its constructor or [[defineAttribute()]]. DynamicModel can be used

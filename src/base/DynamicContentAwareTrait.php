@@ -10,6 +10,10 @@ declare(strict_types=1);
 
 namespace yii\base;
 
+use function count;
+use function strtr;
+use function is_array;
+
 /**
  * DynamicContentAwareTrait implements common methods for classes
  * which support a [[View]] dynamic content feature.

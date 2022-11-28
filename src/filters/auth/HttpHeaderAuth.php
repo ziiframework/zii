@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace yii\filters\auth;
 
+use function preg_match;
+
 /**
  * HttpHeaderAuth is an action filter that supports HTTP authentication through HTTP Headers.
  *

@@ -15,6 +15,17 @@ use Closure;
 use yii\base\Component;
 use yii\base\NotSupportedException;
 
+use function ltrim;
+use function strtr;
+use function in_array;
+use function is_array;
+use function array_map;
+use function is_object;
+use function is_scalar;
+use function array_merge;
+use function method_exists;
+use function call_user_func;
+
 /**
  * Validator is the base class for all validators.
  *

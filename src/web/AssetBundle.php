@@ -15,6 +15,11 @@ use yii\helpers\Url;
 use yii\base\BaseObject;
 use yii\helpers\ArrayHelper;
 
+use function rtrim;
+use function is_array;
+use function array_shift;
+use function array_unshift;
+
 /**
  * AssetBundle represents a collection of asset files, such as CSS, JS, images.
  *

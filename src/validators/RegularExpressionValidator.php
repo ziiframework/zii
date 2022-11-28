@@ -16,6 +16,9 @@ use yii\helpers\Json;
 use yii\web\JsExpression;
 use yii\base\InvalidConfigException;
 
+use function is_array;
+use function preg_match;
+
 /**
  * RegularExpressionValidator validates that the attribute value matches the specified [[pattern]].
  *

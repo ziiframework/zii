@@ -17,6 +17,10 @@ use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
 use yii\data\ActiveDataProvider;
 
+use function is_array;
+use function is_callable;
+use function call_user_func;
+
 /**
  * IndexAction implements the API endpoint for listing multiple models.
  *

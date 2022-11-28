@@ -15,6 +15,10 @@ use Memcached;
 use ReflectionClass;
 use yii\base\InvalidConfigException;
 
+use function time;
+use function array_keys;
+use function extension_loaded;
+
 /**
  * MemCache implements a cache application component based on [memcache](https://pecl.php.net/package/memcache)
  * and [memcached](https://pecl.php.net/package/memcached).

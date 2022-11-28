@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace yii\filters\auth;
 
+use function call_user_func;
+
 /**
  * HttpBasicAuth is an action filter that supports the HTTP Basic authentication method.
  *

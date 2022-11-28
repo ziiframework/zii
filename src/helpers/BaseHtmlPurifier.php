@@ -15,6 +15,8 @@ use Closure;
 use HTMLPurifier;
 use HTMLPurifier_Config;
 
+use function call_user_func;
+
 /**
  * BaseHtmlPurifier provides concrete implementation for [[HtmlPurifier]].
  *

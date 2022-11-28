@@ -16,6 +16,8 @@ use cebe\markdown\block\FencedCodeTrait;
 use cebe\markdown\inline\StrikeoutTrait;
 use cebe\markdown\inline\EmphStrongTrait;
 
+use function rtrim;
+
 /**
  * A Markdown parser that enhances markdown for reading in console environments.
  *

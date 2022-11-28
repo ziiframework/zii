@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace yii\rest;
 
+use const PREG_SPLIT_NO_EMPTY;
+
 use Yii;
 use yii\web\Link;
 use yii\base\Model;
@@ -21,6 +23,13 @@ use yii\base\Component;
 use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
 use yii\data\DataProviderInterface;
+
+use function implode;
+use function is_array;
+use function is_string;
+use function preg_split;
+use function array_merge;
+use function array_values;
 
 /**
  * Serializer converts resource objects and collections into array representation.

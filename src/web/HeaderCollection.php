@@ -17,8 +17,11 @@ use IteratorAggregate;
 use yii\base\BaseObject;
 use ReturnTypeWillChange;
 
+use function count;
+use function reset;
 use function array_map;
 use function array_flip;
+use function strtolower;
 use function array_key_exists;
 
 /**

@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace yii\db\mssql;
 
+use function substr;
+
 /**
  * Class ColumnSchema for MSSQL database.
  *

@@ -10,6 +10,12 @@ declare(strict_types=1);
 
 namespace yii\web;
 
+use const ENT_HTML5;
+use const ENT_NOQUOTES;
+use const ENT_SUBSTITUTE;
+use const EXTR_OVERWRITE;
+use const DIRECTORY_SEPARATOR;
+
 use Yii;
 use Throwable;
 use ReflectionClass;
@@ -17,6 +23,35 @@ use yii\base\Exception;
 use yii\helpers\VarDumper;
 use yii\base\UserException;
 use yii\base\ErrorException;
+
+use function file;
+use function count;
+use function rtrim;
+use function explode;
+use function extract;
+use function implode;
+use function ini_set;
+use function is_bool;
+use function stripos;
+use function strncmp;
+use function is_array;
+use function ob_start;
+use function realpath;
+use function get_class;
+use function is_object;
+use function is_string;
+use function mb_strlen;
+use function mb_substr;
+use function preg_match;
+use function strtolower;
+use function is_resource;
+use function str_replace;
+use function array_values;
+use function ob_get_clean;
+use function substr_compare;
+use function str_starts_with;
+use function htmlspecialchars;
+use function ob_implicit_flush;
 
 /**
  * ErrorHandler handles uncaught PHP errors and exceptions.

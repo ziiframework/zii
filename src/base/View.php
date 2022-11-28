@@ -10,6 +10,10 @@ declare(strict_types=1);
 
 namespace yii\base;
 
+use const EXTR_OVERWRITE;
+use const PATHINFO_EXTENSION;
+use const DIRECTORY_SEPARATOR;
+
 use Yii;
 use Exception;
 use Throwable;
@@ -17,6 +21,25 @@ use yii\widgets\Block;
 use yii\helpers\FileHelper;
 use yii\widgets\FragmentCache;
 use yii\widgets\ContentDecorator;
+
+use function end;
+use function count;
+use function ltrim;
+use function dirname;
+use function extract;
+use function is_file;
+use function strncmp;
+use function is_array;
+use function ob_clean;
+use function ob_start;
+use function pathinfo;
+use function array_pop;
+use function is_string;
+use function ob_end_clean;
+use function ob_end_flush;
+use function ob_get_clean;
+use function ob_get_level;
+use function ob_implicit_flush;
 
 /**
  * View represents a view object in the MVC pattern.

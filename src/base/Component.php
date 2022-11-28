@@ -13,6 +13,18 @@ namespace yii\base;
 use Yii;
 use yii\helpers\StringHelper;
 
+use function trim;
+use function is_int;
+use function substr;
+use function strncmp;
+use function array_values;
+use function str_contains;
+use function array_unshift;
+use function method_exists;
+use function call_user_func;
+use function property_exists;
+use function call_user_func_array;
+
 /**
  * Component is the base class that implements the *property*, *event* and *behavior* features.
  *

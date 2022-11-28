@@ -10,6 +10,9 @@ declare(strict_types=1);
 
 namespace yii\helpers;
 
+use const PREG_SPLIT_NO_EMPTY;
+use const PREG_SPLIT_DELIM_CAPTURE;
+
 use Yii;
 use HTMLPurifier_Lexer;
 use HTMLPurifier_Config;
@@ -19,6 +22,34 @@ use HTMLPurifier_Token_End;
 use HTMLPurifier_Token_Text;
 use HTMLPurifier_Token_Empty;
 use HTMLPurifier_Token_Start;
+
+use function trim;
+use function count;
+use function ltrim;
+use function rtrim;
+use function strtr;
+use function krsort;
+use function explode;
+use function implode;
+use function strncmp;
+use function array_map;
+use function mb_strlen;
+use function mb_substr;
+use function localeconv;
+use function mb_strrpos;
+use function preg_match;
+use function preg_quote;
+use function preg_split;
+use function array_slice;
+use function is_callable;
+use function str_replace;
+use function array_filter;
+use function array_values;
+use function base64_decode;
+use function base64_encode;
+use function mb_strtolower;
+use function mb_strtoupper;
+use function substr_compare;
 
 /**
  * BaseStringHelper provides concrete implementation for [[StringHelper]].

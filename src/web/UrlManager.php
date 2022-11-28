@@ -17,6 +17,26 @@ use yii\base\Component;
 use yii\caching\CacheInterface;
 use yii\base\InvalidConfigException;
 
+use function trim;
+use function ltrim;
+use function rtrim;
+use function strlen;
+use function strpos;
+use function substr;
+use function explode;
+use function strncmp;
+use function in_array;
+use function is_array;
+use function get_class;
+use function is_string;
+use function urlencode;
+use function preg_match;
+use function array_merge;
+use function str_contains;
+use function method_exists;
+use function substr_compare;
+use function http_build_query;
+
 /**
  * UrlManager handles HTTP request parsing and creation of URLs based on a set of rules.
  *

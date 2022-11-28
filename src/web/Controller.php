@@ -10,12 +10,23 @@ declare(strict_types=1);
 
 namespace yii\web;
 
+use const PHP_VERSION_ID;
+use const FILTER_VALIDATE_INT;
+use const FILTER_VALIDATE_FLOAT;
+use const FILTER_VALIDATE_BOOLEAN;
+
 use Yii;
 use yii\helpers\Url;
 use ReflectionMethod;
 use yii\base\Exception;
 use ReflectionNamedType;
 use yii\base\InlineAction;
+
+use function implode;
+use function is_array;
+use function filter_var;
+use function array_merge;
+use function array_key_exists;
 
 /**
  * Controller is the base class of web controllers.

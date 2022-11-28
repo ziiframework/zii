@@ -12,6 +12,9 @@ namespace yii\mutex;
 
 use Closure;
 
+use function usleep;
+use function microtime;
+
 /**
  * Trait RetryAcquireTrait.
  *

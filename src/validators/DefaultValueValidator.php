@@ -12,6 +12,8 @@ namespace yii\validators;
 
 use Closure;
 
+use function call_user_func;
+
 /**
  * DefaultValueValidator sets the attribute to be the specified default value.
  *

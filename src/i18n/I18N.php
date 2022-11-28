@@ -14,6 +14,14 @@ use Yii;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
 
+use function rtrim;
+use function strtr;
+use function strpos;
+use function is_array;
+use function is_string;
+use function preg_match;
+use function str_starts_with;
+
 /**
  * I18N provides features related with internationalization (I18N) and localization (L10N).
  *

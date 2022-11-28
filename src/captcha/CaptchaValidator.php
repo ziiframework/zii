@@ -16,6 +16,9 @@ use yii\validators\Validator;
 use yii\validators\ValidationAsset;
 use yii\base\InvalidConfigException;
 
+use function is_array;
+use function strtolower;
+
 /**
  * CaptchaValidator validates that the attribute value is the same as the verification code displayed in the CAPTCHA.
  *

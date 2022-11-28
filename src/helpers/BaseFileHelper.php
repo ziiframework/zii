@@ -10,11 +10,70 @@ declare(strict_types=1);
 
 namespace yii\helpers;
 
+use const FILEINFO_MIME_TYPE;
+use const PATHINFO_EXTENSION;
+use const DIRECTORY_SEPARATOR;
+
 use Yii;
 use yii\base\Exception;
 use yii\base\ErrorException;
 use yii\base\InvalidConfigException;
 use yii\base\InvalidArgumentException;
+
+use function end;
+use function min;
+use function copy;
+use function exec;
+use function chgrp;
+use function chmod;
+use function chown;
+use function count;
+use function mkdir;
+use function rmdir;
+use function rtrim;
+use function strtr;
+use function decoct;
+use function is_dir;
+use function is_int;
+use function strpos;
+use function substr;
+use function unlink;
+use function dirname;
+use function explode;
+use function implode;
+use function is_bool;
+use function is_file;
+use function is_link;
+use function opendir;
+use function readdir;
+use function strncmp;
+use function basename;
+use function closedir;
+use function is_array;
+use function pathinfo;
+use function realpath;
+use function array_pop;
+use function is_string;
+use function array_keys;
+use function finfo_file;
+use function finfo_open;
+use function is_numeric;
+use function strtolower;
+use function array_merge;
+use function file_exists;
+use function finfo_close;
+use function str_replace;
+use function array_reduce;
+use function str_contains;
+use function array_reverse;
+use function mb_strtolower;
+use function call_user_func;
+use function escapeshellarg;
+use function function_exists;
+use function str_starts_with;
+use function array_key_exists;
+use function extension_loaded;
+use function stream_get_wrappers;
 
 /**
  * BaseFileHelper provides concrete implementation for [[FileHelper]].

@@ -10,11 +10,34 @@ declare(strict_types=1);
 
 namespace yii\mail;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
+
 use Yii;
 use yii\web\View;
 use yii\base\Component;
 use yii\base\ViewContextInterface;
 use yii\base\InvalidConfigException;
+
+use function date;
+use function trim;
+use function mkdir;
+use function is_dir;
+use function gettype;
+use function implode;
+use function sprintf;
+use function is_array;
+use function is_object;
+use function microtime;
+use function array_keys;
+use function preg_match;
+use function random_int;
+use function strip_tags;
+use function preg_replace;
+use function call_user_func;
+use function array_key_exists;
+use function file_put_contents;
+use function html_entity_decode;
 
 /**
  * BaseMailer serves as a base class that implements the basic functions required by [[MailerInterface]].

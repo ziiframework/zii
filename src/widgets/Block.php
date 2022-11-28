@@ -12,6 +12,10 @@ namespace yii\widgets;
 
 use yii\base\Widget;
 
+use function ob_start;
+use function ob_get_clean;
+use function ob_implicit_flush;
+
 /**
  * Block records all output between [[begin()]] and [[end()]] calls and stores it in [[\yii\base\View::$blocks]].
  * for later use.

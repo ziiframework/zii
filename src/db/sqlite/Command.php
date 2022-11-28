@@ -10,8 +10,16 @@ declare(strict_types=1);
 
 namespace yii\db\sqlite;
 
+use const PREG_SET_ORDER;
+
 use yii\db\SqlToken;
 use yii\helpers\StringHelper;
+
+use function count;
+use function ltrim;
+use function strpos;
+use function array_pop;
+use function preg_match_all;
 
 /**
  * Command represents an SQLite's SQL statement to be executed against a database.

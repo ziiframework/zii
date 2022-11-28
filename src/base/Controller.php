@@ -10,11 +10,28 @@ declare(strict_types=1);
 
 namespace yii\base;
 
+use const PATHINFO_EXTENSION;
+use const DIRECTORY_SEPARATOR;
+
 use Yii;
 use ReflectionType;
 use yii\di\Instance;
 use ReflectionMethod;
 use yii\di\NotInstantiableException;
+
+use function ltrim;
+use function strpos;
+use function substr;
+use function is_file;
+use function strncmp;
+use function ucwords;
+use function pathinfo;
+use function get_class;
+use function is_string;
+use function preg_match;
+use function str_replace;
+use function array_unshift;
+use function method_exists;
 
 /**
  * Controller is the base class for classes containing controller logic.

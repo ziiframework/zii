@@ -12,12 +12,22 @@ namespace yii\console;
 
 use const STDERR;
 use const STDOUT;
+use const PHP_SAPI;
+use const DIRECTORY_SEPARATOR;
 
 use Yii;
 use Throwable;
 use yii\helpers\Console;
 use yii\base\UserException;
 use yii\base\ErrorException;
+
+use function count;
+use function reset;
+use function dirname;
+use function implode;
+use function print_r;
+use function basename;
+use function get_class;
 
 /**
  * ErrorHandler handles uncaught PHP errors and exceptions.

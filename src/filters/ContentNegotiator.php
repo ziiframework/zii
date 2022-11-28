@@ -19,6 +19,13 @@ use yii\web\BadRequestHttpException;
 use yii\web\NotAcceptableHttpException;
 
 use function count;
+use function reset;
+use function is_int;
+use function in_array;
+use function is_array;
+use function strtolower;
+use function str_replace;
+use function str_starts_with;
 
 /**
  * ContentNegotiator supports response format negotiation and application language negotiation.

@@ -10,12 +10,51 @@ declare(strict_types=1);
 
 namespace yii\db;
 
+use const SORT_DESC;
+use const SORT_STRING;
+use const PREG_SPLIT_NO_EMPTY;
+
 use Generator;
 use yii\helpers\StringHelper;
 use yii\base\NotSupportedException;
 use yii\db\conditions\HashCondition;
 use yii\base\InvalidArgumentException;
 use yii\db\conditions\ConditionInterface;
+
+use function sort;
+use function trim;
+use function count;
+use function ltrim;
+use function reset;
+use function strtr;
+use function is_int;
+use function implode;
+use function in_array;
+use function is_array;
+use function is_float;
+use function array_map;
+use function get_class;
+use function is_object;
+use function is_string;
+use function array_diff;
+use function array_keys;
+use function array_walk;
+use function preg_match;
+use function preg_split;
+use function strtoupper;
+use function array_merge;
+use function array_shift;
+use function ctype_digit;
+use function json_encode;
+use function array_filter;
+use function array_unique;
+use function array_values;
+use function preg_replace;
+use function str_contains;
+use function array_combine;
+use function array_reverse;
+use function array_unshift;
+use function is_subclass_of;
 
 /**
  * QueryBuilder builds a SELECT SQL statement based on the specification given as a [[Query]] object.

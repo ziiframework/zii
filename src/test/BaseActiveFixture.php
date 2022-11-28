@@ -16,6 +16,8 @@ use IteratorAggregate;
 use yii\base\ArrayAccessTrait;
 use yii\base\InvalidConfigException;
 
+use function array_key_exists;
+
 /**
  * BaseActiveFixture is the base class for fixture classes that support accessing fixture data as ActiveRecord objects.
  *

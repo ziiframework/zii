@@ -10,12 +10,37 @@ declare(strict_types=1);
 
 namespace yii\helpers;
 
+use const T_FUNCTION;
+
 use Closure;
 use Exception;
 use IteratorAggregate;
 use ReflectionFunction;
 use yii\base\Arrayable;
 use yii\base\InvalidValueException;
+
+use function file;
+use function trim;
+use function count;
+use function range;
+use function strtr;
+use function gettype;
+use function implode;
+use function is_array;
+use function get_class;
+use function serialize;
+use function addslashes;
+use function array_keys;
+use function array_push;
+use function str_repeat;
+use function var_export;
+use function array_shift;
+use function array_slice;
+use function array_search;
+use function preg_replace;
+use function method_exists;
+use function token_get_all;
+use function highlight_string;
 
 /**
  * BaseVarDumper provides concrete implementation for [[VarDumper]].

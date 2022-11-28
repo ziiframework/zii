@@ -19,6 +19,12 @@ use yii\data\ArrayDataProvider;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveQueryInterface;
 
+use function reset;
+use function is_array;
+use function is_string;
+use function array_merge;
+use function call_user_func;
+
 /**
  * DataColumn is the default column type for the [[GridView]] widget.
  *

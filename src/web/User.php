@@ -10,6 +10,9 @@ declare(strict_types=1);
 
 namespace yii\web;
 
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
+
 use Yii;
 use Exception;
 use Throwable;
@@ -18,6 +21,15 @@ use yii\base\Component;
 use yii\rbac\CheckAccessInterface;
 use yii\base\InvalidValueException;
 use yii\base\InvalidConfigException;
+
+use function time;
+use function count;
+use function in_array;
+use function is_array;
+use function array_keys;
+use function array_merge;
+use function json_decode;
+use function json_encode;
 
 /**
  * User is the class for the `user` application component that manages the user authentication status.

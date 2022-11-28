@@ -10,6 +10,9 @@ declare(strict_types=1);
 
 namespace yii\db\sqlite;
 
+use const SORT_ASC;
+use const SORT_NUMERIC;
+
 use yii\db\SqlToken;
 use yii\db\Constraint;
 use yii\db\Expression;
@@ -23,6 +26,15 @@ use yii\db\ForeignKeyConstraint;
 use yii\db\ConstraintFinderTrait;
 use yii\base\NotSupportedException;
 use yii\db\ConstraintFinderInterface;
+
+use function trim;
+use function count;
+use function explode;
+use function strncmp;
+use function preg_match;
+use function strtolower;
+use function strncasecmp;
+use function str_contains;
 
 /**
  * Schema is the class for retrieving metadata from a SQLite (2/3) database.

@@ -13,6 +13,8 @@ namespace yii\rest;
 use Yii;
 use yii\web\ServerErrorHttpException;
 
+use function call_user_func;
+
 /**
  * DeleteAction implements the API endpoint for deleting a model.
  *

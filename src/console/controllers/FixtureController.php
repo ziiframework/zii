@@ -21,6 +21,19 @@ use yii\helpers\FileHelper;
 use yii\base\InvalidParamException;
 use yii\base\InvalidConfigException;
 
+use function count;
+use function strlen;
+use function substr;
+use function dirname;
+use function implode;
+use function basename;
+use function mb_strpos;
+use function array_diff;
+use function array_merge;
+use function str_replace;
+use function class_exists;
+use function str_contains;
+
 /**
  * Manages fixture data loading and unloading.
  *

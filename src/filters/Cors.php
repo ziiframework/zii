@@ -10,11 +10,24 @@ declare(strict_types=1);
 
 namespace yii\filters;
 
+use const PREG_SPLIT_NO_EMPTY;
+
 use Yii;
 use yii\web\Request;
 use yii\web\Response;
 use yii\base\ActionFilter;
 use yii\base\InvalidConfigException;
+
+use function implode;
+use function ucwords;
+use function in_array;
+use function array_map;
+use function array_keys;
+use function preg_split;
+use function strtolower;
+use function strtoupper;
+use function str_replace;
+use function array_uintersect;
 
 /**
  * Cors filter implements [Cross Origin Resource Sharing](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing).

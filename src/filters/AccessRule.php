@@ -20,6 +20,17 @@ use yii\helpers\IpHelper;
 use yii\helpers\StringHelper;
 use yii\base\InvalidConfigException;
 
+use function strpos;
+use function strncmp;
+use function in_array;
+use function is_array;
+use function array_map;
+use function strtoupper;
+use function array_merge;
+use function is_callable;
+use function str_contains;
+use function call_user_func;
+
 /**
  * This class represents an access rule defined by the [[AccessControl]] action filter.
  *

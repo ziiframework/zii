@@ -21,6 +21,18 @@ use yii\db\ConstraintFinderTrait;
 use yii\db\DefaultValueConstraint;
 use yii\db\ConstraintFinderInterface;
 
+use function count;
+use function explode;
+use function stripos;
+use function ucfirst;
+use function is_array;
+use function array_map;
+use function preg_match;
+use function strcasecmp;
+use function str_replace;
+use function preg_match_all;
+use function version_compare;
+
 /**
  * Schema is the class for retrieving metadata from MS SQL Server databases (version 2008 and above).
  *

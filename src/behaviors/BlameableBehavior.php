@@ -14,6 +14,10 @@ use Yii;
 use Closure;
 use yii\db\BaseActiveRecord;
 
+use function is_array;
+use function is_callable;
+use function call_user_func;
+
 /**
  * BlameableBehavior automatically fills the specified attributes with the current user ID.
  *

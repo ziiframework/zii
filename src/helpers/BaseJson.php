@@ -10,6 +10,17 @@ declare(strict_types=1);
 
 namespace yii\helpers;
 
+use const E_WARNING;
+use const JSON_HEX_AMP;
+use const JSON_HEX_TAG;
+use const JSON_HEX_APOS;
+use const JSON_HEX_QUOT;
+use const PHP_VERSION_ID;
+use const JSON_ERROR_NONE;
+use const JSON_ERROR_SYNTAX;
+use const JSON_PRETTY_PRINT;
+use const JSON_UNESCAPED_UNICODE;
+
 use yii\base\Model;
 use JsonSerializable;
 use SimpleXMLElement;
@@ -18,6 +29,22 @@ use yii\base\Arrayable;
 use yii\web\JsExpression;
 use yii\web\JsonResponseFormatter;
 use yii\base\InvalidArgumentException;
+
+use function count;
+use function strtr;
+use function uniqid;
+use function defined;
+use function constant;
+use function is_array;
+use function is_object;
+use function json_decode;
+use function json_encode;
+use function array_unique;
+use function json_last_error;
+use function set_error_handler;
+use function json_last_error_msg;
+use function call_user_func_array;
+use function restore_error_handler;
 
 /**
  * BaseJson provides concrete implementation for [[Json]].

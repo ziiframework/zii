@@ -15,6 +15,10 @@ use yii\di\Instance;
 use yii\mail\MailerInterface;
 use yii\base\InvalidConfigException;
 
+use function implode;
+use function wordwrap;
+use function array_map;
+
 /**
  * EmailTarget sends selected log messages to the specified email addresses.
  *

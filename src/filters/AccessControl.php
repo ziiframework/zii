@@ -17,6 +17,10 @@ use yii\di\Instance;
 use yii\base\ActionFilter;
 use yii\web\ForbiddenHttpException;
 
+use function is_array;
+use function array_merge;
+use function call_user_func;
+
 /**
  * AccessControl provides simple access control based on a set of rules.
  *

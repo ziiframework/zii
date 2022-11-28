@@ -17,6 +17,9 @@ use PDOStatement;
 use ReturnTypeWillChange;
 use yii\base\InvalidCallException;
 
+use function func_get_args;
+use function call_user_func_array;
+
 /**
  * DataReader represents a forward-only stream of rows from a query result set.
  *
