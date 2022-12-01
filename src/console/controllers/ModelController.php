@@ -502,7 +502,7 @@ class ModelController extends Controller
 
     private function fixCodeStyle(string $file): void
     {
-        $rootDir = dirname(Yii::getAlias('@webroot'));
+        $rootDir = dirname(Yii::getAlias('@vendor'));
 
         $cmd = "php D:/phpcsfixer.phar --version  2>&1";
         exec($cmd, $output, $outCode);
