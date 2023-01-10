@@ -391,7 +391,7 @@ body.mousedown pre {
 
     <div class="header">
         <div class="tools">
-            <textarea id="clipboard"><?= $handler->htmlEncode($exception) ?></textarea>
+            <textarea id="clipboard"><?= $handler->htmlEncode($exception->getMessage()) ?></textarea>
             <span id="copied">Copied!</span>
             <!-- Icon Credit: Font Awesome by Dave Gandy - https://fontawesome.com/ ; fa-clipboard, fa-stackoverflow, fa-google-->
             <a href="#" id="copy-stacktrace" title="Copy the stacktrace for use in a bug report or pastebin">
