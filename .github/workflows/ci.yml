@@ -93,7 +93,7 @@ jobs:
 
     runs-on: ubuntu-20.04
 
-    container: charescape/web:6.2.0
+    container: charescape/web:6.2.1
 
     steps:
       - uses: actions/checkout@v3
