@@ -359,6 +359,7 @@ return [
   'yii\web\JqueryAsset' => YII2_PATH . '/web/JqueryAsset.php',
   'yii\web\JsExpression' => YII2_PATH . '/web/JsExpression.php',
   'yii\web\JsonParser' => YII2_PATH . '/web/JsonParser.php',
+  'yii\web\XmlParser' => YII2_PATH . '/web/XmlParser.php',
   'yii\web\JsonResponseFormatter' => YII2_PATH . '/web/JsonResponseFormatter.php',
   'yii\web\Link' => YII2_PATH . '/web/Link.php',
   'yii\web\Linkable' => YII2_PATH . '/web/Linkable.php',

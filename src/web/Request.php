@@ -173,11 +173,12 @@ class Request extends \yii\base\Request
      * corresponding configurations for [[Yii::createObject|creating the parser objects]].
      * A parser must implement the [[RequestParserInterface]].
      *
-     * To enable parsing for JSON requests you can use the [[JsonParser]] class like in the following example:
+     * To enable parsing for JSON and XML requests you can use the [[JsonParser]] and [[XMLParser]] class like in the following example:
      *
      * ```
      * [
      *     'application/json' => 'yii\web\JsonParser',
+     *     'application/xml' => 'yii\web\XmlParser',
      * ]
      * ```
      *
