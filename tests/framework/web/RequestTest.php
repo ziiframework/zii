@@ -1065,6 +1065,7 @@ class RequestTest extends TestCase
         return [
             'json' => ['application/json', '{"foo":"bar","baz":1}', ['foo' => 'bar', 'baz' => 1]],
             'jsonp' => ['application/javascript', 'parseResponse({"foo":"bar","baz":1});', ['foo' => 'bar', 'baz' => 1]],
+            'xml' => ['application/xml', '<xml><foo>bar</foo><baz>1</baz></xml>', ['foo' => 'bar', 'baz' => '1']],
             'get' => ['application/x-www-form-urlencoded', 'foo=bar&baz=1', ['foo' => 'bar', 'baz' => '1']],
         ];
     }
@@ -1079,6 +1080,8 @@ class RequestTest extends TestCase
         $request->parsers = [
             'application/json' => 'yii\web\JsonParser',
             'application/javascript' => 'yii\web\JsonParser',
+            'application/xml' => 'yii\web\XmlParser',
+            'text/xml' => 'yii\web\XmlParser',
         ];
         $request->setRawBody($rawBody);
         $this->assertSame($expected, $request->getBodyParams());

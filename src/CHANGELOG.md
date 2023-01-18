@@ -1,6 +1,12 @@
 Yii Framework 2 Change Log
 ==========================
 
+3.0.x
+------------------------
+
+- New: Add `yii\web\XmlParser` for request parsers (charescape)
+
+
 2.0.48 under development
 ------------------------
 
