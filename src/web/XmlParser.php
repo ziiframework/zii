@@ -27,9 +27,9 @@ use Symfony\Component\Serializer\Serializer;
  * ]
  * ```
  *
- * @author Charescape <charescape@outlook.com>
+ * @author Ruitang Du <charescape@outlook.com>
  *
- * @since 2.0
+ * @since 3.0
  */
 class XmlParser implements RequestParserInterface
 {
