@@ -228,9 +228,22 @@ class ModelController extends Controller
 
     public array $exclude = [];
 
+    public string $modelNamePrefix = 'Base';
+
     public function options($actionID)
     {
-        return ['override', 'exclude'];
+        return array_merge(parent::options($actionID), [
+            'override',
+            'exclude',
+            'modelNamePrefix',
+        ]);
+    }
+
+    public function optionAliases()
+    {
+        return array_merge(parent::optionAliases(), [
+            'p' => 'modelNamePrefix',
+        ]);
     }
 
     public function actionIndex(): void
@@ -266,7 +279,7 @@ class ModelController extends Controller
 
         $this->_targetNamespace = new PhpNamespace($this->modelNamespace);
 
-        $this->_targetClass = $this->_targetNamespace->addClass('Base' . Inflector::camelize($tableName));
+        $this->_targetClass = $this->_targetNamespace->addClass($this->modelNamePrefix . Inflector::camelize($tableName));
         $this->_targetClass->setExtends($this->modelExtends);
         $this->_targetClass->setAbstract();
 
@@ -454,7 +467,7 @@ class ModelController extends Controller
                 ->addParameter('session_secret');
         }
 
-        $file = Yii::getAlias($this->modelDir) . '/Base' . Inflector::camelize($tableName) . '.php';
+        $file = Yii::getAlias($this->modelDir) . '/' . $this->modelNamePrefix . Inflector::camelize($tableName) . '.php';
 
         if ($override === true || !file_exists($file)) {
             $objectBody = str_replace(array_keys(self::$_codeReplacements), array_values(self::$_codeReplacements), (string) $this->_targetNamespace);
@@ -466,15 +479,15 @@ class ModelController extends Controller
                 $fileContent = file_get_contents($file);
                 $fileContent = str_replace(': \\?', ': ?', $fileContent);
                 file_put_contents($file, $fileContent);
-                echo '✔ Successfully created abstract model Base' . Inflector::camelize($tableName) . "\n";
+                echo '✔ Successfully created abstract model ' . $this->modelNamePrefix . Inflector::camelize($tableName) . "\n";
                 $this->createAbstractModelInstance($tableName);
                 $this->fixCodeStyle($file);
             } else {
-                echo '✘ Failed to create abstract model Base' . Inflector::camelize($tableName);
+                echo '✘ Failed to create abstract model ' . $this->modelNamePrefix . Inflector::camelize($tableName);
             }
             echo "\n";
         } else {
-            echo '✘ Create model Base' . Inflector::camelize($tableName) . " aborted, file $file already exists\n";
+            echo '✘ Create model ' . $this->modelNamePrefix . Inflector::camelize($tableName) . " aborted, file $file already exists\n";
         }
     }
 
@@ -490,7 +503,7 @@ class ModelController extends Controller
         $namespace = new PhpNamespace($this->modelNamespace);
 
         $class = $namespace->addClass(Inflector::camelize($tableName));
-        $class->setExtends('\\Zpp\\Models\\Base' . Inflector::camelize($tableName));
+        $class->setExtends('\\Zpp\\Models\\' . $this->modelNamePrefix . Inflector::camelize($tableName));
         $class->setFinal();
 
         if (file_put_contents($file, "<?php\n\ndeclare(strict_types=1);\n\n" . $namespace->__toString()) !== false) {
