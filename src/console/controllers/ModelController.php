@@ -500,10 +500,10 @@ class ModelController extends Controller
             return;
         }
 
-        $namespace = new PhpNamespace($this->modelNamespace . '\\Gii');
+        $namespace = new PhpNamespace($this->modelNamespace);
 
         $class = $namespace->addClass(Inflector::camelize($tableName));
-        $class->setExtends('\\Zpp\\Models\\' . $this->modelNamePrefix . Inflector::camelize($tableName));
+        $class->setExtends('\\' . $this->modelNamespace . '\\Gii\\' . $this->modelNamePrefix . Inflector::camelize($tableName));
         $class->setFinal();
 
         if (file_put_contents($file, "<?php\n\ndeclare(strict_types=1);\n\n" . $namespace->__toString()) !== false) {
