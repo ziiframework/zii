@@ -273,7 +273,7 @@ class ModelController extends Controller
         }
     }
 
-    public function actionGii(string $tableName, bool $override = false): void
+    public function actionGii(string $tableName): void
     {
         $this->resetAttributes();
 
@@ -469,7 +469,7 @@ class ModelController extends Controller
 
         $file = Yii::getAlias($this->modelDir) . '/Gii/' . $this->modelNamePrefix . Inflector::camelize($tableName) . '.php';
 
-        if ($override === true || !file_exists($file)) {
+        if ($this->override === true || !file_exists($file)) {
             $objectBody = str_replace(array_keys(self::$_codeReplacements), array_values(self::$_codeReplacements), (string) $this->_targetNamespace);
             $objectBody = preg_replace('/["]([^$"]+)["]/u', "'$1'", $objectBody);
             $objectBody = preg_replace('/["](\s+)(\d+)(\s+)["]/u', "'$1$2$3'", $objectBody);
