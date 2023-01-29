@@ -268,7 +268,7 @@ class ModelController extends Controller
 
         foreach ($tableNames as $tableName) {
             if (!in_array($tableName, $exclude, true)) {
-                $this->actionGii($tableName, $this->override);
+                $this->actionGii($tableName);
             }
         }
     }
@@ -278,6 +278,7 @@ class ModelController extends Controller
         $this->resetAttributes();
 
         $this->_targetNamespace = new PhpNamespace($this->modelNamespace . '\\Gii');
+        $this->_targetNamespace->addUse($this->modelExtends);
 
         $this->_targetClass = $this->_targetNamespace->addClass($this->modelNamePrefix . Inflector::camelize($tableName));
         $this->_targetClass->setExtends($this->modelExtends);
@@ -500,10 +501,13 @@ class ModelController extends Controller
             return;
         }
 
+        $extendsClassName = '\\' . $this->modelNamespace . '\\Gii\\' . $this->modelNamePrefix . Inflector::camelize($tableName);
+
         $namespace = new PhpNamespace($this->modelNamespace);
+        $namespace->addUse($extendsClassName);
 
         $class = $namespace->addClass(Inflector::camelize($tableName));
-        $class->setExtends('\\' . $this->modelNamespace . '\\Gii\\' . $this->modelNamePrefix . Inflector::camelize($tableName));
+        $class->setExtends($extendsClassName);
         $class->setFinal();
 
         if (file_put_contents($file, "<?php\n\ndeclare(strict_types=1);\n\n" . $namespace->__toString()) !== false) {
@@ -784,6 +788,8 @@ class ModelController extends Controller
             $this->_targetNamespace->addUse(ActiveQuery::class);
 
             foreach ($this->_ruleExist as $item) {
+                $this->_targetNamespace->addUse("\\{$this->modelNamespace}\\{$item['targetClassName']}");
+
                 $rules[] = [
                     $this->arrayOrString($item['name']),
                     'exist',
@@ -793,10 +799,13 @@ class ModelController extends Controller
                 ];
 
                 // Table Relations
-                $this->_targetClass->addMethod('getDb' . $this->getRelationMethodName($item['name']))
-                    ->setReturnType(Type::union($this->modelNamespace . '\\' . $item['targetClassName'], ActiveQuery::class))
-                    ->setReturnNullable()
-                    ->setBody("return \$this->hasOne({$item['targetClassName']}::class, ['{$item['targetAttribute']}' => '" . $item['name'] . "']);");
+                $refMethodName = 'getDb' . $this->getRelationMethodName($item['name']);
+                if (!$this->_targetClass->hasMethod($refMethodName)) {
+                    $this->_targetClass->addMethod($refMethodName)
+                        ->setReturnType(Type::union($this->modelNamespace . '\\' . $item['targetClassName'], ActiveQuery::class))
+                        ->setReturnNullable()
+                        ->setBody("return \$this->hasOne({$item['targetClassName']}::class, ['{$item['targetAttribute']}' => '" . $item['name'] . "']);");
+                }
 
                 // Class Comment
                 $this->_targetClass->addComment(implode(' ', [
@@ -905,10 +914,19 @@ EOT;
         $command = Yii::$app->db->createCommand($sql);
 
         try {
-            return $command->queryAll();
+            $all = $command->queryAll();
         } catch (Exception $e) {
-            return [];
+            $all = [];
         }
+
+        $result = [];
+
+        // 去重
+        foreach ($all as $single) {
+            $result[$single['CONSTRAINT_NAME']] = $single;
+        }
+
+        return $result;
     }
 
     private function fieldTypeCast(string $dbType): string
