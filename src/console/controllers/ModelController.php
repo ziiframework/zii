@@ -480,7 +480,7 @@ class ModelController extends Controller
                 $fileContent = str_replace(': \\?', ': ?', $fileContent);
                 file_put_contents($file, $fileContent);
                 echo '✔ Successfully created abstract model ' . $this->modelNamePrefix . Inflector::camelize($tableName) . "\n";
-                $this->createAbstractModelInstance($tableName);
+                $this->createFinalModel($tableName);
                 $this->fixCodeStyle($file);
             } else {
                 echo '✘ Failed to create abstract model ' . $this->modelNamePrefix . Inflector::camelize($tableName);
@@ -491,12 +491,12 @@ class ModelController extends Controller
         }
     }
 
-    private function createAbstractModelInstance(string $tableName): void
+    private function createFinalModel(string $tableName): void
     {
         $file = Yii::getAlias($this->modelDir) . "/" . Inflector::camelize($tableName) . '.php';
 
         if (file_exists($file)) {
-            echo "Skipped createAbstractModelInstance()\n";
+            echo "Skipped createFinalModel()\n";
             return;
         }
 
