@@ -277,7 +277,7 @@ class ModelController extends Controller
     {
         $this->resetAttributes();
 
-        $this->_targetNamespace = new PhpNamespace($this->modelNamespace);
+        $this->_targetNamespace = new PhpNamespace($this->modelNamespace . '\\Gii');
 
         $this->_targetClass = $this->_targetNamespace->addClass($this->modelNamePrefix . Inflector::camelize($tableName));
         $this->_targetClass->setExtends($this->modelExtends);
@@ -467,7 +467,7 @@ class ModelController extends Controller
                 ->addParameter('session_secret');
         }
 
-        $file = Yii::getAlias($this->modelDir) . '/' . $this->modelNamePrefix . Inflector::camelize($tableName) . '.php';
+        $file = Yii::getAlias($this->modelDir) . '/Gii/' . $this->modelNamePrefix . Inflector::camelize($tableName) . '.php';
 
         if ($override === true || !file_exists($file)) {
             $objectBody = str_replace(array_keys(self::$_codeReplacements), array_values(self::$_codeReplacements), (string) $this->_targetNamespace);
@@ -500,7 +500,7 @@ class ModelController extends Controller
             return;
         }
 
-        $namespace = new PhpNamespace($this->modelNamespace);
+        $namespace = new PhpNamespace($this->modelNamespace . '\\Gii');
 
         $class = $namespace->addClass(Inflector::camelize($tableName));
         $class->setExtends('\\Zpp\\Models\\' . $this->modelNamePrefix . Inflector::camelize($tableName));
