@@ -41,7 +41,7 @@
         "cebe/indent": "^1.0",
         "charescape/backslasher": "^2.1",
         "nette/php-generator": "^4.0",
-        "phpstan/phpstan": "^1.9",
+        "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^9.5",
         "rector/rector": "^0.15.13",
         "symfony/var-dumper": "^6.0"
