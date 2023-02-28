@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace yii\web;
 
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
 /**
  * Parses a raw HTTP request using [[\Symfony\Component\Serializer\Serializer::decode()]].
@@ -52,6 +52,6 @@ class XmlParser implements RequestParserInterface
 
         $serializer = new Serializer([], [$encoder]);
 
-        return $serializer->decode($rawBody,'xml');
+        return $serializer->decode($rawBody, 'xml');
     }
 }
