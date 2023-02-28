@@ -471,12 +471,12 @@ class ModelController extends Controller
         $file = Yii::getAlias($this->modelDir) . '/Gii/' . $this->modelNamePrefix . Inflector::camelize($tableName) . '.php';
 
         if ($this->override === true || !file_exists($file)) {
-            $objectBody = str_replace(array_keys(self::$_codeReplacements), array_values(self::$_codeReplacements), (string) $this->_targetNamespace);
-            $objectBody = preg_replace('/["]([^$"]+)["]/u', "'$1'", $objectBody);
-            $objectBody = preg_replace('/["](\s+)(\d+)(\s+)["]/u', "'$1$2$3'", $objectBody);
-            $objectBody = preg_replace('/["](\s+)(\d+)["]/u', "'$1$2'", $objectBody);
+            $object_contents = str_replace(array_keys(self::$_codeReplacements), array_values(self::$_codeReplacements), (string) $this->_targetNamespace);
+            $object_contents = preg_replace('/["]([^$"]+)["]/u', "'$1'", $object_contents);
+            $object_contents = preg_replace('/["](\s+)(\d+)(\s+)["]/u', "'$1$2$3'", $object_contents);
+            $object_contents = preg_replace('/["](\s+)(\d+)["]/u', "'$1$2'", $object_contents);
 
-            if (file_put_contents($file, "<?php\n\ndeclare(strict_types=1);\n\n" . $objectBody) !== false) {
+            if (file_put_contents($file, "<?php\n\ndeclare(strict_types=1);\n\n" . $object_contents) !== false) {
                 $fileContent = file_get_contents($file);
                 $fileContent = str_replace(': \\?', ': ?', $fileContent);
                 file_put_contents($file, $fileContent);
