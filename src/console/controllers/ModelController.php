@@ -922,8 +922,8 @@ EOT;
         $fks = [];
 
         // 去重
-        foreach ($all as $single) {
-            $fks[$single['CONSTRAINT_NAME']] = $single;
+        foreach ($all as $v) {
+            $fks[$v['CONSTRAINT_NAME']] = $v;
         }
 
         return $fks;
