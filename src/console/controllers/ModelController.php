@@ -915,18 +915,18 @@ EOT;
 
         try {
             $all = $command->queryAll();
-        } catch (Exception $e) {
+        } catch (Exception) {
             $all = [];
         }
 
-        $result = [];
+        $fks = [];
 
         // 去重
         foreach ($all as $single) {
-            $result[$single['CONSTRAINT_NAME']] = $single;
+            $fks[$single['CONSTRAINT_NAME']] = $single;
         }
 
-        return $result;
+        return $fks;
     }
 
     private function fieldTypeCast(string $dbType): string
