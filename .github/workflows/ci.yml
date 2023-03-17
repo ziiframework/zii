@@ -88,12 +88,12 @@ jobs:
         run: vendor/bin/phpunit --colors=always
 
   container_tests:
-    name: Ubuntu20.04 PHP8.0 MySQL8.0
+    name: ubuntu20-php80-mysql80
     if: ${{ !contains(github.event.head_commit.message, 'skip ci') }}
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
-    container: charescape/web:6.2.1
+    container: charescape/web:ubuntu20-php80-mysql80.rv0
 
     steps:
       - uses: actions/checkout@v3
