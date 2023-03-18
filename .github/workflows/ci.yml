@@ -92,8 +92,8 @@ jobs:
       matrix:
         container-runtime:
           - ubuntu20-php80-mysql80.rv0
-          - ubuntu20-php81-mysql80.rv0
-          - ubuntu20-php82-mysql80.rv0
+          - ubuntu22-php81-mysql80.rv0
+          - ubuntu22-php82-mysql80.rv0
 
     name: ${{ matrix.container-runtime }}
     if: ${{ !contains(github.event.head_commit.message, 'skip ci') }}
