@@ -94,6 +94,7 @@ jobs:
           - ubuntu20-php80-mysql80.rv0
           - ubuntu22-php81-mysql80.rv0
           - ubuntu22-php82-mysql80.rv0
+      fail-fast: false
 
     name: ${{ matrix.container-runtime }}
     if: ${{ !contains(github.event.head_commit.message, 'skip ci') }}
