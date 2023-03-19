@@ -110,8 +110,6 @@ jobs:
 
       - run: /usr/local/mysql/support-files/mysql.server start
 
-      - run: php -v
-
       - run: composer self-update -vvv
 
       - name: Install dependencies
