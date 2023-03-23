@@ -34,6 +34,7 @@ use Closure;
  * @property-read \yii\mail\MailerInterface $mailer The mailer application component.
  * @property-read \yii\web\Request|\yii\console\Request $request The request component.
  * @property-read \yii\web\Response|\yii\console\Response $response The response component.
+ * @property-read \yii\queue\Queue $queue The queue component.
  * @property string $runtimePath The directory that stores runtime files. Defaults to the "runtime"
  * subdirectory under [[basePath]].
  * @property-read \yii\base\Security $security The security application component.
