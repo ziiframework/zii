@@ -20,11 +20,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os-version: [ubuntu-22.04]
+        os-version: [ubuntu-22.04, ubuntu-22.04]
         php-version: ['8.0', '8.1', '8.2']
         mysql-version: ['5.7', '8.0']
         pgsql-version: ['14']
-        mssql-version: ['2019-latest']
+        mssql-version: ['2019-latest', '2022-latest']
 
     services:
       mysql:
