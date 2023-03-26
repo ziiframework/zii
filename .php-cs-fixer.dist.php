@@ -11,8 +11,8 @@ EOF;
 return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
     ->setRules([
-        '@PHP80Migration' => true,
-        '@PHP80Migration:risky' => true,
+        '@PHP81Migration' => true,
+        '@PHP81Migration:risky' => true,
         '@PHPUnit84Migration:risky' => true,
         '@Symfony' => true,
         '@Symfony:risky' => true,

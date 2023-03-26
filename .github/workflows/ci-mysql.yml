@@ -20,13 +20,12 @@ jobs:
     runs-on: ${{ matrix.os-version }}
 
     strategy:
+      fail-fast: false
       matrix:
         os-version:
-          - ubuntu-20.04
           - ubuntu-22.04
 
         php-version:
-          - "8.0"
           - "8.1"
           - "8.2"
 
@@ -45,8 +44,7 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Install PHP with extensions
         uses: shivammathur/setup-php@v2

@@ -20,11 +20,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os-version: [ubuntu-20.04, ubuntu-22.04]
-        php-version: ['8.0', '8.1', '8.2']
+        os-version: [ubuntu-22.04]
+        php-version: ['8.1', '8.2']
         mysql-version: ['5.7', '8.0']
         pgsql-version: ['14']
-        mssql-version: ['2019-latest', '2022-latest']
+        mssql-version: ['2019-latest']
 
     services:
       mysql:
@@ -89,12 +89,11 @@ jobs:
 
   container_tests:
     strategy:
+      fail-fast: false
       matrix:
         container-runtime:
-          - ubuntu20-php80-mysql80.rv0
           - ubuntu22-php81-mysql80.rv0
           - ubuntu22-php82-mysql80.rv0
-      fail-fast: false
 
     name: ${{ matrix.container-runtime }}
     if: ${{ !contains(github.event.head_commit.message, 'skip ci') }}
