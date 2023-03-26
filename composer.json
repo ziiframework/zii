@@ -35,7 +35,7 @@
         "ezyang/htmlpurifier": "^4.16",
         "symfony/polyfill-php81": "^1.27",
         "symfony/serializer": "^6.2",
-        "ziiframework/composer": "^3.8.2"
+        "ziiframework/composer": "^3.9.0"
     },
     "require-dev": {
         "cebe/indent": "^1.0",
