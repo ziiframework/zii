@@ -353,6 +353,10 @@ class ModelController extends Controller
         }
 
         foreach ($this->getTableForeignKeys($tableName) as $tableForeignKey) {
+            if ($tableForeignKey['REFERENCED_TABLE_NAME'] === null) {
+                echo "Warning: REFERENCED_TABLE_NAME is NULL\n";
+                continue;
+            }
             $this->_ruleExist[] = [
                 'name' => $tableForeignKey['COLUMN_NAME'],
                 'targetClassName' => Inflector::camelize($tableForeignKey['REFERENCED_TABLE_NAME']),
