@@ -42,7 +42,7 @@
         "charescape/backslasher": "^2.1",
         "nette/php-generator": "^4.0",
         "phpstan/phpstan": "^1.10",
-        "phpunit/phpunit": "^9.6",
+        "phpunit/phpunit": "^10.2",
         "rector/rector": "^0.16",
         "symfony/var-dumper": "^6.2"
     },
