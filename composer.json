@@ -43,7 +43,7 @@
         "nette/php-generator": "^4.0",
         "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^9.6",
-        "rector/rector": "^0.16",
+        "rector/rector": "^0.17",
         "symfony/var-dumper": "^6.3"
     },
     "autoload": {
