@@ -51,7 +51,7 @@ class ModelController extends Controller
     public string $modelExtends = '\\Zpp\\Models\\BaseModel';
     public string $modelDir = '@app/src/Models';
 
-    public string $identityTable = 'user';
+    public array $identityTables = ['usr', 'user', 'yh'];
 
     public static array $specialKeys = [
         'id' => 'ID',
@@ -284,7 +284,7 @@ class ModelController extends Controller
         $this->_targetClass->setExtends($this->modelExtends);
         $this->_targetClass->setAbstract();
 
-        if ($tableName === $this->identityTable) {
+        if (in_array($tableName, $this->identityTables, true)) {
             $this->_targetNamespace->addUse(IdentityInterface::class);
             $this->_targetClass->addImplement(IdentityInterface::class);
         }
@@ -437,7 +437,7 @@ class ModelController extends Controller
             ->setBody('return array_merge(parent::rules(), ?);', [$this->generateRules()]);
 
         // identity interface implement
-        if ($tableName === $this->identityTable) {
+        if (in_array($tableName, $this->identityTables, true)) {
             $this->_targetClass->addMethod('findIdentity')
                 ->setReturnType(IdentityInterface::class)
                 ->setReturnNullable()
