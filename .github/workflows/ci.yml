@@ -59,7 +59,7 @@ jobs:
     steps:
       - run: sudo locale-gen fr_FR.UTF-8
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Create MSSQL Database
         run: docker exec -i mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'YourStrong!Passw0rd' -Q 'CREATE DATABASE yiitest'
@@ -103,7 +103,7 @@ jobs:
     container: charescape/web:${{ matrix.container-runtime }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - run: sudo ln -s /usr/local/php/bin/php /usr/local/bin/php
 
