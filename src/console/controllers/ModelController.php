@@ -228,7 +228,7 @@ class ModelController extends Controller
 
     public array $exclude = [];
 
-    public string $modelNamePrefix = 'Base';
+    public string $modelNamePrefix = 'Gii';
 
     public function options($actionID)
     {
