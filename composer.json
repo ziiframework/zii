@@ -40,7 +40,7 @@
     "require-dev": {
         "cebe/indent": "^1.0",
         "charescape/backslasher": "^2.1",
-        "nette/php-generator": "^4.0",
+        "nette/php-generator": "^4.1",
         "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^9.6",
         "rector/rector": "^0.18",
