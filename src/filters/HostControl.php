@@ -179,6 +179,8 @@ class HostControl extends ActionFilter
     {
         $exception = new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
 
+        // TODO: ForbiddenHttpException()
+
         // use regular error handling if $this->fallbackHostInfo was set
         if (!empty(Yii::$app->getRequest()->hostName)) {
             throw $exception;
