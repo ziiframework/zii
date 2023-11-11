@@ -646,9 +646,18 @@ class FileHelperTest extends TestCase
         $foundFiles = FileHelper::findFiles($basePath, ['except' => ['?*/a.1']]);
         sort($foundFiles);
         $expect = array_values(array_filter($flat, static function ($p) {
-            return substr($p, -11, 10) === 'one' . DIRECTORY_SEPARATOR . 'two' . DIRECTORY_SEPARATOR . 'a.' || (substr($p, -8) !== DIRECTORY_SEPARATOR . 'one' . DIRECTORY_SEPARATOR . 'a.1' &&
-                substr($p, -10) !== DIRECTORY_SEPARATOR . 'three' . DIRECTORY_SEPARATOR . 'a.1');
+            return substr($p, -11, 10) === 'one' . DIRECTORY_SEPARATOR . 'two' . DIRECTORY_SEPARATOR . 'a.' || (substr($p, -8) !== DIRECTORY_SEPARATOR . 'one' . DIRECTORY_SEPARATOR . 'a.1'
+                && substr($p, -10) !== DIRECTORY_SEPARATOR . 'three' . DIRECTORY_SEPARATOR . 'a.1');
         }));
+        $this->assertEquals($expect, $foundFiles);
+
+        // negative pattern
+        $foundFiles = FileHelper::findFiles($basePath, ['except' => ['/one/*', '!/one/two']]);
+        sort($foundFiles);
+        $expect = array_values(array_filter($flat, static function ($p) {
+            return !str_contains($p, DIRECTORY_SEPARATOR . 'one') || str_contains($p, DIRECTORY_SEPARATOR . 'two');
+        }));
+
         $this->assertEquals($expect, $foundFiles);
     }
 
@@ -1252,6 +1261,66 @@ class FileHelperTest extends TestCase
             [true, ['user' => new stdClass()], null],
             [true, ['group' => new stdClass()], null],
             [true, null, 'test'],
+        ];
+    }
+
+    /**
+     * @dataProvider getExtensionsByMimeTypeProvider
+     *
+     * @param string $mimeType
+     * @param array $extensions
+     *
+     * @return void
+     */
+    public function testGetExtensionsByMimeType($mimeType, $extensions): void
+    {
+        $this->assertEquals($extensions, FileHelper::getExtensionsByMimeType($mimeType));
+    }
+
+    public function getExtensionsByMimeTypeProvider()
+    {
+        return [
+            [
+                'application/json',
+                [
+                    'json',
+                ],
+            ],
+            [
+                'image/jpeg',
+                [ // Note: For backwards compatibility the (alphabetic) order of `framework/helpers/mimeTypes.php` is expected.
+                    'jfif',
+                    'jpe',
+                    'jpeg',
+                    'jpg',
+                    'pjp',
+                    'pjpeg',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider getExtensionByMimeTypeProvider
+     *
+     * @param string $mimeType
+     * @param bool $preferShort
+     * @param array $extension
+     *
+     * @return void
+     */
+    public function testGetExtensionByMimeType($mimeType, $preferShort, $extension): void
+    {
+        $this->assertEquals($extension, FileHelper::getExtensionByMimeType($mimeType, $preferShort));
+    }
+
+    public function getExtensionByMimeTypeProvider()
+    {
+        return [
+            ['application/json', true, 'json'],
+            ['application/json', false, 'json'],
+            ['image/jpeg', true, 'jpg'],
+            ['image/jpeg', false, 'jpeg'],
         ];
     }
 }
