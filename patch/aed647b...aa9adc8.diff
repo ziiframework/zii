@@ -10542,18 +10542,6 @@ index a70ad1f3e1a..025379796f1 100644
              } elseif ($item['active']) {
                  $active = true;
              }
-diff --git a/phpunit.xml.dist b/phpunit.xml.dist
-index 34e150ef8ed..2b9f7c6df55 100644
---- a/phpunit.xml.dist
-+++ b/phpunit.xml.dist
-@@ -21,7 +21,6 @@
- 				<file>framework/web/ResponseFormatterInterface.php</file>
- 				<file>framework/.phpstorm.meta.php</file>
- 				<directory suffix="Exception.php">framework/base</directory>
--				<directory suffix=".php">framework/db/mssql</directory>
- 				<directory suffix=".php">framework/bootstrap</directory>
- 			</blacklist>
- 		</filter>
 diff --git a/tests/TestCase.php b/tests/TestCase.php
 index d18e1145949..5a8287f1f55 100644
 --- a/tests/TestCase.php
