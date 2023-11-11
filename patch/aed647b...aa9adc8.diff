@@ -1,4 +1,4 @@
-diff --git a/framework/BaseYii.php b/framework/BaseYii.php
+diff --git a/src/BaseYii.php b/src/BaseYii.php
 index efc453add05..496f6aa121a 100644
 --- a/framework/BaseYii.php
 +++ b/framework/BaseYii.php
@@ -20,7 +20,7 @@ index efc453add05..496f6aa121a 100644
      }
  
      /**
-diff --git a/framework/CHANGELOG.md b/framework/CHANGELOG.md
+diff --git a/src/CHANGELOG.md b/src/CHANGELOG.md
 index 40a25165de2..3867382321c 100644
 --- a/framework/CHANGELOG.md
 +++ b/framework/CHANGELOG.md
@@ -125,7 +125,7 @@ index 40a25165de2..3867382321c 100644
  
  
  2.0.47 November 18, 2022
-diff --git a/framework/UPGRADE.md b/framework/UPGRADE.md
+diff --git a/src/UPGRADE.md b/src/UPGRADE.md
 index 898f77c6944..3a9569a9822 100644
 --- a/framework/UPGRADE.md
 +++ b/framework/UPGRADE.md
@@ -159,7 +159,7 @@ index 898f77c6944..3a9569a9822 100644
  
  Upgrade from Yii 2.0.44
  -----------------------
-diff --git a/framework/assets/yii.activeForm.js b/framework/assets/yii.activeForm.js
+diff --git a/src/assets/yii.activeForm.js b/src/assets/yii.activeForm.js
 index b12f812c37d..5b9ce4aaec2 100644
 --- a/framework/assets/yii.activeForm.js
 +++ b/framework/assets/yii.activeForm.js
@@ -193,7 +193,7 @@ index b12f812c37d..5b9ce4aaec2 100644
 +    var currentAjaxRequest = null;
 +
  })(window.jQuery);
-diff --git a/framework/assets/yii.gridView.js b/framework/assets/yii.gridView.js
+diff --git a/src/assets/yii.gridView.js b/src/assets/yii.gridView.js
 index 825ff5044db..f02d4d95e94 100644
 --- a/framework/assets/yii.gridView.js
 +++ b/framework/assets/yii.gridView.js
@@ -225,7 +225,7 @@ index 825ff5044db..f02d4d95e94 100644
          },
  
          getSelectedRows: function () {
-diff --git a/framework/base/Configurable.php b/framework/base/Configurable.php
+diff --git a/src/base/Configurable.php b/src/base/Configurable.php
 index 9982d6f627c..b44a082841e 100644
 --- a/framework/base/Configurable.php
 +++ b/framework/base/Configurable.php
@@ -238,7 +238,7 @@ index 9982d6f627c..b44a082841e 100644
   * ```
   *
   * That is, the last parameter of the constructor must accept a configuration array.
-diff --git a/framework/base/DynamicModel.php b/framework/base/DynamicModel.php
+diff --git a/src/base/DynamicModel.php b/src/base/DynamicModel.php
 index 027da6d1982..9ce466b8fa3 100644
 --- a/framework/base/DynamicModel.php
 +++ b/framework/base/DynamicModel.php
@@ -282,7 +282,7 @@ index 027da6d1982..9ce466b8fa3 100644
      /**
       * {@inheritdoc}
       */
-diff --git a/framework/base/ErrorHandler.php b/framework/base/ErrorHandler.php
+diff --git a/src/base/ErrorHandler.php b/src/base/ErrorHandler.php
 index 81a20f0a3c9..393438ede57 100644
 --- a/framework/base/ErrorHandler.php
 +++ b/framework/base/ErrorHandler.php
@@ -295,7 +295,7 @@ index 81a20f0a3c9..393438ede57 100644
              }
              // to restore working directory in shutdown handler
              if (PHP_SAPI !== 'cli') {
-diff --git a/framework/behaviors/AttributeTypecastBehavior.php b/framework/behaviors/AttributeTypecastBehavior.php
+diff --git a/src/behaviors/AttributeTypecastBehavior.php b/src/behaviors/AttributeTypecastBehavior.php
 index 3d372bef582..a418b15de25 100644
 --- a/framework/behaviors/AttributeTypecastBehavior.php
 +++ b/framework/behaviors/AttributeTypecastBehavior.php
@@ -325,7 +325,7 @@ index 3d372bef582..a418b15de25 100644
 +        }
      }
  }
-diff --git a/framework/caching/DbCache.php b/framework/caching/DbCache.php
+diff --git a/src/caching/DbCache.php b/src/caching/DbCache.php
 index 5bf3b02dedd..d707ba41a27 100644
 --- a/framework/caching/DbCache.php
 +++ b/framework/caching/DbCache.php
@@ -338,7 +338,7 @@ index 5bf3b02dedd..d707ba41a27 100644
      }
  
      /**
-diff --git a/framework/classes.php b/framework/classes.php
+diff --git a/src/classes.php b/src/classes.php
 index 439f757ce0b..46741e3180d 100644
 --- a/framework/classes.php
 +++ b/framework/classes.php
@@ -353,7 +353,7 @@ index 439f757ce0b..46741e3180d 100644
    'yii\validators\ValidationAsset' => YII2_PATH . '/validators/ValidationAsset.php',
    'yii\validators\Validator' => YII2_PATH . '/validators/Validator.php',
    'yii\web\Application' => YII2_PATH . '/web/Application.php',
-diff --git a/framework/composer.json b/framework/composer.json
+diff --git a/src/composer.json b/src/composer.json
 index aaafa056878..ff36473707c 100644
 --- a/framework/composer.json
 +++ b/framework/composer.json
@@ -373,7 +373,7 @@ index aaafa056878..ff36473707c 100644
          "bower-asset/yii2-pjax": "~2.0.1",
          "paragonie/random_compat": ">=1"
      },
-diff --git a/framework/console/Controller.php b/framework/console/Controller.php
+diff --git a/src/console/Controller.php b/src/console/Controller.php
 index 614241d0f31..579b5977830 100644
 --- a/framework/console/Controller.php
 +++ b/framework/console/Controller.php
@@ -410,7 +410,7 @@ index 614241d0f31..579b5977830 100644
      }
  
      /**
-diff --git a/framework/console/controllers/AssetController.php b/framework/console/controllers/AssetController.php
+diff --git a/src/console/controllers/AssetController.php b/src/console/controllers/AssetController.php
 index 5215066df40..8b9d5a3fc27 100644
 --- a/framework/console/controllers/AssetController.php
 +++ b/framework/console/controllers/AssetController.php
@@ -423,7 +423,7 @@ index 5215066df40..8b9d5a3fc27 100644
                  '{from}' => escapeshellarg($tmpFile),
                  '{to}' => escapeshellarg($outputFile),
              ])));
-diff --git a/framework/console/controllers/MessageController.php b/framework/console/controllers/MessageController.php
+diff --git a/src/console/controllers/MessageController.php b/src/console/controllers/MessageController.php
 index e1a73576903..6d5a7d6448f 100644
 --- a/framework/console/controllers/MessageController.php
 +++ b/framework/console/controllers/MessageController.php
@@ -631,7 +631,7 @@ index e1a73576903..6d5a7d6448f 100644
      }
  
      /**
-diff --git a/framework/console/controllers/ServeController.php b/framework/console/controllers/ServeController.php
+diff --git a/src/console/controllers/ServeController.php b/src/console/controllers/ServeController.php
 index 68a7e50c286..b806f67d55b 100644
 --- a/framework/console/controllers/ServeController.php
 +++ b/framework/console/controllers/ServeController.php
@@ -660,7 +660,7 @@ index 68a7e50c286..b806f67d55b 100644
 +        passthru($command);
 +    }
  }
-diff --git a/framework/console/widgets/Table.php b/framework/console/widgets/Table.php
+diff --git a/src/console/widgets/Table.php b/src/console/widgets/Table.php
 index 4862e88b6be..c0ece4d4d89 100644
 --- a/framework/console/widgets/Table.php
 +++ b/framework/console/widgets/Table.php
@@ -732,7 +732,7 @@ index 4862e88b6be..c0ece4d4d89 100644
              return Console::ansiStrwidth($val);
          }, $row));
          return max($rowsPerCell);
-diff --git a/framework/data/ActiveDataProvider.php b/framework/data/ActiveDataProvider.php
+diff --git a/src/data/ActiveDataProvider.php b/src/data/ActiveDataProvider.php
 index a8b6e158ecf..3a129aa7293 100644
 --- a/framework/data/ActiveDataProvider.php
 +++ b/framework/data/ActiveDataProvider.php
@@ -755,7 +755,7 @@ index a8b6e158ecf..3a129aa7293 100644
              }
          }
      }
-diff --git a/framework/data/Pagination.php b/framework/data/Pagination.php
+diff --git a/src/data/Pagination.php b/src/data/Pagination.php
 index e74bc09afcf..a928681c4da 100644
 --- a/framework/data/Pagination.php
 +++ b/framework/data/Pagination.php
@@ -770,7 +770,7 @@ index e74bc09afcf..a928681c4da 100644
       */
      public $pageSizeLimit = [1, 50];
  
-diff --git a/framework/data/Sort.php b/framework/data/Sort.php
+diff --git a/src/data/Sort.php b/src/data/Sort.php
 index 5b7ff3b77db..0c0abc8b606 100644
 --- a/framework/data/Sort.php
 +++ b/framework/data/Sort.php
@@ -827,7 +827,7 @@ index 5b7ff3b77db..0c0abc8b606 100644
              } else {
                  $label = Inflector::camel2words($attribute);
              }
-diff --git a/framework/db/ActiveQueryTrait.php b/framework/db/ActiveQueryTrait.php
+diff --git a/src/db/ActiveQueryTrait.php b/src/db/ActiveQueryTrait.php
 index e2de1dd12d9..d49fa0fba87 100644
 --- a/framework/db/ActiveQueryTrait.php
 +++ b/framework/db/ActiveQueryTrait.php
@@ -842,7 +842,7 @@ index e2de1dd12d9..d49fa0fba87 100644
          $primaryModel = reset($models);
          if (!$primaryModel instanceof ActiveRecordInterface) {
              /* @var $modelClass ActiveRecordInterface */
-diff --git a/framework/db/ActiveRecordInterface.php b/framework/db/ActiveRecordInterface.php
+diff --git a/src/db/ActiveRecordInterface.php b/src/db/ActiveRecordInterface.php
 index d845e9d32cb..441001a99ff 100644
 --- a/framework/db/ActiveRecordInterface.php
 +++ b/framework/db/ActiveRecordInterface.php
@@ -854,7 +854,7 @@ index d845e9d32cb..441001a99ff 100644
       *
       * @return ActiveQueryInterface the newly created [[ActiveQueryInterface]] instance.
       */
-diff --git a/framework/db/BaseActiveRecord.php b/framework/db/BaseActiveRecord.php
+diff --git a/src/db/BaseActiveRecord.php b/src/db/BaseActiveRecord.php
 index 67a55d7884b..ab5414416c5 100644
 --- a/framework/db/BaseActiveRecord.php
 +++ b/framework/db/BaseActiveRecord.php
@@ -1063,7 +1063,7 @@ index 67a55d7884b..ab5414416c5 100644
 +        static::loadRelationsFor($models, $relationNames, $asArray);
      }
  }
-diff --git a/framework/db/Command.php b/framework/db/Command.php
+diff --git a/src/db/Command.php b/src/db/Command.php
 index 6f5d5daede2..72eda72e4e1 100644
 --- a/framework/db/Command.php
 +++ b/framework/db/Command.php
@@ -1126,7 +1126,7 @@ index 6f5d5daede2..72eda72e4e1 100644
                      Yii::debug('Query result served from cache', 'yii\db\Command::query');
                      return $result[0];
                  }
-diff --git a/framework/db/Connection.php b/framework/db/Connection.php
+diff --git a/src/db/Connection.php b/src/db/Connection.php
 index 0693d242206..4df8f3af62f 100644
 --- a/framework/db/Connection.php
 +++ b/framework/db/Connection.php
@@ -1139,7 +1139,7 @@ index 0693d242206..4df8f3af62f 100644
              }
          }
  
-diff --git a/framework/db/Migration.php b/framework/db/Migration.php
+diff --git a/src/db/Migration.php b/src/db/Migration.php
 index be61749514e..c4bf99981af 100644
 --- a/framework/db/Migration.php
 +++ b/framework/db/Migration.php
@@ -1170,7 +1170,7 @@ index be61749514e..c4bf99981af 100644
       * @param string $table the name of the table to be created. The name will be properly quoted by the method.
       * @param array $columns the columns (name => definition) in the new table.
       * @param string|null $options additional SQL fragment that will be appended to the generated SQL.
-diff --git a/framework/db/Query.php b/framework/db/Query.php
+diff --git a/src/db/Query.php b/src/db/Query.php
 index f0b215859dc..1819c9c3107 100644
 --- a/framework/db/Query.php
 +++ b/framework/db/Query.php
@@ -1192,7 +1192,7 @@ index f0b215859dc..1819c9c3107 100644
              $columns = preg_split('/\s*,\s*/', trim($columns), -1, PREG_SPLIT_NO_EMPTY);
          }
          $this->groupBy = $columns;
-diff --git a/framework/db/QueryBuilder.php b/framework/db/QueryBuilder.php
+diff --git a/src/db/QueryBuilder.php b/src/db/QueryBuilder.php
 index b96ffe28eff..114116e67c5 100644
 --- a/framework/db/QueryBuilder.php
 +++ b/framework/db/QueryBuilder.php
@@ -1213,7 +1213,7 @@ index b96ffe28eff..114116e67c5 100644
       * ]);
       * ```
       *
-diff --git a/framework/db/QueryTrait.php b/framework/db/QueryTrait.php
+diff --git a/src/db/QueryTrait.php b/src/db/QueryTrait.php
 index 990520d4e5b..308e31db769 100644
 --- a/framework/db/QueryTrait.php
 +++ b/framework/db/QueryTrait.php
@@ -1243,7 +1243,7 @@ index 990520d4e5b..308e31db769 100644
              return [$columns];
          } elseif (is_array($columns)) {
              return $columns;
-diff --git a/framework/db/Schema.php b/framework/db/Schema.php
+diff --git a/src/db/Schema.php b/src/db/Schema.php
 index 002a68e2bf8..53c0af9882d 100644
 --- a/framework/db/Schema.php
 +++ b/framework/db/Schema.php
@@ -1292,7 +1292,7 @@ index 002a68e2bf8..53c0af9882d 100644
              return $row;
          }
  
-diff --git a/framework/db/conditions/LikeCondition.php b/framework/db/conditions/LikeCondition.php
+diff --git a/src/db/conditions/LikeCondition.php b/src/db/conditions/LikeCondition.php
 index f4684d3f54f..0fe2a8fa0eb 100644
 --- a/framework/db/conditions/LikeCondition.php
 +++ b/framework/db/conditions/LikeCondition.php
@@ -1330,7 +1330,7 @@ index f4684d3f54f..0fe2a8fa0eb 100644
       */
      public function getEscapingReplacements()
      {
-diff --git a/framework/db/conditions/LikeConditionBuilder.php b/framework/db/conditions/LikeConditionBuilder.php
+diff --git a/src/db/conditions/LikeConditionBuilder.php b/src/db/conditions/LikeConditionBuilder.php
 index 049be5b92ec..accb849c2aa 100644
 --- a/framework/db/conditions/LikeConditionBuilder.php
 +++ b/framework/db/conditions/LikeConditionBuilder.php
@@ -1343,7 +1343,7 @@ index 049be5b92ec..accb849c2aa 100644
              }
              $parts[] = "{$column} {$operator} {$phName}{$escapeSql}";
          }
-diff --git a/framework/db/cubrid/Schema.php b/framework/db/cubrid/Schema.php
+diff --git a/src/db/cubrid/Schema.php b/src/db/cubrid/Schema.php
 index f2e0e3643c8..65b6c11b9d4 100644
 --- a/framework/db/cubrid/Schema.php
 +++ b/framework/db/cubrid/Schema.php
@@ -1409,7 +1409,7 @@ index f2e0e3643c8..65b6c11b9d4 100644
          $constraints = ArrayHelper::index($constraints, null, ['TYPE', 'NAME']);
          ArrayHelper::multisort($constraints, 'KEY_ORDER', SORT_ASC, SORT_NUMERIC);
          $result = [
-diff --git a/framework/db/mssql/QueryBuilder.php b/framework/db/mssql/QueryBuilder.php
+diff --git a/src/db/mssql/QueryBuilder.php b/src/db/mssql/QueryBuilder.php
 index cc3595519cd..1225c466cc6 100644
 --- a/framework/db/mssql/QueryBuilder.php
 +++ b/framework/db/mssql/QueryBuilder.php
@@ -1426,7 +1426,7 @@ index cc3595519cd..1225c466cc6 100644
                  }
              }
          }
-diff --git a/framework/db/mssql/Schema.php b/framework/db/mssql/Schema.php
+diff --git a/src/db/mssql/Schema.php b/src/db/mssql/Schema.php
 index 640b6ad093a..db7f07c87cb 100644
 --- a/framework/db/mssql/Schema.php
 +++ b/framework/db/mssql/Schema.php
@@ -1516,7 +1516,7 @@ index 640b6ad093a..db7f07c87cb 100644
 +        return $type;
      }
  }
-diff --git a/framework/db/mysql/QueryBuilder.php b/framework/db/mysql/QueryBuilder.php
+diff --git a/src/db/mysql/QueryBuilder.php b/src/db/mysql/QueryBuilder.php
 index b1517ab4da7..fc10931c7a1 100644
 --- a/framework/db/mysql/QueryBuilder.php
 +++ b/framework/db/mysql/QueryBuilder.php
@@ -1529,7 +1529,7 @@ index b1517ab4da7..fc10931c7a1 100644
              if ($cache) {
                  $cache->set($key, $version, $this->db->schemaCacheDuration);
              }
-diff --git a/framework/db/mysql/Schema.php b/framework/db/mysql/Schema.php
+diff --git a/src/db/mysql/Schema.php b/src/db/mysql/Schema.php
 index 6a795b1de28..fa2270eb77d 100644
 --- a/framework/db/mysql/Schema.php
 +++ b/framework/db/mysql/Schema.php
@@ -1599,7 +1599,7 @@ index 6a795b1de28..fa2270eb77d 100644
              $this->_oldMysql = version_compare($version, '5.1', '<=');
          }
  
-diff --git a/framework/db/oci/Schema.php b/framework/db/oci/Schema.php
+diff --git a/src/db/oci/Schema.php b/src/db/oci/Schema.php
 index 5e581441892..e0e4c05e2da 100644
 --- a/framework/db/oci/Schema.php
 +++ b/framework/db/oci/Schema.php
@@ -1629,7 +1629,7 @@ index 5e581441892..e0e4c05e2da 100644
      }
  
      /**
-diff --git a/framework/db/pgsql/Schema.php b/framework/db/pgsql/Schema.php
+diff --git a/src/db/pgsql/Schema.php b/src/db/pgsql/Schema.php
 index 8fb5943b92b..154e01a3808 100644
 --- a/framework/db/pgsql/Schema.php
 +++ b/framework/db/pgsql/Schema.php
@@ -1650,7 +1650,7 @@ index 8fb5943b92b..154e01a3808 100644
      }
  
      /**
-diff --git a/framework/db/sqlite/Schema.php b/framework/db/sqlite/Schema.php
+diff --git a/src/db/sqlite/Schema.php b/src/db/sqlite/Schema.php
 index 2ccd2be1ba1..32b209b2254 100644
 --- a/framework/db/sqlite/Schema.php
 +++ b/framework/db/sqlite/Schema.php
@@ -1680,7 +1680,7 @@ index 2ccd2be1ba1..32b209b2254 100644
      }
  
      /**
-diff --git a/framework/filters/PageCache.php b/framework/filters/PageCache.php
+diff --git a/src/filters/PageCache.php b/src/filters/PageCache.php
 index c10dcabe4f6..b9f02ba4ec4 100644
 --- a/framework/filters/PageCache.php
 +++ b/framework/filters/PageCache.php
@@ -1737,7 +1737,7 @@ index c10dcabe4f6..b9f02ba4ec4 100644
      }
  
      /**
-diff --git a/framework/helpers/BaseArrayHelper.php b/framework/helpers/BaseArrayHelper.php
+diff --git a/src/helpers/BaseArrayHelper.php b/src/helpers/BaseArrayHelper.php
 index 0e615a579db..56411163e1e 100644
 --- a/framework/helpers/BaseArrayHelper.php
 +++ b/framework/helpers/BaseArrayHelper.php
@@ -1780,7 +1780,7 @@ index 0e615a579db..56411163e1e 100644
                  return true;
              }
              // Cannot use `array_has_key` on Objects for PHP 7.4+, therefore we need to check using [[ArrayAccess::offsetExists()]]
-diff --git a/framework/helpers/BaseConsole.php b/framework/helpers/BaseConsole.php
+diff --git a/src/helpers/BaseConsole.php b/src/helpers/BaseConsole.php
 index abb838c9c47..febeed313b1 100644
 --- a/framework/helpers/BaseConsole.php
 +++ b/framework/helpers/BaseConsole.php
@@ -1813,7 +1813,7 @@ index abb838c9c47..febeed313b1 100644
          } elseif (!array_key_exists($input, $options)) {
              goto top;
          }
-diff --git a/framework/helpers/BaseFileHelper.php b/framework/helpers/BaseFileHelper.php
+diff --git a/src/helpers/BaseFileHelper.php b/src/helpers/BaseFileHelper.php
 index 35deec5ef49..55445aec009 100644
 --- a/framework/helpers/BaseFileHelper.php
 +++ b/framework/helpers/BaseFileHelper.php
@@ -1916,7 +1916,7 @@ index 35deec5ef49..55445aec009 100644
       * - `only`: array, list of patterns that the file paths should match if they are to be returned. Directory paths
       *   are not checked against them. Same pattern matching rules as in the `except` option are used.
       *   If a file path matches a pattern in both `only` and `except`, it will NOT be returned.
-diff --git a/framework/helpers/BaseFormatConverter.php b/framework/helpers/BaseFormatConverter.php
+diff --git a/src/helpers/BaseFormatConverter.php b/src/helpers/BaseFormatConverter.php
 index 1f2aeb4d673..3cea9c95017 100644
 --- a/framework/helpers/BaseFormatConverter.php
 +++ b/framework/helpers/BaseFormatConverter.php
@@ -2003,7 +2003,7 @@ index 1f2aeb4d673..3cea9c95017 100644
 +        return $formatter->getPattern();
 +    }
  }
-diff --git a/framework/helpers/BaseHtml.php b/framework/helpers/BaseHtml.php
+diff --git a/src/helpers/BaseHtml.php b/src/helpers/BaseHtml.php
 index 9c04ad90f95..45812e4165b 100644
 --- a/framework/helpers/BaseHtml.php
 +++ b/framework/helpers/BaseHtml.php
@@ -2016,7 +2016,7 @@ index 9c04ad90f95..45812e4165b 100644
                  } elseif ($name === 'style') {
                      if (empty($value)) {
                          continue;
-diff --git a/framework/helpers/BaseJson.php b/framework/helpers/BaseJson.php
+diff --git a/src/helpers/BaseJson.php b/src/helpers/BaseJson.php
 index eaaee0fbd05..a2821ad9ff7 100644
 --- a/framework/helpers/BaseJson.php
 +++ b/framework/helpers/BaseJson.php
@@ -2033,7 +2033,7 @@ index eaaee0fbd05..a2821ad9ff7 100644
              } elseif ($data instanceof \SimpleXMLElement) {
                  $data = (array) $data;
  
-diff --git a/framework/helpers/BaseStringHelper.php b/framework/helpers/BaseStringHelper.php
+diff --git a/src/helpers/BaseStringHelper.php b/src/helpers/BaseStringHelper.php
 index da134163105..749f92f79cd 100644
 --- a/framework/helpers/BaseStringHelper.php
 +++ b/framework/helpers/BaseStringHelper.php
@@ -2156,7 +2156,7 @@ index da134163105..749f92f79cd 100644
 +        return mb_substr($string, $startPos, $endPos - $startPos);
 +    }
  }
-diff --git a/framework/helpers/mimeAliases.php b/framework/helpers/mimeAliases.php
+diff --git a/src/helpers/mimeAliases.php b/src/helpers/mimeAliases.php
 index 4cd89888a77..a9e677adcbd 100644
 --- a/framework/helpers/mimeAliases.php
 +++ b/framework/helpers/mimeAliases.php
@@ -2170,7 +2170,7 @@ index 4cd89888a77..a9e677adcbd 100644
   */
  return [
      'text/rtf' => 'application/rtf',
-diff --git a/framework/helpers/mimeExtensions.php b/framework/helpers/mimeExtensions.php
+diff --git a/src/helpers/mimeExtensions.php b/src/helpers/mimeExtensions.php
 new file mode 100644
 index 00000000000..e4936030fd8
 --- /dev/null
@@ -3417,7 +3417,7 @@ index 00000000000..e4936030fd8
 +    'video/x-smv' => 'smv',
 +    'x-conference/x-cooltalk' => 'ice',
 +];
-diff --git a/framework/helpers/mimeTypes.php b/framework/helpers/mimeTypes.php
+diff --git a/src/helpers/mimeTypes.php b/src/helpers/mimeTypes.php
 index 944633aa5d2..f895e8d0728 100644
 --- a/framework/helpers/mimeTypes.php
 +++ b/framework/helpers/mimeTypes.php
@@ -3502,7 +3502,7 @@ index 944633aa5d2..f895e8d0728 100644
      $mimeTypes = array_replace($mimeTypes, array('xz' => 'application/octet-stream'));
  }
  
-diff --git a/framework/i18n/Formatter.php b/framework/i18n/Formatter.php
+diff --git a/src/i18n/Formatter.php b/src/i18n/Formatter.php
 index 3236a433beb..001b81bfa90 100644
 --- a/framework/i18n/Formatter.php
 +++ b/framework/i18n/Formatter.php
@@ -3515,7 +3515,7 @@ index 3236a433beb..001b81bfa90 100644
          }
  
          throw new InvalidArgumentException("Unknown format type: $format");
-diff --git a/framework/log/FileTarget.php b/framework/log/FileTarget.php
+diff --git a/src/log/FileTarget.php b/src/log/FileTarget.php
 index 05ad09430af..d4c267e2ed1 100644
 --- a/framework/log/FileTarget.php
 +++ b/framework/log/FileTarget.php
@@ -3538,7 +3538,7 @@ index 05ad09430af..d4c267e2ed1 100644
          if (($fp = @fopen($this->logFile, 'a')) === false) {
              throw new InvalidConfigException("Unable to append to log file: {$this->logFile}");
          }
-diff --git a/framework/messages/af/yii.php b/framework/messages/af/yii.php
+diff --git a/src/messages/af/yii.php b/src/messages/af/yii.php
 index b4a10bdf664..18be9560231 100644
 --- a/framework/messages/af/yii.php
 +++ b/framework/messages/af/yii.php
@@ -3595,7 +3595,7 @@ index b4a10bdf664..18be9560231 100644
      '{nFormatted} {n, plural, =1{byte} other{bytes}}' => '{nFormatted} {n, plural, =1{greep} other{grepe}}',
      '{nFormatted} {n, plural, =1{gibibyte} other{gibibytes}}' => '{nFormatted} {n, plural, =1{gibigreep} other{gibigrepe}}',
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, =1{gigagreep} other{gigagrepe}}',
-diff --git a/framework/messages/ar/yii.php b/framework/messages/ar/yii.php
+diff --git a/src/messages/ar/yii.php b/src/messages/ar/yii.php
 index f300954a31c..a2b19347e06 100644
 --- a/framework/messages/ar/yii.php
 +++ b/framework/messages/ar/yii.php
@@ -3726,7 +3726,7 @@ index f300954a31c..a2b19347e06 100644
      '{nFormatted} {n, plural, =1{byte} other{bytes}}' => '{nFormatted} بايت',
      '{nFormatted} {n, plural, =1{gibibyte} other{gibibytes}}' => '{nFormatted} جيبيبايت',
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} جيجابايت',
-diff --git a/framework/messages/az/yii.php b/framework/messages/az/yii.php
+diff --git a/src/messages/az/yii.php b/src/messages/az/yii.php
 index 797dc804327..a283d5501e4 100644
 --- a/framework/messages/az/yii.php
 +++ b/framework/messages/az/yii.php
@@ -3875,7 +3875,7 @@ index 797dc804327..a283d5501e4 100644
 +    '{nFormatted} {n, plural, =1{tebibyte} other{tebibytes}}' => '',
 +    '{nFormatted} {n, plural, =1{terabyte} other{terabytes}}' => '{nFormatted} Terabayt',
  ];
-diff --git a/framework/messages/be/yii.php b/framework/messages/be/yii.php
+diff --git a/src/messages/be/yii.php b/src/messages/be/yii.php
 index f2ed384a925..c2771f47385 100644
 --- a/framework/messages/be/yii.php
 +++ b/framework/messages/be/yii.php
@@ -3932,7 +3932,7 @@ index f2ed384a925..c2771f47385 100644
      '{nFormatted} {n, plural, =1{byte} other{bytes}}' => '{nFormatted} {n, plural, one{байт} few{байта} many{байтаў} other{байта}}',
      '{nFormatted} {n, plural, =1{gibibyte} other{gibibytes}}' => '{nFormatted} {n, plural, one{гібібайт} few{гібібайта} many{гібібайтаў} other{гібібайта}}',
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, one{гігабайт} few{гігабайта} many{гігабайтаў} other{гігабайта}}',
-diff --git a/framework/messages/bg/yii.php b/framework/messages/bg/yii.php
+diff --git a/src/messages/bg/yii.php b/src/messages/bg/yii.php
 index eb87f3bf120..d12f3e03169 100644
 --- a/framework/messages/bg/yii.php
 +++ b/framework/messages/bg/yii.php
@@ -3989,7 +3989,7 @@ index eb87f3bf120..d12f3e03169 100644
      '{nFormatted} {n, plural, =1{byte} other{bytes}}' => '{nFormatted} {n, plural, =1{байта} other{байта}}',
      '{nFormatted} {n, plural, =1{gibibyte} other{gibibytes}}' => '{nFormatted} {n, plural, =1{гибибайт} other{гибибайта}}',
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, =1{гигабайт} other{гигабайта}}',
-diff --git a/framework/messages/bs/yii.php b/framework/messages/bs/yii.php
+diff --git a/src/messages/bs/yii.php b/src/messages/bs/yii.php
 index 968d93aa442..c4013f58cf1 100644
 --- a/framework/messages/bs/yii.php
 +++ b/framework/messages/bs/yii.php
@@ -4106,7 +4106,7 @@ index 968d93aa442..c4013f58cf1 100644
      '{nFormatted} {n, plural, =1{byte} other{bytes}}' => '{nFormatted} {n, plural, =1{bajt} other{bajtova}}',
      '{nFormatted} {n, plural, =1{gibibyte} other{gibibytes}}' => '{nFormatted} {n, plural, =1{gibibajt} other{gibibajta}}',
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, =1{gigabajt} other{gigabajta}}',
-diff --git a/framework/messages/ca/yii.php b/framework/messages/ca/yii.php
+diff --git a/src/messages/ca/yii.php b/src/messages/ca/yii.php
 index f404ab6411d..9e359a0dd5d 100644
 --- a/framework/messages/ca/yii.php
 +++ b/framework/messages/ca/yii.php
@@ -4255,7 +4255,7 @@ index f404ab6411d..9e359a0dd5d 100644
 +    '{nFormatted} {n, plural, =1{tebibyte} other{tebibytes}}' => '',
 +    '{nFormatted} {n, plural, =1{terabyte} other{terabytes}}' => '{nFormatted} {n, plural, =1{terabyte} other{terabytes}}',
  ];
-diff --git a/framework/messages/config.php b/framework/messages/config.php
+diff --git a/src/messages/config.php b/src/messages/config.php
 index 93845f2e0a9..21ba4310a5c 100644
 --- a/framework/messages/config.php
 +++ b/framework/messages/config.php
@@ -4284,7 +4284,7 @@ index 93845f2e0a9..21ba4310a5c 100644
      // boolean, whether to mark messages that no longer appear in the source code.
      // Defaults to true, which means each of these messages will be enclosed with a pair of '@@' marks.
      'markUnused' => true,
-diff --git a/framework/messages/cs/yii.php b/framework/messages/cs/yii.php
+diff --git a/src/messages/cs/yii.php b/src/messages/cs/yii.php
 index d5c8232f1ba..5520301c14b 100644
 --- a/framework/messages/cs/yii.php
 +++ b/framework/messages/cs/yii.php
@@ -4429,7 +4429,7 @@ index d5c8232f1ba..5520301c14b 100644
      '{nFormatted} {n, plural, =1{byte} other{bytes}}' => '{nFormatted} {n, plural, =1{byte} few{byty} other{bytů}}',
      '{nFormatted} {n, plural, =1{gibibyte} other{gibibytes}}' => '{nFormatted} {n, plural, =1{gibibyte} few{gibibyty} other{gibibytů}}',
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, =1{gigabyte} few{gigabyty} other{gigabytů}}',
-diff --git a/framework/messages/da/yii.php b/framework/messages/da/yii.php
+diff --git a/src/messages/da/yii.php b/src/messages/da/yii.php
 index d7e27d265e3..6f074dd60be 100644
 --- a/framework/messages/da/yii.php
 +++ b/framework/messages/da/yii.php
@@ -4645,7 +4645,7 @@ index d7e27d265e3..6f074dd60be 100644
 +    '{nFormatted} {n, plural, =1{tebibyte} other{tebibytes}}' => '',
 +    '{nFormatted} {n, plural, =1{terabyte} other{terabytes}}' => '{nFormatted} {n, plural, =1{terabyte} other{terabytes}}',
  ];
-diff --git a/framework/messages/de/yii.php b/framework/messages/de/yii.php
+diff --git a/src/messages/de/yii.php b/src/messages/de/yii.php
 index 51ede9951a1..96f36ac4374 100644
 --- a/framework/messages/de/yii.php
 +++ b/framework/messages/de/yii.php
@@ -4736,7 +4736,7 @@ index 51ede9951a1..96f36ac4374 100644
 -    'The format of {filter} is invalid.' => 'Das Format von {filter} ist ungültig.',
 -    'Unknown filter attribute "{attribute}"' => 'Unbekanntes Filter-Attribut "{attribute}"',
  ];
-diff --git a/framework/messages/el/yii.php b/framework/messages/el/yii.php
+diff --git a/src/messages/el/yii.php b/src/messages/el/yii.php
 index 2c4cfa79fd9..fddd64d8212 100644
 --- a/framework/messages/el/yii.php
 +++ b/framework/messages/el/yii.php
@@ -4748,7 +4748,7 @@ index 2c4cfa79fd9..fddd64d8212 100644
      '{delta, plural, =1{1 day} other{# days}}' => '{delta, plural, =1{1 ημέρα} other{# ημέρες}}',
      '{delta, plural, =1{1 hour} other{# hours}}' => '{delta, plural, =1{1 ώρα} other{# ώρες}}',
      '{delta, plural, =1{1 minute} other{# minutes}}' => '{delta, plural, =1{1 λεπτό} other{# λεπτά}}',
-diff --git a/framework/messages/es/yii.php b/framework/messages/es/yii.php
+diff --git a/src/messages/es/yii.php b/src/messages/es/yii.php
 index 6d65a3233c8..af60f0767ed 100644
 --- a/framework/messages/es/yii.php
 +++ b/framework/messages/es/yii.php
@@ -4828,7 +4828,7 @@ index 6d65a3233c8..af60f0767ed 100644
      '{nFormatted} {n, plural, =1{byte} other{bytes}}' => '{nFormatted} {n, plural, =1{byte} other{bytes}}',
      '{nFormatted} {n, plural, =1{gibibyte} other{gibibytes}}' => '{nFormatted} {n, plural, =1{gibibyte} other{gibibytes}}',
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}',
-diff --git a/framework/messages/et/yii.php b/framework/messages/et/yii.php
+diff --git a/src/messages/et/yii.php b/src/messages/et/yii.php
 index 337d7fc1506..950274fa961 100644
 --- a/framework/messages/et/yii.php
 +++ b/framework/messages/et/yii.php
@@ -4960,7 +4960,7 @@ index 337d7fc1506..950274fa961 100644
      '{nFormatted} B' => '{nFormatted} B',
      '{nFormatted} GB' => '{nFormatted} GB',
      '{nFormatted} GiB' => '{nFormatted} GiB',
-diff --git a/framework/messages/fa/yii.php b/framework/messages/fa/yii.php
+diff --git a/src/messages/fa/yii.php b/src/messages/fa/yii.php
 index ec97c548788..e9213b3482f 100644
 --- a/framework/messages/fa/yii.php
 +++ b/framework/messages/fa/yii.php
@@ -5075,7 +5075,7 @@ index ec97c548788..e9213b3482f 100644
      '{nFormatted} {n, plural, =1{byte} other{bytes}}' => '{nFormatted} بایت',
      '{nFormatted} {n, plural, =1{gibibyte} other{gibibytes}}' => '{nFormatted} گیبی‌بایت',
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} گیگابایت',
-diff --git a/framework/messages/fi/yii.php b/framework/messages/fi/yii.php
+diff --git a/src/messages/fi/yii.php b/src/messages/fi/yii.php
 index 938fd62d97c..531a44214e7 100644
 --- a/framework/messages/fi/yii.php
 +++ b/framework/messages/fi/yii.php
@@ -5176,7 +5176,7 @@ index 938fd62d97c..531a44214e7 100644
      '{nFormatted} {n, plural, =1{byte} other{bytes}}' => '{nFormatted} {n, plural, =1{tavu} other{tavua}}',
      '{nFormatted} {n, plural, =1{gibibyte} other{gibibytes}}' => '{nFormatted} {n, plural, =1{gibitavu} other{gibitavua}}',
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, =1{gigatavu} other{gigatavua}}',
-diff --git a/framework/messages/fr/yii.php b/framework/messages/fr/yii.php
+diff --git a/src/messages/fr/yii.php b/src/messages/fr/yii.php
 index 458d7e738e7..8e1bfda3cd4 100644
 --- a/framework/messages/fr/yii.php
 +++ b/framework/messages/fr/yii.php
@@ -5241,7 +5241,7 @@ index 458d7e738e7..8e1bfda3cd4 100644
      '{nFormatted} {n, plural, =1{terabyte} other{terabytes}}' => '{nFormatted} {n, plural, =1{# teraoctet} other{# teraoctets}}',
 -    '"{attribute}" does not support operator "{operator}".' => '"{attribute}" ne supporte pas l\'opérateur "{operator}".',
  ];
-diff --git a/framework/messages/he/yii.php b/framework/messages/he/yii.php
+diff --git a/src/messages/he/yii.php b/src/messages/he/yii.php
 index 4613b419139..b3eef1b535c 100644
 --- a/framework/messages/he/yii.php
 +++ b/framework/messages/he/yii.php
@@ -5378,7 +5378,7 @@ index 4613b419139..b3eef1b535c 100644
 +    '{nFormatted} {n, plural, =1{tebibyte} other{tebibytes}}' => '',
 +    '{nFormatted} {n, plural, =1{terabyte} other{terabytes}}' => '',
  ];
-diff --git a/framework/messages/hi/yii.php b/framework/messages/hi/yii.php
+diff --git a/src/messages/hi/yii.php b/src/messages/hi/yii.php
 index 6c79f0c2620..0276c2d8728 100644
 --- a/framework/messages/hi/yii.php
 +++ b/framework/messages/hi/yii.php
@@ -5457,7 +5457,7 @@ index 6c79f0c2620..0276c2d8728 100644
      '{nFormatted} {n, plural, =1{byte} other{bytes}}' => '{nFormatted} {n, plural, =1{बाइट} other{बाइट्स}}',
      '{nFormatted} {n, plural, =1{gibibyte} other{gibibytes}}' => '{nFormatted} {n, plural, =1{गिबिबाइट} other{गिबिबाइटस}}',
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, =1{गीगाबाइट} other{गीगाबाइटस}}',
-diff --git a/framework/messages/hr/yii.php b/framework/messages/hr/yii.php
+diff --git a/src/messages/hr/yii.php b/src/messages/hr/yii.php
 index ac445e0908c..73e5c656fb0 100644
 --- a/framework/messages/hr/yii.php
 +++ b/framework/messages/hr/yii.php
@@ -5607,7 +5607,7 @@ index ac445e0908c..73e5c656fb0 100644
 +    '{nFormatted} {n, plural, =1{tebibyte} other{tebibytes}}' => '',
 +    '{nFormatted} {n, plural, =1{terabyte} other{terabytes}}' => '{nFormatted} {n, plural, =1{terabajt} other{terabajta}}',
  ];
-diff --git a/framework/messages/hu/yii.php b/framework/messages/hu/yii.php
+diff --git a/src/messages/hu/yii.php b/src/messages/hu/yii.php
 index 88575242bd3..db42e0f2926 100644
 --- a/framework/messages/hu/yii.php
 +++ b/framework/messages/hu/yii.php
@@ -5825,7 +5825,7 @@ index 88575242bd3..db42e0f2926 100644
 +    '{nFormatted} {n, plural, =1{tebibyte} other{tebibytes}}' => '',
 +    '{nFormatted} {n, plural, =1{terabyte} other{terabytes}}' => '{nFormatted} terabájt',
  ];
-diff --git a/framework/messages/hy/yii.php b/framework/messages/hy/yii.php
+diff --git a/src/messages/hy/yii.php b/src/messages/hy/yii.php
 index 8e2cb584548..b62094573e1 100644
 --- a/framework/messages/hy/yii.php
 +++ b/framework/messages/hy/yii.php
@@ -5925,7 +5925,7 @@ index 8e2cb584548..b62094573e1 100644
 -    'The format of {filter} is invalid.' => '{filter}-ի ֆորմատը անվավեր է։',
 -    'Unknown filter attribute "{attribute}"' => 'Անհայտ ֆիլտրի ատրիբուտ՝ «{attribute}»։',
  ];
-diff --git a/framework/messages/id/yii.php b/framework/messages/id/yii.php
+diff --git a/src/messages/id/yii.php b/src/messages/id/yii.php
 index b8a08f73f52..785f29f43b2 100644
 --- a/framework/messages/id/yii.php
 +++ b/framework/messages/id/yii.php
@@ -6074,7 +6074,7 @@ index b8a08f73f52..785f29f43b2 100644
 +    '{nFormatted} {n, plural, =1{tebibyte} other{tebibytes}}' => '',
 +    '{nFormatted} {n, plural, =1{terabyte} other{terabytes}}' => '{nFormatted} {n, plural, =1{petabita} other{petabita}}',
  ];
-diff --git a/framework/messages/it/yii.php b/framework/messages/it/yii.php
+diff --git a/src/messages/it/yii.php b/src/messages/it/yii.php
 index c16a9c18912..e2d7eff4165 100644
 --- a/framework/messages/it/yii.php
 +++ b/framework/messages/it/yii.php
@@ -6211,7 +6211,7 @@ index c16a9c18912..e2d7eff4165 100644
      '{nFormatted} {n, plural, =1{byte} other{bytes}}' => '{nFormatted} {n, plural, =1{byte} other{byte}}',
      '{nFormatted} {n, plural, =1{gibibyte} other{gibibytes}}' => '{nFormatted} {n, plural, =1{gibibyte} other{gibibyte}}',
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, =1{gigabyte} other{gigabyte}}',
-diff --git a/framework/messages/ja/yii.php b/framework/messages/ja/yii.php
+diff --git a/src/messages/ja/yii.php b/src/messages/ja/yii.php
 index 42d26beba54..6fd6c3f9da5 100644
 --- a/framework/messages/ja/yii.php
 +++ b/framework/messages/ja/yii.php
@@ -6267,7 +6267,7 @@ index 42d26beba54..6fd6c3f9da5 100644
      '{nFormatted} {n, plural, =1{byte} other{bytes}}' => '{nFormatted} バイト',
      '{nFormatted} {n, plural, =1{gibibyte} other{gibibytes}}' => '{nFormatted} ギビバイト',
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} ギガバイト',
-diff --git a/framework/messages/ka/yii.php b/framework/messages/ka/yii.php
+diff --git a/src/messages/ka/yii.php b/src/messages/ka/yii.php
 index 96eaaeb621d..c885e6bd951 100644
 --- a/framework/messages/ka/yii.php
 +++ b/framework/messages/ka/yii.php
@@ -6384,7 +6384,7 @@ index 96eaaeb621d..c885e6bd951 100644
      '{nFormatted} {n, plural, =1{byte} other{bytes}}' => '{nFormatted} {n, plural, one{ბაიტი} few{ბაიტს} many{ბაიტი} other{ბაიტს}}',
      '{nFormatted} {n, plural, =1{gibibyte} other{gibibytes}}' => '{nFormatted} {n, plural, one{გიბიბაიტი} few{გიბიბაიტს} many{გიბიბაიტი} other{გიბიბაიტს}}',
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, one{გიგაბაიტი} few{გიგაბაიტს} many{გიგაბაიტი} other{გიგაბაიტს}}',
-diff --git a/framework/messages/kk/yii.php b/framework/messages/kk/yii.php
+diff --git a/src/messages/kk/yii.php b/src/messages/kk/yii.php
 index b33338dbab8..fb43703aa89 100644
 --- a/framework/messages/kk/yii.php
 +++ b/framework/messages/kk/yii.php
@@ -6521,7 +6521,7 @@ index b33338dbab8..fb43703aa89 100644
 +    '{nFormatted} {n, plural, =1{tebibyte} other{tebibytes}}' => '',
 +    '{nFormatted} {n, plural, =1{terabyte} other{terabytes}}' => '',
  ];
-diff --git a/framework/messages/ko/yii.php b/framework/messages/ko/yii.php
+diff --git a/src/messages/ko/yii.php b/src/messages/ko/yii.php
 index 4fe82311fe8..bf0a51babb4 100644
 --- a/framework/messages/ko/yii.php
 +++ b/framework/messages/ko/yii.php
@@ -6662,7 +6662,7 @@ index 4fe82311fe8..bf0a51babb4 100644
 +    '{nFormatted} {n, plural, =1{tebibyte} other{tebibytes}}' => '',
 +    '{nFormatted} {n, plural, =1{terabyte} other{terabytes}}' => '',
  ];
-diff --git a/framework/messages/kz/yii.php b/framework/messages/kz/yii.php
+diff --git a/src/messages/kz/yii.php b/src/messages/kz/yii.php
 index d8a3cf94b5a..76c43e120c8 100644
 --- a/framework/messages/kz/yii.php
 +++ b/framework/messages/kz/yii.php
@@ -6837,7 +6837,7 @@ index d8a3cf94b5a..76c43e120c8 100644
 +    '{nFormatted} {n, plural, =1{tebibyte} other{tebibytes}}' => '{nFormatted} {n, plural, one{тебибайт} few{тебибайта} many{тебибайтов} other{тебибайта}}',
 +    '{nFormatted} {n, plural, =1{terabyte} other{terabytes}}' => '{nFormatted} {n, plural, one{терабайт} few{терабайта} many{терабайтов} other{терабайта}}',
 +];
-diff --git a/framework/messages/lt/yii.php b/framework/messages/lt/yii.php
+diff --git a/src/messages/lt/yii.php b/src/messages/lt/yii.php
 index fce59c5471b..72d8d5b3081 100644
 --- a/framework/messages/lt/yii.php
 +++ b/framework/messages/lt/yii.php
@@ -6990,7 +6990,7 @@ index fce59c5471b..72d8d5b3081 100644
 +    '{nFormatted} {n, plural, =1{tebibyte} other{tebibytes}}' => '{nFormatted} tebi{n, plural, one{baitas} few{baitai} other{baitų}}',
 +    '{nFormatted} {n, plural, =1{terabyte} other{terabytes}}' => '{nFormatted} tera{n, plural, one{baitas} few{baitai} other{baitų}}',
  ];
-diff --git a/framework/messages/lv/yii.php b/framework/messages/lv/yii.php
+diff --git a/src/messages/lv/yii.php b/src/messages/lv/yii.php
 index e49ca559500..d1ad194b9d4 100644
 --- a/framework/messages/lv/yii.php
 +++ b/framework/messages/lv/yii.php
@@ -7169,7 +7169,7 @@ index e49ca559500..d1ad194b9d4 100644
 +    '{nFormatted} {n, plural, =1{tebibyte} other{tebibytes}}' => '{nFormatted} tebi{n, plural, zero{baitu} one{baits} other{baiti}}',
 +    '{nFormatted} {n, plural, =1{terabyte} other{terabytes}}' => '{nFormatted} tera{n, plural, zero{baitu} one{baits} other{baiti}}',
  ];
-diff --git a/framework/messages/ms/yii.php b/framework/messages/ms/yii.php
+diff --git a/src/messages/ms/yii.php b/src/messages/ms/yii.php
 index 72212cbb3ed..3850dcaa6fe 100644
 --- a/framework/messages/ms/yii.php
 +++ b/framework/messages/ms/yii.php
@@ -7286,7 +7286,7 @@ index 72212cbb3ed..3850dcaa6fe 100644
      '{nFormatted} {n, plural, =1{byte} other{bytes}}' => '',
      '{nFormatted} {n, plural, =1{gibibyte} other{gibibytes}}' => '',
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '',
-diff --git a/framework/messages/nb-NO/yii.php b/framework/messages/nb-NO/yii.php
+diff --git a/src/messages/nb-NO/yii.php b/src/messages/nb-NO/yii.php
 index 9f9870c5e0a..7aebeffa60f 100644
 --- a/framework/messages/nb-NO/yii.php
 +++ b/framework/messages/nb-NO/yii.php
@@ -7422,7 +7422,7 @@ index 9f9870c5e0a..7aebeffa60f 100644
 +    '{nFormatted} {n, plural, =1{tebibyte} other{tebibytes}}' => '',
 +    '{nFormatted} {n, plural, =1{terabyte} other{terabytes}}' => '',
  ];
-diff --git a/framework/messages/nl/yii.php b/framework/messages/nl/yii.php
+diff --git a/src/messages/nl/yii.php b/src/messages/nl/yii.php
 index 24261d0520b..a647a96df31 100644
 --- a/framework/messages/nl/yii.php
 +++ b/framework/messages/nl/yii.php
@@ -7540,7 +7540,7 @@ index 24261d0520b..a647a96df31 100644
      '{nFormatted} {n, plural, =1{byte} other{bytes}}' => '{nFormatted} {n, plural, =1{byte} other{bytes}}',
      '{nFormatted} {n, plural, =1{gibibyte} other{gibibytes}}' => '{nFormatted} {n, plural, =1{gibibyte} other{gibibytes}}',
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}',
-diff --git a/framework/messages/pl/yii.php b/framework/messages/pl/yii.php
+diff --git a/src/messages/pl/yii.php b/src/messages/pl/yii.php
 index 9bd176f5052..53d609ba0b5 100644
 --- a/framework/messages/pl/yii.php
 +++ b/framework/messages/pl/yii.php
@@ -7650,7 +7650,7 @@ index 9bd176f5052..53d609ba0b5 100644
      '{nFormatted} {n, plural, =1{byte} other{bytes}}' => '{nFormatted} {n, plural, =1{bajt} few{bajty} many{bajtów} other{bajta}}',
      '{nFormatted} {n, plural, =1{gibibyte} other{gibibytes}}' => '{nFormatted} {n, plural, =1{gibibajt} few{gibibajty} many{gibibajtów} other{gibibajta}}',
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, =1{gigabajt} few{gigabajty} many{gigabajtów} other{gigabajta}}',
-diff --git a/framework/messages/pt-BR/yii.php b/framework/messages/pt-BR/yii.php
+diff --git a/src/messages/pt-BR/yii.php b/src/messages/pt-BR/yii.php
 index c626562c9c8..c71b5b4ac27 100644
 --- a/framework/messages/pt-BR/yii.php
 +++ b/framework/messages/pt-BR/yii.php
@@ -7737,7 +7737,7 @@ index c626562c9c8..c71b5b4ac27 100644
      '{nFormatted} {n, plural, =1{byte} other{bytes}}' => '{nFormatted} {n, plural, =1{byte} other{bytes}}',
      '{nFormatted} {n, plural, =1{gibibyte} other{gibibytes}}' => '{nFormatted} {n, plural, =1{gibibyte} other{gibibytes}}',
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}',
-diff --git a/framework/messages/pt/yii.php b/framework/messages/pt/yii.php
+diff --git a/src/messages/pt/yii.php b/src/messages/pt/yii.php
 index f6bdfe5f62c..9cc4999d438 100644
 --- a/framework/messages/pt/yii.php
 +++ b/framework/messages/pt/yii.php
@@ -7905,7 +7905,7 @@ index f6bdfe5f62c..9cc4999d438 100644
 -    '{attribute} should contain at most {max, number} {max, plural, one{character} other{characters}}.' => '“{attribute}” deve conter no máximo {max, number} {max, plural, one{caractere} other{caracteres}}.',
 -    '{attribute} should contain {length, number} {length, plural, one{character} other{characters}}.' => '“{attribute}” deve conter {length, number} {length, plural, one{caractere} other{caracteres}}.',
  ];
-diff --git a/framework/messages/ro/yii.php b/framework/messages/ro/yii.php
+diff --git a/src/messages/ro/yii.php b/src/messages/ro/yii.php
 index 6042d0bd695..7d62653f784 100644
 --- a/framework/messages/ro/yii.php
 +++ b/framework/messages/ro/yii.php
@@ -8042,7 +8042,7 @@ index 6042d0bd695..7d62653f784 100644
 +    '{nFormatted} {n, plural, =1{tebibyte} other{tebibytes}}' => '',
 +    '{nFormatted} {n, plural, =1{terabyte} other{terabytes}}' => '',
  ];
-diff --git a/framework/messages/ru/yii.php b/framework/messages/ru/yii.php
+diff --git a/src/messages/ru/yii.php b/src/messages/ru/yii.php
 index 31b27234323..44bced6a49d 100644
 --- a/framework/messages/ru/yii.php
 +++ b/framework/messages/ru/yii.php
@@ -8108,7 +8108,7 @@ index 31b27234323..44bced6a49d 100644
      '{nFormatted} {n, plural, =1{terabyte} other{terabytes}}' => '{nFormatted} {n, plural, one{терабайт} few{терабайта} many{терабайтов} other{терабайта}}',
 -    'You should upload at least {limit, number} {limit, plural, one{file} other{files}}.' => 'Вы должны загрузить как минимум {limit, number} {limit, plural, one{файл} few{файла} many{файлов} other{файла}}.',
  ];
-diff --git a/framework/messages/sk/yii.php b/framework/messages/sk/yii.php
+diff --git a/src/messages/sk/yii.php b/src/messages/sk/yii.php
 index 28aaaa78de1..50ff8e981b2 100644
 --- a/framework/messages/sk/yii.php
 +++ b/framework/messages/sk/yii.php
@@ -8157,7 +8157,7 @@ index 28aaaa78de1..50ff8e981b2 100644
 -    'Aliases available: {aliases}' => 'Dostupné aliasy: {aliases}',
 -    'Options available: {options}' => 'Dostupné možnosti: {options}',
  ];
-diff --git a/framework/messages/sl/yii.php b/framework/messages/sl/yii.php
+diff --git a/src/messages/sl/yii.php b/src/messages/sl/yii.php
 index 7fa542489bb..5b15a08321c 100644
 --- a/framework/messages/sl/yii.php
 +++ b/framework/messages/sl/yii.php
@@ -8284,7 +8284,7 @@ index 7fa542489bb..5b15a08321c 100644
      '{nFormatted} {n, plural, =1{byte} other{bytes}}' => '{nFormatted} {n, plural, one{bajt} two{bajta} few{bajti} other{bajtov}}',
      '{nFormatted} {n, plural, =1{gibibyte} other{gibibytes}}' => '{nFormatted} {n, plural, one{gibibajt} two{gibibajta} few{gibibajti} other{gibibajtov}}',
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, one{gigabajt} two{gigabajta} few{gigabajti} other{gigabajtov}}',
-diff --git a/framework/messages/sr-Latn/yii.php b/framework/messages/sr-Latn/yii.php
+diff --git a/src/messages/sr-Latn/yii.php b/src/messages/sr-Latn/yii.php
 index e4467b9a679..768dbd8eacd 100644
 --- a/framework/messages/sr-Latn/yii.php
 +++ b/framework/messages/sr-Latn/yii.php
@@ -8448,7 +8448,7 @@ index e4467b9a679..768dbd8eacd 100644
 +    '{nFormatted} {n, plural, =1{tebibyte} other{tebibytes}}' => '',
 +    '{nFormatted} {n, plural, =1{terabyte} other{terabytes}}' => '{nFormatted} {n, plural, one{terabajt} few{terabajta} many{terabajta} other{terabajta}}',
  ];
-diff --git a/framework/messages/sr/yii.php b/framework/messages/sr/yii.php
+diff --git a/src/messages/sr/yii.php b/src/messages/sr/yii.php
 index 6e7ba378329..7262ded5773 100644
 --- a/framework/messages/sr/yii.php
 +++ b/framework/messages/sr/yii.php
@@ -8612,7 +8612,7 @@ index 6e7ba378329..7262ded5773 100644
 +    '{nFormatted} {n, plural, =1{tebibyte} other{tebibytes}}' => '',
 +    '{nFormatted} {n, plural, =1{terabyte} other{terabytes}}' => '{nFormatted} {n, plural, one{терабајт} few{терабајта} many{терабајта} other{терабајта}}',
  ];
-diff --git a/framework/messages/sv/yii.php b/framework/messages/sv/yii.php
+diff --git a/src/messages/sv/yii.php b/src/messages/sv/yii.php
 index b3777626b02..4be34190894 100644
 --- a/framework/messages/sv/yii.php
 +++ b/framework/messages/sv/yii.php
@@ -8729,7 +8729,7 @@ index b3777626b02..4be34190894 100644
      '{nFormatted} {n, plural, =1{byte} other{bytes}}' => '{nFormatted} {n, plural, =1{byte} other{byte}}',
      '{nFormatted} {n, plural, =1{gibibyte} other{gibibytes}}' => '{nFormatted} {n, plural, =1{gibibyte} other{gibibyte}}',
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, =1{gigabyte} other{gigabyte}}',
-diff --git a/framework/messages/tg/yii.php b/framework/messages/tg/yii.php
+diff --git a/src/messages/tg/yii.php b/src/messages/tg/yii.php
 index 76429c5874e..7c9d9fc884e 100644
 --- a/framework/messages/tg/yii.php
 +++ b/framework/messages/tg/yii.php
@@ -8810,7 +8810,7 @@ index 76429c5874e..7c9d9fc884e 100644
      '{nFormatted} {n, plural, =1{byte} other{bytes}}' => '{nFormatted} {n, plural, one{байт} few{байт} many{байт} other{байт}}',
      '{nFormatted} {n, plural, =1{gibibyte} other{gibibytes}}' => '{nFormatted} {n, plural, one{гибибайт} few{гибибайт} many{гибибайт} other{гибибайт}}',
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, one{гигабайт} few{гигабайт} many{гигабайт} other{гигабайт}}',
-diff --git a/framework/messages/th/yii.php b/framework/messages/th/yii.php
+diff --git a/src/messages/th/yii.php b/src/messages/th/yii.php
 index 0b2c056ed9f..6ce740fde16 100644
 --- a/framework/messages/th/yii.php
 +++ b/framework/messages/th/yii.php
@@ -8948,7 +8948,7 @@ index 0b2c056ed9f..6ce740fde16 100644
 +    '{nFormatted} {n, plural, =1{tebibyte} other{tebibytes}}' => '',
 +    '{nFormatted} {n, plural, =1{terabyte} other{terabytes}}' => '',
  ];
-diff --git a/framework/messages/tr/yii.php b/framework/messages/tr/yii.php
+diff --git a/src/messages/tr/yii.php b/src/messages/tr/yii.php
 index b846f17d1e0..f17530b26ca 100644
 --- a/framework/messages/tr/yii.php
 +++ b/framework/messages/tr/yii.php
@@ -9028,7 +9028,7 @@ index b846f17d1e0..f17530b26ca 100644
      '{nFormatted} {n, plural, =1{byte} other{bytes}}' => '{nFormatted} {n, plural, =1{bayt} other{bayt}}',
      '{nFormatted} {n, plural, =1{gibibyte} other{gibibytes}}' => '{nFormatted} {n, plural, =1{gibibayt} other{gibibayt}}',
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, =1{gigabayt} other{gigabayt}}',
-diff --git a/framework/messages/uk/yii.php b/framework/messages/uk/yii.php
+diff --git a/src/messages/uk/yii.php b/src/messages/uk/yii.php
 index fb6fed9c46a..1a61ec73c2b 100644
 --- a/framework/messages/uk/yii.php
 +++ b/framework/messages/uk/yii.php
@@ -9127,7 +9127,7 @@ index fb6fed9c46a..1a61ec73c2b 100644
      '{nFormatted} {n, plural, =1{byte} other{bytes}}' => '{nFormatted} {n, plural, one{байт} few{байта} many{байтів} other{байта}}',
      '{nFormatted} {n, plural, =1{gibibyte} other{gibibytes}}' => '{nFormatted} {n, plural, one{гібібайт} few{гібібайта} many{гібібайтів} other{гібібайта}}',
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, one{гігабайт} few{гігабайта} many{гігабайтів} other{гігабайта}}',
-diff --git a/framework/messages/uz-Cy/yii.php b/framework/messages/uz-Cy/yii.php
+diff --git a/src/messages/uz-Cy/yii.php b/src/messages/uz-Cy/yii.php
 index f29a077b30c..c7ae1e73d88 100644
 --- a/framework/messages/uz-Cy/yii.php
 +++ b/framework/messages/uz-Cy/yii.php
@@ -9402,7 +9402,7 @@ index f29a077b30c..c7ae1e73d88 100644
 +    '{nFormatted} {n, plural, =1{tebibyte} other{tebibytes}}' => '{nFormatted} {n, plural, one{тебибайт} few{тебибайт} many{тебибайт} other{тебибайт}}',
 +    '{nFormatted} {n, plural, =1{terabyte} other{terabytes}}' => '{nFormatted} {n, plural, one{терабайт} few{терабайт} many{терабайт} other{терабайт}}',
 +];
-diff --git a/framework/messages/uz/yii.php b/framework/messages/uz/yii.php
+diff --git a/src/messages/uz/yii.php b/src/messages/uz/yii.php
 index 306de73abcc..cf1a2f612f3 100644
 --- a/framework/messages/uz/yii.php
 +++ b/framework/messages/uz/yii.php
@@ -9557,7 +9557,7 @@ index 306de73abcc..cf1a2f612f3 100644
 +    '{nFormatted} {n, plural, =1{tebibyte} other{tebibytes}}' => '{nFormatted} {n, plural, one{tebibayt} few{tebibayt} many{tebibayt} other{tebibayt}}',
 +    '{nFormatted} {n, plural, =1{terabyte} other{terabytes}}' => '{nFormatted} {n, plural, one{terabayt} few{terabayt} many{terabayt} other{terabayt}}',
  ];
-diff --git a/framework/messages/vi/yii.php b/framework/messages/vi/yii.php
+diff --git a/src/messages/vi/yii.php b/src/messages/vi/yii.php
 index 4bbc9f4896b..947442e6d21 100644
 --- a/framework/messages/vi/yii.php
 +++ b/framework/messages/vi/yii.php
@@ -9702,7 +9702,7 @@ index 4bbc9f4896b..947442e6d21 100644
 +    '{nFormatted} {n, plural, =1{tebibyte} other{tebibytes}}' => '',
 +    '{nFormatted} {n, plural, =1{terabyte} other{terabytes}}' => '{nFormatted} terabyte',
  ];
-diff --git a/framework/messages/zh-TW/yii.php b/framework/messages/zh-TW/yii.php
+diff --git a/src/messages/zh-TW/yii.php b/src/messages/zh-TW/yii.php
 index 866b25d0f9b..c9bc82152c1 100644
 --- a/framework/messages/zh-TW/yii.php
 +++ b/framework/messages/zh-TW/yii.php
@@ -9836,7 +9836,7 @@ index 866b25d0f9b..c9bc82152c1 100644
      '{nFormatted} {n, plural, =1{byte} other{bytes}}' => '{nFormatted} 字節',
      '{nFormatted} {n, plural, =1{gibibyte} other{gibibytes}}' => '{nFormatted} 千兆位二進制字節',
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} 千兆字節',
-diff --git a/framework/messages/zh-CN/yii.php b/framework/messages/zh/yii.php
+diff --git a/src/messages/zh-CN/yii.php b/src/messages/zh/yii.php
 similarity index 98%
 rename from framework/messages/zh-CN/yii.php
 rename to framework/messages/zh/yii.php
@@ -9896,7 +9896,7 @@ index 9d5447b89d7..7f1f3de35d9 100644
      '{nFormatted} {n, plural, =1{byte} other{bytes}}' => '{nFormatted} 字节',
      '{nFormatted} {n, plural, =1{gibibyte} other{gibibytes}}' => '{nFormatted} 千兆二进制字节',
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} 千兆字节',
-diff --git a/framework/mutex/MysqlMutex.php b/framework/mutex/MysqlMutex.php
+diff --git a/src/mutex/MysqlMutex.php b/src/mutex/MysqlMutex.php
 index cbbd49dad3f..d7716e8c64e 100644
 --- a/framework/mutex/MysqlMutex.php
 +++ b/framework/mutex/MysqlMutex.php
@@ -9964,7 +9964,7 @@ index cbbd49dad3f..d7716e8c64e 100644
          return sha1($name);
      }
  }
-diff --git a/framework/rbac/DbManager.php b/framework/rbac/DbManager.php
+diff --git a/src/rbac/DbManager.php b/src/rbac/DbManager.php
 index 00c40711eb8..2685ad5a1cd 100644
 --- a/framework/rbac/DbManager.php
 +++ b/framework/rbac/DbManager.php
@@ -10092,7 +10092,7 @@ index 00c40711eb8..2685ad5a1cd 100644
 +        $this->cache->set($this->getUserRolesCachedSetKey(), $cachedUserIds);
 +    }
  }
-diff --git a/framework/requirements/YiiRequirementChecker.php b/framework/requirements/YiiRequirementChecker.php
+diff --git a/src/requirements/YiiRequirementChecker.php b/src/requirements/YiiRequirementChecker.php
 index c3c707876fb..45675cd716c 100644
 --- a/framework/requirements/YiiRequirementChecker.php
 +++ b/framework/requirements/YiiRequirementChecker.php
@@ -10108,7 +10108,7 @@ index c3c707876fb..45675cd716c 100644
      /**
       * Check the given requirements, collecting results into internal field.
       * This method can be invoked several times checking different requirement sets.
-diff --git a/framework/requirements/requirements.php b/framework/requirements/requirements.php
+diff --git a/src/requirements/requirements.php b/src/requirements/requirements.php
 index 55593061518..d065f6363bc 100644
 --- a/framework/requirements/requirements.php
 +++ b/framework/requirements/requirements.php
@@ -10125,7 +10125,7 @@ index 55593061518..d065f6363bc 100644
 +        'memo' => 'Recommended for yii2-queue CLI operations'
      )
  );
-diff --git a/framework/rest/Serializer.php b/framework/rest/Serializer.php
+diff --git a/src/rest/Serializer.php b/src/rest/Serializer.php
 index a4d16b195f2..eedd96c2cc6 100644
 --- a/framework/rest/Serializer.php
 +++ b/framework/rest/Serializer.php
@@ -10169,7 +10169,7 @@ index a4d16b195f2..eedd96c2cc6 100644
              } elseif (is_array($model)) {
                  $models[$i] = ArrayHelper::toArray($model);
              }
-diff --git a/framework/validators/DateValidator.php b/framework/validators/DateValidator.php
+diff --git a/src/validators/DateValidator.php b/src/validators/DateValidator.php
 index 740011846de..c0f66454120 100644
 --- a/framework/validators/DateValidator.php
 +++ b/framework/validators/DateValidator.php
@@ -10184,7 +10184,7 @@ index 740011846de..c0f66454120 100644
              return false;
          }
  
-diff --git a/framework/validators/NumberValidator.php b/framework/validators/NumberValidator.php
+diff --git a/src/validators/NumberValidator.php b/src/validators/NumberValidator.php
 index 714288a27f6..074af8cf45f 100644
 --- a/framework/validators/NumberValidator.php
 +++ b/framework/validators/NumberValidator.php
@@ -10215,7 +10215,7 @@ index 714288a27f6..074af8cf45f 100644
                  return [$this->tooBig, ['max' => $this->max]];
              }
          }
-diff --git a/framework/web/Controller.php b/framework/web/Controller.php
+diff --git a/src/web/Controller.php b/src/web/Controller.php
 index 52de6c998e7..86be85819f0 100644
 --- a/framework/web/Controller.php
 +++ b/framework/web/Controller.php
@@ -10238,7 +10238,7 @@ index 52de6c998e7..86be85819f0 100644
                      && $type->isBuiltin()
                      && ($params[$name] !== null || !$type->allowsNull())
                  ) {
-diff --git a/framework/web/Cookie.php b/framework/web/Cookie.php
+diff --git a/src/web/Cookie.php b/src/web/Cookie.php
 index ac9a7233710..d249afa6cbd 100644
 --- a/framework/web/Cookie.php
 +++ b/framework/web/Cookie.php
@@ -10253,7 +10253,7 @@ index ac9a7233710..d249afa6cbd 100644
       */
      public $expire = 0;
      /**
-diff --git a/framework/web/CookieCollection.php b/framework/web/CookieCollection.php
+diff --git a/src/web/CookieCollection.php b/src/web/CookieCollection.php
 index aa09b9ca455..597fc2f5fd7 100644
 --- a/framework/web/CookieCollection.php
 +++ b/framework/web/CookieCollection.php
@@ -10303,7 +10303,7 @@ index aa09b9ca455..597fc2f5fd7 100644
       * The array keys are cookie names, and the array values are the corresponding cookie objects.
       */
      public function toArray()
-diff --git a/framework/web/HeaderCollection.php b/framework/web/HeaderCollection.php
+diff --git a/src/web/HeaderCollection.php b/src/web/HeaderCollection.php
 index 07d6502ef46..724e875bc69 100644
 --- a/framework/web/HeaderCollection.php
 +++ b/framework/web/HeaderCollection.php
@@ -10317,7 +10317,7 @@ index 07d6502ef46..724e875bc69 100644
   * @author Qiang Xue <qiang.xue@gmail.com>
   * @since 2.0
   */
-diff --git a/framework/web/Request.php b/framework/web/Request.php
+diff --git a/src/web/Request.php b/src/web/Request.php
 index d3a716c97f0..d87489ce389 100644
 --- a/framework/web/Request.php
 +++ b/framework/web/Request.php
@@ -10385,7 +10385,7 @@ index d3a716c97f0..d87489ce389 100644
      }
  
      private $_secureForwardedHeaderParts;
-diff --git a/framework/web/Response.php b/framework/web/Response.php
+diff --git a/src/web/Response.php b/src/web/Response.php
 index bc06a4b04dd..1724438803e 100644
 --- a/framework/web/Response.php
 +++ b/framework/web/Response.php
@@ -10450,7 +10450,7 @@ index bc06a4b04dd..1724438803e 100644
          }
  
          if ($checkAjax && $request->getIsAjax()) {
-diff --git a/framework/web/Session.php b/framework/web/Session.php
+diff --git a/src/web/Session.php b/src/web/Session.php
 index 01997ff5f5f..40768924cf5 100644
 --- a/framework/web/Session.php
 +++ b/framework/web/Session.php
@@ -10471,7 +10471,7 @@ index 01997ff5f5f..40768924cf5 100644
       *
       * @throws InvalidArgumentException if the parameters are incomplete.
       * @see https://www.php.net/manual/en/function.session-set-cookie-params.php
-diff --git a/framework/web/View.php b/framework/web/View.php
+diff --git a/src/web/View.php b/src/web/View.php
 index c372fece58c..f2c19fc721f 100644
 --- a/framework/web/View.php
 +++ b/framework/web/View.php
@@ -10512,7 +10512,7 @@ index c372fece58c..f2c19fc721f 100644
          }
  
          if (empty($depends)) {
-diff --git a/framework/widgets/MaskedInputAsset.php b/framework/widgets/MaskedInputAsset.php
+diff --git a/src/widgets/MaskedInputAsset.php b/src/widgets/MaskedInputAsset.php
 index 57748be86f8..473f4315ffa 100644
 --- a/framework/widgets/MaskedInputAsset.php
 +++ b/framework/widgets/MaskedInputAsset.php
@@ -10525,7 +10525,7 @@ index 57748be86f8..473f4315ffa 100644
      ];
      public $depends = [
          'yii\web\YiiAsset',
-diff --git a/framework/widgets/Menu.php b/framework/widgets/Menu.php
+diff --git a/src/widgets/Menu.php b/src/widgets/Menu.php
 index a70ad1f3e1a..025379796f1 100644
 --- a/framework/widgets/Menu.php
 +++ b/framework/widgets/Menu.php
