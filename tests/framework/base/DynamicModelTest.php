@@ -40,7 +40,21 @@ class DynamicModelTest extends TestCase
         $this->assertTrue($model->hasErrors('age'));
     }
 
-    public function testAddRule(): void
+    public function testValidateDataWithPostData()
+    {
+        $post = [
+            'name' => 'long name',
+        ];
+        $model = DynamicModel::validateData($post, [
+            [['email', 'name'], 'required'],
+            ['age', 'default', 'value' => 18],
+        ]);
+        $this->assertTrue($model->hasErrors());
+        $this->assertTrue($model->hasErrors('email'));
+        $this->assertEquals(18, $model->age);
+    }
+
+    public function testAddRule()
     {
         $model = new DynamicModel();
         $this->assertEquals(0, $model->getValidators()->count());
