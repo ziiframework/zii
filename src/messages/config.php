@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -18,8 +15,7 @@ return [
     'languages' => [
         'af', 'ar', 'az', 'be', 'bg', 'bs', 'ca', 'cs', 'da', 'de', 'el', 'es', 'et', 'fa', 'fi', 'fr', 'he', 'hi',
         'pt-BR', 'ro', 'hr', 'hu', 'hy', 'id', 'it', 'ja', 'ka', 'kk', 'ko', 'kz', 'lt', 'lv', 'ms', 'nb-NO', 'nl',
-        'pl', 'pt', 'ru', 'sk', 'sl', 'sr', 'sr-Latn', 'sv', 'tg', 'th', 'tr', 'uk', 'uz', 'uz-Cy', 'vi', 'zh-CN',
-        'zh-TW',
+        'pl', 'pt', 'ru', 'sk', 'sl', 'sr', 'sr-Latn', 'sv', 'tg', 'th', 'tr', 'uk', 'uz', 'uz-Cy', 'vi', 'zh', 'zh-TW'
     ],
     // string, the name of the function for translating messages.
     // Defaults to 'Yii::t'. This is used as a mark to find the messages to be
@@ -29,12 +25,12 @@ return [
     // boolean, whether to sort messages by keys when merging new messages
     // with the existing ones. Defaults to false, which means the new (untranslated)
     // messages will be separated from the old (translated) ones.
-    'sort' => false,
+    'sort' => true,
     // boolean, whether the message file should be overwritten with the merged messages
     'overwrite' => true,
     // boolean, whether to remove messages that no longer appear in the source code.
     // Defaults to false, which means each of these messages will be enclosed with a pair of '@@' marks.
-    'removeUnused' => false,
+    'removeUnused' => true,
     // boolean, whether to mark messages that no longer appear in the source code.
     // Defaults to true, which means each of these messages will be enclosed with a pair of '@@' marks.
     'markUnused' => true,
@@ -70,5 +66,5 @@ return [
     // Generated file format. Can be "php", "db" or "po".
     'format' => 'php',
     // Connection component ID for "db" format.
-    // 'db' => 'db',
+    //'db' => 'db',
 ];
