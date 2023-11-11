@@ -9838,8 +9838,8 @@ index 866b25d0f9b..c9bc82152c1 100644
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} 千兆字節',
 diff --git a/src/messages/zh-CN/yii.php b/src/messages/zh/yii.php
 similarity index 98%
-rename from framework/messages/zh-CN/yii.php
-rename to framework/messages/zh/yii.php
+rename from src/messages/zh-CN/yii.php
+rename to src/messages/zh/yii.php
 index 9d5447b89d7..7f1f3de35d9 100644
 --- a/src/messages/zh-CN/yii.php
 +++ b/src/messages/zh/yii.php
