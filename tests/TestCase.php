@@ -135,11 +135,13 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
     /**
      * Asserting two strings equality ignoring unicode whitespaces.
+     *
      * @param string $expected
      * @param string $actual
      * @param string $message
      */
-    protected function assertEqualsAnyWhitespace($expected, $actual, $message = ''){
+    protected function assertEqualsAnyWhitespace($expected, $actual, $message = ''): void
+    {
         $expected = $this->sanitizeWhitespaces($expected);
         $actual = $this->sanitizeWhitespaces($actual);
 
@@ -151,14 +153,14 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * Used on objects, it asserts that two variables reference
      * the same object.
      *
-     * @param mixed  $expected
-     * @param mixed  $actual
      * @param string $message
      */
-    protected function assertSameAnyWhitespace($expected, $actual, $message = ''){
+    protected function assertSameAnyWhitespace($expected, $actual, $message = ''): void
+    {
         if (is_string($expected)) {
             $expected = $this->sanitizeWhitespaces($expected);
         }
+
         if (is_string($actual)) {
             $actual = $this->sanitizeWhitespaces($actual);
         }
@@ -169,8 +171,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * Asserts that a haystack contains a needle ignoring line endings.
      *
-     * @param mixed $needle
-     * @param mixed $haystack
      * @param string $message
      */
     protected function assertContainsWithoutLE($needle, $haystack, $message = ''): void
@@ -182,22 +182,22 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Replaces unicode whitespaces with standard whitespace
+     * Replaces unicode whitespaces with standard whitespace.
      *
      * @see https://github.com/yiisoft/yii2/issues/19868 (ICU 72 changes)
-     * @param $string
+     *
      * @return string
      */
-    protected function sanitizeWhitespaces($string){
-        return preg_replace("/[\pZ\pC]/u", " ", $string);
+    protected function sanitizeWhitespaces($string)
+    {
+        return preg_replace("/[\pZ\pC]/u", ' ', $string);
     }
 
     /**
      * Invokes a inaccessible method.
+     *
      * @param array $args
      * @param bool $revoke whether to make method inaccessible after execution
-     *
-     * @return mixed
      *
      * @since 2.0.11
      */
@@ -242,8 +242,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * Gets an inaccessible object property.
      *
      * @param bool $revoke whether to make property inaccessible after getting
-     *
-     * @return mixed
      */
     protected function getInaccessibleProperty($object, $propertyName, $revoke = true)
     {
@@ -266,7 +264,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * Asserts that value is one of expected values.
      *
-     * @param mixed $actual
      * @param string $message
      */
     public function assertIsOneOf($actual, array $expected, $message = ''): void

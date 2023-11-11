@@ -20,7 +20,7 @@ use yii\caching\MemCache;
  */
 class MemCachedTest extends CacheTestCase
 {
-    private $_cacheInstance = null;
+    private $_cacheInstance;
 
     /**
      * @return MemCache
@@ -34,7 +34,7 @@ class MemCachedTest extends CacheTestCase
         if (
             PHP_VERSION_ID >= 80100 && version_compare(phpversion('memcached'), '3.1.5', '<=')
         ) {
-            $php_version = phpversion();
+            $php_version = PHP_VERSION;
             $memcached_version = phpversion('memcached');
             $this->markTestSkipped("memcached version $memcached_version is not ready for PHP $php_version. Skipping.");
         }

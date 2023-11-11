@@ -57,9 +57,6 @@ class SortTest extends TestCase
         $this->assertEquals(SORT_ASC, $orders['age']);
     }
 
-    /**
-     * @depends testGetOrders
-     */
     public function testGetAttributeOrders(): void
     {
         $sort = new Sort([
@@ -87,9 +84,6 @@ class SortTest extends TestCase
         $this->assertEquals(SORT_ASC, $orders['age']);
     }
 
-    /**
-     * @depends testGetAttributeOrders
-     */
     public function testGetAttributeOrder(): void
     {
         $sort = new Sort([
@@ -111,9 +105,6 @@ class SortTest extends TestCase
         $this->assertNull($sort->getAttributeOrder('xyz'));
     }
 
-    /**
-     * @depends testGetAttributeOrders
-     */
     public function testSetAttributeOrders(): void
     {
         $sort = new Sort([
@@ -221,10 +212,20 @@ class SortTest extends TestCase
         $this->assertEquals('/index.php?r=site%2Findex&sort=age', $sort->createUrl('name'));
     }
 
+    public function providerForLinkWithParams()
+    {
+        return [
+            [true, null, '<a class="asc" href="/index.php?r=site%2Findex&amp;sort=-age%2C-name" data-sort="-age,-name">Age</a>'],
+            [false, null, '<a class="asc" href="/index.php?r=site%2Findex&amp;sort=-age" data-sort="-age">Age</a>'],
+            [true, ['age' => SORT_DESC], '<a class="asc" href="/index.php?r=site%2Findex&amp;sort=-age%2C-name" data-sort="-age,-name">Age</a>'],
+            [false, ['age' => SORT_DESC], '<a class="asc" href="/index.php?r=site%2Findex&amp;sort=-age" data-sort="-age">Age</a>'],
+        ];
+    }
+
     /**
-     * @depends testCreateUrl
+     * @dataProvider providerForLinkWithParams
      */
-    public function testLink(): void
+    public function testLinkWithParams($enableMultiSort, $defaultOrder, $link): void
     {
         $this->mockApplication();
         $manager = new UrlManager([
@@ -244,12 +245,95 @@ class SortTest extends TestCase
             'params' => [
                 'sort' => 'age,-name',
             ],
-            'enableMultiSort' => true,
+            'enableMultiSort' => $enableMultiSort,
+            'defaultOrder' => $defaultOrder,
             'urlManager' => $manager,
             'route' => 'site/index',
         ]);
 
-        $this->assertEquals('<a class="asc" href="/index.php?r=site%2Findex&amp;sort=-age%2C-name" data-sort="-age,-name">Age</a>', $sort->link('age'));
+        $this->assertEquals($link, $sort->link('age'));
+    }
+
+    public function providerForLinkWithParamsAndPassedButEmptySort()
+    {
+        return [
+            [null],
+            [['age' => SORT_DESC]],
+            [['age' => SORT_ASC]],
+        ];
+    }
+
+    /**
+     * @dataProvider providerForLinkWithParamsAndPassedButEmptySort
+     */
+    public function testLinkWithParamsAndPassedButEmptySort($defaultOrder): void
+    {
+        $this->mockApplication();
+        $manager = new UrlManager([
+            'baseUrl' => '/',
+            'scriptUrl' => '/index.php',
+            'cache' => null,
+        ]);
+
+        $sort = new Sort([
+            'attributes' => [
+                'age',
+                'name' => [
+                    'asc' => ['first_name' => SORT_ASC, 'last_name' => SORT_ASC],
+                    'desc' => ['first_name' => SORT_DESC, 'last_name' => SORT_DESC],
+                ],
+            ],
+            'params' => [
+                'sort' => '',
+            ],
+            'enableMultiSort' => true,
+            'defaultOrder' => $defaultOrder,
+            'urlManager' => $manager,
+            'route' => 'site/index',
+        ]);
+
+        $this->assertEquals('<a href="/index.php?r=site%2Findex&amp;sort=age" data-sort="age">Age</a>', $sort->link('age'));
+    }
+
+    public function providerForLinkWithoutParams()
+    {
+        return [
+            [false, null, '<a href="/index.php?r=site%2Findex&amp;sort=age" data-sort="age">Age</a>'],
+            [false, ['age' => SORT_DESC], '<a class="desc" href="/index.php?r=site%2Findex&amp;sort=age" data-sort="age">Age</a>'],
+            [false, ['age' => SORT_ASC], '<a class="asc" href="/index.php?r=site%2Findex&amp;sort=-age" data-sort="-age">Age</a>'],
+            [true, null, '<a href="/index.php?r=site%2Findex&amp;sort=age" data-sort="age">Age</a>'],
+            [true, ['age' => SORT_DESC], '<a class="desc" href="/index.php?r=site%2Findex&amp;sort=" data-sort="">Age</a>'],
+            [true, ['age' => SORT_ASC], '<a class="asc" href="/index.php?r=site%2Findex&amp;sort=-age" data-sort="-age">Age</a>'],
+        ];
+    }
+
+    /**
+     * @dataProvider providerForLinkWithoutParams
+     */
+    public function testLinkWithoutParams($enableMultiSort, $defaultOrder, $link): void
+    {
+        $this->mockApplication();
+        $manager = new UrlManager([
+            'baseUrl' => '/',
+            'scriptUrl' => '/index.php',
+            'cache' => null,
+        ]);
+
+        $sort = new Sort([
+            'attributes' => [
+                'age',
+                'name' => [
+                    'asc' => ['first_name' => SORT_ASC, 'last_name' => SORT_ASC],
+                    'desc' => ['first_name' => SORT_DESC, 'last_name' => SORT_DESC],
+                ],
+            ],
+            'enableMultiSort' => $enableMultiSort,
+            'defaultOrder' => $defaultOrder,
+            'urlManager' => $manager,
+            'route' => 'site/index',
+        ]);
+
+        $this->assertEquals($link, $sort->link('age'));
     }
 
     public function testParseSortParam(): void
@@ -273,8 +357,6 @@ class SortTest extends TestCase
     }
 
     /**
-     * @depends testGetOrders
-     *
      * @see https://github.com/yiisoft/yii2/pull/13260
      */
     public function testGetExpressionOrders(): void
