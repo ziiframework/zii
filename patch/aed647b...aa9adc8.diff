@@ -1,7 +1,7 @@
 diff --git a/src/BaseYii.php b/src/BaseYii.php
 index efc453add05..496f6aa121a 100644
---- a/framework/BaseYii.php
-+++ b/framework/BaseYii.php
+--- a/src/BaseYii.php
++++ b/src/BaseYii.php
 @@ -68,7 +68,7 @@ class BaseYii
       */
      public static $classMap = [];
@@ -22,8 +22,8 @@ index efc453add05..496f6aa121a 100644
      /**
 diff --git a/src/CHANGELOG.md b/src/CHANGELOG.md
 index 40a25165de2..3867382321c 100644
---- a/framework/CHANGELOG.md
-+++ b/framework/CHANGELOG.md
+--- a/src/CHANGELOG.md
++++ b/src/CHANGELOG.md
 @@ -1,10 +1,98 @@
  Yii Framework 2 Change Log
  ==========================
@@ -127,8 +127,8 @@ index 40a25165de2..3867382321c 100644
  2.0.47 November 18, 2022
 diff --git a/src/UPGRADE.md b/src/UPGRADE.md
 index 898f77c6944..3a9569a9822 100644
---- a/framework/UPGRADE.md
-+++ b/framework/UPGRADE.md
+--- a/src/UPGRADE.md
++++ b/src/UPGRADE.md
 @@ -52,6 +52,17 @@ version B between A and C, you need to follow the instructions
  for both A and B.
  
@@ -161,8 +161,8 @@ index 898f77c6944..3a9569a9822 100644
  -----------------------
 diff --git a/src/assets/yii.activeForm.js b/src/assets/yii.activeForm.js
 index b12f812c37d..5b9ce4aaec2 100644
---- a/framework/assets/yii.activeForm.js
-+++ b/framework/assets/yii.activeForm.js
+--- a/src/assets/yii.activeForm.js
++++ b/src/assets/yii.activeForm.js
 @@ -395,9 +395,11 @@
                          data: $form.serialize() + extData,
                          dataType: data.settings.ajaxDataType,
@@ -195,8 +195,8 @@ index b12f812c37d..5b9ce4aaec2 100644
  })(window.jQuery);
 diff --git a/src/assets/yii.gridView.js b/src/assets/yii.gridView.js
 index 825ff5044db..f02d4d95e94 100644
---- a/framework/assets/yii.gridView.js
-+++ b/framework/assets/yii.gridView.js
+--- a/src/assets/yii.gridView.js
++++ b/src/assets/yii.gridView.js
 @@ -188,16 +188,19 @@
              if (!options.multiple || !options.checkAll) {
                  return;
@@ -227,8 +227,8 @@ index 825ff5044db..f02d4d95e94 100644
          getSelectedRows: function () {
 diff --git a/src/base/Configurable.php b/src/base/Configurable.php
 index 9982d6f627c..b44a082841e 100644
---- a/framework/base/Configurable.php
-+++ b/framework/base/Configurable.php
+--- a/src/base/Configurable.php
++++ b/src/base/Configurable.php
 @@ -15,7 +15,7 @@
   * like the following:
   *
@@ -240,8 +240,8 @@ index 9982d6f627c..b44a082841e 100644
   * That is, the last parameter of the constructor must accept a configuration array.
 diff --git a/src/base/DynamicModel.php b/src/base/DynamicModel.php
 index 027da6d1982..9ce466b8fa3 100644
---- a/framework/base/DynamicModel.php
-+++ b/framework/base/DynamicModel.php
+--- a/src/base/DynamicModel.php
++++ b/src/base/DynamicModel.php
 @@ -201,6 +201,7 @@ public function addRule($attributes, $validator, $options = [])
          }
  
@@ -284,8 +284,8 @@ index 027da6d1982..9ce466b8fa3 100644
       */
 diff --git a/src/base/ErrorHandler.php b/src/base/ErrorHandler.php
 index 81a20f0a3c9..393438ede57 100644
---- a/framework/base/ErrorHandler.php
-+++ b/framework/base/ErrorHandler.php
+--- a/src/base/ErrorHandler.php
++++ b/src/base/ErrorHandler.php
 @@ -94,7 +94,7 @@ public function register()
                  set_error_handler([$this, 'handleError']);
              }
@@ -297,8 +297,8 @@ index 81a20f0a3c9..393438ede57 100644
              if (PHP_SAPI !== 'cli') {
 diff --git a/src/behaviors/AttributeTypecastBehavior.php b/src/behaviors/AttributeTypecastBehavior.php
 index 3d372bef582..a418b15de25 100644
---- a/framework/behaviors/AttributeTypecastBehavior.php
-+++ b/framework/behaviors/AttributeTypecastBehavior.php
+--- a/src/behaviors/AttributeTypecastBehavior.php
++++ b/src/behaviors/AttributeTypecastBehavior.php
 @@ -362,5 +362,25 @@ public function afterSave($event)
      public function afterFind($event)
      {
@@ -327,8 +327,8 @@ index 3d372bef582..a418b15de25 100644
  }
 diff --git a/src/caching/DbCache.php b/src/caching/DbCache.php
 index 5bf3b02dedd..d707ba41a27 100644
---- a/framework/caching/DbCache.php
-+++ b/framework/caching/DbCache.php
+--- a/src/caching/DbCache.php
++++ b/src/caching/DbCache.php
 @@ -317,7 +317,7 @@ protected function isVarbinaryDataField()
       */
      protected function getDataFieldName()
@@ -340,8 +340,8 @@ index 5bf3b02dedd..d707ba41a27 100644
      /**
 diff --git a/src/classes.php b/src/classes.php
 index 439f757ce0b..46741e3180d 100644
---- a/framework/classes.php
-+++ b/framework/classes.php
+--- a/src/classes.php
++++ b/src/classes.php
 @@ -345,9 +345,9 @@
    'yii\validators\RequiredValidator' => YII2_PATH . '/validators/RequiredValidator.php',
    'yii\validators\SafeValidator' => YII2_PATH . '/validators/SafeValidator.php',
@@ -355,8 +355,8 @@ index 439f757ce0b..46741e3180d 100644
    'yii\web\Application' => YII2_PATH . '/web/Application.php',
 diff --git a/src/composer.json b/src/composer.json
 index aaafa056878..ff36473707c 100644
---- a/framework/composer.json
-+++ b/framework/composer.json
+--- a/src/composer.json
++++ b/src/composer.json
 @@ -68,11 +68,11 @@
          "ext-ctype": "*",
          "lib-pcre": "*",
@@ -375,8 +375,8 @@ index aaafa056878..ff36473707c 100644
      },
 diff --git a/src/console/Controller.php b/src/console/Controller.php
 index 614241d0f31..579b5977830 100644
---- a/framework/console/Controller.php
-+++ b/framework/console/Controller.php
+--- a/src/console/Controller.php
++++ b/src/console/Controller.php
 @@ -28,8 +28,8 @@
   * where `<route>` is a route to a controller action and the params will be populated as properties of a command.
   * See [[options()]] for details.
@@ -412,8 +412,8 @@ index 614241d0f31..579b5977830 100644
      /**
 diff --git a/src/console/controllers/AssetController.php b/src/console/controllers/AssetController.php
 index 5215066df40..8b9d5a3fc27 100644
---- a/framework/console/controllers/AssetController.php
-+++ b/framework/console/controllers/AssetController.php
+--- a/src/console/controllers/AssetController.php
++++ b/src/console/controllers/AssetController.php
 @@ -515,7 +515,7 @@ protected function compressJsFiles($inputFiles, $outputFile)
          if (is_string($this->jsCompressor)) {
              $tmpFile = $outputFile . '.tmp';
@@ -425,8 +425,8 @@ index 5215066df40..8b9d5a3fc27 100644
              ])));
 diff --git a/src/console/controllers/MessageController.php b/src/console/controllers/MessageController.php
 index e1a73576903..6d5a7d6448f 100644
---- a/framework/console/controllers/MessageController.php
-+++ b/framework/console/controllers/MessageController.php
+--- a/src/console/controllers/MessageController.php
++++ b/src/console/controllers/MessageController.php
 @@ -353,17 +353,7 @@ protected function saveMessagesToDb($messages, $db, $sourceMessageTable, $messag
          foreach ($rows as $row) {
              $currentMessages[$row['category']][$row['id']] = $row['message'];
@@ -633,8 +633,8 @@ index e1a73576903..6d5a7d6448f 100644
      /**
 diff --git a/src/console/controllers/ServeController.php b/src/console/controllers/ServeController.php
 index 68a7e50c286..b806f67d55b 100644
---- a/framework/console/controllers/ServeController.php
-+++ b/framework/console/controllers/ServeController.php
+--- a/src/console/controllers/ServeController.php
++++ b/src/console/controllers/ServeController.php
 @@ -80,7 +80,13 @@ public function actionIndex($address = 'localhost')
          }
          $this->stdout("Quit the server with CTRL-C or COMMAND-C.\n");
@@ -662,8 +662,8 @@ index 68a7e50c286..b806f67d55b 100644
  }
 diff --git a/src/console/widgets/Table.php b/src/console/widgets/Table.php
 index 4862e88b6be..c0ece4d4d89 100644
---- a/framework/console/widgets/Table.php
-+++ b/framework/console/widgets/Table.php
+--- a/src/console/widgets/Table.php
++++ b/src/console/widgets/Table.php
 @@ -136,7 +136,11 @@ public function setRows(array $rows)
      {
          $this->rows = array_map(function($row) {
@@ -734,8 +734,8 @@ index 4862e88b6be..c0ece4d4d89 100644
          return max($rowsPerCell);
 diff --git a/src/data/ActiveDataProvider.php b/src/data/ActiveDataProvider.php
 index a8b6e158ecf..3a129aa7293 100644
---- a/framework/data/ActiveDataProvider.php
-+++ b/framework/data/ActiveDataProvider.php
+--- a/src/data/ActiveDataProvider.php
++++ b/src/data/ActiveDataProvider.php
 @@ -183,15 +183,11 @@ public function setSort($value)
                      $sort->attributes[$attribute] = [
                          'asc' => [$attribute => SORT_ASC],
@@ -757,8 +757,8 @@ index a8b6e158ecf..3a129aa7293 100644
      }
 diff --git a/src/data/Pagination.php b/src/data/Pagination.php
 index e74bc09afcf..a928681c4da 100644
---- a/framework/data/Pagination.php
-+++ b/framework/data/Pagination.php
+--- a/src/data/Pagination.php
++++ b/src/data/Pagination.php
 @@ -133,8 +133,8 @@ class Pagination extends BaseObject implements Linkable
       */
      public $defaultPageSize = 20;
@@ -772,8 +772,8 @@ index e74bc09afcf..a928681c4da 100644
  
 diff --git a/src/data/Sort.php b/src/data/Sort.php
 index 5b7ff3b77db..0c0abc8b606 100644
---- a/framework/data/Sort.php
-+++ b/framework/data/Sort.php
+--- a/src/data/Sort.php
++++ b/src/data/Sort.php
 @@ -145,7 +145,7 @@ class Sort extends BaseObject
       */
      public $sortParam = 'sort';
@@ -829,8 +829,8 @@ index 5b7ff3b77db..0c0abc8b606 100644
              }
 diff --git a/src/db/ActiveQueryTrait.php b/src/db/ActiveQueryTrait.php
 index e2de1dd12d9..d49fa0fba87 100644
---- a/framework/db/ActiveQueryTrait.php
-+++ b/framework/db/ActiveQueryTrait.php
+--- a/src/db/ActiveQueryTrait.php
++++ b/src/db/ActiveQueryTrait.php
 @@ -135,6 +135,10 @@ protected function createModels($rows)
       */
      public function findWith($with, &$models)
@@ -844,8 +844,8 @@ index e2de1dd12d9..d49fa0fba87 100644
              /* @var $modelClass ActiveRecordInterface */
 diff --git a/src/db/ActiveRecordInterface.php b/src/db/ActiveRecordInterface.php
 index d845e9d32cb..441001a99ff 100644
---- a/framework/db/ActiveRecordInterface.php
-+++ b/framework/db/ActiveRecordInterface.php
+--- a/src/db/ActiveRecordInterface.php
++++ b/src/db/ActiveRecordInterface.php
 @@ -144,6 +144,7 @@ public static function isPrimaryKey($keys);
       * // Use where() to ignore the default condition
       * // SELECT FROM customer WHERE age>30
@@ -856,8 +856,8 @@ index d845e9d32cb..441001a99ff 100644
       */
 diff --git a/src/db/BaseActiveRecord.php b/src/db/BaseActiveRecord.php
 index 67a55d7884b..ab5414416c5 100644
---- a/framework/db/BaseActiveRecord.php
-+++ b/framework/db/BaseActiveRecord.php
+--- a/src/db/BaseActiveRecord.php
++++ b/src/db/BaseActiveRecord.php
 @@ -282,7 +282,7 @@ public function canSetProperty($name, $checkVars = true, $checkBehaviors = true)
       */
      public function __get($name)
@@ -1065,8 +1065,8 @@ index 67a55d7884b..ab5414416c5 100644
  }
 diff --git a/src/db/Command.php b/src/db/Command.php
 index 6f5d5daede2..72eda72e4e1 100644
---- a/framework/db/Command.php
-+++ b/framework/db/Command.php
+--- a/src/db/Command.php
++++ b/src/db/Command.php
 @@ -258,7 +258,7 @@ public function prepare($forRead = null)
              $forRead = false;
          }
@@ -1128,8 +1128,8 @@ index 6f5d5daede2..72eda72e4e1 100644
                  }
 diff --git a/src/db/Connection.php b/src/db/Connection.php
 index 0693d242206..4df8f3af62f 100644
---- a/framework/db/Connection.php
-+++ b/framework/db/Connection.php
+--- a/src/db/Connection.php
++++ b/src/db/Connection.php
 @@ -1013,7 +1013,7 @@ public function getDriverName()
              if (($pos = strpos((string)$this->dsn, ':')) !== false) {
                  $this->_driverName = strtolower(substr($this->dsn, 0, $pos));
@@ -1141,8 +1141,8 @@ index 0693d242206..4df8f3af62f 100644
  
 diff --git a/src/db/Migration.php b/src/db/Migration.php
 index be61749514e..c4bf99981af 100644
---- a/framework/db/Migration.php
-+++ b/framework/db/Migration.php
+--- a/src/db/Migration.php
++++ b/src/db/Migration.php
 @@ -305,13 +305,25 @@ public function delete($table, $condition = '', $params = [])
       *
       * The columns in the new  table should be specified as name-definition pairs (e.g. 'name' => 'string'),
@@ -1172,8 +1172,8 @@ index be61749514e..c4bf99981af 100644
       * @param string|null $options additional SQL fragment that will be appended to the generated SQL.
 diff --git a/src/db/Query.php b/src/db/Query.php
 index f0b215859dc..1819c9c3107 100644
---- a/framework/db/Query.php
-+++ b/framework/db/Query.php
+--- a/src/db/Query.php
++++ b/src/db/Query.php
 @@ -1049,7 +1049,7 @@ public function rightJoin($table, $on = '', $params = [])
  
      /**
@@ -1194,8 +1194,8 @@ index f0b215859dc..1819c9c3107 100644
          $this->groupBy = $columns;
 diff --git a/src/db/QueryBuilder.php b/src/db/QueryBuilder.php
 index b96ffe28eff..114116e67c5 100644
---- a/framework/db/QueryBuilder.php
-+++ b/framework/db/QueryBuilder.php
+--- a/src/db/QueryBuilder.php
++++ b/src/db/QueryBuilder.php
 @@ -692,7 +692,7 @@ public function delete($table, $condition, &$params)
       *
       * The columns in the new table should be specified as name-definition pairs (e.g. 'name' => 'string'),
@@ -1215,8 +1215,8 @@ index b96ffe28eff..114116e67c5 100644
       *
 diff --git a/src/db/QueryTrait.php b/src/db/QueryTrait.php
 index 990520d4e5b..308e31db769 100644
---- a/framework/db/QueryTrait.php
-+++ b/framework/db/QueryTrait.php
+--- a/src/db/QueryTrait.php
++++ b/src/db/QueryTrait.php
 @@ -305,7 +305,7 @@ protected function isEmpty($value)
  
      /**
@@ -1245,8 +1245,8 @@ index 990520d4e5b..308e31db769 100644
              return $columns;
 diff --git a/src/db/Schema.php b/src/db/Schema.php
 index 002a68e2bf8..53c0af9882d 100644
---- a/framework/db/Schema.php
-+++ b/framework/db/Schema.php
+--- a/src/db/Schema.php
++++ b/src/db/Schema.php
 @@ -313,7 +313,7 @@ public function refreshTableSchema($name)
       */
      public function createQueryBuilder()
@@ -1294,8 +1294,8 @@ index 002a68e2bf8..53c0af9882d 100644
  
 diff --git a/src/db/conditions/LikeCondition.php b/src/db/conditions/LikeCondition.php
 index f4684d3f54f..0fe2a8fa0eb 100644
---- a/framework/db/conditions/LikeCondition.php
-+++ b/framework/db/conditions/LikeCondition.php
+--- a/src/db/conditions/LikeCondition.php
++++ b/src/db/conditions/LikeCondition.php
 @@ -18,8 +18,8 @@
  class LikeCondition extends SimpleCondition
  {
@@ -1332,8 +1332,8 @@ index f4684d3f54f..0fe2a8fa0eb 100644
      {
 diff --git a/src/db/conditions/LikeConditionBuilder.php b/src/db/conditions/LikeConditionBuilder.php
 index 049be5b92ec..accb849c2aa 100644
---- a/framework/db/conditions/LikeConditionBuilder.php
-+++ b/framework/db/conditions/LikeConditionBuilder.php
+--- a/src/db/conditions/LikeConditionBuilder.php
++++ b/src/db/conditions/LikeConditionBuilder.php
 @@ -78,7 +78,7 @@ public function build(ExpressionInterface $expression, array &$params = [])
              if ($value instanceof ExpressionInterface) {
                  $phName = $this->queryBuilder->buildExpression($value, $params);
@@ -1345,8 +1345,8 @@ index 049be5b92ec..accb849c2aa 100644
          }
 diff --git a/src/db/cubrid/Schema.php b/src/db/cubrid/Schema.php
 index f2e0e3643c8..65b6c11b9d4 100644
---- a/framework/db/cubrid/Schema.php
-+++ b/framework/db/cubrid/Schema.php
+--- a/src/db/cubrid/Schema.php
++++ b/src/db/cubrid/Schema.php
 @@ -7,6 +7,7 @@
  
  namespace yii\db\cubrid;
@@ -1411,8 +1411,8 @@ index f2e0e3643c8..65b6c11b9d4 100644
          $result = [
 diff --git a/src/db/mssql/QueryBuilder.php b/src/db/mssql/QueryBuilder.php
 index cc3595519cd..1225c466cc6 100644
---- a/framework/db/mssql/QueryBuilder.php
-+++ b/framework/db/mssql/QueryBuilder.php
+--- a/src/db/mssql/QueryBuilder.php
++++ b/src/db/mssql/QueryBuilder.php
 @@ -460,10 +460,9 @@ private function normalizeTableRowData($table, $columns, &$params)
              $columnSchemas = $tableSchema->columns;
              foreach ($columns as $name => $value) {
@@ -1428,8 +1428,8 @@ index cc3595519cd..1225c466cc6 100644
          }
 diff --git a/src/db/mssql/Schema.php b/src/db/mssql/Schema.php
 index 640b6ad093a..db7f07c87cb 100644
---- a/framework/db/mssql/Schema.php
-+++ b/framework/db/mssql/Schema.php
+--- a/src/db/mssql/Schema.php
++++ b/src/db/mssql/Schema.php
 @@ -7,6 +7,7 @@
  
  namespace yii\db\mssql;
@@ -1518,8 +1518,8 @@ index 640b6ad093a..db7f07c87cb 100644
  }
 diff --git a/src/db/mysql/QueryBuilder.php b/src/db/mysql/QueryBuilder.php
 index b1517ab4da7..fc10931c7a1 100644
---- a/framework/db/mysql/QueryBuilder.php
-+++ b/framework/db/mysql/QueryBuilder.php
+--- a/src/db/mysql/QueryBuilder.php
++++ b/src/db/mysql/QueryBuilder.php
 @@ -410,7 +410,7 @@ private function supportsFractionalSeconds()
          }
          $version = $cache ? $cache->get($key) : null;
@@ -1531,8 +1531,8 @@ index b1517ab4da7..fc10931c7a1 100644
              }
 diff --git a/src/db/mysql/Schema.php b/src/db/mysql/Schema.php
 index 6a795b1de28..fa2270eb77d 100644
---- a/framework/db/mysql/Schema.php
-+++ b/framework/db/mysql/Schema.php
+--- a/src/db/mysql/Schema.php
++++ b/src/db/mysql/Schema.php
 @@ -7,6 +7,7 @@
  
  namespace yii\db\mysql;
@@ -1601,8 +1601,8 @@ index 6a795b1de28..fa2270eb77d 100644
  
 diff --git a/src/db/oci/Schema.php b/src/db/oci/Schema.php
 index 5e581441892..e0e4c05e2da 100644
---- a/framework/db/oci/Schema.php
-+++ b/framework/db/oci/Schema.php
+--- a/src/db/oci/Schema.php
++++ b/src/db/oci/Schema.php
 @@ -7,6 +7,7 @@
  
  namespace yii\db\oci;
@@ -1631,8 +1631,8 @@ index 5e581441892..e0e4c05e2da 100644
      /**
 diff --git a/src/db/pgsql/Schema.php b/src/db/pgsql/Schema.php
 index 8fb5943b92b..154e01a3808 100644
---- a/framework/db/pgsql/Schema.php
-+++ b/framework/db/pgsql/Schema.php
+--- a/src/db/pgsql/Schema.php
++++ b/src/db/pgsql/Schema.php
 @@ -7,6 +7,7 @@
  
  namespace yii\db\pgsql;
@@ -1652,8 +1652,8 @@ index 8fb5943b92b..154e01a3808 100644
      /**
 diff --git a/src/db/sqlite/Schema.php b/src/db/sqlite/Schema.php
 index 2ccd2be1ba1..32b209b2254 100644
---- a/framework/db/sqlite/Schema.php
-+++ b/framework/db/sqlite/Schema.php
+--- a/src/db/sqlite/Schema.php
++++ b/src/db/sqlite/Schema.php
 @@ -7,6 +7,7 @@
  
  namespace yii\db\sqlite;
@@ -1682,8 +1682,8 @@ index 2ccd2be1ba1..32b209b2254 100644
      /**
 diff --git a/src/filters/PageCache.php b/src/filters/PageCache.php
 index c10dcabe4f6..b9f02ba4ec4 100644
---- a/framework/filters/PageCache.php
-+++ b/framework/filters/PageCache.php
+--- a/src/filters/PageCache.php
++++ b/src/filters/PageCache.php
 @@ -7,6 +7,7 @@
  
  namespace yii\filters;
@@ -1739,8 +1739,8 @@ index c10dcabe4f6..b9f02ba4ec4 100644
      /**
 diff --git a/src/helpers/BaseArrayHelper.php b/src/helpers/BaseArrayHelper.php
 index 0e615a579db..56411163e1e 100644
---- a/framework/helpers/BaseArrayHelper.php
-+++ b/framework/helpers/BaseArrayHelper.php
+--- a/src/helpers/BaseArrayHelper.php
++++ b/src/helpers/BaseArrayHelper.php
 @@ -327,7 +327,12 @@ public static function setValue(&$array, $path, $value)
       */
      public static function remove(&$array, $key, $default = null)
@@ -1782,8 +1782,8 @@ index 0e615a579db..56411163e1e 100644
              // Cannot use `array_has_key` on Objects for PHP 7.4+, therefore we need to check using [[ArrayAccess::offsetExists()]]
 diff --git a/src/helpers/BaseConsole.php b/src/helpers/BaseConsole.php
 index abb838c9c47..febeed313b1 100644
---- a/framework/helpers/BaseConsole.php
-+++ b/framework/helpers/BaseConsole.php
+--- a/src/helpers/BaseConsole.php
++++ b/src/helpers/BaseConsole.php
 @@ -948,13 +948,17 @@ public static function confirm($message, $default = false)
       * @param string $prompt the prompt message
       * @param array $options Key-value array of options to choose from. Key is what is inputed and used, value is
@@ -1815,8 +1815,8 @@ index abb838c9c47..febeed313b1 100644
          }
 diff --git a/src/helpers/BaseFileHelper.php b/src/helpers/BaseFileHelper.php
 index 35deec5ef49..55445aec009 100644
---- a/framework/helpers/BaseFileHelper.php
-+++ b/framework/helpers/BaseFileHelper.php
+--- a/src/helpers/BaseFileHelper.php
++++ b/src/helpers/BaseFileHelper.php
 @@ -39,6 +39,11 @@ class BaseFileHelper
       * @since 2.0.14
       */
@@ -1918,8 +1918,8 @@ index 35deec5ef49..55445aec009 100644
       *   If a file path matches a pattern in both `only` and `except`, it will NOT be returned.
 diff --git a/src/helpers/BaseFormatConverter.php b/src/helpers/BaseFormatConverter.php
 index 1f2aeb4d673..3cea9c95017 100644
---- a/framework/helpers/BaseFormatConverter.php
-+++ b/framework/helpers/BaseFormatConverter.php
+--- a/src/helpers/BaseFormatConverter.php
++++ b/src/helpers/BaseFormatConverter.php
 @@ -97,22 +97,13 @@ class BaseFormatConverter
       * @param string|null $locale the locale to use for converting ICU short patterns `short`, `medium`, `long` and `full`.
       * If not given, `Yii::$app->language` will be used.
@@ -2005,8 +2005,8 @@ index 1f2aeb4d673..3cea9c95017 100644
  }
 diff --git a/src/helpers/BaseHtml.php b/src/helpers/BaseHtml.php
 index 9c04ad90f95..45812e4165b 100644
---- a/framework/helpers/BaseHtml.php
-+++ b/framework/helpers/BaseHtml.php
+--- a/src/helpers/BaseHtml.php
++++ b/src/helpers/BaseHtml.php
 @@ -2017,7 +2017,7 @@ public static function renderTagAttributes($attributes)
                          $value = explode(' ', implode(' ', $value));
                          $value = array_unique($value);
@@ -2018,8 +2018,8 @@ index 9c04ad90f95..45812e4165b 100644
                          continue;
 diff --git a/src/helpers/BaseJson.php b/src/helpers/BaseJson.php
 index eaaee0fbd05..a2821ad9ff7 100644
---- a/framework/helpers/BaseJson.php
-+++ b/framework/helpers/BaseJson.php
+--- a/src/helpers/BaseJson.php
++++ b/src/helpers/BaseJson.php
 @@ -185,6 +185,12 @@ protected static function processData($data, &$expressions, $expPrefix)
  
              if ($data instanceof Arrayable) {
@@ -2035,8 +2035,8 @@ index eaaee0fbd05..a2821ad9ff7 100644
  
 diff --git a/src/helpers/BaseStringHelper.php b/src/helpers/BaseStringHelper.php
 index da134163105..749f92f79cd 100644
---- a/framework/helpers/BaseStringHelper.php
-+++ b/framework/helpers/BaseStringHelper.php
+--- a/src/helpers/BaseStringHelper.php
++++ b/src/helpers/BaseStringHelper.php
 @@ -49,7 +49,7 @@ public static function byteSubstr($string, $start, $length = null)
              $length = static::byteLength($string);
          }
@@ -2158,8 +2158,8 @@ index da134163105..749f92f79cd 100644
  }
 diff --git a/src/helpers/mimeAliases.php b/src/helpers/mimeAliases.php
 index 4cd89888a77..a9e677adcbd 100644
---- a/framework/helpers/mimeAliases.php
-+++ b/framework/helpers/mimeAliases.php
+--- a/src/helpers/mimeAliases.php
++++ b/src/helpers/mimeAliases.php
 @@ -3,6 +3,9 @@
   * MIME aliases.
   *
@@ -2174,7 +2174,7 @@ diff --git a/src/helpers/mimeExtensions.php b/src/helpers/mimeExtensions.php
 new file mode 100644
 index 00000000000..e4936030fd8
 --- /dev/null
-+++ b/framework/helpers/mimeExtensions.php
++++ b/src/helpers/mimeExtensions.php
 @@ -0,0 +1,1241 @@
 +<?php
 +/**
@@ -3419,8 +3419,8 @@ index 00000000000..e4936030fd8
 +];
 diff --git a/src/helpers/mimeTypes.php b/src/helpers/mimeTypes.php
 index 944633aa5d2..f895e8d0728 100644
---- a/framework/helpers/mimeTypes.php
-+++ b/framework/helpers/mimeTypes.php
+--- a/src/helpers/mimeTypes.php
++++ b/src/helpers/mimeTypes.php
 @@ -7,8 +7,12 @@
   * Its content is generated from the apache http mime.types file.
   * https://svn.apache.org/viewvc/httpd/httpd/trunk/docs/conf/mime.types?view=markup
@@ -3504,8 +3504,8 @@ index 944633aa5d2..f895e8d0728 100644
  
 diff --git a/src/i18n/Formatter.php b/src/i18n/Formatter.php
 index 3236a433beb..001b81bfa90 100644
---- a/framework/i18n/Formatter.php
-+++ b/framework/i18n/Formatter.php
+--- a/src/i18n/Formatter.php
++++ b/src/i18n/Formatter.php
 @@ -460,7 +460,7 @@ public function format($value, $format)
          }
          $method = 'as' . $format;
@@ -3517,8 +3517,8 @@ index 3236a433beb..001b81bfa90 100644
          throw new InvalidArgumentException("Unknown format type: $format");
 diff --git a/src/log/FileTarget.php b/src/log/FileTarget.php
 index 05ad09430af..d4c267e2ed1 100644
---- a/framework/log/FileTarget.php
-+++ b/framework/log/FileTarget.php
+--- a/src/log/FileTarget.php
++++ b/src/log/FileTarget.php
 @@ -106,12 +106,17 @@ public function init()
       */
      public function export()
@@ -3540,8 +3540,8 @@ index 05ad09430af..d4c267e2ed1 100644
          }
 diff --git a/src/messages/af/yii.php b/src/messages/af/yii.php
 index b4a10bdf664..18be9560231 100644
---- a/framework/messages/af/yii.php
-+++ b/framework/messages/af/yii.php
+--- a/src/messages/af/yii.php
++++ b/src/messages/af/yii.php
 @@ -26,6 +26,8 @@
      ' and ' => ' en ',
      '"{attribute}" does not support operator "{operator}".' => '"{attribute}" ondersteun nie operateur "{operator}" nie.',
@@ -3597,8 +3597,8 @@ index b4a10bdf664..18be9560231 100644
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, =1{gigagreep} other{gigagrepe}}',
 diff --git a/src/messages/ar/yii.php b/src/messages/ar/yii.php
 index f300954a31c..a2b19347e06 100644
---- a/framework/messages/ar/yii.php
-+++ b/framework/messages/ar/yii.php
+--- a/src/messages/ar/yii.php
++++ b/src/messages/ar/yii.php
 @@ -23,8 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -3728,8 +3728,8 @@ index f300954a31c..a2b19347e06 100644
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} جيجابايت',
 diff --git a/src/messages/az/yii.php b/src/messages/az/yii.php
 index 797dc804327..a283d5501e4 100644
---- a/framework/messages/az/yii.php
-+++ b/framework/messages/az/yii.php
+--- a/src/messages/az/yii.php
++++ b/src/messages/az/yii.php
 @@ -23,9 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -3877,8 +3877,8 @@ index 797dc804327..a283d5501e4 100644
  ];
 diff --git a/src/messages/be/yii.php b/src/messages/be/yii.php
 index f2ed384a925..c2771f47385 100644
---- a/framework/messages/be/yii.php
-+++ b/framework/messages/be/yii.php
+--- a/src/messages/be/yii.php
++++ b/src/messages/be/yii.php
 @@ -26,6 +26,8 @@
      ' and ' => ' і ',
      '"{attribute}" does not support operator "{operator}".' => '"{attribute}" не падтрымлівае аператар "{operator}".',
@@ -3934,8 +3934,8 @@ index f2ed384a925..c2771f47385 100644
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, one{гігабайт} few{гігабайта} many{гігабайтаў} other{гігабайта}}',
 diff --git a/src/messages/bg/yii.php b/src/messages/bg/yii.php
 index eb87f3bf120..d12f3e03169 100644
---- a/framework/messages/bg/yii.php
-+++ b/framework/messages/bg/yii.php
+--- a/src/messages/bg/yii.php
++++ b/src/messages/bg/yii.php
 @@ -26,6 +26,8 @@
      ' and ' => ' и ',
      '"{attribute}" does not support operator "{operator}".' => '"{attribute}" не поддържа оператор "{operator}".',
@@ -3991,8 +3991,8 @@ index eb87f3bf120..d12f3e03169 100644
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, =1{гигабайт} other{гигабайта}}',
 diff --git a/src/messages/bs/yii.php b/src/messages/bs/yii.php
 index 968d93aa442..c4013f58cf1 100644
---- a/framework/messages/bs/yii.php
-+++ b/framework/messages/bs/yii.php
+--- a/src/messages/bs/yii.php
++++ b/src/messages/bs/yii.php
 @@ -23,9 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -4108,8 +4108,8 @@ index 968d93aa442..c4013f58cf1 100644
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, =1{gigabajt} other{gigabajta}}',
 diff --git a/src/messages/ca/yii.php b/src/messages/ca/yii.php
 index f404ab6411d..9e359a0dd5d 100644
---- a/framework/messages/ca/yii.php
-+++ b/framework/messages/ca/yii.php
+--- a/src/messages/ca/yii.php
++++ b/src/messages/ca/yii.php
 @@ -23,9 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -4257,8 +4257,8 @@ index f404ab6411d..9e359a0dd5d 100644
  ];
 diff --git a/src/messages/config.php b/src/messages/config.php
 index 93845f2e0a9..21ba4310a5c 100644
---- a/framework/messages/config.php
-+++ b/framework/messages/config.php
+--- a/src/messages/config.php
++++ b/src/messages/config.php
 @@ -15,8 +15,7 @@
      'languages' => [
          'af', 'ar', 'az', 'be', 'bg', 'bs', 'ca', 'cs', 'da', 'de', 'el', 'es', 'et', 'fa', 'fi', 'fr', 'he', 'hi',
@@ -4286,8 +4286,8 @@ index 93845f2e0a9..21ba4310a5c 100644
      'markUnused' => true,
 diff --git a/src/messages/cs/yii.php b/src/messages/cs/yii.php
 index d5c8232f1ba..5520301c14b 100644
---- a/framework/messages/cs/yii.php
-+++ b/framework/messages/cs/yii.php
+--- a/src/messages/cs/yii.php
++++ b/src/messages/cs/yii.php
 @@ -24,43 +24,13 @@
   */
  return [
@@ -4431,8 +4431,8 @@ index d5c8232f1ba..5520301c14b 100644
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, =1{gigabyte} few{gigabyty} other{gigabytů}}',
 diff --git a/src/messages/da/yii.php b/src/messages/da/yii.php
 index d7e27d265e3..6f074dd60be 100644
---- a/framework/messages/da/yii.php
-+++ b/framework/messages/da/yii.php
+--- a/src/messages/da/yii.php
++++ b/src/messages/da/yii.php
 @@ -23,90 +23,125 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -4647,8 +4647,8 @@ index d7e27d265e3..6f074dd60be 100644
  ];
 diff --git a/src/messages/de/yii.php b/src/messages/de/yii.php
 index 51ede9951a1..96f36ac4374 100644
---- a/framework/messages/de/yii.php
-+++ b/framework/messages/de/yii.php
+--- a/src/messages/de/yii.php
++++ b/src/messages/de/yii.php
 @@ -24,9 +24,13 @@
   */
  return [
@@ -4738,8 +4738,8 @@ index 51ede9951a1..96f36ac4374 100644
  ];
 diff --git a/src/messages/el/yii.php b/src/messages/el/yii.php
 index 2c4cfa79fd9..fddd64d8212 100644
---- a/framework/messages/el/yii.php
-+++ b/framework/messages/el/yii.php
+--- a/src/messages/el/yii.php
++++ b/src/messages/el/yii.php
 @@ -109,6 +109,7 @@
      '{attribute} should contain at least {min, number} {min, plural, one{character} other{characters}}.' => 'Το «{attribute}» πρέπει να περιέχει τουλάχιστον {min, number} {min, plural, one{χαρακτήρα} few{χαρακτήρες} many{χαρακτήρες} other{χαρακτήρες}}.',
      '{attribute} should contain at most {max, number} {max, plural, one{character} other{characters}}.' => 'Το «{attribute}» πρέπει να περιέχει το πολύ {max, number} {max, plural, one{χαρακτήρα} few{χαρακτήρες} many{χαρακτήρες} other{χαρακτήρες}}.',
@@ -4750,8 +4750,8 @@ index 2c4cfa79fd9..fddd64d8212 100644
      '{delta, plural, =1{1 minute} other{# minutes}}' => '{delta, plural, =1{1 λεπτό} other{# λεπτά}}',
 diff --git a/src/messages/es/yii.php b/src/messages/es/yii.php
 index 6d65a3233c8..af60f0767ed 100644
---- a/framework/messages/es/yii.php
-+++ b/framework/messages/es/yii.php
+--- a/src/messages/es/yii.php
++++ b/src/messages/es/yii.php
 @@ -24,10 +24,13 @@
   */
  return [
@@ -4830,8 +4830,8 @@ index 6d65a3233c8..af60f0767ed 100644
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}',
 diff --git a/src/messages/et/yii.php b/src/messages/et/yii.php
 index 337d7fc1506..950274fa961 100644
---- a/framework/messages/et/yii.php
-+++ b/framework/messages/et/yii.php
+--- a/src/messages/et/yii.php
++++ b/src/messages/et/yii.php
 @@ -23,9 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -4962,8 +4962,8 @@ index 337d7fc1506..950274fa961 100644
      '{nFormatted} GiB' => '{nFormatted} GiB',
 diff --git a/src/messages/fa/yii.php b/src/messages/fa/yii.php
 index ec97c548788..e9213b3482f 100644
---- a/framework/messages/fa/yii.php
-+++ b/framework/messages/fa/yii.php
+--- a/src/messages/fa/yii.php
++++ b/src/messages/fa/yii.php
 @@ -24,9 +24,13 @@
   */
  return [
@@ -5077,8 +5077,8 @@ index ec97c548788..e9213b3482f 100644
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} گیگابایت',
 diff --git a/src/messages/fi/yii.php b/src/messages/fi/yii.php
 index 938fd62d97c..531a44214e7 100644
---- a/framework/messages/fi/yii.php
-+++ b/framework/messages/fi/yii.php
+--- a/src/messages/fi/yii.php
++++ b/src/messages/fi/yii.php
 @@ -23,17 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -5178,8 +5178,8 @@ index 938fd62d97c..531a44214e7 100644
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, =1{gigatavu} other{gigatavua}}',
 diff --git a/src/messages/fr/yii.php b/src/messages/fr/yii.php
 index 458d7e738e7..8e1bfda3cd4 100644
---- a/framework/messages/fr/yii.php
-+++ b/framework/messages/fr/yii.php
+--- a/src/messages/fr/yii.php
++++ b/src/messages/fr/yii.php
 @@ -24,7 +24,10 @@
   */
  return [
@@ -5243,8 +5243,8 @@ index 458d7e738e7..8e1bfda3cd4 100644
  ];
 diff --git a/src/messages/he/yii.php b/src/messages/he/yii.php
 index 4613b419139..b3eef1b535c 100644
---- a/framework/messages/he/yii.php
-+++ b/framework/messages/he/yii.php
+--- a/src/messages/he/yii.php
++++ b/src/messages/he/yii.php
 @@ -23,9 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -5380,8 +5380,8 @@ index 4613b419139..b3eef1b535c 100644
  ];
 diff --git a/src/messages/hi/yii.php b/src/messages/hi/yii.php
 index 6c79f0c2620..0276c2d8728 100644
---- a/framework/messages/hi/yii.php
-+++ b/framework/messages/hi/yii.php
+--- a/src/messages/hi/yii.php
++++ b/src/messages/hi/yii.php
 @@ -24,9 +24,13 @@
   */
  return [
@@ -5459,8 +5459,8 @@ index 6c79f0c2620..0276c2d8728 100644
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, =1{गीगाबाइट} other{गीगाबाइटस}}',
 diff --git a/src/messages/hr/yii.php b/src/messages/hr/yii.php
 index ac445e0908c..73e5c656fb0 100644
---- a/framework/messages/hr/yii.php
-+++ b/framework/messages/hr/yii.php
+--- a/src/messages/hr/yii.php
++++ b/src/messages/hr/yii.php
 @@ -23,9 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -5609,8 +5609,8 @@ index ac445e0908c..73e5c656fb0 100644
  ];
 diff --git a/src/messages/hu/yii.php b/src/messages/hu/yii.php
 index 88575242bd3..db42e0f2926 100644
---- a/framework/messages/hu/yii.php
-+++ b/framework/messages/hu/yii.php
+--- a/src/messages/hu/yii.php
++++ b/src/messages/hu/yii.php
 @@ -23,92 +23,125 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -5827,8 +5827,8 @@ index 88575242bd3..db42e0f2926 100644
  ];
 diff --git a/src/messages/hy/yii.php b/src/messages/hy/yii.php
 index 8e2cb584548..b62094573e1 100644
---- a/framework/messages/hy/yii.php
-+++ b/framework/messages/hy/yii.php
+--- a/src/messages/hy/yii.php
++++ b/src/messages/hy/yii.php
 @@ -6,8 +6,7 @@
   */
  
@@ -5927,8 +5927,8 @@ index 8e2cb584548..b62094573e1 100644
  ];
 diff --git a/src/messages/id/yii.php b/src/messages/id/yii.php
 index b8a08f73f52..785f29f43b2 100644
---- a/framework/messages/id/yii.php
-+++ b/framework/messages/id/yii.php
+--- a/src/messages/id/yii.php
++++ b/src/messages/id/yii.php
 @@ -23,11 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -6076,8 +6076,8 @@ index b8a08f73f52..785f29f43b2 100644
  ];
 diff --git a/src/messages/it/yii.php b/src/messages/it/yii.php
 index c16a9c18912..e2d7eff4165 100644
---- a/framework/messages/it/yii.php
-+++ b/framework/messages/it/yii.php
+--- a/src/messages/it/yii.php
++++ b/src/messages/it/yii.php
 @@ -23,35 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -6213,8 +6213,8 @@ index c16a9c18912..e2d7eff4165 100644
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, =1{gigabyte} other{gigabyte}}',
 diff --git a/src/messages/ja/yii.php b/src/messages/ja/yii.php
 index 42d26beba54..6fd6c3f9da5 100644
---- a/framework/messages/ja/yii.php
-+++ b/framework/messages/ja/yii.php
+--- a/src/messages/ja/yii.php
++++ b/src/messages/ja/yii.php
 @@ -1,4 +1,10 @@
  <?php
 +/**
@@ -6269,8 +6269,8 @@ index 42d26beba54..6fd6c3f9da5 100644
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} ギガバイト',
 diff --git a/src/messages/ka/yii.php b/src/messages/ka/yii.php
 index 96eaaeb621d..c885e6bd951 100644
---- a/framework/messages/ka/yii.php
-+++ b/framework/messages/ka/yii.php
+--- a/src/messages/ka/yii.php
++++ b/src/messages/ka/yii.php
 @@ -23,9 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -6386,8 +6386,8 @@ index 96eaaeb621d..c885e6bd951 100644
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, one{გიგაბაიტი} few{გიგაბაიტს} many{გიგაბაიტი} other{გიგაბაიტს}}',
 diff --git a/src/messages/kk/yii.php b/src/messages/kk/yii.php
 index b33338dbab8..fb43703aa89 100644
---- a/framework/messages/kk/yii.php
-+++ b/framework/messages/kk/yii.php
+--- a/src/messages/kk/yii.php
++++ b/src/messages/kk/yii.php
 @@ -23,9 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -6523,8 +6523,8 @@ index b33338dbab8..fb43703aa89 100644
  ];
 diff --git a/src/messages/ko/yii.php b/src/messages/ko/yii.php
 index 4fe82311fe8..bf0a51babb4 100644
---- a/framework/messages/ko/yii.php
-+++ b/framework/messages/ko/yii.php
+--- a/src/messages/ko/yii.php
++++ b/src/messages/ko/yii.php
 @@ -23,8 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -6664,8 +6664,8 @@ index 4fe82311fe8..bf0a51babb4 100644
  ];
 diff --git a/src/messages/kz/yii.php b/src/messages/kz/yii.php
 index d8a3cf94b5a..76c43e120c8 100644
---- a/framework/messages/kz/yii.php
-+++ b/framework/messages/kz/yii.php
+--- a/src/messages/kz/yii.php
++++ b/src/messages/kz/yii.php
 @@ -1,8 +1,14 @@
  <?php
 +/**
@@ -6839,8 +6839,8 @@ index d8a3cf94b5a..76c43e120c8 100644
 +];
 diff --git a/src/messages/lt/yii.php b/src/messages/lt/yii.php
 index fce59c5471b..72d8d5b3081 100644
---- a/framework/messages/lt/yii.php
-+++ b/framework/messages/lt/yii.php
+--- a/src/messages/lt/yii.php
++++ b/src/messages/lt/yii.php
 @@ -23,32 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -6992,8 +6992,8 @@ index fce59c5471b..72d8d5b3081 100644
  ];
 diff --git a/src/messages/lv/yii.php b/src/messages/lv/yii.php
 index e49ca559500..d1ad194b9d4 100644
---- a/framework/messages/lv/yii.php
-+++ b/framework/messages/lv/yii.php
+--- a/src/messages/lv/yii.php
++++ b/src/messages/lv/yii.php
 @@ -23,31 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -7171,8 +7171,8 @@ index e49ca559500..d1ad194b9d4 100644
  ];
 diff --git a/src/messages/ms/yii.php b/src/messages/ms/yii.php
 index 72212cbb3ed..3850dcaa6fe 100644
---- a/framework/messages/ms/yii.php
-+++ b/framework/messages/ms/yii.php
+--- a/src/messages/ms/yii.php
++++ b/src/messages/ms/yii.php
 @@ -23,9 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -7288,8 +7288,8 @@ index 72212cbb3ed..3850dcaa6fe 100644
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '',
 diff --git a/src/messages/nb-NO/yii.php b/src/messages/nb-NO/yii.php
 index 9f9870c5e0a..7aebeffa60f 100644
---- a/framework/messages/nb-NO/yii.php
-+++ b/framework/messages/nb-NO/yii.php
+--- a/src/messages/nb-NO/yii.php
++++ b/src/messages/nb-NO/yii.php
 @@ -23,9 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -7424,8 +7424,8 @@ index 9f9870c5e0a..7aebeffa60f 100644
  ];
 diff --git a/src/messages/nl/yii.php b/src/messages/nl/yii.php
 index 24261d0520b..a647a96df31 100644
---- a/framework/messages/nl/yii.php
-+++ b/framework/messages/nl/yii.php
+--- a/src/messages/nl/yii.php
++++ b/src/messages/nl/yii.php
 @@ -23,9 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -7542,8 +7542,8 @@ index 24261d0520b..a647a96df31 100644
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}',
 diff --git a/src/messages/pl/yii.php b/src/messages/pl/yii.php
 index 9bd176f5052..53d609ba0b5 100644
---- a/framework/messages/pl/yii.php
-+++ b/framework/messages/pl/yii.php
+--- a/src/messages/pl/yii.php
++++ b/src/messages/pl/yii.php
 @@ -26,6 +26,8 @@
      ' and ' => ' i ',
      '"{attribute}" does not support operator "{operator}".' => 'Operator "{operator}" nie jest dozwolony dla "{attribute}".',
@@ -7652,8 +7652,8 @@ index 9bd176f5052..53d609ba0b5 100644
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, =1{gigabajt} few{gigabajty} many{gigabajtów} other{gigabajta}}',
 diff --git a/src/messages/pt-BR/yii.php b/src/messages/pt-BR/yii.php
 index c626562c9c8..c71b5b4ac27 100644
---- a/framework/messages/pt-BR/yii.php
-+++ b/framework/messages/pt-BR/yii.php
+--- a/src/messages/pt-BR/yii.php
++++ b/src/messages/pt-BR/yii.php
 @@ -23,17 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -7739,8 +7739,8 @@ index c626562c9c8..c71b5b4ac27 100644
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}',
 diff --git a/src/messages/pt/yii.php b/src/messages/pt/yii.php
 index f6bdfe5f62c..9cc4999d438 100644
---- a/framework/messages/pt/yii.php
-+++ b/framework/messages/pt/yii.php
+--- a/src/messages/pt/yii.php
++++ b/src/messages/pt/yii.php
 @@ -25,19 +25,53 @@
  return [
      ' and ' => ' e ',
@@ -7907,8 +7907,8 @@ index f6bdfe5f62c..9cc4999d438 100644
  ];
 diff --git a/src/messages/ro/yii.php b/src/messages/ro/yii.php
 index 6042d0bd695..7d62653f784 100644
---- a/framework/messages/ro/yii.php
-+++ b/framework/messages/ro/yii.php
+--- a/src/messages/ro/yii.php
++++ b/src/messages/ro/yii.php
 @@ -23,8 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -8044,8 +8044,8 @@ index 6042d0bd695..7d62653f784 100644
  ];
 diff --git a/src/messages/ru/yii.php b/src/messages/ru/yii.php
 index 31b27234323..44bced6a49d 100644
---- a/framework/messages/ru/yii.php
-+++ b/framework/messages/ru/yii.php
+--- a/src/messages/ru/yii.php
++++ b/src/messages/ru/yii.php
 @@ -26,6 +26,8 @@
      ' and ' => ' и ',
      '"{attribute}" does not support operator "{operator}".' => '"{attribute}" не поддерживает оператор "{operator}".',
@@ -8110,8 +8110,8 @@ index 31b27234323..44bced6a49d 100644
  ];
 diff --git a/src/messages/sk/yii.php b/src/messages/sk/yii.php
 index 28aaaa78de1..50ff8e981b2 100644
---- a/framework/messages/sk/yii.php
-+++ b/framework/messages/sk/yii.php
+--- a/src/messages/sk/yii.php
++++ b/src/messages/sk/yii.php
 @@ -26,6 +26,8 @@
      ' and ' => ' a ',
      '"{attribute}" does not support operator "{operator}".' => '"{attribute}" nepodporuje operátor "{operator}".',
@@ -8159,8 +8159,8 @@ index 28aaaa78de1..50ff8e981b2 100644
  ];
 diff --git a/src/messages/sl/yii.php b/src/messages/sl/yii.php
 index 7fa542489bb..5b15a08321c 100644
---- a/framework/messages/sl/yii.php
-+++ b/framework/messages/sl/yii.php
+--- a/src/messages/sl/yii.php
++++ b/src/messages/sl/yii.php
 @@ -23,10 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -8286,8 +8286,8 @@ index 7fa542489bb..5b15a08321c 100644
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, one{gigabajt} two{gigabajta} few{gigabajti} other{gigabajtov}}',
 diff --git a/src/messages/sr-Latn/yii.php b/src/messages/sr-Latn/yii.php
 index e4467b9a679..768dbd8eacd 100644
---- a/framework/messages/sr-Latn/yii.php
-+++ b/framework/messages/sr-Latn/yii.php
+--- a/src/messages/sr-Latn/yii.php
++++ b/src/messages/sr-Latn/yii.php
 @@ -23,36 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -8450,8 +8450,8 @@ index e4467b9a679..768dbd8eacd 100644
  ];
 diff --git a/src/messages/sr/yii.php b/src/messages/sr/yii.php
 index 6e7ba378329..7262ded5773 100644
---- a/framework/messages/sr/yii.php
-+++ b/framework/messages/sr/yii.php
+--- a/src/messages/sr/yii.php
++++ b/src/messages/sr/yii.php
 @@ -23,36 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -8614,8 +8614,8 @@ index 6e7ba378329..7262ded5773 100644
  ];
 diff --git a/src/messages/sv/yii.php b/src/messages/sv/yii.php
 index b3777626b02..4be34190894 100644
---- a/framework/messages/sv/yii.php
-+++ b/framework/messages/sv/yii.php
+--- a/src/messages/sv/yii.php
++++ b/src/messages/sv/yii.php
 @@ -23,9 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -8731,8 +8731,8 @@ index b3777626b02..4be34190894 100644
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, =1{gigabyte} other{gigabyte}}',
 diff --git a/src/messages/tg/yii.php b/src/messages/tg/yii.php
 index 76429c5874e..7c9d9fc884e 100644
---- a/framework/messages/tg/yii.php
-+++ b/framework/messages/tg/yii.php
+--- a/src/messages/tg/yii.php
++++ b/src/messages/tg/yii.php
 @@ -23,13 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -8812,8 +8812,8 @@ index 76429c5874e..7c9d9fc884e 100644
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, one{гигабайт} few{гигабайт} many{гигабайт} other{гигабайт}}',
 diff --git a/src/messages/th/yii.php b/src/messages/th/yii.php
 index 0b2c056ed9f..6ce740fde16 100644
---- a/framework/messages/th/yii.php
-+++ b/framework/messages/th/yii.php
+--- a/src/messages/th/yii.php
++++ b/src/messages/th/yii.php
 @@ -23,9 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -8950,8 +8950,8 @@ index 0b2c056ed9f..6ce740fde16 100644
  ];
 diff --git a/src/messages/tr/yii.php b/src/messages/tr/yii.php
 index b846f17d1e0..f17530b26ca 100644
---- a/framework/messages/tr/yii.php
-+++ b/framework/messages/tr/yii.php
+--- a/src/messages/tr/yii.php
++++ b/src/messages/tr/yii.php
 @@ -23,9 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -9030,8 +9030,8 @@ index b846f17d1e0..f17530b26ca 100644
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, =1{gigabayt} other{gigabayt}}',
 diff --git a/src/messages/uk/yii.php b/src/messages/uk/yii.php
 index fb6fed9c46a..1a61ec73c2b 100644
---- a/framework/messages/uk/yii.php
-+++ b/framework/messages/uk/yii.php
+--- a/src/messages/uk/yii.php
++++ b/src/messages/uk/yii.php
 @@ -23,15 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -9129,8 +9129,8 @@ index fb6fed9c46a..1a61ec73c2b 100644
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} {n, plural, one{гігабайт} few{гігабайта} many{гігабайтів} other{гігабайта}}',
 diff --git a/src/messages/uz-Cy/yii.php b/src/messages/uz-Cy/yii.php
 index f29a077b30c..c7ae1e73d88 100644
---- a/framework/messages/uz-Cy/yii.php
-+++ b/framework/messages/uz-Cy/yii.php
+--- a/src/messages/uz-Cy/yii.php
++++ b/src/messages/uz-Cy/yii.php
 @@ -1,125 +1,147 @@
  <?php
 -    /**
@@ -9404,8 +9404,8 @@ index f29a077b30c..c7ae1e73d88 100644
 +];
 diff --git a/src/messages/uz/yii.php b/src/messages/uz/yii.php
 index 306de73abcc..cf1a2f612f3 100644
---- a/framework/messages/uz/yii.php
-+++ b/framework/messages/uz/yii.php
+--- a/src/messages/uz/yii.php
++++ b/src/messages/uz/yii.php
 @@ -23,31 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -9559,8 +9559,8 @@ index 306de73abcc..cf1a2f612f3 100644
  ];
 diff --git a/src/messages/vi/yii.php b/src/messages/vi/yii.php
 index 4bbc9f4896b..947442e6d21 100644
---- a/framework/messages/vi/yii.php
-+++ b/framework/messages/vi/yii.php
+--- a/src/messages/vi/yii.php
++++ b/src/messages/vi/yii.php
 @@ -24,9 +24,13 @@
   */
  return [
@@ -9704,8 +9704,8 @@ index 4bbc9f4896b..947442e6d21 100644
  ];
 diff --git a/src/messages/zh-TW/yii.php b/src/messages/zh-TW/yii.php
 index 866b25d0f9b..c9bc82152c1 100644
---- a/framework/messages/zh-TW/yii.php
-+++ b/framework/messages/zh-TW/yii.php
+--- a/src/messages/zh-TW/yii.php
++++ b/src/messages/zh-TW/yii.php
 @@ -23,10 +23,14 @@
   * NOTE: this file must be saved in UTF-8 encoding.
   */
@@ -9841,8 +9841,8 @@ similarity index 98%
 rename from framework/messages/zh-CN/yii.php
 rename to framework/messages/zh/yii.php
 index 9d5447b89d7..7f1f3de35d9 100644
---- a/framework/messages/zh-CN/yii.php
-+++ b/framework/messages/zh/yii.php
+--- a/src/messages/zh-CN/yii.php
++++ b/src/messages/zh/yii.php
 @@ -26,6 +26,8 @@
      ' and ' => ' 与 ',
      '"{attribute}" does not support operator "{operator}".' => '"{attribute}" 不支持操作 "{operator}"',
@@ -9898,8 +9898,8 @@ index 9d5447b89d7..7f1f3de35d9 100644
      '{nFormatted} {n, plural, =1{gigabyte} other{gigabytes}}' => '{nFormatted} 千兆字节',
 diff --git a/src/mutex/MysqlMutex.php b/src/mutex/MysqlMutex.php
 index cbbd49dad3f..d7716e8c64e 100644
---- a/framework/mutex/MysqlMutex.php
-+++ b/framework/mutex/MysqlMutex.php
+--- a/src/mutex/MysqlMutex.php
++++ b/src/mutex/MysqlMutex.php
 @@ -69,9 +69,13 @@ protected function acquireLock($name, $timeout = 0)
      {
          return $this->db->useMaster(function ($db) use ($name, $timeout) {
@@ -9966,8 +9966,8 @@ index cbbd49dad3f..d7716e8c64e 100644
  }
 diff --git a/src/rbac/DbManager.php b/src/rbac/DbManager.php
 index 00c40711eb8..2685ad5a1cd 100644
---- a/framework/rbac/DbManager.php
-+++ b/framework/rbac/DbManager.php
+--- a/src/rbac/DbManager.php
++++ b/src/rbac/DbManager.php
 @@ -87,6 +87,11 @@ class DbManager extends BaseManager
       * @since 2.0.3
       */
@@ -10094,8 +10094,8 @@ index 00c40711eb8..2685ad5a1cd 100644
  }
 diff --git a/src/requirements/YiiRequirementChecker.php b/src/requirements/YiiRequirementChecker.php
 index c3c707876fb..45675cd716c 100644
---- a/framework/requirements/YiiRequirementChecker.php
-+++ b/framework/requirements/YiiRequirementChecker.php
+--- a/src/requirements/YiiRequirementChecker.php
++++ b/src/requirements/YiiRequirementChecker.php
 @@ -56,6 +56,11 @@
   */
  class YiiRequirementChecker
@@ -10110,8 +10110,8 @@ index c3c707876fb..45675cd716c 100644
       * This method can be invoked several times checking different requirement sets.
 diff --git a/src/requirements/requirements.php b/src/requirements/requirements.php
 index 55593061518..d065f6363bc 100644
---- a/framework/requirements/requirements.php
-+++ b/framework/requirements/requirements.php
+--- a/src/requirements/requirements.php
++++ b/src/requirements/requirements.php
 @@ -111,5 +111,12 @@
          'memo' => 'When <a href="https://www.yiiframework.com/doc-2.0/yii-validators-ipvalidator.html#$expandIPv6-detail">IpValidator::expandIPv6</a>
          property is set to <code>true</code>, PHP must support IPv6 protocol stack. Currently PHP constant <code>AF_INET6</code> is not defined
@@ -10127,8 +10127,8 @@ index 55593061518..d065f6363bc 100644
  );
 diff --git a/src/rest/Serializer.php b/src/rest/Serializer.php
 index a4d16b195f2..eedd96c2cc6 100644
---- a/framework/rest/Serializer.php
-+++ b/framework/rest/Serializer.php
+--- a/src/rest/Serializer.php
++++ b/src/rest/Serializer.php
 @@ -188,6 +188,12 @@ protected function getRequestedFields()
       */
      protected function serializeDataProvider($dataProvider)
@@ -10171,8 +10171,8 @@ index a4d16b195f2..eedd96c2cc6 100644
              }
 diff --git a/src/validators/DateValidator.php b/src/validators/DateValidator.php
 index 740011846de..c0f66454120 100644
---- a/framework/validators/DateValidator.php
-+++ b/framework/validators/DateValidator.php
+--- a/src/validators/DateValidator.php
++++ b/src/validators/DateValidator.php
 @@ -441,8 +441,8 @@ private function parseDateValuePHP($value, $format)
          // if no time was provided in the format string set timezone to default one to match yii\i18n\Formatter::formatDateTimeValue()
          $timezone = $hasTimeInfo ? $this->timeZone : $this->defaultTimeZone;
@@ -10186,8 +10186,8 @@ index 740011846de..c0f66454120 100644
  
 diff --git a/src/validators/NumberValidator.php b/src/validators/NumberValidator.php
 index 714288a27f6..074af8cf45f 100644
---- a/framework/validators/NumberValidator.php
-+++ b/framework/validators/NumberValidator.php
+--- a/src/validators/NumberValidator.php
++++ b/src/validators/NumberValidator.php
 @@ -116,19 +116,19 @@ public function validateAttribute($model, $attribute)
      protected function validateValue($value)
      {
@@ -10217,8 +10217,8 @@ index 714288a27f6..074af8cf45f 100644
          }
 diff --git a/src/web/Controller.php b/src/web/Controller.php
 index 52de6c998e7..86be85819f0 100644
---- a/framework/web/Controller.php
-+++ b/framework/web/Controller.php
+--- a/src/web/Controller.php
++++ b/src/web/Controller.php
 @@ -17,10 +17,6 @@
   *
   * For more details and usage information on Controller, see the [guide article on controllers](guide:structure-controllers).
@@ -10240,8 +10240,8 @@ index 52de6c998e7..86be85819f0 100644
                  ) {
 diff --git a/src/web/Cookie.php b/src/web/Cookie.php
 index ac9a7233710..d249afa6cbd 100644
---- a/framework/web/Cookie.php
-+++ b/framework/web/Cookie.php
+--- a/src/web/Cookie.php
++++ b/src/web/Cookie.php
 @@ -57,8 +57,8 @@ class Cookie extends \yii\base\BaseObject
       */
      public $domain = '';
@@ -10255,8 +10255,8 @@ index ac9a7233710..d249afa6cbd 100644
      /**
 diff --git a/src/web/CookieCollection.php b/src/web/CookieCollection.php
 index aa09b9ca455..597fc2f5fd7 100644
---- a/framework/web/CookieCollection.php
-+++ b/framework/web/CookieCollection.php
+--- a/src/web/CookieCollection.php
++++ b/src/web/CookieCollection.php
 @@ -18,7 +18,6 @@
   * For more details and usage information on CookieCollection, see the [guide article on handling cookies](guide:runtime-sessions-cookies).
   *
@@ -10305,8 +10305,8 @@ index aa09b9ca455..597fc2f5fd7 100644
      public function toArray()
 diff --git a/src/web/HeaderCollection.php b/src/web/HeaderCollection.php
 index 07d6502ef46..724e875bc69 100644
---- a/framework/web/HeaderCollection.php
-+++ b/framework/web/HeaderCollection.php
+--- a/src/web/HeaderCollection.php
++++ b/src/web/HeaderCollection.php
 @@ -13,9 +13,6 @@
  /**
   * HeaderCollection is used by [[Response]] to maintain the currently registered HTTP headers.
@@ -10319,8 +10319,8 @@ index 07d6502ef46..724e875bc69 100644
   */
 diff --git a/src/web/Request.php b/src/web/Request.php
 index d3a716c97f0..d87489ce389 100644
---- a/framework/web/Request.php
-+++ b/framework/web/Request.php
+--- a/src/web/Request.php
++++ b/src/web/Request.php
 @@ -1220,6 +1220,8 @@ protected function getUserIpFromIpHeaders()
          return null;
      }
@@ -10387,8 +10387,8 @@ index d3a716c97f0..d87489ce389 100644
      private $_secureForwardedHeaderParts;
 diff --git a/src/web/Response.php b/src/web/Response.php
 index bc06a4b04dd..1724438803e 100644
---- a/framework/web/Response.php
-+++ b/framework/web/Response.php
+--- a/src/web/Response.php
++++ b/src/web/Response.php
 @@ -10,6 +10,7 @@
  use Yii;
  use yii\base\InvalidArgumentException;
@@ -10452,8 +10452,8 @@ index bc06a4b04dd..1724438803e 100644
          if ($checkAjax && $request->getIsAjax()) {
 diff --git a/src/web/Session.php b/src/web/Session.php
 index 01997ff5f5f..40768924cf5 100644
---- a/framework/web/Session.php
-+++ b/framework/web/Session.php
+--- a/src/web/Session.php
++++ b/src/web/Session.php
 @@ -57,7 +57,6 @@
   * @property bool $hasSessionId Whether the current request has sent the session ID.
   * @property string $id The current session ID.
@@ -10473,8 +10473,8 @@ index 01997ff5f5f..40768924cf5 100644
       * @see https://www.php.net/manual/en/function.session-set-cookie-params.php
 diff --git a/src/web/View.php b/src/web/View.php
 index c372fece58c..f2c19fc721f 100644
---- a/framework/web/View.php
-+++ b/framework/web/View.php
+--- a/src/web/View.php
++++ b/src/web/View.php
 @@ -132,12 +132,14 @@ class View extends \yii\base\View
      public $jsFiles = [];
  
@@ -10514,8 +10514,8 @@ index c372fece58c..f2c19fc721f 100644
          if (empty($depends)) {
 diff --git a/src/widgets/MaskedInputAsset.php b/src/widgets/MaskedInputAsset.php
 index 57748be86f8..473f4315ffa 100644
---- a/framework/widgets/MaskedInputAsset.php
-+++ b/framework/widgets/MaskedInputAsset.php
+--- a/src/widgets/MaskedInputAsset.php
++++ b/src/widgets/MaskedInputAsset.php
 @@ -21,7 +21,7 @@ class MaskedInputAsset extends AssetBundle
  {
      public $sourcePath = '@bower/inputmask/dist';
@@ -10527,8 +10527,8 @@ index 57748be86f8..473f4315ffa 100644
          'yii\web\YiiAsset',
 diff --git a/src/widgets/Menu.php b/src/widgets/Menu.php
 index a70ad1f3e1a..025379796f1 100644
---- a/framework/widgets/Menu.php
-+++ b/framework/widgets/Menu.php
+--- a/src/widgets/Menu.php
++++ b/src/widgets/Menu.php
 @@ -283,7 +283,11 @@ protected function normalizeItems($items, &$active)
                      $items[$i]['active'] = false;
                  }
